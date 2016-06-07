@@ -144,4 +144,4 @@ if __name__ == '__main__':
         allParses = [];
         ret =  string2wordsFromBegAll(strings[j], "", allParses)
         numParses = len(allParses)
-        print("string2wordsFromBegAll got", numParses, "(", allParses, ")")
+        print("string2wordsFromBegAll got" + str(numParses) + "(" + str(allParses) + ")")
