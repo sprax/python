@@ -1,2 +1,2 @@
 # sprython
-sandbox for python
+sandbox for Python
