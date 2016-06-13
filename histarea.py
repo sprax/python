@@ -31,19 +31,19 @@ def histarea(histogram, length):
             area += lesser_max - height
     return area
 
-def test_histarea():
-    '''Test driver for histarea'''
 
-    histogram = [-1, 2, 32, -4, 4, 44, 2, 38, 0]
+def test_one(histogram):
+    '''Test histarea on one array'''
     length = len(histogram)
     area = histarea(histogram, length)
-
-    print sys.argv[0] 		# program_name
-    print "Area from histogram:", area
-    for j in range(length):
-        print(histogram[j]),
+    print "Area from histogram:", histogram, "=>", area
     print
 
+def test_histarea():
+    '''Test driver for histarea'''
+    print sys.argv[0], ": test_histarea"	# program_name
+    test_one([10, 5, 10, 15, 10, 20])
+    test_one([-1, 2, 32, -4, 4, 44, 2, 38, 0])
 
 if __name__ == '__main__':
     test_histarea()
