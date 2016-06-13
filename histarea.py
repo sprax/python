@@ -4,10 +4,6 @@ that would be trapped by a histogram.'''
 
 import sys
 
-# default values:
-INT_MIN = -2147483648
-
-
 def histarea(histogram, length):
     '''Calculates the area of "fluid" that would be trapped in poured onto
     a histogram from above.'''
@@ -26,18 +22,16 @@ def histarea(histogram, length):
             max_from_left.append(max_height)
 
 	# Pass 2: Initialize from last entry; do skip the first entry.
-        max_height = histogram[length-1]
-        for j in range(length-1, 0, -1):
+        max_from_right = histogram[length-1]
+        for j in range(length-2, 0, -1):
             height = histogram[j]
-            if  max_height < height:
-                max_height = height
-            if  max_height > max_from_left[j]:
-                area += max_from_left[j] - height
-            else:
-                area += max_height - height
+            if  max_from_right < height:
+                max_from_right = height
+            lesser_max = min(max_from_left[j], max_from_right)
+            area += lesser_max - height
     return area
 
-def main_histarea():
+def test_histarea():
     '''Test driver for histarea'''
 
     histogram = [-1, 2, 32, -4, 4, 44, 2, 38, 0]
@@ -50,6 +44,7 @@ def main_histarea():
         print(histogram[j]),
     print
 
+
 if __name__ == '__main__':
-    main_histarea()
+    test_histarea()
 
