@@ -76,7 +76,6 @@ def test_sum_nested_iter():
         print("index sum: TypeError because is_indexible is False for tuples:\n\t", ex)
     tot = sum_nested_iter_stack(tpl)
     print("stack sum: ", tot)
-    print(tpl)
 
 
 if __name__ == '__main__':
