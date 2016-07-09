@@ -6,16 +6,16 @@ Usage (to run unit tests): python sum_nested_iter.py
 import collections
 
 def is_iterable(vit):
-    '''Is vit iterable?  Or just a value?'''
+    '''Is vit an iterable?  Or just a value?'''
     return isinstance(vit, collections.Iterable)
 
 def is_indexible(vit):
-    '''More idiomatic than return type(vit) is ([])'''
+    '''More idiomatic than:  return type(vit) is ([])'''
     return isinstance(vit, [])
 
-def sum_nested_iter_rec(listval, tot):
+def sum_nested_iter_rec(vitlist, tot):
     '''Sum up all values in a list of nested lists.'''
-    for vit in listval:
+    for vit in vitlist:
         if is_iterable(vit):
             tot = sum_nested_iter_rec(vit, tot)
         else:
