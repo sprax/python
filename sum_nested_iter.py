@@ -1,22 +1,33 @@
 #!/usr/bin/python3
 '''Sum up all values in a list or tuple of nested lists and tuples.
 Usage (to run unit tests): python sum_nested_iter.py
-'''
+None of the methods here can handle (nested) iterables containing strings.
+That case could be handled by explicitly testing for type str, or type Number,
+or using some logic with len() and is_subscriptable (defined below),
+but what would you actually want it to do?  Convert strings to numbers
+and sum them, or convert numbers to strings and concatenate them, or what?'''
 
 import collections
 from collections import deque
 
 def is_iterable(vit):
     '''Is vit an iterable?  Or just a scalar value?
-    Returns True for lists, tuples, and strings, False for numeric types.
-    '''
+    Returns True for lists, tuples, and strings, False for numeric types.'''
     return isinstance(vit, collections.Iterable)
 
 def is_list(vit):
-    '''Not so idiomatic way of testing if vit is a list.
-    Returns True if vit is a list, False if vit is a tuple or string.
-    '''
-    return type(vit) is type([])
+    '''Returns True if vit is a list, False if vit is a tuple or string.
+    A less idiomatic way, warned against by pylint: return type(vit) is type([])'''
+    return isinstance(vit, list)
+
+def is_subscriptable(vit):
+    '''Returns True if vit can be subscripted and is non-empty.
+    Thus it returns True for a non-empty list, tuple, or string.'''
+    try:
+        vit[0]
+        return True
+    except (TypeError, IndexError):
+        return False
 
 
 def sum_nested_iter_rec(vitlist, tot):
@@ -107,7 +118,8 @@ def test_sum_nested_iter():
     try:
         tot = sum_nested_list_rec(tpl, 0)
     except TypeError as ex:
-        print("index sum: TypeError (expected) because is_list is False for tuples:\n\t", ex)
+        print("sum_nested_list_rec got a TypeError exception (expected)")
+        print("\t because is_list is False for tuples:\n\t ", ex)
     tot = sum_nested_iter_stack(tpl)
     print("stack sum:  ", tot)
     tot = sum_nested_iter_deque(lst)
@@ -120,12 +132,11 @@ def test_sum_nested_iter_on_scalar():
     try:
         tot = sum_nested_iter_rec(num, 0) 
     except TypeError as ex:
-        print("Recursive functions assume an iterable argument, thus: ", ex)
+        print("sum_nested_iter_rec got a TypeError exception, because this")
+        print("\t recursive function assumes an iterable argument, thus:\n\t ", ex)
     tot = sum_nested_iter_stack(num)
     print("stack sum, number argument and sum: ", num, tot)
     string = "string"
-    # tot = sum_nested_iter_stack(string)
-    # print("stack sum, string argument and sum: ", string, tot)
 
 if __name__ == '__main__':
     test_sum_nested_iter()
