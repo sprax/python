@@ -39,8 +39,7 @@ def sum_nested_index_rec(vitlist, tot):
 def sum_nested_iter_stack(vit):
     '''Sum all values in a list or typle of nested iterables using a stack'''
     tot = 0
-    stack = []
-    stack.append(vit)
+    stack = [vit]
     while stack:
         vit = stack.pop()
         if is_iterable(vit):
@@ -73,7 +72,7 @@ def test_sum_nested_iter():
         tot = sum_nested_index_rec(tpl, 0)
         print("index sum: ", tot)
     except TypeError as ex:
-        print("index sum: TypeError because is_indexible is False for tuples:\n\t", ex)
+        print("index sum: TypeError (expected) because is_indexible is False for tuples:\n\t", ex)
     tot = sum_nested_iter_stack(tpl)
     print("stack sum: ", tot)
 
