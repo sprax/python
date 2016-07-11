@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-'''Sum up all values in a list or tuple of nested lists and tuples.
-Usage (to run unit tests): python sum_nested_iter.py
+'''Sum all values in a list or tuple of nested lists and tuples.
+Usage (to run unit tests): python sum_nested.py
 None of the methods here can handle (nested) iterables containing strings.
 That case could be handled by explicitly testing for type str, or type Number,
 or using some logic with len() and is_subscriptable (defined below),
