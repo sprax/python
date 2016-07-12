@@ -64,6 +64,16 @@ def dicDir(dirpath, dirSuffix, patterns, verbose):
 
     print
     print "Dictionary: "
+    date2files = make_date_to_files_dic(pairs, dirSuffix)
+    for key in sorted(date2files.keys()):
+        print key
+        dfiles = sorted(date2files[key])
+        for fn in dfiles:
+            print "\t\t" + fn
+    return out_dirs, date2files
+
+
+def make_date_to_files_dic(pairs, dirSuffix):
     date2files = defaultdict(list)
     # On Windows `ST_CTIME` is a creation date,
     # but on Unix it could be something else.
@@ -77,13 +87,8 @@ def dicDir(dirpath, dirSuffix, patterns, verbose):
         print modtime, datestr, os.path.basename(path)
         print time.ctime(modtime), os.path.basename(path)
         date2files[datestr].append(path)
+    return date2files
 
-    for key in sorted(date2files.keys()):
-        print key
-        dfiles = sorted(date2files[key])
-        for fn in dfiles:
-            print "\t\t" + fn
-    return out_dirs, date2files
 
 def getUniqueDirName(dirs, baseName):
     '''if there is already a directory with this name (baseName), make a new name'''
