@@ -1,5 +1,11 @@
-#!/usr/bin/env python
-# Usage: python <thisScript> [inputDir [filePatterns [outSuffix]]]
+#!/usr/bin/env python2.7
+'''
+Group photos and videos by date and move them to folders named
+for the dates found.  Moves .jpg and .mov files by default, but
+the file extensions can be specified.
+
+Usage: python <thisScript> [inputDir [filePatterns [outSuffix]]]
+'''
 # Sprax Lines  2012 ?
 
 # import modules
@@ -7,56 +13,52 @@ from collections import defaultdict
 import glob
 import os
 import re
-from stat import S_ISREG, S_ISDIR, ST_MTIME, ST_MODE
+# from stat import S_ISREG, S_ISDIR, ST_MTIME, ST_MODE
+from stat import ST_MTIME
 import shutil
 import sys
 import time
 
-debug = 3
-
-def dicDir(dirpath, dirSuffix, patterns):
-    """ Make dictionary mapping file modification dates to file names 
-    """
+def dicDir(dirpath, dirSuffix, patterns, verbose):
+    """ Make dictionary mapping file modification dates to file names """
     # get all entries in the directory w/ stats
 
     print
-    print "DirPath: " , dirpath
-    print "Patterns: " , patterns
+    print "DirPath: ", dirpath
+    print "Patterns: ", patterns
 
-    print 
+    print
     print "Directories: "
-    dp = dirpath
-    #dp = "/asd/PYTHON/AA/"
-    dirs = filter(os.path.isdir, os.listdir(dp))
-    if debug > 2:
-        print dirs
-	print "len(patterns): ", len(patterns)
-	# exit(0)
-    for dp in sorted(dirs):
+    out_dirs = filter(os.path.isdir, os.listdir(dirpath))
+    if verbose > 2:
+        print out_dirs
+        print "len(patterns): ", len(patterns)
+        # exit(0)
+    for dp in sorted(out_dirs):
         dn = os.path.basename(dp)
         try:
             ts = time.strptime(dn, "%b %d, %Y")
             # print "time.ts: ", ts
             dates = time.strftime("%Y.%m.%d_%a", ts)
             print "dirName ==> dated :: %s ==> %s" % (dn, dates)
-            canonDateDirName = getUniqueDirName(dirs, dates)
-            if debug > 1:
+            canonDateDirName = getUniqueDirName(out_dirs, dates)
+            if verbose > 1:
                 print "unique cannonical dir name: ", canonDateDirName
             print "Moving ", dn, " to ", canonDateDirName
             shutil.move(dn, canonDateDirName)
-            dirs.append(canonDateDirName)
+            out_dirs.append(canonDateDirName)
         except:
-            if debug > 0:
-                print "dirName (%s) did not parse as a date" % dn    
+            if verbose > 0:
+                print "dirName (%s) did not parse as a date" % dn
 
-    print 
+    print
     print "Files: "
     files = []
     for pattern in patterns:
         print "globbing pattern: ", pattern
-        files.extend( filter(os.path.isfile, glob.glob(dirpath + "/" + pattern)) )
+        files.extend(filter(os.path.isfile, glob.glob(dirpath + "/" + pattern)))
     pairs = ((os.stat(fn), fn) for fn in files)
-    if debug > 1:
+    if verbose > 1:
         print files
         # exit(0)
 
@@ -81,14 +83,10 @@ def dicDir(dirpath, dirSuffix, patterns):
         dfiles = sorted(date2files[key])
         for fn in dfiles:
             print "\t\t" + fn
-    return dirs, date2files
-
-
-def usage(defaultTemplate, defaultOutput):
-    print "Default template file: " + defaultTemplate
-    print "Default output file: " + defaultOuput
+    return out_dirs, date2files
 
 def getUniqueDirName(dirs, baseName):
+    '''if there is already a directory with this name (baseName), make a new name'''
     suffix = 0
     uniqDirName = baseName
     while uniqDirName in dirs:
@@ -99,9 +97,8 @@ def getUniqueDirName(dirs, baseName):
 
 def mvFilesToDateDirs(dirs, date2files):
     """ Put Acc test results into a canonical CSV format, one column per test run.
-    Usage: python canonize.py templateFile outputFile] summaryFile(s) 
-    NB:  the outputFile name will have '.csv' appended   
-    """
+    Usage: python canonize.py templateFile outputFile] summaryFile(s)
+    NB:  the outputFile name will have '.csv' appended"""
 
     print "mvFilesToDateDirs"
     print dirs
@@ -117,15 +114,16 @@ def mvFilesToDateDirs(dirs, date2files):
             shutil.move(fn, uniqDirName)
 
 
-if __name__ == '__main__':
-    """ Print out dictionary of modfication dates and files in a directory.
-    """
+def main():
+    """ Print out dictionary of modfication dates and files in a directory."""
+    verbose = 3
+
     # simple, inflexible arg parsing:
     numArgs = len(sys.argv)
 
-    print "numArgs: " , numArgs
+    print "numArgs: ", numArgs
 
-    if (numArgs > 44):
+    if numArgs > 44:
         print sys.argv[0]
         print dicDir.__doc__
 
@@ -139,8 +137,8 @@ if __name__ == '__main__':
     begPatArgs = 2
 
     if numArgs > 3 and re.match("--s", sys.argv[2]):
-        dirSuffix = sys.argv[3] 
-        if debug > 0:
+        dirSuffix = sys.argv[3]
+        if verbose > 0:
             print "Suffix: ", dirSuffix
         begPatArgs = 4
     else:
@@ -149,12 +147,15 @@ if __name__ == '__main__':
     if numArgs > begPatArgs:
         patterns = sys.argv[begPatArgs:]
     else:
-        patterns = ['*.jpg',  '*.mov']
+        patterns = ['*.jpg', '*.mov']
 
-    dirs, date2files = dicDir(dirpath, dirSuffix, patterns)
+    dirs, date2files = dicDir(dirpath, dirSuffix, patterns, verbose)
 
     if len(date2files.keys()) > 0:
         mvFilesToDateDirs(dirs, date2files)
     else:
         print "The date2files dict is empty."
+
+if __name__ == '__main__':
+    main()
 
