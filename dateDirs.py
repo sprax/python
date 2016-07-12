@@ -20,7 +20,7 @@ import shutil
 import sys
 import time
 
-def dicDir(dirpath, dirSuffix, patterns, verbose):
+def dateDirs(dirpath, dirSuffix, patterns, verbose):
     """ Make dictionary mapping file modification dates to file names """
     # get all entries in the directory w/ stats
 
@@ -28,19 +28,25 @@ def dicDir(dirpath, dirSuffix, patterns, verbose):
     print("DirPath: ", dirpath)
     print("Patterns: ", patterns)
     print("Directories: ")
-    out_dirs = filter(os.path.isdir, os.listdir(dirpath))
+    try:
+        in_dirs = filter(os.path.isdir, os.listdir(dirpath))
+    except FileNotFoundError:
+        print("Input directory (", dirpath, ") not found; quitting.\n")
+        exit(1)
+
     if verbose > 2:
-        for dn in out_dirs:
+        for dn in in_dirs:
             print("\t", dn)
 
-    for dp in sorted(out_dirs):
+    out_dirs = []
+    for dp in sorted(in_dirs):
         dn = os.path.basename(dp)
         try:
             ts = time.strptime(dn, "%b %d, %Y")
             # print("time.ts: ", ts)
             dates = time.strftime("%Y.%m.%d_%a", ts)
             print("dirName ==> dated :: %s ==> %s" % (dn, dates))
-            canonDateDirName = getUniqueDirName(out_dirs, dates)
+            canonDateDirName = getUniqueDirName(in_dirs, dates)
             if verbose > 1:
                 print("unique cannonical dir name: ", canonDateDirName)
             print("Moving ", dn, " to ", canonDateDirName)
@@ -70,6 +76,7 @@ def dicDir(dirpath, dirSuffix, patterns, verbose):
 
 
 def make_date_to_files_dic(pairs, dirSuffix):
+    '''maps each found date to a list of files'''
     date2files = defaultdict(list)
     # On Windows `ST_CTIME` is a creation date,
     # but on Unix it could be something else.
@@ -95,23 +102,17 @@ def getUniqueDirName(dirs, baseName):
         uniqDirName = baseName + "_" + str(suffix)
     return uniqDirName
 
+def moveFilesToDateDirs(dirs, date2files):
+    '''Actually move the files into the date-named directories'''
 
-    print("numArgs: ", numArgs)
-
-def mvFilesToDateDirs(dirs, date2files):
-    """ Put Acc test results into a canonical CSV format, one column per test run.
-    Usage: python canonize.py templateFile outputFile] summaryFile(s)
-    NB:  the outputFile name will have '.csv' appended"""
-
-    print("mvFilesToDateDirs")
-    print(dirs)
-    for key in sorted(date2files.keys()):
-        # Get unique directory name
-        uniqDirName = getUniqueDirName(dirs, key)
+    print("moveFilesToDateDirs")
+    for dirName in sorted(date2files.keys()):
+        # Get unique directory name -- this is redundant (TODO)
+        uniqDirName = getUniqueDirName(dirs, dirName)
         if not os.path.exists(uniqDirName):
             print("Making directory: ", uniqDirName)
             os.makedirs(uniqDirName)
-        dfiles = date2files[key]
+        dfiles = date2files[dirName]
         for fn in dfiles:
             print("Moving ", fn, " to ", uniqDirName)
             shutil.move(fn, uniqDirName)
@@ -126,7 +127,7 @@ def main():
 
     if numArgs > 44:
         print(sys.argv[0])
-        print(dicDir.__doc__)
+        print(dateDirs.__doc__)
 
     # path to the directory (relative or absolute)
     # dirpath = sys.argv[1] if len(sys.argv) == 2 else r'.'
@@ -150,13 +151,12 @@ def main():
     else:
         patterns = ['*.jpg', '*.mov', '*.png']
 
-    dirs, date2files = dicDir(dirpath, dirSuffix, patterns, verbose)
+    out_dirs, date2files = dateDirs(dirpath, dirSuffix, patterns, verbose)
 
     if len(date2files.keys()) > 0:
-        mvFilesToDateDirs(dirs, date2files)
+        moveFilesToDateDirs(out_dirs, date2files)
     else:
         print("The date2files dict is empty.")
 
 if __name__ == '__main__':
     main()
-
