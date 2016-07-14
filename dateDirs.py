@@ -149,7 +149,7 @@ def main():
     if numArgs > begPatArgs:
         patterns = sys.argv[begPatArgs:]
     else:
-        patterns = ['*.jpg', '*.mov', '*.png']
+        patterns = ['*.jpeg', '*.jpg', '*.mov', '*.mp4', '*.png']
 
     out_dirs, date2files = dateDirs(dirpath, dirSuffix, patterns, verbose)
 
