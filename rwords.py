@@ -30,20 +30,32 @@ class SubCipher:
         single-letter word, and "a" as the most common lowercase
         single-letter word.  Assuming English, obviously.'''
         print("Looking for the words 'a' and 'I'")
-        ciphai = self.cipher_short.most_common(2)
-        corpai = self.corpus_short.most_common(2)
-        print(ciphai, corpai)
-        corpchars = (corpai[0][0], corpai[1][0])
-        if corpchars == ('a', 'I') or corpchars == ('I', 'a'):
-            if ciphai[0][0].islower():
-                self.assign('a', ciphai[0][0])
-                self.assign('i', ciphai[1][0])
-            else:
-                self.assign('a', ciphai[1][0])
-                self.assign('i', ciphai[0][0])
-        else:
-            print("Unexpected most commont 1-letter words in corpus: ", corpchars)
 
+        # Looking at these most common corpus words only as a sanity-check
+        corpai = self.corpus_short.most_common(2)
+        corpchars = (corpai[0][0], corpai[1][0])
+        if corpchars != ('a', 'I') and corpchars != ('I', 'a'):
+            print("Unexpected most common 1-letter words in corpus: ", corpai)
+
+        ciphai = self.cipher_short.most_common(2)
+        if ciphai[0][0].islower():
+            self.assign('a', ciphai[0][0])
+            self.assign('i', ciphai[1][0])
+        else:
+            self.assign('a', ciphai[1][0])
+            self.assign('i', ciphai[0][0])
+
+    def find_the_and_and(self):
+        '''Try to find the two most common English words: "the" and "and".'''
+        print("Looking for the words 'the' and 'the'")
+
+        # Looking at these most common corpus words only as a sanity-check
+        corps = self.corpus_words.most_common(2)
+        words = (corps[0][0], corps[1][0])
+        if words != ('the', 'and') and words != ('and', 'the'):
+            print("Unexpected most common 3-letter words in corpus: ", corps)
+
+        ciphs = self.cipher_words.most_common(2)
 
 def decipher_file(cipher_file, corpus_file):
     '''Given a file of ordinary English sentences encoded using a simple
@@ -57,6 +69,7 @@ def decipher_file(cipher_file, corpus_file):
         print(word, count)
 
     subs.find_a_and_I()
+    subs.find_the_and_and()
 
 def count_words(file):
     '''Returns a Counter that has counted all ASCII-only words found in a text file.'''
