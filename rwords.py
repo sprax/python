@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Sprax Lines       2016.07.12      Written with Python 3.5
-""" Print cleaned-up space-separated 'words' from text file."""
+'''Class and script to solve simple substitution cipher from corpus and encoded text'''
 
 import re
 import sys
@@ -23,7 +23,7 @@ class SubCipher:
     def assign(self, corp, ciph):
         self.forward_map[corp] = ciph
         self.inverse_map[ciph] = corp
-        print(corp, " -> ", ciph)
+        print('        ', corp, " -> ", ciph)
 
     def find_a_and_I(self):
         '''Try to find the word "I" as the most common capitalized
