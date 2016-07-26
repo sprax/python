@@ -50,7 +50,7 @@ class SubCipher:
 
     def find_the_and_and(self):
         '''Try to find the two most common English words: "the" and "and".'''
-        print("Looking for the words 'the' and 'the'")
+        print("Looking for the words 'the' and 'and'")
 
         # Looking at these most common corpus words only as a sanity-check
         corps = self.corpus_words.most_common(2)
@@ -99,17 +99,8 @@ class SubCipher:
                 continue
             unknowns = self.num_unknown(ciph)   # update in case any of its chars were discovered
             if unknowns == 1:
-                print('Trying to match: ', ciph, unknowns, -neg_count)
-                for item in corpus:
-                    if len(item[0]) == length:
-                        word = item[0]
-                        for idx in range(length):
-                            inv = self.inverse_map[ciph[idx]]
-                            if inv != 0 and word[idx] != inv:
-                                break
-                            else:
-                                if self.forward_map[word[idx]] == 0:
-                                    self.assign(word[idx], ciph[idx])
+                self.inverse_match_1_unknown(ciph, length, -neg_count, corpus) 
+
             elif unknowns > 1:
                 if ciph == sentinel:
                     print('Breaking from queue at: ', ciph, unknowns, -neg_count)
@@ -125,13 +116,34 @@ class SubCipher:
             else:
                 print ('Discarding: ', ciph, unknowns, -neg_count)
 
+    def inverse_match_1_unknown(self, ciph, length, count, corpus):
+        print('Trying to match: ', ciph, 1, count)
+        # max_score = self.score_inverse(self.inverse_map)
+        for item in corpus:
+            if len(item[0]) == length:
+                word = item[0]
+                for idx in range(length):
+                    inv = self.inverse_map[ciph[idx]]
+                    if inv != 0 and word[idx] != inv:
+                        break
+                    else:
+                        if self.forward_map[word[idx]] == 0:
+                            self.assign(word[idx], ciph[idx])
+
+    def score_inverse(self, inverse):
+        '''score based on totality of deciphered ciphs matching corpus words'''
+        score_total = 0
+        for ciph, ciph_count in self.cipher_words.items():
+            word = self.deciphered(ciph)
+            word_count = self.corpus_words[word]    # 0 if not in corpus
+            score = word_count * ciph_count * len(ciph)
+            print(" {:9}\t {} => {}".format(score, ciph, word))
+            score_total += score
+        return score
+
     def num_unknown(self, ciph):
         '''returns the number of unknown cipher characters in the string ciph'''
         return sum(map(lambda x: self.inverse_map[x] == 0, ciph))
-
-    def show_all_deciphered_words(self):
-        for ciph in self.cipher_words.keys():
-            print(ciph, ' -> ', self.deciphered(ciph))
 
     def deciphered(self, ciph):
         '''Replace contents of ciph with inverse mapped chars'''
@@ -144,7 +156,14 @@ class SubCipher:
                 out.append(inv)
         return ''.join(out)
 
+    def show_all_deciphered_words(self):
+        score = self.score_inverse(self.inverse_map)
+        for ciph in self.cipher_words.keys():
+            print(ciph, ' -> ', self.deciphered(ciph))
+
     def show_cipher(self):
+        score = self.score_inverse(self.inverse_map)
+        print("Score from all matched words using the key below: ", score)
         for c in char_range_inclusive('a', 'z'):
             print(c, " -> ", self.forward_map[c])
 
