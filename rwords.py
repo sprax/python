@@ -2,6 +2,7 @@
 # Sprax Lines       2016.07.12      Written with Python 3.5
 '''Class and script to solve simple substitution cipher from corpus and encoded text'''
 
+import heapq
 import re
 import sys
 ##from string import punctuation
@@ -75,6 +76,59 @@ class SubCipher:
                     self.assign('n', ciph[1])
                     self.assign('d', ciph[2])
 
+    def find_words_from_ciphers(self):
+        '''Find common corpus words comprised mostly of known inverse
+        cipher chars, and try filling in the missing letters.  Trials
+        are evaluated by scoring how many decoded cipher words then 
+        match corpus words.  The highest score wins.  (That is, the 
+        decision is immediate, not defered to accumulate multiple
+        scoring passes or backpropogating votes.'''
+
+        corpus = self.corpus_words.most_common(4000)
+        pq = [] # priority = [num_unknown(updated on pop), -count, length]
+        for item in self.cipher_words.items():
+            ciph = item[0]
+            count = item[1]
+            entry = [self.num_unknown(ciph), -count, len(ciph), ciph]
+            heapq.heappush(pq, entry)
+
+        sentinel = ''   # terminate loop when seen twice
+        while pq:
+            unknowns, neg_count, length, ciph = heapq.heappop(pq)
+            if unknowns == 0:
+                continue
+            unknowns = self.num_unknown(ciph)   # update in case any of its chars were discovered
+            if unknowns == 1:
+                print('Trying to match: ', ciph, unknowns, -neg_count)
+                for item in corpus:
+                    if len(item[0]) == length:
+                        word = item[0]
+                        for idx in range(length):
+                            inv = self.inverse_map[ciph[idx]]
+                            if inv != 0 and word[idx] != inv:
+                                break
+                            else:
+                                if self.forward_map[word[idx]] == 0:
+                                    self.assign(word[idx], ciph[idx])
+            elif unknowns > 1:
+                if ciph == sentinel:
+                    print('Breaking from queue at: ', ciph, unknowns, -neg_count)
+                    break
+                elif not sentinel:
+                    # Set the sentinel and give each item still in the queue
+                    # a chance to update its unknowns.  Some may change to 1
+                    # and get matched.  Quit when the sentinel comes back to
+                    # the front.
+                    sentinel = ciph
+                    print('Replacing at end of queue: ', ciph, unknowns, -neg_count)
+                    heapq.heappush(pq, [1000, 0, length, ciph])
+            else:
+                print ('Discarding: ', ciph, unknowns, -neg_count)
+
+    def num_unknown(self, ciph):
+        '''returns the number of unknown cipher characters in the string ciph'''
+        return sum(map(lambda x: self.inverse_map[x] == 0, ciph))
+
 def decipher_file(cipher_file, corpus_file):
     '''Given a file of ordinary English sentences encoded using a simple
     substitution cipher, and a corpus of English text expected to contain
@@ -82,12 +136,13 @@ def decipher_file(cipher_file, corpus_file):
 
     subs = SubCipher(cipher_file, corpus_file)
 
-    print("corpus_counts:")
+    print("corpus_words:")
     for (word, count) in subs.corpus_words.most_common(10):
         print(word, count)
 
     subs.find_a_and_I()
     subs.find_the_and_and()
+    subs.find_words_from_ciphers()
 
 def count_words(file):
     '''Returns a Counter that has counted all ASCII-only words found in a text file.'''
@@ -130,8 +185,8 @@ def count_chars_from_words(word_counter):
     for item in word_counter.items():
         for _ in range(item[1]):
             char_counter.update(item[0])
-    for c in char_counter.keys():
-        print(c, ' : ', char_counter[c])
+    ##for c in char_counter.keys():
+    ##    print(c, ' : ', char_counter[c])
     return char_counter
 
 def main():
