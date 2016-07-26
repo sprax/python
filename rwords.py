@@ -15,6 +15,7 @@ class SubCipher:
     def __init__(self, cipher_file, corpus_file):
         self.cipher_file = cipher_file
         self.corpus_file = corpus_file
+        self.cipher_lines = read_file_lines(cipher_file)
         self.cipher_short, self.cipher_words = count_short_and_lowered_long_words(cipher_file, 1)
         self.corpus_short, self.corpus_words = count_short_and_lowered_long_words(corpus_file, 1)
         self.cipher_chars = count_chars_from_words(self.cipher_words)
@@ -38,7 +39,6 @@ class SubCipher:
         self.inverse_map[ciph] = corp
         if self.verbose > 0:
             print("Accept", corp, "->", ciph)
-
 
     def find_a_and_I(self):
         '''Try to find the word "I" as the most common capitalized
@@ -129,7 +129,7 @@ class SubCipher:
                     print('Repush entry [', ciph, unknowns, -neg_count, '] to end of the queue')
                     heapq.heappush(pq, [1000, 0, length, ciph])
             elif self.verbose > 2:
-                print ('\tAlready deciphered: ', unknowns, -neg_count, ciph, self.deciphered(ciph))
+                print ('\tAlready deciphered: ', unknowns, -neg_count, ciph, self.decipher_word(ciph))
 
     def inverse_match_1_unknown(self, ciph, length, count, corpus):
         '''Try to match one cipher word with a single unknown against all
@@ -165,7 +165,7 @@ class SubCipher:
             old_forward = self.forward_map[max_char]
             if old_forward != 0:                        # erase previous forward mapping, if it exists
                 if self.verbose > 0:
-                    old_word = self.deciphered(ciph)
+                    old_word = self.decipher_word(ciph)
                     print("Delete {} -> {} because '{}' => '{}' gave old score {}".format(
                         max_char, self.forward_map[max_char], ciph, old_word, beg_score))
                 self.forward_map[max_char] = 0
@@ -176,10 +176,10 @@ class SubCipher:
             self.assign(max_char, ciph_char)
 
     def score_inverse(self, inverse):
-        '''score based on totality of deciphered ciphs matching corpus words'''
+        '''score based on totality of deciphered cipher words matching corpus words'''
         score_total = 0
         for ciph, ciph_count in self.cipher_words.items():
-            word = self.deciphered(ciph)
+            word = self.decipher_word(ciph)
             word_count = self.corpus_words[word]    # 0 if not in corpus
             score = word_count * ciph_count * len(ciph)
             ##print(" {:9}\t {} => {}".format(score, ciph, word))
@@ -190,7 +190,7 @@ class SubCipher:
         '''returns the number of unknown cipher characters in the string ciph'''
         return sum(map(lambda x: self.inverse_map[x] == 0, ciph))
 
-    def deciphered(self, ciph):
+    def decipher_word(self, ciph):
         '''Replace contents of ciph with inverse mapped chars'''
         out = []
         for j in range(len(ciph)):
@@ -201,18 +201,25 @@ class SubCipher:
                 out.append(inv)
         return ''.join(out)
 
-    def show_all_deciphered_words(self):
+    def show_deciphered_words(self):
         for ciph in self.cipher_words.keys():
-            print(ciph, '=>', self.deciphered(ciph))
+            print(ciph, '=>', self.decipher_word(ciph))
 
     def show_cipher(self):
         score = self.score_inverse(self.inverse_map)
         print("Score from all matched words using the key below: ", score)
-        for c in char_range_inclusive('a', 'z'):
-            t = self.forward_map[c]
-            print(c, "->", t if t else ' ')
+        for word_char in char_range_inclusive('a', 'z'):
+            ciph_char = self.forward_map[word_char]
+            print(word_char, "->", ciph_char if ciph_char else ' ')
 
-def decipher_file(cipher_file, corpus_file):
+    def show_deciphered_lines(self):
+        for line in self.cipher_lines:
+            print(self.decipher_text(line))
+
+    def decipher_text(self, line):
+        return self.decipher_word(line)  # wrong
+
+def solve_simple_substition_cipher(cipher_file, corpus_file):
     '''Given a file of ordinary English sentences encoded using a simple
     substitution cipher, and a corpus of English text expected to contain
     most of the words in the encoded text, decipher the encoded file.
@@ -223,13 +230,21 @@ def decipher_file(cipher_file, corpus_file):
     subs.find_a_and_I()
     subs.find_the_and_and()
     subs.find_words_from_ciphers()
-    ##subs.show_all_deciphered_words()
+    ##subs.show_deciphered_words()
     subs.show_cipher()
+    subs.show_deciphered_lines()
 
 
 def char_range_inclusive(start, end, step=1):
     for char in range(ord(start), ord(end)+1, step):
         yield chr(char)
+
+def read_file_lines(file):
+    lines = []
+    with open(file, 'r') as text:
+        for line in text:
+            lines.append(line.rstrip())
+    return lines
 
 def count_words(file):
     '''Returns a Counter that has counted all ASCII-only words found in a text file.'''
@@ -272,7 +287,8 @@ def count_chars_from_words(word_counter):
     return char_counter
 
 def main():
-    '''Get file names for cipher and corpus texts and call decipher_file.'''
+    '''Get file names for cipher and corpus texts and call
+    solve_simple_substition_cipher.'''
 
     # simple, inflexible arg parsing:
     argc = len(sys.argv)
@@ -284,7 +300,7 @@ def main():
     cipher_file = sys.argv[1] if argc > 1 else r'cipher.txt'
     corpus_file = sys.argv[2] if argc > 2 else r'corpus.txt'
 
-    decipher_file(cipher_file, corpus_file)
+    solve_simple_substition_cipher(cipher_file, corpus_file)
 
 
 if __name__ == '__main__':
