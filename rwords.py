@@ -228,7 +228,8 @@ class SubCipher:
     def show_deciphered_lines(self):
         for line in self.cipher_lines:
             text = self.decipher_text(line)
-            uprint(text)
+            uprint(text)                                                 # system-agnostic?
+            ## print(text.encode(sys.stdout.encoding, errors='replace')) # adapt to system?
 
 def uprint(*objects, sep=' ', end='\n', file=sys.stdout):
     enc = file.encoding
