@@ -66,3 +66,5 @@ target/
 *.swap
 *.swp
 \.*.swp
+*.bak
+*.backup
