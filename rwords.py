@@ -190,17 +190,30 @@ class SubCipher:
         '''returns the number of unknown cipher characters in the string ciph'''
         return sum(map(lambda x: self.inverse_map[x] == 0, ciph))
 
-    def decipher_word(self, ciph):
-        '''Replace contents of ciph with inverse mapped chars'''
+    def decipher_word(self, encoded_word):
+        '''Replace contents of encoded_word with inverse mapped chars'''
         out = []
-        for j in range(len(ciph)):
-            inv = self.inverse_map[ciph[j]]
+        for j in range(len(encoded_word)):
+            inv = self.inverse_map[encoded_word[j]]
             if inv == 0:
                 out.append('_')
             else:
                 out.append(inv)
         return ''.join(out)
 
+    def decipher_text(self, line):
+        decoded = []
+        for q in line:
+            if 'a' <= q and q <= 'z':
+                x = self.inverse_map[q]
+                decoded.append(x if x else '_')
+            elif 'A' <= q and q <= 'Z':
+                x = self.inverse_map[q.lower()]
+                decoded.append(x.upper() if x else '_')
+            else:
+                decoded.append(q)
+        return ''.join(decoded);
+       
     def show_deciphered_words(self):
         for ciph in self.cipher_words.keys():
             print(ciph, '=>', self.decipher_word(ciph))
@@ -214,10 +227,17 @@ class SubCipher:
 
     def show_deciphered_lines(self):
         for line in self.cipher_lines:
-            print(self.decipher_text(line))
+            text = self.decipher_text(line)
+            uprint(text)
 
-    def decipher_text(self, line):
-        return self.decipher_word(line)  # wrong
+def uprint(*objects, sep=' ', end='\n', file=sys.stdout):
+    enc = file.encoding
+    if enc == 'UTF-8':
+        print(*objects, sep=sep, end=end, file=file)
+    else:
+        f = lambda obj: str(obj).encode(enc, errors='backslashreplace').decode(enc)
+        print(*map(f, objects), sep=sep, end=end, file=file)
+
 
 def solve_simple_substition_cipher(cipher_file, corpus_file):
     '''Given a file of ordinary English sentences encoded using a simple
