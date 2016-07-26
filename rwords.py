@@ -43,10 +43,10 @@ class SubCipher:
         ciphai = self.cipher_short.most_common(2)
         if ciphai[0][0].islower():
             self.assign('a', ciphai[0][0])
-            self.assign('i', ciphai[1][0])
+            self.assign('i', ciphai[1][0].lower())
         else:
             self.assign('a', ciphai[1][0])
-            self.assign('i', ciphai[0][0])
+            self.assign('i', ciphai[0][0].lower())
 
     def find_the_and_and(self):
         '''Try to find the two most common English words: "the" and "and".'''
@@ -129,6 +129,25 @@ class SubCipher:
         '''returns the number of unknown cipher characters in the string ciph'''
         return sum(map(lambda x: self.inverse_map[x] == 0, ciph))
 
+    def show_all_deciphered_words(self):
+        for ciph in self.cipher_words.keys():
+            print(ciph, ' -> ', self.deciphered(ciph))
+
+    def deciphered(self, ciph):
+        '''Replace contents of ciph with inverse mapped chars'''
+        out = []
+        for j in range(len(ciph)):
+            inv = self.inverse_map[ciph[j]]
+            if inv == 0:
+                out.append('_')
+            else:
+                out.append(inv)
+        return ''.join(out)
+
+    def show_cipher(self):
+        for c in char_range_inclusive('a', 'z'):
+            print(c, " -> ", self.forward_map[c])
+
 def decipher_file(cipher_file, corpus_file):
     '''Given a file of ordinary English sentences encoded using a simple
     substitution cipher, and a corpus of English text expected to contain
@@ -143,6 +162,13 @@ def decipher_file(cipher_file, corpus_file):
     subs.find_a_and_I()
     subs.find_the_and_and()
     subs.find_words_from_ciphers()
+    subs.show_all_deciphered_words()
+    subs.show_cipher()
+
+
+def char_range_inclusive(start, end, step=1):
+    for char in range(ord(start), ord(end)+1, step):
+        yield chr(char)
 
 def count_words(file):
     '''Returns a Counter that has counted all ASCII-only words found in a text file.'''
