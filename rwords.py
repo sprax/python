@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Sprax Lines       2016.07.12      Written with Python 3.5
+# Sprax Lines       2016.07.25      Written with Python 3.5
 '''Class and script to solve simple substitution cipher from corpus and encoded text'''
 
 import heapq
@@ -24,6 +24,12 @@ class SubCipher:
         self.inverse_map = defaultdict(int)
 
     def assign(self, corp, ciph):
+        assert self.forward_map[corp] == 0, (
+                "Cannot forward assign {} -> {} because already {} -> {}"
+                .format(corp, ciph, corp, self.forward_map[corp]))
+        assert self.inverse_map[ciph] == 0, (
+                "Cannot inverse assign {} -> {} because already {} -> {}"
+                .format(corp, ciph, self.inverse_map[ciph], ciph))
         self.forward_map[corp] = ciph
         self.inverse_map[ciph] = corp
         print('        ', corp, " -> ", ciph)
@@ -34,25 +40,25 @@ class SubCipher:
         single-letter word.  Assuming English, obviously.'''
         print("Looking for the words 'a' and 'I'")
 
-        # Looking at these most common corpus words only as a sanity-check
-        corpai = self.corpus_short.most_common(2)
-        corpchars = (corpai[0][0], corpai[1][0])
+        # Peek at these most common corpus words as a sanity-check
+        corp_ai = self.corpus_short.most_common(2)
+        corpchars = (corp_ai[0][0], corp_ai[1][0])
         if corpchars != ('a', 'I') and corpchars != ('I', 'a'):
-            print("Unexpected most common 1-letter words in corpus: ", corpai)
+            print("Unexpected most common 1-letter words in corpus: ", corp_ai)
 
-        ciphai = self.cipher_short.most_common(2)
-        if ciphai[0][0].islower():
-            self.assign('a', ciphai[0][0])
-            self.assign('i', ciphai[1][0].lower())
+        ciph_ai = self.cipher_short.most_common(2)
+        if ciph_ai[0][0].islower():
+            self.assign('a', ciph_ai[0][0])
+            self.assign('i', ciph_ai[1][0].lower())
         else:
-            self.assign('a', ciphai[1][0])
-            self.assign('i', ciphai[0][0].lower())
+            self.assign('a', ciph_ai[1][0])
+            self.assign('i', ciph_ai[0][0].lower())
 
     def find_the_and_and(self):
         '''Try to find the two most common English words: "the" and "and".'''
         print("Looking for the words 'the' and 'and'")
 
-        # Looking at these most common corpus words only as a sanity-check
+        # Peek at these most common corpus words as a sanity-check
         corps = self.corpus_words.most_common(2)
         words = (corps[0][0], corps[1][0])
         if words != ('the', 'and') and words != ('and', 'the'):
@@ -118,17 +124,21 @@ class SubCipher:
 
     def inverse_match_1_unknown(self, ciph, length, count, corpus):
         print('Trying to match: ', ciph, 1, count)
-        # max_score = self.score_inverse(self.inverse_map)
-        for item in corpus:
-            if len(item[0]) == length:
-                word = item[0]
+        beg_score = self.score_inverse(self.inverse_map)
+        #max_score = 0
+        for word, count in corpus:
+            if len(word) == length:
+                # Match inverted ciphers to word chars
                 for idx in range(length):
                     inv = self.inverse_map[ciph[idx]]
-                    if inv != 0 and word[idx] != inv:
-                        break
-                    else:
-                        if self.forward_map[word[idx]] == 0:
-                            self.assign(word[idx], ciph[idx])
+                    if inv == 0:
+                        unk_idx = idx       # found the hole, so save its index
+                    elif word[idx] != inv:
+                        break               # break on the first mismatch
+                else:                       # all known chars matched, hole excluded
+                    # Compute the total score that would result from accepting this mapping
+                    if self.forward_map[word[unk_idx]] == 0:
+                        self.assign(word[unk_idx], ciph[unk_idx])
 
     def score_inverse(self, inverse):
         '''score based on totality of deciphered ciphs matching corpus words'''
@@ -139,7 +149,7 @@ class SubCipher:
             score = word_count * ciph_count * len(ciph)
             print(" {:9}\t {} => {}".format(score, ciph, word))
             score_total += score
-        return score
+        return score_total
 
     def num_unknown(self, ciph):
         '''returns the number of unknown cipher characters in the string ciph'''
@@ -157,7 +167,6 @@ class SubCipher:
         return ''.join(out)
 
     def show_all_deciphered_words(self):
-        score = self.score_inverse(self.inverse_map)
         for ciph in self.cipher_words.keys():
             print(ciph, ' -> ', self.deciphered(ciph))
 
@@ -170,7 +179,9 @@ class SubCipher:
 def decipher_file(cipher_file, corpus_file):
     '''Given a file of ordinary English sentences encoded using a simple
     substitution cipher, and a corpus of English text expected to contain
-    most of the words in the encoded text, decipher the encoded file.'''
+    most of the words in the encoded text, decipher the encoded file.
+    Uses the SubCipher class.
+    '''
 
     subs = SubCipher(cipher_file, corpus_file)
 
