@@ -17,6 +17,8 @@ class SubCipher:
         self.corpus_file = corpus_file
         self.cipher_short, self.cipher_words = count_short_and_lowered_long_words(cipher_file, 1)
         self.corpus_short, self.corpus_words = count_short_and_lowered_long_words(corpus_file, 1)
+        self.cipher_chars = count_chars_from_words(self.cipher_words)
+        self.corpus_chars = count_chars_from_words(self.corpus_words)
         self.forward_map = defaultdict(int)
         self.inverse_map = defaultdict(int)
 
@@ -55,7 +57,23 @@ class SubCipher:
         if words != ('the', 'and') and words != ('and', 'the'):
             print("Unexpected most common 3-letter words in corpus: ", corps)
 
-        ciphs = self.cipher_words.most_common(2)
+        most_freq_ciphs = self.cipher_chars.most_common(2)
+        probable_e = most_freq_ciphs[0][0]
+        alternate_e = most_freq_ciphs[0][0]
+        found_and = False
+        found_the = False
+        for item in self.cipher_words.most_common(10):
+            ciph = item[0]
+            if len(ciph) == 3:
+                if not found_the and (ciph[2] == probable_e or ciph[2] == alternate_e):
+                    found_the = True
+                    self.assign('t', ciph[0])
+                    self.assign('h', ciph[1])
+                    self.assign('e', ciph[2])
+                if not found_and and ciph[0] == self.forward_map['a']:
+                    found_and = True
+                    self.assign('n', ciph[1])
+                    self.assign('d', ciph[2])
 
 def decipher_file(cipher_file, corpus_file):
     '''Given a file of ordinary English sentences encoded using a simple
@@ -105,6 +123,16 @@ def count_short_and_lowered_long_words(file, max_short_len):
             short_counter.update(short)
             other_counter.update(other)
     return short_counter, other_counter
+
+def count_chars_from_words(word_counter):
+    '''Count chars from all words times their counts'''
+    char_counter = Counter()
+    for item in word_counter.items():
+        for _ in range(item[1]):
+            char_counter.update(item[0])
+    for c in char_counter.keys():
+        print(c, ' : ', char_counter[c])
+    return char_counter
 
 def main():
     '''Get file names for cipher and corpus texts and call decipher_file.'''
