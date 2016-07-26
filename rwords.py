@@ -5,7 +5,6 @@
 import heapq
 import re
 import sys
-##from string import punctuation
 from collections import defaultdict
 from collections import Counter
 
@@ -22,6 +21,11 @@ class SubCipher:
         self.corpus_chars = count_chars_from_words(self.corpus_words)
         self.forward_map = defaultdict(int)
         self.inverse_map = defaultdict(int)
+        self.verbose = 1
+        if self.verbose > 1:
+            print("The dozen most common corpus words and their counts:")
+            for word, count in self.corpus_words.most_common(12):
+                print("\t", word, "\t", count)
 
     def assign(self, corp, ciph):
         assert self.forward_map[corp] == 0, (
@@ -32,13 +36,16 @@ class SubCipher:
                 .format(corp, ciph, self.inverse_map[ciph], ciph))
         self.forward_map[corp] = ciph
         self.inverse_map[ciph] = corp
-        print('        ', corp, " -> ", ciph)
+        if self.verbose > 0:
+            print("Accept", corp, "->", ciph)
+
 
     def find_a_and_I(self):
         '''Try to find the word "I" as the most common capitalized
         single-letter word, and "a" as the most common lowercase
         single-letter word.  Assuming English, obviously.'''
-        print("Looking for the words 'a' and 'I'")
+        if self.verbose > 0:
+            print("Search for the words 'a' and 'I'")
 
         # Peek at these most common corpus words as a sanity-check
         corp_ai = self.corpus_short.most_common(2)
@@ -56,7 +63,8 @@ class SubCipher:
 
     def find_the_and_and(self):
         '''Try to find the two most common English words: "the" and "and".'''
-        print("Looking for the words 'the' and 'and'")
+        if self.verbose > 0:
+            print("Search for the words 'the' and 'and'")
 
         # Peek at these most common corpus words as a sanity-check
         corps = self.corpus_words.most_common(2)
@@ -90,7 +98,8 @@ class SubCipher:
         decision is immediate, not defered to accumulate multiple
         scoring passes or backpropogating votes.'''
 
-        corpus = self.corpus_words.most_common(4000)
+        num_words = len(self.corpus_words)
+        corpus = self.corpus_words.most_common(num_words) # Just try them all
         pq = [] # priority = [num_unknown(updated on pop), -count, length]
         for item in self.cipher_words.items():
             ciph = item[0]
@@ -117,15 +126,20 @@ class SubCipher:
                     # and get matched.  Quit when the sentinel comes back to
                     # the front.
                     sentinel = ciph
-                    print('Replacing at end of queue: ', ciph, unknowns, -neg_count)
+                    print('Repush entry [', ciph, unknowns, -neg_count, '] to end of the queue')
                     heapq.heappush(pq, [1000, 0, length, ciph])
-            else:
-                print ('Discarding: ', ciph, unknowns, -neg_count)
+            elif self.verbose > 2:
+                print ('\tAlready deciphered: ', unknowns, -neg_count, ciph, self.deciphered(ciph))
 
     def inverse_match_1_unknown(self, ciph, length, count, corpus):
-        print('Trying to match: ', ciph, 1, count)
+        '''Try to match one cipher word with a single unknown against all
+        corpus words of same length.  Accept the  match that maximaly
+        improves the total score (if there is any such a match).'''
+        ## print('Trying to match: ', ciph, 1, count)
         beg_score = self.score_inverse(self.inverse_map)
-        #max_score = 0
+        max_score = 0
+        max_char  = 0
+        max_word  = ''
         for word, count in corpus:
             if len(word) == length:
                 # Match inverted ciphers to word chars
@@ -137,8 +151,29 @@ class SubCipher:
                         break               # break on the first mismatch
                 else:                       # all known chars matched, hole excluded
                     # Compute the total score that would result from accepting this mapping
-                    if self.forward_map[word[unk_idx]] == 0:
-                        self.assign(word[unk_idx], ciph[unk_idx])
+                    word_char = word[unk_idx]
+                    ciph_char = ciph[unk_idx]
+                    self.inverse_map[ciph_char] = word_char  # create temporary inverse mapping
+                    try_score = self.score_inverse(self.inverse_map)
+                    self.inverse_map[ciph_char] = 0          # delete temporary inverse mapping
+                    if max_score < try_score:
+                        max_score = try_score
+                        max_char = word_char
+                        max_word = word
+
+        if max_score > beg_score:
+            old_forward = self.forward_map[max_char]
+            if old_forward != 0:                        # erase previous forward mapping, if it exists
+                if self.verbose > 0:
+                    old_word = self.deciphered(ciph)
+                    print("Delete {} -> {} because '{}' => '{}' gave old score {}".format(
+                        max_char, self.forward_map[max_char], ciph, old_word, beg_score))
+                self.forward_map[max_char] = 0
+                self.inverse_map[old_forward] = 0
+            if self.verbose > 0:
+                print("Assign {} -> {} because '{}' => '{}' gives score {} > {}".format(
+                    max_char, ciph_char, ciph, max_word, max_score, beg_score))
+            self.assign(max_char, ciph_char)
 
     def score_inverse(self, inverse):
         '''score based on totality of deciphered ciphs matching corpus words'''
@@ -147,7 +182,7 @@ class SubCipher:
             word = self.deciphered(ciph)
             word_count = self.corpus_words[word]    # 0 if not in corpus
             score = word_count * ciph_count * len(ciph)
-            print(" {:9}\t {} => {}".format(score, ciph, word))
+            ##print(" {:9}\t {} => {}".format(score, ciph, word))
             score_total += score
         return score_total
 
@@ -168,13 +203,14 @@ class SubCipher:
 
     def show_all_deciphered_words(self):
         for ciph in self.cipher_words.keys():
-            print(ciph, ' -> ', self.deciphered(ciph))
+            print(ciph, '=>', self.deciphered(ciph))
 
     def show_cipher(self):
         score = self.score_inverse(self.inverse_map)
         print("Score from all matched words using the key below: ", score)
         for c in char_range_inclusive('a', 'z'):
-            print(c, " -> ", self.forward_map[c])
+            t = self.forward_map[c]
+            print(c, "->", t if t else ' ')
 
 def decipher_file(cipher_file, corpus_file):
     '''Given a file of ordinary English sentences encoded using a simple
@@ -184,15 +220,10 @@ def decipher_file(cipher_file, corpus_file):
     '''
 
     subs = SubCipher(cipher_file, corpus_file)
-
-    print("corpus_words:")
-    for (word, count) in subs.corpus_words.most_common(10):
-        print(word, count)
-
     subs.find_a_and_I()
     subs.find_the_and_and()
     subs.find_words_from_ciphers()
-    subs.show_all_deciphered_words()
+    ##subs.show_all_deciphered_words()
     subs.show_cipher()
 
 
@@ -202,15 +233,12 @@ def char_range_inclusive(start, end, step=1):
 
 def count_words(file):
     '''Returns a Counter that has counted all ASCII-only words found in a text file.'''
-    ##rgx_split = re.compile(r'[\d\s{}]+'.format(re.escape(punctuation)))
     rgx_match = re.compile(r"[A-Za-z]+")
     counter = Counter()
     with open(file, 'r') as text:
         for line in text:
-            ##words = re.split(rgx_split, line.rstrip())
             words = re.findall(rgx_match, line.rstrip())
             words = [x.lower() if len(x) > 1 else x for x in words]
-            ##print(words)
             counter.update(words)
     return counter
 
@@ -241,8 +269,6 @@ def count_chars_from_words(word_counter):
     for item in word_counter.items():
         for _ in range(item[1]):
             char_counter.update(item[0])
-    ##for c in char_counter.keys():
-    ##    print(c, ' : ', char_counter[c])
     return char_counter
 
 def main():
