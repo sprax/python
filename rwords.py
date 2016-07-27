@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # Sprax Lines       2016.07.25      Written with Python 3.5
-'''Class and script to solve simple substitution cipher from corpus and encoded text'''
+'''Class and driver script to solve simple substitution cipher from
+a corpus and encoded text in separate text files.
+'''
 
 import heapq
 import re
@@ -218,81 +220,74 @@ class SubCipher:
         for ciph in self.cipher_words.keys():
             print(ciph, '=>', self.decipher_word(ciph))
 
-    def show_cipher(self):
-        score = self.score_inverse(self.inverse_map)
-        print("Score from all matched words using the key below: ", score)
+    def print_forward_map(self, outfile=sys.stdout):
         for word_char in char_range_inclusive('a', 'z'):
             ciph_char = self.forward_map[word_char]
-            print(word_char, "->", ciph_char if ciph_char else ' ')
+            print(word_char, "->", ciph_char if ciph_char else ' ', file=outfile)
 
-    def show_deciphered_lines(self):
+    def print_deciphered_lines(self, outfile=sys.stdout):
         for line in self.cipher_lines:
             text = self.decipher_text(line)
-            print(text)                                                 # system-agnostic?
-            ## print(text.encode(sys.stdout.encoding, errors='replace')) # adapt to system?
+            if outfile == sys.stdout:
+                uprint(text)                # compensate for non-UTF-terminals
+            else:
+                print(text, file=outfile)
 
-def uprint(*objects, sep=' ', end='\n', file=sys.stdout):
+    def write_forward_cipher_key(self, path):
+        with open(path, 'w') as out:
+            self.print_forward_map(out)
+            out.close()
+
+    def write_deciphered_text(self, path):
+        with open(path, 'w') as out:
+            self.print_deciphered_lines(out)
+            out.close()
+
+def uprint(*objects, sep=' ', end='\n', outfile=sys.stdout):
     '''Prints non-ASCII Unicode (UTF-8) characters in a safe (but possibly 
     ugly) way even in a Windows command terminal.  Unicode-enabled terminals
     such as on Mac or KDE have no problem, nor do most IDE's, but calling
     Python's built-in print to print such characters (e.g., an em-dash)
     from a Windows cmd or Powershell terminal causes errors such as: 
     UnicodeEncodeError: 'charmap' codec can't encode characters in position 32-33:
-    character maps to <undefined>
-    '''
-    enc = file.encoding
+    character maps to <undefined> '''
+    enc = outfile.encoding
     if enc == 'UTF-8':
-        print(*objects, sep=sep, end=end, file=file)
+        print(*objects, sep=sep, end=end, file=outfile)
     else:
         f = lambda obj: str(obj).encode(enc, errors='backslashreplace').decode(enc)
-        print(*map(f, objects), sep=sep, end=end, file=file)
-
-def solve_simple_substition_cipher(cipher_file, corpus_file):
-    '''Given a file of ordinary English sentences encoded using a simple
-    substitution cipher, and a corpus of English text expected to contain
-    most of the words in the encoded text, decipher the encoded file.
-    Uses the SubCipher class.
-    '''
-
-    subs = SubCipher(cipher_file, corpus_file)
-    subs.find_a_and_I()
-    subs.find_the_and_and()
-    subs.find_words_from_ciphers()
-    ##subs.show_deciphered_words()
-    subs.show_cipher()
-    subs.show_deciphered_lines()
-
+        print(*map(f, objects), sep=sep, end=end, file=outfile)
 
 def char_range_inclusive(start, end, step=1):
     for char in range(ord(start), ord(end)+1, step):
         yield chr(char)
 
-def read_file_lines(file):
+def read_file_lines(path):
     lines = []
-    with open(file, 'r') as text:
+    with open(path, 'r') as text:
         for line in text:
             lines.append(line.rstrip())
     return lines
 
-def count_words(file):
+def count_words(path):
     '''Returns a Counter that has counted all ASCII-only words found in a text file.'''
     rgx_match = re.compile(r"[A-Za-z]+")
     counter = Counter()
-    with open(file, 'r') as text:
+    with open(path, 'r') as text:
         for line in text:
             words = re.findall(rgx_match, line.rstrip())
             words = [x.lower() if len(x) > 1 else x for x in words]
             counter.update(words)
     return counter
 
-def count_short_and_lowered_long_words(file, max_short_len):
+def count_short_and_lowered_long_words(path, max_short_len):
     '''Returns two Counters containing all the ASCII-only words found in a text file.
        The first counter counts only words up to length max_short_len, as-is.
        The second counter contains all the longer words, but lowercased.'''
     rgx_match = re.compile(r"[A-Za-z]+")
     short_counter = Counter()
     other_counter = Counter()
-    with open(file, 'r') as text:
+    with open(path, 'r') as text:
         for line in text:
             short = []
             other = []
@@ -313,6 +308,25 @@ def count_chars_from_words(word_counter):
         for _ in range(item[1]):
             char_counter.update(item[0])
     return char_counter
+
+def solve_simple_substition_cipher(cipher_file, corpus_file):
+    '''Given a file of ordinary English sentences encoded using a simple
+    substitution cipher, and a corpus of English text expected to contain
+    most of the words in the encoded text, decipher the encoded file.
+    Uses the SubCipher class.
+    '''
+
+    subs = SubCipher(cipher_file, corpus_file)
+    subs.find_a_and_I()
+    subs.find_the_and_and()
+    subs.find_words_from_ciphers()
+    ##subs.show_deciphered_words()
+    score = subs.score_inverse(subs.inverse_map)
+    print("Score from all matched words using the key below: ", score)
+    subs.print_forward_map()
+    subs.print_deciphered_lines()
+    subs.write_forward_cipher_key(cipher_file + ".key")
+    subs.write_deciphered_text(cipher_file + ".decoded")
 
 def main():
     '''Get file names for cipher and corpus texts and call
