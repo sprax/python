@@ -18,8 +18,8 @@ class SubCipher:
         self.cipher_file = cipher_file
         self.corpus_file = corpus_file
         self.cipher_lines = read_file_lines(cipher_file)
-        self.cipher_short, self.cipher_words = count_short_and_lowered_long_words(cipher_file, 1)
-        self.corpus_short, self.corpus_words = count_short_and_lowered_long_words(corpus_file, 1)
+        self.cipher_short, self.cipher_words = word_counts_short_and_long(cipher_file, 1)
+        self.corpus_short, self.corpus_words = word_counts_short_and_long(corpus_file, 1)
         self.cipher_chars = count_chars_from_words(self.cipher_words)
         self.corpus_chars = count_chars_from_words(self.corpus_words)
         self.forward_map = defaultdict(int)
@@ -45,7 +45,7 @@ class SubCipher:
         if self.verbose > 1:
             print("Accept", corp, "->", ciph)
 
-    def find_a_and_I(self):
+    def find_a_and_i(self):
         '''Try to find the word "I" as the most common capitalized
         single-letter word, and "a" as the most common lowercase
         single-letter word.  Assuming English, obviously.'''
@@ -105,25 +105,23 @@ class SubCipher:
 
         num_words = len(self.corpus_words)
         corpus = self.corpus_words.most_common(num_words) # Just try them all
-        inverse_pq = [] # priority = [num_unknown(updated on pop), -count, length]
-        for item in self.cipher_words.items():
-            ciph = item[0]
-            count = item[1]
-            entry = [self.num_unknown(ciph), -count, len(ciph), ciph]
+        inverse_pq = [] # priority = [num_unknown (updated on pop), -count, length]
+        for ciph, count in self.cipher_words.items():
+            entry = [self.number_of_unknowns(ciph), -count, len(ciph), ciph]
             heapq.heappush(inverse_pq, entry)
 
         sentinel = ''   # terminate loop when seen twice
         while inverse_pq:
-            unknowns, neg_count, length, ciph = heapq.heappop(inverse_pq)
-            if unknowns == 0:
+            num_unk, neg_count, length, ciph = heapq.heappop(inverse_pq)
+            if num_unk == 0:
                 continue
-            unknowns = self.num_unknown(ciph)   # update in case any of its chars were discovered
-            if unknowns == 1:
-                self.inverse_match_1_unknown(ciph, length, -neg_count, corpus)
+            num_unk, idx_unk = self.num_idx_unknown(ciph)   # update (unknowns can become known)
+            if num_unk == 1:
+                self.inverse_match_1_unknown(ciph, length, idx_unk, corpus)
 
-            elif unknowns > 1:
+            elif num_unk > 1:
                 if ciph == sentinel:
-                    print('Breaking from queue at: ', ciph, unknowns, -neg_count)
+                    print('Breaking from queue at: ', ciph, num_unk, -neg_count)
                     break
                 elif not sentinel:
                     # Set the sentinel and give each item still in the queue
@@ -131,13 +129,13 @@ class SubCipher:
                     # and get matched.  Quit when the sentinel comes back to
                     # the front.
                     sentinel = ciph
-                    print('Repush entry [', ciph, unknowns, -neg_count, '] to end of the queue')
+                    print('Repush entry [', ciph, num_unk, -neg_count, '] to end of the queue')
                     heapq.heappush(inverse_pq, [1000, 0, length, ciph])
             elif self.verbose > 2:
-                print('\tAlready deciphered: ', unknowns, -neg_count, ciph
+                print('\tAlready deciphered: ', num_unk, -neg_count, ciph
                       , self.decipher_word(ciph))
 
-    def inverse_match_1_unknown(self, ciph, length, count, corpus):
+    def inverse_match_1_unknown(self, ciph, length, idx_unknown, corpus):
         '''Try to match one cipher word with a single unknown against all
         corpus words of same length.  Accept the  match that maximaly
         improves the total score (if there is any such a match).'''
@@ -146,7 +144,7 @@ class SubCipher:
         max_score = 0
         max_char = 0
         max_word = ''
-        for word, count in corpus:
+        for word, _ in corpus:
             if len(word) == length:
                 # Match inverted ciphers to word chars
                 for idx in range(length):
@@ -169,16 +167,17 @@ class SubCipher:
 
         if max_score > beg_score:
             old_forward = self.forward_map[max_char]
+            count = self.cipher_words[ciph]
             if old_forward != 0: # erase previous forward mapping, if it exists
                 if self.verbose > 0:
                     old_word = self.decipher_word(ciph)
-                    print("Delete {} -> {} because '{}' => '{}' gave old score: {}".format(
-                        max_char, self.forward_map[max_char], ciph, old_word, beg_score))
+                    print("Delete {} -> {} because {} x '{}' => '{}' gave old score: {}".format(
+                        max_char, self.forward_map[max_char], count, ciph, old_word, beg_score))
                 self.forward_map[max_char] = 0
                 self.inverse_map[old_forward] = 0
             if self.verbose > 0:
-                print("Assign {} -> {} because '{}' => '{}' gives new score {} > {}".format(
-                    max_char, ciph_char, ciph, max_word, max_score, beg_score))
+                print("Assign {} -> {} because {} x '{}' => '{}' gives new score {} > {}".format(
+                    max_char, ciph_char, count, ciph, max_word, max_score, beg_score))
             self.assign(max_char, ciph_char)
 
     def score_inverse(self):
@@ -192,9 +191,23 @@ class SubCipher:
             score_total += score
         return score_total
 
-    def num_unknown(self, ciph):
+    def number_of_unknowns(self, ciph):
         '''returns the number of unknown cipher characters in the string ciph'''
         return sum(map(lambda x: self.inverse_map[x] == 0, ciph))
+
+    def num_idx_unknown(self, ciph):
+        '''returns the number of unknown cipher characters in the string ciph
+        and the index of the right-most unknown'''
+        num_unknown = 0
+        idx_unknown = -1
+        idx = 0
+        for fwd in ciph:
+            inv = self.inverse_map[fwd]
+            if inv == 0:
+                num_unknown += 1
+                idx_unknown = idx
+            idx += 1
+        return num_unknown, idx_unknown
 
     def decipher_word(self, encoded_word):
         '''Replace contents of encoded_word with inverse mapped chars'''
@@ -297,7 +310,7 @@ def count_words(path):
             counter.update(words)
     return counter
 
-def count_short_and_lowered_long_words(path, max_short_len):
+def word_counts_short_and_long(path, max_short_len):
     '''Returns two Counters containing all the ASCII-only words found in a text file.
        The first counter counts only words up to length max_short_len, as-is.
        The second counter contains all the longer words, but lowercased.'''
@@ -333,7 +346,7 @@ def solve_simple_substition_cipher(cipher_file, corpus_file, verbose):
     Uses the SubCipher class.
     '''
     subs = SubCipher(cipher_file, corpus_file, verbose)
-    subs.find_a_and_I()
+    subs.find_a_and_i()
     subs.find_the_and_and()
     subs.find_words_from_ciphers()
     if verbose > 1:
