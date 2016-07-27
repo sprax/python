@@ -143,7 +143,6 @@ class SubCipher:
         self.inverse_score = self.score_inverse_map()
         ciph_char = ciph[idx_unknown]
         max_score = 0
-        max_char = 0
         max_word = ''
         deciphered = self.decipher_word(ciph)
         for word, _ in corpus:
@@ -162,10 +161,11 @@ class SubCipher:
                     self.inverse_map[ciph_char] = 0         # delete temporary inverse mapping
                     if max_score < try_score:
                         max_score = try_score
-                        max_char = word_char
                         max_word = word
 
         if max_score > self.inverse_score:
+            self.update_mapping_on_better_score(ciph, idx_unknown, max_word, max_score)
+            '''
             old_forward = self.forward_map[max_char]
             count = self.cipher_words[ciph]
             # Must delete the previous forward mapping, if it exists
@@ -181,8 +181,10 @@ class SubCipher:
                     max_char, ciph_char, count, ciph, max_word, max_score, self.inverse_score))
             self.inverse_score = max_score
             self.assign(max_char, ciph_char)
+            '''
 
     def update_mapping_on_better_score(self, ciph, idx_unknown, max_word, max_score):
+        '''Update forward and inverse maps and show the details, if verbose > 0'''
         ciph_char = ciph[idx_unknown]
         max_char = max_word[idx_unknown]
         old_forward = self.forward_map[max_char]
