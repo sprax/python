@@ -31,12 +31,15 @@ class SubCipher:
                 print("\t", word, "\t", count)
 
     def assign(self, corp, ciph):
+        '''Assigns corpus char -> cipher char in the forward cipher map,
+        and the opposite in the inverse map.  Asserts that these character
+        are not already mapped.  TODO: Replace assert with actual error?'''
         assert self.forward_map[corp] == 0, (
-                "Cannot forward assign {} -> {} because already {} -> {}"
-                .format(corp, ciph, corp, self.forward_map[corp]))
+            "Cannot forward assign {} -> {} because already {} -> {}"
+            .format(corp, ciph, corp, self.forward_map[corp]))
         assert self.inverse_map[ciph] == 0, (
-                "Cannot inverse assign {} -> {} because already {} -> {}"
-                .format(corp, ciph, self.inverse_map[ciph], ciph))
+            "Cannot inverse assign {} -> {} because already {} -> {}"
+            .format(corp, ciph, self.inverse_map[ciph], ciph))
         self.forward_map[corp] = ciph
         self.inverse_map[ciph] = corp
         if self.verbose > 0:
@@ -95,28 +98,28 @@ class SubCipher:
     def find_words_from_ciphers(self):
         '''Find common corpus words comprised mostly of known inverse
         cipher chars, and try filling in the missing letters.  Trials
-        are evaluated by scoring how many decoded cipher words then 
-        match corpus words.  The highest score wins.  (That is, the 
+        are evaluated by scoring how many decoded cipher words then
+        match corpus words.  The highest score wins.  (That is, the
         decision is immediate, not defered to accumulate multiple
         scoring passes or backpropogating votes.'''
 
         num_words = len(self.corpus_words)
         corpus = self.corpus_words.most_common(num_words) # Just try them all
-        pq = [] # priority = [num_unknown(updated on pop), -count, length]
+        inverse_pq = [] # priority = [num_unknown(updated on pop), -count, length]
         for item in self.cipher_words.items():
             ciph = item[0]
             count = item[1]
             entry = [self.num_unknown(ciph), -count, len(ciph), ciph]
-            heapq.heappush(pq, entry)
+            heapq.heappush(inverse_pq, entry)
 
         sentinel = ''   # terminate loop when seen twice
-        while pq:
-            unknowns, neg_count, length, ciph = heapq.heappop(pq)
+        while inverse_pq:
+            unknowns, neg_count, length, ciph = heapq.heappop(inverse_pq)
             if unknowns == 0:
                 continue
             unknowns = self.num_unknown(ciph)   # update in case any of its chars were discovered
             if unknowns == 1:
-                self.inverse_match_1_unknown(ciph, length, -neg_count, corpus) 
+                self.inverse_match_1_unknown(ciph, length, -neg_count, corpus)
 
             elif unknowns > 1:
                 if ciph == sentinel:
@@ -129,9 +132,10 @@ class SubCipher:
                     # the front.
                     sentinel = ciph
                     print('Repush entry [', ciph, unknowns, -neg_count, '] to end of the queue')
-                    heapq.heappush(pq, [1000, 0, length, ciph])
+                    heapq.heappush(inverse_pq, [1000, 0, length, ciph])
             elif self.verbose > 2:
-                print ('\tAlready deciphered: ', unknowns, -neg_count, ciph, self.decipher_word(ciph))
+                print('\tAlready deciphered: ', unknowns, -neg_count, ciph
+                        , self.decipher_word(ciph, self.inverse_map))
 
     def inverse_match_1_unknown(self, ciph, length, count, corpus):
         '''Try to match one cipher word with a single unknown against all
@@ -165,9 +169,9 @@ class SubCipher:
 
         if max_score > beg_score:
             old_forward = self.forward_map[max_char]
-            if old_forward != 0:                        # erase previous forward mapping, if it exists
+            if old_forward != 0: # erase previous forward mapping, if it exists
                 if self.verbose > 0:
-                    old_word = self.decipher_word(ciph)
+                    old_word = self.decipher_word(ciph, self.inverse_map)
                     print("Delete {} -> {} because '{}' => '{}' gave old score {}".format(
                         max_char, self.forward_map[max_char], ciph, old_word, beg_score))
                 self.forward_map[max_char] = 0
@@ -177,11 +181,11 @@ class SubCipher:
                     max_char, ciph_char, ciph, max_word, max_score, beg_score))
             self.assign(max_char, ciph_char)
 
-    def score_inverse(self, inverse):
+    def score_inverse(self, inverse_map):
         '''score based on totality of deciphered cipher words matching corpus words'''
         score_total = 0
         for ciph, ciph_count in self.cipher_words.items():
-            word = self.decipher_word(ciph)
+            word = self.decipher_word(ciph, inverse_map)
             word_count = self.corpus_words[word]    # 0 if not in corpus
             score = word_count * ciph_count * len(ciph)
             ##print(" {:9}\t {} => {}".format(score, ciph, word))
@@ -192,11 +196,11 @@ class SubCipher:
         '''returns the number of unknown cipher characters in the string ciph'''
         return sum(map(lambda x: self.inverse_map[x] == 0, ciph))
 
-    def decipher_word(self, encoded_word):
+    def decipher_word(self, encoded_word, inverse_map) :
         '''Replace contents of encoded_word with inverse mapped chars'''
         out = []
         for j in range(len(encoded_word)):
-            inv = self.inverse_map[encoded_word[j]]
+            inv = inverse_map[encoded_word[j]]
             if inv == 0:
                 out.append('_')
             else:
@@ -214,11 +218,11 @@ class SubCipher:
                 decoded.append(x.upper() if x else '_')
             else:
                 decoded.append(q)
-        return ''.join(decoded);
-       
+        return ''.join(decoded)
+
     def show_deciphered_words(self):
         for ciph in self.cipher_words.keys():
-            print(ciph, '=>', self.decipher_word(ciph))
+            print(ciph, '=>', self.decipher_word(ciph, self.inverse_map))
 
     def print_forward_map(self, outfile=sys.stdout):
         for word_char in char_range_inclusive('a', 'z'):
@@ -244,11 +248,11 @@ class SubCipher:
             out.close()
 
 def uprint(*objects, sep=' ', end='\n', outfile=sys.stdout):
-    '''Prints non-ASCII Unicode (UTF-8) characters in a safe (but possibly 
+    '''Prints non-ASCII Unicode (UTF-8) characters in a safe (but possibly
     ugly) way even in a Windows command terminal.  Unicode-enabled terminals
     such as on Mac or KDE have no problem, nor do most IDE's, but calling
     Python's built-in print to print such characters (e.g., an em-dash)
-    from a Windows cmd or Powershell terminal causes errors such as: 
+    from a Windows cmd or Powershell terminal causes errors such as:
     UnicodeEncodeError: 'charmap' codec can't encode characters in position 32-33:
     character maps to <undefined> '''
     enc = outfile.encoding
@@ -258,11 +262,15 @@ def uprint(*objects, sep=' ', end='\n', outfile=sys.stdout):
         f = lambda obj: str(obj).encode(enc, errors='backslashreplace').decode(enc)
         print(*map(f, objects), sep=sep, end=end, file=outfile)
 
-def char_range_inclusive(start, end, step=1):
-    for char in range(ord(start), ord(end)+1, step):
+def char_range_inclusive(first, last, step=1):
+    '''ranges from specified first to last character, inclusive, in
+    any character set, depending only on ord()'''
+    for char in range(ord(first), ord(last)+1, step):
         yield chr(char)
 
+
 def read_file_lines(path):
+    '''reads a text file into a list of lines'''
     lines = []
     with open(path, 'r') as text:
         for line in text:
