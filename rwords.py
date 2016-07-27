@@ -165,26 +165,12 @@ class SubCipher:
 
         if max_score > self.inverse_score:
             self.update_mapping_on_better_score(ciph, idx_unknown, max_word, max_score)
-            '''
-            old_forward = self.forward_map[max_char]
-            count = self.cipher_words[ciph]
-            # Must delete the previous forward mapping, if it exists
-            if old_forward != 0:
-                if self.verbose > 0:
-                    old_word = self.decipher_word(ciph)
-                    print("Delete {} -> {} because {} x '{}' => '{}' gave old score: {}".format(
-                        max_char, self.forward_map[max_char], count, ciph, old_word, self.inverse_score))
-                self.forward_map[max_char] = 0
-                self.inverse_map[old_forward] = 0
-            if self.verbose > 0:
-                print("Assign {} -> {} because {} x '{}' => '{}' gives new score {} > {}".format(
-                    max_char, ciph_char, count, ciph, max_word, max_score, self.inverse_score))
-            self.inverse_score = max_score
-            self.assign(max_char, ciph_char)
-            '''
 
     def update_mapping_on_better_score(self, ciph, idx_unknown, max_word, max_score):
-        '''Update forward and inverse maps and show the details, if verbose > 0'''
+        '''Update forward and inverse maps and, if verbose > 0, show why.
+        For now this method assumes inverse-map scoring, but could be generalized
+        for forward-mapping, partial-word matches (stemming), and so forth.
+        This method exists mainly to provide a trace of the solver's progress.'''
         ciph_char = ciph[idx_unknown]
         max_char = max_word[idx_unknown]
         old_forward = self.forward_map[max_char]
@@ -194,7 +180,8 @@ class SubCipher:
             if self.verbose > 0:
                 old_word = self.decipher_word(ciph)
                 print("Delete {} -> {} because {} x '{}' => '{}' gave old score: {}".format(
-                    max_char, self.forward_map[max_char], count, ciph, old_word, self.inverse_score))
+                    max_char, self.forward_map[max_char], count,
+                    ciph, old_word, self.inverse_score))
             self.forward_map[max_char] = 0
             self.inverse_map[old_forward] = 0
         if self.verbose > 0:
