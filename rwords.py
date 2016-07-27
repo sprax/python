@@ -24,6 +24,7 @@ class SubCipher:
         self.corpus_chars = count_chars_from_words(self.corpus_words)
         self.forward_map = defaultdict(int)
         self.inverse_map = defaultdict(int)
+        self.inverse_score = 0
         self.verbose = verbose
         if self.verbose > 1:
             print("The dozen most common corpus words and their counts:")
@@ -102,7 +103,6 @@ class SubCipher:
         match corpus words.  The highest score wins.  (That is, the
         decision is immediate, not defered to accumulate multiple
         scoring passes or backpropogating votes.'''
-
         num_words = len(self.corpus_words)
         corpus = self.corpus_words.most_common(num_words) # Just try them all
         inverse_pq = [] # priority = [num_unknown (updated on pop), -count, length]
@@ -110,7 +110,7 @@ class SubCipher:
             entry = [self.number_of_unknowns(ciph), -count, len(ciph), ciph]
             heapq.heappush(inverse_pq, entry)
 
-        sentinel = ''   # terminate loop when seen twice
+        sentinel = ''   # terminate the loop when the sentinel is seen a second time
         while inverse_pq:
             num_unk, neg_count, length, ciph = heapq.heappop(inverse_pq)
             if num_unk == 0:
@@ -137,50 +137,71 @@ class SubCipher:
 
     def inverse_match_1_unknown(self, ciph, length, idx_unknown, corpus):
         '''Try to match one cipher word with a single unknown against all
-        corpus words of same length.  Accept the  match that maximaly
+        corpus words of same length.  Accept the match that maximaly
         improves the total score (if there is any such a match).'''
         ## print('Trying to match: ', ciph, 1, count)
-        beg_score = self.score_inverse()
+        self.inverse_score = self.score_inverse_map()
+        ciph_char = ciph[idx_unknown]
         max_score = 0
         max_char = 0
         max_word = ''
+        deciphered = self.decipher_word(ciph)
         for word, _ in corpus:
             if len(word) == length:
                 # Match inverted ciphers to word chars
                 for idx in range(length):
-                    inv = self.inverse_map[ciph[idx]]
-                    if inv == 0:
-                        unk_idx = idx       # found the hole, so save its index
-                    elif word[idx] != inv:
-                        break               # break on the first mismatch
+                    if idx == idx_unknown:
+                        continue            # skip over the single unknown
+                    if word[idx] != deciphered[idx]:
+                        break               # break on the first known mismatch
                 else:                       # all known chars matched, hole excluded
                     # Compute the total score that would result from accepting this mapping
-                    word_char = word[unk_idx]
-                    ciph_char = ciph[unk_idx]
-                    self.inverse_map[ciph_char] = word_char  # create temporary inverse mapping
-                    try_score = self.score_inverse()
-                    self.inverse_map[ciph_char] = 0          # delete temporary inverse mapping
+                    word_char = word[idx_unknown]
+                    self.inverse_map[ciph_char] = word_char # create temporary inverse mapping
+                    try_score = self.score_inverse_map()    # compute score with this mapping
+                    self.inverse_map[ciph_char] = 0         # delete temporary inverse mapping
                     if max_score < try_score:
                         max_score = try_score
                         max_char = word_char
                         max_word = word
 
-        if max_score > beg_score:
+        if max_score > self.inverse_score:
             old_forward = self.forward_map[max_char]
             count = self.cipher_words[ciph]
-            if old_forward != 0: # erase previous forward mapping, if it exists
+            # Must delete the previous forward mapping, if it exists
+            if old_forward != 0:
                 if self.verbose > 0:
                     old_word = self.decipher_word(ciph)
                     print("Delete {} -> {} because {} x '{}' => '{}' gave old score: {}".format(
-                        max_char, self.forward_map[max_char], count, ciph, old_word, beg_score))
+                        max_char, self.forward_map[max_char], count, ciph, old_word, self.inverse_score))
                 self.forward_map[max_char] = 0
                 self.inverse_map[old_forward] = 0
             if self.verbose > 0:
                 print("Assign {} -> {} because {} x '{}' => '{}' gives new score {} > {}".format(
-                    max_char, ciph_char, count, ciph, max_word, max_score, beg_score))
+                    max_char, ciph_char, count, ciph, max_word, max_score, self.inverse_score))
+            self.inverse_score = max_score
             self.assign(max_char, ciph_char)
 
-    def score_inverse(self):
+    def update_mapping_on_better_score(self, ciph, idx_unknown, max_word, max_score):
+        ciph_char = ciph[idx_unknown]
+        max_char = max_word[idx_unknown]
+        old_forward = self.forward_map[max_char]
+        count = self.cipher_words[ciph]
+        # Must delete the previous forward mapping, if it exists
+        if old_forward != 0:
+            if self.verbose > 0:
+                old_word = self.decipher_word(ciph)
+                print("Delete {} -> {} because {} x '{}' => '{}' gave old score: {}".format(
+                    max_char, self.forward_map[max_char], count, ciph, old_word, self.inverse_score))
+            self.forward_map[max_char] = 0
+            self.inverse_map[old_forward] = 0
+        if self.verbose > 0:
+            print("Assign {} -> {} because {} x '{}' => '{}' gives new score {} > {}".format(
+                max_char, ciph_char, count, ciph, max_word, max_score, self.inverse_score))
+        self.inverse_score = max_score
+        self.assign(max_char, ciph_char)
+
+    def score_inverse_map(self):
         '''score based on totality of deciphered cipher words matching corpus words'''
         score_total = 0
         for ciph, ciph_count in self.cipher_words.items():
@@ -351,7 +372,7 @@ def solve_simple_substition_cipher(cipher_file, corpus_file, verbose):
     subs.find_words_from_ciphers()
     if verbose > 1:
         subs.print_deciphered_words()
-    score = subs.score_inverse()
+    score = subs.score_inverse_map()
     print("Score from all matched words using the key below: ", score)
     subs.print_forward_map()
     subs.print_deciphered_lines()
