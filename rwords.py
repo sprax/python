@@ -228,17 +228,24 @@ class SubCipher:
     def show_deciphered_lines(self):
         for line in self.cipher_lines:
             text = self.decipher_text(line)
-            uprint(text)                                                 # system-agnostic?
+            print(text)                                                 # system-agnostic?
             ## print(text.encode(sys.stdout.encoding, errors='replace')) # adapt to system?
 
 def uprint(*objects, sep=' ', end='\n', file=sys.stdout):
+    '''Prints non-ASCII Unicode (UTF-8) characters in a safe (but possibly 
+    ugly) way even in a Windows command terminal.  Unicode-enabled terminals
+    such as on Mac or KDE have no problem, nor do most IDE's, but calling
+    Python's built-in print to print such characters (e.g., an em-dash)
+    from a Windows cmd or Powershell terminal causes errors such as: 
+    UnicodeEncodeError: 'charmap' codec can't encode characters in position 32-33:
+    character maps to <undefined>
+    '''
     enc = file.encoding
     if enc == 'UTF-8':
         print(*objects, sep=sep, end=end, file=file)
     else:
         f = lambda obj: str(obj).encode(enc, errors='backslashreplace').decode(enc)
         print(*map(f, objects), sep=sep, end=end, file=file)
-
 
 def solve_simple_substition_cipher(cipher_file, corpus_file):
     '''Given a file of ordinary English sentences encoded using a simple
