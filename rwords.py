@@ -86,11 +86,14 @@ class SubCipher:
         if self.verbose > 0:
             print("Search for the words 'the' and 'and'")
 
-        # Peek at these most common corpus words as a sanity-check
-        corps = self.corpus_words.most_common(2)
-        words = (corps[0][0], corps[1][0])
+        # Peek at the most common three-letter corpus words as a sanity-check
+        len3words = []
+        for word, count in self.corpus_words.most_common(12):
+            if len(word) == 3:
+                len3words.append(word)
+        words = len3words[:2]
         if words != ('the', 'and') and words != ('and', 'the'):
-            print("Unexpected most common 3-letter words in corpus: ", corps)
+            print("Unexpected most common 3-letter words in corpus:\n", len3words)
 
         most_freq_ciphs = self.cipher_chars.most_common(2)
         probable_e = most_freq_ciphs[0][0]
@@ -279,11 +282,19 @@ class SubCipher:
                 decoded.append(char)
         return ''.join(decoded)
 
+    ######## OUTPUT METHODS ########
+
     def print_deciphered_words(self, outfile=sys.stdout):
         '''Print all the words from the cipher file as decoded using
         the current inverse_map to stdout (default) or a file'''
-        for ciph in self.cipher_words.keys():
-            print(ciph, '=>', self.decipher_word(ciph), file=outfile)
+        print('cipher\tcorpus \tcoded\tdecoded')
+        for ciph in sorted(self.cipher_words.keys(), key=self.cipher_words.get,
+                reverse=True):
+            ciph_count = self.cipher_words[ciph]
+            word = self.decipher_word(ciph)
+            corp_count = self.corpus_words[word]
+            print('{}\t{} \t {} => {}'.format(
+                ciph_count, corp_count, ciph, word), file=outfile)
 
     def print_forward_map(self, outfile=sys.stdout):
         '''Print the forward cipher mapping to stdout (default) or a file'''
@@ -361,7 +372,7 @@ def word_counts_short_and_long(path, max_short_len):
     rgx_match = re.compile(r"[A-Za-z]+")
     short_counter = Counter()
     other_counter = Counter()
-    with open(path, 'r') as text:
+    with open(path, 'r', encoding="utf8") as text:
         for line in text:
             short = []
             other = []
