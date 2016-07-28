@@ -45,6 +45,26 @@ class SubCipher:
             for word, count in self.corpus_words.most_common(12):
                 print("\t", word, "\t", count)
 
+    def solve(self):
+        '''Given a file of ordinary English sentences encoded using a simple
+        substitution cipher, and a corpus of English text expected to contain
+        most of the words in the encoded text, decipher the encoded file.
+        Uses the SubCipher class.
+        '''
+        self.find_a_and_i()
+        self.find_the_and_and()
+        self.find_words_from_ciphers()
+        if self.verbose > 0:
+            matches, misses = self.count_decoded_words_in_corpus()
+            print("Distinct decoded words found in corpus: {}  misses: {}".format(matches, misses))
+            if self.verbose > 2:
+                self.print_deciphered_words()
+            print("Score from all matched words using the key below: ", self.inverse_score)
+        self.print_forward_map()
+        self.print_deciphered_lines()
+        self.write_forward_cipher_key(self.cipher_file + ".key")
+        self.write_deciphered_text(self.cipher_file + ".decoded")
+
     def assign(self, corp, ciph):
         '''Assigns corpus char -> cipher char in the forward cipher map,
         and the opposite in the inverse map.  Asserts that these character
@@ -92,16 +112,15 @@ class SubCipher:
             if len(word) == 3:
                 len3words.append(word)
         words = len3words[:2]
-        if words != ('the', 'and') and words != ('and', 'the'):
+        if words != ['the', 'and'] and words != ['and', 'the']:
             print("Unexpected most common 3-letter words in corpus:\n", len3words)
 
         most_freq_ciphs = self.cipher_chars.most_common(2)
         probable_e = most_freq_ciphs[0][0]
-        alternate_e = most_freq_ciphs[0][0]
+        alternate_e = most_freq_ciphs[1][0]
         found_and = False
         found_the = False
-        for item in self.cipher_words.most_common(10):
-            ciph = item[0]
+        for ciph, count in self.cipher_words.most_common(10):
             if len(ciph) == 3:
                 if not found_the and (ciph[2] == probable_e or ciph[2] == alternate_e):
                     found_the = True
@@ -157,7 +176,7 @@ class SubCipher:
         corpus words of same length.  Accept the match that maximaly
         improves the total score (if there is any such a match).'''
         if self.verbose > 3:
-            print('Trying to match cipher word {} and index {}'.format(ciph, idx_unknown))
+            print('Trying to match cipher word {} at index {}'.format(ciph, idx_unknown))
         self.inverse_score = self.score_inverse_map()
         ciph_char = ciph[idx_unknown]
         max_score = 0
@@ -401,20 +420,7 @@ def solve_simple_substition_cipher(cipher_file, corpus_file, verbose):
     Uses the SubCipher class.
     '''
     subs = SubCipher(cipher_file, corpus_file, verbose)
-    subs.find_a_and_i()
-    subs.find_the_and_and()
-    subs.find_words_from_ciphers()
-    if verbose > 2:
-        subs.print_deciphered_words()
-    if verbose > 0:
-        matches, misses = subs.count_decoded_words_in_corpus()
-        print("Distinct decoded words found in corpus: {}  misses: {}".format(matches, misses))
-        score = subs.score_inverse_map()
-        print("Score from all matched words using the key below: ", score)
-    subs.print_forward_map()
-    subs.print_deciphered_lines()
-    subs.write_forward_cipher_key(cipher_file + ".key")
-    subs.write_deciphered_text(cipher_file + ".decoded")
+    subs.solve()
 
 def main():
     '''Get file names for cipher and corpus texts and call
