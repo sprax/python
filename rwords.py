@@ -2,6 +2,20 @@
 # Sprax Lines       2016.07.25      Written with Python 3.5
 '''Class and driver script to solve simple substitution cipher from
 a corpus and encoded text in separate text files.
+
+Usage: python3 <this_script> [encoded_file [corpus_file [verbosity]]]
+Where:
+    encoded_file contains text (at least mostly English) in which
+    every lower [upper[ case ASCII letter has been replaced by the
+    lower [upper] case subsititution-cipher value for that letter;
+    corpus_file contains (mostly English) text whose word distribution
+    is not too dissimilar from that of the encoded text; and
+    verbosity sets the level of trace output.
+    Two new files are written:
+    cipher_text.key will contain the discovered forward mapping of letter
+    to cipher, and
+    cipher_text.decoded will contain the deciphered contents the
+    cipher_text file.
 '''
 
 import heapq
@@ -139,7 +153,8 @@ class SubCipher:
         '''Try to match one cipher word with a single unknown against all
         corpus words of same length.  Accept the match that maximaly
         improves the total score (if there is any such a match).'''
-        ## print('Trying to match: ', ciph, 1, count)
+        if self.verbose > 3:
+            print('Trying to match cipher word {} and index {}'.format(ciph, idx_unknown))
         self.inverse_score = self.score_inverse_map()
         ciph_char = ciph[idx_unknown]
         max_score = 0
@@ -197,9 +212,28 @@ class SubCipher:
             word = self.decipher_word(ciph)
             word_count = self.corpus_words[word]    # 0 if not in corpus
             score = word_count * ciph_count * len(ciph)
-            ##print(" {:9}\t {} => {}".format(score, ciph, word))
+            if self.verbose > 5:
+                print(" {:9}\t {} => {}".format(score, ciph, word))
             score_total += score
         return score_total
+
+    def count_decoded_words_in_corpus(self):
+        '''returns two counts:
+        (1) the number of distinct encoded words that, decoded with the current
+        best guess at the cipher key, match some word found in the corpus, and
+        (2) the number that do not.
+        Note that the set of 'words' may include such strings as "t" and
+        "ll", which result from splitting "don't" and "you'll" on the
+        apostrophe. No assumption is made of proper grammer or orthography'''
+        num_ciphers = len(self.cipher_short) + len(self.cipher_words)
+        num_matches = 0
+        for cipher in self.cipher_short:
+            deciph = self.decipher_word(cipher)
+            num_matches += 1 if self.corpus_short[deciph] else 0
+        for cipher in self.cipher_words:
+            deciph = self.decipher_word(cipher)
+            num_matches += 1 if self.corpus_words[deciph] else 0
+        return num_matches, num_ciphers - num_matches
 
     def number_of_unknowns(self, ciph):
         '''returns the number of unknown cipher characters in the string ciph'''
@@ -359,10 +393,13 @@ def solve_simple_substition_cipher(cipher_file, corpus_file, verbose):
     subs.find_a_and_i()
     subs.find_the_and_and()
     subs.find_words_from_ciphers()
-    if verbose > 1:
+    if verbose > 2:
         subs.print_deciphered_words()
-    score = subs.score_inverse_map()
-    print("Score from all matched words using the key below: ", score)
+    if verbose > 0:
+        matches, misses = subs.count_decoded_words_in_corpus()
+        print("Distinct decoded words found in corpus: {}  misses: {}".format(matches, misses))
+        score = subs.score_inverse_map()
+        print("Score from all matched words using the key below: ", score)
     subs.print_forward_map()
     subs.print_deciphered_lines()
     subs.write_forward_cipher_key(cipher_file + ".key")
@@ -374,15 +411,16 @@ def main():
 
     # simple, inflexible arg parsing:
     argc = len(sys.argv)
-    if argc > 2:
+    if argc > 4:
         print(sys.argv[0])
         print(__doc__)
+        exit(0)
 
     # Get the paths to the files (relative or absolute)
     cipher_file = sys.argv[1] if argc > 1 else r'cipher.txt'
     corpus_file = sys.argv[2] if argc > 2 else r'corpus.txt'
+    verbose = int(sys.argv[3]) if argc > 3 else 1
 
-    verbose = 1
     solve_simple_substition_cipher(cipher_file, corpus_file, verbose)
 
 
