@@ -30,6 +30,19 @@ On a smaller sample size, it might be important to re-try
 previously matched words when any bindings they assumed are
 later changed.  Not re-trying them meas that some information is lost.  
 
+#### Weighting and Confidence Measures
+The scoring function simply counts all the letters in each decoded
+word that matches a corpus word, when decoded using the cipher key
+under evaluation.  All letters have the same weight, namely 1,
+and this weight cannot be devided up among various possible matches
+according to frequencies or any other measure of confidence.  For 
+example, the partially decoded word "the_" could match "them", "then",
+or "they."  But instead of awarding 1/3 of a point to each letter 'm',
+'n', and 'y', or dividing that point up according to the relative 
+counts of each of these three words (in the corpus or the cipher text),
+one of these letters will win the whole point, the others get nothing.
+
+
 ### Speed
 When running this script on a large corpus, such as the corpus-en.txt 
 file provided, nearly all the runtime goes to reading the file and

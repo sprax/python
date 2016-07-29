@@ -118,9 +118,10 @@ class SubCipher:
         if words != ['the', 'and'] and words != ['and', 'the']:
             print("Unexpected most common 3-letter words in corpus:\n", len3words)
 
-        most_freq_ciphs = self.cipher_chars.most_common(2)
-        probable_e = most_freq_ciphs[0][0]
-        alternate_e = most_freq_ciphs[1][0]
+        most_freq_cipher_chars = self.cipher_chars.most_common(2)
+        probable_e = most_freq_cipher_chars[0][0]
+        alternate_e = most_freq_cipher_chars[1][0]
+        probable_a = self.forward_map['a']
         found_and = False
         found_the = False
         for ciph, _ in self.cipher_words.most_common(10):
@@ -130,7 +131,7 @@ class SubCipher:
                     self.assign('t', ciph[0])
                     self.assign('h', ciph[1])
                     self.assign('e', ciph[2])
-                if not found_and and ciph[0] == self.forward_map['a']:
+                if not found_and and ciph[0] == probable_a:
                     found_and = True
                     self.assign('n', ciph[1])
                     self.assign('d', ciph[2])
