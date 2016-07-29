@@ -32,8 +32,8 @@ class SubCipher:
         self.cipher_file = cipher_file
         self.corpus_file = corpus_file
         self.cipher_lines = read_file_lines(cipher_file)
-        self.cipher_short, self.cipher_words = word_counts_short_and_long(cipher_file, 1)
-        self.corpus_short, self.corpus_words = word_counts_short_and_long(corpus_file, 1)
+        self.cipher_len_1, self.cipher_words = word_counts_short_and_long(cipher_file, 1)
+        self.corpus_len_1, self.corpus_words = word_counts_short_and_long(corpus_file, 1)
         self.cipher_chars = count_chars_from_words(self.cipher_words)
         self.corpus_chars = count_chars_from_words(self.corpus_words)
         self.forward_map = defaultdict(int)
@@ -55,11 +55,14 @@ class SubCipher:
         self.find_the_and_and()
         self.find_words_from_ciphers()
         if self.verbose > 0:
-            matches, misses = self.count_decoded_words_in_corpus()
+            matches, misses, missing_words = self.count_decoded_words_in_corpus()
             print("Distinct decoded words found in corpus: {}  misses: {}".format(matches, misses))
-            if self.verbose > 2:
-                self.print_deciphered_words()
-            print("Score from all matched words using the key below: ", self.inverse_score)
+            if self.verbose > 1:
+                print("decoded words missing from corpus:", missing_words)
+                if self.verbose > 2:
+                    self.print_deciphered_words()
+            print("Score from all matched words using the key below: ",
+                  self.inverse_score, " (total matched letters)")
         self.print_forward_map()
         self.print_deciphered_lines()
         self.write_forward_cipher_key(self.cipher_file + ".key")
@@ -88,12 +91,12 @@ class SubCipher:
             print("Search for the words 'a' and 'I'")
 
         # Peek at these most common corpus words as a sanity-check
-        corp_ai = self.corpus_short.most_common(2)
+        corp_ai = self.corpus_len_1.most_common(2)
         corpchars = (corp_ai[0][0], corp_ai[1][0])
         if corpchars != ('a', 'I') and corpchars != ('I', 'a'):
             print("Unexpected most common 1-letter words in corpus: ", corp_ai)
 
-        ciph_ai = self.cipher_short.most_common(2)
+        ciph_ai = self.cipher_len_1.most_common(2)
         if ciph_ai[0][0].islower():
             self.assign('a', ciph_ai[0][0])
             self.assign('i', ciph_ai[1][0].lower())
@@ -108,7 +111,7 @@ class SubCipher:
 
         # Peek at the most common three-letter corpus words as a sanity-check
         len3words = []
-        for word, count in self.corpus_words.most_common(12):
+        for word, _ in self.corpus_words.most_common(12):
             if len(word) == 3:
                 len3words.append(word)
         words = len3words[:2]
@@ -120,7 +123,7 @@ class SubCipher:
         alternate_e = most_freq_ciphs[1][0]
         found_and = False
         found_the = False
-        for ciph, count in self.cipher_words.most_common(10):
+        for ciph, _ in self.cipher_words.most_common(10):
             if len(ciph) == 3:
                 if not found_the and (ciph[2] == probable_e or ciph[2] == alternate_e):
                     found_the = True
@@ -232,7 +235,7 @@ class SubCipher:
         score_total = 0
         for ciph, ciph_count in self.cipher_words.items():
             word = self.decipher_word(ciph)
-            word_count = self.corpus_words[word]    # 0 if not in corpus
+            word_count = 1 if self.corpus_words[word] else 0    # 0 if not in corpus
             score = word_count * ciph_count * len(ciph)
             if self.verbose > 5:
                 print(" {:9}\t {} => {}".format(score, ciph, word))
@@ -240,22 +243,33 @@ class SubCipher:
         return score_total
 
     def count_decoded_words_in_corpus(self):
-        '''returns two counts:
-        (1) the number of distinct encoded words that, decoded with the current
-        best guess at the cipher key, match some word found in the corpus, and
-        (2) the number that do not.
+        '''returns three things: the hit and miss counts, and a list of
+        all the decoded cipher text words missing from the corpus:
+        (1) hits: the number of distinct encoded words that, decoded with the
+        current best guess at the cipher key, match some word found in the corpus, and
+        (2) misses: the number that do not.
         Note that the set of 'words' may include such strings as "t" and
         "ll", which result from splitting "don't" and "you'll" on the
-        apostrophe. No assumption is made of proper grammer or orthography'''
-        num_ciphers = len(self.cipher_short) + len(self.cipher_words)
+        apostrophe. No assumption is made of proper grammer or orthography
+        (3) missing words: a list containing all decoded cipher text
+        words not found in the corpus, in lexicographically sorted order
+        '''
+        num_ciphers = len(self.cipher_len_1) + len(self.cipher_words)
         num_matches = 0
-        for cipher in self.cipher_short:
+        missing = []
+        for cipher in self.cipher_len_1:
             deciph = self.decipher_word(cipher)
-            num_matches += 1 if self.corpus_short[deciph] else 0
+            if self.corpus_len_1[deciph] > 0:
+                num_matches += 1
+            else:
+                missing.append(deciph)
         for cipher in self.cipher_words:
             deciph = self.decipher_word(cipher)
-            num_matches += 1 if self.corpus_words[deciph] else 0
-        return num_matches, num_ciphers - num_matches
+            if self.corpus_words[deciph] > 0:
+                num_matches += 1
+            else:
+                missing.append(deciph)
+        return num_matches, num_ciphers - num_matches, sorted(missing)
 
     def number_of_unknowns(self, ciph):
         '''returns the number of unknown cipher characters in the string ciph'''
@@ -308,7 +322,7 @@ class SubCipher:
         the current inverse_map to stdout (default) or a file'''
         print('cipher\tcorpus \tcoded\tdecoded')
         for ciph in sorted(self.cipher_words.keys(), key=self.cipher_words.get,
-                reverse=True):
+                           reverse=True):
             ciph_count = self.cipher_words[ciph]
             word = self.decipher_word(ciph)
             corp_count = self.corpus_words[word]
