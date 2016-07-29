@@ -1,0 +1,14 @@
+subs/README.txt for subs_cipher.py
+Sprax Lines  July 2016
+
+PROBLEM:
+
+SOLUTION:
+
+ALGORITHMS:
+
+GENERALIZATIONS/ALTERNAIVES:
+
+FILES:
+
+
