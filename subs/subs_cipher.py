@@ -11,11 +11,20 @@ Where:
     corpus_file contains (mostly English) text whose word distribution
     is not too dissimilar from that of the encoded text; and
     verbosity sets the level of trace output.
-    Two new files are written:
-    cipher_text.key will contain the discovered forward mapping of letter
+Two new files are written:
+1)  cipher_text.key will contain the discovered forward mapping of letter
     to cipher, and
-    cipher_text.decoded will contain the deciphered contents the
+2)  cipher_text.decoded will contain the deciphered contents the
     cipher_text file.
+Verbosity levels:
+    0   Only the forward cipher key and decoded text,
+        plus unexpected conditions.
+    1   Insertions and deletions to the key, and the reasons/scores.
+    2   Decoded words not found in the corpus
+    3   All decoded words
+    4   Messages about the queue of cipher words being matched
+    6   Every partially decoded cipher word every time a possible
+        change to the cipher key is evaluatied
 '''
 
 import heapq
@@ -51,8 +60,21 @@ class SubCipher:
         most of the words in the encoded text, decipher the encoded file.
         Uses the SubCipher class.
         '''
+        # Find the words "a" and "I" (not crucial: it's okay if this fails).
         self.find_a_and_i()
-        self.find_the_and_and()
+
+        # Peek at the most common three-letter corpus words as a sanity-check
+        len3words = []
+        for word, _ in self.corpus_words.most_common(12):
+            if len(word) == 3:
+                len3words.append(word)
+        words = len3words[:2]
+        if words != ['the', 'and'] and words != ['and', 'the']:
+            print("Unexpected most common 3-letter words in the corpus:\n", len3words)
+        # Find the words "the" and "and"
+        self.find_the()             # crucial
+        self.find_and()             # not crucial
+
         self.find_words_from_ciphers()
         if self.verbose > 0:
             matches, misses, missing_words = self.count_decoded_words_in_corpus()
@@ -104,45 +126,42 @@ class SubCipher:
             self.assign('a', ciph_ai[1][0])
             self.assign('i', ciph_ai[0][0].lower())
 
-    def find_the_and_and(self):
-        '''Try to find the two most common English words: "the" and "and".'''
+    def find_the(self):
+        '''Try to find the most common English word: "the"'''
         if self.verbose > 0:
-            print("Search for the words 'the' and 'and'")
-
-        # Peek at the most common three-letter corpus words as a sanity-check
-        len3words = []
-        for word, _ in self.corpus_words.most_common(12):
-            if len(word) == 3:
-                len3words.append(word)
-        words = len3words[:2]
-        if words != ['the', 'and'] and words != ['and', 'the']:
-            print("Unexpected most common 3-letter words in corpus:\n", len3words)
-
-        most_freq_cipher_chars = self.cipher_chars.most_common(2)
-        probable_e = most_freq_cipher_chars[0][0]
-        alternate_e = most_freq_cipher_chars[1][0]
-        probable_a = self.forward_map['a']
-        found_and = False
-        found_the = False
-        for ciph, _ in self.cipher_words.most_common(10):
+            print('Search for the word "the"')
+        most_freq_ciphs = self.cipher_chars.most_common(2)
+        probable_e = most_freq_ciphs[0][0]
+        alternate_e = most_freq_ciphs[1][0]
+        for ciph, _ in self.cipher_words.most_common(12):
             if len(ciph) == 3:
-                if not found_the and (ciph[2] == probable_e or ciph[2] == alternate_e):
-                    found_the = True
+                if ciph[2] == probable_e or ciph[2] == alternate_e:
                     self.assign('t', ciph[0])
                     self.assign('h', ciph[1])
                     self.assign('e', ciph[2])
-                if not found_and and ciph[0] == probable_a:
-                    found_and = True
+                    break
+                    
+    def find_and(self):
+        '''Try to find the second most common English word: "and"'''
+        if self.verbose > 0:
+            print("Search for the words 'the' and 'and'")
+        probable_a = self.forward_map['a']
+
+        for ciph, _ in self.cipher_words.most_common(15):
+            if len(ciph) == 3:
+                if ciph[0] == probable_a:
                     self.assign('n', ciph[1])
                     self.assign('d', ciph[2])
-
+                    break
+                    
     def find_words_from_ciphers(self):
-        '''Find common corpus words comprised mostly of known inverse
-        cipher chars, and try filling in the missing letters.  Trials
-        are evaluated by scoring how many decoded cipher words then
-        match corpus words.  The highest score wins.  (That is, the
-        decision is immediate, not defered to accumulate multiple
-        scoring passes or backpropogating votes.'''
+        '''Queue up encoded words comprised mostly of chars with
+        already guessed inverse ciphers, and try to fill in the missing
+        letters by matching these against the most common corpus words in
+        descending order of frequency in the corpus.  Trials are evaluated
+        by scoring how many decoded cipher words then match corpus words.
+        The highest score wins.  (That is, the decision is immediate, not
+        defered to accumulate multiple scoring passes or backpropogating votes.'''
         num_words = len(self.corpus_words)
         corpus = self.corpus_words.most_common(num_words) # Just try them all
         inverse_pq = [] # priority = [num_unknown (updated on pop), -count, length]
@@ -171,7 +190,7 @@ class SubCipher:
                     sentinel = ciph
                     print('Repush entry [', ciph, num_unk, -neg_count, '] to end of the queue')
                     heapq.heappush(inverse_pq, [1000, 0, length, ciph])
-            elif self.verbose > 2:
+            elif self.verbose > 3:
                 print('\tAlready deciphered: ', num_unk, -neg_count, ciph
                       , self.decipher_word(ciph))
 
