@@ -11,11 +11,20 @@ Where:
     corpus_file contains (mostly English) text whose word distribution
     is not too dissimilar from that of the encoded text; and
     verbosity sets the level of trace output.
-    Two new files are written:
-    cipher_text.key will contain the discovered forward mapping of letter
+Two new files are written:
+1)  cipher_text.key will contain the discovered forward mapping of letter
     to cipher, and
-    cipher_text.decoded will contain the deciphered contents the
+2)  cipher_text.decoded will contain the deciphered contents the
     cipher_text file.
+Verbosity levels:
+    0   Only the forward cipher key and decoded text,
+        plus unexpected conditions.
+    1   Insertions and deletions to the key, and the reasons/scores.
+    2   Decoded words not found in the corpus
+    3   All decoded words
+    4   Messages about the queue of cipher words being matched
+    6   Every partially decoded cipher word every time a possible
+        change to the cipher key is evaluatied
 '''
 
 import heapq
@@ -170,7 +179,7 @@ class SubCipher:
                     sentinel = ciph
                     print('Repush entry [', ciph, num_unk, -neg_count, '] to end of the queue')
                     heapq.heappush(inverse_pq, [1000, 0, length, ciph])
-            elif self.verbose > 2:
+            elif self.verbose > 3:
                 print('\tAlready deciphered: ', num_unk, -neg_count, ciph
                       , self.decipher_word(ciph))
 
