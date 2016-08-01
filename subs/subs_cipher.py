@@ -3,14 +3,14 @@
 '''Class and driver script to solve simple substitution cipher from
 a corpus and encoded text in separate text files.
 
-Usage: python3 <this_script> [encoded_file [corpus_file [verbosity]]]
+Usage: python3 subs_cipher.py [encoded_file [corpus_file [verbosity]]]
 Where:
-    encoded_file contains text (at least mostly English) in which
+    The encoded_file contains text (at least mostly English) in which
     every lower [upper[ case ASCII letter has been replaced by the
-    lower [upper] case subsititution-cipher value for that letter;
-    corpus_file contains (mostly English) text whose word distribution
-    is not too dissimilar from that of the encoded text; and
-    verbosity sets the level of trace output.
+    lower [upper] case substitution-cipher value for that letter;
+    the corpus_file contains (mostly English) text whose word distribution
+    is not too dissimilar from that of the encoded text; 
+    and verbosity is a number that controls how much trace is output.
 Two new files are written:
 1)  cipher_text.key will contain the discovered forward mapping of letter
     to cipher, and
@@ -18,13 +18,13 @@ Two new files are written:
     cipher_text file.
 Verbosity levels:
     0   Only the forward cipher key and decoded text,
-        plus unexpected conditions.
+        plus warnings if anything unexpected happens.
     1   Insertions and deletions to the key, and the reasons/scores.
     2   Decoded words not found in the corpus
     3   All decoded words
-    4   Messages about the queue of cipher words being matched
-    6   Every partially decoded cipher word every time a possible
-        change to the cipher key is evaluatied
+    4   Messages pertaining to the queue of cipher words being matched
+    6   Every partially decoded cipher word, every time a possible
+        change to the cipher key is evaluated (very verbose).
 '''
 
 import heapq
@@ -71,6 +71,7 @@ class SubCipher:
         words = len3words[:2]
         if words != ['the', 'and'] and words != ['and', 'the']:
             print("Unexpected most common 3-letter words in the corpus:\n", len3words)
+
         # Find the words "the" and "and"
         self.find_the()             # crucial
         self.find_and()             # not crucial
