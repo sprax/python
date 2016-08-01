@@ -20,25 +20,37 @@ The overall strategy has three parts:
 2) Bootstrap the decoding by forward matching a few most common corpus words
 to their likely encodings in the cipher text, based on frequency alone.  The
 words I chose for this purpose are "I", "a", "the", and "and".  Experiments
-show that for actual given corpus and encrypted texts, "the" alone would have
-been sufficient.
-3) Given the current best guess at the cipher key, gather all the encoded
-words that contain exactly one letter whose inverse mapping has not yet been
-guessed.  Taking each of these single-unknown cipher words in descending
-order of frequency, try to match it against all (or at least the most common)
+show that for the actual given corpus and encrypted text, it is enough to look
+for "the" and nothing else.
+3) Given the current best guess at the cipher map, partially order all the
+encoded words by how many unmapped letters each one contains.  In fact, put
+them all in a priority queue (min heap).
+4) Focus on the encoded words that contain exactly one unmapped letter each.
+Taking each one of these single-unknown cipher words in descending order of
+frequency, try to match it against all (or at least against all the most common)
 corpus words of the same length, also in descending order of frequency.
-Whenever a corpus word's letters match all the previously guessed keys of
-this cipher word, evaluate the map that would result from adding the implied
-new key mapping.  (That is, if the unguessed letter is at index j of the
+Whenever a corpus word's letters match all the previously guessed keys for
+this cipher word's letters, evaluate the map that would result from adding the
+implied new key mapping.  (That is, if the unguessed letter is at index j of the
 cipher word, try adding corpus_word[j] -> cipher_word[j] to the existing map.)
 A simple way to score the map is to count the letters in all the cipher words
 that would match whole corpus words when decoded with this map.  If multiple
-corpus words match the single-unknown cipher words, keep the first one that 
-gives the maximal score.  If this maximal score is greater than score of the
+corpus words match this single-unknown cipher word, keep the first one that 
+gives the maximal score.  
+5) If this maximal score is greater than score of the
 old best-guess map, then accept this new binding and go on to the next
-single-unknown cipher word.  
-
-
+entry in the queue. 
+6) As this process of inverse-map guessing and evaluation consumes the 
+queue, it adds keys to the map.  This, by definition, reduces the
+number of unmapped letters in the words remaining in the queue.  Thus
+their priorites should change.  One could re-evaluate all the entries
+and re-heapify the queue every time the map changes, but in practice, 
+lazily re-evaluating each entry only when it is popped seems adequate.
+Cipher words with zero remaining unmapped letters are discarded, 
+naturally, and the heap will re-order itself soon enough.
+7) Repeat steps (4) through (6) until there are no more single-unknown 
+cipher words in the queue.
+8) Using the resulting cipher map, decode the encrypted text.
 
 
 
