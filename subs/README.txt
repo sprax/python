@@ -15,6 +15,17 @@ Depending on the verbosity setting
 
 How It Works
 ------------
+The overall strategy has three parts:
+1) Map all words and letters to their counts in the corpus and cipher texts.  
+2) Bootstrap the decoding by forward matching a few most common corpus words
+to their likely encodings in the cipher text, based on frequency alone.  The
+words I chose for this purpose are "I", "a", "the", and "and".  Experiments
+show that for actual given corpus and encrypted texts, "the" alone would have
+been sufficient.
+3) Given the current best guess at the cipher key, look for encoded words that
+have exactly one unguessed cipher letter, and try matching these against each
+word in the corpus of the same length.  If all the previously guessed ciphers
+match, then evaluate 
 
 
 Limitations and Possible Enhancements
@@ -90,6 +101,14 @@ guess these remaining 3 letters based solely on frequency, but with a
 count of 0 in the cipher text, these letters have no meaningful
 frequencies.  Rather than confuse the issue, I left that code out.
 Better to match j, q, and z to nothing than to make an uninformed guess.)
+
+#### Faster Data Structures
+I know from experience that a well-coded trie can beat a hashmap at
+rejecting non-matching words.  Instead of multiplying and adding up
+every letter in the match candidate to derive a hash code into a 
+large table, the trie uses the candidate's letters directly as
+indicies into a compact, hopefully cache-resident table.  But I think
+that would be overkill for a problem of the given size characteristics.
 
 ### Space
 The corpus Counter stores the original string and its count for every 
