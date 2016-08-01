@@ -11,7 +11,8 @@ decrypts the sample text, writing each to separate files.
 
 Input and Output
 ----------------
-Usage: python3 subs_cipher.py [encoded_file [corpus_file [verbosity]]]
+Usage: `python3 subs_cipher.py [encoded_file [corpus_file [verbosity]]]`
+```
 Where:
     The encoded_file contains text (at least mostly English) in which
     every lower [upper[ case ASCII letter has been replaced by the
@@ -33,7 +34,7 @@ Verbosity levels:
     4   Messages pertaining to the queue of cipher words being matched
     6   Every partially decoded cipher word, every time a possible
         change to the cipher key is evaluated (very verbose).
-
+```
 How It Works
 ------------
 The overall strategy has three parts:
