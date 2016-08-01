@@ -37,17 +37,23 @@ Verbosity levels:
 ```
 How It Works
 ------------
-The overall strategy has three parts:
+### Strategy
+The overall strategy has three phases:
 1) Map all words and letters to their counts in the corpus and cipher texts.
 2) Bootstrap the decoding by forward matching a few most common corpus words
 to their likely encodings in the cipher text, based on frequency alone.  The
 words I chose for this purpose are "I", "a", "the", and "and".  Experiments
 show that to succeed on the actual given corpus and encrypted text, it is
 enough to bootstrap on "the" and nothing else.
-3) Given the current best guess at the cipher map, partially order all the
-encoded words by how many unmapped letters each one contains.  In fact, put
-them all in a priority queue (min heap).
-4) Focus on the encoded words that contain exactly one unmapped letter each.
+3) Given the current best guess at the cipher map, try to guess more
+map entries by matching partially decoded cipher words with corpus
+words, and update the map with whatever bindings results in the most
+matched whole words.
+
+### Phase 3 Algorithm
+1. Partially order all the encoded words by how many unmapped letters each
+one contains.  In fact, put them all in a priority queue (min heap).
+2. Focus on the encoded words that contain exactly one unmapped letter each.
 Taking each one of these single-unknown cipher words in descending order of
 frequency, try to match it against all corpus words of the same length (or at
 least against all the most common ones), also in descending order of frequency.
@@ -59,10 +65,10 @@ map.)  A simple way to score the map is to count the letters in all the cipher
 words that would match whole corpus words when decoded with this map.
 If multiple corpus words match this single-unknown cipher word, keep the first
 one that gives the maximal score.
-5) If this maximal score is greater than score of the old best-guess map,
+3. If this maximal score is greater than score of the old best-guess map,
 then accept this new letter-to-cipher binding and go on to the next entry
 in the queue.
-6) As this process of inverse-map guessing and evaluation consumes the
+4. As this process of inverse-map guessing and evaluation consumes the
 queue, it adds keys to the map.  This, by definition, reduces the
 number of unmapped letters in the words remaining in the queue.  Thus
 their priorities should change.  One could re-evaluate all the entries
@@ -70,9 +76,9 @@ and re-heapify the queue every time the map changes, but in practice,
 lazily re-evaluating each entry only when it is popped seems adequate.
 Cipher words with zero remaining unmapped letters are discarded,
 naturally, and the heap will re-order itself soon enough.
-7) Repeat steps (4) through (6) until there are no more single-unknown
+5. Repeat steps (2) through (4) until there are no more single-unknown
 cipher words in the queue.
-8) Using the resulting cipher map, decode the encrypted text.
+6. Using the resulting cipher map, decode the encrypted text.
 
 Limitations and Possible Enhancements
 -------------------------------------
