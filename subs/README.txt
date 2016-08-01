@@ -22,10 +22,24 @@ to their likely encodings in the cipher text, based on frequency alone.  The
 words I chose for this purpose are "I", "a", "the", and "and".  Experiments
 show that for actual given corpus and encrypted texts, "the" alone would have
 been sufficient.
-3) Given the current best guess at the cipher key, look for encoded words that
-have exactly one unguessed cipher letter, and try matching these against each
-word in the corpus of the same length.  If all the previously guessed ciphers
-match, then evaluate 
+3) Given the current best guess at the cipher key, gather all the encoded
+words that contain exactly one letter whose inverse mapping has not yet been
+guessed.  Taking each of these single-unknown cipher words in descending
+order of frequency, try to match it against all (or at least the most common)
+corpus words of the same length, also in descending order of frequency.
+Whenever a corpus word's letters match all the previously guessed keys of
+this cipher word, evaluate the map that would result from adding the implied
+new key mapping.  (That is, if the unguessed letter is at index j of the
+cipher word, try adding corpus_word[j] -> cipher_word[j] to the existing map.)
+A simple way to score the map is to count the letters in all the cipher words
+that would match whole corpus words when decoded with this map.  If multiple
+corpus words match the single-unknown cipher words, keep the first one that 
+gives the maximal score.  If this maximal score is greater than score of the
+old best-guess map, then accept this new binding and go on to the next
+single-unknown cipher word.  
+
+
+
 
 
 Limitations and Possible Enhancements
