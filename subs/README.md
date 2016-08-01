@@ -11,7 +11,28 @@ decrypts the sample text, writing each to separate files.
 
 Input and Output
 ----------------
-Depending on the verbosity setting
+Usage: python3 subs_cipher.py [encoded_file [corpus_file [verbosity]]]
+Where:
+    The encoded_file contains text (at least mostly English) in which
+    every lower [upper[ case ASCII letter has been replaced by the
+    lower [upper] case substitution-cipher value for that letter;
+    the corpus_file contains (mostly English) text whose word distribution
+    is not too dissimilar from that of the encoded text;
+    and verbosity is a number that controls how much trace is output.
+Two new files are written:
+1)  cipher_text.key will contain the discovered forward mapping of letter
+    to cipher, and
+2)  cipher_text.decoded will contain the deciphered contents the
+    cipher_text file.
+Verbosity levels:
+    0   Only the forward cipher key and decoded text,
+        plus warnings if anything unexpected happens.
+    1   Insertions and deletions to the key, and the reasons/scores.
+    2   Decoded words not found in the corpus
+    3   All decoded words
+    4   Messages pertaining to the queue of cipher words being matched
+    6   Every partially decoded cipher word, every time a possible
+        change to the cipher key is evaluated (very verbose).
 
 How It Works
 ------------
@@ -20,8 +41,8 @@ The overall strategy has three parts:
 2) Bootstrap the decoding by forward matching a few most common corpus words
 to their likely encodings in the cipher text, based on frequency alone.  The
 words I chose for this purpose are "I", "a", "the", and "and".  Experiments
-show that for the actual given corpus and encrypted text, it is enough to look
-for "the" and nothing else.
+show that to succeed on the actual given corpus and encrypted text, it is
+enough to bootstrap on "the" and nothing else.
 3) Given the current best guess at the cipher map, partially order all the
 encoded words by how many unmapped letters each one contains.  In fact, put
 them all in a priority queue (min heap).
