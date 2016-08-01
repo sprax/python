@@ -9,7 +9,7 @@ Where:
     every lower [upper[ case ASCII letter has been replaced by the
     lower [upper] case substitution-cipher value for that letter;
     the corpus_file contains (mostly English) text whose word distribution
-    is not too dissimilar from that of the encoded text; 
+    is not too dissimilar from that of the encoded text;
     and verbosity is a number that controls how much trace is output.
 Two new files are written:
 1)  cipher_text.key will contain the discovered forward mapping of letter
@@ -141,7 +141,7 @@ class SubCipher:
                     self.assign('h', ciph[1])
                     self.assign('e', ciph[2])
                     break
-                    
+
     def find_and(self):
         '''Try to find the second most common English word: "and"'''
         if self.verbose > 0:
@@ -154,7 +154,7 @@ class SubCipher:
                     self.assign('n', ciph[1])
                     self.assign('d', ciph[2])
                     break
-                    
+
     def find_words_from_ciphers(self):
         '''Queue up encoded words comprised mostly of chars with
         already guessed inverse ciphers, and try to fill in the missing
