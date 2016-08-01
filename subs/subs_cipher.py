@@ -3,9 +3,9 @@
 '''Class and driver script to solve simple substitution cipher from
 a corpus and encoded text in separate text files.
 
-Usage: python3 subs_cipher.py [encoded_file [corpus_file [verbosity]]]
+Usage: python3 subs_cipher.py [cipher_file [corpus_file [verbosity]]]
 Where:
-    The encoded_file contains text (at least mostly English) in which
+    The cipher_file contains text (at least mostly English) in which
     every lower [upper[ case ASCII letter has been replaced by the
     lower [upper] case substitution-cipher value for that letter;
     the corpus_file contains (mostly English) text whose word distribution
