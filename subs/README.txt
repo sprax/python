@@ -52,11 +52,17 @@ naturally, and the heap will re-order itself soon enough.
 cipher words in the queue.
 8) Using the resulting cipher map, decode the encrypted text.
 
-
-
 Limitations and Possible Enhancements
 -------------------------------------
 ### Robustness
+The algorithm as a whole succeeds even if you comment out all of the
+bootstrapphing phase except for finding the word "the".  You could
+probably replace the find_the() method with a lot of random key-guessing
+and map-scoring, and still succeed, but then you are throwing out the
+most obvious information in the corpus.)
+That indicates that this approach is fairly robust. 
+
+Nevertheless, the current implementation has its shortcomings.
 The way the comparison queue is set up, each encoded word in the 
 cipher text will be compared with possibly matching corpus words
 at most once, and at that time, the scores resulting from each
@@ -109,7 +115,6 @@ or "they."  But instead of awarding 1/3 of a point to each letter 'm',
 'n', and 'y', or dividing that point up according to the relative 
 counts of each of these three words (in the corpus or the cipher text),
 one of these letters will win the whole point, the others get nothing.
-
 
 ### Speed
 When running this script on a large corpus, such as the corpus-en.txt 
