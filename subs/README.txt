@@ -21,14 +21,45 @@ Limitations and Possible Enhancements
 -------------------------------------
 ### Robustness
 The way the comparison queue is set up, each encoded word in the 
-cipher text will be scored against possibly matching corpus words
-matches only once, and the relative scores then will be based 
-partly on the already existing key assignments in whatever 
-cipher mapping was current at that time.  But these keys
-assignments change as more encoded words are processed.  
-On a smaller sample size, it might be important to re-try 
-previously matched words when any bindings they assumed are
-later changed.  Not re-trying them meas that some information is lost.  
+cipher text will be compared with possibly matching corpus words
+at most once, and at that time, the scores resulting from each
+potential letter-to-cipher match will depend in part on whatever
+letter-to-cipher bindings are already present in the current best-guess
+map.  These already guessed bidings may be incorrect, and indeed 
+they will be replaced if a different binding is found to yield a higher
+score.  When such a binding is replaced, however, there is no
+back-tracking; word matches that depended on the erroneous bindings
+are not expressly tossed out or individually re-evaluated.  Nor is
+the priority of every entry in the queue re-computed on wheneve the
+current cipher map is "corrected" by deleting and replacing an
+existing key.  Instead, the queue just greedily processes forward.
+On a smaller sample size, it might be important to re-try previously
+matched cipher words containing any letter whose inverse cipher key
+is corrected.
+
+#### Higher Order Syntax: Letter and Word Order
+
+##### Letter Order
+The current decrypting methods look only at individual letter and 
+word frequencies, taking no account of any prescriptive or statistical
+constraints on their order.  In English, for example, many words begin
+with the letter B followed by a vowel, but no words begin with 'bb',
+'bc', 'bf', or 'bg', and very few words begin with 'bd' or 'bh' (they
+are mostly loan words).  It would be straightforward to count the
+occurrences of all adjacent letter pairs found in the corpus, create
+separate weighted graphs for the beginnings, interiors, and ends of
+words, and add these statistical constraints to the scoring mechanism:
+basically, multiply any possible decoding of a cipher word by its
+syntactic probability as measured only from the corpus.  
+
+##### Word Order
+Likewise, word order within sentences is constrained.  Some adjacent
+word pairs (or higher-order engrams) are much more frequent than
+others.  For example, the word pair "is in" occurs 639 times in the
+given corpus, whereas "in is" occors 3 times.  Thus if you already
+believe that i -> h, then you may subjectively evaluate "hr hj" as
+approximately 213 times more likely to encode "is in" than to encode
+"in is".  That gives gives s -> r and n -> j.
 
 #### Weighting and Confidence Measures
 The scoring function simply counts all the letters in each decoded
