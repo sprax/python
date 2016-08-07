@@ -301,13 +301,11 @@ class SubCipher:
         and the index of the right-most unknown'''
         num_unknown = 0
         idx_unknown = -1
-        idx = 0
-        for fwd in ciph:
+        for idx, fwd in enumerate(ciph):
             inv = self.inverse_map[fwd]
             if inv == 0:
                 num_unknown += 1
                 idx_unknown = idx
-            idx += 1
         return num_unknown, idx_unknown
 
     def decipher_word(self, encoded_word):
@@ -469,8 +467,8 @@ def main():
         exit(0)
 
     # Get the paths to the files (relative or absolute)
-    cipher_file = sys.argv[1] if argc > 1 else r'cipher.txt'
-    corpus_file = sys.argv[2] if argc > 2 else r'corpus.txt'
+    cipher_file = sys.argv[1] if argc > 1 else r'cipher.txt.bak'
+    corpus_file = sys.argv[2] if argc > 2 else r'corpus.txt.bak'
     verbose = int(sys.argv[3]) if argc > 3 else 1
 
     solve_simple_substition_cipher(cipher_file, corpus_file, verbose)
