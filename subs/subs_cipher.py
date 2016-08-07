@@ -87,6 +87,8 @@ class SubCipher:
             print("Score from all matched words using the key below: ",
                   self.inverse_score, " (total matched letters)")
         self.print_forward_map()
+        self.complete_map_using_char_counts()
+        self.print_forward_map()
         self.print_deciphered_lines()
         self.write_forward_cipher_key(self.cipher_file + ".key")
         self.write_deciphered_text(self.cipher_file + ".decoded")
@@ -106,6 +108,24 @@ class SubCipher:
         if self.verbose > 1:
             print("Accept", corp, "->", ciph)
 
+    def complete_map_using_char_counts(self):
+        '''Complete the cipher map based on letter frequency alone.
+        Unless the corpus *and* sample encoded text are both large,
+        this is unlikely to be correct.  Used iteratively, with much
+        of the mapping already guessed, it could he useful.  Otherwise,
+        it is a last-chance, apriori best guess, because it uses
+        information from the corpus only, not from the cipher text.
+        '''
+        if self.verbose > 0:
+            print("Guessing the rest of the cipher map based solely on letter counts.")
+        dd = self.corpus_chars
+        forward_unmapped = [x for x in sorted(dd, key=dd.__getitem__,
+            reverse=True) if self.forward_map[x] == 0]
+        inverse_unmapped = [x for x in sorted(dd, key=dd.__getitem__,
+            reverse=True) if self.inverse_map[x] == 0]
+        for corpus_char, cipher_char in zip(forward_unmapped, inverse_unmapped):
+            self.assign(corpus_char, cipher_char)
+    
     def find_a_and_i(self):
         '''Try to find the word "I" as the most common capitalized
         single-letter word, and "a" as the most common lowercase
@@ -469,7 +489,7 @@ def main():
     # Get the paths to the files (relative or absolute)
     cipher_file = sys.argv[1] if argc > 1 else r'cipher.txt.bak'
     corpus_file = sys.argv[2] if argc > 2 else r'corpus.txt.bak'
-    verbose = int(sys.argv[3]) if argc > 3 else 1
+    verbose = int(sys.argv[3]) if argc > 3 else 3
 
     solve_simple_substition_cipher(cipher_file, corpus_file, verbose)
 
