@@ -118,11 +118,12 @@ class SubCipher:
         '''
         if self.verbose > 0:
             print("Guessing the rest of the cipher map based solely on letter counts.")
-        dd = self.corpus_chars
-        forward_unmapped = [x for x in sorted(dd, key=dd.__getitem__,
-            reverse=True) if self.forward_map[x] == 0]
-        inverse_unmapped = [x for x in sorted(dd, key=dd.__getitem__,
-            reverse=True) if self.inverse_map[x] == 0]
+        fdd = self.corpus_chars
+        idd = self.cipher_chars
+        forward_unmapped = (x for x in sorted(fdd, key=fdd.__getitem__,
+            reverse=True) if self.forward_map[x] == 0)
+        inverse_unmapped = (x for x in sorted(fdd, key=idd.__getitem__,
+            reverse=True) if self.inverse_map[x] == 0)
         for corpus_char, cipher_char in zip(forward_unmapped, inverse_unmapped):
             self.assign(corpus_char, cipher_char)
     
