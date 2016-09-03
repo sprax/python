@@ -19,7 +19,9 @@ class GetNo:
     def __init__(self, adverb_file, corpus_file, verbose):
         self.adverb_file = adverb_file
         self.corpus_file = corpus_file
-        self.corpus_words = word_counts(corpus_file)
+        self.corpus_words = count_words(corpus_file)
+        self.adverb_freqs = read_counted_word_file(adverb_file)
+        self.corpus_adverbs = count_counted_words(self)
         self.dialogue = defaultdict(int)
 
         self.verbose = verbose
@@ -28,41 +30,37 @@ class GetNo:
             for word, count in self.corpus_words.most_common(12):
                 print("\t", word, "\t", count)
 
+        # for word, count in self.corpus_adverbs.items():
+            # print(word, count)
+
+        for word in sorted(self.corpus_adverbs.keys(), key=self.corpus_adverbs.get,
+            reverse=True):
+            count = self.corpus_adverbs[word]
+            print('    {}\t{}'.format(word, count))
+
     def find_no(self):
         '''Look for ways of sayning No'''
 
     def show_no(self):
         '''Show frequent ways of saying No'''
 
-def uprint(*objects, sep=' ', end='\n', outfile=sys.stdout):
-    '''Prints non-ASCII Unicode (UTF-8) characters in a safe (but possibly
-    ugly) way even in a Windows command terminal.  Unicode-enabled terminals
-    such as on Mac or KDE have no problem, nor do most IDE's, but calling
-    Python's built-in print to print such characters (e.g., an em-dash)
-    from a Windows cmd or Powershell terminal causes errors such as:
-    UnicodeEncodeError: 'charmap' codec can't encode characters in position 32-33:
-    character maps to <undefined> '''
-    enc = outfile.encoding
-    if enc == 'UTF-8':
-        print(*objects, sep=sep, end=end, file=outfile)
-    else:
-        enc_dec = lambda obj: str(obj).encode(enc, errors='backslashreplace').decode(enc)
-        print(*map(enc_dec, objects), sep=sep, end=end, file=outfile)
+def count_counted_words(self):
+    word_counts = {}
+    for word in self.adverb_freqs.keys():
+        count = self.corpus_words[word]
+        if count > 1:
+            word_counts[word] = count
+    return word_counts
 
-def char_range_inclusive(first, last, step=1):
-    '''ranges from specified first to last character, inclusive, in
-    any character set, depending only on ord()'''
-    for char in range(ord(first), ord(last)+1, step):
-        yield chr(char)
-
-
-def read_file_lines(path):
-    '''reads a text file into a list of lines'''
-    lines = []
+def read_counted_word_file(path):
+    '''reads a text file of format <count word> into a dictionary'''
+    word_counts = {}
     with open(path, 'r') as text:
         for line in text:
-            lines.append(line.rstrip())
-    return lines
+            count, word = line.split()
+            word_counts[word] = count
+            # print(count, word)
+    return word_counts
 
 def count_words(path):
     '''Returns a Counter that has counted all ASCII-only words found in a text file.'''
@@ -125,8 +123,8 @@ def main():
         exit(0)
 
     # Get the paths to the files (relative or absolute)
-    adverb_file = sys.argv[1] if argc > 1 else r'cipher.txt.bak'
-    corpus_file = sys.argv[2] if argc > 2 else r'corpus.txt.bak'
+    adverb_file = sys.argv[1] if argc > 1 else r'adverb.txt'
+    corpus_file = sys.argv[2] if argc > 2 else r'corpus.txt'
     verbose = int(sys.argv[3]) if argc > 3 else 1
 
     find_no_simple_substition_cipher(adverb_file, corpus_file, verbose)
