@@ -20,23 +20,26 @@ class GetNo:
         self.adverb_file = adverb_file
         self.corpus_file = corpus_file
         self.corpus_words = count_words(corpus_file)
-        self.adverb_freqs = read_counted_word_file(adverb_file)
+        self.adverb_freqs = load_counted_word_file(adverb_file)
         self.corpus_adverbs = count_counted_words(self)
         self.dialogue = defaultdict(int)
 
+        numfreq = 3
         self.verbose = verbose
         if self.verbose > 1:
-            print("The dozen most common corpus words and their counts:")
-            for word, count in self.corpus_words.most_common(12):
-                print("\t", word, "\t", count)
+            print("The", numfreq, "most common corpus words:")
+            for word, count in self.corpus_words.most_common(numfreq):
+                print('    {:>7d} {}'.format(count, word))
 
-        # for word, count in self.corpus_adverbs.items():
-            # print(word, count)
+        print("All adverbs in the corpus:")
+        for word, count in self.corpus_adverbs.items():
+            print(word, count)
 
+        print("The", numfreq, "most common corpus adverbs:")
         for word in sorted(self.corpus_adverbs.keys(), key=self.corpus_adverbs.get,
-            reverse=True):
+            reverse=True)[:numfreq]:
             count = self.corpus_adverbs[word]
-            print('    {}\t{}'.format(word, count))
+            print('    {:>7d} {}'.format(count, word))
 
     def find_no(self):
         '''Look for ways of sayning No'''
@@ -48,11 +51,11 @@ def count_counted_words(self):
     word_counts = {}
     for word in self.adverb_freqs.keys():
         count = self.corpus_words[word]
-        if count > 1:
+        if count > 0:
             word_counts[word] = count
     return word_counts
 
-def read_counted_word_file(path):
+def load_counted_word_file(path):
     '''reads a text file of format <count word> into a dictionary'''
     word_counts = {}
     with open(path, 'r') as text:
@@ -73,26 +76,27 @@ def count_words(path):
             counter.update(words)
     return counter
 
-def word_counts_short_and_long(path, max_short_len):
-    '''Returns two Counters containing all the ASCII-only words found in a text file.
-       The first counter counts only words up to length max_short_len, as-is.
-       The second counter contains all the longer words, but lowercased.'''
-    rgx_match = re.compile(r"[A-Za-z]+")
-    short_counter = Counter()
-    other_counter = Counter()
+def find_quoted_replies(path):
+    '''Finds first 3 (or fewer) words starting quoted replies.  
+       Returns a defaultdict mapping these phrases to their counts.
+       Words longer than 1-letter are lowercased.'''
+    rgx_quoted = re.compile(r"(["'])(?:(?=(\\?))\2.)*?\1")
+    rgx_word = re.compile(r"[A-Za-z]+")
+    counter = Counter()
     with open(path, 'r', encoding="utf8") as text:
         for line in text:
-            short = []
-            other = []
-            words = re.findall(rgx_match, line.rstrip())
-            for word in words:
-                if len(word) <= max_short_len:
-                    short.append(word)
-                else:
-                    other.append(word.lower())
-            short_counter.update(short)
-            other_counter.update(other)
-    return short_counter, other_counter
+            quotes = re.findall(rgx_quoted, line.rstrip())
+            phrases = []
+            for quote in quotes:
+                phrase = []
+                words = re.findall(rgx_match, quote)
+                for word in words:
+                    if len(word) == 1
+                        phrase.append(word)
+                    else:
+                        phrase.append(word.lower())
+                counter.update(phrases)
+    return counter
 
 def count_chars_from_words(word_counter):
     '''Count chars from all words times their counts'''
@@ -125,7 +129,7 @@ def main():
     # Get the paths to the files (relative or absolute)
     adverb_file = sys.argv[1] if argc > 1 else r'adverb.txt'
     corpus_file = sys.argv[2] if argc > 2 else r'corpus.txt'
-    verbose = int(sys.argv[3]) if argc > 3 else 1
+    verbose = int(sys.argv[3]) if argc > 3 else 3
 
     find_no_simple_substition_cipher(adverb_file, corpus_file, verbose)
 
