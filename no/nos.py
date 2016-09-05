@@ -22,9 +22,9 @@ class GetNo:
         self.corpus_words = count_words(corpus_file)
         self.adverb_freqs = load_counted_word_file(adverb_file)
         self.corpus_adverbs = count_counted_words(self)
-        self.dialogue = defaultdict(int)
+        self.replies = find_quoted_replies(corpus_file)
 
-        numfreq = 3
+        numfreq = 4
         self.verbose = verbose
         if self.verbose > 1:
             print("The", numfreq, "most common corpus words:")
@@ -40,6 +40,12 @@ class GetNo:
             reverse=True)[:numfreq]:
             count = self.corpus_adverbs[word]
             print('    {:>7d} {}'.format(count, word))
+
+        print("The", numfreq, "most common reply phrases:")
+        for phrase, count in self.replies.most_common(numfreq):
+            print('    {:>7d} {}'.format(count, phrase))
+
+
 
     def find_no(self):
         '''Look for ways of sayning No'''
@@ -80,7 +86,9 @@ def find_quoted_replies(path):
     '''Finds first 3 (or fewer) words starting quoted replies.  
        Returns a defaultdict mapping these phrases to their counts.
        Words longer than 1-letter are lowercased.'''
-    rgx_quoted = re.compile(r"(["'])(?:(?=(\\?))\2.)*?\1")
+    rgx_quoted_B = re.compile(r'(["])(?:(?=(\\?))\2.)*?\1')
+    rgx_quoted_A = re.compile(r'([^"]+)')
+    rgx_quoted = re.compile(r'"([^"]*)"')
     rgx_word = re.compile(r"[A-Za-z]+")
     counter = Counter()
     with open(path, 'r', encoding="utf8") as text:
@@ -88,14 +96,15 @@ def find_quoted_replies(path):
             quotes = re.findall(rgx_quoted, line.rstrip())
             phrases = []
             for quote in quotes:
-                phrase = []
-                words = re.findall(rgx_match, quote)
-                for word in words:
-                    if len(word) == 1
-                        phrase.append(word)
-                    else:
-                        phrase.append(word.lower())
-                counter.update(phrases)
+                print("quote:{}".format(quote))
+                #phrase = []
+                #words = re.findall(rgx_word, quote)
+                #for word in words:
+                #    if len(word) == 1:
+                #        phrase.append(word)
+                #    else:
+                #        phrase.append(word.lower())
+                # counter.update(phrases)
     return counter
 
 def count_chars_from_words(word_counter):
