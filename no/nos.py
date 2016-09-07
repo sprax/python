@@ -7,6 +7,7 @@ Where: TBD
 '''
 
 import heapq
+import itertools
 import re
 import sys
 from collections import defaultdict
@@ -22,10 +23,14 @@ class GetNo:
         self.corpus_words = count_words(corpus_file)
         self.adverb_freqs = load_counted_word_file(adverb_file)
         self.corpus_adverbs = count_counted_words(self)
+        self.verbose = verbose
+        numfreq = 4
+
+        print("print_paragraphs:")
+        print_paragraphs(corpus_file)
+
         self.replies = find_quoted_replies(corpus_file)
 
-        numfreq = 4
-        self.verbose = verbose
         if self.verbose > 1:
             print("The", numfreq, "most common corpus words:")
             for word, count in self.corpus_words.most_common(numfreq):
@@ -46,12 +51,47 @@ class GetNo:
             print('    {:>7d} {}'.format(count, phrase))
 
 
-
     def find_no(self):
         '''Look for ways of sayning No'''
 
     def show_no(self):
         '''Show frequent ways of saying No'''
+
+
+
+def paragraphs(fileobj, separator='\n'):
+    """Iterate a fileobject by paragraph"""
+    ## Makes no assumptions about the encoding used in the file
+    lines = []
+    for line in fileobj:
+        if line == separator and lines:
+            yield ''.join(lines)
+            lines = []
+        else:
+            lines.append(line)
+    yield ''.join(lines)
+
+def paragraphs_re(fileobj, separator='\n'):
+    """Iterate a fileobject by paragraph"""
+    ## Makes no assumptions about the encoding used in the file
+    lines = []
+    for line in fileobj:
+        if re.match(separator, line) and lines:
+            yield ' '.join(lines)
+            lines = []
+        else:
+            line = line.rstrip()
+            if line:
+               lines.append(line)
+    yield ' '.join(lines)
+
+
+def print_paragraphs(path):
+    with open(path) as f:
+        for idx, para in enumerate(paragraphs_re(f)):
+            print("    Paragraph {}:".format(idx))
+            print(para)
+            print()
 
 def count_counted_words(self):
     word_counts = {}
@@ -91,12 +131,14 @@ def find_quoted_replies(path):
     rgx_quoted = re.compile(r'"([^"]*)"')
     rgx_word = re.compile(r"[A-Za-z]+")
     counter = Counter()
+    idx = 0
     with open(path, 'r', encoding="utf8") as text:
-        for line in text:
-            quotes = re.findall(rgx_quoted, line.rstrip())
+        for para in paragraphs_re(text):
+            quotes = re.findall(rgx_quoted, para)
             phrases = []
             for quote in quotes:
-                print("quote:{}".format(quote))
+                print("quote {}: {}".format(idx, quote))
+                idx += 1
                 #phrase = []
                 #words = re.findall(rgx_word, quote)
                 #for word in words:
@@ -115,7 +157,7 @@ def count_chars_from_words(word_counter):
             char_counter.update(item[0])
     return char_counter
 
-def find_no_simple_substition_cipher(adverb_file, corpus_file, verbose):
+def find_quoted_no_phrases(adverb_file, corpus_file, verbose):
     '''Given a file of ordinary English sentences encoded using a simple
     substitution cipher, and a corpus of English text expected to contain
     most of the words in the encoded text, decipher the encoded file.
@@ -126,7 +168,7 @@ def find_no_simple_substition_cipher(adverb_file, corpus_file, verbose):
 
 def main():
     '''Get file names for cipher and corpus texts and call
-    find_no_simple_substition_cipher.'''
+    find_quoted_no_phrases.'''
 
     # simple, inflexible arg parsing:
     argc = len(sys.argv)
@@ -140,7 +182,7 @@ def main():
     corpus_file = sys.argv[2] if argc > 2 else r'corpus.txt'
     verbose = int(sys.argv[3]) if argc > 3 else 3
 
-    find_no_simple_substition_cipher(adverb_file, corpus_file, verbose)
+    find_quoted_no_phrases(adverb_file, corpus_file, verbose)
 
 
 if __name__ == '__main__':
