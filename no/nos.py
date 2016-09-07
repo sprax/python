@@ -47,7 +47,7 @@ class GetNo:
             print('    {:>7d} {}'.format(count, word))
 
         print("The", numfreq, "most common reply phrases:")
-        for phrase, count in self.replies.most_common(numfreq):
+        for phrase, count in self.replies.most_common(numfreq*10):
             print('    {:>7d} {}'.format(count, phrase))
 
 
@@ -65,11 +65,11 @@ def paragraphs(fileobj, separator='\n'):
     lines = []
     for line in fileobj:
         if line == separator and lines:
-            yield ''.join(lines)
+            yield ' '.join(lines)
             lines = []
         else:
             lines.append(line)
-    yield ''.join(lines)
+    yield ' '.join(lines)
 
 def paragraphs_re(fileobj, separator='\n'):
     """Iterate a fileobject by paragraph"""
@@ -139,14 +139,16 @@ def find_quoted_replies(path):
             for quote in quotes:
                 print("quote {}: {}".format(idx, quote))
                 idx += 1
-                #phrase = []
-                #words = re.findall(rgx_word, quote)
-                #for word in words:
-                #    if len(word) == 1:
-                #        phrase.append(word)
-                #    else:
-                #        phrase.append(word.lower())
-                # counter.update(phrases)
+                phrase = []
+                words = re.findall(rgx_word, quote)
+                for word in words[:3]:
+                    if len(word) == 1:
+                        phrase.append(word)
+                    else:
+                        phrase.append(word.lower())
+                phrases.append(' '.join(phrase))
+                counter.update(phrases)
+    print(phrases)
     return counter
 
 def count_chars_from_words(word_counter):
