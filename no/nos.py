@@ -24,21 +24,21 @@ class GetNo:
         self.adverb_freqs = load_counted_word_file(adverb_file)
         self.corpus_adverbs = count_counted_words(self)
         self.verbose = verbose
-        numfreq = 4
+        numfreq = 9
 
-        print("print_paragraphs:")
-        print_paragraphs(corpus_file)
+        ## print_paragraphs(corpus_file)
 
-        self.replies = find_quoted_replies(corpus_file)
+        self.replies = find_quoted_replies(corpus_file, verbose)
 
         if self.verbose > 1:
             print("The", numfreq, "most common corpus words:")
             for word, count in self.corpus_words.most_common(numfreq):
                 print('    {:>7d} {}'.format(count, word))
 
-        print("All adverbs in the corpus:")
-        for word, count in self.corpus_adverbs.items():
-            print(word, count)
+        if self.verbose > 3:
+            print("All adverbs in the corpus:")
+            for word, count in self.corpus_adverbs.items():
+                print(word, count)
 
         print("The", numfreq, "most common corpus adverbs:")
         for word in sorted(self.corpus_adverbs.keys(), key=self.corpus_adverbs.get,
@@ -47,7 +47,7 @@ class GetNo:
             print('    {:>7d} {}'.format(count, word))
 
         print("The", numfreq, "most common reply phrases:")
-        for phrase, count in self.replies.most_common(numfreq*10):
+        for phrase, count in self.replies.most_common(numfreq*3):
             print('    {:>7d} {}'.format(count, phrase))
 
 
@@ -87,6 +87,7 @@ def paragraphs_re(fileobj, separator='\n'):
 
 
 def print_paragraphs(path):
+    print("print_paragraphs:")
     with open(path) as f:
         for idx, para in enumerate(paragraphs_re(f)):
             print("    Paragraph {}:".format(idx))
@@ -122,14 +123,14 @@ def count_words(path):
             counter.update(words)
     return counter
 
-def find_quoted_replies(path):
+def find_quoted_replies(path, verbose):
     '''Finds first 3 (or fewer) words starting quoted replies.  
        Returns a defaultdict mapping these phrases to their counts.
        Words longer than 1-letter are lowercased.'''
     rgx_quoted_B = re.compile(r'(["])(?:(?=(\\?))\2.)*?\1')
     rgx_quoted_A = re.compile(r'([^"]+)')
     rgx_quoted = re.compile(r'"([^"]*)"')
-    rgx_word = re.compile(r"[A-Za-z]+")
+    rgx_word = re.compile(r"[A-Z'a-z]+")
     counter = Counter()
     idx = 0
     with open(path, 'r', encoding="utf8") as text:
@@ -137,7 +138,8 @@ def find_quoted_replies(path):
             quotes = re.findall(rgx_quoted, para)
             phrases = []
             for quote in quotes:
-                print("quote {}: {}".format(idx, quote))
+                if verbose > 3:
+                    print("quote {}: {}".format(idx, quote))
                 idx += 1
                 phrase = []
                 words = re.findall(rgx_word, quote)
@@ -147,8 +149,9 @@ def find_quoted_replies(path):
                     else:
                         phrase.append(word.lower())
                 phrases.append(' '.join(phrase))
-                counter.update(phrases)
-    print(phrases)
+            counter.update(phrases)
+            ## for ppp in phrases:
+            ##    print("ppp: ", ppp)
     return counter
 
 def count_chars_from_words(word_counter):
