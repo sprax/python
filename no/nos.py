@@ -13,7 +13,7 @@ import sys
 from collections import defaultdict
 from collections import Counter
 
-import utfprint
+import utf_print
 
 class GetNo:
     '''Counts ways of saying No'''
@@ -48,7 +48,7 @@ class GetNo:
 
         print("The", numfreq, "most common reply phrases:")
         for phrase, count in self.replies.most_common(numfreq*3):
-            print('    {:>7d} {}'.format(count, phrase))
+            utf_print.utf_print('    {:>7d} {}'.format(count, phrase))
 
 
     def find_no(self):
@@ -80,7 +80,7 @@ def paragraphs_re(fileobj, separator='\n'):
             yield ' '.join(lines)
             lines = []
         else:
-            line = line.rstrip()
+            line = line.rstrip().replace('’', "'")
             if line:
                lines.append(line)
     yield ' '.join(lines)
@@ -124,13 +124,13 @@ def count_words(path):
     return counter
 
 def find_quoted_replies(path, verbose):
-    '''Finds first 3 (or fewer) words starting quoted replies.  
+    '''Finds first 3 (or fewer) words starting quoted replies.
        Returns a defaultdict mapping these phrases to their counts.
        Words longer than 1-letter are lowercased.'''
     rgx_quoted_B = re.compile(r'(["])(?:(?=(\\?))\2.)*?\1')
     rgx_quoted_A = re.compile(r'([^"]+)')
     rgx_quoted = re.compile(r'"([^"]*)"')
-    rgx_word = re.compile(r"[A-Z'a-z]+")
+    rgx_word = re.compile(r"[A-Z'’a-z]+")
     counter = Counter()
     idx = 0
     with open(path, 'r', encoding="utf8") as text:

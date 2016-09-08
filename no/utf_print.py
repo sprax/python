@@ -4,7 +4,7 @@
 
 import sys
 
-def uprint(*objects, sep=' ', end='\n', outfile=sys.stdout):
+def utf_print(*objects, sep=' ', end='\n', outfile=sys.stdout):
     '''Prints non-ASCII Unicode (UTF-8) characters in a safe (but possibly
     ugly) way even in a Windows command terminal.  Unicode-enabled terminals
     such as on Mac or KDE have no problem, nor do most IDE's, but calling
@@ -21,4 +21,4 @@ def uprint(*objects, sep=' ', end='\n', outfile=sys.stdout):
 
 
 if __name__ == '__main__':
-    uprint("This is utfprint\n")
+    utf_print("This is utfprint\n")
