@@ -24,11 +24,11 @@ class GetNo:
         self.adverb_freqs = load_counted_word_file(adverb_file)
         self.corpus_adverbs = count_counted_words(self)
         self.verbose = verbose
-        numfreq = 9
+        numfreq = 20
 
         ## print_paragraphs(corpus_file)
 
-        self.replies = find_quoted_replies(corpus_file, verbose)
+        self.replies, self.denials = find_quoted_replies(corpus_file, verbose)
 
         if self.verbose > 1:
             print("The", numfreq, "most common corpus words:")
@@ -48,6 +48,10 @@ class GetNo:
 
         print("The", numfreq, "most common reply phrases:")
         for phrase, count in self.replies.most_common(numfreq*3):
+            utf_print.utf_print('    {:>7d} {}'.format(count, phrase))
+
+        print("The", numfreq, "most common denials:")
+        for phrase, count in self.denials.most_common(numfreq*3):
             utf_print.utf_print('    {:>7d} {}'.format(count, phrase))
 
 
@@ -131,12 +135,14 @@ def find_quoted_replies(path, verbose):
     rgx_quoted_A = re.compile(r'([^"]+)')
     rgx_quoted = re.compile(r'"([^"]*)"')
     rgx_word = re.compile(r"[A-Z'’a-z]+")
-    counter = Counter()
+    reply_counter = Counter()
+    denial_counter = Counter()
     idx = 0
     with open(path, 'r', encoding="utf8") as text:
         for para in paragraphs_re(text):
             quotes = re.findall(rgx_quoted, para)
             phrases = []
+            is_denial = False
             for quote in quotes:
                 if verbose > 3:
                     print("quote {}: {}".format(idx, quote))
@@ -147,12 +153,19 @@ def find_quoted_replies(path, verbose):
                     if len(word) == 1:
                         phrase.append(word)
                     else:
-                        phrase.append(word.lower())
-                phrases.append(' '.join(phrase))
-            counter.update(phrases)
+                        low = word.lower()
+                        phrase.append(low)
+                        if low == "no" or low == "not" or low == "don't":
+                            is_denial = True
+                joined = ' '.join(phrase)
+                if is_denial:
+                    is_denial = False
+                    denial_counter.update([joined])
+                phrases.append(joined)
+            reply_counter.update(phrases)
             ## for ppp in phrases:
             ##    print("ppp: ", ppp)
-    return counter
+    return reply_counter, denial_counter
 
 def count_chars_from_words(word_counter):
     '''Count chars from all words times their counts'''
