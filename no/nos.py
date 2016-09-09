@@ -50,8 +50,9 @@ class GetNo:
         for phrase, count in self.replies.most_common(numfreq*3):
             utf_print.utf_print('    {:>7d} {}'.format(count, phrase))
 
+        numfreq *= 3
         print("The", numfreq, "most common denials:")
-        for phrase, count in self.denials.most_common(numfreq*3):
+        for phrase, count in self.denials.most_common(numfreq):
             utf_print.utf_print('    {:>7d} {}'.format(count, phrase))
 
 
@@ -120,7 +121,7 @@ def count_words(path):
     '''Returns a Counter that has counted all ASCII-only words found in a text file.'''
     rgx_match = re.compile(r"[A-Za-z]+")
     counter = Counter()
-    with open(path, 'r') as text:
+    with open(path, 'r', encoding="utf8") as text:
         for line in text:
             words = re.findall(rgx_match, line.rstrip())
             words = [x.lower() if len(x) > 1 else x for x in words]
