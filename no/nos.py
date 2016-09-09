@@ -46,11 +46,11 @@ class GetNo:
             count = self.corpus_adverbs[word]
             print('    {:>7d} {}'.format(count, word))
 
+        numfreq *= 4
         print("The", numfreq, "most common reply phrases:")
-        for phrase, count in self.replies.most_common(numfreq*3):
+        for phrase, count in self.replies.most_common(numfreq):
             utf_print.utf_print('    {:>7d} {}'.format(count, phrase))
 
-        numfreq *= 3
         print("The", numfreq, "most common denials:")
         for phrase, count in self.denials.most_common(numfreq):
             utf_print.utf_print('    {:>7d} {}'.format(count, phrase))
@@ -158,15 +158,34 @@ def find_quoted_replies(path, verbose):
                         phrase.append(low)
                         if low == "no" or low == "not" or low == "don't":
                             is_denial = True
-                joined = ' '.join(phrase)
-                if is_denial:
-                    is_denial = False
-                    denial_counter.update([joined])
-                phrases.append(joined)
+                if phrase:
+                    joined = ' '.join(phrase)
+                    is_question = is_question_word(phrase[0])
+                    if is_denial and not is_question:
+                        is_denial = False
+                        denial_counter.update([joined])
+                    phrases.append(joined)
             reply_counter.update(phrases)
             ## for ppp in phrases:
             ##    print("ppp: ", ppp)
     return reply_counter, denial_counter
+
+def is_question_word(word):
+    if word == "what":
+        return True
+    if word == "when":
+        return True
+    if word == "where":
+        return True
+    if word == "why":
+        return True
+    if word == "who":
+        return True
+    if word == "how":
+        return True
+    if word == "whence":
+        return True
+    return False
 
 def count_chars_from_words(word_counter):
     '''Count chars from all words times their counts'''
