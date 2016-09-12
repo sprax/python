@@ -136,11 +136,14 @@ def find_quoted_replies(path, verbose):
     rgx_quoted_A = re.compile(r'([^"]+)')
     rgx_quoted = re.compile(r'"([^"]*)"')
     rgx_word = re.compile(r"[A-Z'’a-z]+")
+    rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
     reply_counter = Counter()
     denial_counter = Counter()
     idx = 0
     with open(path, 'r', encoding="utf8") as text:
         for para in paragraphs_re(text):
+            if re.match(rgx_para_numbering, para):
+                continue
             quotes = re.findall(rgx_quoted, para)
             phrases = []
             is_denial = False
