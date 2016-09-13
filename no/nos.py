@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # Sprax Lines       2016.09.01      Written with Python 3.5
 '''How many ways have writers written "No"?
-
 Usage: python3 nos.py [adverb_file [corpus_file [verbosity]]]
 Where: TBD
 '''
 
+
+import argparse
 import heapq
 import itertools
 import re
@@ -211,12 +212,29 @@ def main():
     '''Get file names for cipher and corpus texts and call
     find_quoted_no_phrases.'''
 
+    parser = argparse.ArgumentParser(
+            # usage='%(prog)s [options]',
+            description='Process some integers.',
+            )
+    parser.add_argument('adverb_file', type=str, nargs='?', default='adverb.txt',
+                    help='text file containing counted adverbs')
+    parser.add_argument('corpus_file', type=str, nargs='?', default='corpus.txt',
+                    help='text file containing quoted dialogue')
+    parser.add_argument('-verbose', nargs='?', const=1)
+    #, type=int, action='store_const',
+    #                const=0, default=1,
+    #                help='verbosity of output (default: 1)')
+
+
+    args = parser.parse_args()
+    print("args: ", args)
+    print()
+        
+    print(dir(args))
+        
     # simple, inflexible arg parsing:
-    argc = len(sys.argv)
-    if argc > 4:
-        print(sys.argv[0])
-        print(__doc__)
-        exit(0)
+    print(__doc__)
+    exit(0)
 
     # Get the paths to the files (relative or absolute)
     adverb_file = sys.argv[1] if argc > 1 else r'adverb.txt'
