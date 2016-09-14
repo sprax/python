@@ -11,12 +11,12 @@ from collections import Counter
 
 import utf_print
 
-def paragraphs_re(fileobj, separator='\n'):
+def paragraphs_re_lines(fileobj, rgx_para_separator='\n'):
     """Iterate a fileobject by paragraph"""
     ## Makes no assumptions about the encoding used in the file
     lines = []
     for line in fileobj:
-        if re.match(separator, line) and lines:
+        if re.match(rgx_para_separator, line) and lines:
             yield ' '.join(lines)
             lines = []
         else:
@@ -24,6 +24,24 @@ def paragraphs_re(fileobj, separator='\n'):
             if line:
                lines.append(line)
     yield ' '.join(lines)
+
+def paragraphs_re(fileobj, rgx_para_separator='\n'):
+    """yields paragraphs from text file and regex"""
+    ## Makes no assumptions about the encoding used in the file
+    paragraph = ''
+    for line in fileobj:
+        if re.match(rgx_para_separator, line) and paragraph:
+            yield paragraph
+            paragraph = ''
+        else:
+            line = line.rstrip()
+            if line:
+                if paragraph.endswith('-'):
+                    paragraph += line
+                else:
+                    paragraph += ' ' + line
+    if paragraph:
+        yield paragraph
 
 def print_paragraphs(path):
     print("print_paragraphs:")
