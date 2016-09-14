@@ -13,6 +13,16 @@
 (' ', 'Or I', '')
 >>> mm[1][1]
 'Or I'
+
+>>> qq = [m[1] for m in mm]
+>>> qq
+['So you know?', 'Or I', 's kids', 'confessions', 'em?']
+>>> 
+>>> rgsd = re.compile("(^\s*|[,:-]\s+)'(.*?)[,.!?]'(\s*|$)")
+>>> ww = re.findall(rgsd, " 'So you know?' she said, 'Or I've got Fred's kids' 'confessions' to make for 'em?'")
+>>> rr = [m[1] for m in ww]
+>>> rr
+['So you know', "Or I've got Fred's kids' 'confessions' to make for 'em"]
 '''
 
 import heapq
