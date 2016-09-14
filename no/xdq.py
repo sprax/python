@@ -4,6 +4,17 @@
 # Sprax Lines       2016.09.01      Written with Python 3.5
 '''Extract doubly-quoted strings from a file of paragraphs'''
 
+'''
+>>> rgs = re.compile("(^|\s*)'(.*?)'(\s*|$)")
+>>> mm = re.findall(rgs, " 'So you know?' she said, 'Or I've got Fred's kids' 'confessions' to make for 'em?'")
+>>> mm
+[(' ', 'So you know?', ' '), (' ', 'Or I', ''), ('', 's kids', ' '), ('', 'confessions', ' '), (' ', 'em?', '')]
+>>> mm[1]
+(' ', 'Or I', '')
+>>> mm[1][1]
+'Or I'
+'''
+
 import heapq
 import itertools
 import re
