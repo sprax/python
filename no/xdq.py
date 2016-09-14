@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# -*- coding: latin-1 -*-
+#
 # Sprax Lines       2016.09.01      Written with Python 3.5
 '''Extract doubly-quoted strings from a file of paragraphs'''
 
@@ -10,20 +12,6 @@ from collections import defaultdict
 from collections import Counter
 
 import utf_print
-
-def paragraphs_re_lines(fileobj, rgx_para_separator='\n'):
-    """Iterate a fileobject by paragraph"""
-    ## Makes no assumptions about the encoding used in the file
-    lines = []
-    for line in fileobj:
-        if re.match(rgx_para_separator, line) and lines:
-            yield ' '.join(lines)
-            lines = []
-        else:
-            line = line.rstrip()
-            if line:
-               lines.append(line)
-    yield ' '.join(lines)
 
 def paragraphs_re(fileobj, rgx_para_separator='\n'):
     """yields paragraphs from text file and regex"""
@@ -72,7 +60,7 @@ def find_quoted_text(path, verbose):
             phrases = []
             is_denial = False
             for quote in quotes:
-                if verbose > 3:
+                if verbose > 1:
                     print("quote {}: {}".format(idx, quote))
                 idx += 1
                 phrase = []
@@ -87,8 +75,7 @@ def find_quoted_text(path, verbose):
                             is_denial = True
                 if phrase:
                     joined = ' '.join(phrase)
-                    is_question = is_question_word(phrase[0])
-                    if is_denial and not is_question:
+                    if is_denial:
                         is_denial = False
                         denial_counter.update([joined])
                     phrases.append(joined)
@@ -113,8 +100,8 @@ def main():
     corpus_file = sys.argv[1] if argc > 1 else r'corpus.txt'
     verbose = int(sys.argv[2]) if argc > 2 else 3
 
-    print_paragraphs(corpus_file)
-    # find_quoted_text(corpus_file, verbose)
+    # print_paragraphs(corpus_file)
+    find_quoted_text(corpus_file, verbose)
 
 
 if __name__ == '__main__':
