@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # Sprax Lines       2016.09.01      Written with Python 3.5
-'''How many ways have writers written "No"?
-Usage: python3 nos.py [adverb_file [corpus_file [verbosity]]]
-Where: TBD
-'''
-
+'''How many ways have writers written "No"?'''
 
 import argparse
 import heapq
@@ -214,34 +210,20 @@ def main():
 
     parser = argparse.ArgumentParser(
             # usage='%(prog)s [options]',
-            description='Process some integers.',
+            description="Count some quoted ways of saying 'No'",
             )
     parser.add_argument('adverb_file', type=str, nargs='?', default='adverb.txt',
-                    help='text file containing counted adverbs')
+            help='text file containing counted adverbs')
     parser.add_argument('corpus_file', type=str, nargs='?', default='corpus.txt',
-                    help='text file containing quoted dialogue')
-    parser.add_argument('-verbose', nargs='?', const=1)
-    #, type=int, action='store_const',
-    #                const=0, default=1,
-    #                help='verbosity of output (default: 1)')
-
+            help='text file containing quoted dialogue')
+    parser.add_argument('-verbose', nargs='?', const=1, default=2,
+            help='verbosity of output (default: 1)')
 
     args = parser.parse_args()
-    print("args: ", args)
-    print()
-        
-    print(dir(args))
-        
-    # simple, inflexible arg parsing:
     print(__doc__)
-    exit(0)
+    print("args:", args)
 
-    # Get the paths to the files (relative or absolute)
-    adverb_file = sys.argv[1] if argc > 1 else r'adverb.txt'
-    corpus_file = sys.argv[2] if argc > 2 else r'corpus.txt'
-    verbose = int(sys.argv[3]) if argc > 3 else 3
-
-    find_quoted_no_phrases(adverb_file, corpus_file, verbose)
+    find_quoted_no_phrases(args.adverb_file, args.corpus_file, args.verbose)
 
 
 if __name__ == '__main__':
