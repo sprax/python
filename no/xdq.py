@@ -11,18 +11,6 @@ from collections import Counter
 
 import utf_print
 
-def paragraphs(fileobj, separator='\n'):
-    """Iterate a fileobject by paragraph"""
-    ## Makes no assumptions about the encoding used in the file
-    lines = []
-    for line in fileobj:
-        if line == separator and lines:
-            yield ' '.join(lines)
-            lines = []
-        else:
-            lines.append(line)
-    yield ' '.join(lines)
-
 def paragraphs_re(fileobj, separator='\n'):
     """Iterate a fileobject by paragraph"""
     ## Makes no assumptions about the encoding used in the file
@@ -32,11 +20,10 @@ def paragraphs_re(fileobj, separator='\n'):
             yield ' '.join(lines)
             lines = []
         else:
-            line = line.rstrip().replace('’', "'")
+            line = line.rstrip()
             if line:
                lines.append(line)
     yield ' '.join(lines)
-
 
 def print_paragraphs(path):
     print("print_paragraphs:")
@@ -46,8 +33,7 @@ def print_paragraphs(path):
             print(para)
             print()
 
-
-def find_quoted_replies(path, verbose):
+def find_quoted_text(path, verbose):
     '''Finds first 3 (or fewer) words starting quoted replies.
        Returns a defaultdict mapping these phrases to their counts.
        Words longer than 1-letter are lowercased.'''
@@ -63,6 +49,7 @@ def find_quoted_replies(path, verbose):
         for para in paragraphs_re(text):
             if re.match(rgx_para_numbering, para):
                 continue
+            para = para.replace('’', "'")
             quotes = re.findall(rgx_quoted, para)
             phrases = []
             is_denial = False
@@ -105,11 +92,11 @@ def main():
         exit(0)
 
     # Get the paths to the files (relative or absolute)
-    adverb_file = sys.argv[1] if argc > 1 else r'adverb.txt'
-    corpus_file = sys.argv[2] if argc > 2 else r'corpus.txt'
-    verbose = int(sys.argv[3]) if argc > 3 else 3
+    corpus_file = sys.argv[1] if argc > 1 else r'corpus.txt'
+    verbose = int(sys.argv[2]) if argc > 2 else 3
 
-    find_quoted_no_phrases(adverb_file, corpus_file, verbose)
+    print_paragraphs(corpus_file)
+    # find_quoted_text(corpus_file, verbose)
 
 
 if __name__ == '__main__':

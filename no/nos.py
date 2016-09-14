@@ -216,12 +216,13 @@ def main():
             help='text file containing counted adverbs')
     parser.add_argument('corpus_file', type=str, nargs='?', default='corpus.txt',
             help='text file containing quoted dialogue')
-    parser.add_argument('-verbose', nargs='?', const=1, default=2,
+    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=2,
             help='verbosity of output (default: 1)')
-
     args = parser.parse_args()
-    print(__doc__)
-    print("args:", args)
+
+    if (args.verbose > 2):
+        print("args:", args)
+        print(__doc__)
 
     find_quoted_no_phrases(args.adverb_file, args.corpus_file, args.verbose)
 
