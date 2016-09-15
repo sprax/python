@@ -27,6 +27,8 @@ To which "friend" I rejoined, "No way, man, Morris has not signed a check in yea
 "No," he intoned, "not that Time, but only actually this time."
 Happily, merrily even, I rode away.  No 'parley for pensioneers', brawny bra."
 
+# distinguish 'scare' quotes 'dialogue' quotes (which presumably demarcate quoted spech)
+ 'So you know?' she said, 'Or I've got Fred's kids' 'confessions' to make for 'em?' 
 
 This is the last paragraph, my "friend" in crime.  Don't
 forget it for
