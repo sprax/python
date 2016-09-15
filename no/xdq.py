@@ -64,9 +64,10 @@ def find_quoted_text(path, verbose):
     '''Finds first 3 (or fewer) words starting quoted replies.
        Returns a defaultdict mapping these phrases to their counts.
        Words longer than 1-letter are lowercased.'''
-    rgx_quoted_B = re.compile(r'(["])(?:(?=(\\?))\2.)*?\1')
-    rgx_quoted_A = re.compile(r'([^"]+)')
-    rgx_quoted = re.compile(r'"([^"]*)"')
+    rgx_quote_A = re.compile(r'"([^"]*)"')
+    rgx_quote_B = re.compile(r'"([^"]+)"')
+    rgx_quote_C = re.compile(r'(["])(?:(?=(\\?))\2.)*?\1')
+    rgx_quoted = rgx_quote_A
     rgx_word = re.compile(r"[A-Z'’a-z]+")
     rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
     reply_counter = Counter()
@@ -74,6 +75,9 @@ def find_quoted_text(path, verbose):
     idx = 0
     with open(path, 'r', encoding="utf8") as text:
         for para in paragraphs_re(text):
+            if not para:
+                print("para is null!")
+                continue
             if re.match(rgx_para_numbering, para):
                 continue
             para = para.replace('’', "'")
