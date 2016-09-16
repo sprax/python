@@ -67,7 +67,10 @@ def find_quoted_text(path, verbose):
     rgx_quote_A = re.compile(r'"([^"]*)"')
     rgx_quote_B = re.compile(r'"([^"]+)"')
     rgx_quote_C = re.compile(r'(["])(?:(?=(\\?))\2.)*?\1')
-    rgx_quoted = rgx_quote_A
+    rgx_single  = re.compile("(^\s*|[,:-]\s+)'(.*?)[,.!?]'(\s*|$)")
+    rgx_quote_D = re.compile("(^\s*|\t\s*|[,:-]\s+)['\"](.*?)[,.!?]['\"](\s+|$)")
+    # distinguish 'scare' quotes 'dialogue' quotes (which presumably demarcate quoted spech)
+    rgx_quoted = rgx_quote_D
     rgx_word = re.compile(r"[A-Z'’a-z]+")
     rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
     reply_counter = Counter()
@@ -81,7 +84,8 @@ def find_quoted_text(path, verbose):
             if re.match(rgx_para_numbering, para):
                 continue
             para = para.replace('’', "'")
-            quotes = re.findall(rgx_quoted, para)
+            quotelists = re.findall(rgx_quoted, para)
+            quotes = [q[1] for q in quotelists]
             phrases = []
             is_denial = False
             for quote in quotes:
