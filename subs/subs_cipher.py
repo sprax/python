@@ -183,7 +183,7 @@ class SubCipher:
         descending order of frequency in the corpus.  Trials are evaluated
         by scoring how many decoded cipher words then match corpus words.
         The highest score wins.  (That is, the decision is immediate, not
-        defered to accumulate multiple scoring passes or backpropogating votes.'''
+        defered to accumulate multiple scoring passes or backpropagating votes.'''
         num_words = len(self.corpus_words)
         corpus = self.corpus_words.most_common(num_words) # Just try them all
         inverse_pq = [] # priority = [num_unknown (updated on pop), -count, length]

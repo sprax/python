@@ -68,7 +68,7 @@ def find_quoted_text(path, verbose):
     rgx_quote_B = re.compile(r'"([^"]+)"')
     rgx_quote_C = re.compile(r'(["])(?:(?=(\\?))\2.)*?\1')
     rgx_single  = re.compile("(^\s*|[,:-]\s+)'(.*?)[,.!?]'(\s*|$)")
-    rgx_quote_D = re.compile("(^\s*|\t\s*|[,:-]\s+)['\"](.*?)[,.!?]['\"](\s+|$)")
+    rgx_quote_D = re.compile("(^\s*|said\s+|\t\s*|[,:-]\s+)['\"](.*?)[,.!?]['\"](\s+|$)")
     # distinguish 'scare' quotes 'dialogue' quotes (which presumably demarcate quoted spech)
     rgx_quoted = rgx_quote_D
     rgx_word = re.compile(r"[A-Z'’a-z]+")

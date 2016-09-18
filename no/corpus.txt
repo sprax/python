@@ -31,6 +31,8 @@ Happily, merrily even, I rode away.  No 'parley for pensioneers', brawny bra."
 # distinguish 'scare' quotes 'dialogue' quotes (which presumably demarcate quoted spech)
 	'So you know?' she said, 'Or I've got Fred's kids' 'confessions' to make for 'em?' 
 
+He said 'I'm sorry, Dave.  I cannot do that.'
+
 This is the last paragraph, my "friend" in crime.  Don't
 forget it for
 nothing,
