@@ -71,14 +71,13 @@ def quoted_text_iter(path, verbose):
 
 def extract_quoted(para, verbose):
     '''Returns list of quotes extracted from paragraph.'''
-    rgx_quoted = re.compile("(^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](\s+|$)")
+    rgx_quoted = re.compile("(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
     # distinguish 'scare' quotes 'dialogue' quotes (which presumably demarcate quoted spech)
     if not para:
         print("WARNING: paragraph is empty!")
         return []
     para = para.replace('’', "'")
-    quotelists = re.findall(rgx_quoted, para)
-    return [(q[1], q[2]) for q in quotelists]
+    return re.findall(rgx_quoted, para)
 
 def extract_yes_no_repies(path, verbose):
     '''Finds first 3 (or fewer) words starting quoted replies.
