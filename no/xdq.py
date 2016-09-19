@@ -4,27 +4,6 @@
 # Sprax Lines       2016.09.01      Written with Python 3.5
 '''Extract doubly-quoted strings from a file of paragraphs'''
 
-'''
->>> rgs = re.compile("(^|\s*)'(.*?)'(\s*|$)")
->>> mm = re.findall(rgs, " 'So you know?' she said, 'Or I've got Fred's kids' 'confessions' to make for 'em?'")
->>> mm
-[(' ', 'So you know?', ' '), (' ', 'Or I', ''), ('', 's kids', ' '), ('', 'confessions', ' '), (' ', 'em?', '')]
->>> mm[1]
-(' ', 'Or I', '')
->>> mm[1][1]
-'Or I'
-
->>> qq = [m[1] for m in mm]
->>> qq
-['So you know?', 'Or I', 's kids', 'confessions', 'em?']
->>> 
->>> rgsd = re.compile("(^\s*|[,:-]\s+)'(.*?)[,.!?]'(\s*|$)")
->>> ww = re.findall(rgsd, " 'So you know?' she said, 'Or I've got Fred's kids' 'confessions' to make for 'em?'")
->>> rr = [m[1] for m in ww]
->>> rr
-['So you know', "Or I've got Fred's kids' 'confessions' to make for 'em"]
-'''
-
 import heapq
 import itertools
 import re
@@ -68,7 +47,7 @@ def find_quoted_text(path, verbose):
     rgx_quote_B = re.compile(r'"([^"]+)"')
     rgx_quote_C = re.compile(r'(["])(?:(?=(\\?))\2.)*?\1')
     rgx_single  = re.compile("(^\s*|[,:-]\s+)'(.*?)[,.!?]'(\s*|$)")
-    rgx_quote_D = re.compile("(^\s*|said\s+|\t\s*|[,:-]\s+)['\"](.*?)[,.!?]['\"](\s+|$)")
+    rgx_quote_D = re.compile("(^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](\s+|$)")
     # distinguish 'scare' quotes 'dialogue' quotes (which presumably demarcate quoted spech)
     rgx_quoted = rgx_quote_D
     rgx_word = re.compile(r"[A-Z'’a-z]+")
@@ -86,11 +65,12 @@ def find_quoted_text(path, verbose):
             para = para.replace('’', "'")
             quotelists = re.findall(rgx_quoted, para)
             quotes = [q[1] for q in quotelists]
+            puncts = [q[2] for q in quotelists]
             phrases = []
             is_denial = False
-            for quote in quotes:
+            for qi, quote in enumerate(quotes):
                 if verbose > 1:
-                    print("quote {}: {}".format(idx, quote))
+                    print("quote {} {}: {}".format(idx, puncts[qi], quote))
                 idx += 1
                 phrase = []
                 words = re.findall(rgx_word, quote)
