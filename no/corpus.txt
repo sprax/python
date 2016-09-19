@@ -31,7 +31,7 @@ Happily, merrily even, I rode away.  No 'parley for pensioneers', brawny bra."
 # distinguish 'scare' quotes 'dialogue' quotes (which presumably demarcate quoted spech)
 	'So you know?' she said, 'Or I've got Fred's kids' 'confessions' to make for 'em?' 
 
-He said 'I'm sorry, Dave.  I cannot do that.'
+Hal said 'I'm sorry, Dave.  I cannot do that.' so I says "You bloody well will do it, you monster!"
 
 And then she says "sorry, I wasn't listening.  Would you start over?"
 

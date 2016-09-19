@@ -13,7 +13,7 @@ from collections import Counter
 
 import utf_print
 
-def paragraphs_re(fileobj, rgx_para_separator='\n'):
+def paragraph_iter(fileobj, rgx_para_separator='\n'):
     """yields paragraphs from text file and regex"""
     ## Makes no assumptions about the encoding used in the file
     paragraph = ''
@@ -34,12 +34,13 @@ def paragraphs_re(fileobj, rgx_para_separator='\n'):
 def print_paragraphs(path):
     print("print_paragraphs:")
     with open(path) as f:
-        for idx, para in enumerate(paragraphs_re(f)):
+        for idx, para in enumerate(paragraph_iter(f)):
             print("    Paragraph {}:".format(idx))
             print(para)
             print()
 
-def find_quoted_text(path, verbose):
+
+def quoted_text_iter(path, verbose):
     '''Finds first 3 (or fewer) words starting quoted replies.
        Returns a defaultdict mapping these phrases to their counts.
        Words longer than 1-letter are lowercased.'''
@@ -54,9 +55,8 @@ def find_quoted_text(path, verbose):
     rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
     reply_counter = Counter()
     denial_counter = Counter()
-    idx = 0
     with open(path, 'r', encoding="utf8") as text:
-        for para in paragraphs_re(text):
+        for para in paragraph_iter(text):
             if not para:
                 print("para is null!")
                 continue
@@ -68,35 +68,61 @@ def find_quoted_text(path, verbose):
             puncts = [q[2] for q in quotelists]
             phrases = []
             is_denial = False
-            for qi, quote in enumerate(quotes):
+            for idx, quote in enumerate(quotes):
                 if verbose > 1:
-                    print("quote {} {}: {}".format(idx, puncts[qi], quote))
-                idx += 1
-                phrase = []
-                words = re.findall(rgx_word, quote)
-                for word in words[:3]:
-                    if len(word) == 1:
-                        phrase.append(word)
-                    else:
-                        low = word.lower()
-                        phrase.append(low)
-                        if low == "no" or low == "not" or low == "don't":
-                            is_denial = True
-                if phrase:
-                    joined = ' '.join(phrase)
-                    if is_denial:
-                        is_denial = False
-                        denial_counter.update([joined])
-                    phrases.append(joined)
-            reply_counter.update(phrases)
-            ## for ppp in phrases:
-            ##    print("ppp: ", ppp)
+                    print("quote {} {}: {}".format(idx, puncts[idx], quote))
+                yield (quote, puncts[idx])
+
+
+def extract_yes_no_repies(path, verbose):
+    '''Finds first 3 (or fewer) words starting quoted replies.
+       Returns a defaultdict mapping these phrases to their counts.
+       Words longer than 1-letter are lowercased.'''
+    rgx_word = re.compile(r"[A-Z'’a-z]+")
+    rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
+    reply_counter = Counter()
+    denial_counter = Counter()
+    idx = 0
+    for para in quoted_text_iter(path, verbose):
+        if not para:
+            print("para is null!")
+            continue
+        if re.match(rgx_para_numbering, para):
+            continue
+        para = para.replace('’', "'")
+        quotelists = re.findall(rgx_quoted, para)
+        quotes = [q[1] for q in quotelists]
+        puncts = [q[2] for q in quotelists]
+        phrases = []
+        is_denial = False
+        for qi, quote in enumerate(quotes):
+            if verbose > 1:
+                print("quote {} {}: {}".format(idx, puncts[qi], quote))
+            idx += 1
+            phrase = []
+            words = re.findall(rgx_word, quote)
+            for word in words[:3]:
+                if len(word) == 1:
+                    phrase.append(word)
+                else:
+                    low = word.lower()
+                    phrase.append(low)
+                    if low == "no" or low == "not" or low == "don't":
+                        is_denial = True
+            if phrase:
+                joined = ' '.join(phrase)
+                if is_denial:
+                    is_denial = False
+                    denial_counter.update([joined])
+                phrases.append(joined)
+        reply_counter.update(phrases)
+        ## for ppp in phrases:
+        ##    print("ppp: ", ppp)
     return reply_counter, denial_counter
 
-def main():
-    '''Get file names for cipher and corpus texts and call
-    find_quoted_no_phrases.'''
 
+def main():
+    '''Driver to extract quoted dialog from a corpus.'''
 
     # simple, inflexible arg parsing:
     argc = len(sys.argv)
@@ -107,10 +133,11 @@ def main():
 
     # Get the paths to the files (relative or absolute)
     corpus_file = sys.argv[1] if argc > 1 else r'corpus.txt'
-    verbose = int(sys.argv[2]) if argc > 2 else 3
+    verbose = int(sys.argv[2]) if argc > 2 else 1
 
     # print_paragraphs(corpus_file)
-    find_quoted_text(corpus_file, verbose)
+    for para in quoted_text_iter(corpus_file, verbose):
+        print("{}{}".format(para[0], para[1]))
 
 
 if __name__ == '__main__':
