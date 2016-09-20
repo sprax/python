@@ -33,46 +33,47 @@ def paragraph_iter(fileobj, rgx_para_separator='\n'):
 
 def print_paragraphs(path):
     print("print_paragraphs:")
-    with open(path) as f:
-        for idx, para in enumerate(paragraph_iter(f)):
+    with open(path, 'r', encoding="utf8") as text:
+        for idx, para in enumerate(paragraph_iter(text)):
             print("    Paragraph {}:".format(idx))
             print(para)
             print()
 
-
-def quoted_text_iter(path, verbose):
-    '''Finds first 3 (or fewer) words starting quoted replies.
-       Returns a defaultdict mapping these phrases to their counts.
-       Words longer than 1-letter are lowercased.'''
-    rgx_quote_A = re.compile(r'"([^"]*)"')
-    rgx_quote_B = re.compile(r'"([^"]+)"')
-    rgx_quote_C = re.compile(r'(["])(?:(?=(\\?))\2.)*?\1')
-    rgx_single  = re.compile("(^\s*|[,:-]\s+)'(.*?)[,.!?]'(\s*|$)")
-    rgx_quote_D = re.compile("(^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](\s+|$)")
-    # distinguish 'scare' quotes 'dialogue' quotes (which presumably demarcate quoted spech)
-    rgx_quoted = rgx_quote_D
-    rgx_word = re.compile(r"[A-Z'’a-z]+")
+def quotes_per_paragraph_iter(path, verbose):
+    '''returns a generator that yields the list of quoted dialogue
+    phrases found in each paragraph in the text file, including
+    empty lists for quoteless paragraphs.'''
     rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
-    reply_counter = Counter()
-    denial_counter = Counter()
     with open(path, 'r', encoding="utf8") as text:
         for para in paragraph_iter(text):
             if not para:
-                print("WARNING: para is null!")
+                print("WARNING: para is empty!")   # TODO: delete this check!
                 continue
             if re.match(rgx_para_numbering, para):
                 continue
             para = para.replace('’', "'")
-            quotes = extract_quoted(para, verbose)
-            for quote in quotes:
-                if verbose > 1:
-                    print("quote:", quote)
-                yield quote
+            yield extract_quoted(para, verbose)
+
+def quoted_phrase_iter(path, verbose):
+    '''Generater that merges all quoted phrases into one stream, ignoring paragraph boundaries.'''
+    for para_quotes in quotes_per_paragraph_iter(path, verbose):
+        if not para_quotes:
+            continue
+        for quote in para_quotes:
+            if verbose > 1:
+                print("quote:", quote)
+            yield quote
 
 def extract_quoted(para, verbose):
     '''Returns list of quotes extracted from paragraph.'''
-    rgx_quoted = re.compile("(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
+
+    # rgx_quote_A = re.compile(r'"([^"]*)"')
+    # rgx_quote_B = re.compile(r'"([^"]+)"')
+    # rgx_quote_C = re.compile(r'(["])(?:(?=(\\?))\2.)*?\1')
+    # rgx_single  = re.compile("(^\s*|[,:-]\s+)'(.*?)[,.!?]'(\s*|$)")
+    # rgx_quote_D = re.compile("(^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](\s+|$)")
     # distinguish 'scare' quotes 'dialogue' quotes (which presumably demarcate quoted spech)
+    rgx_quoted = re.compile("(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
     if not para:
         print("WARNING: paragraph is empty!")
         return []
@@ -84,20 +85,14 @@ def extract_yes_no_repies(path, verbose):
        Returns a defaultdict mapping these phrases to their counts.
        Words longer than 1-letter are lowercased.'''
     rgx_word = re.compile(r"[A-Z'’a-z]+")
-    rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
     reply_counter = Counter()
     denial_counter = Counter()
     idx = 0
-    for para in quoted_text_iter(path, verbose):
-        if not para:
-            print("para is null!")
+    quotes_in_previous_para = False
+    for quotes in quotes_per_paragraph_iter(path, verbose):
+        if not quotes:
+            quotes_in_previous_para = False
             continue
-        if re.match(rgx_para_numbering, para):
-            continue
-        para = para.replace('’', "'")
-        quotelists = re.findall(rgx_quoted, para)
-        quotes = [q[1] for q in quotelists]
-        puncts = [q[2] for q in quotelists]
         phrases = []
         is_denial = False
         for qi, quote in enumerate(quotes):
@@ -123,6 +118,7 @@ def extract_yes_no_repies(path, verbose):
         reply_counter.update(phrases)
         ## for ppp in phrases:
         ##    print("ppp: ", ppp)
+        quotes_in_previous_para = True
     return reply_counter, denial_counter
 
 
@@ -141,8 +137,8 @@ def main():
     verbose = int(sys.argv[2]) if argc > 2 else 1
 
     # print_paragraphs(corpus_file)
-    for para in quoted_text_iter(corpus_file, verbose):
-        print("{}{}".format(para[0], para[1]))
+    for quoted in quoted_phrase_iter(corpus_file, verbose):
+        print("{}{}".format(quoted[0], quoted[1]))
 
 
 if __name__ == '__main__':
