@@ -4,6 +4,7 @@
 # Sprax Lines       2016.09.01      Written with Python 3.5
 '''Extract doubly-quoted strings from a file of paragraphs'''
 
+import argparse
 import heapq
 import itertools
 import re
@@ -61,7 +62,7 @@ def quoted_phrase_iter(path, verbose):
             continue
         for quote in para_quotes:
             if verbose > 1:
-                print("quote:", quote)
+                utf_print.utf_print("quote:", quote)
             yield quote
 
 def extract_quoted(para, verbose):
@@ -125,23 +126,29 @@ def extract_yes_no_repies(path, verbose):
 def main():
     '''Driver to extract quoted dialog from a corpus.'''
 
-    # simple, inflexible arg parsing:
-    argc = len(sys.argv)
-    if argc > 4:
-        print(sys.argv[0])
-        print(__doc__)
-        exit(0)
 
-    # Get the paths to the files (relative or absolute)
-    corpus_file = sys.argv[1] if argc > 1 else r'corpus.txt'
-    verbose = int(sys.argv[2]) if argc > 2 else 1
+    parser = argparse.ArgumentParser(
+            # usage='%(prog)s [options]',
+            description="Count some quoted ways of saying 'No'",
+            )
+    parser.add_argument('corpus_file', type=str, nargs='?', default='corpus.txt',
+            help='text file containing quoted dialogue')
+    parser.add_argument('-number', type=int, nargs='?', const=1, default=10,
+            help='number of most common denials (default: 10)')
+    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
+            help='verbosity of output (default: 1)')
+    args = parser.parse_args()
+
+    if (args.verbose > 2):
+        print("args:", args)
+        print(__doc__)
 
     # print_paragraphs(corpus_file)
     # for quoted in quoted_phrase_iter(corpus_file, verbose):
     #    print("{}{}".format(quoted[0], quoted[1]))
-    replies, denials = extract_yes_no_repies(corpus_file, verbose)       
+    replies, denials = extract_yes_no_repies(args.corpus_file, args.verbose)       
     
-    numfreq = 4
+    numfreq = args.number
     print("The", numfreq, "most common reply phrases:")
     for phrase, count in replies.most_common(numfreq):
         utf_print.utf_print('    {:>7d} {}'.format(count, phrase))

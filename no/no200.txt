@@ -1,0 +1,402 @@
+The 200 most common reply phrases:
+        247 yes
+        181 no
+        159 well
+        117 what do you
+         93 what is it
+         92 I don't know
+         77 ah
+         74 I do not
+         73 do you know
+         66 what
+         65 I don t
+         58 I am not
+         54 what are you
+         51 yes sir
+         43 yes yes
+         43 what is the
+         42 how do you
+         42 that is true
+         41 there is no
+         40 it is a
+         40 now
+         39 why
+         36 oh
+         34 you are a
+         33 I am very
+         32 this is the
+         31 I tell you
+         31 I have been
+         30 not at all
+         30 why do you
+         29 it is not
+         29 I should like
+         29 what did you
+         28 I have no
+         28 good
+         28 in that case
+         27 well then
+         27 come
+         27 I am going
+         27 sir
+         26 I did not
+         26 I will not
+         25 that is the
+         25 this is a
+         23 I am afraid
+         23 to be sure
+         23 there is a
+         23 no no
+         23 nothing
+         23 I don't understand
+         22 it would be
+         22 where are you
+         22 I have not
+         22 it is the
+         22 it seems to
+         21 I should think
+         21 what is your
+         21 I know that
+         21 how can you
+         21 he is a
+         21 what's the matter
+         20 why not
+         20 oh yes
+         20 on the contrary
+         20 I beg your
+         20 I am glad
+         19 I will tell
+         19 I
+         19 i'll tell you
+         19 information about donations
+         19 and do you
+         18 it will be
+         18 yes I am
+         18 what am I
+         18 it s not
+         18 I want to
+         18 well well
+         18 is it possible
+         18 you are not
+         18 I don't want
+         17 it must be
+         17 hush
+         17 I think I
+         17 I can t
+         17 what is this
+         17 all right
+         17 there is nothing
+         17 I am the
+         17 but it is
+         17 well I don't
+         17 I should have
+         17 oh no
+         17 senor
+         16 who are you
+         16 oh yes I
+         16 you do not
+         16 why is it
+         16 I m not
+         16 I told you
+         16 how is it
+         16 by the way
+         16 so it is
+         16 not a bit
+         16 I am sure
+         16 for all that
+         16 monsieur le baron
+         16 monsieur
+         16 what is that
+         15 well and what
+         15 you are right
+         15 let us go
+         15 very good
+         15 my name is
+         15 that it is
+         15 would you like
+         15 that's true
+         15 I am a
+         15 really
+         15 yes it s
+         15 I have heard
+         15 I am
+         15 I think you
+         14 I would not
+         14 you will be
+         14 I hope you
+         14 so much the
+         14 you don t
+         14 no I m
+         14 indeed
+         14 are you going
+         14 of course it
+         14 my dear
+         14 all right all
+         14 you have a
+         14 I shall not
+         14 this
+         14 so you are
+         14 of course I
+         14 of course
+         14 certainly
+         14 it was a
+         14 where
+         14 biddy
+         13 you see
+         13 ah my dear
+         13 that I will
+         13 I don't think
+         13 in the first
+         13 I know it
+         13 never
+         13 why are you
+         13 why don't you
+         13 yes it is
+         13 hold your tongue
+         13 cosette
+         13 so be it
+         13 yes I do
+         13 then
+         13 but my dear
+         13 I shall be
+         13 that
+         13 certainly not
+         13 here it is
+         13 that is not
+         12 well what is
+         12 it is true
+         12 who
+         12 very well
+         12 I have the
+         12 if you are
+         12 do you think
+         12 how glad I
+         12 why didn't you
+         12 halloa
+         12 I beg you
+         12 I wish I
+         12 it is so
+         12 that is what
+         12 is that the
+         12 what do I
+         12 where is he
+         12 all the same
+         12 and what is
+         12 what have you
+         12 bah
+         12 I believe it
+         12 I have never
+         12 I have seen
+         12 where do you
+         12 thank god
+         12 what a pity
+         12 yes yes I
+         11 if you were
+         11 that is a
+         11 I am so
+         11 well my dear
+         11 she is a
+         11 I will do
+         11 what art thou
+         11 is that all
+The 200 most common denials:
+        181 no
+         92 I don't know
+         74 I do not
+         58 I am not
+         41 there is no
+         30 not at all
+         29 it is not
+         28 I have no
+         26 I will not
+         26 I did not
+         23 I don't understand
+         23 no no
+         22 I have not
+         20 why not
+         18 you are not
+         18 I don't want
+         18 it s not
+         17 oh no
+         17 well I don't
+         16 I m not
+         16 you do not
+         16 not a bit
+         14 I shall not
+         14 I would not
+         14 no I m
+         13 why don't you
+         13 I don't think
+         13 certainly not
+         13 that is not
+         11 no I don
+         10 I don't like
+         10 he is not
+         10 I should not
+         10 no I am
+         10 I don't care
+          9 but I don't
+          9 no sir
+          9 not yet
+          9 you don't know
+          9 no but I
+          9 no thank you
+          8 of course not
+          8 he did not
+          8 I don't mean
+          8 there s no
+          7 I hope not
+          7 I know not
+          7 I could not
+          7 no my dear
+          7 if you don't
+          7 no I have
+          7 did I not
+          7 this is not
+          7 it will not
+          7 that's not the
+          6 that is no
+          6 I think not
+          6 it is no
+          6 don't be afraid
+          6 no wait a
+          6 no I won't
+          6 no no no
+          6 say no more
+          6 you have no
+          6 not in the
+          6 you will not
+          6 let no one
+          5 she did not
+          5 I don't believe
+          5 I had not
+          5 no indeed
+          5 you must not
+          5 is it not
+          5 you have not
+          5 it ain't no
+          5 no I don't
+          5 no I ve
+          5 no no my
+          5 we are not
+          5 I don't mind
+          5 it does not
+          5 he does not
+          5 oh no no
+          5 no he s
+          5 you re not
+          5 it would not
+          5 well why don't
+          5 don't you see
+          5 you shall not
+          5 don't you know
+          5 no it's not
+          5 and I don't
+          5 did you not
+          4 do not let
+          4 it was not
+          4 you don't mean
+          4 no tell me
+          4 that will not
+          4 it don't make
+          4 no it s
+          4 you need not
+          4 are you not
+          4 I am no
+          4 am I not
+          4 but that's not
+          4 no you won't
+          4 no you can't
+          4 no I will
+          4 oh you don't
+          4 no I must
+          4 oh no not
+          4 not a word
+          4 and why not
+          4 oh please don't
+          4 oh no it
+          4 why no
+          4 there's no need
+          4 you were not
+          4 I was not
+          4 no more of
+          4 no is that
+          4 no senor
+          4 no why should
+          4 do you not
+          4 oh no I
+          4 if I don't
+          4 no it is
+          3 no pip
+          3 he could not
+          3 there was no
+          3 is there no
+          3 no I know
+          3 we have not
+          3 i'm not a
+          3 not I
+          3 you don't say
+          3 and do not
+          3 no no I
+          3 no alexey alexandrovitch
+          3 was there no
+          3 I had no
+          3 not the least
+          3 but they don't
+          3 not so much
+          3 is not that
+          3 let us not
+          3 do not make
+          3 it shall not
+          3 no I can
+          3 not one
+          3 don't speak to
+          3 no one can
+          3 I don't feel
+          3 no I think
+          3 no more than
+          3 there are no
+          3 oh no he
+          3 no impossible
+          3 I don't say
+          3 no indeed I
+          3 I don't ask
+          3 oh no oh
+          3 no I shan
+          3 then you don't
+          3 I don't
+          3 no I didn't
+          3 no certainly not
+          3 there is not
+          3 do not forget
+          3 we do not
+          3 no I ll
+          2 don't look
+          2 no fear of
+          2 don't go and
+          2 not now
+          2 O I don't
+          2 well no I
+          2 I don't reckon
+          2 not for the
+          2 I don't see
+          2 not with whom
+          2 no doubt
+          2 fly not cowards
+          2 they are not
+          2 you don't seem
+          2 those are not
+          2 oh don't be
+          2 I don't hear
+          2 and don't you
+          2 you but not
+          2 don't mention it
+          2 that must not
+          2 O no sir
+          2 it's not the
+          2 he s not
+          2 she will not
+          2 no sir I
+          2 but why don't
+          2 no more it
+          2 no he's not
