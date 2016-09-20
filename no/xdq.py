@@ -97,10 +97,10 @@ def extract_yes_no_repies(path, verbose):
         is_denial = False
         for qi, quote in enumerate(quotes):
             if verbose > 1:
-                print("quote {} {}: {}".format(idx, puncts[qi], quote))
+                print("quote {} {}: {}".format(idx, quote[1], quote[0]))
             idx += 1
             phrase = []
-            words = re.findall(rgx_word, quote)
+            words = re.findall(rgx_word, quote[0])
             for word in words[:3]:
                 if len(word) == 1:
                     phrase.append(word)
@@ -137,8 +137,19 @@ def main():
     verbose = int(sys.argv[2]) if argc > 2 else 1
 
     # print_paragraphs(corpus_file)
-    for quoted in quoted_phrase_iter(corpus_file, verbose):
-        print("{}{}".format(quoted[0], quoted[1]))
+    # for quoted in quoted_phrase_iter(corpus_file, verbose):
+    #    print("{}{}".format(quoted[0], quoted[1]))
+    replies, denials = extract_yes_no_repies(corpus_file, verbose)       
+    
+    numfreq = 4
+    print("The", numfreq, "most common reply phrases:")
+    for phrase, count in replies.most_common(numfreq):
+        utf_print.utf_print('    {:>7d} {}'.format(count, phrase))
+
+    print("The", numfreq, "most common denials:")
+    for phrase, count in denials.most_common(numfreq):
+        utf_print.utf_print('    {:>7d} {}'.format(count, phrase))
+
 
 
 if __name__ == '__main__':
