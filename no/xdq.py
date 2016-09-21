@@ -44,15 +44,11 @@ def quotes_per_paragraph_iter(path, verbose):
     '''returns a generator that yields the list of quoted dialogue
     phrases found in each paragraph in the text file, including
     empty lists for quoteless paragraphs.'''
-    rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
     with open(path, 'r', encoding="utf8") as text:
         for para in paragraph_iter(text):
             if not para:
                 print("WARNING: para is empty!")   # TODO: delete this check!
                 continue
-            if re.match(rgx_para_numbering, para):
-                continue
-            para = para.replace('’', "'")
             yield extract_quoted(para, verbose)
 
 def quoted_phrase_iter(path, verbose):
@@ -65,8 +61,8 @@ def quoted_phrase_iter(path, verbose):
                 utf_print.utf_print("quote:", quote)
             yield quote
 
-def extract_quoted(para, verbose):
-    '''Returns list of quotes extracted from paragraph.'''
+def extract_quoted(paragraph, verbose):
+    '''Returns list of quotes extracted from paragraph, unless it's a numbered paragraph'''
 
     # rgx_quote_A = re.compile(r'"([^"]*)"')
     # rgx_quote_B = re.compile(r'"([^"]+)"')
@@ -75,10 +71,13 @@ def extract_quoted(para, verbose):
     # rgx_quote_D = re.compile("(^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](\s+|$)")
     # distinguish 'scare' quotes 'dialogue' quotes (which presumably demarcate quoted spech)
     rgx_quoted = re.compile("(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
-    if not para:
+    rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
+    if not paragraph:
         print("WARNING: paragraph is empty!")
         return []
-    para = para.replace('’', "'")
+    if re.match(rgx_para_numbering, paragraph):
+        return []
+    para = paragraph.replace('’', "'")
     return re.findall(rgx_quoted, para)
 
 def extract_yes_no_repies(path, verbose):
@@ -96,14 +95,21 @@ def extract_yes_no_repies(path, verbose):
             continue
         phrases = []
         is_denial = False
+        is_debug = False
         for qi, quote in enumerate(quotes):
             if verbose > 1:
                 print("quote {} {}: {}".format(idx, quote[1], quote[0]))
             idx += 1
             phrase = []
             words = re.findall(rgx_word, quote[0])
+            # # # # DEBUG:
+            if (words[0] == 'It' and words[1] == 's' and words[2] == 'not'):
+                print("DEBUG words:", words, "  quote:", quote) 
+                is_debug = True
+            else:
+                is_debug = False
             for word in words[:3]:
-                if len(word) == 1:
+                if len(word) == 1 or word[0] == 'I':
                     phrase.append(word)
                 else:
                     low = word.lower()
@@ -115,6 +121,9 @@ def extract_yes_no_repies(path, verbose):
                 if is_denial:
                     is_denial = False
                     denial_counter.update([joined])
+                if  is_debug:
+                    print("DEBUGGERY phrase: ", joined)
+                    print("DEBUGGERY joined: ", joined)
                 phrases.append(joined)
         reply_counter.update(phrases)
         ## for ppp in phrases:
