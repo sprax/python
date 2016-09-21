@@ -104,7 +104,7 @@ def extract_yes_no_repies(path, verbose):
             words = re.findall(rgx_word, quote[0])
             # # # # DEBUG:
             if (words[0] == 'It' and words[1] == 's' and words[2] == 'not'):
-                print("DEBUG words:", words, "  quote:", quote) 
+                print("DEBUGGERY words:", words, "  quote:", quote) 
                 is_debug = True
             else:
                 is_debug = False
