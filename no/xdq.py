@@ -84,7 +84,7 @@ def extract_yes_no_repies(path, verbose):
     '''Finds first 3 (or fewer) words starting quoted replies.
        Returns a defaultdict mapping these phrases to their counts.
        Words longer than 1-letter are lowercased.'''
-    rgx_word = re.compile(r"[A-Z'’a-z]+")
+    rgx_word = re.compile(r"[A-Za-z\'\’]+")
     reply_counter = Counter()
     denial_counter = Counter()
     idx = 0
@@ -102,8 +102,12 @@ def extract_yes_no_repies(path, verbose):
             idx += 1
             phrase = []
             words = re.findall(rgx_word, quote[0])
+            # # words = re.findall(r"\b[a-z']+\b", quote[0], re.I)
+            # # words = re.findall(r"\b[a-z']+", quote[0], re.I)
+            # # words = quote[0].split()
             # # # # DEBUG:
-            if (words[0] == 'It' and words[1] == 's' and words[2] == 'not'):
+            if (words[0] == 'It' and (words[1] == 's' or words[1] == 'x')
+                and words[2] == 'not'):
                 print("DEBUGGERY words:", words, "  quote:", quote) 
                 is_debug = True
             else:
