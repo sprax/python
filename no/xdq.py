@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-# -*- coding: latin-1 -*-
+# Note: do not use Latin-1 encoding, because it would force string
+# literals to use byte encoding, which results in unicode characters > 255
+# being ignored in regular expression strings.
+# That is, do NOT put the following on the first or second line: -*- coding: latin-1 -*-
+# 
 #
 # Sprax Lines       2016.09.01      Written with Python 3.5
 '''Extract doubly-quoted strings from a file of paragraphs'''
@@ -84,7 +88,7 @@ def extract_yes_no_repies(path, verbose):
     '''Finds first 3 (or fewer) words starting quoted replies.
        Returns a defaultdict mapping these phrases to their counts.
        Words longer than 1-letter are lowercased.'''
-    rgx_word = re.compile(r"[A-Za-z\'\’]+")
+    rgx_word = re.compile(r"[A-Za-z'’]+")
     reply_counter = Counter()
     denial_counter = Counter()
     idx = 0
@@ -101,8 +105,8 @@ def extract_yes_no_repies(path, verbose):
                 print("quote {} {}: {}".format(idx, quote[1], quote[0]))
             idx += 1
             phrase = []
-            words = re.findall(rgx_word, quote[0])
-            # # words = re.findall(r"\b[a-z']+\b", quote[0], re.I)
+            ### words = re.findall(rgx_word, quote[0])
+            words = re.findall(r"\b[a-z']+\b", quote[0], re.I | re.U )
             # # words = re.findall(r"\b[a-z']+", quote[0], re.I)
             # # words = quote[0].split()
             # # # # DEBUG:
