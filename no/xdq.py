@@ -99,7 +99,6 @@ def extract_yes_no_repies(path, verbose):
             continue
         phrases = []
         is_denial = False
-        is_debug = False
         for qi, quote in enumerate(quotes):
             if verbose > 1:
                 print("quote {} {}: {}".format(idx, quote[1], quote[0]))
@@ -109,13 +108,6 @@ def extract_yes_no_repies(path, verbose):
             words = re.findall(r"\b[a-z']+\b", quote[0], re.I | re.U )
             # # words = re.findall(r"\b[a-z']+", quote[0], re.I)
             # # words = quote[0].split()
-            # # # # DEBUG:
-            if (words[0] == 'It' and (words[1] == 's' or words[1] == 'x')
-                and words[2] == 'not'):
-                print("DEBUGGERY words:", words, "  quote:", quote) 
-                is_debug = True
-            else:
-                is_debug = False
             for word in words[:3]:
                 if len(word) == 1 or word[0] == 'I':
                     phrase.append(word)
@@ -129,9 +121,6 @@ def extract_yes_no_repies(path, verbose):
                 if is_denial:
                     is_denial = False
                     denial_counter.update([joined])
-                if  is_debug:
-                    print("DEBUGGERY phrase: ", joined)
-                    print("DEBUGGERY joined: ", joined)
                 phrases.append(joined)
         reply_counter.update(phrases)
         ## for ppp in phrases:
