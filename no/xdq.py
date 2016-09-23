@@ -91,9 +91,9 @@ def extract_yes_no_repies(path, verbose):
     rgx_word = re.compile(r"[A-Za-z'’]+")
     reply_counter = Counter()
     denial_counter = Counter()
-    idx = 0
+    qindex = 0
     quotes_in_previous_para = False
-    for quotes in quotes_per_paragraph_iter(path, verbose):
+    for pindex, quotes in enumerate(quotes_per_paragraph_iter(path, verbose)):
         if not quotes:
             quotes_in_previous_para = False
             continue
@@ -101,8 +101,8 @@ def extract_yes_no_repies(path, verbose):
         is_denial = False
         for qi, quote in enumerate(quotes):
             if verbose > 1:
-                print("quote {} {}: {}".format(idx, quote[1], quote[0]))
-            idx += 1
+                print("para {:3}, quote {:2} {}: {}".format(pindex, qindex, quote[1], quote[0]))
+            qindex += 1
             phrase = []
             ### words = re.findall(rgx_word, quote[0])
             words = re.findall(r"\b[a-z']+\b", quote[0], re.I | re.U )
