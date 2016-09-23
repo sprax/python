@@ -80,23 +80,28 @@ def extract_quoted(paragraph, verbose):
     para = paragraph.replace('’', "'")
     return re.findall(rgx_quoted, para)
 
-def extract_yes_no_repies(path, verbose):
-    '''Finds first 3 (or fewer) words starting quoted replies.
+def extract_yes_no_repies(path, beglen, verbose):
+    '''Finds first N (or fewer) words starting quoted replies.
        Returns Counters mapping these phrases to their counts.
        Words longer than 1-letter are lowercased.'''
     # rgx_word = re.compile(r"[A-Za-z'’]+")
     rgx_word = re.compile(r"[A-Za-z']+")
-    reply_counter = Counter()
-    denial_counter = Counter()
+    quote_counter = Counter()   # counts any quoted dialog phrase
+    reply_counter = Counter()   # counts only replies
+    answer_counter = Counter()  # counts only replies to questions
+    denial_counter = Counter()  # counts only negative replies to questions
     qindex = 0
     quotes_in_previous_para = False
+    prev_quote_was_a_question = False
     for pindex, quotes in enumerate(quotes_per_paragraph_iter(path, verbose)):
         if not quotes:
             quotes_in_previous_para = False
             continue
+        quote_counter.update(quotes)
         phrases = []
         is_denial = False
         for qip, quote in enumerate(quotes):
+            is_denial = False
             if verbose > 1:
                 utf_print.utf_print("para {:3}, quote {:2} {}: {}".format(pindex, qindex, quote[1], quote[0]))
             qindex += 1
@@ -105,7 +110,7 @@ def extract_yes_no_repies(path, verbose):
             # # words = re.findall(r"\b[a-z']+\b", quote[0], re.I | re.U )
             # # words = re.findall(r"\b[a-z']+", quote[0], re.I)
             # # words = quote[0].split()
-            for word in words[:3]:
+            for word in words[:beglen]:
                 if len(word) == 1 or word[0] == 'I':
                     phrase.append(word)
                 else:
@@ -115,28 +120,35 @@ def extract_yes_no_repies(path, verbose):
                         is_denial = True
             if phrase:
                 joined = ' '.join(phrase)
-                if is_denial:
-                    is_denial = False
-                    denial_counter.update([joined])
                 phrases.append(joined)
-        reply_counter.update(phrases)
+            if qip == 0 and quotes_in_previous_para:
+                reply_counter.update(phrases)
+                if prev_quote_was_a_question:
+                    answer_counter.update(phrases)
+                    if is_denial:
+                        denial_counter.update([joined])
+
+        if quote[1] == '?':
+            prev_quote_was_a_question = True
+        else:
+            prev_quote_was_a_question = False
         ## for ppp in phrases:
         ##    print("ppp: ", ppp)
         quotes_in_previous_para = True
-    return reply_counter, denial_counter
+    return quote_counter, reply_counter, denial_counter
 
 
 def main():
     '''Driver to extract quoted dialog from a corpus.'''
-
-
     parser = argparse.ArgumentParser(
             # usage='%(prog)s [options]',
             description="Count some quoted ways of saying 'No'",
             )
     parser.add_argument('corpus_file', type=str, nargs='?', default='corpus.txt',
             help='text file containing quoted dialogue')
-    parser.add_argument('-number', type=int, nargs='?', const=1, default=10,
+    parser.add_argument('-beglen', type=int, nargs='?', const=1, default=4,
+            help='number of words beginnning a reply (default: 4)')
+    parser.add_argument('-topmost', type=int, nargs='?', const=1, default=10,
             help='number of most common denials (default: 10)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
             help='verbosity of output (default: 1)')
@@ -149,9 +161,9 @@ def main():
     # print_paragraphs(corpus_file)
     # for quoted in quoted_phrase_iter(corpus_file, verbose):
     #    print("{}{}".format(quoted[0], quoted[1]))
-    replies, denials = extract_yes_no_repies(args.corpus_file, args.verbose)
+    quotes, replies, denials = extract_yes_no_repies(args.corpus_file, args.beglen, args.verbose)
     
-    numfreq = args.number
+    numfreq = args.topmost
     print("The", numfreq, "most common reply phrases:")
     for phrase, count in replies.most_common(numfreq):
         utf_print.utf_print('    {:>7d} {}'.format(count, phrase))
