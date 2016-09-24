@@ -154,7 +154,7 @@ def main():
             help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-    if (args.verbose > 2):
+    if args.verbose > 2:
         print("args:", args)
         print(__doc__)
 
