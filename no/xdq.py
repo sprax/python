@@ -19,7 +19,7 @@ from collections import Counter
 import utf_print
 
 def paragraph_iter(fileobj, rgx_para_separator='\n'):
-    """yields paragraphs from text file and regex"""
+    '''yields paragraphs from text file and regex separator'''
     ## Makes no assumptions about the encoding used in the file
     paragraph = ''
     for line in fileobj:
@@ -37,6 +37,7 @@ def paragraph_iter(fileobj, rgx_para_separator='\n'):
         yield paragraph
 
 def print_paragraphs(path):
+    '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs:")
     with open(path, 'r', encoding="utf8") as text:
         for idx, para in enumerate(paragraph_iter(text)):
@@ -67,7 +68,6 @@ def quoted_phrase_iter(path, verbose):
 
 def extract_quoted(paragraph, verbose):
     '''Returns list of quotes extracted from paragraph, unless it's a numbered paragraph'''
-
     # rgx_quote_A = re.compile(r'"([^"]*)"')
     # rgx_quote_B = re.compile(r'"([^"]+)"')
     # rgx_quote_C = re.compile(r'(["])(?:(?=(\\?))\2.)*?\1')
