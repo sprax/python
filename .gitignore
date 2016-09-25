@@ -64,7 +64,7 @@ target/
 # backup versions from vim, etc.
 *~
 *.swap
-*.swo
+*.sw?
 *.swp
 \.*.swp
 *.bak
