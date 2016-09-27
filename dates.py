@@ -14,14 +14,26 @@ import sys
 import time
 import datetime
 
+dayCodes = ['Mnd', 'Tsd', 'Wnd', 'Thd', 'Frd', 'Std', 'Snd']
+
 def printDates(day_range):
     '''Output dates'''
     date = datetime.datetime.now()
     for day in range(day_range):
-        date += datetime.timedelta(days=day)
-        # print("date: ", date)
-        dates = time.strftime("%Y.%m.%d_%a", date)
-        print("%s ==> %s" % (date, dates))
+        date += datetime.timedelta(days=1)
+        tstm = date.timetuple()
+        dstr = time.strftime("%Y.%m.%d", tstm)
+        locs = 'Home/'
+        if tstm.tm_wday < 5:
+            locs += 'CIC'
+        elif tstm.tm_wday < 6:
+            locs += 'NH'
+        else:
+            locs += 'MIT'
+        code = dayCodes[tstm.tm_wday]
+        # print(tstm)
+        # print("%s ==> %s %s\t%s" % (date, dstr, code, locs))
+        print("%s %s\t%s" % (dstr, code, locs))
 
 
 def main():
