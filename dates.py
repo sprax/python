@@ -20,7 +20,7 @@ def printDates(beg_day, num_day):
     '''Output dates'''
     date = datetime.datetime.now()
     for day in range(beg_day, num_day):
-        print("day: ", day)
+        # print("day: ", day)
         date += datetime.timedelta(days=1)
         tstm = date.timetuple()
         dstr = time.strftime("%Y.%m.%d", tstm)
