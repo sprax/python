@@ -3,7 +3,7 @@
 # literals to use byte encoding, which results in unicode characters > 255
 # being ignored in regular expression strings.
 # That is, do NOT put the following on the first or second line: -*- coding: latin-1 -*-
-# 
+#
 #
 # Sprax Lines       2016.09.01      Written with Python 3.5
 '''Extract doubly- or singly-quoted strings from a file of paragraphs'''
@@ -49,7 +49,6 @@ def quotes_per_paragraph_iter(path, verbose):
     with open(path, 'r', encoding="utf8") as text:
         for para in paragraph_iter(text):
             if not para:
-                print("WARNING: para is empty!")   # TODO: delete this check!
                 continue
             yield extract_quoted(para, verbose)
 
@@ -69,9 +68,9 @@ def extract_quoted(paragraph, verbose):
     # rgx_quote_B = re.compile(r'"([^"]+)"')
     # rgx_quote_C = re.compile(r'(["])(?:(?=(\\?))\2.)*?\1')
     # rgx_single  = re.compile("(^\s*|[,:-]\s+)'(.*?)[,.!?]'(\s*|$)")
-    # rgx_quote_D = re.compile("(^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](\s+|$)")
+    # rgx_qt_D = re.compile("(^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](\s+|$)")
     # distinguish 'scare' quotes 'dialogue' quotes (which presumably demarcate quoted spech)
-    rgx_quoted = re.compile("(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
+    rgx_qt = re.compile(r"(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
     rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
     if not paragraph:
         print("WARNING: paragraph is empty!")
@@ -79,7 +78,7 @@ def extract_quoted(paragraph, verbose):
     if re.match(rgx_para_numbering, paragraph):
         return []
     para = paragraph.replace('’', "'")
-    return re.findall(rgx_quoted, para)
+    return re.findall(rgx_qt, para)
 
 def extract_yes_no_repies(path, beglen, verbose, quotes_out=sys.stdout):
     '''Finds first N (or fewer) words starting quoted replies.
@@ -142,19 +141,19 @@ def extract_yes_no_repies(path, beglen, verbose, quotes_out=sys.stdout):
 def main():
     '''Driver to extract quoted dialog from a corpus.'''
     parser = argparse.ArgumentParser(
-            # usage='%(prog)s [options]',
-            description="Count some quoted ways of saying 'No'",
-            )
+        # usage='%(prog)s [options]',
+        description="Count some quoted ways of saying 'No'",
+        )
     parser.add_argument('corpus_file', type=str, nargs='?', default='corpus.txt',
-            help='text file containing quoted dialogue')
+        help='text file containing quoted dialogue')
     parser.add_argument('quotes_out', type=str, nargs='?', default='corpus_quotes.txt',
-            help='output file of quoted dialogue extracted from the corpus')
+        help='output file of quoted dialogue extracted from the corpus')
     parser.add_argument('-beglen', type=int, nargs='?', const=1, default=4,
-            help='number of words beginnning a reply (default: 4)')
+        help='number of words beginnning a reply (default: 4)')
     parser.add_argument('-topmost', type=int, nargs='?', const=1, default=10,
-            help='number of most common denials (default: 10)')
+        help='number of most common denials (default: 10)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
-            help='verbosity of output (default: 1)')
+        help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
     if args.verbose > 2:
@@ -168,7 +167,7 @@ def main():
         quotes, replies, denials = extract_yes_no_repies(args.corpus_file, args.beglen, 
             args.verbose, out)
         out.close()
-    
+
     numfreq = args.topmost
     print("The", numfreq, "most common reply phrases:")
     for phrase, count in replies.most_common(numfreq):
