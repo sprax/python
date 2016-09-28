@@ -50,7 +50,7 @@ def quotes_per_paragraph_iter(path, verbose):
         for para in paragraph_iter(text):
             if not para:
                 continue
-            yield extract_quoted(para, verbose)
+            yield extract_quoted(para)
 
 def quoted_phrase_iter(path, verbose):
     '''Generater that merges all quoted phrases into one stream, ignoring paragraph boundaries.'''
@@ -62,7 +62,7 @@ def quoted_phrase_iter(path, verbose):
                 utf_print.utf_print("quote:", quote)
             yield quote
 
-def extract_quoted(paragraph, verbose):
+def extract_quoted(paragraph):
     '''Returns list of quotes extracted from paragraph, unless it's a numbered paragraph'''
     # rgx_quote_A = re.compile(r'"([^"]*)"')
     # rgx_quote_B = re.compile(r'"([^"]+)"')
@@ -103,7 +103,8 @@ def extract_yes_no_repies(path, beglen, verbose, quotes_out=sys.stdout):
         for qip, quote in enumerate(quotes):
             is_denial = False
             if verbose > 1:
-                utf_print.utf_print("para {:3}, quote {:2} {}: {}".format(pindex, qindex, quote[1], quote[0]))
+                utf_print.utf_print("para {:3}, quote {:2} {}: {}"
+                                    .format(pindex, qindex, quote[1], quote[0]))
             qindex += 1
             phrase = []
             words = re.findall(rgx_word, quote[0])
@@ -127,14 +128,11 @@ def extract_yes_no_repies(path, beglen, verbose, quotes_out=sys.stdout):
                     answer_counter.update(phrases)
                     if is_denial:
                         denial_counter.update([joined])
-        if quote[1] == '?':
-            prev_quote_was_a_question = True
-        else:
-            prev_quote_was_a_question = False
+            prev_quote_was_a_question = (quote[1] == '?')
+            print(''.join(quote), file=quotes_out)
         ## for ppp in phrases:
         ##    print("ppp: ", ppp)
         quotes_in_previous_para = True
-        print(''.join(quote), file=quotes_out)
     return quote_counter, reply_counter, denial_counter
 
 
@@ -145,15 +143,15 @@ def main():
         description="Count some quoted ways of saying 'No'",
         )
     parser.add_argument('corpus_file', type=str, nargs='?', default='corpus.txt',
-        help='text file containing quoted dialogue')
+                        help='text file containing quoted dialogue')
     parser.add_argument('quotes_out', type=str, nargs='?', default='corpus_quotes.txt',
-        help='output file of quoted dialogue extracted from the corpus')
+                        help='output file of quoted dialogue extracted from the corpus')
     parser.add_argument('-beglen', type=int, nargs='?', const=1, default=4,
-        help='number of words beginnning a reply (default: 4)')
+                        help='number of words beginnning a reply (default: 4)')
     parser.add_argument('-topmost', type=int, nargs='?', const=1, default=10,
-        help='number of most common denials (default: 10)')
+                        help='number of most common denials (default: 10)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
-        help='verbosity of output (default: 1)')
+                        help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
     if args.verbose > 2:
@@ -164,7 +162,7 @@ def main():
     # for quoted in quoted_phrase_iter(corpus_file, verbose):
     #    print("{}{}".format(quoted[0], quoted[1]))
     with open(args.quotes_out, 'w') as out:
-        quotes, replies, denials = extract_yes_no_repies(args.corpus_file, args.beglen, 
+        quotes, replies, denials = extract_yes_no_repies(args.corpus_file, args.beglen,
             args.verbose, out)
         out.close()
 
