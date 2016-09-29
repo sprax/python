@@ -14,22 +14,23 @@ def print_dates(beg_day, num_day):
     date += datetime.timedelta(days=beg_day)
     tstm = date.timetuple()
     print(tstm)
+    # for _ in itertools.repeat(None, num_day):
     for _ in range(num_day):
         # print("day: ", day)
         date += datetime.timedelta(days=1)
         tstm = date.timetuple()
         dstr = time.strftime("%Y.%m.%d", tstm)
-        locs = 'Home/'
         if tstm.tm_wday < 5:
-            locs += 'CIC'
+            locs = 'CIC'
         elif tstm.tm_wday < 6:
-            locs += 'NH'
+            locs = 'Home/NH'
         else:
-            locs += 'MIT'
+            locs = 'Home/MIT'
         code = DAY_CODES[tstm.tm_wday]
         # print(tstm)
         # print("%s ==> %s %s\t%s" % (date, dstr, code, locs))
-        print("%s %s\t%s" % (dstr, code, locs))
+        print("%s %s AM \t%s" % (dstr, code, locs))
+        print("%s %s PM \t%s" % (dstr, code, 'Home'))
 
 
 def main():
