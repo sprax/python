@@ -2,6 +2,7 @@
 # Sprax Lines       2016.09.26      Written for Python 3.5
 '''Output some dates.'''
 
+import argparse
 import sys
 import time
 import datetime
@@ -35,6 +36,22 @@ def print_dates(beg_day, num_day):
 
 def main():
     '''get args and call print_dates'''
+
+    parser = argparse.ArgumentParser(
+        # usage='%(prog)s [options]',
+        description="Read/write journal-entry style dates"
+        )
+    parser.add_argument('num_days', type=int, nargs='?', default=7,
+                        help='number of days')
+    parser.add_argument('first_day', type=int, nargs='?', default=0,
+                        help='offset from now to first date')
+    parser.add_argument('-beglen', type=int, nargs='?', const=1, default=4,
+                        help='number of words beginnning a reply (default: 4)')
+    parser.add_argument('-topmost', type=int, nargs='?', const=1, default=10,
+                        help='number of most common denials (default: 10)')
+    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
+                        help='verbosity of output (default: 1)')
+    args = parser.parse_args()
     argc = len(sys.argv)
     if argc > 3:
         print(sys.argv[0])
