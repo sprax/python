@@ -9,14 +9,14 @@ import datetime
 
 DAY_CODES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
-def print_dates(beg_day, num_day, per_day):
+def print_dates(start_date, offset_days, num_days, per_day):
     '''Output dates'''
-    date = datetime.datetime.now()
-    date += datetime.timedelta(days=beg_day)
+    date = start_date
+    date += datetime.timedelta(days=offset_days)
     tstm = date.timetuple()
     print(tstm)
-    # for _ in itertools.repeat(None, num_day):
-    for _ in range(num_day):
+    # for _ in itertools.repeat(None, num_days):
+    for _ in range(num_days):
         # print("day: ", day)
         date += datetime.timedelta(days=1)
         tstm = date.timetuple()
@@ -44,16 +44,14 @@ def main():
         # usage='%(prog)s [options]',
         description="Read/write journal-entry style dates"
         )
-    parser.add_argument('first_day', type=int, nargs='?', default=0,
-                        help='offset from now to first date')
+    parser.add_argument('offset_days', type=int, nargs='?', default=0,
+                        help='offset from start date (now) to first date')
     parser.add_argument('num_days', type=int, nargs='?', default=7,
-                        help='number of days')
+                        help="number of days' dates to output")
     parser.add_argument('per_day', type=int, nargs='?', default=1,
                         help='number of entries per day')
-    parser.add_argument('-beglen', type=int, nargs='?', const=1, default=4,
-                        help='number of words beginnning a reply (default: 4)')
-    parser.add_argument('-topmost', type=int, nargs='?', const=1, default=10,
-                        help='number of most common denials (default: 10)')
+    parser.add_argument('-start_date', type=str, nargs='?',
+                        help='start date (default: today)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
@@ -62,8 +60,16 @@ def main():
         print(sys.argv[0])
         print(__doc__)
 
-    # Get the paths to the files (relative or absolute)
-    print_dates(args.first_day, args.num_days, args.per_day)
+    # Expected start_date format: "2013-09-28 20:30:55.78200"
+    # default_start_date = datetime.datetime.now()
+    start_date = default_start_date = datetime.datetime.now()
+    if args.start_date:
+        try:
+            start_date = datetime.datetime.strptime(args.start_date, "%Y.%m.%d")
+        except:
+            start_date = default_start_date
+    
+    print_dates(start_date, args.offset_days, args.num_days, args.per_day)
 
 if __name__ == '__main__':
     main()
