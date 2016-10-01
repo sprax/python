@@ -10,7 +10,7 @@ import datetime
 DAY_CODES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
 def print_dates(start_date, offset_days, num_days, per_day):
-    '''Output dates'''
+    '''Output num_days consecutive formatted dates from start_date'''
     date = start_date
     date += datetime.timedelta(days=offset_days)
     tstm = date.timetuple()
@@ -18,12 +18,10 @@ def print_dates(start_date, offset_days, num_days, per_day):
     # for _ in itertools.repeat(None, num_days):
     for _ in range(num_days):
         # print("day: ", day)
-        date += datetime.timedelta(days=1)
-        tstm = date.timetuple()
         dstr = time.strftime("%Y.%m.%d", tstm)
         if tstm.tm_wday < 5:
             locs = 'Home/CIC'
-        elif tstm.tm_wday == 6:
+        elif tstm.tm_wday == 5:
             locs = 'Home/NH'
         else:
             locs = 'Home/MIT'
@@ -35,24 +33,28 @@ def print_dates(start_date, offset_days, num_days, per_day):
             print("%s %s PM \t%s" % (dstr, code, 'Home'))
         else:
             print("%s %s \t%s" % (dstr, code, locs))
+        date += datetime.timedelta(days=1)
+        tstm = date.timetuple()
 
 
 def main():
     '''get args and call print_dates'''
 
+    default_num_days = 7
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="Read/write journal-entry style dates"
         )
     parser.add_argument('offset_days', type=int, nargs='?', default=0,
-                        help='offset from start date (now) to first date')
-    parser.add_argument('num_days', type=int, nargs='?', default=7,
-                        help="number of days' dates to output")
+                        help='offset from start date (default: today) to first output date')
+    parser.add_argument('num_days', type=int, nargs='?', default=default_num_days,
+                        help="number of days' dates to output (default: {})"
+                        .format(default_num_days))
     parser.add_argument('per_day', type=int, nargs='?', default=1,
-                        help='number of entries per day')
-    parser.add_argument('-start_date', type=str, nargs='?',
+                        help='number of entries per day (default: 1)')
+    parser.add_argument('-start_date', metavar='DATE', type=str,
                         help='start date (default: today)')
-    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
+    parser.add_argument('-verbose', type=int, nargs=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
     argc = len(sys.argv)
@@ -66,9 +68,9 @@ def main():
     if args.start_date:
         try:
             start_date = datetime.datetime.strptime(args.start_date, "%Y.%m.%d")
-        except:
+        except ValueError:
+            print("Failed to parse date: {}; using today!".format(args.start_date))
             start_date = default_start_date
-    
     print_dates(start_date, args.offset_days, args.num_days, args.per_day)
 
 if __name__ == '__main__':
