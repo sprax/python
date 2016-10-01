@@ -9,12 +9,13 @@ import datetime
 
 DAY_CODES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
-def print_dates(start_date, offset_days, num_days, per_day):
+def print_dates(start_date, offset_days, num_days, per_day, verbose):
     '''Output num_days consecutive formatted dates from start_date'''
     date = start_date
     date += datetime.timedelta(days=offset_days)
     tstm = date.timetuple()
-    print(tstm)
+    if verbose > 2:
+        print(tstm)
     # for _ in itertools.repeat(None, num_days):
     for _ in range(num_days):
         # print("day: ", day)
@@ -71,7 +72,7 @@ def main():
         except ValueError:
             print("Failed to parse date: {}; using today!".format(args.start_date))
             start_date = default_start_date
-    print_dates(start_date, args.offset_days, args.num_days, args.per_day)
+    print_dates(start_date, args.offset_days, args.num_days, args.per_day, args.verbose)
 
 if __name__ == '__main__':
     main()
