@@ -7,7 +7,7 @@ import sys
 import time
 import datetime
 
-DAY_CODES = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+# DAY_CODES = ['Mnd', 'Tsd', 'Wnd', 'Thd', 'Frd', 'Std', 'Snd']
 
 def print_dates(start_date, offset_days, num_days, per_day):
     '''Output num_days consecutive formatted dates from start_date'''
@@ -18,21 +18,21 @@ def print_dates(start_date, offset_days, num_days, per_day):
     # for _ in itertools.repeat(None, num_days):
     for _ in range(num_days):
         # print("day: ", day)
-        dstr = time.strftime("%Y.%m.%d", tstm)
+        dstr = time.strftime("%Y.%m.%d %a", tstm)
         if tstm.tm_wday < 5:
             locs = 'Home/CIC'
         elif tstm.tm_wday == 5:
             locs = 'Home/NH'
         else:
             locs = 'Home/MIT'
-        code = DAY_CODES[tstm.tm_wday]
+        # code = DAY_CODES[tstm.tm_wday]
         # print(tstm)
         # print("%s ==> %s %s\t%s" % (date, dstr, code, locs))
         if per_day > 1:
-            print("%s %s AM \t%s" % (dstr, code, locs))
-            print("%s %s PM \t%s" % (dstr, code, 'Home'))
+            print("%s AM \t%s" % (dstr, locs))
+            print("%s PM \t%s" % (dstr, 'Home'))
         else:
-            print("%s %s \t%s" % (dstr, code, locs))
+            print("%s\t%s" % (dstr, locs))
         date += datetime.timedelta(days=1)
         tstm = date.timetuple()
 
@@ -57,10 +57,6 @@ def main():
     parser.add_argument('-verbose', type=int, nargs=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
-    argc = len(sys.argv)
-    if argc > 3:
-        print(sys.argv[0])
-        print(__doc__)
 
     # Expected start_date format: "2013-09-28 20:30:55.78200"
     # default_start_date = datetime.datetime.now()
