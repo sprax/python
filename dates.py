@@ -9,7 +9,7 @@ import datetime
 
 # DAY_CODES = ['Mnd', 'Tsd', 'Wnd', 'Thd', 'Frd', 'Std', 'Snd']
 
-def print_dates(start_date, offset_days, num_days, per_day, verbose):
+def print_dates(out_format, start_date, offset_days, num_days, per_day, verbose):
     '''Output num_days consecutive formatted dates from start_date'''
     date = start_date
     date += datetime.timedelta(days=offset_days)
@@ -18,7 +18,7 @@ def print_dates(start_date, offset_days, num_days, per_day, verbose):
         tstm = date.timetuple()
         if verbose > 2:
             print(tstm)
-        dstr = time.strftime("%Y.%m.%d %a", tstm)
+        dstr = time.strftime(out_format, tstm)
         if tstm.tm_wday < 5:
             locs = 'Home/CIC'
         elif tstm.tm_wday == 5:
@@ -35,10 +35,42 @@ def print_dates(start_date, offset_days, num_days, per_day, verbose):
             print("%s\t%s" % (dstr, locs))
         date += datetime.timedelta(days=1)
 
+def try_parse_date(text, input_formats, verbose):
+    '''Try to extract a date by matching the input date formats.'''
+    date = None
+    for date_format in input_formats:
+        try:
+            date = datetime.datetime.strptime(text, date_format)
+            return date
+        except ValueError:
+            pass
+    return None
+
+def reformat_date(text, out_format, input_formats, verbose):
+    '''If text parses as a date of one of the specified formats, return that date.
+    Otherwise, return text as-is.'''
+    date = try_parse_date(text, input_formats, verbose)
+    if date:
+        if verbose > 2:
+            print(tstm)
+        return time.strftime(out_format, tstm)
+    else:
+        return text
+
+def replace_dates(texts, out_format, input_formats, verbose):
+    '''Replace any recognized date at the start of text with one of the specified format.'''
+    texts_out = []
+    for text in texts:
+        text_out = reformat_date(text, out_format, input_formats, verbose)
+        if verbose > 3:
+            print(text_out)
+        texts_out.append(text_out)
+    return texts_out
 
 def main():
     '''get args and call print_dates'''
 
+    default_format = '%Y.%m.%d %a'
     default_num_days = 7
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
@@ -51,6 +83,9 @@ def main():
                         .format(default_num_days))
     parser.add_argument('per_day', type=int, nargs='?', default=1,
                         help='number of entries per day (default: 1)')
+    parser.add_argument('-out_format', metavar='FORMAT', type=str,
+                        help='output date format (default: {})'
+                        .format(default_format.replace('%', '%%')))
     parser.add_argument('-start_date', metavar='DATE', type=str,
                         help='start date (default: today)')
     parser.add_argument('-verbose', type=int, nargs=1, default=1,
@@ -60,13 +95,14 @@ def main():
     # Expected start_date format: "2013-09-28 20:30:55.78200"
     # default_start_date = datetime.datetime.now()
     start_date = default_start_date = datetime.datetime.now()
+    out_format = args.out_format if args.out_format else default_format
     if args.start_date:
         try:
             start_date = datetime.datetime.strptime(args.start_date, "%Y.%m.%d")
         except ValueError:
             print("Failed to parse date: {}; using today!".format(args.start_date))
             start_date = default_start_date
-    print_dates(start_date, args.offset_days, args.num_days, args.per_day, args.verbose)
+    print_dates(out_format, start_date, args.offset_days, args.num_days, args.per_day, args.verbose)
 
 if __name__ == '__main__':
     main()
