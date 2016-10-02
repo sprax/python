@@ -13,12 +13,11 @@ def print_dates(start_date, offset_days, num_days, per_day, verbose):
     '''Output num_days consecutive formatted dates from start_date'''
     date = start_date
     date += datetime.timedelta(days=offset_days)
-    tstm = date.timetuple()
-    if verbose > 2:
-        print(tstm)
     # for _ in itertools.repeat(None, num_days):
     for _ in range(num_days):
-        # print("day: ", day)
+        tstm = date.timetuple()
+        if verbose > 2:
+            print(tstm)
         dstr = time.strftime("%Y.%m.%d %a", tstm)
         if tstm.tm_wday < 5:
             locs = 'Home/CIC'
@@ -35,7 +34,6 @@ def print_dates(start_date, offset_days, num_days, per_day, verbose):
         else:
             print("%s\t%s" % (dstr, locs))
         date += datetime.timedelta(days=1)
-        tstm = date.timetuple()
 
 
 def main():
