@@ -57,15 +57,27 @@ def reformat_date(text, out_format, input_formats, verbose):
     else:
         return text
 
+def replace_first_date(text, out_format, input_formats, verbose):
+    '''Replace any recognized date at the start of text with one of the specified format.'''
+    matched = re.match(rgx_date, text):
+    if matched:
+        raw_date, body = matched.groups()
+        ref_date = reformat_date(raw_date, out_format, input_formats, verbose)
+        if verbose > 3:
+            print(ref_date)
+        return "\t".join(ref_date, body)
+    return texts
+
 def replace_dates(texts, out_format, input_formats, verbose):
     '''Replace any recognized date at the start of text with one of the specified format.'''
     texts_out = []
     for text in texts:
-        text_out = reformat_date(text, out_format, input_formats, verbose)
+        text_out = replace_first_date(text, out_format, input_formats, verbose)
         if verbose > 3:
             print(text_out)
         texts_out.append(text_out)
     return texts_out
+
 
 def main():
     '''get args and call print_dates'''
