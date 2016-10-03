@@ -212,7 +212,7 @@ def etc():
 """
 
 import unittest
-import fibonaccis
+import fibonacci
 
 class TestBinarySearch(unittest.TestCase):
 
