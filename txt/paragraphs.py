@@ -45,17 +45,22 @@ def print_paragraphs(path):
 def paragraph_reader(path, encoding="utf8"):
     '''opens text file and returns paragraph iterator'''
     # # with open(path, 'r', encoding) as text:
-    with open(path, 'r') as text:
-        return paragraph_iter(text)
+    try:
+        text = open(path, 'r')
+        return paragraph_iter(text), text
+    except ex:
+        print("Warning:", ex)
+        return None
 
-def print_paragraphs_bust(path):
+def print_paragraphs_leaky(path):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs:")
-    with paragraph_reader(path) as para_iter:
-        for idx, para in enumerate(para_iter):
-            print("    Paragraph {}:".format(idx))
-            print(para)
-            print()
+    para_iter, fileobj = paragraph_reader(path)
+    for idx, para in enumerate(para_iter):
+        print("    Paragraph {}:".format(idx))
+        utf_print.utf_print(para)
+        print()
+    fileobj.close()
 
 def main():
     '''Driver to iterate over the paragraphs in a text file.'''
@@ -74,8 +79,8 @@ def main():
         print(__doc__)
 
     print_paragraphs(args.text_file)
-    # print("\n\t BUSTED VERSION: \n")
-    # print_paragraphs_bust(args.text_file)
+    print("\n\t LEAKY VERSION: \n")
+    print_paragraphs_leaky(args.text_file)
 
 if __name__ == '__main__':
     main()
