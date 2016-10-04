@@ -120,6 +120,7 @@ def main():
 
     if args.jrnl_input:
         print("convert diary to jrnl format: coming soon...")
+        paragraphs.print_paragraphs(args.jrnl_input)
     else:
         print_dates(out_format, start_date, args.offset_days, args.num_days, args.per_day, args.verbose)
 
