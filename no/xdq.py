@@ -14,6 +14,12 @@ import sys
 from collections import Counter
 
 import utf_print
+import paragraphs
+
+def paragraph_reader(path, encoding="utf8"):
+    '''opens text file and returns paragraph iterator'''
+    with open(path, 'r', encoding) as text:
+        return paragraph_iter(text)
 
 def paragraph_iter(fileobj, rgx_para_separator='\n'):
     '''yields paragraphs from text file and regex separator'''
@@ -33,14 +39,6 @@ def paragraph_iter(fileobj, rgx_para_separator='\n'):
     if paragraph:
         yield paragraph
 
-def print_paragraphs(path):
-    '''Prints sequence numbers and paragraphs.'''
-    print("print_paragraphs:")
-    with open(path, 'r', encoding="utf8") as text:
-        for idx, para in enumerate(paragraph_iter(text)):
-            print("    Paragraph {}:".format(idx))
-            print(para)
-            print()
 
 def quotes_per_paragraph_iter(path, verbose):
     '''returns a generator that yields the list of quoted dialogue
@@ -158,7 +156,8 @@ def main():
         print("args:", args)
         print(__doc__)
 
-    # print_paragraphs(corpus_file)
+    # paragraphs.print_paragraphs(args.corpus_file)
+    #
     # for quoted in quoted_phrase_iter(corpus_file, verbose):
     #    print("{}{}".format(quoted[0], quoted[1]))
     with open(args.quotes_out, 'w') as out:
@@ -174,7 +173,6 @@ def main():
     print("The", numfreq, "most common denials:")
     for phrase, count in denials.most_common(numfreq):
         utf_print.utf_print('    {:>7d} {}'.format(count, phrase))
-
 
 
 if __name__ == '__main__':

@@ -2,6 +2,7 @@
 # Sprax Lines       2016.09.26      Written for Python 3.5
 '''Output some dates.'''
 
+import no.paragraphs
 import argparse
 import sys
 import time
@@ -84,6 +85,8 @@ def main():
 
     default_format = '%Y.%m.%d %a'
     default_num_days = 7
+    default_jrnl_input = "djs.txt"
+    default_start_date = start_date = datetime.datetime.now()
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="Read/write journal-entry style dates"
@@ -95,6 +98,9 @@ def main():
                         .format(default_num_days))
     parser.add_argument('per_day', type=int, nargs='?', default=1,
                         help='number of entries per day (default: 1)')
+    parser.add_argument('-jrnl_input', metavar='FILE', type=str,
+                        help='convert dated-entry text file to jrnl format (default: {})'
+                        .format(default_jrnl_input))
     parser.add_argument('-out_format', metavar='FORMAT', type=str,
                         help='output date format (default: {})'
                         .format(default_format.replace('%', '%%')))
@@ -104,17 +110,18 @@ def main():
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-    # Expected start_date format: "2013-09-28 20:30:55.78200"
-    # default_start_date = datetime.datetime.now()
-    start_date = default_start_date = datetime.datetime.now()
     out_format = args.out_format if args.out_format else default_format
+
     if args.start_date:
         try:
-            start_date = datetime.datetime.strptime(args.start_date, "%Y.%m.%d")
+            start_date = datetime.datetime.strptime(args.start_date, out_format)
         except ValueError:
-            print("Failed to parse date: {}; using today!".format(args.start_date))
-            start_date = default_start_date
-    print_dates(out_format, start_date, args.offset_days, args.num_days, args.per_day, args.verbose)
+            print("WARNING: Failed to parse start date: {}; using default: {}".format(args.start_date, start_date))
+
+    if args.jrnl_input:
+        print("convert diary to jrnl format: coming soon...")
+    else:
+        print_dates(out_format, start_date, args.offset_days, args.num_days, args.per_day, args.verbose)
 
 if __name__ == '__main__':
     main()
