@@ -2,7 +2,7 @@
 # Sprax Lines       2016.09.26      Written for Python 3.5
 '''Output some dates.'''
 
-import no.paragraphs
+import paragraphs
 import argparse
 import sys
 import time
