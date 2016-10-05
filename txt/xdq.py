@@ -40,11 +40,11 @@ def paragraph_iter(fileobj, rgx_para_separator='\n'):
         yield paragraph
 
 
-def quotes_per_paragraph_iter(path, verbose):
+def quotes_per_paragraph_iter(path, verbose, charset='utf8'):
     '''returns a generator that yields the list of quoted dialogue
     phrases found in each paragraph in the text file, including
     empty lists for quoteless paragraphs.'''
-    with open(path, 'r', encoding="utf8") as text:
+    with open(path, 'r', encoding=charset) as text:
         for para in paragraph_iter(text):
             if not para:
                 continue

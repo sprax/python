@@ -2,11 +2,13 @@
 # Sprax Lines       2016.09.26      Written for Python 3.5
 '''Output some dates.'''
 
-import paragraphs
 import argparse
 import sys
 import time
 import datetime
+
+import paragraphs
+import utf_print
 
 # DAY_CODES = ['Mnd', 'Tsd', 'Wnd', 'Thd', 'Frd', 'Std', 'Snd']
 
@@ -80,6 +82,30 @@ def replace_dates(texts, out_format, input_formats, verbose):
     return texts_out
 
 
+
+def reformat_paragraphs(path, charset='utf8'):
+    '''Parses paragraphs into leading date, first sentence, and body.
+    Reformats the date, if present.'''
+    with open(path, 'r', encoding=charset) as text:
+        for idx, para in enumerate(paragraphs.paragraph_iter(text)):
+            print("    Paragraph {}:".format(idx))
+            yield extract_date_head_body(para)
+            # utf_print.utf_print(para)
+            # print()
+
+def extract_date_head_body(paragraph):
+    '''Returns list of quotes extracted from paragraph, unless it's a numbered paragraph'''
+    date_first_pat = "^\s*(\d\d\d\d\.\d\d\.\d\d)'(.*?)[,.!?]'(\s*|$)"
+    rgx_qt = re.compile(r"(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
+    rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
+    if not paragraph:
+        print("WARNING: paragraph is empty!")
+        return []
+    if re.match(rgx_para_numbering, paragraph):
+        return []
+    para = paragraph.replace('’', "'")
+    return re.findall(rgx_qt, para
+
 def main():
     '''get args and call print_dates'''
 
@@ -120,7 +146,7 @@ def main():
 
     if args.jrnl_input:
         print("convert diary to jrnl format: coming soon...")
-        paragraphs.print_paragraphs(args.jrnl_input)
+        reformat_paragraphs(args.jrnl_input)
     else:
         print_dates(out_format, start_date, args.offset_days, args.num_days, args.per_day, args.verbose)
 

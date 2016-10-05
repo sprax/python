@@ -33,20 +33,19 @@ def paragraph_iter(fileobj, rgx_para_separator='\n'):
     if paragraph:
         yield paragraph
 
-def print_paragraphs(path):
+def print_paragraphs(path, charset='utf8'):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs:")
-    with open(path, 'r', encoding="utf8") as text:
+    with open(path, 'r', encoding=charset) as text:
         for idx, para in enumerate(paragraph_iter(text)):
             print("    Paragraph {}:".format(idx))
             utf_print.utf_print(para)
             print()
 
-def paragraph_reader(path, encoding="utf8"):
+def paragraph_reader(path, charset="utf8"):
     '''opens text file and returns paragraph iterator'''
-    # # with open(path, 'r', encoding) as text:
     try:
-        text = open(path, 'r')
+        text = open(path, 'r', encoding=charset)
         return paragraph_iter(text), text
     except ex:
         print("Warning:", ex)
