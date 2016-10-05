@@ -3,9 +3,10 @@
 '''Output some dates.'''
 
 import argparse
+import datetime
+import re
 import sys
 import time
-import datetime
 
 import paragraphs
 import utf_print
@@ -101,10 +102,8 @@ def extract_date_head_body(paragraph):
     if not paragraph:
         print("WARNING: paragraph is empty!")
         return []
-    if re.match(rgx_para_numbering, paragraph):
-        return []
     para = paragraph.replace('’', "'")
-    return re.findall(rgx_qt, para
+    return re.findall(rgx_qt, para)
 
 def main():
     '''get args and call print_dates'''
@@ -146,7 +145,10 @@ def main():
 
     if args.jrnl_input:
         print("convert diary to jrnl format: coming soon...")
-        reformat_paragraphs(args.jrnl_input)
+        found = reformat_paragraphs(args.jrnl_input)
+        for ff in found:
+            print('ff:', ff)
+
     else:
         print_dates(out_format, start_date, args.offset_days, args.num_days, args.per_day, args.verbose)
 
