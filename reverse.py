@@ -1,10 +1,11 @@
+'''reverse a string'''
 
-str = 'spam'
-print(str[::-1])
+STR = 'spam'
+print(STR[::-1])
 
-def reverseString(str):
-    return str[::-1]
+def reverse_string(string):
+    '''reverse'''
+    return string[::-1]
 
-rts = reverseString('Jesus Mary and Joseph')
-print(rts)
-
+RTS = reverse_string('Jesus Mary and Joseph')
+print(RTS)
