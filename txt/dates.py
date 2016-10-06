@@ -176,4 +176,23 @@ re.compile('(date)\\s+([\\w][^.!?]+[.!?])\\s+(.*)')
 >>> m
 >>> m = re.match(rgx, sent)
 >>>
+
+
+
+>>> dates = 'date'
+>>> first = r'[\w][^.!?]+[.!?]'
+>>> bodys = '.*'
+>>> rgx = re.compile("({})\s+({})\s+({})".format(dates, first, bodys)
+... )
+>>>
+>>>
+>>>
+>>> rgx
+re.compile('(date)\\s+([\\w][^.!?]+[.!?])\\s+(.*)')
+>>> sent = 'date 8*^)_+(*+(@(#_+&_+@#$%^&*()$#@%'
+>>> m = rgx.match(sent)
+>>> m
+>>> m = re.match(rgx, sent)
+>>>
+
 '''
