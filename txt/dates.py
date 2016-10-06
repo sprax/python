@@ -39,7 +39,7 @@ def print_dates(out_format, start_date, offset_days, num_days, per_day, verbose)
             print("%s\t%s" % (dstr, locs))
         date += datetime.timedelta(days=1)
 
-def try_parse_date(text, input_formats, verbose):
+def try_parse_date(text, input_formats):
     '''Try to extract a date by matching the input date formats.'''
     date = None
     for date_format in input_formats:
@@ -53,16 +53,19 @@ def try_parse_date(text, input_formats, verbose):
 def reformat_date(text, out_format, input_formats, verbose):
     '''If text parses as a date of one of the specified formats, return that date.
     Otherwise, return text as-is.'''
-    date = try_parse_date(text, input_formats, verbose)
+    date = try_parse_date(text, input_formats)
     if date:
+        tstm = date.timetuple()
         if verbose > 2:
-            print(tstm)
+            print(date, '=>', tstm)
         return time.strftime(out_format, tstm)
     else:
         return text
 
 def replace_first_date(text, out_format, input_formats, verbose):
     '''Replace any recognized date at the start of text with one of the specified format.'''
+    date_first_pat = r"^\s*(\d\d\d\d\.\d\d\.\d\d)'(.*?)[,.!?]'(\s*|$)"
+    rgx_date = re.compile(date_first_pat)
     matched = re.match(rgx_date, text)
     if matched:
         raw_date, body = matched.groups()
@@ -96,7 +99,6 @@ def reformat_paragraphs(path, charset='utf8'):
 
 def extract_date_head_body(paragraph):
     '''Returns list of quotes extracted from paragraph, unless it's a numbered paragraph'''
-    date_first_pat = "^\s*(\d\d\d\d\.\d\d\.\d\d)'(.*?)[,.!?]'(\s*|$)"
     rgx_qt = re.compile(r"(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
     rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
     if not paragraph:
@@ -141,7 +143,8 @@ def main():
         try:
             start_date = datetime.datetime.strptime(args.start_date, out_format)
         except ValueError:
-            print("WARNING: Failed to parse start date: {}; using default: {}".format(args.start_date, start_date))
+            print("WARNING: Failed to parse start date: {}; using default: {}"
+                  .format(args.start_date, start_date))
 
     if args.jrnl_input:
         print("convert diary to jrnl format: coming soon...")
@@ -150,7 +153,27 @@ def main():
             print('ff:', ff)
 
     else:
-        print_dates(out_format, start_date, args.offset_days, args.num_days, args.per_day, args.verbose)
+        print_dates(out_format, start_date, args.offset_days, args.num_days
+                    , args.per_day, args.verbose)
 
 if __name__ == '__main__':
     main()
+
+
+'''
+>>> dates = 'date'
+>>> first = r'[\w][^.!?]+[.!?]'
+>>> bodys = '.*'
+>>> rgx = re.compile("({})\s+({})\s+({})".format(dates, first, bodys)
+... )
+>>>
+>>>
+>>>
+>>> rgx
+re.compile('(date)\\s+([\\w][^.!?]+[.!?])\\s+(.*)')
+>>> sent = 'date 8*^)_+(*+(@(#_+&_+@#$%^&*()$#@%'
+>>> m = rgx.match(sent)
+>>> m
+>>> m = re.match(rgx, sent)
+>>>
+'''
