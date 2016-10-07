@@ -99,13 +99,19 @@ def reformat_paragraphs(path, charset='utf8'):
 
 def extract_date_head_body(paragraph):
     '''Returns list of quotes extracted from paragraph, unless it's a numbered paragraph'''
-    rgx_qt = re.compile(r"(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
-    rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
+    # rgx_qt = re.compile(r"(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
+    # rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
     if not paragraph:
         print("WARNING: paragraph is empty!")
-        return []
-    para = paragraph.replace('’', "'")
-    return re.findall(rgx_qt, para)
+        return ()
+    # para = paragraph.replace('’', "'")
+    date_str = r'\d\d\d\d.\d\d.\d\d';
+    rgx_dhb = re.compile("({})\s+(.*)".format(date_str))
+    mm = re.match(rgx_dhb, paragraph)
+    if mm:
+        return mm.groups()
+    else:
+        return ()
 
 def main():
     '''get args and call print_dates'''
@@ -150,7 +156,8 @@ def main():
         print("convert diary to jrnl format: coming soon...")
         found = reformat_paragraphs(args.jrnl_input)
         for ff in found:
-            print('ff:', ff)
+            utf_print.utf_print('ff: ', ff[0] if len(ff) > 0 else ff)
+
 
     else:
         print_dates(out_format, start_date, args.offset_days, args.num_days
