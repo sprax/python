@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+# Sprax Lines       2016.10.07      
+# From http://glowingpython.blogspot.com/2014/09/text-summarization-with-nltk.html
+'''Summarize something.'''
+
+import argparse
+from nltk.tokenize import sent_tokenize,word_tokenize
+from nltk.corpus import stopwords
+from collections import defaultdict
+from string import punctuation
+from heapq import nlargest
+
+class FrequencySummarizer:
+  def __init__(self, min_cut=0.1, max_cut=0.9):
+    """
+     Initilize the text summarizer.
+     Words that have a frequency term lower than min_cut 
+     or higer than max_cut will be ignored.
+    """
+    self._min_cut = min_cut
+    self._max_cut = max_cut 
+    self._stopwords = set(stopwords.words('english') + list(punctuation))
+
+  def _compute_frequencies(self, word_sent):
+    """ 
+      Compute the frequency of each of word.
+      Input: 
+       word_sent, a list of sentences already tokenized.
+      Output: 
+       freq, a dictionary where freq[w] is the frequency of w.
+    """
+    freq = defaultdict(int)
+    for s in word_sent:
+      for word in s:
+        if word not in self._stopwords:
+          freq[word] += 1
+    # frequencies normalization and fitering
+    m = float(max(freq.values()))
+    keys_to_delete = []
+    for w in freq.keys():
+      freq[w] = freq[w]/m
+      if freq[w] >= self._max_cut or freq[w] <= self._min_cut:
+        keys_to_delete.append(w)
+    for key in keys_to_delete:
+        freq.pop(key, None)
+    return freq
+
+  def summarize(self, text, n):
+    """
+      Return a list of n sentences 
+      which represent the summary of text.
+    """
+    sents = sent_tokenize(text)
+    assert n <= len(sents)
+    word_sent = [word_tokenize(s.lower()) for s in sents]
+    self._freq = self._compute_frequencies(word_sent)
+    ranking = defaultdict(int)
+    for i,sent in enumerate(word_sent):
+      for w in sent:
+        if w in self._freq:
+          ranking[i] += self._freq[w]
+    sents_idx = self._rank(ranking, n)    
+    return [sents[j] for j in sents_idx]
+
+  def _rank(self, ranking, n):
+    """ return the first n sentences with highest ranking """
+    return nlargest(n, ranking, key=ranking.get)
+
+
+
+def main():
+    '''Extract summary from text.'''
+    parser = argparse.ArgumentParser(
+        # usage='%(prog)s [options]',
+        description="Extractive text summarizer'",
+        )
+    parser.add_argument('text_file', type=str, nargs='?', default='corpus.txt',
+                        help='text file containing quoted dialogue')
+    parser.add_argument('summary_file', type=str, nargs='?', default='corpus_summary.txt',
+                        help='output file of quoted dialogue extracted from the corpus')
+    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
+                        help='verbosity of output (default: 1)')
+    args = parser.parse_args()
+
+    if args.verbose > 2:
+        print("args:", args)
+        print(__doc__)
+
+    freqsum = FrequencySummarizer()
+    with open(args.text_file, 'r') as src:
+        text = src.read()
+        title = args.text_file
+        print('----------------------------------')
+        print(title)
+        summary_sentences = freqsum.summarize(text, 2)
+        with open(args.summary_file, 'w') as outfile:
+            for sum_sentence in summary_sentences:
+                if args.verbose > 0:
+                    print(sum_sentence)
+                print(sum_sentence, file=outfile)
+            outfile.close()
+
+if __name__ == '__main__':
+    main()
+

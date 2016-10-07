@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Sprax Lines       2016.07.25      Written with Python 3.5
-'''Class and script to solve simple substitution cipher from corpus and encoded text'''
+'''print not necessarily ASCII text file to terminal'''
 
 import sys
 
