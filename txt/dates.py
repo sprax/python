@@ -73,7 +73,7 @@ def replace_first_date(text, out_format, input_formats, verbose):
         if verbose > 3:
             print(ref_date)
         return "\t".join(ref_date, body)
-    return texts
+    return text
 
 def replace_dates(texts, out_format, input_formats, verbose):
     '''Replace any recognized date at the start of text with one of the specified format.'''
@@ -97,19 +97,20 @@ def reformat_paragraphs(path, charset='utf8'):
             # utf_print.utf_print(para)
             # print()
 
+# rgx_qt = re.compile(r"(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
+
 def extract_date_head_body(paragraph):
     '''Returns list of quotes extracted from paragraph, unless it's a numbered paragraph'''
-    # rgx_qt = re.compile(r"(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
     # rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
     if not paragraph:
         print("WARNING: paragraph is empty!")
         return ()
     # para = paragraph.replace('’', "'")
-    date_str = r'\d\d\d\d.\d\d.\d\d';
-    rgx_dhb = re.compile("({})\s+(.*)".format(date_str))
-    mm = re.match(rgx_dhb, paragraph)
-    if mm:
-        return mm.groups()
+    date_str = r'\d\d\d\d.\d\d.\d\d'
+    rgx_dhb = re.compile(r"({})\s+(.*)".format(date_str))
+    rem = re.match(rgx_dhb, paragraph)
+    if rem:
+        return rem.groups()
     else:
         return ()
 
@@ -154,9 +155,9 @@ def main():
 
     if args.jrnl_input:
         print("convert diary to jrnl format: coming soon...")
-        found = reformat_paragraphs(args.jrnl_input)
-        for ff in found:
-            utf_print.utf_print('ff: ', ff[0] if len(ff) > 0 else ff)
+        refs = reformat_paragraphs(args.jrnl_input)
+        for ref in refs:
+            utf_print.utf_print('ref: ', ref[0] if len(ref) > 0 else ref)
 
 
     else:
