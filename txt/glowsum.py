@@ -15,7 +15,7 @@ class FrequencySummarizer:
     """
      Initilize the text summarizer.
      Words that have a frequency term lower than min_cut 
-     or higer than max_cut will be ignored.
+     or higher than max_cut will be ignored.
     """
     self._min_cut = min_cut
     self._max_cut = max_cut 
