@@ -9,7 +9,7 @@ import sys
 import time
 
 import paragraphs
-import utf_print
+from utf_print import utf_print
 
 # DAY_CODES = ['Mnd', 'Tsd', 'Wnd', 'Thd', 'Frd', 'Std', 'Snd']
 
@@ -105,7 +105,7 @@ def extract_date_head_body(paragraph, verbose):
         print("WARNING: paragraph is empty!")
         return ()
     if verbose > 2:
-        utf_print.utf_print("edhb: ", paragraph)
+        utf_print("edhb: ", paragraph)
     date_grp_str = r'\s*(\d\d\d\d.\d\d.\d\d)\s+'
     wday_grp_str = r'(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+)?'
     place_grp_str = r'\s*(\d\d\d\d.\d\d.\d\d)'
@@ -159,9 +159,10 @@ def main():
         print("convert diary to jrnl format: coming soon...")
         refs = reformat_paragraphs(args.jrnl_input, args.verbose)
         for ref in refs:
-            utf_print.utf_print('ref:', ref)
+            for part in ref:
+                utf_print(part)
             print()
-            # utf_print.utf_print('ref: ', ref[0] if len(ref) > 0 else ref)
+            # utf_print('ref: ', ref[0] if len(ref) > 0 else ref)
     else:
         print_dates(out_format, start_date, args.offset_days, args.num_days
                     , args.per_day, args.verbose)
