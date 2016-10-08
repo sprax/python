@@ -87,27 +87,28 @@ def replace_dates(texts, out_format, input_formats, verbose):
 
 
 
-def reformat_paragraphs(path, charset='utf8'):
+def reformat_paragraphs(path, verbose, charset='utf8'):
     '''Parses paragraphs into leading date, first sentence, and body.
     Reformats the date, if present.'''
     with open(path, 'r', encoding=charset) as text:
         for idx, para in enumerate(paragraphs.paragraph_iter(text)):
-            print("    Paragraph {}:".format(idx))
-            yield extract_date_head_body(para)
-            # utf_print.utf_print(para)
-            # print()
+            if verbose > 2:
+                print("    Paragraph {}:".format(idx))
+            # para = para.replace('’', "'")
+            yield extract_date_head_body(para, verbose)
 
 # rgx_qt = re.compile(r"(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
 
-def extract_date_head_body(paragraph):
-    '''Returns list of quotes extracted from paragraph, unless it's a numbered paragraph'''
-    # rgx_para_numbering = re.compile(r"^[^A-Za-z]*(\d|[ivx]+\.)")
+def extract_date_head_body(paragraph, verbose):
+    '''return date string, head, and body frmo paragraph'''
     if not paragraph:
         print("WARNING: paragraph is empty!")
         return ()
-    # para = paragraph.replace('’', "'")
-    date_str = r'\d\d\d\d.\d\d.\d\d'
-    rgx_dhb = re.compile(r"({})\s+(.*)".format(date_str))
+    if verbose > 2:
+        utf_print.utf_print("edhb: ", paragraph)
+    date_grp_str = r'\s*(\d\d\d\d.\d\d.\d\d)'
+    # TODO: static compile
+    rgx_dhb = re.compile(r"{}\s+(.*)".format(date_grp_str))
     rem = re.match(rgx_dhb, paragraph)
     if rem:
         return rem.groups()
@@ -116,7 +117,6 @@ def extract_date_head_body(paragraph):
 
 def main():
     '''get args and call print_dates'''
-
     default_format = '%Y.%m.%d %a'
     default_num_days = 7
     default_jrnl_input = "djs.txt"
@@ -140,7 +140,7 @@ def main():
                         .format(default_format.replace('%', '%%')))
     parser.add_argument('-start_date', metavar='DATE', type=str,
                         help='start date (default: today)')
-    parser.add_argument('-verbose', type=int, nargs=1, default=1,
+    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
@@ -155,11 +155,11 @@ def main():
 
     if args.jrnl_input:
         print("convert diary to jrnl format: coming soon...")
-        refs = reformat_paragraphs(args.jrnl_input)
+        refs = reformat_paragraphs(args.jrnl_input, args.verbose)
         for ref in refs:
-            utf_print.utf_print('ref: ', ref[0] if len(ref) > 0 else ref)
-
-
+            utf_print.utf_print('ref:', ref)
+            print()
+            # utf_print.utf_print('ref: ', ref[0] if len(ref) > 0 else ref)
     else:
         print_dates(out_format, start_date, args.offset_days, args.num_days
                     , args.per_day, args.verbose)
@@ -167,7 +167,6 @@ def main():
 if __name__ == '__main__':
     main()
 
-
 '''
 >>> dates = 'date'
 >>> first = r'[\w][^.!?]+[.!?]'
@@ -183,17 +182,11 @@ re.compile('(date)\\s+([\\w][^.!?]+[.!?])\\s+(.*)')
 >>> m = rgx.match(sent)
 >>> m
 >>> m = re.match(rgx, sent)
->>>
-
-
 
 >>> dates = 'date'
 >>> first = r'[\w][^.!?]+[.!?]'
 >>> bodys = '.*'
 >>> rgx = re.compile("({})\s+({})\s+({})".format(dates, first, bodys)
-... )
->>>
->>>
 >>>
 >>> rgx
 re.compile('(date)\\s+([\\w][^.!?]+[.!?])\\s+(.*)')
@@ -202,5 +195,5 @@ re.compile('(date)\\s+([\\w][^.!?]+[.!?])\\s+(.*)')
 >>> m
 >>> m = re.match(rgx, sent)
 >>>
-
 '''
+
