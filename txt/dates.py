@@ -99,6 +99,18 @@ def reformat_paragraphs(path, verbose, charset='utf8'):
 
 # rgx_qt = re.compile(r"(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
 
+# @staticmethod
+# def tag_regex(tagsymbols):
+    # pattern = r'(?u)\s([{tags}][-+*#&/\w]+)'.format(tags=tagsymbols)
+    # return re.compile( pattern, re.UNICODE )
+
+def dated_entry_regex():
+    date_grp_str = r'\s*(\d\d\d\d.\d\d.\d\d)\s+'
+    wday_grp_str = r'(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+)?'
+    place_grp_str = r'\s*(\d\d\d\d.\d\d.\d\d)'
+    pattern = r"{}{}(.*)".format(date_grp_str, wday_grp_str)
+    return re.compile( pattern, re.UNICODE )
+
 def extract_date_head_body(paragraph, verbose):
     '''return date string, head, and body frmo paragraph'''
     if not paragraph:
@@ -106,12 +118,7 @@ def extract_date_head_body(paragraph, verbose):
         return ()
     if verbose > 2:
         utf_print("edhb: ", paragraph)
-    date_grp_str = r'\s*(\d\d\d\d.\d\d.\d\d)\s+'
-    wday_grp_str = r'(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+)?'
-    place_grp_str = r'\s*(\d\d\d\d.\d\d.\d\d)'
-    # TODO: static compile
-    rgx_dhb = re.compile(r"{}{}(.*)".format(date_grp_str, wday_grp_str))
-    rem = re.match(rgx_dhb, paragraph)
+    rem = re.match(dated_entry_regex(), paragraph)
     if rem:
         return rem.groups()
     else:
