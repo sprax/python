@@ -90,7 +90,7 @@ def reformat_journal(jrnl_file, verbose):
     print("convert diary to jrnl format: coming soon...")
     # refs = reformat_all_paragraphs(jrnl_file, verbose)
     for ref in reformat_all_paragraphs(jrnl_file, verbose):
-        if verbose > 3:
+        if verbose > 0:
             for part in ref:
                 utf_print(part)
             print()
@@ -111,14 +111,9 @@ def reformat_paragraph(paragraph, verbose):
     if not paragraph:
         print("WARNING: paragraph is empty!")
         return ()
-    dhb = extract_date_head_body(paragraph, verbose)
-    if dhb:
-        # para = para.replace('’', "'")
-        formatted = reformat_groups(dhb)
-        return formatted
-    else:
-        return ()
-
+    (date, wday, head, body) = extract_date_head_body(paragraph, verbose)
+    head = head.replace('’', "'")
+    return (date, wday, head, body)
 
 def extract_date_head_body(paragraph, verbose):
     '''extract (date, head, body) from paragraph, where date and body may be None'''
@@ -126,17 +121,13 @@ def extract_date_head_body(paragraph, verbose):
         utf_print("edhb: ", paragraph)
     rem = re.match(dated_entry_regex(), paragraph)
     if rem:
-        for part in rem.groups():
-            utf_print("\t", part)
-        print()
-        # para = para.replace('’', "'")
-        formatted = reformat_groups(rem.groups())
-        return formatted
+        if verbose > 2:
+            for part in rem.groups():
+                utf_print("\t", part)
+            print()
+        return rem.groups()
     else:
-        return ()
-
-def reformat_groups(groups):
-    return groups
+        return (None, None, None, paragraph)
 
 # rgx_qt = re.compile(r"(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
 
@@ -146,12 +137,11 @@ def reformat_groups(groups):
     # return re.compile( pattern, re.UNICODE )
 
 def dated_entry_regex():
-    date_grp = r'(?:\s*(\d\d\d\d.\d\d.\d\d)\s+)?'
+    date_grp = r'(?:\s*(\d\d\d\d.\d\d.\d\d)[-\s]+)?'
     wday_grp = r'(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+)?'
-    place_grp = r'\s*(\d\d\d\d.\d\d.\d\d)'
-    head_grp = r'(?:\s*)?([^.?!]+[.?!])'
-    body_grp = r'(?:\s*)?(.*)'
-    # # pattern = r"{}{}{}(?:\s*)(.*)".format(date_grp, wday_grp, head_grp)
+    place_grp = r'\s*(\w+)'    # # TODO: Add place as another optional group
+    head_grp = r'(?:\s*)?([^.?!]+(?:[.?!][\'"]?|$))'
+    body_grp = r'(?:\s*)?(\w.*)?'
     pattern = r"{}{}{}{}".format(date_grp, wday_grp, head_grp, body_grp)
     return re.compile( pattern, re.UNICODE )
 
