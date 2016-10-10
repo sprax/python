@@ -111,9 +111,9 @@ def reformat_paragraph(paragraph, verbose):
     if not paragraph:
         print("WARNING: paragraph is empty!")
         return ()
-    (date, wday, head, body) = extract_date_head_body(paragraph, verbose)
+    (date, wday, locs, head, body) = extract_date_head_body(paragraph, verbose)
     head = head.replace('’', "'")
-    return (date, wday, head, body)
+    return (date, wday, locs, head, body)
 
 def extract_date_head_body(paragraph, verbose):
     '''extract (date, head, body) from paragraph, where date and body may be None'''
@@ -139,10 +139,10 @@ def extract_date_head_body(paragraph, verbose):
 def dated_entry_regex():
     date_grp = r'(?:\s*(\d\d\d\d.\d\d.\d\d)[-\s]+)?'
     wday_grp = r'(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+)?'
-    place_grp = r'\s*(\w+)'    # # TODO: Add place as another optional group
+    locs_grp = r'(?:\s*(\w+)(?:\t|\s\s+))?'    # # TODO: Add locs as another optional group
     head_grp = r'(?:\s*)?([^.?!]+(?:[.?!][\'"]?|$))'
     body_grp = r'(?:\s*)?(\w.*)?'
-    pattern = r"{}{}{}{}".format(date_grp, wday_grp, head_grp, body_grp)
+    pattern = r"{}{}{}{}{}".format(date_grp, wday_grp, locs_grp, head_grp, body_grp)
     return re.compile( pattern, re.UNICODE )
 
 def main():
