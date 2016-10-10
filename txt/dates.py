@@ -88,14 +88,15 @@ def replace_dates(texts, out_format, input_formats, verbose):
 
 def reformat_journal(jrnl_file, verbose):
     print("convert diary to jrnl format: coming soon...")
-    refs = reformat_paragraphs(jrnl_file, verbose)
-    for ref in refs:
-        for part in ref:
-            utf_print(part)
-        print()
+    # refs = reformat_all_paragraphs(jrnl_file, verbose)
+    for ref in reformat_all_paragraphs(jrnl_file, verbose):
+        if verbose > 3:
+            for part in ref:
+                utf_print(part)
+            print()
         # utf_print('ref: ', ref[0] if len(ref) > 0 else ref)
 
-def reformat_paragraphs(path, verbose, charset='utf8'):
+def reformat_all_paragraphs(path, verbose, charset='utf8'):
     '''Parses paragraphs into leading date, first sentence, and body.
     Reformats the date, if present.'''
     with open(path, 'r', encoding=charset) as text:
@@ -103,7 +104,39 @@ def reformat_paragraphs(path, verbose, charset='utf8'):
             if verbose > 3:
                 print("    Paragraph {}:".format(idx))
                 utf_print(para)
-            yield extract_date_head_body(para, verbose)
+            yield reformat_paragraph(para, verbose)
+
+def reformat_paragraph(paragraph, verbose):
+    '''return date string, head, and body from paragraph'''
+    if not paragraph:
+        print("WARNING: paragraph is empty!")
+        return ()
+    dhb = extract_date_head_body(paragraph, verbose)
+    if dhb:
+        # para = para.replace('’', "'")
+        formatted = reformat_groups(dhb)
+        return formatted
+    else:
+        return ()
+
+
+def extract_date_head_body(paragraph, verbose):
+    '''extract (date, head, body) from paragraph, where date and body may be None'''
+    if verbose > 5:
+        utf_print("edhb: ", paragraph)
+    rem = re.match(dated_entry_regex(), paragraph)
+    if rem:
+        for part in rem.groups():
+            utf_print("\t", part)
+        print()
+        # para = para.replace('’', "'")
+        formatted = reformat_groups(rem.groups())
+        return formatted
+    else:
+        return ()
+
+def reformat_groups(groups):
+    return groups
 
 # rgx_qt = re.compile(r"(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
 
@@ -113,30 +146,14 @@ def reformat_paragraphs(path, verbose, charset='utf8'):
     # return re.compile( pattern, re.UNICODE )
 
 def dated_entry_regex():
-    date_grp = r'\s*(\d\d\d\d.\d\d.\d\d)\s+'
+    date_grp = r'(?:\s*(\d\d\d\d.\d\d.\d\d)\s+)?'
     wday_grp = r'(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+)?'
     place_grp = r'\s*(\d\d\d\d.\d\d.\d\d)'
-    sentence_grp = r'\s*([^.?!]+[.?!])'
-    pattern = r"{}{}{}\s+(.*)".format(date_grp, wday_grp, sentence_grp)
+    head_grp = r'(?:\s*)?([^.?!]+[.?!])'
+    body_grp = r'(?:\s*)?(.*)'
+    # # pattern = r"{}{}{}(?:\s*)(.*)".format(date_grp, wday_grp, head_grp)
+    pattern = r"{}{}{}{}".format(date_grp, wday_grp, head_grp, body_grp)
     return re.compile( pattern, re.UNICODE )
-
-def extract_date_head_body(paragraph, verbose):
-    '''return date string, head, and body from paragraph'''
-    if not paragraph:
-        print("WARNING: paragraph is empty!")
-        return ()
-    if verbose > 2:
-        utf_print("edhb: ", paragraph)
-    rem = re.match(dated_entry_regex(), paragraph)
-    if rem:
-        # para = para.replace('’', "'")
-        formatted = reformat_groups(rem.groups())
-        return formatted
-    else:
-        return ()
-
-def reformat_groups(groups):
-    return groups
 
 def main():
     '''get args and call print_dates'''

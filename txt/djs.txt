@@ -52,8 +52,6 @@ Or, more importantly, a separate paragraph with no date?
 This should be parsed as belonging to the most same date as the previous
 paragraph.
 
-
-
 2016.10.03 Why @M&M's?
 Not @Kei$ha's?  Or @^_^!  The "@99%ers," or has it been said '@my…bad??'
 '@genus:species'?  what he said.  
@@ -64,3 +62,5 @@ Not @Kei$ha's?  Or @^_^!  He said "@99%ers," or @my<…>b?? @gen:spec @:-) ff @S
 
 2016.10.03 hey its @4:20!
 "Why not spend some @$$ on @^v^?"
+
+Another dateless paragraph, my friends, so Why not call to find out more?
