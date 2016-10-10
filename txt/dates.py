@@ -86,15 +86,23 @@ def replace_dates(texts, out_format, input_formats, verbose):
     return texts_out
 
 
+def reformat_journal(jrnl_file, verbose):
+    print("convert diary to jrnl format: coming soon...")
+    refs = reformat_paragraphs(jrnl_file, verbose)
+    for ref in refs:
+        for part in ref:
+            utf_print(part)
+        print()
+        # utf_print('ref: ', ref[0] if len(ref) > 0 else ref)
 
 def reformat_paragraphs(path, verbose, charset='utf8'):
     '''Parses paragraphs into leading date, first sentence, and body.
     Reformats the date, if present.'''
     with open(path, 'r', encoding=charset) as text:
         for idx, para in enumerate(paragraphs.paragraph_iter(text)):
-            if verbose > 2:
+            if verbose > 3:
                 print("    Paragraph {}:".format(idx))
-            # para = para.replace('’', "'")
+                utf_print(para)
             yield extract_date_head_body(para, verbose)
 
 # rgx_qt = re.compile(r"(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
@@ -113,7 +121,7 @@ def dated_entry_regex():
     return re.compile( pattern, re.UNICODE )
 
 def extract_date_head_body(paragraph, verbose):
-    '''return date string, head, and body frmo paragraph'''
+    '''return date string, head, and body from paragraph'''
     if not paragraph:
         print("WARNING: paragraph is empty!")
         return ()
@@ -121,9 +129,14 @@ def extract_date_head_body(paragraph, verbose):
         utf_print("edhb: ", paragraph)
     rem = re.match(dated_entry_regex(), paragraph)
     if rem:
-        return rem.groups()
+        # para = para.replace('’', "'")
+        formatted = reformat_groups(rem.groups())
+        return formatted
     else:
         return ()
+
+def reformat_groups(groups):
+    return groups
 
 def main():
     '''get args and call print_dates'''
@@ -164,13 +177,7 @@ def main():
                   .format(args.start_date, start_date))
 
     if args.jrnl_input:
-        print("convert diary to jrnl format: coming soon...")
-        refs = reformat_paragraphs(args.jrnl_input, args.verbose)
-        for ref in refs:
-            for part in ref:
-                utf_print(part)
-            print()
-            # utf_print('ref: ', ref[0] if len(ref) > 0 else ref)
+        reformat_journal(args.jrnl_input, args.verbose)
     else:
         print_dates(out_format, start_date, args.offset_days, args.num_days
                     , args.per_day, args.verbose)
