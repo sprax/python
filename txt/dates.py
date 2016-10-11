@@ -44,6 +44,7 @@ def try_parse_date(text, input_formats):
     date = None
     for date_format in input_formats:
         try:
+            print("\t\t try_parse(text, date_format) : ({}, {})".format(text, date_format))
             date = datetime.datetime.strptime(text, date_format)
             return date
         except ValueError:
@@ -86,17 +87,17 @@ def replace_dates(texts, out_format, input_formats, verbose):
     return texts_out
 
 
-def reformat_journal(jrnl_file, verbose):
-    print("convert diary to jrnl format: coming soon...")
+def reformat_journal(jrnl_file, date_format_out, verbose):
+    print("convert diary to jrnl format: date_format_out:", date_format_out)
     # refs = reformat_all_paragraphs(jrnl_file, verbose)
-    for ref in reformat_all_paragraphs(jrnl_file, verbose):
+    for ref in reformat_all_paragraphs(jrnl_file, date_format_out, verbose):
         if verbose > 0:
             for part in ref:
                 utf_print(part)
             print()
         # utf_print('ref: ', ref[0] if len(ref) > 0 else ref)
 
-def reformat_all_paragraphs(path, verbose, charset='utf8'):
+def reformat_all_paragraphs(path, date_format_out, verbose, charset='utf8'):
     '''Parses paragraphs into leading date, first sentence, and body.
     Reformats the date, if present.'''
     with open(path, 'r', encoding=charset) as text:
@@ -104,15 +105,23 @@ def reformat_all_paragraphs(path, verbose, charset='utf8'):
             if verbose > 3:
                 print("    Paragraph {}:".format(idx))
                 utf_print(para)
-            yield reformat_paragraph(para, verbose)
+            yield reformat_paragraph(para, date_format_out, verbose)
 
-def reformat_paragraph(paragraph, verbose):
+def reformat_paragraph(paragraph, out_format, verbose):
     '''return date string, head, and body from paragraph'''
     if not paragraph:
         print("WARNING: paragraph is empty!")
         return ()
     (date, wday, locs, head, body) = extract_date_head_body(paragraph, verbose)
-    head = head.replace('’', "'")
+    if date:
+        input_formats = [ out_format ]
+        print("\t\t\t input_formats: ", input_formats)
+        refd = reformat_date(date, out_format, input_formats, verbose)
+        print("\t reformatted date:\t", refd)
+    if head:
+        head = head.replace('’', "'")
+    if body:
+        body = body.replace('’', "'")
     return (date, wday, locs, head, body)
 
 def extract_date_head_body(paragraph, verbose):
@@ -130,16 +139,15 @@ def extract_date_head_body(paragraph, verbose):
         return (None, None, None, paragraph)
 
 # rgx_qt = re.compile(r"(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
-
 # @staticmethod
 # def tag_regex(tagsymbols):
     # pattern = r'(?u)\s([{tags}][-+*#&/\w]+)'.format(tags=tagsymbols)
     # return re.compile( pattern, re.UNICODE )
 
 def dated_entry_regex():
-    date_grp = r'(?:\s*(\d\d\d\d.\d\d.\d\d)[-\s]+)?'
+    date_grp = r'(?:\s*(\d\d\d\d.\d\d.\d\d|\d\d.\d\d.\d\d)[-\s])?'
     wday_grp = r'(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+)?'
-    locs_grp = r'(?:\s*(\w+)(?:\t|\s\s+))?'    # # TODO: Add locs as another optional group
+    locs_grp = r'(?:\s*([^.?!]+)(?:\t|\s\s+))?'    # # TODO: Add locs as another optional group
     head_grp = r'(?:\s*)?([^.?!]+(?:[.?!][\'"]?|$))'
     body_grp = r'(?:\s*)?(\w.*)?'
     pattern = r"{}{}{}{}{}".format(date_grp, wday_grp, locs_grp, head_grp, body_grp)
@@ -165,7 +173,7 @@ def main():
     parser.add_argument('-jrnl_input', metavar='FILE', type=str,
                         help='convert dated-entry text file to jrnl format (default: {})'
                         .format(default_jrnl_input))
-    parser.add_argument('-out_format', metavar='FORMAT', type=str,
+    parser.add_argument('-out_format', metavar='FORMAT', type=str, default=default_format,
                         help='output date format (default: {})'
                         .format(default_format.replace('%', '%%')))
     parser.add_argument('-start_date', metavar='DATE', type=str,
@@ -184,7 +192,9 @@ def main():
                   .format(args.start_date, start_date))
 
     if args.jrnl_input:
-        reformat_journal(args.jrnl_input, args.verbose)
+        date_format_in = [ args.out_format ]
+        date_format_out = args.out_format
+        reformat_journal(args.jrnl_input, date_format_out, args.verbose)
     else:
         print_dates(out_format, start_date, args.offset_days, args.num_days
                     , args.per_day, args.verbose)
