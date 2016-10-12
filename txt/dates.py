@@ -88,6 +88,7 @@ def replace_dates(texts, in_formats, out_format, verbose):
 
 
 def reformat_journal(jrnl_file, in_formats, out_format, verbose):
+    '''rewrite journal file in canonical format'''
     print("convert diary to jrnl format: out_format:", out_format)
     for ref in reformat_all_paragraphs(jrnl_file, in_formats, out_format, verbose):
         if verbose > 0:
@@ -143,13 +144,14 @@ def extract_date_head_body(paragraph, verbose):
     # return re.compile( pattern, re.UNICODE )
 
 def dated_entry_regex():
+    '''return compiled regex pattern'''
     date_grp = r'(?:\s*(\d\d\d\d.\d\d.\d\d|\d\d.\d\d.\d\d)[-\s])?'
     wday_grp = r'(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+)?'
-    locs_grp = r'(?:\s*([^.?!]+)(?:\t|\s\s+))?'    # # TODO: Add locs as another optional group
-    head_grp = r'(?:\s*)?([^.?!]+(?:[.?!][\'"]?|$))'
+    locs_grp = r'(?:\s*([^.?!]+)(?:\t|\s\s+))?'    # TODO: Add locs as another optional group
+    head_grp = r'(?:\s*)?([^.?!]+(?:[.?!][\'"]?|$)'
     body_grp = r'(?:\s*)?(\w.*)?'
     pattern = r"{}{}{}{}{}".format(date_grp, wday_grp, locs_grp, head_grp, body_grp)
-    return re.compile( pattern, re.UNICODE )
+    return re.compile(pattern, re.UNICODE)
 
 def main():
     '''get args and call print_dates'''
@@ -180,7 +182,7 @@ def main():
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-    in_formats = [ '%Y.%m.%d' ]
+    in_formats = ['%Y.%m.%d']
     out_format = args.out_format if args.out_format else default_format_out
 
     if args.start_date:
@@ -199,7 +201,7 @@ def main():
 if __name__ == '__main__':
     main()
 
-'''
+r'''
 >>> dates = 'date'
 >>> first = r'[\w][^.!?]+[.!?]'
 >>> bodys = '.*'
@@ -228,4 +230,3 @@ re.compile('(date)\\s+([\\w][^.!?]+[.!?])\\s+(.*)')
 >>> m = re.match(rgx, sent)
 >>>
 '''
-
