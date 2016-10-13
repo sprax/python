@@ -56,8 +56,11 @@ def reformat_date(text, in_formats, out_format, verbose):
     date = try_parse_date(text, in_formats)
     if date:
         tstm = date.timetuple()
-        if verbose > 2:
-            print(date, '=>', tstm)
+        dstr = time.strftime(out_format, tstm)
+        if verbose > 0:
+            print(date, '=>', dstr)
+            if verbose > 5:
+                print('=>', tstm)
         return time.strftime(out_format, tstm)
     else:
         return text
@@ -113,9 +116,8 @@ def reformat_paragraph(paragraph, in_formats, out_format, verbose):
         return ()
     (date, wday, locs, head, body) = extract_date_head_body(paragraph, verbose)
     if date:
-        print("\t\t\t in_formats: ", in_formats)
         refd = reformat_date(date, in_formats, out_format, verbose)
-        print("\t reformatted date:\t", refd)
+        # print("\t reformatted date:\t", refd)
     if head:
         head = head.replace('’', "'")
     if body:
@@ -147,7 +149,7 @@ def dated_entry_regex():
     date_grp = r'(?:\s*(\d\d\d\d.\d\d.\d\d|\d\d.\d\d.\d\d)[-\s])?'
     wday_grp = r'(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+)?'
     locs_grp = r'(?:\s*([^.?!]+)(?:\t|\s\s+))?'    # TODO: Add locs as another optional group
-    head_grp = r'(?:\s*)?([^.?!]+(?:[.?!][\'"]?|$)'
+    head_grp = r'(?:\s*)?([^.?!]+(?:[.?!][\'"]?|$))'
     body_grp = r'(?:\s*)?(\w.*)?'
     pattern = r"{}{}{}{}{}".format(date_grp, wday_grp, locs_grp, head_grp, body_grp)
     return re.compile(pattern, re.UNICODE)
