@@ -18,24 +18,26 @@ def fib_memoize(n):
     return memo[n]
 
 
-def fib_iterate(n):
+def fib_iterate(on):
+    '''iteratively compute function: seq num to fib num'''
     a, b = 0, 1
     for _ in range(n):
         a, b = b, a + b
     return a
     
 # Binet's formula (only good for n < 70)
-phi = (1 + 5**0.5) / 2
+PHI = (1 + 5**0.5) / 2
 
 def fib_binet(n):
-    return int(round((phi**n - (1-phi)**n) / 5**0.5))
+    return int(round((PHI**n - (1-PHI)**n) / 5**0.5))
     
 # Binet inverse formula
 
 def fib_binet_inverse(f):
+    '''inverse: fibonacci number to sequence number'''
     if f < 2:
         return f
-    return int(round(log(f * 5**0.5) / log(phi)))
+    return int(round(log(f * 5**0.5) / log(PHI)))
 
 # fibonacci_matrix
 def mul(A, B):
