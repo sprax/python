@@ -5,7 +5,6 @@
 import argparse
 import datetime
 import re
-import sys
 import time
 
 import paragraphs
@@ -135,7 +134,7 @@ def extract_date_head_body(paragraph, verbose):
             print()
         return rem.groups()
     else:
-        return (None, None, None, paragraph)
+        return (None, None, None, None, paragraph)
 
 # rgx_qt = re.compile(r"(?:^\s*|said\s+|says\s+|\t\s*|[,:-]\s+)['\"](.*?)([,.!?])['\"](?:\s+|$)")
 # @staticmethod
@@ -158,7 +157,7 @@ def main():
     default_format_out = '%Y.%m.%d %a'
     default_num_days = 7
     default_jrnl_input = "djs.txt"
-    default_start_date = start_date = datetime.datetime.now()
+    # default_start_date = start_date = datetime.datetime.now()
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="Read/write journal-entry style dates"
