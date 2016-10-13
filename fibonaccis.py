@@ -1,6 +1,7 @@
 # fibonaccis.py -- several ways of generating and printing the Fibonacci series
 
 import math
+from math import log
 
 def fib_recurse(n):
     if n <= 1:
@@ -19,7 +20,7 @@ def fib_memoize(n):
 
 def fib_iterate(n):
     a, b = 0, 1
-    for i in range(n):
+    for _ in range(n):
         a, b = b, a + b
     return a
     
@@ -30,7 +31,6 @@ def fib_binet(n):
     return int(round((phi**n - (1-phi)**n) / 5**0.5))
     
 # Binet inverse formula
-from math import log
 
 def fib_binet_inverse(f):
     if f < 2:
@@ -43,18 +43,20 @@ def mul(A, B):
     d, e, f = B
     return a*d + b*e, a*e + b*f, b*e + c*f
 
-def pow(A, n):
+def power(A, n):
+    '''Raise A to the nth power'''
     if n == 1:     return A
-    if n & 1 == 0: return pow(mul(A, A), n//2)
-    else:          return mul(A, pow(mul(A, A), (n-1)//2))
+    if n & 1 == 0: return power(mul(A, A), n//2)
+    else:          return mul(A, power(mul(A, A), (n-1)//2))
 
 def fib_matrix(n):
     if n < 2: return n
-    return pow((1,1,0), n-1)[0]
+    return power((1,1,0), n-1)[0]
 
 
 # fibonacci_generator
 def fib_generate(n):
+    '''gen fibs'''
     a, b, x = 0, 1, 0
     while x < n:
         yield a
@@ -62,7 +64,7 @@ def fib_generate(n):
         x = x+1
 
 
-# fibonacci_generator
+# fibonacci_reciprocal_generator
 def fib_generate_recip(n):
     a, b, x = 1, 2, 1
     while x < n:
@@ -72,8 +74,9 @@ def fib_generate_recip(n):
 
 
 def main_fib():
+    '''test fibs'''
     n = 7
-    fib_generated = [y for y in fib_generate(n) ]
+    fib_generated = [y for y in fib_generate(n)]
     print('memoize  matrix  iterate generate  recurse    binet')
     for x in range(1, n):
         print(repr(fib_memoize(x)).rjust(7), 
@@ -82,15 +85,14 @@ def main_fib():
               repr(fib_generated[x]).rjust(8),
               repr(fib_recurse(x)).rjust(8),
               repr(fib_binet(x)).rjust(8),
-              )
-              
-    print('sum: {0}'.format(sum(fib_generate(32))));
+             )
+    print('sum: {0}'.format(sum(fib_generate(32))))
     print('sum of {1}s: {0}'.format(sum(fib_generate_recip(32)), 'reciprocal'))
     #old style
     print('The values of PI and E are approximately: %7.5f and %7.5f.' % (math.pi, math.e))
-    print('The values of GM and Euler\'s are close to {1:.5f} and {0:.5f}.'.format(math.e, (1 + math.sqrt(5))/2))
+    print('The values of GM and Euler\'s are close to {1:.5f} and {0:.5f}.'
+          .format(math.e, (1 + math.sqrt(5))/2))
     print('The story of {0}, {1}, and {other}.'.format('Bill', 'Manfred', other='George'))
 
 if __name__ == '__main__':
     main_fib()
-
