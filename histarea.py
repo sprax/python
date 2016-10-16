@@ -36,15 +36,14 @@ def test_one(histogram):
     '''Test histarea on one array'''
     length = len(histogram)
     area = histarea(histogram, length)
-    print "Area from histogram:", histogram, "=>", area
-    print
+    print("Area from histogram:", histogram, "=>", area)
+    print()
 
 def test_histarea():
     '''Test driver for histarea'''
-    print sys.argv[0], ": test_histarea"	# program_name
+    print(sys.argv[0], ": test_histarea")	# program_name
     test_one([10, 5, 10, 15, 10, 20])
     test_one([-1, 2, 32, -4, 4, 44, 2, 38, 0])
 
 if __name__ == '__main__':
     test_histarea()
-
