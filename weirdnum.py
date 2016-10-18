@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/user/local/bin/python3
 # https://www.hackerrank.com/challenges/py-if-else?h_r=next-challenge&h_v=zen
 '''Without using if-else (elif)'''
 
