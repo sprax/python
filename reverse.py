@@ -1,11 +1,11 @@
 '''reverse a string'''
 
-STR = 'spam'
-print(STR[::-1])
+import sys
 
 def reverse_string(string):
     '''reverse'''
     return string[::-1]
 
-RTS = reverse_string('Jesus Mary and Joseph')
-print(RTS)
+if __name__ == '__main__':
+    string = sys.argv[1] if len(sys.argv) > 1 else 'Jesus Mary and Joseph'
+    print(string, '==>', reverse_string(string))
