@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Sprax Lines       2016.09.26      Written for Python 3.5
-'''Output some dates.'''
+'''Parse a debate transcript into speaker turns.'''
 
 import argparse
 import datetime
@@ -9,34 +9,6 @@ import time
 
 import paragraphs
 from utf_print import utf_print
-
-# DAY_CODES = ['Mnd', 'Tsd', 'Wnd', 'Thd', 'Frd', 'Std', 'Snd']
-
-def print_dates(out_format, start_date, offset_days, num_days, per_day, verbose):
-    '''Output num_days consecutive formatted dates from start_date'''
-    date = start_date
-    date += datetime.timedelta(days=offset_days)
-    # for _ in itertools.repeat(None, num_days):
-    for _ in range(num_days):
-        tstm = date.timetuple()
-        if verbose > 2:
-            print(tstm)
-        dstr = time.strftime(out_format, tstm)
-        if tstm.tm_wday < 5:
-            locs = 'Home/CIC'
-        elif tstm.tm_wday == 5:
-            locs = 'Home/NH'
-        else:
-            locs = 'Home/MIT'
-        # code = DAY_CODES[tstm.tm_wday]
-        # print(tstm)
-        # print("%s ==> %s %s\t%s" % (date, dstr, code, locs))
-        if per_day > 1:
-            print("%s AM \t%s" % (dstr, locs))
-            print("%s PM \t%s" % (dstr, 'Home'))
-        else:
-            print("%s\t%s" % (dstr, locs))
-        date += datetime.timedelta(days=1)
 
 def try_parse_date(text, in_formats):
     '''Try to extract a date by matching the input date formats.'''
@@ -89,7 +61,7 @@ def replace_dates(texts, in_formats, out_format, verbose):
     return texts_out
 
 
-def reformat_journal(jrnl_file, in_formats, out_format, verbose):
+def reformat_debate(jrnl_file, in_formats, out_format, verbose):
     '''rewrite journal file in canonical format'''
     print("convert diary to jrnl format: out_format:", out_format)
     for ref in reformat_all_paragraphs(jrnl_file, in_formats, out_format, verbose):
@@ -155,7 +127,7 @@ def dated_entry_regex():
     return re.compile(pattern, re.UNICODE)
 
 def main():
-    '''get args and call print_dates'''
+    '''get args and call ...'''
     default_format_out = '%Y.%m.%d %a'
     default_num_days = 7
     default_jrnl_input = "djs.txt"
@@ -193,11 +165,7 @@ def main():
             print("WARNING: Failed to parse start date: {}; using default: {}"
                   .format(args.start_date, start_date))
 
-    if args.jrnl_input:
-        reformat_journal(args.jrnl_input, in_formats, out_format, args.verbose)
-    else:
-        print_dates(out_format, start_date, args.offset_days, args.num_days
-                    , args.per_day, args.verbose)
+    reformat_debate(args.jrnl_input, in_formats, out_format, args.verbose)
 
 if __name__ == '__main__':
     main()
