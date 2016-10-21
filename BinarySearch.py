@@ -1,4 +1,7 @@
 
+import unittest
+import fibonaccis
+
 class BinarySearch:
     """BinarySearch: find exact values or bounds in a numerical array"""
 
@@ -26,8 +29,8 @@ class BinarySearch:
         return -1;
 
 
-    def findLowerBound(self, A, val):
-        """findLowerBound
+    def find_lower_bound(self, A, val):
+        """find_lower_bound
         Return an index for the largest element v in intArray such that 
         v <= specified value.
         If there is no such element in A, return -1
@@ -51,8 +54,8 @@ class BinarySearch:
         return -1
 
 
-    def findUpperBound(self, A, val):
-        """findUpperBound
+    def find_upper_bound(self, A, val):
+        """find_upper_bound
         Return index of smallest element v in A s.t v >= specified value.
         If there is no such element in A, return -1.
         """        
@@ -211,13 +214,11 @@ def etc():
 }
 """
 
-import unittest
-import fibonacci
 
 class TestBinarySearch(unittest.TestCase):
 
     def setUp(self):
-        self.intArray = [y for y in fibonacci.fib_generate(20) ]
+        self.intArray = [y for y in fibonaccis.fib_generate(20) ]
         self.testVals = [-2, 0, 1, 2, 20, 21, 22, 8888]
         print(str(BinarySearch.__doc__))
         print(str(self.id()), '\n')
@@ -234,9 +235,9 @@ class TestBinarySearch(unittest.TestCase):
                 print("exact value", val, "not found")
         print()
 
-    def test_findLowerBound(self):
+    def test_find_lower_bound(self):
         bs = BinarySearch()
-        fn = bs.findLowerBound;
+        fn = bs.find_lower_bound;
         print(str(fn.__doc__))
         print(self.intArray)
         for val in self.testVals:
@@ -247,18 +248,19 @@ class TestBinarySearch(unittest.TestCase):
                 print("lower bound for", val, "not found")
         print()
 
-    def test_findUpperBound(self):
+    def test_find_upper_bound(self):
         bs = BinarySearch()
-        fn = bs.findUpperBound;
+        fn = bs.find_upper_bound;
         print(str(fn.__doc__))
         print(self.intArray)
         for val in self.testVals:
             r = fn(self.intArray, val)
             if (r >= 0):
                 print("upper bound", self.intArray[r], "found for", val, "at index", r)
-            else:
+            else:
                 print("upper bound for", val, "not found")
-        print()
-
-if __name__ == '__main__':
-    unittest.main()
+        print()
+
+if __name__ == '__main__':
+    unittest.main()
+
