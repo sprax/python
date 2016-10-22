@@ -13,7 +13,7 @@ import re
 import sys
 from collections import Counter
 
-import utf_print
+from utf_print import utf_print
 
 def paragraph_iter(fileobj, rgx_para_separator='\n'):
     '''yields paragraphs from text file and regex separator'''
@@ -39,7 +39,7 @@ def print_paragraphs(path, charset='utf8'):
     with open(path, 'r', encoding=charset) as text:
         for idx, para in enumerate(paragraph_iter(text)):
             print("    Paragraph {}:".format(idx))
-            utf_print.utf_print(para)
+            utf_print(para)
             print()
 
 def paragraph_reader(path, charset="utf8"):
@@ -57,7 +57,7 @@ def print_paragraphs_leaky(path):
     para_iter, fileobj = paragraph_reader(path)
     for idx, para in enumerate(para_iter):
         print("    Paragraph {}:".format(idx))
-        utf_print.utf_print(para)
+        utf_print(para)
         print()
     fileobj.close()
 
@@ -69,6 +69,8 @@ def main():
         )
     parser.add_argument('text_file', type=str, nargs='?', default='corpus.txt',
                         help='text file containing quoted dialogue')
+    parser.add_argument('-mode', type=int, nargs='?', const=1, default=1,
+            help='mode: 1 = ALL, 2 = First 10 words (default: 1)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
@@ -77,7 +79,7 @@ def main():
         print("args:", args)
         print(__doc__)
 
-    print_paragraphs(args.text_file)
+    print_paragraphs(args.text_file, args.mode)
     print("\n\t LEAKY VERSION: \n")
     print_paragraphs_leaky(args.text_file)
 
