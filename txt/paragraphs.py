@@ -33,7 +33,7 @@ def paragraph_iter(fileobj, rgx_para_separator='\n'):
     if paragraph:
         yield paragraph
 
-def print_paragraphs(path, charset='utf8'):
+def print_paragraphs(path, mode, charset='utf8'):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs:")
     with open(path, 'r', encoding=charset) as text:
@@ -70,7 +70,7 @@ def main():
     parser.add_argument('text_file', type=str, nargs='?', default='corpus.txt',
                         help='text file containing quoted dialogue')
     parser.add_argument('-mode', type=int, nargs='?', const=1, default=1,
-            help='mode: 1 = ALL, 2 = First 10 words (default: 1)')
+                        help='mode: 1 = ALL, 2 = First 10 words (default: 1)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
