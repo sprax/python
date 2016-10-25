@@ -10,8 +10,6 @@
 
 import argparse
 import re
-import sys
-from collections import Counter
 
 from utf_print import utf_print
 
@@ -33,21 +31,28 @@ def paragraph_iter(fileobj, rgx_para_separator='\n'):
     if paragraph:
         yield paragraph
 
-def print_paragraphs(path, mode, charset='utf8'):
+def print_paragraphs(path, max_words, charset='utf8'):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs:")
     with open(path, 'r', encoding=charset) as text:
-        for idx, para in enumerate(paragraph_iter(text)):
-            print("    Paragraph {}:".format(idx))
-            utf_print(para)
-            print()
+        if max_words < 1:
+            for idx, para in enumerate(paragraph_iter(text)):
+                print("    Paragraph {}:".format(idx))
+                utf_print(para)
+                print()
+        else:
+            for idx, para in enumerate(paragraph_iter(text)):
+                words = para.split()[:max_words]
+                print("    Paragraph {}:".format(idx))
+                utf_print(' '.join(words))
+                print()
 
 def paragraph_reader(path, charset="utf8"):
     '''opens text file and returns paragraph iterator'''
     try:
         text = open(path, 'r', encoding=charset)
         return paragraph_iter(text), text
-    except ex:
+    except FileNotFoundError as ex:
         print("Warning:", ex)
         return None
 
@@ -63,14 +68,12 @@ def print_paragraphs_leaky(path):
 
 def main():
     '''Driver to iterate over the paragraphs in a text file.'''
-    parser = argparse.ArgumentParser(
-        # usage='%(prog)s [options]',
-        description="Count some quoted ways of saying 'No'",
-        )
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('text_file', type=str, nargs='?', default='corpus.txt',
                         help='text file containing quoted dialogue')
-    parser.add_argument('-mode', type=int, nargs='?', const=1, default=1,
-                        help='mode: 1 = ALL, 2 = First 10 words (default: 1)')
+    parser.add_argument('-max_words', type=int, nargs='?', const=1, default=0,
+                        help='maximum words per paragraph: print only the first M words,\
+			or all if M < 1 (default: 0)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
@@ -79,7 +82,7 @@ def main():
         print("args:", args)
         print(__doc__)
 
-    print_paragraphs(args.text_file, args.mode)
+    print_paragraphs(args.text_file, args.max_words)
     print("\n\t LEAKY VERSION: \n")
     print_paragraphs_leaky(args.text_file)
 
