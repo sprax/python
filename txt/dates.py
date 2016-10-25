@@ -159,7 +159,7 @@ def main():
     default_format_out = '%Y.%m.%d %a'
     default_num_days = 7
     default_jrnl_input = "djs.txt"
-    # default_start_date = start_date = datetime.datetime.now()
+    default_start_date = start_date = datetime.datetime.now()
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="Read/write journal-entry style dates"
