@@ -31,21 +31,56 @@ def paragraph_iter(fileobj, rgx_para_separator='\n'):
     if paragraph:
         yield paragraph
 
-def print_paragraphs(path, max_words, charset='utf8'):
+
+def print_paragraphs(path, charset='utf8'):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs:")
     with open(path, 'r', encoding=charset) as text:
-        if max_words < 1:
-            for idx, para in enumerate(paragraph_iter(text)):
-                print("    Paragraph {}:".format(idx))
-                utf_print(para)
-                print()
-        else:
-            for idx, para in enumerate(paragraph_iter(text)):
-                words = para.split()[:max_words]
-                print("    Paragraph {}:".format(idx))
-                utf_print(' '.join(words))
-                print()
+        for idx, para in enumerate(paragraph_iter(text)):
+            print("    Paragraph {}:".format(idx))
+            utf_print(para)
+            print()
+
+def print_paragraphs_split_join_str(path, max_words, charset='utf8'):
+    '''Prints sequence numbers and paragraphs.'''
+    print("print_paragraphs:")
+    with open(path, 'r', encoding=charset) as text:
+        for idx, para in enumerate(paragraph_iter(text)):
+            words = para.split()[:max_words]
+            print("    Paragraph {}:".format(idx))
+            utf_print(' '.join(words))
+            print()
+
+def print_paragraphs_split_join_rgx(path, max_words, charset='utf8'):
+    '''Prints sequence numbers and paragraphs.'''
+    print("print_paragraphs:")
+    with open(path, 'r', encoding=charset) as text:
+        for idx, para in enumerate(paragraph_iter(text)):
+            words = re.split('\W*\s+\W*', para)[:max_words]
+            print("    Paragraph {}:".format(idx))
+            utf_print(' '.join(words))
+            print()
+
+            
+def find_nth(string, pat, n=0, overlap=False):
+    l = 1 if overlap else len(pat)
+    i = -l
+    for c in range(n + 1):
+        i = string.find(pat, i + l)
+        if i < 0:
+            break
+    return i
+
+
+def print_paragraphs_trunc(path, max_words, charset='utf8'):
+    '''Prints sequence numbers and paragraphs.'''
+    print("print_paragraphs:")
+    with open(path, 'r', encoding=charset) as text:
+        for idx, para in enumerate(paragraph_iter(text)):
+            words = para.split()[:max_words]
+            print("    Paragraph {}:".format(idx))
+            utf_print(' '.join(words))
+            print()
 
 def paragraph_reader(path, charset="utf8"):
     '''opens text file and returns paragraph iterator'''
@@ -81,10 +116,15 @@ def main():
     if args.verbose > 2:
         print("args:", args)
         print(__doc__)
+   
+    if args.max_words > 0:
+        print_paragraphs_trunc(args.text_file, args.max_words)
+    elif args.max_words == 0:
+        print_paragraphs(args.text_file)
+    else:
+        print("\n\t LEAKY VERSION: \n")
+        print_paragraphs_leaky(args.text_file)
 
-    print_paragraphs(args.text_file, args.max_words)
-    print("\n\t LEAKY VERSION: \n")
-    print_paragraphs_leaky(args.text_file)
 
 if __name__ == '__main__':
     main()
