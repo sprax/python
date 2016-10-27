@@ -106,6 +106,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('text_file', type=str, nargs='?', default='corpus.txt',
                         help='text file containing quoted dialogue')
+    parser.add_argument('-function', type=int, nargs='?', const=1, default=0,
+                        help='paragraph printing function: 0=all (default: 0)')
     parser.add_argument('-max_words', type=int, nargs='?', const=1, default=0,
                         help='maximum words per paragraph: print only the first M words,\
 			or all if M < 1 (default: 0)')
