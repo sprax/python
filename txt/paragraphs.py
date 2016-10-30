@@ -124,7 +124,9 @@ def main():
     elif args.function == 1:
         print_paragraphs_trunc(args.text_file, args.max_words)
     elif args.function == 2:
-        print_paragraphs_trunc(args.text_file, args.max_words)
+        print_paragraphs_split_join_str(args.text_file, args.max_words)
+    elif args.function == 3:
+        print_paragraphs_split_join_rgx(args.text_file, args.max_words)
     elif args.function == 3:
         print("\n\t LEAKY VERSION: \n")
     else:
