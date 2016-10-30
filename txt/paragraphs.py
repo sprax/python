@@ -119,13 +119,17 @@ def main():
         print("args:", args)
         print(__doc__)
    
-    if args.max_words > 0:
-        print_paragraphs_trunc(args.text_file, args.max_words)
-    elif args.max_words == 0:
+    if args.function == 0:
         print_paragraphs(args.text_file)
-    else:
+    elif args.function == 1:
+        print_paragraphs_trunc(args.text_file, args.max_words)
+    elif args.function == 2:
+        print_paragraphs_trunc(args.text_file, args.max_words)
+    elif args.function == 3:
         print("\n\t LEAKY VERSION: \n")
+    else:
         print_paragraphs_leaky(args.text_file)
+    
 
 
 if __name__ == '__main__':
