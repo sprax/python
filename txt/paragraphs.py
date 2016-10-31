@@ -88,7 +88,7 @@ def index_substr_nth(string, count=0, subs=' ', overlap=False):
     '''index of nth occurrence of substring in string'''
     skip = 1 if overlap else len(subs)
     index = -skip
-    for c in range(count + 1):
+    for _ in range(count + 1):
         index = string.find(subs, index + skip)
         if index < 0:
             break
@@ -97,12 +97,16 @@ def index_substr_nth(string, count=0, subs=' ', overlap=False):
 
 def index_regex_nth(string, count=0, rgx=re.compile(r'\s+'), overlap=False):
     '''index of nth occurrence of regex pattern in string'''
-    for c in range(count + 1):
+    index = 0
+    offset = 0
+    for _ in range(count + 1):
         # index = rgx.finditer(string, index + skip)
-        index = string.find(subs, index + 1) # FIXME: this is wrong
-        if index < 0:
-            break
-    return index
+        mat = rgx.search(string, offset)
+        if not mat:
+            return -1
+        mat_span = mat.span()
+        offset = mat_span[1]
+    return mat_span[0]
 
 def print_paragraphs_trunc(path, max_words, charset='utf8'):
     '''Prints sequence numbers and paragraphs.'''
