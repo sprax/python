@@ -51,6 +51,7 @@ def print_paragraphs_split_join_str(path, max_words, charset='utf8'):
             utf_print(' '.join(words))
             print()
 
+
 def print_paragraphs_split_join_rgx(path, max_words, charset='utf8'):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs:")
@@ -62,15 +63,46 @@ def print_paragraphs_split_join_rgx(path, max_words, charset='utf8'):
             print()
 
             
-def find_nth(string, pat, n=0, overlap=False):
-    l = 1 if overlap else len(pat)
-    i = -l
-    for c in range(n + 1):
-        i = string.find(pat, i + l)
-        if i < 0:
-            break
-    return i
 
+def print_paragraphs_nth_substr(path, max_words, charset='utf8'):
+    '''Prints sequence numbers and paragraphs.'''
+    print("print_paragraphs_nth_substr(", path, max_words, charset, ")" )
+    with open(path, 'r', encoding=charset) as text:
+        for idx, para in enumerate(paragraph_iter(text)):
+            index = index_substr_nth(para, max_words)
+            print("    Paragraph {}:".format(idx))
+            utf_print(para[:index])
+            print()
+
+def print_paragraphs_nth_regex(path, max_words, charset='utf8'):
+    '''Prints sequence numbers and paragraphs.'''
+    print("print_paragraphs_nth_substr(", path, max_words, charset, ")" )
+    with open(path, 'r', encoding=charset) as text:
+        for idx, para in enumerate(paragraph_iter(text)):
+            index = index_regex_nth(para, max_words)
+            print("    Paragraph {}:".format(idx))
+            utf_print(para[:index])
+            print()
+            
+def index_substr_nth(string, count=0, subs=' ', overlap=False):
+    '''index of nth occurrence of substring in string'''
+    skip = 1 if overlap else len(subs)
+    index = -skip
+    for c in range(count + 1):
+        index = string.find(subs, index + skip)
+        if index < 0:
+            break
+    return index
+
+
+def index_regex_nth(string, count=0, rgx=re.compile(r'\s+'), overlap=False):
+    '''index of nth occurrence of regex pattern in string'''
+    for c in range(count + 1):
+        # index = rgx.finditer(string, index + skip)
+        index = string.find(subs, index + 1) # FIXME: this is wrong
+        if index < 0:
+            break
+    return index
 
 def print_paragraphs_trunc(path, max_words, charset='utf8'):
     '''Prints sequence numbers and paragraphs.'''
@@ -127,9 +159,12 @@ def main():
         print_paragraphs_split_join_str(args.text_file, args.max_words)
     elif args.function == 3:
         print_paragraphs_split_join_rgx(args.text_file, args.max_words)
-    elif args.function == 3:
-        print("\n\t LEAKY VERSION: \n")
+    elif args.function == 4:
+        print_paragraphs_nth_substr(args.text_file, args.max_words)
+    elif args.function == 5:
+        print_paragraphs_nth_regex(args.text_file, args.max_words)
     else:
+        print("\n\t LEAKY VERSION: \n")
         print_paragraphs_leaky(args.text_file)
     
 
