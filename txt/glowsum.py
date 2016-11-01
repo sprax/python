@@ -86,7 +86,7 @@ def main():
         print("args:", args)
         print(__doc__)
 
-    freqsum = FrequencySummarizer()
+    freqsum = FrequencySummarizer(min_cut=0.2, max_cut=0.95)
     with open(args.text_file, 'r') as src:
         text = src.read()
         title = args.text_file
