@@ -25,13 +25,13 @@ class FrequencySummarizer:
     """ 
       Compute the frequency of each of word.
       Input: 
-       word_sent, a list of sentences already tokenized.
+          word_sent, a list of sentences already tokenized.
       Output: 
-       freq, a dictionary where freq[w] is the frequency of w.
+          freq, a dictionary where freq[w] is the frequency of w.
     """
     freq = defaultdict(int)
-    for s in word_sent:
-      for word in s:
+    for sentence in word_sent:
+      for word in sentence:
         if word not in self._stopwords:
           freq[word] += 1
     # frequencies normalization and fitering
