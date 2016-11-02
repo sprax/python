@@ -11,7 +11,7 @@ from string import punctuation
 from heapq import nlargest
 
 class FrequencySummarizer:
-  def __init__(self, min_cut=0.1, max_cut=0.9):
+  def __init__(self, text, min_cut=0.1, max_cut=0.9):
     """
      Initilize the text summarizer.
      Words that have a frequency term lower than min_cut 
@@ -20,6 +20,16 @@ class FrequencySummarizer:
     self._min_cut = min_cut
     self._max_cut = max_cut 
     self._stopwords = set(stopwords.words('english') + list(punctuation))
+    self._freq = self._init_freqs(text)
+
+  def _init_freqs(self, text):
+    """
+      Return a list of N sentences 
+      which represent the summary of text.
+    """
+    self._sents = sent_tokenize(text)
+    self._word_sent = [word_tokenize(s.lower()) for s in self._sents]
+    return self._compute_frequencies(self._word_sent)
 
   def _compute_frequencies(self, word_sent):
     """ 
@@ -45,22 +55,16 @@ class FrequencySummarizer:
         freq.pop(key, None)
     return freq
 
+
   def summarize(self, text, summary_sentence_count):
-    """
-      Return a list of N sentences 
-      which represent the summary of text.
-    """
-    sents = sent_tokenize(text)
-    assert summary_sentence_count <= len(sents)
-    word_sent = [word_tokenize(s.lower()) for s in sents]
-    self._freq = self._compute_frequencies(word_sent)
     ranking = defaultdict(int)
-    for i,sent in enumerate(word_sent):
+    assert summary_sentence_count <= len(self._sents)
+    for i, sent in enumerate(self._word_sent):
       for w in sent:
         if w in self._freq:
           ranking[i] += self._freq[w]
     sents_idx = self._rank(ranking, summary_sentence_count)    
-    return [sents[j] for j in sents_idx]
+    return [self._sents[j] for j in sents_idx]
 
   def _rank(self, ranking, summary_sentence_count):
     """ return the first count sentences with highest ranking """
@@ -72,7 +76,7 @@ def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_sent_co
         text = src.read()
         src.close()
 
-    freqsum = FrequencySummarizer(min_cut=min_freq, max_cut=max_freq)
+    freqsum = FrequencySummarizer(text, min_cut=min_freq, max_cut=max_freq)
     title = text_file
     print(text_file, '====>', summary_file)
     print(title)
