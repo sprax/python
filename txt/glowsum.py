@@ -47,7 +47,7 @@ class FrequencySummarizer:
 
   def summarize(self, text, summary_sentence_count):
     """
-      Return a list of count sentences 
+      Return a list of N sentences 
       which represent the summary of text.
     """
     sents = sent_tokenize(text)
@@ -68,21 +68,23 @@ class FrequencySummarizer:
 
 
 def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_sent_count, verbose):
-    freqsum = FrequencySummarizer(min_cut=min_freq, max_cut=max_freq)
     with open(text_file, 'r') as src:
         text = src.read()
-        title = text_file
-        print(text_file, '====>', summary_file)
-        print(title)
-        print('---------------------------------------------------------------------------')
-        summary_sentences = freqsum.summarize(text, sum_sent_count)
-        with open(summary_file, 'w') as outfile:
-            for sum_sentence in summary_sentences:
-                if verbose > 0:
-                    print(sum_sentence)
-                    print()
-                print(sum_sentence, file=outfile)
-            outfile.close()
+        src.close()
+
+    freqsum = FrequencySummarizer(min_cut=min_freq, max_cut=max_freq)
+    title = text_file
+    print(text_file, '====>', summary_file)
+    print(title)
+    print('---------------------------------------------------------------------------')
+    summary_sentences = freqsum.summarize(text, sum_sent_count)
+    with open(summary_file, 'w') as outfile:
+        for sum_sentence in summary_sentences:
+            if verbose > 0:
+                print(sum_sentence)
+                print()
+            print(sum_sentence, file=outfile)
+        outfile.close()
 
 def main():
     '''Extract summary from text.'''
