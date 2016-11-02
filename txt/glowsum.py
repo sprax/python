@@ -45,13 +45,13 @@ class FrequencySummarizer:
         freq.pop(key, None)
     return freq
 
-  def summarize(self, text, n):
+  def summarize(self, text, summary_sentence_count):
     """
-      Return a list of n sentences 
+      Return a list of count sentences 
       which represent the summary of text.
     """
     sents = sent_tokenize(text)
-    assert n <= len(sents)
+    assert summary_sentence_count <= len(sents)
     word_sent = [word_tokenize(s.lower()) for s in sents]
     self._freq = self._compute_frequencies(word_sent)
     ranking = defaultdict(int)
@@ -59,26 +59,28 @@ class FrequencySummarizer:
       for w in sent:
         if w in self._freq:
           ranking[i] += self._freq[w]
-    sents_idx = self._rank(ranking, n)    
+    sents_idx = self._rank(ranking, summary_sentence_count)    
     return [sents[j] for j in sents_idx]
 
-  def _rank(self, ranking, n):
-    """ return the first n sentences with highest ranking """
-    return nlargest(n, ranking, key=ranking.get)
+  def _rank(self, ranking, summary_sentence_count):
+    """ return the first count sentences with highest ranking """
+    return nlargest(summary_sentence_count, ranking, key=ranking.get)
 
 
-def summarize_text_file(text_file, summary_file, min_freq, max_freq, verbose):
+def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_sent_count, verbose):
     freqsum = FrequencySummarizer(min_cut=min_freq, max_cut=max_freq)
     with open(text_file, 'r') as src:
         text = src.read()
         title = text_file
-        print('----------------------------------')
+        print(text_file, '====>', summary_file)
         print(title)
-        summary_sentences = freqsum.summarize(text, 2)
+        print('---------------------------------------------------------------------------')
+        summary_sentences = freqsum.summarize(text, sum_sent_count)
         with open(summary_file, 'w') as outfile:
             for sum_sentence in summary_sentences:
                 if verbose > 0:
                     print(sum_sentence)
+                    print()
                 print(sum_sentence, file=outfile)
             outfile.close()
 
@@ -96,6 +98,8 @@ def main():
                         help='maximum frequency cut-off (default: 0.9)')
     parser.add_argument('-min_freq', type=float, nargs='?', const=1, default=0.1,
                         help='minimum frequency cut-off (default: 0.1)')
+    parser.add_argument('-sentence_count', type=int, nargs='?', const=1, default=2,
+                        help='summary sentence count (default: 2)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
@@ -104,7 +108,8 @@ def main():
         print("args:", args)
         print(__doc__)
 
-    summarize_text_file(args.text_file, args.summary_file, args.min_freq, args.max_freq, args.verbose)
+    summarize_text_file(args.text_file, args.summary_file, args.min_freq, args.max_freq,
+            args.sentence_count, args.verbose)
 
 
 if __name__ == '__main__':
