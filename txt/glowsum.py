@@ -67,6 +67,20 @@ class FrequencySummarizer:
     return nlargest(n, ranking, key=ranking.get)
 
 
+def summarize_text_file(text_file, summary_file, min_freq, max_freq, verbose):
+    freqsum = FrequencySummarizer(min_cut=min_freq, max_cut=max_freq)
+    with open(text_file, 'r') as src:
+        text = src.read()
+        title = text_file
+        print('----------------------------------')
+        print(title)
+        summary_sentences = freqsum.summarize(text, 2)
+        with open(summary_file, 'w') as outfile:
+            for sum_sentence in summary_sentences:
+                if verbose > 0:
+                    print(sum_sentence)
+                print(sum_sentence, file=outfile)
+            outfile.close()
 
 def main():
     '''Extract summary from text.'''
@@ -78,6 +92,10 @@ def main():
                         help='text file containing quoted dialogue')
     parser.add_argument('summary_file', type=str, nargs='?', default='corpus_summary.txt',
                         help='output file of quoted dialogue extracted from the corpus')
+    parser.add_argument('-max_freq', type=float, nargs='?', const=1, default=0.9,
+                        help='maximum frequency cut-off (default: 0.9)')
+    parser.add_argument('-min_freq', type=float, nargs='?', const=1, default=0.1,
+                        help='minimum frequency cut-off (default: 0.1)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
@@ -86,19 +104,8 @@ def main():
         print("args:", args)
         print(__doc__)
 
-    freqsum = FrequencySummarizer(min_cut=0.2, max_cut=0.95)
-    with open(args.text_file, 'r') as src:
-        text = src.read()
-        title = args.text_file
-        print('----------------------------------')
-        print(title)
-        summary_sentences = freqsum.summarize(text, 2)
-        with open(args.summary_file, 'w') as outfile:
-            for sum_sentence in summary_sentences:
-                if args.verbose > 0:
-                    print(sum_sentence)
-                print(sum_sentence, file=outfile)
-            outfile.close()
+    summarize_text_file(args.text_file, args.summary_file, args.min_freq, args.max_freq, args.verbose)
+
 
 if __name__ == '__main__':
     main()
