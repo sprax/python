@@ -22,10 +22,11 @@ class FrequencySummarizer:
         self._min_freq = min_freq
         self._max_freq = max_freq 
         self._stopwords = set(nltk.corpus.stopwords.words('english') + list(string.punctuation))
+        self._total_words = 0
         self._word_counts = defaultdict(int)
+        self._text_paragraphs = []
         self._text_sentences = []
         self._snt_word_lists = []
-        self._paragraph_count = 0
 
     def add_text(self, text):
         '''Add text that may contain one or more blank-line separated paragraphs.'''
@@ -35,6 +36,7 @@ class FrequencySummarizer:
 
     def add_paragraph(self, paragraph):
         '''Add a single paragraph containing one or more sentences.'''
+        self._text_paragraphs.append(paragraph)
         sentences = nltk.sent_tokenize(paragraph)
         self._text_sentences.extend(sentences)
         for sentence in sentences:
@@ -42,6 +44,7 @@ class FrequencySummarizer:
             word_list = nltk.word_tokenize(sentence.lower())
             # word_list = nltk.word_tokenize(sentence.decode("utf8").lower())
             for word in word_list:
+                self._total_words += 1
                 self._word_counts[word] += 1
                 word_hash[word] = 1 + (word_hash[word] if word in word_hash else 0)
             self._snt_word_lists.append(word_hash)
@@ -51,13 +54,15 @@ class FrequencySummarizer:
 
     def summarize(self, summary_sentence_count):
         self.filter_words()
+        words_per_sentence = self._total_words / len(self._text_sentences)
         ranking = defaultdict(int)
         input_count = len(self._text_sentences)
         if  summary_sentence_count > input_count:
             summary_sentence_count = input_count
         assert summary_sentence_count <= len(self._text_sentences)
         for idx, snt_words in enumerate(self._snt_word_lists):
-            ranking[idx] = self._score_sentence(snt_words)
+            # ranking[idx] = self._score_sentence(snt_words) * (1.0 + 1.0/len(snt_words))
+            ranking[idx] = self._score_sentence(snt_words) * math.log(words_per_sentence*(1.0 + 1.0/len(snt_words)))
         sents_idx = self._rank(summary_sentence_count, ranking)    
         return [self._text_sentences[j] for j in sents_idx]
 
