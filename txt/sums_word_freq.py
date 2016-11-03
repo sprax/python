@@ -3,11 +3,13 @@
 # From http://glowingpython.blogspot.com/2014/09/text-summarization-with-nltk.html
 '''Summarize something.'''
 
+# from nltk.corpus import stopwords
+# from nltk.tokenize import sent_tokenize, word_tokenize
+# from string import punctuation
 import argparse
-from nltk.tokenize import sent_tokenize, word_tokenize
-from nltk.corpus import stopwords
+import nltk
+import string
 from collections import defaultdict
-from string import punctuation
 from heapq import nlargest
 
 from utf_print import utf_print
@@ -21,16 +23,16 @@ class FrequencySummarizer:
     """
     self._min_freq = min_freq
     self._max_freq = max_freq 
-    self._stopwords = set(stopwords.words('english') + list(punctuation))
+    self._stopwords = set(nltk.corpus.stopwords.words('english') + list(string.punctuation))
     self._word_counts = defaultdict(int)
     self._text_sentences = []
     self._word_sentences = []
 
   def add_text(self, text):
-    sentences = sent_tokenize(text)
+    sentences = nltk.sent_tokenize(text)
     self._text_sentences.extend(sentences)
     for sentence in sentences:
-         word_sentence = word_tokenize(sentence.lower())
+         word_sentence = nltk.word_tokenize(sentence.lower())
          self._word_sentences.append(word_sentence)
          for word in word_sentence:
              self._word_counts[word] += 1
