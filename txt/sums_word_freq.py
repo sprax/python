@@ -4,91 +4,92 @@
 '''Summarize something.'''
 
 import argparse
-from nltk.tokenize import sent_tokenize,word_tokenize
+from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from collections import defaultdict
 from string import punctuation
 from heapq import nlargest
 
+from utf_print import utf_print
+
 class FrequencySummarizer:
-  def __init__(self, text, min_cut=0.1, max_cut=0.9):
+  def __init__(self, min_freq=0.1, max_freq=0.9):
     """
      Initilize the text summarizer.
-     Words that have a frequency term lower than min_cut 
-     or higher than max_cut will be ignored.
+     Words that have a frequency term lower than min_freq 
+     or higher than max_freq will be ignored.
     """
-    self._min_cut = min_cut
-    self._max_cut = max_cut 
+    self._min_freq = min_freq
+    self._max_freq = max_freq 
     self._stopwords = set(stopwords.words('english') + list(punctuation))
-    self._freq = self._init_freqs(text)
+    self._word_counts = defaultdict(int)
+    self._text_sentences = []
+    self._word_sentences = []
 
-  def _init_freqs(self, text):
-    """
-      Return a list of N sentences 
-      which represent the summary of text.
-    """
-    self._sents = sent_tokenize(text)
-    self._word_sent = [word_tokenize(s.lower()) for s in self._sents]
-    return self._compute_frequencies(self._word_sent)
-
-  def _compute_frequencies(self, word_sent):
-    """ 
-      Compute the frequency of each of word.
-      Input: 
-          word_sent, a list of sentences already tokenized.
-      Output: 
-          freq, a dictionary where freq[w] is the frequency of w.
-    """
-    freq = defaultdict(int)
-    for sentence in word_sent:
-      for word in sentence:
-        if word not in self._stopwords:
-          freq[word] += 1
-    # frequencies normalization and fitering
-    m = float(max(freq.values()))
-    keys_to_delete = []
-    for w in freq.keys():
-      freq[w] = freq[w]/m
-      if freq[w] >= self._max_cut or freq[w] <= self._min_cut:
-        keys_to_delete.append(w)
-    for key in keys_to_delete:
-        freq.pop(key, None)
-    return freq
+  def add_text(self, text):
+    sentences = sent_tokenize(text)
+    self._text_sentences.extend(sentences)
+    for sentence in sentences:
+         word_sentence = word_tokenize(sentence.lower())
+         self._word_sentences.append(word_sentence)
+         for word in word_sentence:
+             self._word_counts[word] += 1
+    filter_word_counts(self._word_counts, self._stopwords, self._min_freq, self._max_freq)
 
 
   def summarize(self, text, summary_sentence_count):
     ranking = defaultdict(int)
-    assert summary_sentence_count <= len(self._sents)
-    for i, sent in enumerate(self._word_sent):
+    assert summary_sentence_count <= len(self._text_sentences)
+    for i, sent in enumerate(self._word_sentences):
       for w in sent:
-        if w in self._freq:
-          ranking[i] += self._freq[w]
+        if w in self._word_counts:
+          ranking[i] += self._word_counts[w]
     sents_idx = self._rank(ranking, summary_sentence_count)    
-    return [self._sents[j] for j in sents_idx]
+    return [self._text_sentences[j] for j in sents_idx]
 
   def _rank(self, ranking, summary_sentence_count):
     """ return the first count sentences with highest ranking """
     return nlargest(summary_sentence_count, ranking, key=ranking.get)
 
+###############################################################################
+
+def filter_word_counts(word_counts, stopwords, min_freq, max_freq):
+    """ remove any word in stopwords
+    or whose count is below the min or above the max threshold """
+    max_word_count = 0
+    for word, count in word_counts.items():
+        if count > max_word_count and word not in stopwords:
+            max_word_count = count
+    min_freq_count = max_word_count * min_freq
+    max_freq_count = max_word_count * max_freq
+    words_to_remove = []
+    for word, count in word_counts.items():
+        if count <= min_freq_count or count >= max_freq_count or word in stopwords:
+            words_to_remove.append(word)
+    for key in words_to_remove:
+        word_counts.pop(key, None)
 
 def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_sent_count, verbose):
+    """ Return a list of N sentences which represent the summary of text.  """
     with open(text_file, 'r') as src:
         text = src.read()
         src.close()
 
-    freqsum = FrequencySummarizer(text, min_cut=min_freq, max_cut=max_freq)
+    freqsum = FrequencySummarizer(min_freq, max_freq)
+    freqsum.add_text(text)
+
     title = text_file
     print(text_file, '====>', summary_file)
-    print(title)
     print('---------------------------------------------------------------------------')
     summary_sentences = freqsum.summarize(text, sum_sent_count)
     with open(summary_file, 'w') as outfile:
         for sum_sentence in summary_sentences:
             if verbose > 0:
-                print(sum_sentence)
+                utf_print(sum_sentence)
                 print()
             print(sum_sentence, file=outfile)
         outfile.close()
+    print('---------------------------------------------------------------------------')
 
 def main():
     '''Extract summary from text.'''
