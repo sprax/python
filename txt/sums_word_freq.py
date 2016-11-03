@@ -79,7 +79,7 @@ def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_sent_co
     freqsum.add_text(text)
 
     title = text_file
-    print(text_file, '====>', summary_file)
+    print(text_file, '====>', summary_file, "  keeping", sum_sent_count, "sentences.")
     print('---------------------------------------------------------------------------')
     summary_sentences = freqsum.summarize(text, sum_sent_count)
     with open(summary_file, 'w') as outfile:
