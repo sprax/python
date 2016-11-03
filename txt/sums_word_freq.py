@@ -15,49 +15,58 @@ from heapq import nlargest
 from utf_print import utf_print
 
 class FrequencySummarizer:
-  def __init__(self, min_freq=0.1, max_freq=0.9):
-    """
-     Initilize the text summarizer.
-     Words that have a frequency term lower than min_freq 
-     or higher than max_freq will be ignored.
-    """
-    self._min_freq = min_freq
-    self._max_freq = max_freq 
-    self._stopwords = set(nltk.corpus.stopwords.words('english') + list(string.punctuation))
-    self._word_counts = defaultdict(int)
-    self._text_sentences = []
-    self._word_sentences = []
 
-  def add_text(self, text):
-    sentences = nltk.sent_tokenize(text)
-    self._text_sentences.extend(sentences)
-    for sentence in sentences:
-         word_sentence = nltk.word_tokenize(sentence.lower())
-         self._word_sentences.append(word_sentence)
-         for word in word_sentence:
-             self._word_counts[word] += 1
-    filter_word_counts(self._word_counts, self._stopwords, self._min_freq, self._max_freq)
+    def __init__(self, min_freq=0.1, max_freq=0.9):
+        '''Initilize the text summarizer.'''
+        self._min_freq = min_freq
+        self._max_freq = max_freq 
+        self._stopwords = set(nltk.corpus.stopwords.words('english') + list(string.punctuation))
+        self._word_counts = defaultdict(int)
+        self._text_sentences = []
+        self._word_sentences = []
 
+    def add_text(self, text):
+        '''Add text that may contain one or more blank-line separated paragraphs.'''
+        paragraphs = nltk.blankline_tokenize(text)
+        for para in paragraphs:
+            self.add_paragraph(para)    
 
-  def summarize(self, text, summary_sentence_count):
-    ranking = defaultdict(int)
-    assert summary_sentence_count <= len(self._text_sentences)
-    for i, sent in enumerate(self._word_sentences):
-      for w in sent:
-        if w in self._word_counts:
-          ranking[i] += self._word_counts[w]
-    sents_idx = self._rank(ranking, summary_sentence_count)    
-    return [self._text_sentences[j] for j in sents_idx]
+    def add_paragraph(self, paragraph):
+        '''Add a single paragraph containing one or more sentences.'''
+        sentences = nltk.sent_tokenize(paragraph)
+        self._text_sentences.extend(sentences)
+        for sentence in sentences:
+            word_sentence = nltk.word_tokenize(sentence.lower())
+            # word_sentence = nltk.word_tokenize(sentence.decode("utf8").lower())
+            self._word_sentences.append(word_sentence)
+            for word in word_sentence:
+                self._word_counts[word] += 1
 
-  def _rank(self, ranking, summary_sentence_count):
-    """ return the first count sentences with highest ranking """
-    return nlargest(summary_sentence_count, ranking, key=ranking.get)
+    def filter_words(self):
+        filter_word_counts(self._word_counts, self._stopwords, self._min_freq, self._max_freq)
+
+    def summarize(self, summary_sentence_count):
+        self.filter_words()
+        ranking = defaultdict(int)
+        input_count = len(self._text_sentences)
+        if  summary_sentence_count > input_count:
+            summary_sentence_count = input_count
+        assert summary_sentence_count <= len(self._text_sentences)
+        for i, sent in enumerate(self._word_sentences):
+            for w in sent:
+                if w in self._word_counts:
+                    ranking[i] += self._word_counts[w]
+        sents_idx = self._rank(ranking, summary_sentence_count)    
+        return [self._text_sentences[j] for j in sents_idx]
+
+    def _rank(self, ranking, summary_sentence_count):
+        """ return the first count sentences with highest ranking """
+        return nlargest(summary_sentence_count, ranking, key=ranking.get)
 
 ###############################################################################
 
 def filter_word_counts(word_counts, stopwords, min_freq, max_freq):
-    """ remove any word in stopwords
-    or whose count is below the min or above the max threshold """
+    """ remove any word in stopwords or whose count is below the min or above the max threshold """
     max_word_count = 0
     for word, count in word_counts.items():
         if count > max_word_count and word not in stopwords:
@@ -83,7 +92,7 @@ def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_sent_co
     title = text_file
     print(text_file, '====>', summary_file, "  keeping", sum_sent_count, "sentences.")
     print('---------------------------------------------------------------------------')
-    summary_sentences = freqsum.summarize(text, sum_sent_count)
+    summary_sentences = freqsum.summarize(sum_sent_count)
     with open(summary_file, 'w') as outfile:
         for sum_sentence in summary_sentences:
             if verbose > 0:
