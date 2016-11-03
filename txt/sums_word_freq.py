@@ -7,10 +7,11 @@
 # from nltk.tokenize import sent_tokenize, word_tokenize
 # from string import punctuation
 import argparse
+import heapq
+import math
 import nltk
 import string
 from collections import defaultdict
-from heapq import nlargest
 
 from utf_print import utf_print
 
@@ -23,7 +24,8 @@ class FrequencySummarizer:
         self._stopwords = set(nltk.corpus.stopwords.words('english') + list(string.punctuation))
         self._word_counts = defaultdict(int)
         self._text_sentences = []
-        self._word_sentences = []
+        self._snt_word_lists = []
+        self._paragraph_count = 0
 
     def add_text(self, text):
         '''Add text that may contain one or more blank-line separated paragraphs.'''
@@ -36,11 +38,13 @@ class FrequencySummarizer:
         sentences = nltk.sent_tokenize(paragraph)
         self._text_sentences.extend(sentences)
         for sentence in sentences:
-            word_sentence = nltk.word_tokenize(sentence.lower())
-            # word_sentence = nltk.word_tokenize(sentence.decode("utf8").lower())
-            self._word_sentences.append(word_sentence)
-            for word in word_sentence:
+            word_hash = {}
+            word_list = nltk.word_tokenize(sentence.lower())
+            # word_list = nltk.word_tokenize(sentence.decode("utf8").lower())
+            for word in word_list:
                 self._word_counts[word] += 1
+                word_hash[word] = 1 + (word_hash[word] if word in word_hash else 0)
+            self._snt_word_lists.append(word_hash)
 
     def filter_words(self):
         filter_word_counts(self._word_counts, self._stopwords, self._min_freq, self._max_freq)
@@ -52,16 +56,23 @@ class FrequencySummarizer:
         if  summary_sentence_count > input_count:
             summary_sentence_count = input_count
         assert summary_sentence_count <= len(self._text_sentences)
-        for i, sent in enumerate(self._word_sentences):
-            for w in sent:
-                if w in self._word_counts:
-                    ranking[i] += self._word_counts[w]
-        sents_idx = self._rank(ranking, summary_sentence_count)    
+        for idx, snt_words in enumerate(self._snt_word_lists):
+            ranking[idx] = self._score_sentence(snt_words)
+        sents_idx = self._rank(summary_sentence_count, ranking)    
         return [self._text_sentences[j] for j in sents_idx]
 
-    def _rank(self, ranking, summary_sentence_count):
-        """ return the first count sentences with highest ranking """
-        return nlargest(summary_sentence_count, ranking, key=ranking.get)
+    def _score_sentence(self, snt_words):
+        score = 0
+        words = 0
+        for word, count in snt_words.items():
+            words += count
+            if word in self._word_counts:
+                score += self._word_counts[word]
+        return score # / math.log2(len(snt_words))
+
+    def _rank(self, summary_sentence_count, ranking):
+        '''Return the highest ranked N sentences.'''
+        return heapq.nlargest(summary_sentence_count, ranking, key=ranking.get)
 
 ###############################################################################
 
