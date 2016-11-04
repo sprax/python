@@ -22,7 +22,8 @@ class FrequencySummarizer:
         self._min_freq = min_freq
         self._max_freq = max_freq 
         self._stopwords = set(nltk.corpus.stopwords.words('english') + list(string.punctuation))
-        self._total_words = 0
+        self._input_words = 0
+        self._count_words = 0
         self._word_counts = defaultdict(int)
         self._text_paragraphs = []
         self._text_sentences = []
@@ -44,23 +45,23 @@ class FrequencySummarizer:
             word_list = nltk.word_tokenize(sentence.lower())
             # word_list = nltk.word_tokenize(sentence.decode("utf8").lower())
             for word in word_list:
-                self._total_words += 1
+                self._input_words += 1
                 self._word_counts[word] += 1
                 word_hash[word] = 1 + (word_hash[word] if word in word_hash else 0)
             self._snt_word_lists.append(word_hash)
 
     def filter_words(self):
         '''apply thresholding and remove stop words'''
-        filter_word_counts(self._word_counts, self._stopwords, self._min_freq, self._max_freq)
+        return filter_word_counts(self._word_counts, self._stopwords, self._min_freq, self._max_freq)
 
-    def summarize(self, summary_count, summary_percent):
-        self.filter_words()
-        words_per_sentence = self._total_words / len(self._text_sentences)
+    def summarize_all(self, summary_count, summary_percent):
+        self._count_words = self.filter_words()
+        sentence_count = len(self._text_sentences)
+        words_per_sentence = self._count_words / sentence_count
         ranking = defaultdict(int)
-        input_count = len(self._text_sentences)
         if not summary_count:
-            summary_count = int(math.ceil(summary_percent * input_count / 100.0))
-        if  summary_count > input_count or summary_count < 1:
+            summary_count = int(math.ceil(summary_percent * sentence_count / 100.0))
+        if  summary_count > sentence_count or summary_count < 1:
             summary_count = 1
 
         for idx, snt_words in enumerate(self._snt_word_lists):
@@ -93,11 +94,15 @@ def filter_word_counts(word_counts, stopwords, min_freq, max_freq):
     min_freq_count = max_word_count * min_freq
     max_freq_count = max_word_count * max_freq
     words_to_remove = []
+    total_count = 0
     for word, count in word_counts.items():
         if count <= min_freq_count or count >= max_freq_count or word in stopwords:
             words_to_remove.append(word)
+        else:
+            total_count += count
     for key in words_to_remove:
         word_counts.pop(key, None)
+    return total_count
 
 def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_number, sum_percent, verbose):
     """ Return a list of N sentences which represent the summary of text.  """
@@ -112,7 +117,7 @@ def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_number,
     print(text_file, '====>', summary_file)
     print("Keeping", (sum_number if sum_number else "{} percent of the".format(sum_percent)), "sentences.")
     print('---------------------------------------------------------------------------')
-    summary_sentences = freqsum.summarize(sum_number, sum_percent)
+    summary_sentences = freqsum.summarize_all(sum_number, sum_percent)
     with open(summary_file, 'w') as outfile:
         for sum_sentence in summary_sentences:
             if verbose > 0:
