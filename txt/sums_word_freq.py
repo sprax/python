@@ -129,7 +129,7 @@ def filter_word_counts(word_counts, stopwords, min_freq, max_freq):
         word_counts.pop(key, None)
     return total_count
 
-def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_number, sum_percent, verbose):
+def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_number, sum_percent, do_serial, verbose):
     """ Return a list of N sentences which represent the summary of text.  """
     with open(text_file, 'r') as src:
         text = src.read()
@@ -149,6 +149,14 @@ def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_number,
                 utf_print(sum_sentence)
                 print()
             print(sum_sentence, file=outfile)
+        if do_serial:
+            print('---------------------------------------------------------------------------')
+            summary_sentences = freqsum.summarize_all(sum_number, sum_percent)
+            for sum_sentence in summary_sentences:
+                if verbose > 0:
+                    utf_print(sum_sentence)
+                    print()
+                print(sum_sentence, file=outfile)
         outfile.close()
     print('---------------------------------------------------------------------------')
 
@@ -170,6 +178,8 @@ def main():
                         help='number of sentences to keep (default: 5), overrides -percent')
     parser.add_argument('-percent', type=float, nargs='?', const=1, default=10.0,
                         help='percentage of sentences to keep (default: 10.0%)')
+    parser.add_argument('-serial', action='store_true',
+                        help='summarize each paragraph in series')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
@@ -179,7 +189,7 @@ def main():
         print(__doc__)
 
     summarize_text_file(args.text_file, args.summary_file, args.min_freq, args.max_freq,
-            args.number, args.percent, args.verbose)
+            args.number, args.percent, args.serial, args.verbose)
 
 
 if __name__ == '__main__':
