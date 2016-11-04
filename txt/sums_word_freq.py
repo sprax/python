@@ -30,13 +30,17 @@ class FrequencySummarizer:
         self._snt_word_lists = []
 
     def add_text(self, text):
-        '''Add text that may contain one or more blank-line separated paragraphs.'''
+        '''Add text that may contain one or more blank-line separated paragraphs.
+        Return the count of sentences in text'''
+        sentence_count = 0
         paragraphs = nltk.blankline_tokenize(text)
         for para in paragraphs:
-            self.add_paragraph(para)    
+            sentence_count += self.add_paragraph(para)
+        return sentence_count
 
     def add_paragraph(self, paragraph):
-        '''Add a single paragraph containing one or more sentences.'''
+        '''Add a single paragraph containing one or more sentences.
+        Return the count of sentences in text'''
         self._text_paragraphs.append(paragraph)
         sentences = nltk.sent_tokenize(paragraph)
         self._text_sentences.extend(sentences)
@@ -49,6 +53,7 @@ class FrequencySummarizer:
                 self._word_counts[word] += 1
                 word_hash[word] = 1 + (word_hash[word] if word in word_hash else 0)
             self._snt_word_lists.append(word_hash)
+        return len(sentences)
 
     def filter_words(self):
         '''apply thresholding and remove stop words'''
@@ -59,13 +64,24 @@ class FrequencySummarizer:
         sentence_count = len(self._text_sentences)
         words_per_sentence = self._count_words / sentence_count
         ranking = defaultdict(int)
-        if not summary_count:
-            summary_count = int(math.ceil(summary_percent * sentence_count / 100.0))
-        if  summary_count > sentence_count or summary_count < 1:
-            summary_count = 1
-
+        summary_count = resolve_count(summary_count, summary_percent, sentence_count)
         for idx, snt_words in enumerate(self._snt_word_lists):
             # ranking[idx] = self._score_sentence(snt_words) * (1.0 + 1.0/len(snt_words))
+            ranking[idx] = self._score_sentence(snt_words) * math.log(words_per_sentence*(1.0 + 1.0/len(snt_words)))
+        sents_idx = self._rank(summary_count, ranking)
+        return [self._text_sentences[j] for j in sents_idx]
+
+    def summarize_next(self, text, summary_count, summary_percent):
+        saved_sentence_count = len(self._text_sentences)
+        added_sentence_count = self._add_text(text)
+        self._count_words = self.filter_words()
+        total_sentence_count = len(self._text_sentences)
+        assert total_sentence_count == saved_sentence_count + added_sentence_count
+        words_per_sentence = self._count_words / total_sentence_count
+        ranking = defaultdict(int)
+        summary_count = resolve_count(summary_count, summary_percent, added_sentence_count)
+        for idx in range(saved_sentence_count, total_sentence_count):
+            snt_words = self._snt_word_lists[idx]
             ranking[idx] = self._score_sentence(snt_words) * math.log(words_per_sentence*(1.0 + 1.0/len(snt_words)))
         sents_idx = self._rank(summary_count, ranking)    
         return [self._text_sentences[j] for j in sents_idx]
@@ -84,6 +100,15 @@ class FrequencySummarizer:
         return heapq.nlargest(summary_count, ranking, key=ranking.get)
 
 ###############################################################################
+
+def resolve_count(summary_count, summary_percent, sentence_count):
+    if not summary_count:
+        summary_count = int(math.ceil(summary_percent * sentence_count / 100.0))
+    if  summary_count > sentence_count:
+        summary_count = sentence_count
+    if  summary_count < 1:
+        summary_count = 1
+    return summary_count
 
 def filter_word_counts(word_counts, stopwords, min_freq, max_freq):
     """ remove any word in stopwords or whose count is below the min or above the max threshold """
