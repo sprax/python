@@ -18,17 +18,19 @@ from utf_print import utf_print
 class FrequencySummarizer:
     '''Text summarization based on word frequencies'''
 
-    def __init__(self, min_freq=0.1, max_freq=0.9):
+    def __init__(self, min_freq=0.1, max_freq=0.9, verbose=1):
         '''Initilize the text summarizer.'''
         self._min_freq = min_freq
         self._max_freq = max_freq 
         self._stopwords = set(nltk.corpus.stopwords.words('english') + list(string.punctuation))
+        self._filtered = False
         self._input_words = 0
         self._count_words = 0
         self._word_counts = defaultdict(int)
         self._text_paragraphs = []
         self._text_sentences = []
         self._snt_word_lists = []
+        self._verbose = verbose
 
     def add_text(self, text):
         '''Add text that may contain one or more blank-line separated paragraphs.
@@ -57,11 +59,14 @@ class FrequencySummarizer:
         return len(sentences)
 
     def filter_words(self):
-        '''apply thresholding and remove stop words'''
-        return filter_word_counts(self._word_counts, self._stopwords, self._min_freq, self._max_freq)
+        '''apply thresholding and remove stop words if not already filtered'''
+        if not self._filtered:
+            self._count_words = filter_word_counts(self._word_counts, self._stopwords,
+                self._min_freq, self._max_freq, self._verbose)
+            self._filtered = True
 
-    def summarize_all(self, summary_count, summary_percent):
-        self._count_words = self.filter_words()
+    def summarize_all(self, summary_count, summary_percent, indices, verbose):
+        self.filter_words()
         sentence_count = len(self._text_sentences)
         words_per_sentence = self._count_words / sentence_count
         ranking = defaultdict(int)
@@ -69,12 +74,17 @@ class FrequencySummarizer:
         for idx, snt_words in enumerate(self._snt_word_lists):
             ranking[idx] = self._score_sentence(snt_words, words_per_sentence)
         sents_idx = self._rank(summary_count, ranking)
+        sents_idx.sort()
+        if indices or verbose > 2:
+            print("Sentence indices: ", sents_idx)
+            if indices:
+                return []
         return [self._text_sentences[j] for j in sents_idx]
 
-    def summarize_next(self, text, summary_count, summary_percent):
+    def summarize_next(self, text, summary_count, summary_percent, indices, verbose):
         saved_sentence_count = len(self._text_sentences)
         added_sentence_count = self._add_text(text)
-        self._count_words = self.filter_words()
+        self.filter_words()
         total_sentence_count = len(self._text_sentences)
         assert total_sentence_count == saved_sentence_count + added_sentence_count
         words_per_sentence = self._count_words / total_sentence_count
@@ -83,7 +93,8 @@ class FrequencySummarizer:
         for idx in range(saved_sentence_count, total_sentence_count):
             snt_words = self._snt_word_lists[idx]
             ranking[idx] = self._score_sentence(snt_words, words_per_sentence)
-        sents_idx = self._rank(summary_count, ranking)    
+        sents_idx = self._rank(summary_count, ranking)
+        sents_idx.sort()
         return [self._text_sentences[j] for j in sents_idx]
 
     def _score_sentence(self, snt_words, words_per_sentence):
@@ -110,7 +121,7 @@ def resolve_count(summary_count, summary_percent, sentence_count):
         summary_count = 1
     return summary_count
 
-def filter_word_counts(word_counts, stopwords, min_freq, max_freq):
+def filter_word_counts(word_counts, stopwords, min_freq, max_freq, verbose):
     """ remove any word in stopwords or whose count is below the min or above the max threshold """
     max_word_count = 0
     for word, count in word_counts.items():
@@ -118,31 +129,40 @@ def filter_word_counts(word_counts, stopwords, min_freq, max_freq):
             max_word_count = count
     min_freq_count = max_word_count * min_freq
     max_freq_count = max_word_count * max_freq
-    words_to_remove = []
+    stop_words_to_remove = []
+    rare_words_to_remove = []
     total_count = 0
     for word, count in word_counts.items():
-        if count <= min_freq_count or count >= max_freq_count or word in stopwords:
-            words_to_remove.append(word)
+        if count >= max_freq_count or word in stopwords:
+            stop_words_to_remove.append(word)
+        elif count <= min_freq_count:
+            rare_words_to_remove.append(word)
         else:
             total_count += count
-    for key in words_to_remove:
-        word_counts.pop(key, None)
+    if verbose > 2:
+        utf_print("========Removing common words: ", stop_words_to_remove)
+        for key in stop_words_to_remove:
+            word_counts.pop(key, None)
+        utf_print("========Removing rarest words: ", rare_words_to_remove)
+        for key in rare_words_to_remove:
+            word_counts.pop(key, None)
     return total_count
 
-def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_number, sum_percent, do_serial, verbose):
+def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_number, sum_percent,
+                        do_serial, indices, verbose, charset='utf8'):
     """ Return a list of N sentences which represent the summary of text.  """
-    with open(text_file, 'r') as src:
+    with open(text_file, 'r', encoding=charset) as src:
         text = src.read()
         src.close()
 
-    freqsum = FrequencySummarizer(min_freq, max_freq)
+    freqsum = FrequencySummarizer(min_freq, max_freq, verbose)
     freqsum.add_text(text)
 
     title = text_file
     print(text_file, '====>', summary_file)
     print("Keeping", (sum_number if sum_number else "{} percent of the".format(sum_percent)), "sentences.")
     print('---------------------------------------------------------------------------')
-    summary_sentences = freqsum.summarize_all(sum_number, sum_percent)
+    summary_sentences = freqsum.summarize_all(sum_number, sum_percent, indices, verbose)
     with open(summary_file, 'w') as outfile:
         for sum_sentence in summary_sentences:
             if verbose > 0:
@@ -151,7 +171,7 @@ def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_number,
             print(sum_sentence, file=outfile)
         if do_serial:
             print('---------------------------------------------------------------------------')
-            summary_sentences = freqsum.summarize_all(sum_number, sum_percent)
+            summary_sentences = freqsum.summarize_all(sum_number, sum_percent, indices, verbose)
             for sum_sentence in summary_sentences:
                 if verbose > 0:
                     utf_print(sum_sentence)
@@ -170,6 +190,8 @@ def main():
                         help='text file containing quoted dialogue')
     parser.add_argument('summary_file', type=str, nargs='?', default='corpus_summary.txt',
                         help='output file of quoted dialogue extracted from the corpus')
+    parser.add_argument('-index', action='store_true',
+                        help='show only indices of summary sentences')
     parser.add_argument('-max_freq', type=float, nargs='?', const=1, default=0.9,
                         help='maximum frequency cut-off (default: 0.9)')
     parser.add_argument('-min_freq', type=float, nargs='?', const=1, default=0.1,
@@ -189,7 +211,7 @@ def main():
         print(__doc__)
 
     summarize_text_file(args.text_file, args.summary_file, args.min_freq, args.max_freq,
-            args.number, args.percent, args.serial, args.verbose)
+            args.number, args.percent, args.serial, args.index, args.verbose)
 
 
 if __name__ == '__main__':
