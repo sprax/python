@@ -6,16 +6,17 @@
 # from nltk.corpus import stopwords
 # from nltk.tokenize import sent_tokenize, word_tokenize
 # from string import punctuation
+import nltk
 import argparse
 import heapq
 import math
-import nltk
 import string
 from collections import defaultdict
 
 from utf_print import utf_print
 
 class FrequencySummarizer:
+    '''Text summarization based on word frequencies'''
 
     def __init__(self, min_freq=0.1, max_freq=0.9):
         '''Initilize the text summarizer.'''
@@ -66,8 +67,7 @@ class FrequencySummarizer:
         ranking = defaultdict(int)
         summary_count = resolve_count(summary_count, summary_percent, sentence_count)
         for idx, snt_words in enumerate(self._snt_word_lists):
-            # ranking[idx] = self._score_sentence(snt_words) * (1.0 + 1.0/len(snt_words))
-            ranking[idx] = self._score_sentence(snt_words) * math.log(words_per_sentence*(1.0 + 1.0/len(snt_words)))
+            ranking[idx] = self._score_sentence(snt_words, words_per_sentence)
         sents_idx = self._rank(summary_count, ranking)
         return [self._text_sentences[j] for j in sents_idx]
 
@@ -82,18 +82,18 @@ class FrequencySummarizer:
         summary_count = resolve_count(summary_count, summary_percent, added_sentence_count)
         for idx in range(saved_sentence_count, total_sentence_count):
             snt_words = self._snt_word_lists[idx]
-            ranking[idx] = self._score_sentence(snt_words) * math.log(words_per_sentence*(1.0 + 1.0/len(snt_words)))
+            ranking[idx] = self._score_sentence(snt_words, words_per_sentence)
         sents_idx = self._rank(summary_count, ranking)    
         return [self._text_sentences[j] for j in sents_idx]
 
-    def _score_sentence(self, snt_words):
+    def _score_sentence(self, snt_words, words_per_sentence):
         score = 0
         words = 0
         for word, count in snt_words.items():
             words += count
             if word in self._word_counts:
                 score += self._word_counts[word]
-        return score # / math.log2(len(snt_words))
+        return score * math.log(words_per_sentence*(1.0 + 1.0/len(snt_words)))
 
     def _rank(self, summary_count, ranking):
         '''Return the highest ranked N sentences.'''
