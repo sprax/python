@@ -19,7 +19,7 @@ class FrequencySummarizer:
     '''Text summarization based on word frequencies'''
 
     def __init__(self, min_freq=0.1, max_freq=0.9, verbose=1):
-        '''Initilize the text summarizer.'''
+        '''Initialize the text summarizer.'''
         self._min_freq = min_freq
         self._max_freq = max_freq 
         self._stopwords = set(nltk.corpus.stopwords.words('english') + list(string.punctuation))

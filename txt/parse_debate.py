@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 # Sprax Lines       2016.09.26      Written for Python 3.5
-'''Parse a debate transcript into speaker turns.'''
+'''Parse a debate transcript into speaker turns:
+N > 1 contestants each have approximately the same number T of turns,
+M >= 0 moderators collectively have somewhere between T and N*T turns,
+and each turn is an array of one or more paragraphs, each of which
+divides into one or more sentences.
+'''
 
 import argparse
 import datetime
@@ -13,7 +18,6 @@ from utf_print import utf_print
 def main():
     '''get args and call ...'''
     default_format_out = '%Y.%m.%d %a'
-    default_num_days = 7
     default_debate_text = "djs.txt"
     # default_start_date = start_date = datetime.datetime.now()
     parser = argparse.ArgumentParser(
@@ -33,9 +37,23 @@ def main():
     in_formats = ['%Y.%m.%d']
     out_format = args.out_format if args.out_format else default_format_out
 
-    reformat_debate(args.debate_text, in_formats, out_format, args.verbose)
+    parse_debate(args.debate_text, in_formats, out_format, args.verbose)
 
-def reformat_debate(transcript_file, in_formats, out_format, verbose):
+class DebateTurn:
+    def __init__(self, speaker, text):
+        self.speaker = speaker
+        self.text  = text
+        
+class Debate:
+    '''Initialize debate as a sequence of turns by moderators and contestants.'''
+    def __init__(self, transcript, moderators=[], debaters=[]):
+        self.moderators = moderators
+        self.debaters = debaters
+        self.turn_count = 0
+        self.turns = parse_debate(transcript)
+
+
+def parse_debate(transcript_file, in_formats, out_format, verbose):
     '''rewrite journal file in canonical format'''
     print("convert debate to turns format: out_format:", out_format)
     for ref in reformat_all_paragraphs(transcript_file, in_formats, out_format, verbose):
@@ -44,6 +62,7 @@ def reformat_debate(transcript_file, in_formats, out_format, verbose):
                 utf_print(part)
             print()
         # utf_print('ref: ', ref[0] if len(ref) > 0 else ref)
+    return []
 
 def reformat_all_paragraphs(path, in_formats, out_format, verbose, charset='utf8'):
     '''Parses paragraphs into leading date, first sentence, and body.

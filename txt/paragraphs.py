@@ -13,8 +13,11 @@ import re
 
 from utf_print import utf_print
 
-def paragraph_iter(fileobj, rgx_para_separator='\n'):
-    '''yields paragraphs from text file and regex separator'''
+
+def paragraph_iter(fileobj, rgx_para_separator=r'\s*\n\s*'):
+    '''yields paragraphs from text file and regex separator, which by default matches
+    either one or more blank lines (two line feeds among whitespace),
+    or one line-feed followed by a tab, possibly in the middle of other whitespace.'''
     ## Makes no assumptions about the encoding used in the file
     paragraph = ''
     for line in fileobj:
@@ -31,7 +34,25 @@ def paragraph_iter(fileobj, rgx_para_separator='\n'):
     if paragraph:
         yield paragraph
 
-
+def paragraph_multiline_iter(fileobj, rgx_para_separator=r'\s*\n\s*\n\s*|\s*\n\t\s*'):
+    '''yields paragraphs from text file and regex separator, which by default matches
+    either one or more blank lines (two line feeds among whitespace),
+    or one line-feed followed by a tab, possibly in the middle of other whitespace.'''
+    ## Makes no assumptions about the encoding used in the file
+    paragraph = ''
+    for line in fileobj:
+        if re.match(rgx_para_separator, line) and paragraph:
+            yield paragraph
+            paragraph = ''
+        else:
+            line = line.rstrip()
+            if line:
+                if paragraph.endswith('-'):
+                    paragraph += line
+                else:
+                    paragraph += ' ' + line
+    if paragraph:
+        yield paragraph
 def print_paragraphs(path, charset='utf8'):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs:")
@@ -136,11 +157,11 @@ def print_paragraphs_trunc(path, max_words, charset='utf8'):
 def paragraph_reader(path, charset="utf8"):
     '''opens text file and returns paragraph iterator'''
     try:
-        text = open(path, 'r', encoding=charset)
-        return paragraph_iter(text), text
+        text_stream = open(path, 'r', encoding=charset)
+        return paragraph_iter(text_stream), text_stream
     except FileNotFoundError as ex:
         print("Warning:", ex)
-        return None
+        return None, None
 
 def print_paragraphs_leaky(path):
     '''Prints sequence numbers and paragraphs.'''
