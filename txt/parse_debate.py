@@ -37,63 +37,53 @@ def main():
     in_formats = ['%Y.%m.%d']
     out_format = args.out_format if args.out_format else default_format_out
 
-    parse_debate(args.debate_text, in_formats, out_format, args.verbose)
+    debate = Debate(args.debate_text, in_formats, out_format, args.verbose)
+    # now summarize it...
 
 class DebateTurn:
-    def __init__(self, speaker, text):
+    def __init__(self, speaker, date, text):
         self.speaker = speaker
-        self.text  = text
+        self.date = date
+        self.text = text
         
 class Debate:
     '''Initialize debate as a sequence of turns by moderators and contestants.'''
-    def __init__(self, transcript, moderators=[], debaters=[]):
+    def __init__(self, transcript, date_formats_in, date_format_out, moderators=[], debaters=[]):
         self.moderators = moderators
         self.debaters = debaters
         self.turn_count = 0
-        self.turns, self.speakers = parse_debate(transcript)
+        self.all_turns = []
+        self.speaker_turns = {} 
+        self.parse_transcript(transcript, date_formats_in, date_format_out)
 
-def parse_debate(transcript_file, in_formats, out_format, verbose):
-    '''returns array of all speaker turns as one sequence, and dictionary mapping each
-    speaker to an array of turn indices.'''
-    print("convert debate to turns format: out_format:", out_format)
-    for ref in reformat_all_paragraphs(transcript_file, in_formats, out_format, verbose):
-        if verbose > 0:
-            for part in ref:
-                utf_print(part)
-            print()
-        # utf_print('ref: ', ref[0] if len(ref) > 0 else ref)
-    return [], {}
+    def parse_transcript(self, transcript_file, date_formats_in, date_format_out):
+        '''Populates Debate data: array of all speaker turns as one sequence,
+        and dictionary mapping each speaker to an array of turn indices.'''
+        verbose = 1
+        for para in reformat_paragraphs(transcript_file, verbose):
+            if is_comment(para):
+                continue
+            (speaker, date, body) = extract_speaker_date_body(para, verbose)
+            if speaker:
+                print("<====", speaker, '====>')
+            if date:
+                refd = reformat_date(date, in_formats, out_format, verbose)
+                # print("\t reformatted date:\t", refd)
+            if body:
+                body = body.replace('’', "'")
 
-def reformat_all_paragraphs(path, in_formats, out_format, verbose, charset='utf8'):
-    '''Parses paragraphs into leading date, first sentence, and body.
-    Reformats the date, if present.'''
+def reformat_paragraphs(path, verbose, charset='utf8'):
+    '''Just get the paragraphs.'''
     with open(path, 'r', encoding=charset) as text:
-        for idx, para in enumerate(paragraphs.paragraph_iter(text)):
-            if verbose > 3:
-                print("    Paragraph {}:".format(idx))
-                utf_print(para)
-            if not is_comment(para):
-                yield reformat_paragraph(para, in_formats, out_format, verbose)
+        for para in paragraphs.paragraph_iter(text):
+            yield para
 
 def is_comment(string):
     return string[0] == '#'
 
-def reformat_paragraph(paragraph, in_formats, out_format, verbose):
-    '''return date string, head, and body from paragraph'''
-    (speaker, date, body) = extract_speaker_date_body(paragraph, verbose)
-    if date:
-        refd = reformat_date(date, in_formats, out_format, verbose)
-        # print("\t reformatted date:\t", refd)
-    if speaker:
-        print("<====", speaker, '====>')
-    if body:
-        body = body.replace('’', "'")
-    return (speaker, date, body)
 
 def extract_speaker_date_body(paragraph, verbose):
     '''extract (date, head, body) from paragraph, where date and body may be None'''
-    if verbose > 5:
-        utf_print("edhb: ", paragraph)
     rem = re.match(speaker_dated_entry_regex(), paragraph)
     if rem:
         if verbose > 2:
