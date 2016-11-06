@@ -50,11 +50,11 @@ class Debate:
         self.moderators = moderators
         self.debaters = debaters
         self.turn_count = 0
-        self.turns = parse_debate(transcript)
-
+        self.turns, self.speakers = parse_debate(transcript)
 
 def parse_debate(transcript_file, in_formats, out_format, verbose):
-    '''rewrite journal file in canonical format'''
+    '''returns array of all speaker turns as one sequence, and dictionary mapping each
+    speaker to an array of turn indices.'''
     print("convert debate to turns format: out_format:", out_format)
     for ref in reformat_all_paragraphs(transcript_file, in_formats, out_format, verbose):
         if verbose > 0:
@@ -62,7 +62,7 @@ def parse_debate(transcript_file, in_formats, out_format, verbose):
                 utf_print(part)
             print()
         # utf_print('ref: ', ref[0] if len(ref) > 0 else ref)
-    return []
+    return [], {}
 
 def reformat_all_paragraphs(path, in_formats, out_format, verbose, charset='utf8'):
     '''Parses paragraphs into leading date, first sentence, and body.
