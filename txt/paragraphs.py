@@ -73,12 +73,12 @@ def print_paragraphs_split_join_str(path, max_words, charset='utf8'):
             print()
 
 
-def print_paragraphs_split_join_rgx(path, max_words, charset='utf8'):
+def print_paragraphs_split_join_rgx(path, max_words, rgx_pat=r'^|\W*\s+\W*', charset='utf8'):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs:")
     with open(path, 'r', encoding=charset) as text:
         for idx, para in enumerate(paragraph_iter(text)):
-            words = re.split(r'\W*\s+\W*', para)[:max_words]
+            words = re.split(rgx_pat, para)[:max_words]
             print("    Paragraph {}:".format(idx))
             utf_print(' '.join(words))
             print()
@@ -174,7 +174,7 @@ def main():
                         help='text file containing quoted dialogue')
     parser.add_argument('-function', type=int, nargs='?', const=1, default=0,
                         help='paragraph printing function: 0=all (default: 0)')
-    parser.add_argument('-max_words', type=int, nargs='?', const=1, default=0,
+    parser.add_argument('-max_words', type=int, nargs='?', const=1, default=5,
                         help='maximum words per paragraph: print only the first M words,\
 			or all if M < 1 (default: 0)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
