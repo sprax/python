@@ -10,7 +10,6 @@ divides into one or more sentences.
 import argparse
 import datetime
 import re
-import time
 
 import paragraphs
 from utf_print import utf_print
@@ -41,19 +40,20 @@ def main():
     # now summarize it...
 
 class DebateTurn:
+    '''one speaker turn in a debate'''
     def __init__(self, speaker, date, text):
         self.speaker = speaker
         self.date = date
         self.text = text
-        
+
 class Debate:
     '''Initialize debate as a sequence of turns by moderators and contestants.'''
-    def __init__(self, transcript, date_formats_in, date_format_out, moderators=[], debaters=[]):
+    def __init__(self, transcript, date_formats_in, date_format_out, moderators, debaters):
         self.moderators = moderators
         self.debaters = debaters
         self.turn_count = 0
         self.all_turns = []
-        self.speaker_turns = {} 
+        self.speaker_turns = {}
         self.parse_transcript(transcript, date_formats_in, date_format_out)
 
     def parse_transcript(self, transcript_file, date_formats_in, date_format_out):
@@ -68,7 +68,7 @@ class Debate:
                 print("<====", speaker, '====>')
             if date:
                 refd = reformat_date(date, in_formats, out_format, verbose)
-                # print("\t reformatted date:\t", refd)
+                print("\t reformatted date:\t", refd)
             if body:
                 body = body.replace('’', "'")
 
@@ -112,4 +112,3 @@ def speaker_dated_entry_regex():
 
 if __name__ == '__main__':
     main()
-
