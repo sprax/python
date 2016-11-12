@@ -61,6 +61,7 @@ class Debate:
         '''Populates Debate data: array of all speaker turns as one sequence,
         and dictionary mapping each speaker to an array of turn indices.'''
         verbose = 1
+        turn = DebateTurn('[debate start]', datetime.datetime.now(), '')
         for para in reformat_paragraphs(transcript_file, verbose):
             if is_comment(para):
                 continue
@@ -75,6 +76,7 @@ class Debate:
                 print("\t reformatted date:\t", refd)
             if body:
                 body = body.replace('’', "'")
+                turn.append(body)
 
 def reformat_paragraphs(path, verbose, charset='utf8'):
     '''Just get the paragraphs.'''
