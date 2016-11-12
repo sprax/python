@@ -36,7 +36,7 @@ def main():
     in_formats = ['%Y.%m.%d']
     out_format = args.out_format if args.out_format else default_format_out
 
-    debate = Debate(args.debate_text, in_formats, out_format, args.verbose)
+    debate = Debate(args.debate_text)
     # now summarize it...
 
 class DebateTurn:
@@ -48,15 +48,16 @@ class DebateTurn:
 
 class Debate:
     '''Initialize debate as a sequence of turns by moderators and contestants.'''
-    def __init__(self, transcript, date_formats_in, date_format_out, moderators, debaters):
-        self.moderators = moderators
-        self.debaters = debaters
+    def __init__(self, transcript):
+        self.speakers = set()
+        self.moderators = {}
+        self.debaters = {}
         self.turn_count = 0
         self.all_turns = []
         self.speaker_turns = {}
-        self.parse_transcript(transcript, date_formats_in, date_format_out)
+        self.parse_transcript(transcript)
 
-    def parse_transcript(self, transcript_file, date_formats_in, date_format_out):
+    def parse_transcript(self, transcript_file):
         '''Populates Debate data: array of all speaker turns as one sequence,
         and dictionary mapping each speaker to an array of turn indices.'''
         verbose = 1
@@ -65,7 +66,10 @@ class Debate:
                 continue
             (speaker, date, body) = extract_speaker_date_body(para, verbose)
             if speaker:
-                print("<====", speaker, '====>')
+                turn = DebateTurn(speaker, '', body)
+                if speaker not in self.speakers:
+                    self.speakers.add(speaker)
+                    print("<====", speaker, '====>')
             if date:
                 refd = reformat_date(date, in_formats, out_format, verbose)
                 print("\t reformatted date:\t", refd)
