@@ -37,6 +37,10 @@ def main():
     out_format = args.out_format if args.out_format else default_format_out
 
     debate = Debate(args.debate_text)
+    for turn in debate.all_turns[:5]:
+        print(turn.speaker)
+        print(turn.text)
+        print()
     # now summarize it...
 
 class DebateTurn:
@@ -44,7 +48,7 @@ class DebateTurn:
     def __init__(self, speaker, date, text):
         self.speaker = speaker
         self.date = date
-        self.text = text
+        self.text = [text]
 
 class Debate:
     '''Initialize debate as a sequence of turns by moderators and contestants.'''
@@ -62,21 +66,25 @@ class Debate:
         and dictionary mapping each speaker to an array of turn indices.'''
         verbose = 1
         turn = DebateTurn('[debate start]', datetime.datetime.now(), '')
+        self.all_turns.append(turn)
         for para in reformat_paragraphs(transcript_file, verbose):
             if is_comment(para):
                 continue
             (speaker, date, body) = extract_speaker_date_body(para, verbose)
-            if speaker:
-                turn = DebateTurn(speaker, '', body)
-                if speaker not in self.speakers:
-                    self.speakers.add(speaker)
-                    print("<====", speaker, '====>')
             if date:
                 refd = reformat_date(date, in_formats, out_format, verbose)
                 print("\t reformatted date:\t", refd)
-            if body:
+            else:
+                refd = None
+            if speaker:
+                turn = DebateTurn(speaker, refd, body)
+                self.all_turns.append(turn)
+                if speaker not in self.speakers:
+                    self.speakers.add(speaker)
+                    print("<====", speaker, '====>')
+            elif body:
                 body = body.replace('’', "'")
-                turn.append(body)
+                turn.text.append(body)
 
 def reformat_paragraphs(path, verbose, charset='utf8'):
     '''Just get the paragraphs.'''
