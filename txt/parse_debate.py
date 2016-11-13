@@ -26,6 +26,11 @@ def main():
     parser.add_argument('debate_text', metavar='TRANSCRIPT', type=str,
                         help='convert speaker-labeled text file to paragraphs (default: {})'
                         .format(default_debate_text))
+    parser.add_argument('-max_words', type=int, nargs='?', const=1, default=7,
+                        help='maximum words per paragraph: print only the first M words,\
+                        or all if M < 1 (default: 0)')
+    parser.add_argument('-num_turns', type=int, nargs='?', const=1, default=12,
+                        help='number of turns to show, or 0 for all (the default)')
     parser.add_argument('-out_format', metavar='FORMAT', type=str, default=default_format_out,
                         help='output date format (default: {})'
                         .format(default_format_out.replace('%', '%%')))
@@ -37,9 +42,10 @@ def main():
     out_format = args.out_format if args.out_format else default_format_out
 
     debate = Debate(args.debate_text)
-    for turn in debate.all_turns[:5]:
+    for turn in debate.all_turns[:args.num_turns]:
         print(turn.speaker)
-        print(turn.text)
+        for para in turn.text:
+            paragraphs.print_paragraph_regex_count(para, args.max_words)
         print()
     # now summarize it...
 

@@ -53,6 +53,7 @@ def paragraph_multiline_iter(fileobj, rgx_para_separator=r'\s*\n\s*\n\s*|\s*\n\t
                     paragraph += ' ' + line
     if paragraph:
         yield paragraph
+
 def print_paragraphs(path, charset='utf8'):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs:")
@@ -71,7 +72,6 @@ def print_paragraphs_split_join_str(path, max_words, charset='utf8'):
             print("    Paragraph {}:".format(idx))
             utf_print(' '.join(words))
             print()
-
 
 def print_paragraphs_split_join_rgx(path, max_words, rgx_pat=r'^|\W*\s+\W*', charset='utf8'):
     '''Prints sequence numbers and paragraphs.'''
@@ -98,10 +98,31 @@ def print_paragraphs_nth_regex(path, max_words, charset='utf8'):
     print("print_paragraphs_nth_substr(", path, max_words, charset, ")")
     with open(path, 'r', encoding=charset) as text:
         for idx, para in enumerate(paragraph_iter(text)):
-            index = index_regex_count(para, max_words)
-            print("    Paragraph {}:".format(idx))
-            utf_print(para[:index])
+            print_paragraph_regex_count(para, max_words)
             print()
+
+def print_paragraph_regex_count(para, max_words, elliptical='...'):
+    if max_words < 1:
+        utf_print(para)
+    else:
+        index = index_regex_count(para, max_words)
+        if elliptical and len(para) - index > 3:
+            utf_print(para[:index], '...')
+        else:
+            utf_print(para[:index])
+
+def index_regex_count(string, count=0, rgx=re.compile(r'\s+|$')):
+    '''Character index of Nth or last occurrence of regex pattern in string.
+    Returns the index of the Nth occurrence where N <= count, or
+    -1 if the pattern is not found at all.'''
+    offset = 0
+    for _ in range(count):
+        mat = rgx.search(string, offset)
+        if not mat:
+            return offset
+        mat_span = mat.span()
+        offset = mat_span[1]
+    return mat_span[0]
 
 def index_substr_nth(string, count=0, subs=' ', overlap=False):
     '''index of nth occurrence of substring in string'''
@@ -112,7 +133,6 @@ def index_substr_nth(string, count=0, subs=' ', overlap=False):
         if index < 0:
             break
     return index
-
 
 def index_regex_nth(string, count=0, rgx=re.compile(r'\s+|$')):
     '''index of Nth occurrence of regex pattern in string, or -1 if count < n'''
@@ -125,18 +145,6 @@ def index_regex_nth(string, count=0, rgx=re.compile(r'\s+|$')):
         offset = mat_span[1]
     return mat_span[0]
 
-def index_regex_count(string, count=0, rgx=re.compile(r'\s+|$')):
-    '''Character index of Nth or last occurrence of regex pattern in string.
-    Returns the index of the Nth occurrence where N <= count, or
-    -1 if the pattern is not found at all.'''
-    offset = 0
-    for _ in range(count + 1):
-        mat = rgx.search(string, offset)
-        if not mat:
-            return offset
-        mat_span = mat.span()
-        offset = mat_span[1]
-    return mat_span[0]
 
 def print_paragraphs_trunc(path, max_words, charset='utf8'):
     '''Prints sequence numbers and paragraphs.'''
