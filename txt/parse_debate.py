@@ -16,7 +16,6 @@ from utf_print import utf_print
 
 def main():
     '''get args and call ...'''
-    default_format_out = '%Y.%m.%d %a'
     default_debate_text = "djs.txt"
     # default_start_date = start_date = datetime.datetime.now()
     parser = argparse.ArgumentParser(
@@ -31,15 +30,10 @@ def main():
                         or all if M < 1 (default: 0)')
     parser.add_argument('-num_turns', type=int, nargs='?', const=1, default=12,
                         help='number of turns to show, or 0 for all (the default)')
-    parser.add_argument('-out_format', metavar='FORMAT', type=str, default=default_format_out,
-                        help='output date format (default: {})'
-                        .format(default_format_out.replace('%', '%%')))
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-    in_formats = ['%Y.%m.%d']
-    out_format = args.out_format if args.out_format else default_format_out
 
     debate = Debate(args.debate_text)
     for turn in debate.all_turns[:args.num_turns]:
@@ -73,13 +67,12 @@ class Debate:
         verbose = 1
         turn = DebateTurn('[debate start]', datetime.datetime.now(), '')
         self.all_turns.append(turn)
-        for para in reformat_paragraphs(transcript_file, verbose):
+        for para in reformat_paragraphs(transcript_file):
             if is_comment(para):
                 continue
             (speaker, date, body) = extract_speaker_date_body(para, verbose)
             if date:
-                refd = reformat_date(date, in_formats, out_format, verbose)
-                print("\t reformatted date:\t", refd)
+                print("\t  date:\t", refd)
             else:
                 refd = None
             if speaker:
@@ -92,13 +85,14 @@ class Debate:
                 body = body.replace('’', "'")
                 turn.text.append(body)
 
-def reformat_paragraphs(path, verbose, charset='utf8'):
+def reformat_paragraphs(path, charset='utf8'):
     '''Just get the paragraphs.'''
     with open(path, 'r', encoding=charset) as text:
         for para in paragraphs.paragraph_iter(text):
             yield para
 
 def is_comment(string):
+    '''comments start with # or // or /* ... ?'''
     return string[0] == '#'
 
 
