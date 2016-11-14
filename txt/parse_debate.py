@@ -66,6 +66,7 @@ class Debate:
         and dictionary mapping each speaker to an array of turn indices.'''
         verbose = 1
         turn = DebateTurn('[debate start]', datetime.datetime.now(), '')
+        prev_speaker = ''
         self.all_turns.append(turn)
         for para in reformat_paragraphs(transcript_file):
             if is_comment(para):
@@ -75,12 +76,15 @@ class Debate:
                 print("\t  date:\t", refd)
             else:
                 refd = None
-            if speaker:
-                turn = DebateTurn(speaker, refd, body)
-                self.all_turns.append(turn)
+            if speaker and speaker != prev_speaker:
+                prev_speaker = speaker
                 if speaker not in self.speakers:
                     self.speakers.add(speaker)
+                    self.speaker_turns[speaker] = []
                     print("<====", speaker, '====>')
+                turn = DebateTurn(speaker, refd, body)
+                self.all_turns.append(turn)
+                self.speaker_turns[speaker].append(turn)
             elif body:
                 body = body.replace('’', "'")
                 turn.text.append(body)

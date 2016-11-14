@@ -104,7 +104,7 @@ def print_paragraphs_nth_regex(path, max_words, charset='utf8'):
 def print_paragraph_regex_count(para, max_words, elliptical='...'):
     if max_words < 1:
         utf_print(para)
-    else:
+    elif para:
         index = index_regex_count(para, max_words)
         if elliptical and len(para) - index > 3:
             utf_print(para[:index], '...')
