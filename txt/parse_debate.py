@@ -71,11 +71,12 @@ class Debate:
         for para in reformat_paragraphs(transcript_file):
             if is_comment(para):
                 continue
+            refd = None
             (speaker, date, body) = extract_speaker_date_body(para, verbose)
             if date:
+                refd = date
                 print("\t  date:\t", refd)
             else:
-                refd = None
             if speaker and speaker != prev_speaker:
                 prev_speaker = speaker
                 if speaker not in self.speakers:
@@ -88,6 +89,14 @@ class Debate:
             elif body:
                 body = body.replace('’', "'")
                 turn.text.append(body)
+
+    def print_first_per_turn(self, max_words):
+        for turn in debate.all_turns:
+            print(turn.speaker)
+            for para in turn.text:
+                paragraphs.print_paragraph_regex_count(para, max_words)
+            print()
+
 
 def reformat_paragraphs(path, charset='utf8'):
     '''Just get the paragraphs.'''
