@@ -76,7 +76,6 @@ class Debate:
             if date:
                 refd = date
                 print("\t  date:\t", refd)
-            else:
             if speaker and speaker != prev_speaker:
                 prev_speaker = speaker
                 if speaker not in self.speakers:
@@ -91,6 +90,7 @@ class Debate:
                 turn.text.append(body)
 
     def print_first_per_turn(self, max_words):
+        '''Print beginning of turns, up to max words.'''
         for turn in debate.all_turns:
             print(turn.speaker)
             for para in turn.text:
