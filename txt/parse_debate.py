@@ -91,12 +91,11 @@ class Debate:
 
     def print_first_per_turn(self, max_words):
         '''Print beginning of turns, up to max words.'''
-        for turn in debate.all_turns:
+        for turn in self.all_turns:
             print(turn.speaker)
             for para in turn.text:
                 paragraphs.print_paragraph_regex_count(para, max_words)
             print()
-
 
 def reformat_paragraphs(path, charset='utf8'):
     '''Just get the paragraphs.'''
