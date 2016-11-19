@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Sprax Lines       2016.07.12      Written with Python 3.5
-
+'''read text file, print regex-split words.'''
 import re
 
 with open('text.txt', 'r') as f:
@@ -10,4 +10,3 @@ with open('text.txt', 'r') as f:
             if len(word) > 0:
                 print(word)
         print(words)
-
