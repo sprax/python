@@ -25,6 +25,8 @@ def main():
     parser.add_argument('debate_text', metavar='TRANSCRIPT', type=str,
                         help='convert speaker-labeled text file to paragraphs (default: {})'
                         .format(default_debate_text))
+    parser.add_argument('-index', action='store_true',
+        help='show paragraph numbers')
     parser.add_argument('-max_words', type=int, nargs='?', const=1, default=7,
                         help='maximum words per paragraph: print only the first M words,\
                         or all if M < 1 (default: 0)')
@@ -34,10 +36,14 @@ def main():
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-    debate = Debate(args.debate_text, args.verbose)
-    for turn in debate.all_turns[:args.num_turns]:
-        print(turn.speaker)
+    debate = Debate(args.debate_text, args.num_turns, args.verbose)
+    index = 0
+    for count, turn in enumerate(debate.all_turns[:args.num_turns]):
+        print("{} ({})".format(turn.speaker, count))
         for para in turn.text:
+            if args.index:
+                index += 1
+                print("{}:  ".format(index), end='')
             paragraphs.print_paragraph_regex_count(para, args.max_words)
         print()
     # now summarize it...
@@ -51,7 +57,7 @@ class DebateTurn:
 
 class Debate:
     '''Initialize debate as a sequence of turns by moderators and contestants.'''
-    def __init__(self, transcript, verbose):
+    def __init__(self, transcript, max_turns, verbose):
         self.speakers = set()
         self.moderators = set()
         self.debaters = set()
@@ -59,18 +65,19 @@ class Debate:
         self.all_turns = []
         self.speaker_turns = {}
         self.verbose = verbose
-        self.parse_transcript(transcript)
+        self.parse_transcript(transcript, max_turns)
 
-    def parse_transcript(self, transcript_file):
+    def parse_transcript(self, transcript_file, max_turns):
         '''Populates Debate data: array of all speaker turns as one sequence,
         and dictionary mapping each speaker to an array of turn indices.'''
         verbose = 1
         turn = DebateTurn('[debate start]', datetime.datetime.now(), '')
         prev_speaker = ''
         self.all_turns.append(turn)
-        for para in reformat_paragraphs(transcript_file):
+        for idx, para in enumerate(parse_paragraphs(transcript_file)):
             if is_comment(para):
                 continue
+
             refd = None
             (speaker, date, body) = extract_speaker_date_body(para, verbose)
             if date:
@@ -87,6 +94,8 @@ class Debate:
                 turn.text.append(body)
             elif self.verbose > 2:
                 print("______parse_paragraph: discarding:\n", para)
+            if idx > max_turns:
+                break
 
     def add_speaker(self, speaker):
         if speaker not in self.speakers:
@@ -117,16 +126,17 @@ class Debate:
                 paragraphs.print_paragraph_regex_count(para, max_words)
             print()
 
-def reformat_paragraphs(path, charset='utf8'):
+def parse_paragraphs(path, charset='utf8'):
     '''Just get the paragraphs.'''
     with open(path, 'r', encoding=charset) as text:
         for para in paragraphs.paragraph_iter(text):
             yield para
 
-def is_comment(string):
-    '''comments start with # or // or /* ... ?'''
-    return string[0] == '#'
+RGX_COMMENT = re.compile('([#(/[.%-])')
 
+def is_comment(string):
+    '''comments start with # or // or /* or . or % or - or ... ?'''
+    return RGX_COMMENT.match(string) is not None
 
 def extract_speaker_date_body(paragraph, verbose):
     '''extract (date, head, body) from paragraph, where date and body may be None'''

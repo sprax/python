@@ -27,10 +27,10 @@ def paragraph_iter(fileobj, rgx_para_separator=r'\s*\n\s*'):
         else:
             line = line.rstrip()
             if line:
-                if paragraph.endswith('-'):
+                if line.endswith('-'):
                     paragraph += line
                 else:
-                    paragraph += ' ' + line
+                    paragraph += line + ' '
     if paragraph:
         yield paragraph
 
