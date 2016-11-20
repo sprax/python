@@ -28,13 +28,13 @@ def main():
     parser.add_argument('-max_words', type=int, nargs='?', const=1, default=7,
                         help='maximum words per paragraph: print only the first M words,\
                         or all if M < 1 (default: 0)')
-    parser.add_argument('-num_turns', type=int, nargs='?', const=1, default=12,
+    parser.add_argument('-num_turns', type=int, nargs='?', const=1, default=15,
                         help='number of turns to show, or 0 for all (the default)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-    debate = Debate(args.debate_text)
+    debate = Debate(args.debate_text, args.verbose)
     for turn in debate.all_turns[:args.num_turns]:
         print(turn.speaker)
         for para in turn.text:
@@ -51,13 +51,14 @@ class DebateTurn:
 
 class Debate:
     '''Initialize debate as a sequence of turns by moderators and contestants.'''
-    def __init__(self, transcript):
+    def __init__(self, transcript, verbose):
         self.speakers = set()
         self.moderators = set()
         self.debaters = set()
         self.turn_count = 0
         self.all_turns = []
         self.speaker_turns = {}
+        self.verbose = verbose
         self.parse_transcript(transcript)
 
     def parse_transcript(self, transcript_file):
@@ -72,11 +73,6 @@ class Debate:
                 continue
             refd = None
             (speaker, date, body) = extract_speaker_date_body(para, verbose)
-            if not body or len(body) < 5:
-                print("No body?")
-                print("para:", para)
-                print("body:", body)
-                exit(0)
             if date:
                 refd = date
                 print("\t  date:\t", refd)
@@ -89,6 +85,8 @@ class Debate:
             elif body:
                 body = body.replace('’', "'")
                 turn.text.append(body)
+            elif self.verbose > 2:
+                print("______parse_paragraph: discarding:\n", para)
 
     def add_speaker(self, speaker):
         if speaker not in self.speakers:
@@ -100,13 +98,13 @@ class Debate:
         if name in self.debaters:
             raise ValueError('moderator error: ' + name + ' already in debators')
         self.moderators.add(name)
-        self.add_speakder(name)
+        self.add_speaker(name)
 
     def add_debater(self, name):
         if name in self.moderators:
             raise ValueError('debater error: ' + name + ' already in moderators')
         self.debaters.add(name)
-        self.add_speakder(name)
+        self.add_speaker(name)
 
     def get_turns(self, speaker_name):
         return self.speaker_turns[speaker_name]
@@ -153,7 +151,7 @@ def speaker_dated_entry_regex():
     '''return compiled regex pattern'''
     spkr_grp = r'(?:\s*([A-Z]+):(?:\s*))?'
     date_grp = r'(?:\s*(\d\d\d\d.\d\d.\d\d|\d\d.\d\d.\d\d)[-\s])?'
-    body_grp = r'(?:\s*)?(\w.*)?'
+    body_grp = r'(?:\s*)?(\S.*)?'
     pattern = r"{}{}{}".format(spkr_grp, date_grp, body_grp)
     return re.compile(pattern, re.UNICODE)
 
