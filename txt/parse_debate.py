@@ -34,7 +34,6 @@ def main():
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-
     debate = Debate(args.debate_text)
     for turn in debate.all_turns[:args.num_turns]:
         print(turn.speaker)
@@ -54,8 +53,8 @@ class Debate:
     '''Initialize debate as a sequence of turns by moderators and contestants.'''
     def __init__(self, transcript):
         self.speakers = set()
-        self.moderators = {}
-        self.debaters = {}
+        self.moderators = set()
+        self.debaters = set()
         self.turn_count = 0
         self.all_turns = []
         self.speaker_turns = {}
@@ -73,21 +72,44 @@ class Debate:
                 continue
             refd = None
             (speaker, date, body) = extract_speaker_date_body(para, verbose)
+            if not body or len(body) < 5:
+                print("No body?")
+                print("para:", para)
+                print("body:", body)
+                exit(0)
             if date:
                 refd = date
                 print("\t  date:\t", refd)
             if speaker and speaker != prev_speaker:
                 prev_speaker = speaker
-                if speaker not in self.speakers:
-                    self.speakers.add(speaker)
-                    self.speaker_turns[speaker] = []
-                    print("<====", speaker, '====>')
+                self.add_speaker(speaker)
                 turn = DebateTurn(speaker, refd, body)
                 self.all_turns.append(turn)
                 self.speaker_turns[speaker].append(turn)
             elif body:
                 body = body.replace('’', "'")
                 turn.text.append(body)
+
+    def add_speaker(self, speaker):
+        if speaker not in self.speakers:
+            self.speakers.add(speaker)
+            self.speaker_turns[speaker] = []
+            print("<==== new speaker: ", speaker, '====>')
+
+    def add_moderator(self, name):
+        if name in self.debaters:
+            raise ValueError('moderator error: ' + name + ' already in debators')
+        self.moderators.add(name)
+        self.add_speakder(name)
+
+    def add_debater(self, name):
+        if name in self.moderators:
+            raise ValueError('debater error: ' + name + ' already in moderators')
+        self.debaters.add(name)
+        self.add_speakder(name)
+
+    def get_turns(self, speaker_name):
+        return self.speaker_turns[speaker_name]
 
     def print_first_per_turn(self, max_words):
         '''Print beginning of turns, up to max words.'''

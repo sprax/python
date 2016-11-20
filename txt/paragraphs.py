@@ -97,14 +97,13 @@ def print_paragraphs_nth_regex(path, max_words, charset='utf8'):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs_nth_substr(", path, max_words, charset, ")")
     with open(path, 'r', encoding=charset) as text:
-        for idx, para in enumerate(paragraph_iter(text)):
+        for para in paragraph_iter(text):
             print_paragraph_regex_count(para, max_words)
             print()
 
 def print_paragraph_regex_count(para, max_words, elliptical='...'):
-    if max_words < 1:
-        utf_print(para)
-    elif para:
+    '''split paragraph into words using regex and print first max_words words.'''
+    if para:
         index = index_regex_count(para, max_words)
         if elliptical and len(para) - index > 3:
             utf_print(para[:index], '...')
@@ -117,6 +116,8 @@ def index_regex_count(string, count=0, rgx=re.compile(r'\s+|$')):
     -1 if the pattern is not found at all.'''
     offset = 0
     for _ in range(count):
+        if not string:
+            return offset
         mat = rgx.search(string, offset)
         if not mat:
             return offset
