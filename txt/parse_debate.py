@@ -9,6 +9,7 @@ divides into one or more sentences.
 
 import argparse
 import datetime
+import math
 import re
 
 import paragraphs
@@ -26,7 +27,7 @@ def main():
                         help='convert speaker-labeled text file to paragraphs (default: {})'
                         .format(default_debate_text))
     parser.add_argument('-index', action='store_true',
-        help='show paragraph numbers')
+                        help='show paragraph numbers')
     parser.add_argument('-max_words', type=int, nargs='?', const=1, default=7,
                         help='maximum words per paragraph: print only the first M words,\
                         or all if M < 1 (default: 0)')
@@ -37,15 +38,9 @@ def main():
     args = parser.parse_args()
 
     debate = Debate(args.debate_text, args.num_turns, args.verbose)
-    index = 0
+    index = 1
     for count, turn in enumerate(debate.all_turns[:args.num_turns]):
-        print("{} ({})".format(turn.speaker, count))
-        for para in turn.text:
-            if args.index:
-                index += 1
-                print("{}:  ".format(index), end='')
-            paragraphs.print_paragraph_regex_count(para, args.max_words)
-        print()
+        turn.print_turn(count, index, args.max_words)
     # now summarize it...
 
 class DebateTurn:
@@ -54,6 +49,16 @@ class DebateTurn:
         self.speaker = speaker
         self.date = date
         self.text = [text]
+
+    def print_turn(self, turn_count, para_count=0, max_words=math.inf):
+        '''print the text of one speaker's turn'''
+        print("{} ({})".format(self.speaker, turn_count))
+        for para in self.text:
+            if para_count:
+                print("{}:  ".format(para_count), end='')
+                para_count += 1
+            paragraphs.print_paragraph_regex_count(para, max_words)
+        print()
 
 class Debate:
     '''Initialize debate as a sequence of turns by moderators and contestants.'''
@@ -97,25 +102,29 @@ class Debate:
             if idx > max_turns:
                 break
 
-    def add_speaker(self, speaker):
-        if speaker not in self.speakers:
-            self.speakers.add(speaker)
-            self.speaker_turns[speaker] = []
-            print("<==== new speaker: ", speaker, '====>')
+    def add_speaker(self, name):
+        '''add a name to the set of speakers'''
+        if name not in self.speakers:
+            self.speakers.add(name)
+            self.speaker_turns[name] = []
+            print("<==== new speaker: ", name, '====>')
 
     def add_moderator(self, name):
+        '''add a name to the set of moderators'''
         if name in self.debaters:
             raise ValueError('moderator error: ' + name + ' already in debators')
         self.moderators.add(name)
         self.add_speaker(name)
 
     def add_debater(self, name):
+        '''add a name to the set of debators'''
         if name in self.moderators:
             raise ValueError('debater error: ' + name + ' already in moderators')
         self.debaters.add(name)
         self.add_speaker(name)
 
     def get_turns(self, speaker_name):
+        '''get the turns for one speaker'''
         return self.speaker_turns[speaker_name]
 
     def print_first_per_turn(self, max_words):
