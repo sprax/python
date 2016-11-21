@@ -16,6 +16,8 @@ import paragraphs
 import sums_word_freq
 from utf_print import utf_print
 
+INF_SIZE = 2**30
+
 def main():
     '''get args and call ...'''
     default_debate_text = "djs.txt"
@@ -31,7 +33,7 @@ def main():
     parser.add_argument('-max_words', type=int, nargs='?', const=1, default=7,
                         help='maximum words per paragraph: print only the first M words,\
                         or all if M < 1 (default: 0)')
-    parser.add_argument('-num_turns', type=int, nargs='?', const=1,
+    parser.add_argument('-num_turns', type=int, nargs='?', const=1, default=INF_SIZE,
                         help='number of turns to show, or 0 for all (the default)')
     parser.add_argument('-sum_percent', metavar='PERCENT',type=int, nargs='?', const=1,
                         help='summarize to PERCENT percent of original number of sentences (default 15)')
@@ -54,7 +56,7 @@ class DebateTurn:
         self.date = date
         self.text = [text]
 
-    def print_turn(self, turn_count, para_count=0, max_words=math.inf):
+    def print_turn(self, turn_count, para_count=0, max_words=INF_SIZE):
         '''print the text of one speaker's turn'''
         print("{} ({})".format(self.speaker, turn_count))
         for para in self.text:
