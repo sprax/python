@@ -185,7 +185,7 @@ def main():
                         help='paragraph printing function: 0=all (default: 0)')
     parser.add_argument('-max_words', type=int, nargs='?', const=1, default=5,
                         help='maximum words per paragraph: print only the first M words,\
-			or all if M < 1 (default: 0)')
+                        or all if M < 1 (default: 0)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()

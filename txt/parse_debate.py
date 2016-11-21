@@ -13,6 +13,7 @@ import math
 import re
 
 import paragraphs
+import sums_word_freq
 from utf_print import utf_print
 
 def main():
@@ -26,18 +27,21 @@ def main():
     parser.add_argument('debate_text', metavar='TRANSCRIPT', type=str,
                         help='convert speaker-labeled text file to paragraphs (default: {})'
                         .format(default_debate_text))
-    parser.add_argument('-index', action='store_true',
-                        help='show paragraph numbers')
+    parser.add_argument('-index', action='store_true', help='show paragraph numbers')
     parser.add_argument('-max_words', type=int, nargs='?', const=1, default=7,
                         help='maximum words per paragraph: print only the first M words,\
                         or all if M < 1 (default: 0)')
-    parser.add_argument('-num_turns', type=int, nargs='?', const=1, default=15,
+    parser.add_argument('-num_turns', type=int, nargs='?', const=1,
                         help='number of turns to show, or 0 for all (the default)')
+    parser.add_argument('-sum_percent', metavar='PERCENT',type=int, nargs='?', const=1,
+                        help='summarize to PERCENT percent of original number of sentences (default 15)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
     debate = Debate(args.debate_text, args.num_turns, args.verbose)
+    if args.sum_percent and args.sum_percent > 0:
+        freqsum = FrequencySummarizer(0.1, 0.9, args.verbose)
     index = 1
     for count, turn in enumerate(debate.all_turns[:args.num_turns]):
         turn.print_turn(count, index, args.max_words)
