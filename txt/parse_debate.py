@@ -41,9 +41,37 @@ def main():
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-    debate = Debate(args.debate_text, args.num_turns, args.verbose)
+    verbose = args.verbose
+    debate = Debate(args.debate_text, args.num_turns, verbose)
     if args.sum_percent and args.sum_percent > 0:
-        freqsum = FrequencySummarizer(0.1, 0.9, args.verbose)
+        min_freq = 0.1
+        max_freq = 0.9
+        do_serial = False
+        sum_number = 50
+        sum_percent = 10
+        indices = True
+        freqsum = sums_word_freq.FrequencySummarizer(min_freq, max_freq, verbose)
+        with open(args.debate_text, 'r', encoding='utf8') as src:
+            text = src.read()
+            src.close()
+        sentence_count = freqsum.add_text(text)
+        print('---------------------------------------------------------------------------')
+        summary_sentences = freqsum.summarize_all(sum_number, sum_percent, indices, verbose)
+        for sum_sentence in summary_sentences:
+            if verbose > 0:
+                utf_print(sum_sentence)
+                print()
+        if do_serial:
+            print('---------------------------------------------------------------------------')
+            summary_sentences = freqsum.summarize_next(text, sentence_count,
+                                                       sum_number, sum_percent, indices, verbose)
+            for sum_sentence in summary_sentences:
+                if verbose > 0:
+                    utf_print(sum_sentence)
+                    print()
+                print(sum_sentence, file=outfile)
+        print('---------------------------------------------------------------------------')
+
     index = 1
     for count, turn in enumerate(debate.all_turns[:args.num_turns]):
         turn.print_turn(count, index, args.max_words)
