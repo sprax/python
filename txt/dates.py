@@ -115,8 +115,8 @@ def reformat_paragraph(paragraph, in_formats, out_format, verbose):
         print("WARNING: paragraph is empty!")
         return ()
     (date, wday, locs, head, body) = extract_date_head_body(paragraph, verbose)
-    if date:
-        refd = reformat_date(date, in_formats, out_format, verbose)
+    # if date:
+        # refd = reformat_date(date, in_formats, out_format, verbose)
         # print("\t reformatted date:\t", refd)
     if head:
         head = head.replace('’', "'")
@@ -147,7 +147,8 @@ def extract_date_head_body(paragraph, verbose):
 def dated_entry_regex():
     '''return compiled regex pattern'''
     date_grp = r'(?:\s*(\d\d\d\d.\d\d.\d\d|\d\d.\d\d.\d\d)[-\s])?'
-    wday_grp = r'(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+)?'
+    wday_grp = r'(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun|\
+                  Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+)?'
     locs_grp = r'(?:\s*([^.?!]+)(?:\t|\s\s+))?'    # TODO: Add locs as another optional group
     head_grp = r'(?:\s*)?([^.?!]+(?:[.?!][\'"]?|$))'
     body_grp = r'(?:\s*)?(\w.*)?'
@@ -159,7 +160,7 @@ def main():
     default_format_out = '%Y.%m.%d %a'
     default_num_days = 7
     default_jrnl_input = "djs.txt"
-    default_start_date = start_date = datetime.datetime.now()
+    start_date = datetime.datetime.now()
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="Read/write journal-entry style dates"
@@ -201,33 +202,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-r'''
->>> dates = 'date'
->>> first = r'[\w][^.!?]+[.!?]'
->>> bodys = '.*'
->>> rgx = re.compile("({})\s+({})\s+({})".format(dates, first, bodys)
-... )
->>>
->>>
->>>
->>> rgx
-re.compile('(date)\\s+([\\w][^.!?]+[.!?])\\s+(.*)')
->>> sent = 'date 8*^)_+(*+(@(#_+&_+@#$%^&*()$#@%'
->>> m = rgx.match(sent)
->>> m
->>> m = re.match(rgx, sent)
-
->>> dates = 'date'
->>> first = r'[\w][^.!?]+[.!?]'
->>> bodys = '.*'
->>> rgx = re.compile("({})\s+({})\s+({})".format(dates, first, bodys)
->>>
->>> rgx
-re.compile('(date)\\s+([\\w][^.!?]+[.!?])\\s+(.*)')
->>> sent = 'date 8*^)_+(*+(@(#_+&_+@#$%^&*()$#@%'
->>> m = rgx.match(sent)
->>> m
->>> m = re.match(rgx, sent)
->>>
-'''
