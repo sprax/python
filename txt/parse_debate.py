@@ -9,7 +9,6 @@ divides into one or more sentences.
 
 import argparse
 import datetime
-import math
 import re
 
 import paragraphs
@@ -35,15 +34,15 @@ def main():
                         or all if M < 1 (default: 0)')
     parser.add_argument('-num_turns', type=int, nargs='?', const=1, default=INF_SIZE,
                         help='number of turns to show, or 0 for all (the default)')
-    parser.add_argument('-sum_percent', metavar='PERCENT',type=int, nargs='?', const=1,
-                        help='summarize to PERCENT percent of original number of sentences (default 15)')
+    parser.add_argument('-sum_percent', metavar='PERCENT', type=int, nargs='?', const=1, default=0,
+                        help='summarize to PERCENT percent of original number of sentences')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
     verbose = args.verbose
     debate = Debate(args.debate_text, args.num_turns, verbose)
-    if args.sum_percent and args.sum_percent > 0:
+    if args.sum_percent > 0:
         min_freq = 0.1
         max_freq = 0.9
         do_serial = False
@@ -69,13 +68,21 @@ def main():
                 if verbose > 0:
                     utf_print(sum_sentence)
                     print()
-                print(sum_sentence, file=outfile)
+                utf_print(sum_sentence)
         print('---------------------------------------------------------------------------')
 
     index = 1
+    sentence_count = 1
     for count, turn in enumerate(debate.all_turns[:args.num_turns]):
         turn.print_turn(count, index, args.max_words)
-    # now summarize it...
+        # now summarize it...
+        if args.sum_percent > 0:
+            print('---------------------------------------------------------------------------')
+            summary_sentences = freqsum.summarize_next(' '.join(turn.text), sentence_count,
+                                                       sum_number, sum_percent, indices, verbose)
+            for sum_sentence in summary_sentences:
+                utf_print(sum_sentence)
+                print()
 
 class DebateTurn:
     '''one speaker turn in a debate'''
