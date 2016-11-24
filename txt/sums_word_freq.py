@@ -7,9 +7,11 @@
 # from nltk.tokenize import sent_tokenize, word_tokenize
 # from string import punctuation
 import argparse
+import errno
 import heapq
 import math
 import string
+import sys
 from collections import defaultdict
 import nltk
 from utf_print import utf_print
@@ -70,7 +72,7 @@ class FrequencySummarizer:
         sentence_count = len(self._text_sentences)
         words_per_sentence = self._count_words / sentence_count
         ranking = defaultdict(int)
-        summary_count = resolve_count(summary_count, summary_percent, sentence_count)
+        summary_count, act_percent = resolve_count(summary_count, summary_percent, sentence_count)
         for idx, snt_words in enumerate(self._snt_word_lists):
             ranking[idx] = self._score_sentence(snt_words, words_per_sentence)
         sents_idx = _rank(summary_count, ranking)
@@ -91,15 +93,17 @@ class FrequencySummarizer:
         assert total_sentence_count == saved_sentence_count + added_sentence_count
         words_per_sentence = self._count_words / total_sentence_count
         ranking = defaultdict(int)
-        summary_count = resolve_count(summary_count, summary_percent, added_sentence_count)
+        summary_count, act_percent = resolve_count(summary_count, summary_percent, added_sentence_count)
         for idx in range(saved_sentence_count, total_sentence_count):
             snt_words = self._snt_word_lists[idx]
             ranking[idx] = self._score_sentence(snt_words, words_per_sentence)
         sents_idx = _rank(summary_count, ranking)
         sents_idx.sort()
+        if offset > 0:
+            sents_idx = [x - offset for x in sents_idx]
         if verbose > 2:
             print("Sentence indices in [0, {})".format(len(self._text_sentences)), end="")
-            print([x - offset for x in sents_idx])
+            print(sents_idx)
         return sents_idx
 
     def sum_next_snt(self, text, offset, summary_count, summary_percent, verbose):
@@ -122,15 +126,16 @@ def _rank(summary_count, ranking):
     '''Return the highest ranked N sentences.'''
     return heapq.nlargest(summary_count, ranking, key=ranking.get)
 
-def resolve_count(summary_count, summary_percent, sentence_count):
-    '''returns count of sentences to be extracted into summary'''
-    if not summary_count:
-        summary_count = int(math.ceil(summary_percent * sentence_count / 100.0))
-    if  summary_count > sentence_count:
-        summary_count = sentence_count
-    if  summary_count < 1:
-        summary_count = 1
-    return summary_count
+def resolve_count(sub_count, percent, total_count):
+    '''returns count and percentage of sentences, where count trumps percentage '''
+    if not sub_count:
+        sub_count = int(math.ceil(percent * total_count / 100.0))
+    if  sub_count > total_count:
+        sub_count = total_count
+    if  sub_count < 1:
+        sub_count = 1
+    percent = sub_count * 100.0 / total_count
+    return sub_count, percent
 
 def filter_word_counts(word_counts, stopwords, min_freq, max_freq, verbose):
     """ remove any word in stopwords or whose count is below the min or above the max threshold """
@@ -161,7 +166,7 @@ def filter_word_counts(word_counts, stopwords, min_freq, max_freq, verbose):
 
 def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_number, sum_percent,
                         do_serial, indices, verbose, charset='utf8'):
-    """ Return a list of N sentences which represent the summary of text.  """
+    """Output a summary of a text file."""
     with open(text_file, 'r', encoding=charset) as src:
         text = src.read()
         src.close()
@@ -170,48 +175,54 @@ def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_number,
     sentence_count = freqsum.add_text(text)
 
     print(text_file, '====>', summary_file)
-    print("Keeping", (sum_number if sum_number else "{} percent of the".format(sum_percent)),
-          "sentences.")
-    print('---------------------------------------------------------------------------')
+    sum_number, act_percent = resolve_count(sum_number, sum_percent, sentence_count)
+    print("Keeping {} ({:.4} percent) of {} sentences.".format(sum_number, act_percent, sentence_count))
+    print('-------------------------------------------------------------------')
     summary_sentences = freqsum.summarize_all(sum_number, sum_percent, indices, verbose)
-    with open(summary_file, 'w') as outfile:
+
+    if summary_file:
+        try:
+            outfile = open(summary_file, 'w')
+        except IOError as ex:
+            if ex.errno != errno.ENOENT:
+                raise
+            print("IOError opening summary file [{}]:".format(summary_file), ex)
+            outfile = sys.stdout
+    else:
+        outfile = sys.stdout
+
+    if summary_file:
         for sum_sentence in summary_sentences:
-            if verbose > 0:
-                utf_print(sum_sentence)
-                print()
-            print(sum_sentence, file=outfile)
-        if do_serial:
-            print('---------------------------------------------------------------------------')
-            summary_sentences = freqsum.sum_next_snt(text, sentence_count,
-                                                     sum_number, sum_percent, verbose)
-            for sum_sentence in summary_sentences:
-                if verbose > 0:
-                    utf_print(sum_sentence)
-                    print()
-                print(sum_sentence, file=outfile)
-        outfile.close()
-    print('---------------------------------------------------------------------------')
+            utf_print(sum_sentence, outfile=outfile)
+
+    if do_serial:
+        print('-------------------------------------------------------------------', file=outfile)
+        summary_sentences = freqsum.sum_next_snt(text, sentence_count,
+                                                 sum_number, sum_percent, verbose)
+        for sum_sentence in summary_sentences:
+            utf_print(sum_sentence, outfile=outfile)
+    print('-------------------------------------------------------------------', file=outfile)
+    outfile.close()
 
 def main():
     '''Extract summary from text.'''
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
-        description="Extractive text summarizer'",
-        )
+        description="Extractive text summarizer")
     parser.add_argument('text_file', type=str, nargs='?', default='corpus.txt',
-                        help='text file containing quoted dialogue')
-    parser.add_argument('summary_file', type=str, nargs='?', default='corpus_summary.txt',
-                        help='output file of quoted dialogue extracted from the corpus')
+                        help='file containing text to summarize')
     parser.add_argument('-index', action='store_true',
-                        help='show only indices of summary sentences')
+                        help='output only the indices of summary sentences')
     parser.add_argument('-max_freq', type=float, nargs='?', const=1, default=0.9,
                         help='maximum frequency cut-off (default: 0.9)')
     parser.add_argument('-min_freq', type=float, nargs='?', const=1, default=0.1,
                         help='minimum frequency cut-off (default: 0.1)')
     parser.add_argument('-number', type=int, nargs='?', const=1,
                         help='number of sentences to keep (default: 5), overrides -percent')
+    parser.add_argument('-out_file', type=str, nargs='?', default='corpus_summary.txt',
+                        help='output file for summarized text')
     parser.add_argument('-percent', type=float, nargs='?', const=1, default=10.0,
-                        help='percentage of sentences to keep (default: 10.0%)')
+                        help='percentage of sentences to keep (default: 10.0%%)')
     parser.add_argument('-serial', action='store_true',
                         help='summarize each paragraph in series')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
@@ -222,7 +233,8 @@ def main():
         print("args:", args)
         print(__doc__)
 
-    summarize_text_file(args.text_file, args.summary_file, args.min_freq, args.max_freq,
+    summary_file = getattr(args, 'summary_file', None)
+    summarize_text_file(args.text_file, summary_file, args.min_freq, args.max_freq,
                         args.number, args.percent, args.serial, args.index, args.verbose)
 
 if __name__ == '__main__':

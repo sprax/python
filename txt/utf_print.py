@@ -21,4 +21,4 @@ def utf_print(*objects, sep=' ', end='\n', outfile=sys.stdout):
 
 
 if __name__ == '__main__':
-    utf_print("This is utfprint\n")
+    utf_print("This is utf_print\n")
