@@ -120,7 +120,8 @@ class Debate:
         turn = DebateTurn('[debate start]', datetime.datetime.now(), '')
         prev_speaker = ''
         self.all_turns.append(turn)
-        for idx, para in enumerate(parse_paragraphs(transcript_file)):
+        num_turns = 0
+        for para in parse_paragraphs(transcript_file):
             if is_comment(para):
                 continue
 
@@ -130,6 +131,9 @@ class Debate:
                 refd = date
                 print("\t  date:\t", refd)
             if speaker and speaker != prev_speaker:
+                num_turns += 1
+                if num_turns > max_turns:
+                    break
                 prev_speaker = speaker
                 self.add_speaker(speaker)
                 turn = DebateTurn(speaker, refd, body)
@@ -140,15 +144,14 @@ class Debate:
                 turn.text.append(body)
             elif self.verbose > 2:
                 print("______parse_paragraph: discarding:\n", para)
-            if idx > max_turns:
-                break
 
     def add_speaker(self, name):
         '''add a name to the set of speakers'''
         if name not in self.speakers:
             self.speakers.add(name)
             self.speaker_turns[name] = []
-            print("<==== new speaker: ", name, '====>')
+            if self.verbose > 3:
+                print("<==== new speaker: ", name, '====>')
 
     def add_moderator(self, name):
         '''add a name to the set of moderators'''

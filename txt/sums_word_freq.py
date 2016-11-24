@@ -76,13 +76,14 @@ class FrequencySummarizer:
         sents_idx = _rank(summary_count, ranking)
         sents_idx.sort()
         if indices or verbose > 2:
-            print("Sentence indices:", sents_idx)
+            print("Sentence indices in [0, {})".format(len(self._text_sentences)))
+            print(sents_idx)
             if indices:
                 return []
         return [self._text_sentences[j] for j in sents_idx]
 
-    def summarize_next(self, text, offset, summary_count, summary_percent, indices, verbose):
-        '''summarize another chunk of text, based on previous chunks'''
+    def sum_next_idx(self, text, offset, summary_count, summary_percent, verbose):
+        '''summarize another chunk of text, based on previous chunks, and return indices'''
         saved_sentence_count = len(self._text_sentences)
         added_sentence_count = self.add_text(text)
         self.filter_words()
@@ -96,13 +97,14 @@ class FrequencySummarizer:
             ranking[idx] = self._score_sentence(snt_words, words_per_sentence)
         sents_idx = _rank(summary_count, ranking)
         sents_idx.sort()
-        if indices or verbose > 2:
-            print("Sentence indices: [", end="")
-            for idx in sents_idx:
-                print("{}, ".format(idx - offset), end="")
-            print("]")
-            if indices:
-                return []
+        if verbose > 2:
+            print("Sentence indices in [0, {})".format(len(self._text_sentences)), end="")
+            print([x - offset for x in sents_idx])
+        return sents_idx
+
+    def sum_next_snt(self, text, offset, summary_count, summary_percent, verbose):
+        '''summarize another chunk of text, based on previous chunks, and return sentences'''
+        sents_idx = self.sum_next_idx(text, offset, summary_count, summary_percent, verbose)
         return [self._text_sentences[j] for j in sents_idx]
 
     def _score_sentence(self, snt_words, words_per_sentence):
@@ -180,8 +182,8 @@ def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_number,
             print(sum_sentence, file=outfile)
         if do_serial:
             print('---------------------------------------------------------------------------')
-            summary_sentences = freqsum.summarize_next(text, sentence_count,
-                                                       sum_number, sum_percent, indices, verbose)
+            summary_sentences = freqsum.sum_next_snt(text, sentence_count,
+                                                     sum_number, sum_percent, verbose)
             for sum_sentence in summary_sentences:
                 if verbose > 0:
                     utf_print(sum_sentence)
