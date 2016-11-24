@@ -66,13 +66,12 @@ class FrequencySummarizer:
                                                    self._min_freq, self._max_freq, self._verbose)
             self._filtered = True
 
-    def summarize_all(self, summary_count, summary_percent, indices, verbose):
+    def summarize_all(self, summary_count, indices, verbose):
         '''summarize all stored text'''
         self.filter_words()
         sentence_count = len(self._text_sentences)
         words_per_sentence = self._count_words / sentence_count
         ranking = defaultdict(int)
-        summary_count, act_percent = resolve_count(summary_count, summary_percent, sentence_count)
         for idx, snt_words in enumerate(self._snt_word_lists):
             ranking[idx] = self._score_sentence(snt_words, words_per_sentence)
         sents_idx = _rank(summary_count, ranking)
@@ -164,7 +163,7 @@ def filter_word_counts(word_counts, stopwords, min_freq, max_freq, verbose):
             word_counts.pop(key, None)
     return total_count
 
-def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_number, sum_percent,
+def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_count, sum_percent,
                         do_serial, indices, verbose, charset='utf8'):
     """Output a summary of a text file."""
     with open(text_file, 'r', encoding=charset) as src:
@@ -175,10 +174,10 @@ def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_number,
     sentence_count = freqsum.add_text(text)
 
     print(text_file, '====>', summary_file)
-    sum_number, act_percent = resolve_count(sum_number, sum_percent, sentence_count)
-    print("Keeping {} ({:.4} percent) of {} sentences.".format(sum_number, act_percent, sentence_count))
+    sum_count, act_percent = resolve_count(sum_count, sum_percent, sentence_count)
+    print("Keeping {} ({:.4} percent) of {} sentences.".format(sum_count, act_percent, sentence_count))
     print('-------------------------------------------------------------------')
-    summary_sentences = freqsum.summarize_all(sum_number, sum_percent, indices, verbose)
+    summary_sentences = freqsum.summarize_all(sum_count, indices, verbose)
 
     if summary_file:
         try:
@@ -198,7 +197,7 @@ def summarize_text_file(text_file, summary_file, min_freq, max_freq, sum_number,
     if do_serial:
         print('-------------------------------------------------------------------', file=outfile)
         summary_sentences = freqsum.sum_next_snt(text, sentence_count,
-                                                 sum_number, sum_percent, verbose)
+                                                 sum_count, sum_percent, verbose)
         for sum_sentence in summary_sentences:
             utf_print(sum_sentence, outfile=outfile)
     print('-------------------------------------------------------------------', file=outfile)
@@ -232,8 +231,9 @@ def main():
     if args.verbose > 2:
         print("args:", args)
         print(__doc__)
+        exit(0)
 
-    summary_file = getattr(args, 'summary_file', None)
+    summary_file = getattr(args, 'out_file', None)
     summarize_text_file(args.text_file, summary_file, args.min_freq, args.max_freq,
                         args.number, args.percent, args.serial, args.index, args.verbose)
 
