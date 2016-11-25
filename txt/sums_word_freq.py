@@ -67,8 +67,8 @@ class FrequencySummarizer:
                                                    self._min_freq, self._max_freq, self._verbose)
             self._filtered = True
 
-    def summarize_all(self, summary_count, indices, verbose):
-        '''summarize all stored text'''
+    def summarize_all_idx(self, summary_count, verbose):
+        '''summarize all stored text and return indices of ranked extracted sentences'''
         self.filter_words()
         sentence_count = len(self._text_sentences)
         words_per_sentence = self._count_words / sentence_count
@@ -76,16 +76,20 @@ class FrequencySummarizer:
         for idx, snt_words in enumerate(self._snt_word_lists):
             ranking[idx] = self._score_sentence(snt_words, words_per_sentence)
         sents_idx = _rank(summary_count, ranking)
-        sents_idx.sort()
-        if indices or verbose > 2:
+        if verbose > 2:
             print("Sentence indices in [0, {})".format(len(self._text_sentences)))
             print(sents_idx)
-            if indices:
-                return []
+        return sents_idx
+
+    def summarize_all_snt(self, summary_count, verbose):
+        '''summarize all stored text and return the extracted sentences sorted by index'''
+        sents_idx = self.summarize_all_idx(summary_count, verbose)
+        sents_idx.sort()
         return [self._text_sentences[j] for j in sents_idx]
 
     def sum_next_idx(self, text, offset, summary_count, summary_percent, verbose):
-        '''summarize another chunk of text, based on previous chunks, and return indices'''
+        '''summarize another chunk of text, based on previous chunks,
+        and return ranked indices'''
         saved_sentence_count = len(self._text_sentences)
         added_sentence_count = self.add_text(text)
         self.filter_words()
@@ -98,7 +102,6 @@ class FrequencySummarizer:
             snt_words = self._snt_word_lists[idx]
             ranking[idx] = self._score_sentence(snt_words, words_per_sentence)
         sents_idx = _rank(summary_count, ranking)
-        sents_idx.sort()
         if offset > 0:
             sents_idx = [x - offset for x in sents_idx]
         if verbose > 2:
@@ -107,8 +110,10 @@ class FrequencySummarizer:
         return sents_idx
 
     def sum_next_snt(self, text, offset, summary_count, summary_percent, verbose):
-        '''summarize another chunk of text, based on previous chunks, and return sentences'''
+        '''summarize another chunk of text, based on previous chunks,
+        and return sentences sorted by index'''
         sents_idx = self.sum_next_idx(text, offset, summary_count, summary_percent, verbose)
+        sents_idx.sort()
         return [self._text_sentences[j] for j in sents_idx]
 
     def _score_sentence(self, snt_words, words_per_sentence):
@@ -199,10 +204,11 @@ def open_out_file(file_spec):
         return None
 
 def print_sentences(sentences, list_numbers, max_words, out_file):
-    if 0 < max_words and max_words < 15:
-        idx_format = '{} '
-    else:
-        idx_format = '\n    {}\n'
+    if list_numbers:
+        if 0 < max_words and max_words < 15:
+            idx_format = '{} '
+        else:
+            idx_format = '\n    {}\n'
     for idx, sentence in enumerate(sentences):
         if list_numbers:
             print(idx_format.format(idx), end=' ')
@@ -211,6 +217,7 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
         else:
             utf_print(sentence, outfile=out_file)
 
+########################################################
 
 def summarize_text_file(text_file, opt, charset='utf8'):
     """Output a summary of a text file."""
@@ -233,9 +240,13 @@ def summarize_text_file(text_file, opt, charset='utf8'):
     print("Keeping {} ({:.4} percent) of {} sentences.".format(sum_count, act_percent, sentence_count))
     print('-------------------------------------------------------------------')
 
-    summary_sentences = freqsum.summarize_all(sum_count, opt.indices_only, opt.verbose)
+    summary_sentences = []
+    if opt.indices_only:
+        sents_idx = freqsum.summarize_all_idx(sum_count, opt.verbose)
+    else:
+        summary_sentences = freqsum.summarize_all_snt(sum_count, opt.verbose)
 
-    if out_file:
+    if summary_sentences and out_file:
         print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
 
     if opt.serial:
@@ -265,11 +276,12 @@ def main():
                         help='maximum frequency cut-off (default: 0.9)')
     parser.add_argument('-min_freq', type=float, nargs='?', const=1, default=0.1,
                         help='minimum frequency cut-off (default: 0.1)')
-    parser.add_argument('-number', dest='sum_count', type=int, nargs='?', const=1,
+    parser.add_argument('-number', dest='sum_count', type=int, nargs='?', const=1, default=0,
                         help='number of sentences to keep (default: 5), overrides -percent')
     parser.add_argument('-out_file', type=str, nargs='?', const='-',
                         help='output file for summarized text (default: None)')
-    parser.add_argument('-percent', dest='sum_percent', type=float, nargs='?', const=16.6667,
+    parser.add_argument('-percent', dest='sum_percent', type=float, nargs='?',
+                        const=16.6667, default=10.0,
                         help='percentage of sentences to keep (default: 10.0%%)')
     parser.add_argument('-serial', action='store_true',
                         help='summarize each paragraph in series')
