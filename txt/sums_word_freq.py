@@ -14,6 +14,7 @@ import string
 import sys
 from collections import defaultdict
 import nltk
+import paragraphs
 from utf_print import utf_print
 
 class FrequencySummarizer:
@@ -163,53 +164,88 @@ def filter_word_counts(word_counts, stopwords, min_freq, max_freq, verbose):
             word_counts.pop(key, None)
     return total_count
 
+
+def read_file_eafp(file_spec):
+    try:
+        src = open(file_spec, 'r')
+    except IOError as ex:
+        if ex.errno != errno.ENOENT:
+            raise
+        print("WARNING: {} does not exist".format(file_spec))
+        return None
+    else:
+        text = src.read()
+        src.close()
+        return text
+
+def read_file(file_spec, charset='utf8'):
+    with open(file_spec, 'r', encoding=charset) as src:
+        return src.read()
+
+def open_out_file(file_spec):
+    if file_spec:
+        if file_spec in ['-', 'stdout']:
+            return sys.stdout
+        else:
+            try:
+                out_file = open(out_file, 'w')
+            except IOError as ex:
+                if ex.errno != errno.ENOENT:
+                    raise
+                print("IOError opening summary file [{}]:".format(out_file), ex)
+                out_file = sys.stdout
+            return out_file
+    else:
+        return None
+
+def print_sentences(sentences, list_numbers, max_words, out_file):
+    if 0 < max_words and max_words < 15:
+        idx_format = '{} '
+    else:
+        idx_format = '\n    {}\n'
+    for idx, sentence in enumerate(sentences):
+        if list_numbers:
+            print(idx_format.format(idx), end=' ')
+        if max_words:
+            paragraphs.print_paragraph_regex_count(sentence, max_words, outfile=out_file)
+        else:
+            utf_print(sentence, outfile=out_file)
+
+
 def summarize_text_file(text_file, opt, charset='utf8'):
     """Output a summary of a text file."""
 
     # Read initial text corpus:
-    with open(text_file, 'r', encoding=charset) as src:
-        text = src.read()
-        src.close()
+    text = read_file(text_file, charset)
 
     # Try to open output (file):
-    if opt.out_file in ['-', 'stdout']:
-        out_file = sys.stdout
-    elif opt.out_file:
-        try:
-            out_file = open(out_file, 'w')
-        except IOError as ex:
-            if ex.errno != errno.ENOENT:
-                raise
-            print("IOError opening summary file [{}]:".format(out_file), ex)
-            out_file = sys.stdout
-    else:
-        out_file = None
+    out_file = open_out_file(opt.out_file)
 
+    # Create summarizer and initialize with text:
     freqsum = FrequencySummarizer(opt.min_freq, opt.max_freq, opt.verbose)
     sentence_count = freqsum.add_text(text)
 
+    max_words = opt.max_print_words
+
+    # Announce output:
     print(text_file, '====>', '<stdout>' if out_file==sys.stdout else opt.out_file)
     sum_count, act_percent = resolve_count(opt.sum_count, opt.sum_percent, sentence_count)
     print("Keeping {} ({:.4} percent) of {} sentences.".format(sum_count, act_percent, sentence_count))
     print('-------------------------------------------------------------------')
+
     summary_sentences = freqsum.summarize_all(sum_count, opt.indices_only, opt.verbose)
 
-
     if out_file:
-        if opt.list_numbers:
-            for idx, sum_sentence in enumerate(summary_sentences):
-                print('\n   ', idx)
-                utf_print(sum_sentence, outfile=out_file)
-        else:
-            for sum_sentence in summary_sentences:
-                utf_print(sum_sentence, outfile=out_file)
+        print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
 
     if opt.serial:
+        if not out_file:
+            out_file = sys.stdout
         print('-------------------------------------------------------------------', file=out_file)
         summary_sentences = freqsum.sum_next_snt(text, sentence_count,
-                                                 sum_count, sum_percent, opt.verbose)
-        for sum_sentence in summary_sentences:
-            utf_print(sum_sentence, outfile=out_file)
+                                                 sum_count, opt.sum_percent, opt.verbose)
+        print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
+
     print('-------------------------------------------------------------------', file=out_file)
     if out_file and out_file != sys.stdout:
         out_file.close()
@@ -237,6 +273,9 @@ def main():
                         help='percentage of sentences to keep (default: 10.0%%)')
     parser.add_argument('-serial', action='store_true',
                         help='summarize each paragraph in series')
+    parser.add_argument('-truncate', dest='max_print_words', type=int, nargs='?',
+                        const=8, default=0,
+                        help='truncate sentences after MAX words (default: INT_MAX)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()

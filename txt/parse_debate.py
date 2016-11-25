@@ -20,6 +20,7 @@ INF_SIZE = 2**30
 def main():
     '''get args and call ...'''
     default_debate_text = "djs.txt"
+    default_verbose = 1
     # default_start_date = start_date = datetime.datetime.now()
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
@@ -34,10 +35,11 @@ def main():
                         or all if M < 1 (default: 0)')
     parser.add_argument('-num_turns', type=int, nargs='?', const=1, default=INF_SIZE,
                         help='number of turns to show, or 0 for all (the default)')
+    parser.add_argument('-print', action='store_true', help=' paragraph numbers')
     parser.add_argument('-sum_percent', metavar='PERCENT', type=int, nargs='?', const=1, default=0,
                         help='summarize to PERCENT percent of original number of sentences')
-    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
-                        help='verbosity of output (default: 1)')
+    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=default_verbose,
+                        help="verbosity of output (default: {})".format(default_verbose))
     args = parser.parse_args()
 
     verbose = args.verbose
@@ -62,8 +64,8 @@ def main():
                 print()
         if do_serial:
             print('---------------------------------------------------------------------------')
-            summary_sentences = freqsum.summarize_next(text, sentence_count,
-                                                       sum_number, sum_percent, indices, verbose)
+            summary_sentences = freqsum.sum_next_idx(text, sentence_count,
+                                                     sum_number, sum_percent, verbose)
             for sum_sentence in summary_sentences:
                 if verbose > 0:
                     utf_print(sum_sentence)

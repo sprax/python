@@ -10,8 +10,11 @@
 
 import argparse
 import re
+import sys
 
 from utf_print import utf_print
+
+INF_NUM_WORDS = 2**30
 
 
 def paragraph_iter(fileobj, rgx_para_separator=r'\s*\n\s*'):
@@ -93,7 +96,7 @@ def print_paragraphs_nth_substr(path, max_words, charset='utf8'):
             utf_print(para[:index])
             print()
 
-def print_paragraphs_nth_regex(path, max_words, charset='utf8'):
+def print_paragraphs_nth_regex(path, max_words=INF_NUM_WORDS, outfile=sys.stdout, charset='utf8'):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs_nth_substr(", path, max_words, charset, ")")
     with open(path, 'r', encoding=charset) as text:
@@ -101,7 +104,7 @@ def print_paragraphs_nth_regex(path, max_words, charset='utf8'):
             print_paragraph_regex_count(para, max_words)
             print()
 
-def print_paragraph_regex_count(para, max_words, elliptical='...'):
+def print_paragraph_regex_count(para, max_words=INF_NUM_WORDS, outfile=sys.stdout, elliptical='...'):
     '''split paragraph into words using regex and print first max_words words.'''
     if para:
         index = index_regex_count(para, max_words)
@@ -115,9 +118,12 @@ def index_regex_count(string, count=0, rgx=re.compile(r'\s+|$')):
     Returns the index of the Nth occurrence where N <= count, or
     -1 if the pattern is not found at all.'''
     offset = 0
-    for _ in range(count):
-        if not string:
-            return offset
+    if not string:
+        return offset
+    lens = len(string)
+    for z in range(count):
+        if lens <= offset:
+            return offset;
         mat = rgx.search(string, offset)
         if not mat:
             return offset
