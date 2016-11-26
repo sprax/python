@@ -3,20 +3,21 @@
 # From http://glowingpython.blogspot.com/2014/09/text-summarization-with-nltk.html
 '''Summarize text(s).'''
 
+#SPRAX
 # from nltk.corpus import stopwords
 # from nltk.tokenize import sent_tokenize, word_tokenize
 # from string import punctuation
 import argparse
-import errno
 import heapq
-import math
 import string
 import sys
 from collections import defaultdict
 import nltk
+import corpus
 import paragraphs
-from utf_print import utf_print
 import text_file
+
+LINE_MAX = 15
 
 class FrequencySummarizer:
     '''Text summarization based on word frequencies'''
@@ -64,8 +65,8 @@ class FrequencySummarizer:
     def filter_words(self):
         '''apply thresholding and remove stop words if not already filtered'''
         if not self._filtered:
-            self._count_words = filter_word_counts(self._word_counts, self._stopwords,
-                                                   self._min_freq, self._max_freq, self._verbose)
+            self._count_words = corpus.filter_word_counts(self._word_counts, self._stopwords,
+                self._min_freq, self._max_freq, self._verbose)
             self._filtered = True
 
     def summarize_all_idx(self, summary_count, verbose):
@@ -84,7 +85,7 @@ class FrequencySummarizer:
         sents_idx.sort()
         return [self._text_sentences[j] for j in sents_idx]
 
-    def sum_next_idx(self, text, offset, summary_count, summary_percent, verbose):
+    def sum_next_idx(self, text, summary_count, summary_percent, verbose):
         '''summarize another chunk of text, based on previous chunks,
         and return ranked indices'''
         saved_sentence_count = len(self._text_sentences)
@@ -94,19 +95,17 @@ class FrequencySummarizer:
         assert total_sentence_count == saved_sentence_count + added_sentence_count
         words_per_sentence = self._count_words / total_sentence_count
         ranking = defaultdict(int)
-        summary_count, act_percent = resolve_count(summary_count, summary_percent, added_sentence_count)
+        summary_count, act_percent = corpus.resolve_count(summary_count, summary_percent, added_sentence_count)
         for idx in range(saved_sentence_count, total_sentence_count):
             snt_words = self._snt_word_lists[idx]
             ranking[idx] = self._score_sentence(snt_words, words_per_sentence)
         sents_idx = _rank(summary_count, ranking)
-        if offset > 0:
-            sents_idx = [x - offset for x in sents_idx]
         return sents_idx
 
-    def sum_next_snt(self, text, offset, summary_count, summary_percent, verbose):
+    def sum_next_snt(self, text, summary_count, summary_percent, verbose):
         '''summarize another chunk of text, based on previous chunks,
         and return sentences sorted by index'''
-        sents_idx = self.sum_next_idx(text, offset, summary_count, summary_percent, verbose)
+        sents_idx = self.sum_next_idx(text, summary_count, summary_percent, verbose)
         sents_idx.sort()
         return [self._text_sentences[j] for j in sents_idx]
 
@@ -117,7 +116,8 @@ class FrequencySummarizer:
             words += count
             if word in self._word_counts:
                 score += self._word_counts[word]
-        return score * math.log(words_per_sentence*(1.0 + 1.0/len(snt_words)))
+        # return score * math.log(words_per_sentence*(1.0 + 1.0/len(snt_words)))
+        return score
 
 ###############################################################################
 
@@ -125,60 +125,21 @@ def _rank(summary_count, ranking):
     '''Return the highest ranked N sentences.'''
     return heapq.nlargest(summary_count, ranking, key=ranking.get)
 
-def resolve_count(sub_count, percent, total_count):
-    '''returns reconciled sub-count and percentage of total, where count trumps percentage'''
-    if not sub_count:
-        sub_count = int(math.ceil(percent * total_count / 100.0))
-    if  sub_count > total_count:
-        sub_count = total_count
-    if  sub_count < 1:
-        sub_count = 1
-    percent = sub_count * 100.0 / total_count
-    return sub_count, percent
+###############################################################################
 
-def filter_word_counts(word_counts, stopwords, min_freq, max_freq, verbose):
-    """ remove any word in stopwords or whose count is below the min or above the max threshold """
-    max_word_count = 0
-    for word, count in word_counts.items():
-        if count > max_word_count and word not in stopwords:
-            max_word_count = count
-    min_freq_count = max_word_count * min_freq
-    max_freq_count = max_word_count * max_freq
-    stop_words_to_remove = []
-    rare_words_to_remove = []
-    total_count = 0
-    for word, count in word_counts.items():
-        if count >= max_freq_count or word in stopwords:
-            stop_words_to_remove.append(word)
-        elif count <= min_freq_count:
-            rare_words_to_remove.append(word)
-        else:
-            total_count += count
-    if verbose > 2:
-        utf_print("========Removing common words: ", stop_words_to_remove)
-        for key in stop_words_to_remove:
-            word_counts.pop(key, None)
-        utf_print("========Removing rarest words: ", rare_words_to_remove)
-        for key in rare_words_to_remove:
-            word_counts.pop(key, None)
-    return total_count
+def print_ranked_idx(idx, sorted_idx):
+    '''Show ranked and sorted indices.'''
+    size = len(idx)
+    if size < LINE_MAX:
+        print(idx, '==> ', end='')
+    elif size < LINE_MAX*2:
+        print(idx, "==>") 
+    else:
+        print(idx)
+        print("==>")
+    print(sorted_idx)
 
-
-def print_sentences(sentences, list_numbers, max_words, out_file):
-    if list_numbers:
-        if 0 < max_words and max_words < 15:
-            idx_format = '{} '
-        else:
-            idx_format = '\n    {}\n'
-    for idx, sentence in enumerate(sentences):
-        if list_numbers:
-            print(idx_format.format(idx), end=' ')
-        if max_words:
-            paragraphs.print_paragraph_regex_count(sentence, max_words, outfile=out_file)
-        else:
-            utf_print(sentence, outfile=out_file)
-
-########################################################
+###############################################################################
 
 def summarize_text_file(file_spec, opt, charset='utf8'):
     """Output a summary of a text file."""
@@ -197,36 +158,39 @@ def summarize_text_file(file_spec, opt, charset='utf8'):
 
     # Announce output:
     print(file_spec, '====>', '<stdout>' if out_file==sys.stdout else opt.out_file)
-    sum_count, act_percent = resolve_count(opt.sum_count, opt.sum_percent, sentence_count)
+    sum_count, act_percent = corpus.resolve_count(opt.sum_count, opt.sum_percent, sentence_count)
     print("Keeping {} ({:.4} percent) of {} sentences.".format(sum_count, act_percent, sentence_count))
     print('-------------------------------------------------------------------')
 
+    # Summarize and show results:
     if opt.indices_only:
         sents_idx = freqsum.summarize_all_idx(sum_count, opt.verbose)
         print("Sentence indices in [0, {})".format(sentence_count))
-        print(sents_idx)
+        print_ranked_idx(sents_idx, sorted(sents_idx))
     else:
         summary_sentences = freqsum.summarize_all_snt(sum_count, opt.verbose)
         if out_file:
-            print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
+            paragraphs.print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
 
     if opt.serial:
         if not out_file:
             out_file = sys.stdout
         print('-------------------------------------------------------------------', file=out_file)
         if opt.indices_only:
-            sents_idx = freqsum.sum_next_idx(text, sentence_count, sum_count, opt.sum_percent, opt.verbose)
+            sents_idx = freqsum.sum_next_idx(text, sum_count, opt.sum_percent, opt.verbose)
+            sents_idx = [x - sentence_count for x in sents_idx]
             print("Sentence indices in [0, {})".format(sentence_count))
-            print(sents_idx)
+            print_ranked_idx(sents_idx, sorted(sents_idx))
         else:
-            summary_sentences = freqsum.sum_next_snt(text, sentence_count,
-                                                 sum_count, opt.sum_percent, opt.verbose)
+            summary_sentences = freqsum.sum_next_snt(text, sum_count, opt.sum_percent, opt.verbose)
             if out_file:
-                print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
+                paragraphs.print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
 
     print('-------------------------------------------------------------------', file=out_file)
     if out_file and out_file != sys.stdout:
         out_file.close()
+
+###############################################################################
 
 def main():
     '''Extract summary from text.'''

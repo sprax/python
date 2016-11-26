@@ -182,6 +182,21 @@ def print_paragraphs_leaky(path):
         print()
     fileobj.close()
 
+
+def print_sentences(sentences, list_numbers, max_words, out_file):
+    if list_numbers:
+        if 0 < max_words and max_words < 15:
+            idx_format = '{} '
+        else:
+            idx_format = '\n    {}\n'
+    for idx, sentence in enumerate(sentences):
+        if list_numbers:
+            print(idx_format.format(idx), end=' ')
+        if max_words:
+            paragraphs.print_paragraph_regex_count(sentence, max_words, outfile=out_file)
+        else:
+            utf_print(sentence, outfile=out_file)
+
 def main():
     '''Driver to iterate over the paragraphs in a text file.'''
     parser = argparse.ArgumentParser(description=__doc__)
