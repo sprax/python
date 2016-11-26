@@ -11,20 +11,11 @@
    * Frequency-based word filtering.
 '''
 
-
-# from nltk.corpus import stopwords
-# from nltk.tokenize import sent_tokenize, word_tokenize
 # from string import punctuation
 import argparse
-import errno
-import heapq
 import math
 import re
-import string
 import sys
-from collections import defaultdict
-import nltk
-import text_fio
 from utf_print import utf_print
 
 INF_NUM_WORDS = 2**30
@@ -152,22 +143,23 @@ def print_paragraphs_nth_substr(path, max_words, charset='utf8'):
             utf_print(para[:index])
             print()
 
-def print_paragraphs_nth_regex(path, max_words=INF_NUM_WORDS, outfile=sys.stdout, charset='utf8'):
+def print_paragraphs_nth_regex(path, max_words=INF_NUM_WORDS, out_file=sys.stdout, charset='utf8'):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs_nth_substr(", path, max_words, charset, ")")
     with open(path, 'r', encoding=charset) as text:
         for para in paragraph_iter(text):
-            print_paragraph_regex_count(para, max_words)
-            print()
+            print_paragraph_regex_count(para, max_words, out_file)
+            print(file=out_file)
 
-def print_paragraph_regex_count(para, max_words=INF_NUM_WORDS, outfile=sys.stdout, elliptical='...'):
-    '''split paragraph into words using regex and print first max_words words.'''
+def print_paragraph_regex_count(para, max_words=INF_NUM_WORDS, outfile=sys.stdout,
+        elliptical='...'):
+    '''split paragraph into words using regex and print up to max_words words.'''
     if para:
         index = index_regex_count(para, max_words)
         if elliptical and len(para) - index > 3:
-            utf_print(para[:index], '...')
+            utf_print(para[:index], '...', outfile)
         else:
-            utf_print(para[:index])
+            utf_print(para[:index], outfile)
 
 def index_regex_count(string, count=0, rgx=re.compile(r'\s+|$')):
     '''Character index of Nth or last occurrence of regex pattern in string.
@@ -177,9 +169,9 @@ def index_regex_count(string, count=0, rgx=re.compile(r'\s+|$')):
     if not string:
         return offset
     lens = len(string)
-    for z in range(count):
+    for _ in range(count):
         if lens <= offset:
-            return offset;
+            return offset
         mat = rgx.search(string, offset)
         if not mat:
             return offset
@@ -240,6 +232,7 @@ def print_paragraphs_leaky(path):
 
 
 def print_sentences(sentences, list_numbers, max_words, out_file):
+    '''prints an array of sentences, with optional numbering'''
     if list_numbers:
         if 0 < max_words and max_words < 15:
             idx_format = '{} '
@@ -249,7 +242,7 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
         if list_numbers:
             print(idx_format.format(idx), end=' ')
         if max_words:
-            paragraphs.print_paragraph_regex_count(sentence, max_words, outfile=out_file)
+            print_paragraph_regex_count(sentence, max_words, outfile=out_file)
         else:
             utf_print(sentence, outfile=out_file)
 
