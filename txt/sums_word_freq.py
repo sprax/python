@@ -14,7 +14,7 @@ import sys
 from collections import defaultdict
 import nltk
 import text_ops
-import text_file
+import text_fio
 
 LINE_MAX = 15
 

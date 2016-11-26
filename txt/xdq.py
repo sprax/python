@@ -14,7 +14,7 @@ import sys
 from collections import Counter
 
 import utf_print
-import paragraphs
+import text_ops
 
 def paragraph_reader(path, encoding="utf8"):
     '''opens text file and returns paragraph iterator'''

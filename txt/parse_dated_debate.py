@@ -12,7 +12,7 @@ import datetime
 import re
 import time
 
-import paragraphs
+import text_ops
 from utf_print import utf_print
 
 def main():

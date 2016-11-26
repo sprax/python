@@ -24,7 +24,7 @@ import string
 import sys
 from collections import defaultdict
 import nltk
-import text_file
+import text_fio
 from utf_print import utf_print
 
 INF_NUM_WORDS = 2**30

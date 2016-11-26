@@ -7,7 +7,7 @@ import datetime
 import re
 import time
 
-import paragraphs
+import text_ops
 from utf_print import utf_print
 
 # DAY_CODES = ['Mnd', 'Tsd', 'Wnd', 'Thd', 'Frd', 'Std', 'Snd']

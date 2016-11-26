@@ -11,7 +11,7 @@ import argparse
 import datetime
 import re
 
-import paragraphs
+import text_ops
 import sums_word_freq
 from utf_print import utf_print
 
