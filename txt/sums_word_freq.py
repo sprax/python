@@ -16,6 +16,7 @@ from collections import defaultdict
 import nltk
 import paragraphs
 from utf_print import utf_print
+import text_file
 
 class FrequencySummarizer:
     '''Text summarization based on word frequencies'''
@@ -163,39 +164,6 @@ def filter_word_counts(word_counts, stopwords, min_freq, max_freq, verbose):
     return total_count
 
 
-def read_file_eafp(file_spec):
-    try:
-        src = open(file_spec, 'r')
-    except IOError as ex:
-        if ex.errno != errno.ENOENT:
-            raise
-        print("WARNING: {} does not exist".format(file_spec))
-        return None
-    else:
-        text = src.read()
-        src.close()
-        return text
-
-def read_file(file_spec, charset='utf8'):
-    with open(file_spec, 'r', encoding=charset) as src:
-        return src.read()
-
-def open_out_file(file_spec):
-    if file_spec:
-        if file_spec in ['-', 'stdout']:
-            return sys.stdout
-        else:
-            try:
-                out_file = open(out_file, 'w')
-            except IOError as ex:
-                if ex.errno != errno.ENOENT:
-                    raise
-                print("IOError opening summary file [{}]:".format(out_file), ex)
-                out_file = sys.stdout
-            return out_file
-    else:
-        return None
-
 def print_sentences(sentences, list_numbers, max_words, out_file):
     if list_numbers:
         if 0 < max_words and max_words < 15:
@@ -212,14 +180,14 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
 
 ########################################################
 
-def summarize_text_file(text_file, opt, charset='utf8'):
+def summarize_text_file(file_spec, opt, charset='utf8'):
     """Output a summary of a text file."""
 
     # Read initial text corpus:
-    text = read_file(text_file, charset)
+    text = text_file.read_file(file_spec, charset)
 
     # Try to open output (file):
-    out_file = open_out_file(opt.out_file)
+    out_file = text_file.open_out_file(opt.out_file, label='summary')
 
     # Create summarizer and initialize with text:
     freqsum = FrequencySummarizer(opt.min_freq, opt.max_freq, opt.verbose)
@@ -228,7 +196,7 @@ def summarize_text_file(text_file, opt, charset='utf8'):
     max_words = opt.max_print_words
 
     # Announce output:
-    print(text_file, '====>', '<stdout>' if out_file==sys.stdout else opt.out_file)
+    print(file_spec, '====>', '<stdout>' if out_file==sys.stdout else opt.out_file)
     sum_count, act_percent = resolve_count(opt.sum_count, opt.sum_percent, sentence_count)
     print("Keeping {} ({:.4} percent) of {} sentences.".format(sum_count, act_percent, sentence_count))
     print('-------------------------------------------------------------------')
@@ -265,8 +233,8 @@ def main():
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="Extractive text summarizer")
-    parser.add_argument('text_file', type=str, nargs='?', default='corpus.txt',
-                        help='file containing text to summarize')
+    parser.add_argument('text_spec', type=str, nargs='?', default='corpus.txt',
+                        help='text file containing text to summarize')
     parser.add_argument('-index', dest='indices_only', action='store_true',
                         help='output only the indices of summary sentences')
     parser.add_argument('-list_numbers', action='store_true',
@@ -298,7 +266,7 @@ def main():
         exit(0)
 
     # summary_file = getattr(args, 'out_file', None)
-    summarize_text_file(args.text_file, args)
+    summarize_text_file(args.text_spec, args)
 
 if __name__ == '__main__':
     main()
