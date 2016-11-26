@@ -6,16 +6,74 @@
 #
 #
 # Sprax Lines       2016.09.01      Written with Python 3.5
-'''File readers that yield one paragraph at a time.'''
+'''Common operations for textual corpora, including:
+   * File readers that yield one paragraph at a time.
+   * Frequency-based word filtering.
+'''
 
+
+# from nltk.corpus import stopwords
+# from nltk.tokenize import sent_tokenize, word_tokenize
+# from string import punctuation
 import argparse
+import errno
+import heapq
+import math
 import re
+import string
 import sys
-
+from collections import defaultdict
+import nltk
+import paragraphs
+from utf_print import utf_print
+import text_file
 from utf_print import utf_print
 
 INF_NUM_WORDS = 2**30
 
+################################################################################
+
+def filter_word_counts(word_counts, stopwords, min_freq, max_freq, verbose):
+    """ remove any word in stopwords or whose count is below the min or above the max threshold """
+    max_word_count = 0
+    for word, count in word_counts.items():
+        if count > max_word_count and word not in stopwords:
+            max_word_count = count
+    min_freq_count = max_word_count * min_freq
+    max_freq_count = max_word_count * max_freq
+    stop_words_to_remove = []
+    rare_words_to_remove = []
+    total_count = 0
+    for word, count in word_counts.items():
+        if count >= max_freq_count or word in stopwords:
+            stop_words_to_remove.append(word)
+        elif count <= min_freq_count:
+            rare_words_to_remove.append(word)
+        else:
+            total_count += count
+    if verbose > 2:
+        utf_print("========Removing common words: ", stop_words_to_remove)
+        for key in stop_words_to_remove:
+            word_counts.pop(key, None)
+        utf_print("========Removing rarest words: ", rare_words_to_remove)
+        for key in rare_words_to_remove:
+            word_counts.pop(key, None)
+    return total_count
+
+################################################################################
+
+def resolve_count(sub_count, percent, total_count):
+    '''returns reconciled sub-count and percentage of total, where count trumps percentage'''
+    if not sub_count:
+        sub_count = int(math.ceil(percent * total_count / 100.0))
+    if  sub_count > total_count:
+        sub_count = total_count
+    if  sub_count < 1:
+        sub_count = 1
+    percent = sub_count * 100.0 / total_count
+    return sub_count, percent
+
+################################################################################
 
 def paragraph_iter(fileobj, rgx_para_separator=r'\s*\n\s*'):
     '''yields paragraphs from text file and regex separator, which by default matches
