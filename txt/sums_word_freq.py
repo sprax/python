@@ -13,8 +13,7 @@ import string
 import sys
 from collections import defaultdict
 import nltk
-import corpus
-import paragraphs
+import text_ops
 import text_file
 
 LINE_MAX = 15
@@ -65,7 +64,7 @@ class FrequencySummarizer:
     def filter_words(self):
         '''apply thresholding and remove stop words if not already filtered'''
         if not self._filtered:
-            self._count_words = corpus.filter_word_counts(self._word_counts, self._stopwords,
+            self._count_words = text_ops.filter_word_counts(self._word_counts, self._stopwords,
                 self._min_freq, self._max_freq, self._verbose)
             self._filtered = True
 
@@ -95,7 +94,8 @@ class FrequencySummarizer:
         assert total_sentence_count == saved_sentence_count + added_sentence_count
         words_per_sentence = self._count_words / total_sentence_count
         ranking = defaultdict(int)
-        summary_count, act_percent = corpus.resolve_count(summary_count, summary_percent, added_sentence_count)
+        summary_count, act_percent = text_ops.resolve_count(summary_count, summary_percent
+                , added_sentence_count)
         for idx in range(saved_sentence_count, total_sentence_count):
             snt_words = self._snt_word_lists[idx]
             ranking[idx] = self._score_sentence(snt_words, words_per_sentence)
@@ -157,8 +157,8 @@ def summarize_text_file(file_spec, opt, charset='utf8'):
     max_words = opt.max_print_words
 
     # Announce output:
-    print(file_spec, '====>', '<stdout>' if out_file==sys.stdout else opt.out_file)
-    sum_count, act_percent = corpus.resolve_count(opt.sum_count, opt.sum_percent, sentence_count)
+    print(file_spec, '====>', '<stdout>' if out_file == sys.stdout else opt.out_file)
+    sum_count, act_percent = text_ops.resolve_count(opt.sum_count, opt.sum_percent, sentence_count)
     print("Keeping {} ({:.4} percent) of {} sentences.".format(sum_count, act_percent, sentence_count))
     print('-------------------------------------------------------------------')
 
@@ -170,7 +170,7 @@ def summarize_text_file(file_spec, opt, charset='utf8'):
     else:
         summary_sentences = freqsum.summarize_all_snt(sum_count, opt.verbose)
         if out_file:
-            paragraphs.print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
+            text_ops.print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
 
     if opt.serial:
         if not out_file:
@@ -184,7 +184,7 @@ def summarize_text_file(file_spec, opt, charset='utf8'):
         else:
             summary_sentences = freqsum.sum_next_snt(text, sum_count, opt.sum_percent, opt.verbose)
             if out_file:
-                paragraphs.print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
+                text_ops.print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
 
     print('-------------------------------------------------------------------', file=out_file)
     if out_file and out_file != sys.stdout:

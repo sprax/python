@@ -24,8 +24,6 @@ import string
 import sys
 from collections import defaultdict
 import nltk
-import paragraphs
-from utf_print import utf_print
 import text_file
 from utf_print import utf_print
 

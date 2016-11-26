@@ -4,7 +4,7 @@
 import re
 import sys
 from collections import defaultdict
-import paragraphs
+import text_ops
 from utf_print import utf_print
 import argparse
 import errno
@@ -108,7 +108,7 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
         if list_numbers:
             print(idx_format.format(idx), end=' ')
         if max_words:
-            paragraphs.print_paragraph_regex_count(sentence, max_words, outfile=out_file)
+            text_ops.print_paragraph_regex_count(sentence, max_words, outfile=out_file)
         else:
             utf_print(sentence, outfile=out_file)
 
