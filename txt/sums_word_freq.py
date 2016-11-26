@@ -75,11 +75,7 @@ class FrequencySummarizer:
         ranking = defaultdict(int)
         for idx, snt_words in enumerate(self._snt_word_lists):
             ranking[idx] = self._score_sentence(snt_words, words_per_sentence)
-        sents_idx = _rank(summary_count, ranking)
-        if verbose > 2:
-            print("Sentence indices in [0, {})".format(len(self._text_sentences)))
-            print(sents_idx)
-        return sents_idx
+        return _rank(summary_count, ranking)
 
     def summarize_all_snt(self, summary_count, verbose):
         '''summarize all stored text and return the extracted sentences sorted by index'''
@@ -104,9 +100,6 @@ class FrequencySummarizer:
         sents_idx = _rank(summary_count, ranking)
         if offset > 0:
             sents_idx = [x - offset for x in sents_idx]
-        if verbose > 2:
-            print("Sentence indices in [0, {})".format(len(self._text_sentences)), end="")
-            print(sents_idx)
         return sents_idx
 
     def sum_next_snt(self, text, offset, summary_count, summary_percent, verbose):
@@ -132,7 +125,7 @@ def _rank(summary_count, ranking):
     return heapq.nlargest(summary_count, ranking, key=ranking.get)
 
 def resolve_count(sub_count, percent, total_count):
-    '''returns count and percentage of sentences, where count trumps percentage '''
+    '''returns reconciled sub-count and percentage of total, where count trumps percentage'''
     if not sub_count:
         sub_count = int(math.ceil(percent * total_count / 100.0))
     if  sub_count > total_count:
@@ -240,22 +233,28 @@ def summarize_text_file(text_file, opt, charset='utf8'):
     print("Keeping {} ({:.4} percent) of {} sentences.".format(sum_count, act_percent, sentence_count))
     print('-------------------------------------------------------------------')
 
-    summary_sentences = []
     if opt.indices_only:
         sents_idx = freqsum.summarize_all_idx(sum_count, opt.verbose)
+        print("Sentence indices in [0, {})".format(sentence_count))
+        print(sents_idx)
     else:
         summary_sentences = freqsum.summarize_all_snt(sum_count, opt.verbose)
-
-    if summary_sentences and out_file:
-        print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
+        if out_file:
+            print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
 
     if opt.serial:
         if not out_file:
             out_file = sys.stdout
         print('-------------------------------------------------------------------', file=out_file)
-        summary_sentences = freqsum.sum_next_snt(text, sentence_count,
+        if opt.indices_only:
+            sents_idx = freqsum.sum_next_idx(text, sentence_count, sum_count, opt.sum_percent, opt.verbose)
+            print("Sentence indices in [0, {})".format(sentence_count))
+            print(sents_idx)
+        else:
+            summary_sentences = freqsum.sum_next_snt(text, sentence_count,
                                                  sum_count, opt.sum_percent, opt.verbose)
-        print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
+            if out_file:
+                print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
 
     print('-------------------------------------------------------------------', file=out_file)
     if out_file and out_file != sys.stdout:
