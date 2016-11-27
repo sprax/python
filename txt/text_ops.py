@@ -151,15 +151,15 @@ def print_paragraphs_nth_regex(path, max_words=INF_NUM_WORDS, out_file=sys.stdou
             print_paragraph_regex_count(para, max_words, out_file)
             print(file=out_file)
 
-def print_paragraph_regex_count(para, max_words=INF_NUM_WORDS, outfile=sys.stdout,
+def print_paragraph_regex_count(para, max_words=INF_NUM_WORDS, out_file=sys.stdout,
         elliptical='...'):
     '''split paragraph into words using regex and print up to max_words words.'''
     if para:
         index = index_regex_count(para, max_words)
         if elliptical and len(para) - index > 3:
-            utf_print(para[:index], '...', outfile)
+            utf_print(para[:index], '...', outfile=out_file)
         else:
-            utf_print(para[:index], outfile)
+            utf_print(para[:index], outfile=out_file)
 
 def index_regex_count(string, count=0, rgx=re.compile(r'\s+|$')):
     '''Character index of Nth or last occurrence of regex pattern in string.

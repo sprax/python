@@ -27,24 +27,32 @@ def main():
         description="Read/write journal-entry style dates"
         )
     parser.add_argument('debate_text', metavar='TRANSCRIPT', type=str,
-                        help='convert speaker-labeled text file to paragraphs (default: {})'
-                        .format(default_debate_text))
+            help='convert speaker-labeled text file to paragraphs (default: {})'
+            .format(default_debate_text))
     parser.add_argument('-index', action='store_true', help='show paragraph numbers')
+    parser.add_argument('-list_numbers', action='store_true', help='list paragraph numbers')
     parser.add_argument('-max_words', type=int, nargs='?', const=1, default=7,
-                        help='maximum words per paragraph: print only the first M words,\
-                        or all if M < 1 (default: 0)')
-    parser.add_argument('-num_turns', type=int, nargs='?', const=1, default=INF_SIZE,
-                        help='number of turns to show, or 0 for all (the default)')
-    parser.add_argument('-print', action='store_true', help=' paragraph numbers')
-    parser.add_argument('-sum_percent', metavar='PERCENT', type=int, nargs='?', const=1, default=0,
-                        help='summarize to PERCENT percent of original number of sentences')
+            help='maximum words per paragraph: print only the first M words,\
+            or all if M < 1 (default: 0)')
+    parser.add_argument('-percent', metavar='PERCENT', dest='sum_percent', type=int,
+            nargs='?', const=1, default=0,
+            help='summarize to PERCENT percent of original number of sentences')
+    parser.add_argument('-sentences', metavar='SENTENCES', dest='max_sentences', type=int,
+            nargs='?', const=1, default=0,
+            help='max number of sentences per summarized turn')
+    parser.add_argument('-turns', dest='max_turns', type=int, nargs='?', const=1, default=INF_SIZE,
+            help='max number of turns to show, or 0 for all (the default)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=default_verbose,
-                        help="verbosity of output (default: {})".format(default_verbose))
+            help="verbosity of output (default: {})".format(default_verbose))
     args = parser.parse_args()
-
     verbose = args.verbose
-    debate = Debate(args.debate_text, args.num_turns, verbose)
+    if verbose > 3:
+        print("args:", args)
+        exit(0)
+
+    debate = Debate(args.debate_text, args.max_turns, verbose)
     if args.sum_percent > 0:
+        print("FIRST BRANCH")
         min_freq = 0.1
         max_freq = 0.9
         do_serial = False
@@ -57,14 +65,15 @@ def main():
             src.close()
         sentence_count = freqsum.add_text(text)
         print('---------------------------------------------------------------------------')
-        summary_sentences = freqsum.summarize_all(sum_number, sum_percent, indices, verbose)
+        sum_count, act_percent = text_ops.resolve_count(0, args.sum_percent, sentence_count)
+        summary_sentences = freqsum.summarize_all_snt(sum_count)
         for sum_sentence in summary_sentences:
             if verbose > 0:
                 utf_print(sum_sentence)
                 print()
         if do_serial:
             print('---------------------------------------------------------------------------')
-            summary_sentences = freqsum.sum_next_idx(text, sentence_count,
+            summary_sentences = freqsum.summarize_next_idx(text, sentence_count,
                                                      sum_number, sum_percent, verbose)
             for sum_sentence in summary_sentences:
                 if verbose > 0:
@@ -75,13 +84,13 @@ def main():
 
     index = 1
     sentence_count = 1
-    for count, turn in enumerate(debate.all_turns[:args.num_turns]):
+    for count, turn in enumerate(debate.all_turns[:args.max_turns]):
         turn.print_turn(count, index, args.max_words)
         # now summarize it...
         if args.sum_percent > 0:
             print('---------------------------------------------------------------------------')
-            summary_sentences = freqsum.summarize_next(' '.join(turn.text), sentence_count,
-                                                       sum_number, sum_percent, indices, verbose)
+            summary_sentences = freqsum.summarize_next_snt(' '.join(turn.text), sentence_count,
+                    sum_number, sum_percent, indices, verbose)
             for sum_sentence in summary_sentences:
                 utf_print(sum_sentence)
                 print()
@@ -100,7 +109,7 @@ class DebateTurn:
             if para_count:
                 print("{}:  ".format(para_count), end='')
                 para_count += 1
-            paragraphs.print_paragraph_regex_count(para, max_words)
+            text_ops.print_paragraph_regex_count(para, max_words)
         print()
 
 class Debate:
@@ -178,13 +187,13 @@ class Debate:
         for turn in self.all_turns:
             print(turn.speaker)
             for para in turn.text:
-                paragraphs.print_paragraph_regex_count(para, max_words)
+                text_ops.print_paragraph_regex_count(para, max_words)
             print()
 
 def parse_paragraphs(path, charset='utf8'):
     '''Just get the paragraphs.'''
     with open(path, 'r', encoding=charset) as text:
-        for para in paragraphs.paragraph_iter(text):
+        for para in text_ops.paragraph_iter(text):
             yield para
 
 RGX_COMMENT = re.compile('([#(/[.%-])')

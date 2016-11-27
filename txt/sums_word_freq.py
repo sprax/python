@@ -85,7 +85,7 @@ class FrequencySummarizer:
         sents_idx.sort()
         return [self._text_sentences[j] for j in sents_idx]
 
-    def sum_next_idx(self, text, summary_count, summary_percent):
+    def summarize_next_idx(self, text, summary_count, summary_percent):
         '''summarize another chunk of text, based on previous chunks,
         and return ranked indices'''
         saved_sentence_count = len(self._text_sentences)
@@ -103,10 +103,10 @@ class FrequencySummarizer:
         sents_idx = rank_dict_by_value(summary_count, ranking)
         return sents_idx
 
-    def sum_next_snt(self, text, summary_count, summary_percent):
+    def summarize_next_snt(self, text, summary_count, summary_percent):
         '''summarize another chunk of text, based on previous chunks,
         and return sentences sorted by index'''
-        sents_idx = self.sum_next_idx(text, summary_count, summary_percent)
+        sents_idx = self.summarize_next_idx(text, summary_count, summary_percent)
         sents_idx.sort()
         return [self._text_sentences[j] for j in sents_idx]
 
@@ -179,12 +179,12 @@ def summarize_text_file(file_spec, opt, charset='utf8'):
             out_file = sys.stdout
         print('-------------------------------------------------------------------', file=out_file)
         if opt.indices_only:
-            sents_idx = freqsum.sum_next_idx(text, sum_count, opt.sum_percent)
+            sents_idx = freqsum.summarize_next_idx(text, sum_count, opt.sum_percent)
             sents_idx = [x - sentence_count for x in sents_idx]
             print("Sentence indices in [0, {})".format(sentence_count))
             print_ranked_idx(sents_idx, sorted(sents_idx))
         else:
-            summary_sentences = freqsum.sum_next_snt(text, sum_count, opt.sum_percent)
+            summary_sentences = freqsum.summarize_next_snt(text, sum_count, opt.sum_percent)
             if out_file:
                 text_ops.print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
 
