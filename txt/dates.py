@@ -103,7 +103,7 @@ def reformat_all_paragraphs(path, in_formats, out_format, verbose, charset='utf8
     '''Parses paragraphs into leading date, first sentence, and body.
     Reformats the date, if present.'''
     with open(path, 'r', encoding=charset) as text:
-        for idx, para in enumerate(paragraphs.paragraph_iter(text)):
+        for idx, para in enumerate(text_ops.paragraph_iter(text)):
             if verbose > 3:
                 print("    Paragraph {}:".format(idx))
                 utf_print(para)
@@ -149,7 +149,7 @@ def dated_entry_regex():
     date_grp = r'(?:\s*(\d\d\d\d.\d\d.\d\d|\d\d.\d\d.\d\d)[-\s])?'
     wday_grp = r'(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun|\
                   Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s+)?'
-    locs_grp = r'(?:\s*([^.?!]+)(?:\t|\s\s+))?'    # TODO: Add locs as another optional group
+    locs_grp = r'(?:\s*([^.?!]+)(?:\t|\s\s+))?'
     head_grp = r'(?:\s*)?([^.?!]+(?:[.?!][\'"]?|$))'
     body_grp = r'(?:\s*)?(\w.*)?'
     pattern = r"{}{}{}{}{}".format(date_grp, wday_grp, locs_grp, head_grp, body_grp)
