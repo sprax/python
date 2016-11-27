@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 # Sprax Lines       2016.07.12      Written with Python 3.5
 '''read text file, print regex-split words.'''
-import re
-import sys
-from collections import defaultdict
-import text_ops
-from utf_print import utf_print
 import argparse
 import errno
 import heapq
+import re
 import math
-import string
-import nltk
+import sys
+from utf_print import utf_print
+import text_ops
 
 def print_words(file_spec):
+    '''print all white-space separated words read from a file'''
     with open(file_spec, 'r') as text:
         for line in text:
             words = re.split(r'\W+', line.rstrip())
@@ -22,8 +20,8 @@ def print_words(file_spec):
                     print(word)
             print(words)
 
-def _rank(summary_count, ranking):
-    '''Return the highest ranked N sentences.'''
+def rank_dict_by_value(summary_count, ranking):
+    '''Return the highest ranked N dicionary entries.'''
     return heapq.nlargest(summary_count, ranking, key=ranking.get)
 
 def resolve_count(sub_count, percent, total_count):
@@ -66,6 +64,7 @@ def filter_word_counts(word_counts, stopwords, min_freq, max_freq, verbose):
 
 
 def read_file_eafp(file_spec):
+    '''read contents of file_spec, Easier to Ask for Forgiveness than ask Permission.'''
     try:
         src = open(file_spec, 'r')
     except IOError as ex:
@@ -79,20 +78,21 @@ def read_file_eafp(file_spec):
         return text
 
 def read_file(file_spec, charset='utf8'):
+    '''read and return all contents of file'''
     with open(file_spec, 'r', encoding=charset) as src:
         return src.read()
 
-def open_out_file(file_spec, label=''):
+def open_out_file(file_spec, label='text'):
     if file_spec:
         if file_spec in ['-', 'stdout']:
             return sys.stdout
         else:
             try:
-                out_file = open(out_file, 'w')
+                out_file = open(file_spec, 'w')
             except IOError as ex:
                 if ex.errno != errno.ENOENT:
                     raise
-                print("IOError opening {} file [{}]:".format(label, out_file), ex)
+                print("IOError opening {} file [{}]:".format(label, file_spec), ex)
                 out_file = sys.stdout
             return out_file
     else:
@@ -108,23 +108,23 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
         if list_numbers:
             print(idx_format.format(idx), end=' ')
         if max_words:
-            text_ops.print_paragraph_regex_count(sentence, max_words, outfile=out_file)
+            text_ops.print_paragraph_regex_count(sentence, max_words, out_file=out_file)
         else:
             utf_print(sentence, outfile=out_file)
 
 ########################################################
 
-def unit_test(text_file, opt, charset='utf8'):
+def unit_test(text_file, opt):
     """Output a summary of a text file."""
 
     # Read initial text corpus:
-    text = read_file(text_file, charset)
+    # text = read_file(text_file, charset)
 
     # Try to open output (file):
     out_file = open_out_file(opt.out_file)
 
     # Announce output:
-    print(text_file, '====>', '<stdout>' if out_file==sys.stdout else opt.out_file)
+    print(text_file, '====>', '<stdout>' if out_file == sys.stdout else opt.out_file)
     print('-------------------------------------------------------------------')
     if out_file and out_file != sys.stdout:
         out_file.close()
