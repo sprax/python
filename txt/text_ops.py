@@ -53,6 +53,8 @@ def filter_word_counts(word_counts, stopwords, min_freq, max_freq, verbose):
 
 def resolve_count(sub_count, percent, total_count):
     '''returns reconciled sub-count and percentage of total, where count trumps percentage'''
+    if total_count < 1:
+        raise ValueError("total_count must be > 0")
     if not sub_count:
         sub_count = int(math.ceil(percent * total_count / 100.0))
     if  sub_count > total_count:

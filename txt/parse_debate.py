@@ -73,8 +73,7 @@ def main():
                 print()
         if do_serial:
             print('---------------------------------------------------------------------------')
-            summary_sentences = freqsum.summarize_next_idx(text, sentence_count,
-                                                     sum_number, sum_percent, verbose)
+            summary_sentences = freqsum.summarize_next_idx(text, sum_number, sum_percent)
             for sum_sentence in summary_sentences:
                 if verbose > 0:
                     utf_print(sum_sentence)
@@ -89,8 +88,8 @@ def main():
         # now summarize it...
         if args.sum_percent > 0:
             print('---------------------------------------------------------------------------')
-            summary_sentences = freqsum.summarize_next_snt(' '.join(turn.text), sentence_count,
-                    sum_number, sum_percent, indices, verbose)
+            summary_sentences = freqsum.summarize_next_snt(' '.join(turn.text), 
+                    sum_number, sum_percent)
             for sum_sentence in summary_sentences:
                 utf_print(sum_sentence)
                 print()

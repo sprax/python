@@ -90,6 +90,8 @@ class FrequencySummarizer:
         and return ranked indices'''
         saved_sentence_count = len(self._text_sentences)
         added_sentence_count = self.add_text(text)
+        if added_sentence_count < 1:
+            return []
         self.filter_words()
         total_sentence_count = len(self._text_sentences)
         assert total_sentence_count == saved_sentence_count + added_sentence_count
