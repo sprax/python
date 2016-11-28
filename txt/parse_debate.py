@@ -57,8 +57,6 @@ def main():
         max_freq = 0.9
         do_serial = False
         sum_number = 50
-        sum_percent = 10
-        indices = True
         freqsum = sums_word_freq.FrequencySummarizer(min_freq, max_freq, verbose)
         with open(args.debate_text, 'r', encoding='utf8') as src:
             text = src.read()
@@ -73,7 +71,7 @@ def main():
                 print()
         if do_serial:
             print('---------------------------------------------------------------------------')
-            summary_sentences = freqsum.summarize_next_idx(text, sum_number, sum_percent)
+            summary_sentences = freqsum.summarize_next_idx(text, sum_number, act_percent)
             for sum_sentence in summary_sentences:
                 if verbose > 0:
                     utf_print(sum_sentence)
@@ -88,8 +86,8 @@ def main():
         # now summarize it...
         if args.sum_percent > 0:
             print('---------------------------------------------------------------------------')
-            summary_sentences = freqsum.summarize_next_snt(' '.join(turn.text), 
-                    sum_number, sum_percent)
+            summary_sentences = freqsum.summarize_next_snt(' '.join(turn.text),
+                    sum_number, act_percent)
             for sum_sentence in summary_sentences:
                 utf_print(sum_sentence)
                 print()
