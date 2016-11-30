@@ -244,7 +244,7 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
         if list_numbers:
             print(idx_format.format(idx), end=' ')
         if max_words:
-            print_paragraph_regex_count(sentence, max_words, outfile=out_file)
+            print_paragraph_regex_count(sentence, max_words, out_file=out_file)
         else:
             utf_print(sentence, outfile=out_file)
 
