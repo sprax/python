@@ -207,12 +207,12 @@ def main():
                         help='output only the indices of summary sentences')
     parser.add_argument('-list_numbers', action='store_true',
                         help='output list number for each summary sentence')
-    parser.add_argument('-max_freq', type=float, nargs='?', const=1, default=0.9,
+    parser.add_argument('-fM', '-freq_max', dest='max_freq', type=float, nargs='?', const=1, default=0.9,
                         help='maximum frequency cut-off (default: 0.9)')
-    parser.add_argument('-min_freq', type=float, nargs='?', const=1, default=0.1,
+    parser.add_argument('-fm', '-freq_min', dest='min_freq', type=float, nargs='?', const=1, default=0.1,
                         help='minimum frequency cut-off (default: 0.1)')
-    parser.add_argument('-number', dest='sum_count', type=int, nargs='?', const=1, default=0,
-                        help='number of sentences to keep (default: 5), overrides -percent')
+    parser.add_argument('-num_sentences', dest='sum_count', type=int, nargs='?', const=1, default=0,
+                        help='max number of sentences to keep (default: 5), overrides -percent')
     parser.add_argument('-out_file', type=str, nargs='?', const='-',
                         help='output file for summarized text (default: None)')
     parser.add_argument('-percent', dest='sum_percent', type=float, nargs='?',

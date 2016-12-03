@@ -15,12 +15,11 @@ import text_ops
 import sums_word_freq
 from utf_print import utf_print
 
-INF_SIZE = 2**30
-
 def main():
     '''get args and call ...'''
     default_debate_text = "djs.txt"
     default_verbose = 1
+    default_debug = 1
     # default_start_date = start_date = datetime.datetime.now()
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
@@ -29,28 +28,31 @@ def main():
     parser.add_argument('debate_text', metavar='TRANSCRIPT', type=str,
             help='convert speaker-labeled text file to paragraphs (default: {})'
             .format(default_debate_text))
-    parser.add_argument('-ip', '--index_paragraphs', action='store_true', help='list paragraph numbers')
-    parser.add_argument('-is', '--index_sentences', action='store_true', help='list sentence numbers')
-    parser.add_argument('-max_words', type=int, nargs='?', const=1, default=7,
+    parser.add_argument('-lp', '--list_paragraphs', action='store_true', help='list paragraph numbers')
+    parser.add_argument('-ls', '--list_sentences', action='store_true', help='list sentence numbers')
+    parser.add_argument('-ns', '-num_sentences', metavar='SENTENCES', dest='max_sentences', type=int,
+            nargs='?', const=1, default=0,
+            help='max number of sentences per summarized turn')
+    parser.add_argument('-nt', '-num_turns', dest='max_turns', type=int, nargs='?',
+            const=1, default=0,
+            help='max number of turns to show, or 0 for all (default)')
+    parser.add_argument('-nw', '-max_words', dest='max_words', type=int, nargs='?', const=1, default=7,
             help='maximum words per paragraph: print only the first M words,\
             or all if M < 1 (default: 0)')
     parser.add_argument('-percent', metavar='PERCENT', dest='sum_percent', type=int,
             nargs='?', const=1, default=0,
             help='summarize to PERCENT percent of original number of sentences')
-    parser.add_argument('-ns', '-num_sentences', metavar='SENTENCES', dest='max_sentences', type=int,
-            nargs='?', const=1, default=0,
-            help='max number of sentences per summarized turn')
-    parser.add_argument('-nt', '-num_turns', dest='max_turns', type=int, nargs='?',
-            const=1, default=INF_SIZE,
-            help='max number of turns to show, or 0 for all (default)')
+    parser.add_argument('-debug', type=int, nargs='?', const=1, default=default_verbose,
+            help="debug level (default: {})".format(default_debug))
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=default_verbose,
             help="verbosity of output (default: {})".format(default_verbose))
     args = parser.parse_args()
     verbose = args.verbose
-    if verbose > 3:
+    if args.debug > 3:
         print("args:", args)
         exit(0)
 
+    
     debate = Debate(args.debate_text, args.max_turns, verbose)
     if args.sum_percent > 0:
         print("FIRST BRANCH")
@@ -79,10 +81,12 @@ def main():
                     print()
                 utf_print(sum_sentence)
         print('---------------------------------------------------------------------------')
+        exit(0)
 
     index = 1
     sentence_count = 1
-    for count, turn in enumerate(debate.all_turns[:args.max_turns]):
+    num_turns = args.max_turns if args.max_turns else len(debate.all_turns)
+    for count, turn in enumerate(debate.all_turns[:num_turns]):
         turn.print_turn(count, index, args.max_words)
         # now summarize it...
         if args.sum_percent > 0:
@@ -100,14 +104,17 @@ class DebateTurn:
         self.date = date
         self.text = [text]
 
-    def print_turn(self, turn_count, para_count=0, max_words=INF_SIZE):
+    def print_turn(self, turn_count, para_count=0, max_words=0):
         '''print the text of one speaker's turn'''
         print("{} ({})".format(self.speaker, turn_count))
         for para in self.text:
             if para_count:
                 print("{}:  ".format(para_count), end='')
                 para_count += 1
-            text_ops.print_paragraph_regex_count(para, max_words)
+            if max_words:
+               text_ops.print_paragraph_regex_count(para, max_words)
+            else:
+                utf_print(para)
         print()
 
 class Debate:
@@ -141,7 +148,7 @@ class Debate:
                 print("\t  date:\t", refd)
             if speaker and speaker != prev_speaker:
                 num_turns += 1
-                if num_turns > max_turns:
+                if max_turns and num_turns > max_turns:
                     break
                 prev_speaker = speaker
                 self.add_speaker(speaker)
