@@ -24,24 +24,25 @@ def main():
     # default_start_date = start_date = datetime.datetime.now()
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
-        description="Read/write journal-entry style dates"
+        description="Parse and/or summarize a debate transcript."
         )
     parser.add_argument('debate_text', metavar='TRANSCRIPT', type=str,
             help='convert speaker-labeled text file to paragraphs (default: {})'
             .format(default_debate_text))
-    parser.add_argument('-index', action='store_true', help='show paragraph numbers')
-    parser.add_argument('-list_numbers', action='store_true', help='list paragraph numbers')
+    parser.add_argument('-ip', '--index_paragraphs', action='store_true', help='list paragraph numbers')
+    parser.add_argument('-is', '--index_sentences', action='store_true', help='list sentence numbers')
     parser.add_argument('-max_words', type=int, nargs='?', const=1, default=7,
             help='maximum words per paragraph: print only the first M words,\
             or all if M < 1 (default: 0)')
     parser.add_argument('-percent', metavar='PERCENT', dest='sum_percent', type=int,
             nargs='?', const=1, default=0,
             help='summarize to PERCENT percent of original number of sentences')
-    parser.add_argument('-sentences', metavar='SENTENCES', dest='max_sentences', type=int,
+    parser.add_argument('-ns', '-num_sentences', metavar='SENTENCES', dest='max_sentences', type=int,
             nargs='?', const=1, default=0,
             help='max number of sentences per summarized turn')
-    parser.add_argument('-turns', dest='max_turns', type=int, nargs='?', const=1, default=INF_SIZE,
-            help='max number of turns to show, or 0 for all (the default)')
+    parser.add_argument('-nt', '-num_turns', dest='max_turns', type=int, nargs='?',
+            const=1, default=INF_SIZE,
+            help='max number of turns to show, or 0 for all (default)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=default_verbose,
             help="verbosity of output (default: {})".format(default_verbose))
     args = parser.parse_args()
