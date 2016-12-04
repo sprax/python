@@ -68,11 +68,10 @@ def main():
     if args.sum_percent > 0:
         summarize_debate(debate, args, verbose)
     else:
-        print_debate(debate, args)
+        print_debate(debate, args.max_turns, args.max_words)
 
 
 def summarize_debate(debate, args, verbose):
-    print("SUMMARY BRANCH")
     sentence_count = 0
     freqsum = sums_word_freq.FrequencySummarizer(args.min_freq, args.max_freq, verbose)
     for turn in debate.all_turns:
@@ -92,26 +91,32 @@ def summarize_debate(debate, args, verbose):
                 utf_print(sum_sentence)
                 print()
     else:
-        print('---------------------------------------------------------------------------')
-        if args.index_only:
-            for turn in debate.all_turns:
-                sum_idx = freqsum.summarize_next_idx(' '.join(turn.text),
-                        args.max_sentences, args.sum_percent)
-                print(sum_idx)
-        else:
-            for turn in debate.all_turns:
-                summary_sentences = freqsum.summarize_next_snt(' '.join(turn.text),
-                        args.max_sentences, args.sum_percent)
-                for sum_sentence in summary_sentences:
-                    utf_print(sum_sentence)
-        print('---------------------------------------------------------------------------')
+        if verbose > 0:
+            print("Keeping {} sentence(s) for each of {} turns."
+                    .format(args.max_sentences, debate.turn_count()))
+        for tin in range(debate.turn_count()):
+            summarize_turn(debate, freqsum, tin, args.max_sentences, args.sum_percent,
+                    args.max_words, args.index_only)
+    print('---------------------------------------------------------------------------')
 
-def print_debate(debate, args):
+def summarize_turn(debate, freqsum, index, max_sents, percent, max_words, index_only):
+    sents_idx = freqsum.summarize_next_idx(debate.all_turns[index].get_text(),
+            max_sents, percent)
+    print("Turn {}:".format(index))
+    if index_only:
+        print(sent_idx)
+        return
+    sents_idx.sort()
+    for j in sents_idx:
+        utf_print(freqsum._text_sentences[j])
+
+
+def print_debate(debate, max_turns, max_words):
     index = 1
     sentence_count = 1
-    num_turns = args.max_turns if args.max_turns else len(debate.all_turns)
-    for count, turn in enumerate(debate.all_turns[:num_turns]):
-        turn.print_turn(count, index, args.max_words)
+    num_turns = max_turns if max_turns else len(debate.all_turns)
+    for idx, turn in enumerate(debate.all_turns[:num_turns]):
+        turn.print_turn(count, index, max_words)
 
 class DebateTurn:
     '''one speaker turn in a debate'''
@@ -120,9 +125,12 @@ class DebateTurn:
         self.date = date
         self.text = [text]
 
-    def print_turn(self, turn_count, para_count=0, max_words=0):
+    def get_text(self):
+        return ' '.join(self.text)
+
+    def print_turn(self, turn_index, para_count=0, max_words=0):
         '''print the text of one speaker's turn'''
-        print("{} ({})".format(self.speaker, turn_count))
+        print("{} ({})".format(self.speaker, turn_index))
         for para in self.text:
             if para_count:
                 print("{}:  ".format(para_count), end='')
@@ -139,11 +147,13 @@ class Debate:
         self.speakers = set()
         self.moderators = set()
         self.debaters = set()
-        self.turn_count = 0
         self.all_turns = []
         self.speaker_turns = {}
         self.verbose = verbose
         self.parse_transcript(transcript, max_turns)
+
+    def turn_count(self):
+        return len(self.all_turns)
 
     def parse_transcript(self, transcript_file, max_turns):
         '''Populates Debate data: array of all speaker turns as one sequence,
