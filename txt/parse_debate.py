@@ -25,6 +25,8 @@ def main():
         # usage='%(prog)s [options]',
         description="Parse and/or summarize a debate transcript."
         )
+    parser.add_argument('-all_as_one', action='store_true',
+            help='summarize debate as one block of text (no speaker turns)')
     parser.add_argument('debate_text', metavar='TRANSCRIPT', type=str,
             help='convert speaker-labeled text file to paragraphs (default: {})'
             .format(default_debate_text))
@@ -71,35 +73,35 @@ def main():
 
 def summarize_debate(debate, args, verbose):
     print("SUMMARY BRANCH")
-    do_serial = True
     sentence_count = 0
     freqsum = sums_word_freq.FrequencySummarizer(args.min_freq, args.max_freq, verbose)
     for turn in debate.all_turns:
         for para in turn.text:
             sentence_count += freqsum.add_text(para)
     print('---------------------------------------------------------------------------')
-    sum_count, act_percent = text_ops.resolve_count(0, args.sum_percent, sentence_count)
-    if verbose > 0:
-        print("Keeping {} of {} sentences.".format(sum_count, sentence_count))
-    if args.index_only:
-        summary_indices = freqsum.summarize_all_idx(sum_count)
-        print(summary_indices)
+    if args.all_as_one:
+        sum_count, act_percent = text_ops.resolve_count(0, args.sum_percent, sentence_count)
+        if verbose > 0:
+            print("Keeping {} of {} sentences.".format(sum_count, sentence_count))
+        if args.index_only:
+            summary_indices = freqsum.summarize_all_idx(sum_count)
+            print(summary_indices)
+        else:
+            summary_sentences = freqsum.summarize_all_snt(sum_count)
+            for sum_sentence in summary_sentences:
+                utf_print(sum_sentence)
+                print()
     else:
-        summary_sentences = freqsum.summarize_all_snt(sum_count)
-        for sum_sentence in summary_sentences:
-            utf_print(sum_sentence)
-            print()
-    if do_serial:
         print('---------------------------------------------------------------------------')
         if args.index_only:
             for turn in debate.all_turns:
                 sum_idx = freqsum.summarize_next_idx(' '.join(turn.text),
-                        args.max_sentences, act_percent)
+                        args.max_sentences, args.sum_percent)
                 print(sum_idx)
         else:
             for turn in debate.all_turns:
                 summary_sentences = freqsum.summarize_next_snt(' '.join(turn.text),
-                        args.max_sentences, act_percent)
+                        args.max_sentences, args.sum_percent)
                 for sum_sentence in summary_sentences:
                     utf_print(sum_sentence)
         print('---------------------------------------------------------------------------')
