@@ -28,21 +28,30 @@ def main():
     parser.add_argument('debate_text', metavar='TRANSCRIPT', type=str,
             help='convert speaker-labeled text file to paragraphs (default: {})'
             .format(default_debate_text))
-    parser.add_argument('-lp', '--list_paragraphs', action='store_true', help='list paragraph numbers')
-    parser.add_argument('-ls', '--list_sentences', action='store_true', help='list sentence numbers')
-    parser.add_argument('-ns', '-num_sentences', metavar='SENTENCES', dest='max_sentences', type=int,
-            nargs='?', const=1, default=0,
+    parser.add_argument('-fM', '-freq_max', dest='max_freq', type=float, nargs='?',
+           const=1, default=0.9, help='maximum frequency cut-off (default: 0.9)')
+    parser.add_argument('-fm', '-freq_min', dest='min_freq', type=float, nargs='?',
+           const=1, default=0.1, help='minimum frequency cut-off (default: 0.1)')
+    parser.add_argument('-index_only', action='store_true',
+            help='output only the indices of extracted sentences')
+    parser.add_argument('-lp', '--list_paragraphs', action='store_true',
+            help='list paragraph numbers')
+    parser.add_argument('-ls', '--list_sentences', action='store_true',
+            help='list sentence numbers')
+    parser.add_argument('-ns', '-num_sentences', metavar='SENTENCES',
+            dest='max_sentences', type=int, nargs='?', const=1, default=1,
             help='max number of sentences per summarized turn')
-    parser.add_argument('-nt', '-num_turns', dest='max_turns', type=int, nargs='?',
-            const=1, default=0,
+    parser.add_argument('-nt', '-num_turns', dest='max_turns', metavar='TURNS', 
+            type=int, nargs='?', const=1, default=0,
             help='max number of turns to show, or 0 for all (default)')
-    parser.add_argument('-nw', '-max_words', dest='max_words', type=int, nargs='?', const=1, default=7,
+    parser.add_argument('-nw', '-max_words', dest='max_words', metavar='WORDS',
+            type=int, nargs='?', const=12, default=0,
             help='maximum words per paragraph: print only the first M words,\
             or all if M < 1 (default: 0)')
-    parser.add_argument('-percent', metavar='PERCENT', dest='sum_percent', type=int,
-            nargs='?', const=1, default=0,
+    parser.add_argument('-percent', metavar='PERCENT', dest='sum_percent',
+            type=int, nargs='?', const=1, default=0,
             help='summarize to PERCENT percent of original number of sentences')
-    parser.add_argument('-debug', type=int, nargs='?', const=1, default=default_verbose,
+    parser.add_argument('-debug', type=int, nargs='?', const=1, default=default_debug,
             help="debug level (default: {})".format(default_debug))
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=default_verbose,
             help="verbosity of output (default: {})".format(default_verbose))
@@ -52,50 +61,55 @@ def main():
         print("args:", args)
         exit(0)
 
-    
     debate = Debate(args.debate_text, args.max_turns, verbose)
+
     if args.sum_percent > 0:
-        print("FIRST BRANCH")
-        min_freq = 0.1
-        max_freq = 0.9
-        do_serial = False
-        sum_number = 50
-        freqsum = sums_word_freq.FrequencySummarizer(min_freq, max_freq, verbose)
-        with open(args.debate_text, 'r', encoding='utf8') as src:
-            text = src.read()
-            src.close()
-        sentence_count = freqsum.add_text(text)
-        print('---------------------------------------------------------------------------')
-        sum_count, act_percent = text_ops.resolve_count(0, args.sum_percent, sentence_count)
+        summarize_debate(debate, args, verbose)
+    else:
+        print_debate(debate, args)
+
+
+def summarize_debate(debate, args, verbose):
+    print("SUMMARY BRANCH")
+    do_serial = True
+    sentence_count = 0
+    freqsum = sums_word_freq.FrequencySummarizer(args.min_freq, args.max_freq, verbose)
+    for turn in debate.all_turns:
+        for para in turn.text:
+            sentence_count += freqsum.add_text(para)
+    print('---------------------------------------------------------------------------')
+    sum_count, act_percent = text_ops.resolve_count(0, args.sum_percent, sentence_count)
+    if verbose > 0:
+        print("Keeping {} of {} sentences.".format(sum_count, sentence_count))
+    if args.index_only:
+        summary_indices = freqsum.summarize_all_idx(sum_count)
+        print(summary_indices)
+    else:
         summary_sentences = freqsum.summarize_all_snt(sum_count)
         for sum_sentence in summary_sentences:
-            if verbose > 0:
-                utf_print(sum_sentence)
-                print()
-        if do_serial:
-            print('---------------------------------------------------------------------------')
-            summary_sentences = freqsum.summarize_next_idx(text, sum_number, act_percent)
-            for sum_sentence in summary_sentences:
-                if verbose > 0:
-                    utf_print(sum_sentence)
-                    print()
-                utf_print(sum_sentence)
+            utf_print(sum_sentence)
+            print()
+    if do_serial:
         print('---------------------------------------------------------------------------')
-        exit(0)
+        if args.index_only:
+            for turn in debate.all_turns:
+                sum_idx = freqsum.summarize_next_idx(' '.join(turn.text),
+                        args.max_sentences, act_percent)
+                print(sum_idx)
+        else:
+            for turn in debate.all_turns:
+                summary_sentences = freqsum.summarize_next_snt(' '.join(turn.text),
+                        args.max_sentences, act_percent)
+                for sum_sentence in summary_sentences:
+                    utf_print(sum_sentence)
+        print('---------------------------------------------------------------------------')
 
+def print_debate(debate, args):
     index = 1
     sentence_count = 1
     num_turns = args.max_turns if args.max_turns else len(debate.all_turns)
     for count, turn in enumerate(debate.all_turns[:num_turns]):
         turn.print_turn(count, index, args.max_words)
-        # now summarize it...
-        if args.sum_percent > 0:
-            print('---------------------------------------------------------------------------')
-            summary_sentences = freqsum.summarize_next_snt(' '.join(turn.text),
-                    sum_number, act_percent)
-            for sum_sentence in summary_sentences:
-                utf_print(sum_sentence)
-                print()
 
 class DebateTurn:
     '''one speaker turn in a debate'''
