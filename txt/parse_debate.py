@@ -94,22 +94,29 @@ def summarize_debate(debate, args, verbose):
         if verbose > 0:
             print("Keeping {} sentence(s) for each of {} turns."
                     .format(args.max_sentences, debate.turn_count()))
-        for tin in range(debate.turn_count()):
-            summarize_turn(debate, freqsum, tin, args.max_sentences, args.sum_percent,
-                    args.max_words, args.index_only)
+        for turn_id in range(debate.turn_count()):
+            summarize_turn(debate, freqsum, turn_id, args)
     print('---------------------------------------------------------------------------')
 
-def summarize_turn(debate, freqsum, index, max_sents, percent, max_words, index_only):
-    sents_idx = freqsum.summarize_next_idx(debate.all_turns[index].get_text(),
-            max_sents, percent)
-    print("Turn {}:".format(index))
-    if index_only:
-        print(sent_idx)
+def summarize_turn(debate, freqsum, turn_id, opt):
+    old_size = freqsum.sentence_count()
+    turn = debate.all_turns[turn_id]
+    sents_idx = freqsum.summarize_next_idx(turn.get_text(),
+            opt.max_sentences, opt.sum_percent)
+    new_size = freqsum.sentence_count()
+    print("Turn {}, {}:".format(turn_id, turn.speaker))
+    if opt.index_only:
+        print(sents_idx)
         return
     sents_idx.sort()
     for j in sents_idx:
-        utf_print(freqsum._text_sentences[j])
-
+        sentence = freqsum._text_sentences[j]
+        if opt.list_sentences:
+            print("{}: ".format(sents_idx), end='')
+        if opt.max_words:
+            text_ops.print_paragraph_regex_count(sentence, opt.max_words)
+        else:
+            utf_print(sentence)
 
 def print_debate(debate, max_turns, max_words):
     index = 1

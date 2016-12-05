@@ -36,6 +36,9 @@ class FrequencySummarizer:
         self._snt_word_lists = []
         self._verbose = verbose
 
+    def sentence_count(self):
+        return len(self._text_sentences)
+
     def add_text(self, text):
         '''Add text that may contain one or more blank-line separated paragraphs.
         Return the count of sentences in text'''
