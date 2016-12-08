@@ -32,12 +32,12 @@ class FrequencySummarizer:
         self._count_words = 0
         self._word_counts = defaultdict(int)
         self._text_paragraphs = []
-        self._text_sentences = []
+        self.text_sentences = []
         self._snt_word_lists = []
         self._verbose = verbose
 
     def sentence_count(self):
-        return len(self._text_sentences)
+        return len(self.text_sentences)
 
     def add_text(self, text):
         '''Add text that may contain one or more blank-line separated paragraphs.
@@ -53,7 +53,7 @@ class FrequencySummarizer:
         Return the count of sentences in text'''
         self._text_paragraphs.append(paragraph)
         sentences = nltk.sent_tokenize(paragraph)
-        self._text_sentences.extend(sentences)
+        self.text_sentences.extend(sentences)
         for sentence in sentences:
             word_hash = {}
             word_list = nltk.word_tokenize(sentence.lower())
@@ -75,7 +75,7 @@ class FrequencySummarizer:
     def summarize_all_idx(self, summary_count):
         '''summarize all stored text and return indices of ranked extracted sentences'''
         self.filter_words()
-        sentence_count = len(self._text_sentences)
+        sentence_count = len(self.text_sentences)
         words_per_sentence = self._count_words / sentence_count
         ranking = defaultdict(int)
         for idx, snt_words in enumerate(self._snt_word_lists):
@@ -86,17 +86,17 @@ class FrequencySummarizer:
         '''summarize all stored text and return the extracted sentences sorted by index'''
         sents_idx = self.summarize_all_idx(summary_count)
         sents_idx.sort()
-        return [self._text_sentences[j] for j in sents_idx]
+        return [self.text_sentences[j] for j in sents_idx]
 
     def summarize_next_idx(self, text, summary_count, summary_percent):
         '''summarize another chunk of text, based on previous chunks,
         and return ranked indices'''
-        saved_sentence_count = len(self._text_sentences)
+        saved_sentence_count = len(self.text_sentences)
         added_sentence_count = self.add_text(text)
         if added_sentence_count < 1:
             return []
         self.filter_words()
-        total_sentence_count = len(self._text_sentences)
+        total_sentence_count = len(self.text_sentences)
         assert total_sentence_count == saved_sentence_count + added_sentence_count
         words_per_sentence = self._count_words / total_sentence_count
         ranking = defaultdict(int)
@@ -113,7 +113,7 @@ class FrequencySummarizer:
         and return sentences sorted by index'''
         sents_idx = self.summarize_next_idx(text, summary_count, summary_percent)
         sents_idx.sort()
-        return [self._text_sentences[j] for j in sents_idx]
+        return [self.text_sentences[j] for j in sents_idx]
 
     def _score_sentence(self, snt_words, words_per_sentence):
         score = 0

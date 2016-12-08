@@ -72,6 +72,7 @@ def main():
 
 
 def summarize_debate(debate, args, verbose):
+    '''Summarize a debate all at once or turn by turn.'''
     sentence_count = 0
     freqsum = sums_word_freq.FrequencySummarizer(args.min_freq, args.max_freq, verbose)
     for turn in debate.all_turns:
@@ -104,6 +105,7 @@ def summarize_turn(debate, freqsum, turn_id, opt):
     turn = debate.all_turns[turn_id]
     sents_idx = freqsum.summarize_next_idx(turn.get_text(),
             opt.max_sentences, opt.sum_percent)
+
     new_size = freqsum.sentence_count()
     print("Turn {}, {}:".format(turn_id, turn.speaker))
     if opt.index_only:
@@ -111,9 +113,9 @@ def summarize_turn(debate, freqsum, turn_id, opt):
         return
     sents_idx.sort()
     for j in sents_idx:
-        sentence = freqsum._text_sentences[j]
+        sentence = freqsum.text_sentences[j]
         if opt.list_sentences:
-            print("{}: ".format(sents_idx), end='')
+            print("{} in [{}, {}]: ".format(sents_idx, old_size, new_size), end='')
         if opt.max_words:
             text_ops.print_paragraph_regex_count(sentence, opt.max_words)
         else:
@@ -121,11 +123,10 @@ def summarize_turn(debate, freqsum, turn_id, opt):
 
 def print_debate(debate, max_turns, max_words):
     '''Print up to max_turns turns from debate, stopping after max_words per sentence.'''
-    index = 1
-    sentence_count = 1
+    para_count = 1
     num_turns = max_turns if max_turns else len(debate.all_turns)
     for idx, turn in enumerate(debate.all_turns[:num_turns]):
-        turn.print_turn(idx, index, max_words)
+        turn.print_turn(idx, para_count, max_words)
 
 class DebateTurn:
     '''one speaker turn in a debate'''
@@ -135,6 +136,7 @@ class DebateTurn:
         self.text = [text]
 
     def get_text(self):
+        '''Returns all the text in a turn.'''
         return ' '.join(self.text)
 
     def print_turn(self, turn_index, para_count=0, max_words=0):
@@ -162,6 +164,7 @@ class Debate:
         self.parse_transcript(transcript, max_turns)
 
     def turn_count(self):
+        '''returns the total number of turns'''
         return len(self.all_turns)
 
     def parse_transcript(self, transcript_file, max_turns):
