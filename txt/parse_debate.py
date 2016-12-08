@@ -43,7 +43,7 @@ def main():
     parser.add_argument('-ns', '-num_sentences', metavar='SENTENCES',
             dest='max_sentences', type=int, nargs='?', const=1, default=1,
             help='max number of sentences per summarized turn')
-    parser.add_argument('-nt', '-num_turns', dest='max_turns', metavar='TURNS', 
+    parser.add_argument('-nt', '-num_turns', dest='max_turns', metavar='TURNS',
             type=int, nargs='?', const=1, default=0,
             help='max number of turns to show, or 0 for all (default)')
     parser.add_argument('-nw', '-max_words', dest='max_words', metavar='WORDS',
@@ -79,7 +79,7 @@ def summarize_debate(debate, args, verbose):
             sentence_count += freqsum.add_text(para)
     print('---------------------------------------------------------------------------')
     if args.all_as_one:
-        sum_count, act_percent = text_ops.resolve_count(0, args.sum_percent, sentence_count)
+        sum_count, _ = text_ops.resolve_count(0, args.sum_percent, sentence_count)
         if verbose > 0:
             print("Keeping {} of {} sentences.".format(sum_count, sentence_count))
         if args.index_only:
@@ -99,6 +99,7 @@ def summarize_debate(debate, args, verbose):
     print('---------------------------------------------------------------------------')
 
 def summarize_turn(debate, freqsum, turn_id, opt):
+    '''Summarize one DebateTurn'''
     old_size = freqsum.sentence_count()
     turn = debate.all_turns[turn_id]
     sents_idx = freqsum.summarize_next_idx(turn.get_text(),
@@ -119,11 +120,12 @@ def summarize_turn(debate, freqsum, turn_id, opt):
             utf_print(sentence)
 
 def print_debate(debate, max_turns, max_words):
+    '''Print up to max_turns turns from debate, stopping after max_words per sentence.'''
     index = 1
     sentence_count = 1
     num_turns = max_turns if max_turns else len(debate.all_turns)
     for idx, turn in enumerate(debate.all_turns[:num_turns]):
-        turn.print_turn(count, index, max_words)
+        turn.print_turn(idx, index, max_words)
 
 class DebateTurn:
     '''one speaker turn in a debate'''
@@ -143,7 +145,7 @@ class DebateTurn:
                 print("{}:  ".format(para_count), end='')
                 para_count += 1
             if max_words:
-               text_ops.print_paragraph_regex_count(para, max_words)
+                text_ops.print_paragraph_regex_count(para, max_words)
             else:
                 utf_print(para)
         print()
