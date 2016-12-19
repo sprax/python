@@ -1,4 +1,4 @@
-
+'''argparse example'''
 import argparse
 
 parser = argparse.ArgumentParser(description='Process some integers.')
@@ -10,4 +10,3 @@ parser.add_argument('--sum', dest='accumulate', action='store_const',
 
 args = parser.parse_args()
 print(args.accumulate(args.integers))
-
