@@ -18,7 +18,7 @@ def fib_memoize(n):
     return memo[n]
 
 
-def fib_iterate(on):
+def fib_iterate(n):
     '''iteratively compute function: seq num to fib num'''
     a, b = 0, 1
     for _ in range(n):
