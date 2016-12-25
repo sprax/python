@@ -29,18 +29,17 @@ def fib_iterate(n):
 PHI = (1 + 5**0.5) / 2
 
 def fib_binet(n):
+    '''Binet's Fibonacci formula'''
     return int(round((PHI**n - (1-PHI)**n) / 5**0.5))
     
-# Binet inverse formula
-
 def fib_binet_inverse(f):
-    '''inverse: fibonacci number to sequence number'''
+    '''Binet's Fibonacci inverse formula: fibonacci number to sequence number'''
     if f < 2:
         return f
     return int(round(log(f * 5**0.5) / log(PHI)))
 
-# fibonacci_matrix
 def mul(A, B):
+    '''fibonacci matrix, expanded out'''
     a, b, c = A
     d, e, f = B
     return a*d + b*e, a*e + b*f, b*e + c*f
@@ -52,13 +51,14 @@ def power(A, n):
     else:          return mul(A, power(mul(A, A), (n-1)//2))
 
 def fib_matrix(n):
-    if n < 2: return n
+    '''fibonacci's from matrix to the Nth power'''
+    if n < 2:
+        return n
     return power((1,1,0), n-1)[0]
 
 
-# fibonacci_generator
 def fib_generate(n):
-    '''gen fibs'''
+    '''fibonacci generator'''
     a, b, x = 0, 1, 0
     while x < n:
         yield a
@@ -66,8 +66,8 @@ def fib_generate(n):
         x = x+1
 
 
-# fibonacci_reciprocal_generator
 def fib_generate_recip(n):
+    '''fibonacci_reciprocal_generator'''
     a, b, x = 1, 2, 1
     while x < n:
         yield 1.0/a
