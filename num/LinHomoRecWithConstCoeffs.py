@@ -6,6 +6,7 @@
 
 import unittest
 import fibonaccis
+import lucas_list
 
 class LinHomoRecWithConstCoeffs:
     """LHRWCC: Linear Homogenous Recurrence With Constant Coefficients"""
@@ -16,7 +17,7 @@ class LinHomoRecWithConstCoeffs:
         assert len(inits) == self.order
         self.inits = inits
         self.coeffs = coeffs
-        self.length = self.order 
+        self.length = self.order
 
     def a_n_recurse(self, idx):
         '''Deprecated: recursively computes Nth term in the SHRWCC sequence'''
@@ -44,24 +45,37 @@ class TestLinHomoRecWithConstCoef(unittest.TestCase):
     '''unit tests'''
 
     def setUp(self):
-        self.fib_array = [y for y in fibonaccis.fib_generate(32)]
         print(str(LinHomoRecWithConstCoeffs.__doc__))
         print(str(self.id()), '\n')
 
-    def test_fibs(self):
-        '''Test against fibonaccis'''
+    def test_fibonacci(self):
+        '''Test against fibonacci sequence'''
         length = 30
-        print("test_fibs", length)
-        fibs = LinHomoRecWithConstCoeffs([1, 1], [1, 1])
-        print("fibs.order: {}".format(fibs.order))
+        print("test_fibonaccis", length)
+        ref_list = [y for y in fibonaccis.fib_generate(length+1)][1:]
+        self.try_reference_rec([1, 1], [1, 1], ref_list, length)
+
+    def test_lucas(self):
+        '''Test against Lucas number sequence'''
+        length = 30
+        print("test_lucas", length)
+        ref_list = lucas_list.lucas_list(length+1)
+        self.try_reference_rec([1, 1], [1, 3], ref_list, length)
+
+    def try_reference_rec(self, ref_coef, ref_init, ref_list, ref_length):
+        '''Test against a known reference recurrence'''
+        length = ref_length
+        print("test_reference_rec", length)
+        test_rec = LinHomoRecWithConstCoeffs(ref_coef, ref_init)
+        print("test_rec.order: {}".format(test_rec.order))
         save_list = []
         for j in range(length):
-            a_j = fibs.a_n_recurse(j)
-            f_j = self.fib_array[j+1]
-            print("fibs.a_n_recurse({}) => {} =?= {}".format(j, a_j, f_j))
-            assert a_j == f_j
+            a_j = test_rec.a_n_recurse(j)
+            r_j = ref_list[j]
+            print("test_rec.a_n_recurse({}) => {} =?= {}".format(j, a_j, r_j))
+            assert a_j == r_j
             save_list.append(a_j)
-        test_list = fibs.a_n_list(length)
+        test_list = test_rec.a_n_list(length)
         print(test_list)
         assert test_list == save_list
 
