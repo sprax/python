@@ -58,7 +58,7 @@ class BinarySearch:
         """find_upper_bound
         Return index of smallest element v in A s.t v >= specified value.
         If there is no such element in A, return -1.
-        """        
+        """
         lo, md, hi = 0, 0, len(A) - 1
         while (lo <= hi):
             md = (hi + lo) >> 1
