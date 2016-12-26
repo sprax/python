@@ -1,4 +1,5 @@
 # lucas_list.py -- tested with python 2.7 and 3.5
+'''Lucas numbers computed as lists'''
 import sys
 import fibonaccis
 
@@ -13,7 +14,7 @@ def lucas_interval(inf, sup):
     return result
 
 def lucas_list(length): # return list of Lucas numbers up to sup
-    """Return a list containing the Fibonacci series up to sup."""
+    '''Return a list containing the Fibonacci series up to sup.'''
     result = []
     a, b = 1, 3
     while length > 0:
@@ -22,8 +23,8 @@ def lucas_list(length): # return list of Lucas numbers up to sup
         length -= 1
     return result
 
-
 def main():
+    '''Print lists of Lucas numbers (default length 31)'''
     argc = len(sys.argv)
     end_num = int(sys.argv[1]) if argc > 1 else 31
     end_fib = fibonaccis.fib_binet(end_num + 2)
