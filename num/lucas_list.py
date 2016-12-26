@@ -13,12 +13,12 @@ def lucas_interval(inf, sup):
         a, b = b, a+b
     return result
 
-def lucas_list(length): # return list of Lucas numbers up to sup
-    '''Return a list containing the Fibonacci series up to sup.'''
+def lucas_list(length):
+    '''Return a list of Fibonacci numbers.'''
     result = []
     a, b = 1, 3
     while length > 0:
-        result.append(a)    # see below
+        result.append(a)
         a, b = b, a+b
         length -= 1
     return result

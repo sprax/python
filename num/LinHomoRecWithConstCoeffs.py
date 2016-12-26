@@ -11,14 +11,15 @@ class LinHomoRecWithConstCoeffs:
     """LHRWCC: Linear Homogenous Recurrence With Constant Coefficients"""
 
     def __init__(self, coeffs, inits):
-        '''constructor'''
-        assert len(coeffs) == len(inits)
+        '''Constructor'''
         self.order = len(coeffs)
-        self.coeffs = coeffs
+        assert len(inits) == self.order
         self.inits = inits
+        self.coeffs = coeffs
+        self.length = self.order 
 
     def a_n_recurse(self, idx):
-        '''recursively computes Nth term in the SHRWCC sequence'''
+        '''Deprecated: recursively computes Nth term in the SHRWCC sequence'''
         if idx < self.order:
             return self.inits[idx]
         tot = 0
@@ -26,7 +27,18 @@ class LinHomoRecWithConstCoeffs:
             tot += self.coeffs[k] * self.a_n_recurse(idx - k - 1)
         return tot
 
-
+    def a_n_list(self, length):
+        '''Return a memo-ized list of numbers in the SHRWCC sequence'''
+        if self.length >= length:
+            return self.inits[:length]
+        while self.length < length:
+            tot = 0
+            for k in range(self.order):
+                tot += self.coeffs[k] * self.inits[-(k + 1)]
+            self.inits.append(tot)
+            self.length += 1
+        assert len(self.inits) == length
+        return self.inits
 
 class TestLinHomoRecWithConstCoef(unittest.TestCase):
     '''unit tests'''
@@ -38,14 +50,20 @@ class TestLinHomoRecWithConstCoef(unittest.TestCase):
 
     def test_fibs(self):
         '''Test against fibonaccis'''
-        print("test_fibs")
+        length = 30
+        print("test_fibs", length)
         fibs = LinHomoRecWithConstCoeffs([1, 1], [1, 1])
         print("fibs.order: {}".format(fibs.order))
-        for j in range(30):
+        save_list = []
+        for j in range(length):
             a_j = fibs.a_n_recurse(j)
             f_j = self.fib_array[j+1]
             print("fibs.a_n_recurse({}) => {} =?= {}".format(j, a_j, f_j))
             assert a_j == f_j
+            save_list.append(a_j)
+        test_list = fibs.a_n_list(length)
+        print(test_list)
+        assert test_list == save_list
 
 if __name__ == '__main__':
     unittest.main()
