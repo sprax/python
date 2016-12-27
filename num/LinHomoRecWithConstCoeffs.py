@@ -32,6 +32,8 @@ class LinHomoRecWithConstCoeffs:
         '''Return a memo-ized list of numbers in the SHRWCC sequence'''
         if self.length >= length:
             return self.inits[:length]
+        if self.order == 2:
+            return self.a_n_ord2_list(length)
         while self.length < length:
             tot = 0
             for k in range(self.order):
@@ -41,11 +43,11 @@ class LinHomoRecWithConstCoeffs:
         assert len(self.inits) == length
         return self.inits
 
-    def a_n_2_list(self, length):
+    def a_n_ord2_list(self, length):
         '''Simplified list computation for order 2'''
         start_len = len(self.inits)
-        am2, am1 = self.inits[-2], self.inits[-1]
-        cm2, cm1 = self.coeffs[0], self.coeffs[1]
+        am1, am2 = self.inits[-1], self.inits[-2]
+        cm1, cm2 = self.coeffs[0], self.coeffs[1]
         while start_len < length:
             am2, am1 = am1, cm2*am2 + cm1*am1
             self.inits.append(am1)
@@ -72,6 +74,14 @@ class TestLinHomoRecWithConstCoef(unittest.TestCase):
         print("test_lucas", length)
         ref_list = lucas_list.lucas_list(length+1)
         self.try_reference_rec([1, 1], [1, 3], ref_list, length)
+
+    def test_3_7(self):
+        '''Test against coef[3, 7] init[1, 2] number sequence'''
+        length = 6
+        print("test_3_7", length)
+        ref_list = [1, 2, 13, 53, 250, 1121]
+        self.try_reference_rec([3, 7], [1, 2], ref_list, length)
+
 
     def try_reference_rec(self, ref_coef, ref_init, ref_list, ref_length):
         '''Test against a known reference recurrence'''
