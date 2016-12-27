@@ -43,6 +43,17 @@ class LinHomoRecWithConstCoeffs:
         assert len(self.inits) == length
         return self.inits
 
+    def a_n_ord3_list(self, length):
+        '''Simplified list computation for order 2'''
+        start_len = len(self.inits)
+        am1, am2, am3 = self.inits[-1], self.inits[-2], self.inits[-3]
+        cm1, cm2, am3 = self.coeffs[0], self.coeffs[1], self.coeffs[2]
+        while start_len < length:
+            am3, am2, am1 = am2, am1, cm3*am3 + cm2*am2 + cm1*am1
+            self.inits.append(am1)
+            start_len += 1
+        return self.inits
+
     def a_n_ord2_list(self, length):
         '''Simplified list computation for order 2'''
         start_len = len(self.inits)
@@ -76,12 +87,18 @@ class TestLinHomoRecWithConstCoef(unittest.TestCase):
         self.try_reference_rec([1, 1], [1, 3], ref_list, length)
 
     def test_3_7(self):
-        '''Test against coef[3, 7] init[1, 2] number sequence'''
+        '''Test against coef[3, 7] and init[1, 2] number sequence'''
         length = 6
         print("test_3_7", length)
         ref_list = [1, 2, 13, 53, 250, 1121]
         self.try_reference_rec([3, 7], [1, 2], ref_list, length)
 
+    def test_2_3_5(self):
+        '''Test against coef[2, 3, 5] and init[1, 2, 3] number sequence'''
+        length = 7
+        print("test_2_3_5", length)
+        ref_list = [1, 2, 3, 17, 53, 172, 588]
+        self.try_reference_rec([2, 3, 5], [1, 2, 3], ref_list, length)
 
     def try_reference_rec(self, ref_coef, ref_init, ref_list, ref_length):
         '''Test against a known reference recurrence'''
