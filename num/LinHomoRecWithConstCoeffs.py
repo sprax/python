@@ -34,6 +34,8 @@ class LinHomoRecWithConstCoeffs:
             return self.inits[:length]
         if self.order == 2:
             return self.a_n_ord2_list(length)
+        if self.order == 3:
+            return self.a_n_ord3_list(length)
         while self.length < length:
             tot = 0
             for k in range(self.order):
@@ -41,17 +43,6 @@ class LinHomoRecWithConstCoeffs:
             self.inits.append(tot)
             self.length += 1
         assert len(self.inits) == length
-        return self.inits
-
-    def a_n_ord3_list(self, length):
-        '''Simplified list computation for order 2'''
-        start_len = len(self.inits)
-        am1, am2, am3 = self.inits[-1], self.inits[-2], self.inits[-3]
-        cm1, cm2, am3 = self.coeffs[0], self.coeffs[1], self.coeffs[2]
-        while start_len < length:
-            am3, am2, am1 = am2, am1, cm3*am3 + cm2*am2 + cm1*am1
-            self.inits.append(am1)
-            start_len += 1
         return self.inits
 
     def a_n_ord2_list(self, length):
@@ -65,6 +56,18 @@ class LinHomoRecWithConstCoeffs:
             start_len += 1
         return self.inits
 
+    def a_n_ord3_list(self, length):
+        '''Simplified list computation for order 2'''
+        start_len = len(self.inits)
+        am1, am2, am3 = self.inits[-1], self.inits[-2], self.inits[-3]
+        cm1, cm2, cm3 = self.coeffs[0], self.coeffs[1], self.coeffs[2]
+        while start_len < length:
+            am3, am2, am1 = am2, am1, cm3*am3 + cm2*am2 + cm1*am1
+            self.inits.append(am1)
+            start_len += 1
+        return self.inits
+
+#####################################################
 class TestLinHomoRecWithConstCoef(unittest.TestCase):
     '''unit tests'''
 
