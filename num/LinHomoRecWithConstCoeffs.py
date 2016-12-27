@@ -41,6 +41,17 @@ class LinHomoRecWithConstCoeffs:
         assert len(self.inits) == length
         return self.inits
 
+    def a_n_2_list(self, length):
+        '''Simplified list computation for order 2'''
+        start_len = len(self.inits)
+        am2, am1 = self.inits[-2], self.inits[-1]
+        cm2, cm1 = self.coeffs[0], self.coeffs[1]
+        while start_len < length:
+            am2, am1 = am1, cm2*am2 + cm1*am1
+            self.inits.append(am1)
+            start_len += 1
+        return self.inits
+
 class TestLinHomoRecWithConstCoef(unittest.TestCase):
     '''unit tests'''
 

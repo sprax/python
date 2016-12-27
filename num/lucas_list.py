@@ -6,20 +6,20 @@ import fibonaccis
 def lucas_interval(inf, sup):
     '''Return a list of Lucas numbers between inf and sup, inclusive.'''
     result = []
-    a, b = 1, 3
-    while a <= sup:
-        if inf <= a:
-            result.append(a)
-        a, b = b, a+b
+    am2, am1 = 1, 3
+    while am2 <= sup:
+        if inf <= am2:
+            result.append(am2)
+        am2, am1 = am1, am2 + am1
     return result
 
 def lucas_list(length):
     '''Return a list of Fibonacci numbers.'''
     result = []
-    a, b = 1, 3
+    am2, am1 = 1, 3
     while length > 0:
-        result.append(a)
-        a, b = b, a+b
+        result.append(am2)
+        am2, am1 = am1, am2 + am1
         length -= 1
     return result
 
