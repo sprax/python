@@ -21,11 +21,12 @@ LINE_MAX = 15
 class PosFilter:
     '''Filter out some parts of speech, such as adverbs'''
 
-    def __init__(self, verbose=1, tags=['RB'], inter_tags=['CC']):
+    def __init__(self, verbose=1, out_tags=['RB'], con_tags=['CC', ',']):
         '''Initialize the POS filter with the tags of words to filter,
         and the tags of joining words to filter.'''
         self._stopwords = set(nltk.corpus.stopwords.words('english') + list(string.punctuation))
-        self.tags = tags
+        self.out_tags = out_tags
+        self.con_tags = con_tags
         self.verbose = verbose
 
     def filter_paragraph(self, paragraph):
@@ -33,16 +34,22 @@ class PosFilter:
         filtered = []
         sentences = nltk.sent_tokenize(paragraph)
         for sentence in sentences:
+            inside = False
             output = []
             tokens = nltk.word_tokenize(sentence)
             tagged = nltk.pos_tag(tokens)
             for wt in tagged:
-                if wt[1] not in self.tags:
-                    output.append(wt[0])
+                if wt[1] in self.out_tags:
+                    inside = True
+                    if self.verbose > 1:
+                        print("Filter out:", wt[0])
+                elif inside and wt[1] in self.con_tags:
+                    print("Filter con:", wt[0])
                 else:
-                    print("Filter out:", wt[0])
+                    inside = False
+                    output.append(wt[0])
             filtered.extend(output)
-        return ' '.join(filtered)
+        return ' '.join(filtered[:-1]) + filtered[-1] if filtered else ''
 
 
 def filter_file(filter, path, verbose, charset='utf8'):
@@ -83,8 +90,8 @@ def main():
     parser.add_argument('-truncate', dest='max_print_words', type=int, nargs='?',
                         const=8, default=0,
                         help='truncate sentences after MAX words (default: INT_MAX)')
-    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
-                        help='verbosity of output (default: 1)')
+    parser.add_argument('-verbose', type=int, nargs='?', const=2, default=2,
+                        help='verbosity of output (default: 2)')
     args = parser.parse_args()
 
     if args.verbose > 3:
@@ -94,7 +101,7 @@ def main():
         exit(0)
 
     # summary_file = getattr(args, 'out_file', None)
-    pos_filter = PosFilter()
+    pos_filter = PosFilter(args.verbose)
     for y in filter_file(pos_filter, args.text_spec, args.verbose, charset='utf8'):
         print(y)
 
