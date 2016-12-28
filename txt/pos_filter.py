@@ -41,16 +41,33 @@ class PosFilter:
             output = []
             tokens = nltk.word_tokenize(sentence)
             tagged = nltk.pos_tag(tokens)
-            for wt in tagged:
-                if wt[1] in self.out_tags:
-                    inside = True
-                    if self.verbose > 1:
-                        print("Filter out:", wt[0])
-                elif inside and wt[1] in self.con_tags:
-                    print("Filter con:", wt[0])
+            precon = []
+            for (tok, tag) in tagged:
+                if inside:
+                    if tag in self.out_tags:
+                        if self.verbose > 1:
+                            print("Filter out:", tok)
+                    elif tag in self.con_tags:
+                        print("Filter con?", tok)
+                        precon.append(tok)
+                    else:
+                        inside = False
+                        # print("INSIDE precon:", precon)
+                        if output and len(precon) > 1:
+                            output.append(precon.pop())
+                        precon = []
+                        output.append(tok)
                 else:
-                    inside = False
-                    output.append(wt[0])
+                    if tag in self.out_tags:
+                        inside = True
+                        precon = []
+                    elif tag in self.con_tags:
+                        precon.append(tok)
+                    else:
+                        if output and precon:
+                            output.append(precon.pop())
+                        assert precon == []
+                        output.append(tok)
             filtered.extend(output)
         # return ' '.join(filtered[:-1]) + filtered[-1] if filtered else ''
         return join_tokenized(output)
