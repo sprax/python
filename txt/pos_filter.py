@@ -34,6 +34,9 @@ class PosFilter:
         filtered = []
         sentences = nltk.sent_tokenize(paragraph)
         for sentence in sentences:
+            if self.verbose > 1:
+                print()
+                print(sentence)
             inside = False
             output = []
             tokens = nltk.word_tokenize(sentence)
@@ -49,8 +52,11 @@ class PosFilter:
                     inside = False
                     output.append(wt[0])
             filtered.extend(output)
-        return ' '.join(filtered[:-1]) + filtered[-1] if filtered else ''
+        # return ' '.join(filtered[:-1]) + filtered[-1] if filtered else ''
+        return join_tokenized(output)
 
+def join_tokenized(tokens):
+    return "".join([" "+i if not i.startswith("'") and i not in string.punctuation else i for i in tokens]).strip()
 
 def filter_file(filter, path, verbose, charset='utf8'):
     '''Filter all paragraphs in a text file'''
