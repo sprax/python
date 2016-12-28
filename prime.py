@@ -1,4 +1,5 @@
-# for.py
+#!/usr/bin/env python3 
+'''Find primes by checking each number in a range for divisors.  Primes have no divisors but 1 and themselves.'''
 
 for n in range(2, 53):
     for x in range(2, n):
