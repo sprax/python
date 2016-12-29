@@ -16,11 +16,12 @@ def set_xdv_verbosity(verbosity):
 
 def xdv(level, *args, **kwargs):
     '''Conditional output: eXpress Depending on Verbosity'''
-    if XDV_VERBOSITY is None:
+    try:
+        if level <= XDV_VERBOSITY:
+            print(*args, **kwargs)
+    except TypeError:
         print("WARNING: XDV_VERBOSITY was None (in {}); setting it to {}".format(__name__, XDV_DEFAULT))
         set_xdv_verbosity(0)
-    if level <= XDV_VERBOSITY:
-        print(*args, **kwargs)
 
 def try_xdv():
     '''test xdv'''

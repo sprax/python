@@ -15,17 +15,17 @@ import nltk
 import text_ops
 import text_fio
 import text_ops
+from xdv import xdv, set_xdv_verbosity
 
 class PosFilter:
     '''Filter out some parts of speech, such as adverbs'''
 
-    def __init__(self, verbose=1, out_tags=['RB'], con_tags=['CC', ','], negatives=['no', 'not', 'never', "don't", "n't"]):
+    def __init__(self, out_tags=['RB'], con_tags=['CC', ','], negatives=['no', 'not', 'never', "don't", "n't"]):
         '''Initialize the POS filter with the tags of words to filter,
         and the tags of joining words to filter.'''
         self._stopwords = set(nltk.corpus.stopwords.words('english') + list(string.punctuation))
         self.out_tags = out_tags
         self.con_tags = con_tags
-        self.verbose = verbose
         self.negatives = negatives
 
     def filter_paragraph(self, paragraph):
@@ -33,9 +33,8 @@ class PosFilter:
         filtered = []
         sentences = nltk.sent_tokenize(paragraph)
         for sentence in sentences:
-            if self.verbose > 1:
-                print()
-                print(sentence)
+            xdv(1)
+            xdv(1, sentence)
             inside = False
             output = []
             tokens = nltk.word_tokenize(sentence)
@@ -51,24 +50,24 @@ class PosFilter:
                             output[-1] += tok
                         else:
                             output.append(tok)
-                        print("Preserve neg:", tag, tok)
-                    elif self.verbose > 1:
-                        print("Filter out:", tag, tok)
+                        xdv(2, "Preserve neg:", tag, tok)
+                    else:
+                        xdv(1, "Filter out:", tag, tok)
                 elif inside and tag in self.con_tags:
-                    print("Filter con?", tag, tok)
+                    xdv(3, "Filter con?", tag, tok)
                     precon.append(tok)      # push
                 else:
                     # TODO: Heuristics!
                     if output and len(precon) > 1 and (precon[-2] != precon[-1] or tag == 'PRP'):
                         con = precon.pop()
-                        print("Append con:", con)
+                        xdv(2, "Append con:", con)
                         output.append(con)
-                    print("Append tok:", tag, tok)
+                    xdv(3, "Append tok:", tag, tok)
                     output.append(tok)
                     if inside:
                         inside = False
                         precon = []
-                        # print("INSIDE precon:", precon)
+                        # xdv(0, "INSIDE precon:", precon)
             filtered.extend(output)
         # return ' '.join(filtered[:-1]) + filtered[-1] if filtered else ''
         return join_tokenized(output)
@@ -118,14 +117,15 @@ def main():
                         help='verbosity of output (default: 2)')
     args = parser.parse_args()
 
-    if args.verbose > 3:
+    if args.verbose > 4:
         print("outfile: <{}>".format(args.out_file))
         print("args:", args)
         print(__doc__)
         exit(0)
+    set_xdv_verbosity(args.verbose)
 
     # summary_file = getattr(args, 'out_file', None)
-    pos_filter = PosFilter(args.verbose)
+    pos_filter = PosFilter()
     for y in filter_file(pos_filter, args.text_spec, args.verbose, charset='utf8'):
         print(y)
 
