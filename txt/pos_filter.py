@@ -6,21 +6,17 @@
 # from nltk.tokenize import sent_tokenize, word_tokenize, pos_tag
 # from string import punctuation
 import argparse
-import heapq
-import math
 import string
-import sys
-from collections import defaultdict
 import nltk
 import text_ops
-import text_fio
-import text_ops
+from utf_print import utf_print
 from xdv import xdv, set_xdv_verbosity
 
 class PosFilter:
     '''Filter out some parts of speech, such as adverbs'''
 
-    def __init__(self, out_tags=['RB'], con_tags=['CC', ','], negatives=['no', 'not', 'never', "don't", "n't"]):
+    def __init__(self, out_tags=['RB'], con_tags=['CC', ',']
+            , negatives=['no', 'not', 'never', "don't", "n't"]):
         '''Initialize the POS filter with the tags of words to filter,
         and the tags of joining words to filter.'''
         self._stopwords = set(nltk.corpus.stopwords.words('english') + list(string.punctuation))
@@ -73,16 +69,18 @@ class PosFilter:
         return join_tokenized(output)
 
 def join_tokenized(tokens):
-    return "".join([" "+i if not i.startswith("'") and i not in string.punctuation else i for i in tokens]).strip()
+    '''Join tokens into a sentence; partial inverse of word_tokenize.'''
+    return "".join([" "+i if not i.startswith("'") and i not in string.punctuation
+        else i for i in tokens]).strip()
 
-def filter_file(filter, path, verbose, charset='utf8'):
+def filter_file(word_filter, path, verbose, charset='utf8'):
     '''Filter all paragraphs in a text file'''
     with open(path, 'r', encoding=charset) as text:
         for idx, para in enumerate(text_ops.paragraph_iter(text)):
             if verbose > 3:
                 print("    Paragraph {}:".format(idx))
                 utf_print(para)
-            yield filter.filter_paragraph(para)
+            yield word_filter.filter_paragraph(para)
 
 ###############################################################################
 
@@ -97,10 +95,10 @@ def main():
                         help='output only the indices of summary sentences')
     parser.add_argument('-list_numbers', action='store_true',
                         help='output list number for each summary sentence')
-    parser.add_argument('-fM', '-freq_max', dest='max_freq', type=float, nargs='?', const=1, default=0.9,
-                        help='maximum frequency cut-off (default: 0.9)')
-    parser.add_argument('-fm', '-freq_min', dest='min_freq', type=float, nargs='?', const=1, default=0.1,
-                        help='minimum frequency cut-off (default: 0.1)')
+    parser.add_argument('-fM', '-freq_max', dest='max_freq', type=float, nargs='?', const=1,
+                        default=0.9, help='maximum frequency cut-off (default: 0.9)')
+    parser.add_argument('-fm', '-freq_min', dest='min_freq', type=float, nargs='?', const=1,
+                        default=0.1, help='minimum frequency cut-off (default: 0.1)')
     parser.add_argument('-num_sentences', dest='sum_count', type=int, nargs='?', const=1, default=0,
                         help='max number of sentences to keep (default: 5), overrides -percent')
     parser.add_argument('-out_file', type=str, nargs='?', const='-',
@@ -126,8 +124,8 @@ def main():
 
     # summary_file = getattr(args, 'out_file', None)
     pos_filter = PosFilter()
-    for y in filter_file(pos_filter, args.text_spec, args.verbose, charset='utf8'):
-        print(y)
+    for sent in filter_file(pos_filter, args.text_spec, args.verbose, charset='utf8'):
+        print(sent)
 
 if __name__ == '__main__':
     main()
