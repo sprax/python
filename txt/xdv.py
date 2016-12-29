@@ -20,7 +20,8 @@ def xdv(level, *args, **kwargs):
         if level <= XDV_VERBOSITY:
             print(*args, **kwargs)
     except TypeError:
-        print("WARNING: XDV_VERBOSITY was None (in {}); setting it to {}".format(__name__, XDV_DEFAULT))
+        print("WARNING: XDV_VERBOSITY was None (in {}); setting it to {}"
+                .format(__name__, XDV_DEFAULT))
         set_xdv_verbosity(0)
 
 def try_xdv():
@@ -32,6 +33,7 @@ def try_xdv():
     xdv(4, "4 -- hey from xdv", "YO", "\n{}".format("goodbye from xdv"), sep='')
 
 def test_xdv():
+    '''test xdv module methods'''
     try_xdv()
     set_xdv_verbosity(2)
     try_xdv()
