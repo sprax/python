@@ -21,13 +21,14 @@ LINE_MAX = 15
 class PosFilter:
     '''Filter out some parts of speech, such as adverbs'''
 
-    def __init__(self, verbose=1, out_tags=['RB'], con_tags=['CC', ',']):
+    def __init__(self, verbose=1, out_tags=['RB'], con_tags=['CC', ','], negatives=['no', 'not', 'never', "don't", "n't"]):
         '''Initialize the POS filter with the tags of words to filter,
         and the tags of joining words to filter.'''
         self._stopwords = set(nltk.corpus.stopwords.words('english') + list(string.punctuation))
         self.out_tags = out_tags
         self.con_tags = con_tags
         self.verbose = verbose
+        self.negatives = negatives
 
     def filter_paragraph(self, paragraph):
         '''Filter a single paragraph containing one or more sentences.'''
@@ -45,20 +46,34 @@ class PosFilter:
             for (tok, tag) in tagged:
                 if inside:
                     if tag in self.out_tags:
-                        if self.verbose > 1:
-                            print("Filter out:", tok)
+                        if tag == 'RB' and tok in self.negatives:
+                            if tok == "n't":
+                                output[-1] += tok
+                            else:
+                                output.append(tok)
+                            print("Preserve neg:", tag, tok)
+                        elif self.verbose > 1:
+                            print("Filter out:", tag, tok)
                     elif tag in self.con_tags:
-                        print("Filter con?", tok)
+                        print("Filter con?", tag, tok)
                         precon.append(tok)
                     else:
                         inside = False
                         # print("INSIDE precon:", precon)
-                        if output and len(precon) > 1:
+                        if output and len(precon) > 1 and precon[-2] != precon[-1]:
                             output.append(precon.pop())
                         precon = []
                         output.append(tok)
                 else:
                     if tag in self.out_tags:
+                        if tag == 'RB' and tok in self.negatives:
+                            if tok == "n't":
+                                output[-1] += tok
+                            else:
+                                output.append(tok)
+                            print("Preserve neg:", tag, tok)
+                        elif self.verbose > 1:
+                            print("Filter out:", tag, tok)
                         inside = True
                         precon = []
                     elif tag in self.con_tags:
