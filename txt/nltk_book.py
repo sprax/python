@@ -23,22 +23,41 @@ def counter(text):
 
 def bigrams_counter(text, min_len):
     '''Counter of bigrams'''
-    big_counter = Counter()
+    counter = Counter()
     for big in nltk.bigrams(text):
         if len(big[0]) > min_len and len(big[1]) > min_len:
-            big_counter.update([big])
-    return big_counter
+            counter.update([big])
+    return counter
 
-def trigrams_counter(text, min_len):
+def trigrams_counter(text, min_len, min_sum_len):
     '''Counter of trigrams'''
-    big_counter = Counter()
+    counter = Counter()
     for trig in nltk.trigrams(text):
-        if len(trig[0]) > min_len and len(trig[1]) > min_len:
-            big_counter.update([trig])
-    return big_counter
+        len0 = len(trig[0])
+        if len0 < min_len:
+            continue
+        len1 = len(trig[0])
+        if len1 < min_len:
+            continue
+        len2 = len(trig[2])
+        if len2 < min_len:
+            continue
+        if len0 + len1 + len2 < min_sum_len:
+            continue
+        counter.update([trig])
+    return counter
 
-def test_nltk_book():
+def generate_model(cfdist, word, length=15):
+    words = [word]
+    for _ in range(length):
+        word = cfdist[word].max()
+        if word not in words:
+            words.append(word)
+    print(' '.join(words))
+
+def test_nltk_book(text):
     '''test module methods'''
+    trig_counter = trigrams_counter(text)
 
 if __name__ == '__main__':
     test_nltk_book()
