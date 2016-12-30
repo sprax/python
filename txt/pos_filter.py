@@ -42,10 +42,7 @@ class PosFilter:
                         inside = True
                         precon = []
                     if tag == 'RB' and tok in self.negatives:
-                        if tok == "n't":
-                            output[-1] += tok
-                        else:
-                            output.append(tok)
+                        output.append(tok)
                         xdv(2, "Preserve neg:", tag, tok)
                     else:
                         xdv(1, "Filter out:", tag, tok)
@@ -70,17 +67,8 @@ class PosFilter:
 
 def join_tokenized(tokens):
     '''Join tokens into a sentence; partial inverse of word_tokenize.'''
-    return "".join([" "+i if not i.startswith("'") and i not in string.punctuation
+    return "".join([" "+i if not i.startswith("'") and i not in string.punctuation and i not in ["n't"]
         else i for i in tokens]).strip()
-
-def filter_file(word_filter, path, verbose, charset='utf8'):
-    '''Filter all paragraphs in a text file'''
-    with open(path, 'r', encoding=charset) as text:
-        for idx, para in enumerate(text_ops.paragraph_iter(text)):
-            if verbose > 3:
-                print("    Paragraph {}:".format(idx))
-                utf_print(para)
-            yield word_filter.filter_paragraph(para)
 
 ###############################################################################
 
@@ -91,40 +79,28 @@ def main():
         description="Extractive text summarizer")
     parser.add_argument('text_spec', type=str, nargs='?', default='corpus.txt',
                         help='text file containing text to summarize')
-    parser.add_argument('-index', dest='indices_only', action='store_true',
-                        help='output only the indices of summary sentences')
     parser.add_argument('-list_numbers', action='store_true',
-                        help='output list number for each summary sentence')
-    parser.add_argument('-fM', '-freq_max', dest='max_freq', type=float, nargs='?', const=1,
-                        default=0.9, help='maximum frequency cut-off (default: 0.9)')
-    parser.add_argument('-fm', '-freq_min', dest='min_freq', type=float, nargs='?', const=1,
-                        default=0.1, help='minimum frequency cut-off (default: 0.1)')
-    parser.add_argument('-num_sentences', dest='sum_count', type=int, nargs='?', const=1, default=0,
-                        help='max number of sentences to keep (default: 5), overrides -percent')
-    parser.add_argument('-out_file', type=str, nargs='?', const='-',
-                        help='output file for summarized text (default: None)')
-    parser.add_argument('-percent', dest='sum_percent', type=float, nargs='?',
-                        const=16.6667, default=10.0,
-                        help='percentage of sentences to keep (default: 10.0%%)')
-    parser.add_argument('-serial', action='store_true',
-                        help='summarize each paragraph in series')
-    parser.add_argument('-truncate', dest='max_print_words', type=int, nargs='?',
-                        const=8, default=0,
-                        help='truncate sentences after MAX words (default: INT_MAX)')
+                        help='output list number for each filtered sentence')
     parser.add_argument('-verbose', type=int, nargs='?', const=2, default=2,
                         help='verbosity of output (default: 2)')
     args = parser.parse_args()
 
-    if args.verbose > 4:
-        print("outfile: <{}>".format(args.out_file))
+    if args.verbose > 8:
         print("args:", args)
         print(__doc__)
         exit(0)
     set_xdv_verbosity(args.verbose)
 
-    # summary_file = getattr(args, 'out_file', None)
-    pos_filter = PosFilter()
-    for sent in filter_file(pos_filter, args.text_spec, args.verbose, charset='utf8'):
+    filter = PosFilter()
+    for sent in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
+        print(sent)
+    print('==================================================================')
+    filter = PosFilter(['JJ'], ['RB', 'CC', ','])
+    for sent in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
+        print(sent)
+    print('==================================================================')
+    filter = PosFilter(['JJ','RB'], ['RB', 'CC', ','])
+    for sent in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
         print(sent)
 
 if __name__ == '__main__':

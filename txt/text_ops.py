@@ -248,6 +248,12 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
         else:
             utf_print(sentence, outfile=out_file)
 
+def filter_file(filter, path, charset='utf8'):
+    '''Generator yielding filtered paragraphs from a text file'''
+    with open(path, 'r', encoding=charset) as text:
+        for para in paragraph_iter(text):
+            yield filter.filter_paragraph(para)
+
 def main():
     '''Driver to iterate over the paragraphs in a text file.'''
     parser = argparse.ArgumentParser(description=__doc__)
