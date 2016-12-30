@@ -3,6 +3,7 @@
 
 from collections import Counter
 import nltk
+from xdv import xdv, set_xdv_verbosity
 
 def lexical_diversity(text):
     '''ratio of word count to unique word count'''
@@ -47,13 +48,32 @@ def trigrams_counter(text, min_len, min_sum_len):
         counter.update([trig])
     return counter
 
-def generate_model(cfdist, word, length=15):
+def generate_cfd_max(cfdist, word, length=15):
+    words = [word]
+    for _ in range(length):
+        word = cfdist[word].max()
+        words.append(word)
+    print(' '.join(words))
+
+def generate_cfd_max_skip_dupes(cfdist, word, length=15):
     words = [word]
     for _ in range(length):
         word = cfdist[word].max()
         if word not in words:
             words.append(word)
     print(' '.join(words))
+
+def generate_cfd_prob(cfdist, word, length=15):
+    words = [word]
+    for _ in range(length):
+        freqs = cfdist[word]
+        for word in sorted(freqs.keys(), key=freqs.get, reverse=True):
+            xdv(1, "Try:", freqs[word], word)
+            if word not in words:
+                words.append(word)
+                break
+    print(' '.join(words))
+
 
 def test_nltk_book(text):
     '''test module methods'''
