@@ -43,26 +43,25 @@ class PosFilter:
                         precon = []
                     if tag == 'RB' and tok in self.negatives:
                         output.append(tok)
-                        xdv(2, "Preserve neg:", tag, tok)
+                        xdv(3, "Preserve neg:", tag, tok)
                     else:
-                        xdv(1, "Filter out:", tag, tok)
+                        xdv(2, "Filter out:", tag, tok)
                 elif inside and tag in self.con_tags:
-                    xdv(3, "Filter con?", tag, tok)
+                    xdv(4, "Filter con?", tag, tok)
                     precon.append(tok)      # push
                 else:
                     # TODO: Heuristics!
                     if output and len(precon) > 1 and (precon[-2] != precon[-1] or tag == 'PRP'):
                         con = precon.pop()
-                        xdv(2, "Append con:", con)
+                        xdv(3, "Append con:", con)
                         output.append(con)
-                    xdv(3, "Append tok:", tag, tok)
+                    xdv(4, "Append tok:", tag, tok)
                     output.append(tok)
                     if inside:
                         inside = False
                         precon = []
-                        # xdv(0, "INSIDE precon:", precon)
+                        xdv(5, "INSIDE precon:", precon)
             filtered.extend(output)
-        # return ' '.join(filtered[:-1]) + filtered[-1] if filtered else ''
         return join_tokenized(output)
 
 def join_tokenized(tokens):
@@ -91,14 +90,15 @@ def main():
         exit(0)
     set_xdv_verbosity(args.verbose)
 
+    print('======== Remove Adverbs [RB] ==================================================')
     filter = PosFilter()
     for sent in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
         print(sent)
-    print('==================================================================')
+    print('======== Remove Adjectives [JJ] ===============================================')
     filter = PosFilter(['JJ'], ['RB', 'CC', ','])
     for sent in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
         print(sent)
-    print('==================================================================')
+    print('======== Remove Adv and Adj [JJ, RB] ==========================================')
     filter = PosFilter(['JJ','RB'], ['RB', 'CC', ','])
     for sent in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
         print(sent)
