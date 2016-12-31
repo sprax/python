@@ -39,7 +39,11 @@ def fib_binet_inverse(f):
     return int(round(log(f * 5**0.5) / log(PHI)))
 
 def mul(A, B):
-    '''fibonacci matrix, expanded out'''
+    '''matrix multiply, expanded out?
+    a  b     d   e        a*d + b*e   a*e + b*f
+          X           =   
+    c  0     f   0        b*d + c*e   b*e + c*f
+    '''
     a, b, c = A
     d, e, f = B
     return a*d + b*e, a*e + b*f, b*e + c*f
