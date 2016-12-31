@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+i#!/usr/bin/env python3
 # Sprax Lines       2016.12.26      Written with Python 3.5
 """LHRWCC: Linear Homogenous Recurrence With Constant Coefficients.
    Class and unit tests.
@@ -20,7 +20,7 @@ class LinHomoRecWithConstCoeffs:
         self.length = self.order
 
     def a_n_recurse(self, idx):
-        '''Deprecated: recursively computes Nth term in the SHRWCC sequence'''
+        '''Deprecated: recursively computes Nth term in the LHRWCC sequence'''
         if idx < self.order:
             return self.inits[idx]
         tot = 0
@@ -29,7 +29,7 @@ class LinHomoRecWithConstCoeffs:
         return tot
 
     def a_n_list(self, length):
-        '''Return a memo-ized list of numbers in the SHRWCC sequence'''
+        '''Return a memo-ized list of numbers in the LHRWCC sequence'''
         if self.length >= length:
             return self.inits[:length]
         if self.order == 2:
