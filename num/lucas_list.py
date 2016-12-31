@@ -14,7 +14,7 @@ def lucas_interval(inf, sup):
     return result
 
 def lucas_list(length):
-    '''Return a list of Fibonacci numbers.'''
+    '''Return a list of Lucas numbers.'''
     result = []
     am2, am1 = 1, 3
     while length > 0:
@@ -27,6 +27,7 @@ def main():
     '''Print lists of Lucas numbers (default length 31)'''
     argc = len(sys.argv)
     end_num = int(sys.argv[1]) if argc > 1 else 31
+    # TODO: Equivalent of Binet formula for Lucas numbers?
     end_fib = fibonaccis.fib_binet(end_num + 2)
     numbers = lucas_interval(1, end_fib)
     print(numbers)
