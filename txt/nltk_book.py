@@ -53,7 +53,7 @@ def generate_cfd_max(cfdist, word, length=15):
     for _ in range(length):
         word = cfdist[word].max()
         words.append(word)
-    print(' '.join(words))
+    print(join_tokenized(words))
 
 def generate_cfd_max_skip_dupes(cfdist, word, length=15):
     words = [word]
@@ -61,7 +61,7 @@ def generate_cfd_max_skip_dupes(cfdist, word, length=15):
         word = cfdist[word].max()
         if word not in words:
             words.append(word)
-    print(' '.join(words))
+    print(join_tokenized(words))
 
 def generate_cfd_prob(cfdist, word, length=15):
     words = [word]
@@ -72,7 +72,13 @@ def generate_cfd_prob(cfdist, word, length=15):
             if word not in words:
                 words.append(word)
                 break
-    print(' '.join(words))
+    print(join_tokenized(words))
+
+
+def join_tokenized(tokens):
+    '''Join tokens into a sentence; partial inverse of word_tokenize.'''
+    return "".join([" "+i if not i.startswith("'") and i not in string.punctuation and i not in ["n't"]
+        else i for i in tokens]).strip()
 
 
 def test_nltk_book(text):
