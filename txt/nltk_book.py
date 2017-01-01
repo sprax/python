@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 '''nltk_book.py'''
 
+import string
 from collections import Counter
 import nltk
 from xdv import xdv, set_xdv_verbosity
@@ -48,6 +49,24 @@ def trigrams_counter(text, min_len, min_sum_len):
         counter.update([trig])
     return counter
 
+def filter_string_punct(tokenized):
+    for token in tokenized:
+        if token not in string.punctuation:
+            yield token
+
+SENTENCE_PUNCTUATION = '!"\'()*+,./:;<>?[\\]^_`{|}~'
+
+def filter_sentence_punct(tokenized):
+    for token in tokenized:
+        if token not in SENTENCE_PUNCTUATION:
+            yield token
+
+def join_tokenized(tokens):
+    '''Join tokens into a sentence; partial inverse of word_tokenize.'''
+    return "".join([" "+i if not i.startswith("'") and i not in string.punctuation
+        and i not in ["n't"]
+        else i for i in tokens]).strip()
+
 def generate_cfd_max(cfdist, word, length=15):
     words = [word]
     for _ in range(length):
@@ -74,11 +93,6 @@ def generate_cfd_prob(cfdist, word, length=15):
                 break
     print(join_tokenized(words))
 
-
-def join_tokenized(tokens):
-    '''Join tokens into a sentence; partial inverse of word_tokenize.'''
-    return "".join([" "+i if not i.startswith("'") and i not in string.punctuation and i not in ["n't"]
-        else i for i in tokens]).strip()
 
 
 def test_nltk_book(text):
