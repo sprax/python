@@ -86,6 +86,11 @@ def generate_cfd_max_uniq(cfdist, word, length=15):
                 break
     print(join_tokenized(words))
 
+#Some fun ones using this function on bigrams from Moby Dick:
+# The voyages now show white whale shakes down certain mathematical symmetry
+# The Narwhale has ever new made what prodigious black foam that interval
+#     passed round upon inquiry remains white steeds
+#
 def generate_cfd_rand_uniq(cfdist, word, length=15):
     result = [word]
     for _ in range(length):
@@ -107,31 +112,44 @@ def generate_cfd_rand_uniq(cfdist, word, length=15):
             break
     print(join_tokenized(result))
 
-#TODO Not right, yet -- need to eliminate entire range using randrange(start, end)
+#Some fun ones using this function on bigrams from Moby Dick:
+# The yards long voyage was dimly parted the capsized hull rolls upwards and nobler thing still lingers
+# The English whalers sometimes most elegant language cannot withstand them matters more recondite and napping
+# The subterranean laugh exclaimed Stubb was over tender than hitherto identified
+#     with rippling straight path made incarnate
+# The schooner moored alongside ere stepping upon immortals.
 def generate_cfd_prob_uniq(cfdist, word, length=15):
+    '''Generate next word randomly in proportion to CFD probability, 
+       and if it is already in the output, take the next most probable
+       word that is not already in the output.'''
     result = [word]
     for _ in range(length):
         freqs = cfdist[word]
-        words = sorted(freqs.keys(), key=freqs.get, reverse=True):
+        if not freqs:
+            print("Inner pre break.")
+            break
+        words = sorted(freqs.keys(), key=freqs.get, reverse=True)
         count = len(words)
         rlist = []
         total = 0
         for word in words:
             total += freqs[word]
-            rlist.append[total]
-        while count > 0:
-            rdx = random.randrange(total)
-            for index, total in enumerate(rlist):
-                if rdx < total:
+            rlist.append(total)
+        rdx = random.randrange(total)
+        for index, total in enumerate(rlist):
+            if rdx < total:
+                for wdx in range(index, count):
                     word = words[index]
-                    xdv(0, "Try:", freqs[word], word)
                     if word not in result:
+                        xdv(0, "Uniq:", freqs[word], word)
                         result.append(word)
-                        count = 0
                         break
-            else:
+                    else:
+                        xdv(0, "Dupe:", freqs[word], word)
                 break
-            count -= 1
+        else:
+            print("Else break outer.")
+            break
     print(join_tokenized(result))
 
 
