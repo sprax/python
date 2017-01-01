@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 '''nltk_book.py'''
 
+import random
 import string
 from collections import Counter
 import nltk
@@ -74,15 +75,7 @@ def generate_cfd_max(cfdist, word, length=15):
         words.append(word)
     print(join_tokenized(words))
 
-def generate_cfd_max_skip_dupes(cfdist, word, length=15):
-    words = [word]
-    for _ in range(length):
-        word = cfdist[word].max()
-        if word not in words:
-            words.append(word)
-    print(join_tokenized(words))
-
-def generate_cfd_prob(cfdist, word, length=15):
+def generate_cfd_max_uniq(cfdist, word, length=15):
     words = [word]
     for _ in range(length):
         freqs = cfdist[word]
@@ -93,6 +86,26 @@ def generate_cfd_prob(cfdist, word, length=15):
                 break
     print(join_tokenized(words))
 
+def generate_cfd_rand_uniq(cfdist, word, length=15):
+    words = [word]
+    for _ in range(length):
+        freqs = cfdist[word]
+        words = list(freqs.keys())
+        count = len(words)
+        ilist = list(range(count))
+        while count > 0:
+            index = random.randrange(count)
+            word = words[index]
+            xdv(0, "Try:", freqs[word], word)
+            if word not in words:
+                words.append(word)
+                break
+            else:
+                count -= 1
+                ilist[index] = ilist[count]
+        if count == 0:
+            break
+    print(join_tokenized(words))
 
 
 def test_nltk_book(text):
