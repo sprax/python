@@ -7,6 +7,15 @@ from collections import Counter
 import nltk
 from xdv import xdv, set_xdv_verbosity
 
+NLTK_VERBOSITY = 1
+
+def set_nltk_verbosity(verbosity):
+    '''Set the modul-global variable NLTK_VERBOSITY'''
+    global NLTK_VERBOSITY
+    print("Setting NLTK_VERBOSITY = {}".format(verbosity))
+    NLTK_VERBOSITY = verbosity
+
+
 def lexical_diversity(text):
     '''ratio of word count to unique word count'''
     return len(text) / len(set(text))
@@ -73,18 +82,18 @@ def generate_cfd_max(cfdist, word, length=15):
     for _ in range(length):
         word = cfdist[word].max()
         words.append(word)
-    print(join_tokenized(words))
+    return join_tokenized(words)
 
 def generate_cfd_max_uniq(cfdist, word, length=15):
     words = [word]
     for _ in range(length):
         freqs = cfdist[word]
         for word in sorted(freqs.keys(), key=freqs.get, reverse=True):
-            xdv(1, "Try:", freqs[word], word)
+            xdv(NLTK_VERBOSITY, "Try:", freqs[word], word)
             if word not in words:
                 words.append(word)
                 break
-    print(join_tokenized(words))
+    return join_tokenized(words)
 
 #Some fun ones using this function on bigrams from Moby Dick:
 # The voyages now show white whale shakes down certain mathematical symmetry
@@ -101,7 +110,7 @@ def generate_cfd_rand_uniq(cfdist, word, length=15):
         while count > 0:
             index = random.randrange(count)
             word = words[index]
-            xdv(0, "Try:", freqs[word], word)
+            xdv(NLTK_VERBOSITY, "Try:", freqs[word], word)
             if word not in result:
                 result.append(word)
                 break
@@ -110,7 +119,7 @@ def generate_cfd_rand_uniq(cfdist, word, length=15):
                 ilist[index] = ilist[count]
         if count == 0:
             break
-    print(join_tokenized(result))
+    return join_tokenized(result)
 
 #Some fun ones using this function on bigrams from Moby Dick:
 # The yards long voyage was dimly parted the capsized hull rolls upwards and nobler thing still lingers
@@ -126,7 +135,7 @@ def generate_cfd_prob_uniq(cfdist, word, length=15):
     for _ in range(length):
         freqs = cfdist[word]
         if not freqs:
-            print("Inner pre break.")
+            xdv(NLTK_VERBOSITY, "Inner pre break.")
             break
         words = sorted(freqs.keys(), key=freqs.get, reverse=True)
         count = len(words)
@@ -141,16 +150,16 @@ def generate_cfd_prob_uniq(cfdist, word, length=15):
                 for wdx in range(index, count):
                     word = words[index]
                     if word not in result:
-                        xdv(0, "Uniq:", freqs[word], word)
+                        xdv(NLTK_VERBOSITY, "Uniq:", freqs[word], word)
                         result.append(word)
                         break
                     else:
-                        xdv(0, "Dupe:", freqs[word], word)
+                        xdv(NLTK_VERBOSITY, "Dupe:", freqs[word], word)
                 break
         else:
-            print("Else break outer.")
+            xdv(NLTK_VERBOSITY, "Else break outer.")
             break
-    print(join_tokenized(result))
+    return join_tokenized(result)
 
 
 def test_nltk_book(text):
