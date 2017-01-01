@@ -87,7 +87,7 @@ def generate_cfd_max_uniq(cfdist, word, length=15):
     print(join_tokenized(words))
 
 def generate_cfd_rand_uniq(cfdist, word, length=15):
-    words = [word]
+    result = [word]
     for _ in range(length):
         freqs = cfdist[word]
         words = list(freqs.keys())
@@ -97,15 +97,42 @@ def generate_cfd_rand_uniq(cfdist, word, length=15):
             index = random.randrange(count)
             word = words[index]
             xdv(0, "Try:", freqs[word], word)
-            if word not in words:
-                words.append(word)
+            if word not in result:
+                result.append(word)
                 break
             else:
                 count -= 1
                 ilist[index] = ilist[count]
         if count == 0:
             break
-    print(join_tokenized(words))
+    print(join_tokenized(result))
+
+#TODO Not right, yet -- need to eliminate entire range using randrange(start, end)
+def generate_cfd_prob_uniq(cfdist, word, length=15):
+    result = [word]
+    for _ in range(length):
+        freqs = cfdist[word]
+        words = sorted(freqs.keys(), key=freqs.get, reverse=True):
+        count = len(words)
+        rlist = []
+        total = 0
+        for word in words:
+            total += freqs[word]
+            rlist.append[total]
+        while count > 0:
+            rdx = random.randrange(total)
+            for index, total in enumerate(rlist):
+                if rdx < total:
+                    word = words[index]
+                    xdv(0, "Try:", freqs[word], word)
+                    if word not in result:
+                        result.append(word)
+                        count = 0
+                        break
+            else:
+                break
+            count -= 1
+    print(join_tokenized(result))
 
 
 def test_nltk_book(text):
