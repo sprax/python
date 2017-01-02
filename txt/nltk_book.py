@@ -48,6 +48,11 @@ def frac(text, word_set):
     total = sum([text.count(word) for word in word_set])
     return total / len(text)
 
+def content_fraction(text):
+    stopwords = nltk.corpus.stopwords.words('english')
+    content = [w for w in text if w.lower() not in stopwords]
+    return len(content) / len(text)
+
 def text_counter(text):
     '''Counter of words'''
     return Counter(text)
@@ -79,7 +84,7 @@ def trigrams_counter(text, min_len, min_sum_len):
         counter.update([trig])
     return counter
 
-def filter_string_punct(tokenized):
+def reject_string_punct(tokenized):
     '''Filter out all tokens that are substrings of string.punctuation.'''
     for token in tokenized:
         if token not in string.punctuation:
@@ -87,7 +92,7 @@ def filter_string_punct(tokenized):
 
 SENTENCE_PUNCTUATION = '!"\'()*+,./:;<>?[\\]^_`{|}~'
 
-def filter_sentence_punct(tokenized):
+def reject_sentence_punct(tokenized):
     '''Filter out tokens that are substrings of string.punctualtion'''
     for token in tokenized:
         if token not in SENTENCE_PUNCTUATION:
@@ -95,10 +100,19 @@ def filter_sentence_punct(tokenized):
 
 NLTK_PUNCTUATION_PATTERN = re.compile("[{}]".format(string.punctuation))
 
-def filter_words_with_punct(tokenized):
+
+def reject_words_with_punct(tokenized):
     '''Filter out all tokens containing any punctuation.'''
     for token in tokenized:
-        if not re.match(NLTK_PUNCTUATION_PATTERN, token):
+        if not re.search(NLTK_PUNCTUATION_PATTERN, token):
+            yield token
+
+NON_ALPHA_PATTERN = re.compile(r'(?:\W|[0-9])+')
+
+def reject_non_alpha(tokenized):
+    '''Retain only alphabetic strings (words, presumably), no non-word characters.'''
+    for token in tokenized:
+        if not re.search(NON_ALPHA_PATTERN, token):
             yield token
 
 def join_tokenized(tokens):
