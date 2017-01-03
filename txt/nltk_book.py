@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-Routines from the NLTK book.  NB: Many of these functions take a 
+Routines from the NLTK book.  NB: Many of these functions take a
 parameter called "tokens", which is assumed to name an array of tokens.
 The actual argument can be a text as imported from nltk.book, or an
 arbitrary array of strings, numbers, objects, whatever.  Treating an
@@ -53,15 +53,16 @@ def frac(tokens, word_set):
     return total / len(tokens)
 
 def content_fraction(tokens):
+    '''What fraction of tokens are not stopwords?'''
     stopwords = nltk.corpus.stopwords.words('english')
     content = [w for w in tokens if w.lower() not in stopwords]
     return len(content) / len(tokens)
 
-def text_counter(tokens):
+def text_from_tokens(tokens):
     '''Counter of words'''
     return Counter(tokens)
 
-def bigrams_counter(tokens, min_len):
+def bigrams_from_tokens(tokens, min_len):
     '''Counter of bigrams'''
     counter = Counter()
     for big in nltk.bigrams(tokens):
@@ -70,7 +71,22 @@ def bigrams_counter(tokens, min_len):
         counter.update([big])
     return counter
 
-def trigrams_counter(tokens, min_len, min_sum_len):
+def word_bigrams_from_sentences(sentences):
+    '''Counter of bigrams found in an array of sentences.  For example:
+    sentences = nltk.corpus.genesis.sents('english-kjv.txt')
+    word_bigrams = word_bigrams_from_sentences(sentences)
+    '''
+    counter = Counter()
+    for tokens in sentences:
+        for big in nltk.bigrams(tokens):
+            if re.match(NON_ALPHA_PATTERN, big[0]):
+                continue
+            if re.match(NON_ALPHA_PATTERN, big[1]):
+                continue
+            counter.update([big])
+    return counter
+
+def trigrams_from_tokens(tokens, min_len, min_sum_len):
     '''Counter of trigrams'''
     counter = Counter()
     for trig in nltk.trigrams(tokens):
@@ -218,8 +234,8 @@ def generate_cfd_prob_uniq(cfdist, word, length=15):
 
 def test_nltk_book(tokens=nltk.book.text1):
     '''test module methods'''
-    trig_counter = trigrams_counter(tokens, 2, 10)
-    print(trig_counter.most_common(10))
+    trigs = trigrams_from_tokens(tokens, 2, 10)
+    print(trigs.most_common(10))
 
 if __name__ == '__main__':
     test_nltk_book()
