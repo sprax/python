@@ -95,8 +95,6 @@ def word_trigrams_from_sentences(sentences):
     counter = Counter()
     for sent_tokens in sentences:
         length = len(sent_tokens)
-        if length < 3:
-            continue
         idx = 2
         while idx < length:
             if re.match(NON_ALPHA_PATTERN, sent_tokens[idx - 2]):
