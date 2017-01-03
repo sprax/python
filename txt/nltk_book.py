@@ -106,15 +106,15 @@ def word_trigrams_from_sentences(sentences):
             if re.match(NON_ALPHA_PATTERN, sent_tokens[idx]):
                 idx += 3
                 continue
-            counter.update([sent_tokens[idx-2:idx]])
             idx += 1
+            counter.update([tuple(sent_tokens[idx-3:idx])])
             while idx < length:
                 if re.match(NON_ALPHA_PATTERN, sent_tokens[idx]):
                     idx += 3
                     break
                 else:
-                    counter.update([sent_tokens[idx-2:idx]])
                     idx += 1
+                    counter.update([tuple(sent_tokens[idx-3:idx])])
     return counter
 
 
