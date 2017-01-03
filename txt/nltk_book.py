@@ -77,14 +77,47 @@ def word_bigrams_from_sentences(sentences):
     word_bigrams = word_bigrams_from_sentences(sentences)
     '''
     counter = Counter()
-    for tokens in sentences:
-        for big in nltk.bigrams(tokens):
+    for sent_tokens in sentences:
+        for big in nltk.bigrams(sent_tokens):
             if re.match(NON_ALPHA_PATTERN, big[0]):
                 continue
             if re.match(NON_ALPHA_PATTERN, big[1]):
                 continue
             counter.update([big])
     return counter
+
+def word_trigrams_from_sentences(sentences):
+    '''Counter of trigrams found in an array of sentences.  For example:
+    sentences = nltk.corpus.gutenberg.sents('melville-moby_dick.txt')
+    word_trigrams = word_bigrams_from_sentences(sentences)
+    '''
+    counter = Counter()
+    for sent_tokens in sentences:
+        length = len(sent_tokens)
+        if length < 3:
+            continue
+        idx = 2
+        while idx < length:
+            if re.match(NON_ALPHA_PATTERN, sent_tokens[idx - 2]):
+                idx += 1
+                continue
+            if re.match(NON_ALPHA_PATTERN, sent_tokens[idx - 1]):
+                idx += 2
+                continue
+            if re.match(NON_ALPHA_PATTERN, sent_tokens[idx]):
+                idx += 3
+                continue
+            counter.update(sent_tokens[idx-2:idx])
+            idx += 1
+            while idx < length:
+                if re.match(NON_ALPHA_PATTERN, sent_tokens[idx]):
+                    idx += 3
+                    break
+                else:
+                    counter.update(sent_tokens[idx-2:idx])
+                    idx += 1
+    return counter
+
 
 def trigrams_from_tokens(tokens, min_len, min_sum_len):
     '''Counter of trigrams'''
