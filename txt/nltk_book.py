@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
-'''nltk_book.py'''
-
+'''
+Routines from the NLTK book.  NB: Many of these functions take a 
+parameter called "tokens", which is assumed to name an array of tokens.
+The actual argument can be a text as imported from nltk.book, or an
+arbitrary array of strings, numbers, objects, whatever.  Treating an
+entire book or corpus as one flat array of tokens may yield dull results.
+'''
 import re
 import random
 import string
@@ -16,60 +21,59 @@ def set_nltk_verbosity(verbosity):
     print("Setting NLTK_VERBOSITY = {}".format(verbosity))
     NLTK_VERBOSITY = verbosity
 
-
-def lexical_diversity(text):
+def lexical_diversity(tokens):
     '''ratio of word count to unique word count'''
-    return len(text) / len(set(text))
+    return len(tokens) / len(set(tokens))
 
-def text_vocab(text):
-    '''set of lower-case words in text'''
-    return set(w.lower() for w in text if w.isalpha())
+def text_vocab(tokens):
+    '''set of lower-case words in tokens'''
+    return set(w.lower() for w in tokens if w.isalpha())
 
-def odd_words(text):
+def odd_words(tokens):
     '''originally: unusual_words'''
-    all_vocab = text_vocab(text)
+    all_vocab = text_vocab(tokens)
     english_vocab = set(w.lower() for w in nltk.corpus.words.words())
     odd_vocab = all_vocab - english_vocab
     return sorted(odd_vocab)
 
-def lexical_oddity(text):
-    '''fraction of text's vocab not in NLTK's standard English vocab'''
-    all_vocab = text_vocab(text)
+def lexical_oddity(tokens):
+    '''fraction of tokens vocab not in NLTK's standard English vocab'''
+    all_vocab = text_vocab(tokens)
     english_vocab = set(w.lower() for w in nltk.corpus.words.words())
     odd_vocab = all_vocab - english_vocab
     return len(odd_vocab) / len(all_vocab)
 
-def freq(text, word):
+def freq(tokens, word):
     '''frequency of a single word'''
-    return text.count(word) / len(text)
+    return tokens.count(word) / len(tokens)
 
-def frac(text, word_set):
-    '''fraction of text comprised of words in word_set'''
-    total = sum([text.count(word) for word in word_set])
-    return total / len(text)
+def frac(tokens, word_set):
+    '''fraction of tokens comprised of words in word_set'''
+    total = sum([tokens.count(word) for word in word_set])
+    return total / len(tokens)
 
-def content_fraction(text):
+def content_fraction(tokens):
     stopwords = nltk.corpus.stopwords.words('english')
-    content = [w for w in text if w.lower() not in stopwords]
-    return len(content) / len(text)
+    content = [w for w in tokens if w.lower() not in stopwords]
+    return len(content) / len(tokens)
 
-def text_counter(text):
+def text_counter(tokens):
     '''Counter of words'''
-    return Counter(text)
+    return Counter(tokens)
 
-def bigrams_counter(text, min_len):
+def bigrams_counter(tokens, min_len):
     '''Counter of bigrams'''
     counter = Counter()
-    for big in nltk.bigrams(text):
+    for big in nltk.bigrams(tokens):
         if len(big[0]) < min_len or len(big[1]) < min_len:
             continue
         counter.update([big])
     return counter
 
-def trigrams_counter(text, min_len, min_sum_len):
+def trigrams_counter(tokens, min_len, min_sum_len):
     '''Counter of trigrams'''
     counter = Counter()
-    for trig in nltk.trigrams(text):
+    for trig in nltk.trigrams(tokens):
         len0 = len(trig[0])
         if len0 < min_len:
             continue
@@ -212,9 +216,9 @@ def generate_cfd_prob_uniq(cfdist, word, length=15):
             break
     return join_tokenized(result)
 
-def test_nltk_book(text=nltk.book.text1):
+def test_nltk_book(tokens=nltk.book.text1):
     '''test module methods'''
-    trig_counter = trigrams_counter(text, 2, 10)
+    trig_counter = trigrams_counter(tokens, 2, 10)
     print(trig_counter.most_common(10))
 
 if __name__ == '__main__':
