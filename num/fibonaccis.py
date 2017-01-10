@@ -85,7 +85,7 @@ def main_fib():
     fib_generated = [y for y in fib_generate(n)]
     print('memoize  matrix  iterate generate  recurse    binet')
     for x in range(1, n):
-        print(repr(fib_memoize(x)).rjust(7), 
+        print(repr(fib_memoize(x)).rjust(7),
               repr(fib_matrix(x)).rjust(7),
               repr(fib_iterate(x)).rjust(8),
               repr(fib_generated[x]).rjust(8),
