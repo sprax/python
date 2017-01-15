@@ -1,4 +1,4 @@
-i#!/usr/bin/env python3
+#!/usr/bin/env python3
 # Sprax Lines       2016.12.26      Written with Python 3.5
 """LHRWCC: Linear Homogenous Recurrence With Constant Coefficients.
    Class and unit tests.
@@ -71,6 +71,9 @@ class LinHomoRecWithConstCoeffs:
 class TestLinHomoRecWithConstCoef(unittest.TestCase):
     '''unit tests'''
 
+    # def __init__(self):
+    #     self.className = "TestLinHomoRecWithConstCoef(unittest.TestCase)"
+
     def setUp(self):
         print(str(LinHomoRecWithConstCoeffs.__doc__))
         print(str(self.id()), '\n')
@@ -106,7 +109,7 @@ class TestLinHomoRecWithConstCoef(unittest.TestCase):
     def try_reference_rec(self, ref_coef, ref_init, ref_list, ref_length):
         '''Test against a known reference recurrence'''
         length = ref_length
-        print("test_reference_rec", length)
+        print("try_reference_rec", length)
         test_rec = LinHomoRecWithConstCoeffs(ref_coef, ref_init)
         print("test_rec.order: {}".format(test_rec.order))
         save_list = []
