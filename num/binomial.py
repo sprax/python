@@ -5,6 +5,8 @@
 import operator as op
 
 def ncr(n, r):
+    if n < r:
+        return 0
     r = min(r, n-r)
     if r == 0:
         return 1
@@ -16,3 +18,4 @@ print("ncr(3, 2) => ", ncr(4, 2))
 print("ncr(4, 2) => ", ncr(4, 2))
 print("ncr(5, 3) => ", ncr(5, 3))
 print("ncr(6, 5) => ", ncr(6, 5))
+print("ncr(5, 6) => ", ncr(5, 6))
