@@ -1,6 +1,6 @@
 #!/user//bin/python
 # Python 2.7
-'''Binomial coefficients, or N choose R'''
+'''Binomial coefficients, or N choose R, for Python 2'''
 
 import operator as op
 
@@ -11,4 +11,4 @@ def ncr(n, r):
     denom = reduce(op.mul, xrange(1, r+1))
     return numer//denom
 
-print("ncr(4, 2) => ", ncr(4,2))
+print("ncr(4, 2) => ", ncr(4, 2))
