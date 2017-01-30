@@ -10,6 +10,43 @@ import sys
 from utf_print import utf_print
 import text_ops
 
+from utf_print import utf_print
+
+def read_lines(file_spec, charset='utf8'):
+    '''read and return all lines of a text file as a list of str'''
+    with open(file_spec, 'r', encoding=charset) as text:
+        for line in text:
+            # utf_print(line.rstrip())
+            yield line.rstrip()
+
+def read_file(file_spec, charset='utf8'):
+    '''read and return all contents of file as one str'''
+    with open(file_spec, 'r', encoding=charset) as src:
+        return src.read()
+
+def read_file_eafp(file_spec):
+    '''read contents of file_spec, Easier to Ask for Forgiveness than ask Permission.'''
+    try:
+        src = open(file_spec, 'r')
+    except IOError as ex:
+        if ex.errno != errno.ENOENT:
+            raise
+        print("WARNING: {} does not exist".format(file_spec))
+        return None
+    else:
+        text = src.read()
+        src.close()
+        return text
+
+def utf_print_words(fspec):
+    with open(fspec, 'r', encoding="utf8") as text:
+        for line in text:
+            words = re.split(r'\W+', line.rstrip())
+            for word in words:
+                if len(word) > 0:
+                    utf_print(word)
+            utf_print(words)
+
 def print_words(file_spec):
     '''print all white-space separated words read from a file'''
     with open(file_spec, 'r') as text:
@@ -63,24 +100,6 @@ def filter_word_counts(word_counts, stopwords, min_freq, max_freq, verbose):
     return total_count
 
 
-def read_file_eafp(file_spec):
-    '''read contents of file_spec, Easier to Ask for Forgiveness than ask Permission.'''
-    try:
-        src = open(file_spec, 'r')
-    except IOError as ex:
-        if ex.errno != errno.ENOENT:
-            raise
-        print("WARNING: {} does not exist".format(file_spec))
-        return None
-    else:
-        text = src.read()
-        src.close()
-        return text
-
-def read_file(file_spec, charset='utf8'):
-    '''read and return all contents of file'''
-    with open(file_spec, 'r', encoding=charset) as src:
-        return src.read()
 
 def open_out_file(file_spec, label='text'):
     if file_spec:
