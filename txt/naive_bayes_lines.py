@@ -12,6 +12,7 @@ import math
 import string
 import sys
 from collections import defaultdict
+from collections import Counter
 import nltk
 import text_ops
 import text_fio
@@ -33,7 +34,7 @@ class TextFileWordFreqs:
         self._text_lines = []
         self._line_word_dicts = []
         self._verbose = verbose
-        self._word_counts = defaultdict(int)
+        self._word_counts = Counter()
         self._sum_word_len = 0
         for line in text_fio.read_lines(file_spec, charset):
             self._text_lines.append(line)
@@ -54,9 +55,9 @@ class TextFileWordFreqs:
         self._input_words += len(word_list)
         # word_list = nltk.word_tokenize(sentence.decode("utf8").lower())
         sum_len = 0
+        self._word_counts.update(word_list)
         for word in word_list:
             sum_len += len(word)
-            self._word_counts[word] += 1
             # word_hash[word] = 1 + word_hash[word] if word in word_hash else 1
             if word in word_hash:
                 word_hash[word] += 1 
@@ -137,11 +138,20 @@ def classify_lines(class_file_specs, opt, charset='utf8'):
 
     text_line = "No Mandrill login was found in the account in question."
     word_list = nltk.word_tokenize(text_line.lower())
+
     scores = []
     for line_class in classes:
-        print("class from file:", line_class._file_spec)
+        print("class based on file:", line_class._file_spec)
         scores.append(line_class.score_text_line(word_list))
         print()
+    print("Scores:", scores)
+
+    for line_class in classes:
+        line_class.filter_words()
+        print("Filtered class based on file:", line_class._file_spec)
+        scores.append(line_class.score_text_line(word_list))
+        print()
+
     print("Scores:", scores)
     exit(0)
 
@@ -202,10 +212,10 @@ def main():
                         help='output only the indices of summary sentences')
     parser.add_argument('-list_numbers', action='store_true',
                         help='output list number for each summary sentence')
-    parser.add_argument('-fM', '-freq_max', dest='max_freq', type=float, nargs='?', const=1, default=0.9,
-                        help='maximum frequency cut-off (default: 0.9)')
-    parser.add_argument('-fm', '-freq_min', dest='min_freq', type=float, nargs='?', const=1, default=0.1,
-                        help='minimum frequency cut-off (default: 0.1)')
+    parser.add_argument('-fM', '-freq_max', dest='max_freq', type=float, nargs='?', const=1, default=1.0,
+                        help='maximum frequency cut-off (default: 1.0)')
+    parser.add_argument('-fm', '-freq_min', dest='min_freq', type=float, nargs='?', const=1, default=0.05,
+                        help='minimum frequency cut-off (default: 0.05)')
     parser.add_argument('-num_sentences', dest='sum_count', type=int, nargs='?', const=1, default=0,
                         help='max number of sentences to keep (default: 5), overrides -percent')
     parser.add_argument('-out_file', type=str, nargs='?', const='-',

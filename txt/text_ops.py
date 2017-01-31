@@ -34,9 +34,9 @@ def filter_word_counts(word_counts, stopwords, min_freq, max_freq, verbose):
     rare_words_to_remove = []
     total_count = 0
     for word, count in word_counts.items():
-        if count >= max_freq_count or word in stopwords:
+        if count > max_freq_count or word in stopwords:
             stop_words_to_remove.append(word)
-        elif count <= min_freq_count:
+        elif count < min_freq_count:
             rare_words_to_remove.append(word)
         else:
             total_count += count
