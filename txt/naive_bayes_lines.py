@@ -24,6 +24,7 @@ class TextFileWordFreqs:
 
     def __init__(self, file_spec, min_freq=0.1, max_freq=0.9, verbose=1, charset='utf8'):
         '''Initialize the text file word counter.'''
+        self._file_spec = file_spec
         self._min_freq = min_freq
         self._max_freq = max_freq
         self._stopwords = set(nltk.corpus.stopwords.words('english') + list(string.punctuation))
@@ -38,6 +39,8 @@ class TextFileWordFreqs:
             self._text_lines.append(line)
             self._sum_word_len += self.count_words(line)
         self._counted_words = self._input_words
+        print()
+        print("verbosity {} for file:".format(self._verbose), file_spec)
         utf_print(self._text_lines[ 0])
         utf_print(self._text_lines[ 1])
         utf_print(self._text_lines[-1])
@@ -93,13 +96,14 @@ class TextFileWordFreqs:
         return score
 
     def score_text_line(self, word_list):
-        score = 0
+        line_score = 0
         for word in word_list:
-            if word in self._word_counts:
-                score += math.log((1 + self._word_counts[word])/self._counted_words)
-            elif self._verbose > 5:
+            if self._verbose > 1 and not word in self._word_counts:
                 print("_score_text_line: uncounted word: ", word)
-        return score
+            word_score = math.log((1 + self._word_counts[word])/self._counted_words)
+            line_score += word_score
+            utf_print("word:", word, "\t\t score: ", word_score)
+        return line_score
 
 ###############################################################################
 
@@ -131,11 +135,13 @@ def classify_lines(class_file_specs, opt, charset='utf8'):
     for file_spec in class_file_specs:
         classes.append(TextFileWordFreqs(file_spec, opt.min_freq, opt.max_freq, opt.verbose))
 
-    text_line = "No Mandrill was harmed in the making of this software release."
+    text_line = "No Mandrill login was found in the account in question."
     word_list = nltk.word_tokenize(text_line.lower())
     scores = []
     for line_class in classes:
+        print("class from file:", line_class._file_spec)
         scores.append(line_class.score_text_line(word_list))
+        print()
     print("Scores:", scores)
     exit(0)
 
