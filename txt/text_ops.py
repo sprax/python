@@ -20,6 +20,16 @@ from utf_print import utf_print
 
 INF_NUM_WORDS = 2**30
 
+
+################################################################################
+
+def filter_stop_word_counts(word_counts, stopwords):
+    """ remove any word in stopwords or whose count is below the min or above the max threshold """
+    count_removed = 0
+    for word in stopwords:
+        count_removed += word_counts.pop(word, 0)
+    return count_removed
+
 ################################################################################
 
 def filter_word_counts(word_counts, stopwords, min_freq, max_freq, verbose):
@@ -48,7 +58,6 @@ def filter_word_counts(word_counts, stopwords, min_freq, max_freq, verbose):
         for key in rare_words_to_remove:
             word_counts.pop(key, None)
     return total_count
-
 ################################################################################
 
 def resolve_count(sub_count, percent, total_count):

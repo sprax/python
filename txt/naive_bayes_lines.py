@@ -147,7 +147,8 @@ def classify_lines(class_file_specs, opt, charset='utf8'):
     print("Scores:", scores)
 
     for line_class in classes:
-        line_class.filter_words()
+        # line_class.filter_words()
+        text_ops.filter_stop_word_counts(line_class._word_counts, line_class._stopwords)
         print("Filtered class based on file:", line_class._file_spec)
         scores.append(line_class.score_text_line(word_list))
         print()
