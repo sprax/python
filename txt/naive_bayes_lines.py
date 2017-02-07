@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Sprax Lines       2017.01.29
-'''Summarize text(s).'''
+'''Classify lines of text.'''
 
 #SPRAX
 # from nltk.corpus import stopwords
@@ -42,8 +42,8 @@ class TextFileWordFreqs:
         self._counted_words = self._input_words
         print()
         print("verbosity {} for file:".format(self._verbose), file_spec)
-        utf_print(self._text_lines[ 0])
-        utf_print(self._text_lines[ 1])
+        utf_print(self._text_lines[0])
+        utf_print(self._text_lines[1])
         utf_print(self._text_lines[-1])
         print()
 
@@ -213,10 +213,10 @@ def main():
                         help='output only the indices of summary sentences')
     parser.add_argument('-list_numbers', action='store_true',
                         help='output list number for each summary sentence')
-    parser.add_argument('-fM', '-freq_max', dest='max_freq', type=float, nargs='?', const=1, default=1.0,
-                        help='maximum frequency cut-off (default: 1.0)')
-    parser.add_argument('-fm', '-freq_min', dest='min_freq', type=float, nargs='?', const=1, default=0.05,
-                        help='minimum frequency cut-off (default: 0.05)')
+    parser.add_argument('-fM', '-freq_max', dest='max_freq', type=float, nargs='?', const=1,
+                        default=1.0, help='maximum frequency cut-off (default: 1.0)')
+    parser.add_argument('-fm', '-freq_min', dest='min_freq', type=float, nargs='?', const=1,
+                        default=0.05, help='minimum frequency cut-off (default: 0.05)')
     parser.add_argument('-num_sentences', dest='sum_count', type=int, nargs='?', const=1, default=0,
                         help='max number of sentences to keep (default: 5), overrides -percent')
     parser.add_argument('-out_file', type=str, nargs='?', const='-',
