@@ -128,7 +128,7 @@ def print_ranked_idx(idx, sorted_idx):
 
 ###############################################################################
 
-def classify_lines(class_file_specs, opt, charset='utf8'):
+def classify_lines(class_file_specs, opt):
     '''Text file line contents and word frequencies'''
 
     # input class files:
@@ -163,42 +163,13 @@ def classify_lines(class_file_specs, opt, charset='utf8'):
     # Create summarizer and initialize with text:
     line_count = text_freqs.add_text(text)
 
-    max_words = opt.max_print_words
-
     # Announce output:
-    print(file_spec, '====>', '<stdout>' if out_file == sys.stdout else opt.out_file)
+    print(line_class._file_spec, '====>', '<stdout>' if out_file == sys.stdout else opt.out_file)
     sum_count, act_percent = text_ops.resolve_count(opt.sum_count, opt.sum_percent, line_count)
     print("Keeping {} ({:.4} percent) of {} sentences."
             .format(sum_count, act_percent, line_count))
     print('-------------------------------------------------------------------')
 
-    # Summarize and show results:
-    if opt.indices_only:
-        sents_idx = text_freqs.summarize_all_idx(sum_count)
-        print("Sentence indices in [0, {})".format(line_count))
-        print_ranked_idx(sents_idx, sorted(sents_idx))
-    else:
-        summary_sentences = text_freqs.summarize_all_snt(sum_count)
-        if out_file:
-            text_ops.print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
-
-    if opt.serial:
-        if not out_file:
-            out_file = sys.stdout
-        print('-------------------------------------------------------------------', file=out_file)
-        if opt.indices_only:
-            sents_idx = text_freqs.summarize_next_idx(text, sum_count, opt.sum_percent)
-            sents_idx = [x - line_count for x in sents_idx]
-            print("Sentence indices in [0, {})".format(line_count))
-            print_ranked_idx(sents_idx, sorted(sents_idx))
-        else:
-            summary_sentences = text_freqs.summarize_next_snt(text, sum_count, opt.sum_percent)
-            if out_file:
-                text_ops.print_sentences(summary_sentences, opt.list_numbers, max_words, out_file)
-
-    print('-------------------------------------------------------------------', file=out_file)
-    if out_file and out_file != sys.stdout:
-        out_file.close()
 
 ###############################################################################
 
