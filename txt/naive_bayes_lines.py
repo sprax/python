@@ -25,7 +25,7 @@ class TextFileWordFreqs:
 
     def __init__(self, file_spec, min_freq=0.1, max_freq=0.9, verbose=1, charset='utf8'):
         '''Initialize the text file word counter.'''
-        self._file_spec = file_spec
+        self.file_spec = file_spec
         self._min_freq = min_freq
         self._max_freq = max_freq
         self._stopwords = set(nltk.corpus.stopwords.words('english') + list(string.punctuation))
@@ -80,20 +80,18 @@ class TextFileWordFreqs:
         '''Return indices of count lines closest to normal for the set, ranked by self-similar score'''
         self.filter_words()
         line_count = len(self._text_lines)
-        words_per_line = self._counted_words / line_count
         ranking = defaultdict(int)
         for idx, line_dicts in enumerate(self._line_word_dicts):
-            ranking[idx] = self._score_line_dict(line_dicts, words_per_line)
+            ranking[idx] = self._score_line_dict(line_dicts)
         return rank_dict_by_value(count, ranking)
 
-    def _score_line_dict(self, line_dicts, words_per_line):
+    def _score_line_dict(self, line_dicts):
         score = 0
         for word, count in line_dicts.items():
             if word in self._word_counts:
                 score += count * math.log((1 + self._word_counts[word])/self._counted_words)
             else:
                 print("Warning: _score_line_dict called on non-corpus line")
-        # return score * math.log(words_per_line*(1.0 + 1.0/len(line_dicts)))
         return score
 
     def score_text_line(self, word_list):
@@ -141,7 +139,7 @@ def classify_lines(class_file_specs, opt):
 
     scores = []
     for line_class in classes:
-        print("class based on file:", line_class._file_spec)
+        print("class based on file:", line_class.file_spec)
         scores.append(line_class.score_text_line(word_list))
         print()
     print("Scores:", scores)
@@ -149,7 +147,7 @@ def classify_lines(class_file_specs, opt):
     for line_class in classes:
         # line_class.filter_words()
         text_ops.filter_stop_word_counts(line_class._word_counts, line_class._stopwords)
-        print("Filtered class based on file:", line_class._file_spec)
+        print("Filtered class based on file:", line_class.file_spec)
         scores.append(line_class.score_text_line(word_list))
         print()
 
@@ -158,13 +156,11 @@ def classify_lines(class_file_specs, opt):
 
 
     # Try to open output (file):
-    out_file = text_fio.open_out_file(opt.out_file, label='summary')
+    # out_file = text_fio.open_out_file(opt.out_file, label='summary')
 
-    # Create summarizer and initialize with text:
-    line_count = text_freqs.add_text(text)
 
     # Announce output:
-    print(line_class._file_spec, '====>', '<stdout>' if out_file == sys.stdout else opt.out_file)
+    print(line_class.file_spec, '====>', '<stdout>' if out_file == sys.stdout else opt.out_file)
     sum_count, act_percent = text_ops.resolve_count(opt.sum_count, opt.sum_percent, line_count)
     print("Keeping {} ({:.4} percent) of {} sentences."
             .format(sum_count, act_percent, line_count))
@@ -174,10 +170,10 @@ def classify_lines(class_file_specs, opt):
 ###############################################################################
 
 def main():
-    '''Extract summary from text.'''
+    '''Learn text line classes.'''
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
-        description="Extractive text summarizer")
+        description="Text line classifier")
     parser.add_argument('text_specs', type=str, nargs='+', default='corpus.txt',
                         help='text files containing lines representative of classes')
     parser.add_argument('-index', dest='indices_only', action='store_true',
