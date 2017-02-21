@@ -10,7 +10,6 @@ import argparse
 import heapq
 import math
 import string
-import sys
 from collections import defaultdict
 from collections import Counter
 import nltk
@@ -67,6 +66,7 @@ class TextFileWordFreqs:
         return sum_len
 
     def line_count(self):
+        # number of lines
         return len(self._text_lines)
 
     def filter_words(self):
@@ -77,9 +77,9 @@ class TextFileWordFreqs:
             self._filtered = True
 
     def most_modal_idx(self, count):
-        '''Return indices of count lines closest to normal for the set, ranked by self-similar score'''
+        '''Return indices of N lines closest to normal for the set, ranked by self-similar score'''
         self.filter_words()
-        line_count = len(self._text_lines)
+        # line_count = len(self._text_lines)
         ranking = defaultdict(int)
         for idx, line_dicts in enumerate(self._line_word_dicts):
             ranking[idx] = self._score_line_dict(line_dicts)
@@ -159,12 +159,12 @@ def classify_lines(class_file_specs, opt):
     # out_file = text_fio.open_out_file(opt.out_file, label='summary')
 
 
-    # Announce output:
-    print(line_class.file_spec, '====>', '<stdout>' if out_file == sys.stdout else opt.out_file)
-    sum_count, act_percent = text_ops.resolve_count(opt.sum_count, opt.sum_percent, line_count)
-    print("Keeping {} ({:.4} percent) of {} sentences."
-            .format(sum_count, act_percent, line_count))
-    print('-------------------------------------------------------------------')
+    # # Announce output:
+    # print(line_class.file_spec, '====>', '<stdout>' if out_file == sys.stdout else opt.out_file)
+    # sum_count, act_percent = text_ops.resolve_count(opt.sum_count, opt.sum_percent, line_count)
+    # print("Keeping {} ({:.4} percent) of {} sentences."
+            # .format(sum_count, act_percent, line_count))
+    # print('-------------------------------------------------------------------')
 
 
 ###############################################################################
