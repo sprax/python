@@ -1,4 +1,4 @@
-# fibonacci_list.py -- tested with python 2.7
+# fibonacci_list.py -- tested with python 2.7 and 3.5
 
 def fib(n): # return Fibonacci series up to n
     """Return a list containing the Fibonacci series up to n."""
