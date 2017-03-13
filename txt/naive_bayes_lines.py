@@ -97,11 +97,12 @@ class TextFileWordFreqs:
     def score_text_line(self, word_list):
         line_score = 0
         for word in word_list:
-            if self._verbose > 1 and not word in self._word_counts:
+            if self._verbose > 2 and not word in self._word_counts:
                 print("_score_text_line: uncounted word: ", word)
             word_score = math.log((1 + self._word_counts[word])/self._counted_words)
             line_score += word_score
-            utf_print("word:", word, "\t\t score: ", word_score)
+            if self._verbose > 1:
+                utf_print("word:", word, "\t\t score: ", word_score)
         return line_score
 
 ###############################################################################
@@ -124,36 +125,52 @@ def print_ranked_idx(idx, sorted_idx):
         print("==>")
     print(sorted_idx)
 
-###############################################################################
+def max_idx_and_val(iterable):
+    max_val = max(iterable)
+    max_idx = iterable.index(max_val)
+    return max_idx, max_val
 
-def classify_lines(class_file_specs, opt):
-    '''Text file line contents and word frequencies'''
-
-    # input class files:
-    classes = []
-    for file_spec in class_file_specs:
-        classes.append(TextFileWordFreqs(file_spec, opt.min_freq, opt.max_freq, opt.verbose))
-
-    text_line = "No Mandrill login was found in the account in question."
-    word_list = nltk.word_tokenize(text_line.lower())
-
+def classify_word_list(word_list, classes, verbose):
     scores = []
     for line_class in classes:
         print("class based on file:", line_class.file_spec)
         scores.append(line_class.score_text_line(word_list))
         print()
     print("Scores:", scores)
+    max_idx, max_val = max_idx_and_val(scores)
+    print("Max index:", max_idx,  " max val:", max_val)
+    return max_idx
 
-    for line_class in classes:
-        # line_class.filter_words()
+###############################################################################
+def classify_line(text_line, nofilter_classes, filtered_classes, verbose):
+    if verbose > 1:
+        print(text_line)
+    word_list = nltk.word_tokenize(text_line.lower())
+    idx_unfilt = classify_word_list(word_list, nofilter_classes, verbose)
+    idx_filter = classify_word_list(word_list, filtered_classes, verbose)
+    comp = "same" if idx_unfilt == idx_filter else "diff"
+    print("unfiltered class", comp, "filtered class: ", idx_unfilt, comp, idx_filter)
+
+###############################################################################
+def classify_lines(class_file_specs, opt):
+    '''Text file line contents and word frequencies'''
+
+    # input class files:
+    nofilter_classes = []
+    for file_spec in class_file_specs:
+        nofilter_classes.append(TextFileWordFreqs(file_spec, opt.min_freq, opt.max_freq, opt.verbose))
+
+    filtered_classes = []
+    for file_spec in class_file_specs:
+        line_class = TextFileWordFreqs(file_spec, opt.min_freq, opt.max_freq, opt.verbose)
         text_ops.filter_stop_word_counts(line_class._word_counts, line_class._stopwords)
-        print("Filtered class based on file:", line_class.file_spec)
-        scores.append(line_class.score_text_line(word_list))
-        print()
+        filtered_classes.append(line_class)
 
-    print("Scores:", scores)
+    text_lines = [ "No Mandrill login was found in the account in question." ]
+    for text_line in text_lines: 
+        classify_line(text_line, nofilter_classes, filtered_classes, opt.verbose)
+    
     exit(0)
-
 
     # Try to open output (file):
     # out_file = text_fio.open_out_file(opt.out_file, label='summary')
