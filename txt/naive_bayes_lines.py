@@ -184,8 +184,6 @@ def main():
                         default=1.0, help='maximum frequency cut-off (default: 1.0)')
     parser.add_argument('-fm', '-freq_min', dest='min_freq', type=float, nargs='?', const=1,
                         default=0.05, help='minimum frequency cut-off (default: 0.05)')
-    parser.add_argument('-num_sentences', dest='sum_count', type=int, nargs='?', const=1, default=0,
-                        help='max number of sentences to keep (default: 5), overrides -percent')
     parser.add_argument('-out_file', type=str, nargs='?', const='-',
                         help='output file for summarized text (default: None)')
     parser.add_argument('-percent', dest='sum_percent', type=float, nargs='?',
