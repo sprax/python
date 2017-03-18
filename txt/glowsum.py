@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-# Sprax Lines       2016.10.07      
+# Sprax Lines       2016.10.07
 # From http://glowingpython.blogspot.com/2014/09/text-summarization-with-nltk.html
 '''Summarize something.'''
 
 import argparse
-from nltk.tokenize import sent_tokenize,word_tokenize
+from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from collections import defaultdict
 from string import punctuation
@@ -13,20 +13,20 @@ from heapq import nlargest
 class FrequencySummarizer:
   def __init__(self, min_cut=0.1, max_cut=0.9):
     """
-     Initilize the text summarizer.
-     Words that have a frequency term lower than min_cut 
+     Initialize the text summarizer.
+     Words that have a frequency term lower than min_cut
      or higher than max_cut will be ignored.
     """
     self._min_cut = min_cut
-    self._max_cut = max_cut 
+    self._max_cut = max_cut
     self._stopwords = set(stopwords.words('english') + list(punctuation))
 
   def _compute_frequencies(self, word_sent):
-    """ 
+    """
       Compute the frequency of each of word.
-      Input: 
+      Input:
           word_sent, a list of sentences already tokenized.
-      Output: 
+      Output:
           freq, a dictionary where freq[w] is the frequency of w.
     """
     freq = defaultdict(int)
@@ -34,11 +34,11 @@ class FrequencySummarizer:
       for word in sentence:
         if word not in self._stopwords:
           freq[word] += 1
-    # frequencies normalization and fitering
+    # frequencies normalization and filtering
     m = float(max(freq.values()))
     keys_to_delete = []
     for w in freq.keys():
-      freq[w] = freq[w]/m
+      freq[w] = freq[w] / m
       if freq[w] >= self._max_cut or freq[w] <= self._min_cut:
         keys_to_delete.append(w)
     for key in keys_to_delete:
@@ -47,7 +47,7 @@ class FrequencySummarizer:
 
   def summarize(self, text, summary_sentence_count):
     """
-      Return a list of N sentences 
+      Return a list of N sentences
       which represent the summary of text.
     """
     sents = sent_tokenize(text)
@@ -55,11 +55,11 @@ class FrequencySummarizer:
     word_sent = [word_tokenize(s.lower()) for s in sents]
     self._freq = self._compute_frequencies(word_sent)
     ranking = defaultdict(int)
-    for i,sent in enumerate(word_sent):
+    for i, sent in enumerate(word_sent):
       for w in sent:
         if w in self._freq:
           ranking[i] += self._freq[w]
-    sents_idx = self._rank(ranking, summary_sentence_count)    
+    sents_idx = self._rank(ranking, summary_sentence_count)
     return [sents[j] for j in sents_idx]
 
   def _rank(self, ranking, summary_sentence_count):
