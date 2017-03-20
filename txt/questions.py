@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Sprax Lines       2016.12.27
 '''Filter POS-tagged text'''
 
@@ -45,7 +44,7 @@ def join_tokenized(tokens):
 ###############################################################################
 
 def main():
-    '''Extract summary from text.'''
+    '''Extract questions from text?'''
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="Extractive text summarizer")
@@ -68,13 +67,7 @@ def main():
     for sent in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
         print(sent)
     print('======== Remove Adjectives [JJ] ===============================================')
-    filter = PosFilter()
-    for sent in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
-        print(sent)
     print('======== Remove Adv and Adj [JJ, RB] ==========================================')
-    filter = PosFilter()
-    for sent in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
-        print(sent)
 
 if __name__ == '__main__':
     main()
