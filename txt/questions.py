@@ -52,6 +52,8 @@ def main():
         description="Extracts questions and statements from text file")
     parser.add_argument('text_spec', type=str, nargs='?', default='debate_questions.txt',
                         help='text file to search for Q and S')
+    parser.add_argument('-encoding', type=str, nargs='?', default='utf8',
+                        help='character set encoding of input text (utf8, iso-8859-1')
     parser.add_argument('-list_numbers', action='store_true',
                         help='output list number for each filtered sentence')
     parser.add_argument('-verbose', type=int, nargs='?', const=2, default=1,
@@ -66,7 +68,7 @@ def main():
 
     #print('======== Remove Adverbs [RB] ==================================================')
     filter = PosFilter()
-    for quands in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
+    for quands in text_ops.filter_file(filter, args.text_spec, charset=args.encoding):
         if quands[0]:
             utf_print('  '.join(quands[0]))
     #print('======== Remove Adjectives [JJ] ===============================================')

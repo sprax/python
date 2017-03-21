@@ -1,3 +1,4 @@
+# Character set encoding: ISO 8859-1 [python: encode('iso-8859-1')]
 
 The last time Steve Kerr was in Beirut, his birthplace, with the bombs pounding the runway and the assassination of his father six months away, he left by car.
 
