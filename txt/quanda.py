@@ -49,13 +49,13 @@ def main():
     '''Extract questions from text?'''
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
-        description="Extracts questions and statements from text file")
+        description="Extractive text summarizer")
     parser.add_argument('text_spec', type=str, nargs='?', default='questions.txt',
-                        help='text file to search for Q and S')
+                        help='text file containing text to summarize')
     parser.add_argument('-list_numbers', action='store_true',
                         help='output list number for each filtered sentence')
     parser.add_argument('-verbose', type=int, nargs='?', const=2, default=2,
-                        help='verbosity of output (default: 1)')
+                        help='verbosity of output (default: 2)')
     args = parser.parse_args()
 
     if args.verbose > 8:
@@ -66,9 +66,8 @@ def main():
 
     print('======== Remove Adverbs [RB] ==================================================')
     filter = PosFilter()
-    for quands in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
-        if quands[0]:
-            print(quands[0][0])
+    for sent in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
+        print(sent)
     print('======== Remove Adjectives [JJ] ===============================================')
     print('======== Remove Adv and Adj [JJ, RB] ==========================================')
 

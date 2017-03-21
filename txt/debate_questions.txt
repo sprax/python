@@ -1,0 +1,32 @@
+Setting XDV_VERBOSITY = 0
+======== Remove Adverbs [RB] ==================================================
+What about your qualities, your skills, and your temperament equip you to step into that role at a moment's notice?
+Why do so many people distrust her?
+Do they have a passion in their life that showed up before they were in public life?
+KAINE: Do you know that we had 175,000 troops deployed in the battlefield in Iraq and Afghanistan?
+And guess what?
+Do you want a “you're hired” president in Hillary Clinton or do you want a “you're fired” president in Donald Trump?
+And Donald Trump -- why would he do this?
+KAINE: How do you know that?
+KAINE: He stood on the stage last week and when Hillary said, you haven't been paying taxes, he said, “That makes me smart.” So it's smart not to pay for our military?
+Do we ask too much of police officers in this country?
+What would you tell the millions of undocumented immigrants who have not committed violent crimes?
+Did you all just hear that?
+KAINE: Did Donald Trump apologize for taking after somebody in a Twitter war and making fun of her weight?
+QUIJANO: So, Governor, how would these millions of undocumented immigrants leave?
+Do you think the world today is a safer or more dangerous place than it was eight years ago?
+PENCE: Did you work on that one a long time?
+Hillary and I want to do enforcement based on, are people dangerous?
+QUIJANO: What exactly would an intelligence surge look like?
+And, look, if you put aside -- push aside your alliances, who you're going to share intelligence with?
+Where would you propose setting up a safe zone specifically?
+PENCE: Donald Trump has paid all the taxes that he's -- do you not take deductions?
+QUIJANO: And exactly how would those safe zones work?
+What steps, if any, would your administration take to counter these actions?
+KAINE: So how do deal with him?
+QUIJANO: What specific steps would you take to prevent North Korea from developing a nuclear-armed missile capable of reaching the United States?
+KAINE: A $20,000 portrait of Donald Trump?
+Can you discuss in detail a time when you struggled to balance your personal faith and a public policy position?
+KAINE: Governor, why don't you trust women to make this choice for themselves?
+======== Remove Adjectives [JJ] ===============================================
+======== Remove Adv and Adj [JJ, RB] ==========================================
