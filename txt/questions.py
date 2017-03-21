@@ -25,8 +25,8 @@ class PosFilter:
         questions = []
         statements = []
         for sentence in sentences:
-            xdv(1)
-            xdv(1, sentence)
+            xdv(2)
+            xdv(2, sentence)
             if self.is_question(sentence):
                 questions.append(sentence)
             else:
@@ -54,7 +54,7 @@ def main():
                         help='text file to search for Q and S')
     parser.add_argument('-list_numbers', action='store_true',
                         help='output list number for each filtered sentence')
-    parser.add_argument('-verbose', type=int, nargs='?', const=2, default=2,
+    parser.add_argument('-verbose', type=int, nargs='?', const=2, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
@@ -64,13 +64,13 @@ def main():
         exit(0)
     set_xdv_verbosity(args.verbose)
 
-    print('======== Remove Adverbs [RB] ==================================================')
+    #print('======== Remove Adverbs [RB] ==================================================')
     filter = PosFilter()
     for quands in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
         if quands[0]:
-            print(quands[0][0])
-    print('======== Remove Adjectives [JJ] ===============================================')
-    print('======== Remove Adv and Adj [JJ, RB] ==========================================')
+            utf_print('  '.join(quands[0]))
+    #print('======== Remove Adjectives [JJ] ===============================================')
+    #print('======== Remove Adv and Adj [JJ, RB] ==========================================')
 
 if __name__ == '__main__':
     main()
