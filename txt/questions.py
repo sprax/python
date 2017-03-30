@@ -50,7 +50,7 @@ def main():
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="Extracts questions and statements from text file")
-    parser.add_argument('text_spec', type=str, nargs='?', default='debate_questions.txt',
+    parser.add_argument('text_spec', type=str, nargs='?', default='Text/debate_questions.txt',
                         help='text file to search for Q and S')
     parser.add_argument('-encoding', type=str, nargs='?', default='utf8',
                         help='character set encoding of input text (utf8, iso-8859-1')
