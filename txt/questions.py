@@ -1,5 +1,19 @@
 # Sprax Lines       2016.12.27
-'''Filter POS-tagged text'''
+'''Process some questions:
+    Extract questions [and answers or spans] from:
+        open text, structured text, xml, html, or csv
+        Classify spans as:
+           question-sentence
+           question-phrase
+           statement-sentence
+           statement-phrase
+           other
+    Tag/Label: for some subset of the above:
+        POS-tagged text
+        Sentiment-labels
+        Intention-labels (socializing, 'asking for a friend')
+        Inferred-request-type
+'''
 
 # from nltk.corpus import stopwords
 # from nltk.tokenize import sent_tokenize, word_tokenize, pos_tag
