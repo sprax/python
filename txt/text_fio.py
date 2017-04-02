@@ -72,34 +72,6 @@ def resolve_count(sub_count, percent, total_count):
     percent = sub_count * 100.0 / total_count
     return sub_count, percent
 
-def filter_word_counts(word_counts, stopwords, min_freq, max_freq, verbose):
-    """ remove any word in stopwords or whose count is below the min or above the max threshold """
-    max_word_count = 0
-    for word, count in word_counts.items():
-        if count > max_word_count and word not in stopwords:
-            max_word_count = count
-    min_freq_count = max_word_count * min_freq
-    max_freq_count = max_word_count * max_freq
-    stop_words_to_remove = []
-    rare_words_to_remove = []
-    total_count = 0
-    for word, count in word_counts.items():
-        if count >= max_freq_count or word in stopwords:
-            stop_words_to_remove.append(word)
-        elif count <= min_freq_count:
-            rare_words_to_remove.append(word)
-        else:
-            total_count += count
-    if verbose > 2:
-        utf_print("========Removing common words: ", stop_words_to_remove)
-        for key in stop_words_to_remove:
-            word_counts.pop(key, None)
-        utf_print("========Removing rarest words: ", rare_words_to_remove)
-        for key in rare_words_to_remove:
-            word_counts.pop(key, None)
-    return total_count
-
-
 
 def open_out_file(file_spec, label='text'):
     if file_spec:
