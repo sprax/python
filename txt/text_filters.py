@@ -10,8 +10,19 @@ import math
 import sys
 from utf_print import utf_print
 import text_ops
-
 from utf_print import utf_print
+
+
+
+
+
+
+###############################################################################
+
+###############################################################################
+
+def replace_smart_quotes(string):
+    return string.replace('“','"').replace('”','"')
 
 def read_lines(file_spec, charset='utf8'):
     '''read and return all lines of a text file as a list of str'''
@@ -19,6 +30,9 @@ def read_lines(file_spec, charset='utf8'):
         for line in text:
             # utf_print(line.rstrip())
             yield line.rstrip()
+
+def translate_smart_quotes(string, table=CURLY):
+    return string.replace('“','"').replace('”','"')
 
 def read_lines_to_ascii(file_spec, charset='utf-8'):
     '''read and return all lines of a text file as a list of ASCII str'''
@@ -28,6 +42,8 @@ def read_lines_to_ascii(file_spec, charset='utf-8'):
             line.decode(charset).encode('ascii', errors='ignore')
             yield line.rstrip()
 
+
+# sed s/[”“]/'"'/g File.txt
 
 
 def read_file(file_spec, charset='utf8'):
