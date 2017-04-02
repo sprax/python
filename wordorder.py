@@ -1,15 +1,15 @@
 #!/bin/python3
-# https://www.hackerrank.com/challenges/word-order 
+# https://www.hackerrank.com/challenges/word-order
 '''
 Input Format
 
-The first line contains the integer, . 
+The first line contains the integer, .
 The next  lines each contain a word.
 
 Output Format
 
-Output  lines. 
-On the first line, output the number of distinct words from the input. 
+Output  lines.
+On the first line, output the number of distinct words from the input.
 On the second line, output the number of occurrences for each distinct
 word according to their appearance in the input.
 '''
