@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: <utf-8> -*-
-
 # Sprax Lines       2017.04.01      Written with Python 3.5
+# To re-import a library in Python 3.4+ (re-import), do:
+# import importlib
+# importlib.reload(nameOfModule)
 '''read text file, print regex-split words.'''
 
 import argparse
@@ -15,14 +17,21 @@ import text_ops
 from utf_print import utf_print
 
 ###############################################################################
-TRANS_NO_SMART = str.maketrans(u"\u2018\u2019\u201c\u201d", "\'\'\"\"")
+TRANS_NO_WHAT = str.maketrans(u"\u2018\u2019\u201c\u201d", "\'\'\"\"")
+TRANS_NO_SMART = str.maketrans("\x92", "\'")
 TRANS_NO_PUNCT = str.maketrans('', '', string.punctuation)
 
 def translate_smart_quotes(string, table=TRANS_NO_SMART):
     return string.translate(table)
 
-def remove_punctuation(string, table=TRANS_NO_SMART):
+def remove_punctuation(string, table=TRANS_NO_PUNCT):
     return string.translate(table)
+
+def replace_quotes(string):
+    return string.replace("\x91", "'").replace("\x92", "'").replace("\x93", '"').replace("\x94", '"')
+
+def replace_emdashes(string):
+    return string.replace("\x97", "--")
 
 ###############################################################################
 
