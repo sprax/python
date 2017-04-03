@@ -13,7 +13,7 @@ import text_ops
 from utf_print import utf_print
 
 ###############################################################################
-CURLY = str.maketrans(u"\u2018\u2019\u201c\u201d", "\'\'\"\"")
+CURLY = bytes.maketrans(u"\u2018\u2019\u201c\u201d", "\'\'\"\"")
 
 def translate_smart_quotes(string, table=CURLY):
     return string.translate(table)
