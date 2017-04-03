@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
--*- coding: <iso-8> -*-
+# -*- coding: <iso-8> -*-
 
 # Sprax Lines       2017.04.01      Written with Python 3.5
 '''read text file, print regex-split words.'''
@@ -9,14 +9,14 @@ import errno
 import heapq
 import re
 import math
+import string
 import sys
-from utf_print import utf_print
 import text_ops
 from utf_print import utf_print
 
 ###############################################################################
-TRANS_NO_SMART = bytes.maketrans(u"\u2018\u2019\u201c\u201d", "\'\'\"\"")
-TRANS_NO_PUNCT = bytes.maketrans('', '', string.punctuation)
+TRANS_NO_SMART = str.maketrans(u"\u2018\u2019\u201c\u201d", "\'\'\"\"")
+TRANS_NO_PUNCT = str.maketrans('', '', string.punctuation)
 
 def translate_smart_quotes(string, table=TRANS_NO_SMART):
     return string.translate(table)
