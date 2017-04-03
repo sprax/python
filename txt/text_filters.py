@@ -12,17 +12,24 @@ from utf_print import utf_print
 import text_ops
 from utf_print import utf_print
 
+###############################################################################
+CURLY = str.maketrans(u"\u2018\u2019\u201c\u201d", "\'\'\"\"")
 
-
-
-
+def translate_smart_quotes(string, table=CURLY):
+    return string.translate(table)
 
 ###############################################################################
 
-###############################################################################
+# (lang == 'en'):
+lead_double = u"\u201c"
+follow_double = u"\u201d"
+lead_single = u"\u2018"
+follow_single = u"\u2019"
 
-def replace_smart_quotes(string):
-    return string.replace('“','"').replace('”','"')
+#def replace_smart_quotes(string):
+#    return string.replace('“','"').replace('”','"')
+
+
 
 def read_lines(file_spec, charset='utf8'):
     '''read and return all lines of a text file as a list of str'''
@@ -31,8 +38,6 @@ def read_lines(file_spec, charset='utf8'):
             # utf_print(line.rstrip())
             yield line.rstrip()
 
-def translate_smart_quotes(string, table=CURLY):
-    return string.replace('“','"').replace('”','"')
 
 def read_lines_to_ascii(file_spec, charset='utf-8'):
     '''read and return all lines of a text file as a list of ASCII str'''
