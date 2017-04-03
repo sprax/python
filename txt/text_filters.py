@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: <iso-8> -*-
+# -*- coding: <utf-8> -*-
 
 # Sprax Lines       2017.04.01      Written with Python 3.5
 '''read text file, print regex-split words.'''
@@ -35,7 +35,7 @@ follow_single = u"\u2019"
 #def replace_smart_quotes(string):
 #    return string.replace('“','"').replace('”','"')
 
-
+#TODO: functions that try to read ascii or utf-8 and failover to iso-8859-1, etc.
 
 def read_lines(file_spec, charset='utf8'):
     '''read and return all lines of a text file as a list of str'''
@@ -57,15 +57,15 @@ def read_lines_to_ascii(file_spec, charset='utf-8'):
 # sed s/[”“]/'"'/g File.txt
 
 
-def read_file(file_spec, charset='utf8'):
+def read_file(file_spec, charset='utf-8'):
     '''read and return all contents of file as one str'''
     with open(file_spec, 'r', encoding=charset) as src:
         return src.read()
 
-def read_file_eafp(file_spec):
+def read_file_eafp(file_spec, charset='utf-8'):
     '''read contents of file_spec, Easier to Ask for Forgiveness than ask Permission.'''
     try:
-        src = open(file_spec, 'r')
+        src = open(file_spec, 'r', encoding=charset)
     except IOError as ex:
         if ex.errno != errno.ENOENT:
             raise
