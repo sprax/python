@@ -34,6 +34,19 @@ u"\u201c" : '"',
 u"\u201d" : '"',
 })
 
+# deprecated because 'filter'
+def filterNonAscii(s): return "".join(filter(lambda x: ord(x)<128, s))
+
+def removeNonAscii(s): return "".join(i for i in s if ord(i)<128)
+
+def translate_to_ascii(string):
+    try:
+        return translate_iso_to_ascii(string)
+    except:
+        return string
+
+
+
 def translate_iso_to_ascii(string):
     return string.translate(ISO_TO_ASCII)
 
