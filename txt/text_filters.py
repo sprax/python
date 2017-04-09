@@ -45,8 +45,6 @@ def translate_to_ascii(string):
     except:
         return string
 
-
-
 def translate_iso_to_ascii(string):
     return string.translate(ISO_TO_ASCII)
 
@@ -94,6 +92,12 @@ def read_lines_to_ascii(file_spec, charset='utf-8'):
 
 # sed s/[”“]/'"'/g File.txt
 
+def read_text_file(file_spec):
+    '''read and return all contents of file as one str'''
+    try:
+        return read_file(file_spec, 'utf-8')
+    except UnicodeDecodeError:
+        return read_file(file_spec, 'iso-8859-1')
 
 def read_file(file_spec, charset='utf-8'):
     '''read and return all contents of file as one str'''
