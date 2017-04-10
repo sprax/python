@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: <utf-8> -*-
+# -*- encoding: <utf-8> -*-
 # Sprax Lines       2017.04.01      Written with Python 3.5
 # To re-import a library in Python 3.4+ (re-import), do:
 # import importlib
@@ -35,41 +35,41 @@ u"\u201d" : '"',
 })
 
 # deprecated because 'filter'
-def filterNonAscii(s): return "".join(filter(lambda x: ord(x)<128, s))
+def filter_non_ascii(in_str):
+    return "".join(filter(lambda x: ord(x) < 128, in_str))
 
-def removeNonAscii(s): return "".join(i for i in s if ord(i)<128)
+def remove_non_ascii(in_str):
+    return "".join(i for i in in_str if ord(i) < 128)
 
-def translate_to_ascii(string):
+def translate_to_ascii(in_str):
     try:
-        return translate_iso_to_ascii(string)
+        return translate_iso_to_ascii(in_str)
     except:
-        return string
+        return in_str
 
-def translate_iso_to_ascii(string):
-    return string.translate(ISO_TO_ASCII)
+def translate_iso_to_ascii(in_str):
+    return in_str.translate(ISO_TO_ASCII)
 
-def translate_smart_quotes(string, table=TRANS_NO_SMART):
-    return string.translate(table)
+def translate_smart_quotes(in_str, table=TRANS_NO_SMART):
+    return in_str.translate(table)
 
-def remove_punctuation(string, table=TRANS_NO_PUNCT):
-    return string.translate(table)
+def remove_punctuation(in_str, table=TRANS_NO_PUNCT):
+    return in_str.translate(table)
 
-def replace_quotes(string):
-    return string.replace("\x91", "'").replace("\x92", "'").replace("\x93", '"').replace("\x94", '"')
+def replace_quotes(instr):
+    return instr.replace("\x91", "'").replace("\x92", "'").replace("\x93", '"').replace("\x94", '"')
 
-def replace_emdashes(string):
-    return string.replace("\x97", "--")
+def replace_emdashes(in_str):
+    return in_str.replace("\x97", "--")
 
 ###############################################################################
 
 # (lang == 'en'):
-lead_double = u"\u201c"
-follow_double = u"\u201d"
-lead_single = u"\u2018"
-follow_single = u"\u2019"
+LEAD_DOUBLE = u"\u201c"
+FOLLOW_DOUBLE = u"\u201d"
+LEAD_SINGLE = u"\u2018"
+FOLLOW_SINGLE = u"\u2019"
 
-#def replace_smart_quotes(string):
-#    return string.replace('“','"').replace('”','"')
 
 #TODO: functions that try to read ascii or utf-8 and failover to iso-8859-1, etc.
 
@@ -88,9 +88,6 @@ def read_lines_to_ascii(file_spec, charset='utf-8'):
             # utf_print(line.rstrip())
             line.decode(charset).encode('ascii', errors='ignore')
             yield line.rstrip()
-
-
-# sed s/[”“]/'"'/g File.txt
 
 def read_text_file(file_spec):
     '''read and return all contents of file as one str'''
