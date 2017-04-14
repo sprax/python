@@ -4,9 +4,14 @@ import editdistance
 
 def edit_dist(seqA, seqB):
     dist = editdistance.eval(seqA, seqB)
-    print("editdistance.eval({}, {}) = {}".format(seqA, seqB, dist))
+    print("{0:>5} = editdistance({1}, {2})".format(dist, seqA, seqB))
 
-edit_dist('banana', 'bandana')
-edit_dist('banana', 'bahamas')
-edit_dist(['one', 'two'], ['one', 'three'])
-edit_dist(['one', 'two', 'three'], ['one', 'eleven', 'three'])
+def main():
+    '''Compute edit distances between strings and other sequences'''
+    edit_dist('banana', 'bandana')
+    edit_dist('banana', 'bahamas')
+    edit_dist(['one', 'two'], ['one', 'three'])
+    edit_dist(['one', 'two', 'three'], ['one', 'eleven', 'three'])
+
+if __name__ == '__main__':
+    main()
