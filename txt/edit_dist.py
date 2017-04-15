@@ -4,7 +4,7 @@ import editdistance
 
 def edit_dist(seqA, seqB):
     dist = editdistance.eval(seqA, seqB)
-    print("{0:>5} = editdistance({1}, {2})".format(dist, seqA, seqB))
+    print("{:>5} = editdistance({}, {})".format(dist, seqA, seqB))
 
 def main():
     '''Compute edit distances between strings and other sequences'''
