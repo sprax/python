@@ -86,7 +86,8 @@ def read_lines_to_ascii(file_spec, charset='utf-8'):
     with open(file_spec, 'r', encoding=charset) as text:
         for line in text:
             # utf_print(line.rstrip())
-            line.decode(charset).encode('ascii', errors='ignore')
+            line = line.decode(encoding=charset, errors='ignore') # .encode('ascii', errors='ignore')
+            # line = str(line, charset, errors='ignore') # .encode('ascii', errors='ignore')
             yield line.rstrip()
 
 def read_text_file(file_spec):
