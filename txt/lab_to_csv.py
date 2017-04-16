@@ -181,13 +181,21 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
         else:
             utf_print(sentence, outfile=out_file)
 
+# TODO: EDIT_HERE
+def translate_file(filter, inpath, outpath, charset='utf8'):
+    '''Generator yielding filtered paragraphs from a text file'''
+    with open(inpath, 'r', encoding=charset) as intext:
+        with open(outpath, 'w') as out:
+            for para in paragraph_iter(text):
+                yield filter.filter_paragraph(para
+
 ########################################################
 
 def unit_test(text_file, opt):
     """Rewrite a text file."""
 
     # Read initial text corpus:
-    text = read_file(text_file, opt.charset)
+    for line in read_linestext = read_file(text_file, opt.charset)
 
     # Try to open output (file):
     out_file = open_out_file(opt.out_file)
@@ -213,7 +221,7 @@ def main():
                         help='output list number for each summary sentence')
     parser.add_argument('-number', dest='sum_count', type=int, nargs='?', const=1, default=0,
                         help='number of sentences to keep (default: 5), overrides -percent')
-    parser.add_argument('-out_file', type=str, nargs='?', const='-',
+    parser.add_argument('-out_file', type=str, nargs='?', default='lab.txt',
                         help='output file for summarized text (default: None)')
     parser.add_argument('-percent', dest='sum_percent', type=float, nargs='?',
                         const=16.6667, default=10.0,
