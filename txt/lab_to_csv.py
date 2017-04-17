@@ -46,9 +46,7 @@ class IsoToAscii:
 
 class AsciiToCompact:
     '''Eliminate extra spaces and punctuation'''
-
-    def __init__(self):
-        self.regex = re.compile(r' ([,;.?!])')
+    regex = re.compile(r' ([,;.?!])')
 
     def translate(self, in_str):
         result = re.sub('\s+', ' ', in_str)
@@ -56,10 +54,16 @@ class AsciiToCompact:
 
 class JoinContractions:
     "Rejoin tokenized contractions."
-    regex = re.compile(r"\b(.*) n't ")
+    regex = re.compile(r"\b(.*) (n't|'s) ")
 
     def translate(self, in_str):
-        return self.regex.sub(r"\1n't ", in_str)
+        return self.regex.sub(r"\1\2 ", in_str)
+
+class MonoPunct:
+    regex = re.compile(" '' ")
+
+    def translate(self, in_str):
+        return self.regex.sub(r' " ', in_str)
 
 
 # deprecated because 'filter'
@@ -229,7 +233,8 @@ def translate_file(in_path, out_path, opt):
     # Announce output:
     print(in_path, '====>', '<stdout>' if out_path == '-' else out_path)
     print('-------------------------------------------------------------------')
-    translators = [IsoToAscii(), AsciiToCompact(), JoinContractions()]
+    translators = [IsoToAscii(), AsciiToCompact(),
+                   JoinContractions(), MonoPunct()]
     translate_line_file(translators, in_path, out_path, opt.charset)
 
 ###############################################################################

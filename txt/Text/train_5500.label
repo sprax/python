@@ -77,7 +77,6 @@ DESC:manner How do I make fuel bricks from recycled newspaper ?
 HUM:ind What 19th-century painter died in the Marquesas Islands ?
 ENTY:body The corpus callosum is in what part of the body ?
 DESC:manner How do I log on to home page at Headquarters U.S. European Command ?
-LOC:country What country did the Nazis occupy for 1 , CD NNS IN NNP NNP NNP .
 ENTY:other What is Nebraska 's most valuable resource ?
 NUM:count How many species of the Great White shark are there ?
 DESC:desc What is the origin of head lice ?
@@ -244,14 +243,12 @@ NUM:count How many South American countries have the letter Z in their names ?
 DESC:def What is the contents of proposition 98 ?
 LOC:other Where was George Washington born ?
 NUM:count How many people on the ground were killed from the bombing of Pan Am Flight 103 over Lockerbie , Scotland , December 21 , CD .
-HUM:ind Who wrote NN DT NNP NNP '' ?
 DESC:def What is paracetamol ?
 DESC:desc What are the powers and weaknesses of Green Lantern 's ring ?
-ENTY:animal Which mosquito 's bite draws blood , DT NN CC DT NN .
+ENTY:animal Which mosquito 's bite draws blood ?
 NUM:date When was the first steel mill in the United States built ?
 HUM:ind What diminutive American female gymnast stole the show at the 1984 Olympics ?
 DESC:desc What is the origin of the name Katie ?
-HUM:gr What schools in the Washington , DC NN NN VBP NN NN NN NN .
 NUM:date When did the Berlin Wall go up ?
 HUM:desc Who is Terrence Malick ?
 ENTY:instru What instrument is Ray Charles best known for playing ?
@@ -848,7 +845,7 @@ HUM:desc Who is Colin Powell ?
 ENTY:animal What species is a colt ?
 ABBR:exp What is the full name of the PLO ?
 LOC:country What is the smallest country in Africa ?
-HUM:ind Who coined the term NN cyberspace `` in his novel NN Neuromancer '' ?
+HUM:ind Who coined the term '' cyberspace `` in his novel '' Neuromancer '' ?
 ENTY:event What age followed the Bronze Age ?
 HUM:title What is her profession ?
 HUM:ind What is the full name of the man who invented the multicolored game cube that has 42.3 quintillion potential combinations ?
@@ -978,7 +975,7 @@ NUM:money What is the average cost for four years of medical school ?
 ENTY:other What does God create in the first sentence of the Bible ?
 HUM:ind Which of the following men was not married to Rita Hayworth ?
 NUM:money What is the current ticket fare from from Cairo to Barbados ?
-ABBR:exp What does NN O `` mean when used as a prefix in Irish surnames ?
+ABBR:exp What does '' O `` mean when used as a prefix in Irish surnames ?
 DESC:manner How do you find oxidation numbers ?
 LOC:state What is the state nickname of Mississippi ?
 DESC:reason What is Black Hills , South Dakota most famous for ?
@@ -1118,7 +1115,7 @@ LOC:city What Colorado city owns its own glacier ?
 DESC:desc What is the history of `` the toast '' ?
 ENTY:event What was the name of the Protestant revolt against the supremacy of the Pope ?
 DESC:def What is an arab strap ?
-NUM:money How much does it cost , average or whatever is available , to produce and send junk mail catalogues in the US ? , DT CD NN NN ,
+NUM:money How much does it cost , average or whatever is available , to produce and send junk mail catalogues in the US ?
 HUM:ind Who is the current UN Secretary General ?
 HUM:gr Who provides telephone service in Orange County , California ?
 LOC:other Where did guinea pigs originate ?
@@ -1424,7 +1421,6 @@ ENTY:food Name Li 'l Abner 's favorite Indian drink .
 ENTY:event What are some important events of the 1830 's ?
 NUM:date The Iraqis launched their attack on Kuwait on what day ?
 ENTY:letter What letter adorns the flag of Rwanda ?
-ENTY:other What did 8 , CD NNS VBP TO VB NNP POS NN .
 DESC:def What is God ?
 LOC:country What country 's northernmost city is Darwin ?
 LOC:other What sound does Olympia , Washington , overlook ?
@@ -5030,7 +5026,7 @@ HUM:ind What famous husband-and-wife team did radio ads for Blue Nun wine ?
 NUM:count How many times has Harold Stassen announced a drive for the White House ?
 NUM:money What are bottle caps with presidents ' pictures inside worth ?
 LOC:other Where can I find the history of the Hungarian language ?
-DESC:reason Why do USA fax machines not work in UK , NNP ?
+DESC:reason Why do USA fax machines not work in the UK ?
 ENTY:other What cigarette is `` a whole new world '' ?
 HUM:ind Who tramped through Florida looking for the Fountain of Youth ?
 NUM:date In 1990 , what day of the week did Christmas fall on ?
