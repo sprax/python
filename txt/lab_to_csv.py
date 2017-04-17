@@ -21,13 +21,6 @@ TRANS_NO_WHAT = str.maketrans(u"\u2018\u2019\u201c\u201d", "\'\'\"\"")
 TRANS_NO_SMART = str.maketrans("\x91\x92\x93\x94", "''\"\"")
 TRANS_NO_PUNCT = str.maketrans('', '', string.punctuation)
 
-ISO_TO_ASCII = str.maketrans({
-u"\x91" : "'",
-u"\x92" : "'",
-u"\x93" : '"',
-u"\x94" : '"',
-u"\x97" : '--',
-})
 UNICODE_TO_ASCII = str.maketrans({
 u"\u2018" : "'",
 u"\u2019" : "'",
@@ -35,11 +28,29 @@ u"\u201c" : '"',
 u"\u201d" : '"',
 })
 
+ISO_TO_ASCII = str.maketrans({
+"`" : "'",
+u"\x91" : "'",
+u"\x92" : "'",
+u"\x93" : '"',
+u"\x94" : '"',
+u"\x97" : '--',
+})
+
 class IsoToAscii:
     '''Translate non-ASCII characters to ASCII or nothing'''
-
     def translate(self, in_str):
         return in_str.translate(ISO_TO_ASCII)
+
+class AsciiToCompact:
+    '''Eliminate extra spaces and punctuation'''
+
+    def __init__(self):
+        self.regex = re.compile(r' ([,;.?])')
+
+    def translate(self, in_str):
+        result = re.sub('\s+', ' ', in_str)
+        return self.regex.sub(r'\1', result)
 
 
 # deprecated because 'filter'
@@ -214,7 +225,8 @@ def translate_file(in_path, out_path, opt):
     # Announce output:
     print(in_path, '====>', '<stdout>' if out_path == '-' else out_path)
     print('-------------------------------------------------------------------')
-    translator = IsoToAscii()
+    # translator = IsoToAscii()
+    translator = AsciiToCompact()
     translate_line_file(translator, in_path, out_path, opt.charset)
 
 ###############################################################################
