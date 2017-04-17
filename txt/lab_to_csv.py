@@ -20,6 +20,7 @@ from utf_print import utf_print
 TRANS_NO_WHAT = str.maketrans(u"\u2018\u2019\u201c\u201d", "\'\'\"\"")
 TRANS_NO_SMART = str.maketrans("\x91\x92\x93\x94", "''\"\"")
 TRANS_NO_PUNCT = str.maketrans('', '', string.punctuation)
+
 ISO_TO_ASCII = str.maketrans({
 u"\x91" : "'",
 u"\x92" : "'",
@@ -33,6 +34,13 @@ u"\u2019" : "'",
 u"\u201c" : '"',
 u"\u201d" : '"',
 })
+
+class IsoToAscii:
+    '''Translate non-ASCII characters to ASCII or nothing'''
+
+    def translate(self, in_str):
+        return in_str.translate(ISO_TO_ASCII)
+
 
 # deprecated because 'filter'
 def filter_non_ascii(in_str):
@@ -181,30 +189,33 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
         else:
             utf_print(sentence, outfile=out_file)
 
-# TODO: EDIT_HERE
-def translate_file(filter, inpath, outpath, charset='utf8'):
+def translate_para_file(para_filter, in_path, out_path, charset='utf8'):
     '''Generator yielding filtered paragraphs from a text file'''
-    with open(inpath, 'r', encoding=charset) as intext:
-        with open(outpath, 'w') as out:
-            for para in paragraph_iter(text):
-                yield filter.filter_paragraph(para
+    with open(in_path, 'r', encoding=charset) as in_text:
+        with open(out_path, 'w') as out_file:
+            for para in paragraph_iter(in_text):
+                output = para_filter.filter_line(para)
+                print(output if output else ' ', file=out_file)
+
+def translate_line_file(line_translator, in_path, out_path, charset='utf8'):
+    '''Translate input line by line to output file'''
+    with open(in_path, 'r', encoding=charset) as in_text:
+        with open(out_path, 'w') as out_file:
+            for line in in_text:
+                output = line_translator.translate(line)
+                print(output if output else ' ', file=out_file)
+
 
 ########################################################
 
-def unit_test(text_file, opt):
+def translate_file(in_path, out_path, opt):
     """Rewrite a text file."""
 
-    # Read initial text corpus:
-    for line in read_linestext = read_file(text_file, opt.charset)
-
-    # Try to open output (file):
-    out_file = open_out_file(opt.out_file)
-
     # Announce output:
-    print(text_file, '====>', '<stdout>' if out_file == sys.stdout else opt.out_file)
+    print(in_path, '====>', '<stdout>' if out_path == '-' else out_path)
     print('-------------------------------------------------------------------')
-    if out_file and out_file != sys.stdout:
-        out_file.close()
+    translator = IsoToAscii()
+    translate_line_file(translator, in_path, out_path, opt.charset)
 
 ###############################################################################
 
@@ -213,7 +224,7 @@ def main():
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="Extractive text summarizer")
-    parser.add_argument('text_file', type=str, nargs='?', default='Text/train_1000.label',
+    parser.add_argument('in_file', type=str, nargs='?', default='Text/train_1000.label',
                         help='file containing text to summarize')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='output only the indices of summary sentences')
@@ -242,7 +253,7 @@ def main():
         exit(0)
 
     # summary_file = getattr(args, 'out_file', None)
-    unit_test(args.text_file, args)
+    translate_file(args.in_file, args.out_file, args)
 
 if __name__ == '__main__':
     main()
