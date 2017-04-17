@@ -1,4 +1,4 @@
 # Character set encoding: ISO 8859-1 [python: encode('iso-8859-1')]
 
-“I’m fearful about Steve’s image of Beirut,” wrote his father — the ‘uni’s prez’” — Malcolm H. Kerr.
+“I’m fearful about Steve’s urðimage of Beirut,” wrote his father — the ‘uni’s prez’” — Malcolm H. Kerr.
 
