@@ -28,6 +28,7 @@ u"\u201c" : '"',
 u"\u201d" : '"',
 })
 
+
 ISO_TO_ASCII = str.maketrans({
 "`" : "'",
 u"\x91" : "'",
@@ -35,6 +36,7 @@ u"\x92" : "'",
 u"\x93" : '"',
 u"\x94" : '"',
 u"\x97" : '--',
+u"\xf0" : '-',
 })
 
 class IsoToAscii:
@@ -82,12 +84,6 @@ def replace_emdashes(in_str):
     return in_str.replace("\x97", "--")
 
 ###############################################################################
-
-# (lang == 'en'):
-LEAD_DOUBLE = u"\u201c"
-FOLLOW_DOUBLE = u"\u201d"
-LEAD_SINGLE = u"\u2018"
-FOLLOW_SINGLE = u"\u2019"
 
 
 #TODO: functions that try to read ascii or utf-8 and failover to iso-8859-1, etc.
@@ -208,13 +204,14 @@ def translate_para_file(para_filter, in_path, out_path, charset='utf8'):
                 output = para_filter.filter_line(para)
                 print(output if output else ' ', file=out_file)
 
-def translate_line_file(line_translator, in_path, out_path, charset='utf8'):
+def translate_line_file(line_translators, in_path, out_path, charset='utf8'):
     '''Translate input line by line to output file'''
     with open(in_path, 'r', encoding=charset) as in_text:
-        with open(out_path, 'w') as out_file:
+        with (sys.stdout if out_path == '-' else open(out_path, 'w')) as out_file:
             for line in in_text:
-                output = line_translator.translate(line)
-                print(output if output else ' ', file=out_file)
+                for translator in line_translators:
+                    line = translator.translate(line)
+                print(line if line else ' ', file=out_file)
 
 
 ########################################################
@@ -225,9 +222,8 @@ def translate_file(in_path, out_path, opt):
     # Announce output:
     print(in_path, '====>', '<stdout>' if out_path == '-' else out_path)
     print('-------------------------------------------------------------------')
-    # translator = IsoToAscii()
-    translator = AsciiToCompact()
-    translate_line_file(translator, in_path, out_path, opt.charset)
+    translators = [IsoToAscii(), AsciiToCompact()]
+    translate_line_file(translators, in_path, out_path, opt.charset)
 
 ###############################################################################
 
