@@ -39,17 +39,21 @@ u"\x97" : '--',
 u"\xf0" : '-',
 })
 
+def translateIsoToAscii(in_str):
+    return in_str.translate(ISO_TO_ASCII)
+
 class IsoToAscii:
     '''Translate non-ASCII characters to ASCII or nothing'''
+    # translation = ISO_TO_ASCII
     def translate(self, in_str):
-        return in_str.translate(ISO_TO_ASCII)
+        return translateIsoToAscii(in_str)
 
 class AsciiToCompact:
     '''Eliminate extra spaces and punctuation'''
     regex = re.compile(r' ([,;.?!])')
 
     def translate(self, in_str):
-        result = re.sub('\s+', ' ', in_str)
+        result = re.sub(r'\s+', ' ', in_str)
         return self.regex.sub(r'\1', result)
 
 class JoinContractions:
@@ -89,7 +93,8 @@ def remove_punctuation(in_str, table=TRANS_NO_PUNCT):
     return in_str.translate(table)
 
 def replace_quotes(instr):
-    return instr.replace("\x91", "'").replace("\x92", "'").replace("\x93", '"').replace("\x94", '"')
+    return instr.replace("\x91", "'").replace("\x92", "'")\
+                .replace("\x93", '"').replace("\x94", '"')
 
 def replace_emdashes(in_str):
     return in_str.replace("\x97", "--")
@@ -97,7 +102,7 @@ def replace_emdashes(in_str):
 ###############################################################################
 
 
-#TODO: functions that try to read ascii or utf-8 and failover to iso-8859-1, etc.
+#TODO: try to read ascii or utf-8 and failover to iso-8859-1, etc.
 
 def read_lines(file_spec, charset='utf8'):
     '''read and return all lines of a text file as a list of str'''
@@ -112,8 +117,10 @@ def read_lines_to_ascii(file_spec, charset='utf-8'):
     with open(file_spec, 'r', encoding=charset) as text:
         for line in text:
             # utf_print(line.rstrip())
-            line = line.decode(encoding=charset, errors='ignore') # .encode('ascii', errors='ignore')
-            # line = str(line, charset, errors='ignore') # .encode('ascii', errors='ignore')
+            line = line.decode(encoding=charset, errors='ignore')
+            # .encode('ascii', errors='ignore')
+            # line = str(line, charset, errors='ignore')
+            # .encode('ascii', errors='ignore')
             yield line.rstrip()
 
 def read_text_file(file_spec):
@@ -129,7 +136,10 @@ def read_file(file_spec, charset='utf-8'):
         return src.read()
 
 def read_file_eafp(file_spec, charset='utf-8'):
-    '''read contents of file_spec, Easier to Ask for Forgiveness than ask Permission.'''
+    '''
+    Read contents of file_spec.
+    Easier to Ask for Forgiveness than ask Permission.
+    '''
     try:
         src = open(file_spec, 'r', encoding=charset)
     except IOError as ex:
