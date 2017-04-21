@@ -39,14 +39,14 @@ u"\x97" : '--',
 u"\xf0" : '-',
 })
 
-def translateIsoToAscii(in_str):
+def translate_iso_to_ascii(in_str):
     return in_str.translate(ISO_TO_ASCII)
 
 class IsoToAscii:
     '''Translate non-ASCII characters to ASCII or nothing'''
     # translation = ISO_TO_ASCII
     def translate(self, in_str):
-        return translateIsoToAscii(in_str)
+        return translate_iso_to_ascii(in_str)
 
 class AsciiToCompact:
     '''Eliminate extra spaces and punctuation'''
