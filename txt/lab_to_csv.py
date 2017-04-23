@@ -47,7 +47,7 @@ class IsoToAscii:
     '''Translate non-ASCII characters to ASCII or nothing'''
     translation = ISO_TO_ASCII
     def translate(self, in_str):
-        return in_str.translate(translation)
+        return in_str.translate(self.translation)
     # def translate(self, in_str):
     #     return translate_iso_to_ascii(in_str)
 
@@ -71,6 +71,12 @@ class MonoPunct:
 
     def translate(self, in_str):
         return self.regex.sub(r' " ', in_str)
+
+class JoinPossessive:
+    regex = re.compile(" ' ")
+
+    def translate(self, in_str):
+        return self.regex.sub(r"' ", in_str)
 
 
 # deprecated because 'filter'
@@ -247,7 +253,7 @@ def translate_file(in_path, out_path, opt):
     print(in_path, '====>', '<stdout>' if out_path == '-' else out_path)
     print('-------------------------------------------------------------------')
     translators = [IsoToAscii(), AsciiToCompact(),
-                   JoinContractions(), MonoPunct()]
+                   JoinContractions(), MonoPunct(), JoinPossessive()]
     translate_line_file(translators, in_path, out_path, opt.charset)
 
 ###############################################################################
