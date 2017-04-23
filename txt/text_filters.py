@@ -9,6 +9,7 @@
 import argparse
 import errno
 import heapq
+import os.path
 import re
 import math
 import string
@@ -28,7 +29,6 @@ u"\u201c" : '"',
 u"\u201d" : '"',
 })
 
-
 ISO_TO_ASCII = str.maketrans({
 "`" : "'",
 u"\x91" : "'",
@@ -39,9 +39,26 @@ u"\x97" : '--',
 u"\xf0" : '-',
 })
 
+def translate_smart_quotes(in_str, table=TRANS_NO_SMART):
+    '''Replace curly quotes with straight ones.'''
+    return in_str.translate(table)
+
 def translate_iso_to_ascii(in_str):
     '''Replace curly quotes with straight ones, etc.'''
     return in_str.translate(ISO_TO_ASCII)
+
+def remove_punctuation(in_str, table=TRANS_NO_PUNCT):
+    '''Remove all string.punctuation characters.'''
+    return in_str.translate(table)
+
+def replace_quotes(instr):
+    '''Replace curly quotes one-by-one (slow)'''
+    return instr.replace("\x91", "'").replace("\x92", "'")\
+                .replace("\x93", '"').replace("\x94", '"')
+
+def replace_emdashes(in_str):
+    '''Replace each em-dash with two hyphens (--).'''
+    return in_str.replace("\x97", "--")
 
 class IsoToAscii:
     '''Translate non-ASCII characters to ASCII or nothing'''
@@ -68,16 +85,18 @@ class JoinContractions:
 
 class MonoPunct:
     regex = re.compile(" '' ")
-
     def translate(self, in_str):
         return self.regex.sub(r' " ', in_str)
 
 class JoinPossessive:
     regex = re.compile(" ' ")
-
     def translate(self, in_str):
         return self.regex.sub(r"' ", in_str)
 
+class JoinQuoted:
+    regex = re.compile(r"([\"']) ((?:\\\1|.)*?) \1")
+    def translate(self, in_str):
+        return self.regex.sub(r"\1\2\1", in_str)
 
 # deprecated because 'filter'
 def filter_non_ascii(in_str):
@@ -92,21 +111,7 @@ def translate_to_ascii(in_str):
     except:
         return in_str
 
-def translate_iso_to_ascii(in_str):
-    return in_str.translate(ISO_TO_ASCII)
 
-def translate_smart_quotes(in_str, table=TRANS_NO_SMART):
-    return in_str.translate(table)
-
-def remove_punctuation(in_str, table=TRANS_NO_PUNCT):
-    return in_str.translate(table)
-
-def replace_quotes(instr):
-    return instr.replace("\x91", "'").replace("\x92", "'")\
-                .replace("\x93", '"').replace("\x94", '"')
-
-def replace_emdashes(in_str):
-    return in_str.replace("\x97", "--")
 
 ###############################################################################
 
@@ -252,33 +257,36 @@ def translate_file(in_path, out_path, opt):
     # Announce output:
     print(in_path, '====>', '<stdout>' if out_path == '-' else out_path)
     print('-------------------------------------------------------------------')
-    translators = [IsoToAscii(), AsciiToCompact(),
-                   JoinContractions(), MonoPunct(), JoinPossessive()]
+    translators = [IsoToAscii(), AsciiToCompact(), JoinContractions(),
+                   MonoPunct(), JoinPossessive(), JoinQuoted()]
     translate_line_file(translators, in_path, out_path, opt.charset)
 
 ###############################################################################
 
-def main():
-    '''Extract summary from text.'''
+def abs_path(dir_spec, file_spec):
+    '''Returns an absolute path based on a dir_spec and a (relative) file_spec'''
+    if os.path.isabs(file_spec):
+        return file_spec
+    return os.path.join(dir_spec, file_spec)
+
+def filter_text_file():
+    '''Filter lines or sentences in a text file.'''
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
-        description="Extractive text summarizer")
-    parser.add_argument('in_file', type=str, nargs='?', default='Text/train_1000.label',
-                        help='file containing text to summarize')
+        description="test text_filters")
+    parser.add_argument('input_file', type=str, nargs='?', default='train_1000.label',
+                        help='file containing text to filter')
+    parser.add_argument('-dir', dest='text_dir', type=str, default='/Users/sprax/text',
+                        help='directory to search for input_file')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
-                        help='output only the indices of summary sentences')
+                        help='charset encoding of input text')
     parser.add_argument('-list_numbers', action='store_true',
-                        help='output list number for each summary sentence')
-    parser.add_argument('-number', dest='sum_count', type=int, nargs='?', const=1, default=0,
+                        help='output list number for each filtered sentence')
+    parser.add_argument('-number', dest='max_lines', type=int, nargs='?', const=1, default=0,
                         help='number of sentences to keep (default: 5), overrides -percent')
-    parser.add_argument('-out_file', type=str, nargs='?', default='lab.txt',
-                        help='output file for summarized text (default: None)')
-    parser.add_argument('-percent', dest='sum_percent', type=float, nargs='?',
-                        const=16.6667, default=10.0,
-                        help='percentage of sentences to keep (default: 10.0%%)')
-    parser.add_argument('-serial', action='store_true',
-                        help='summarize each paragraph in series')
-    parser.add_argument('-truncate', dest='max_print_words', type=int, nargs='?',
+    parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
+                        help='output path for filtered text (default: - <stdout>)')
+    parser.add_argument('-truncate', dest='max_words', type=int, nargs='?',
                         const=8, default=0,
                         help='truncate sentences after MAX words (default: INT_MAX)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
@@ -286,13 +294,15 @@ def main():
     args = parser.parse_args()
 
     if args.verbose > 3:
-        print("outfile: <{}>".format(args.out_file))
+        print("output_file: <{}>".format(args.output_file))
         print("args:", args)
         print(__doc__)
         exit(0)
 
-    # summary_file = getattr(args, 'out_file', None)
-    translate_file(args.in_file, args.out_file, args)
+    in_path = abs_path(args.text_dir, args.input_file)
+    out_path = abs_path(args.text_dir, args.output_file)
+
+    translate_file(in_path, out_path, args)
 
 if __name__ == '__main__':
-    main()
+    filter_text_file()
