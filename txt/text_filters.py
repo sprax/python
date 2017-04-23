@@ -20,19 +20,64 @@ from utf_print import utf_print
 TRANS_NO_WHAT = str.maketrans(u"\u2018\u2019\u201c\u201d", "\'\'\"\"")
 TRANS_NO_SMART = str.maketrans("\x91\x92\x93\x94", "''\"\"")
 TRANS_NO_PUNCT = str.maketrans('', '', string.punctuation)
-ISO_TO_ASCII = str.maketrans({
-u"\x91" : "'",
-u"\x92" : "'",
-u"\x93" : '"',
-u"\x94" : '"',
-u"\x97" : '--',
-})
+
 UNICODE_TO_ASCII = str.maketrans({
 u"\u2018" : "'",
 u"\u2019" : "'",
 u"\u201c" : '"',
 u"\u201d" : '"',
 })
+
+
+ISO_TO_ASCII = str.maketrans({
+"`" : "'",
+u"\x91" : "'",
+u"\x92" : "'",
+u"\x93" : '"',
+u"\x94" : '"',
+u"\x97" : '--',
+u"\xf0" : '-',
+})
+
+def translate_iso_to_ascii(in_str):
+    '''Replace curly quotes with straight ones, etc.'''
+    return in_str.translate(ISO_TO_ASCII)
+
+class IsoToAscii:
+    '''Translate non-ASCII characters to ASCII or nothing'''
+    translation = ISO_TO_ASCII
+    def translate(self, in_str):
+        return in_str.translate(self.translation)
+    # def translate(self, in_str):
+    #     return translate_iso_to_ascii(in_str)
+
+class AsciiToCompact:
+    '''Eliminate extra spaces and punctuation'''
+    regex = re.compile(r' ([,;.?!])')
+
+    def translate(self, in_str):
+        result = re.sub(r'\s+', ' ', in_str)
+        return self.regex.sub(r'\1', result)
+
+class JoinContractions:
+    "Rejoin tokenized contractions."
+    regex = re.compile(r"\b(.*) (n't|'s) ")
+
+    def translate(self, in_str):
+        return self.regex.sub(r"\1\2 ", in_str)
+
+class MonoPunct:
+    regex = re.compile(" '' ")
+
+    def translate(self, in_str):
+        return self.regex.sub(r' " ', in_str)
+
+class JoinPossessive:
+    regex = re.compile(" ' ")
+
+    def translate(self, in_str):
+        return self.regex.sub(r"' ", in_str)
+
 
 # deprecated because 'filter'
 def filter_non_ascii(in_str):
@@ -57,21 +102,16 @@ def remove_punctuation(in_str, table=TRANS_NO_PUNCT):
     return in_str.translate(table)
 
 def replace_quotes(instr):
-    return instr.replace("\x91", "'").replace("\x92", "'").replace("\x93", '"').replace("\x94", '"')
+    return instr.replace("\x91", "'").replace("\x92", "'")\
+                .replace("\x93", '"').replace("\x94", '"')
 
 def replace_emdashes(in_str):
     return in_str.replace("\x97", "--")
 
 ###############################################################################
 
-# (lang == 'en'):
-LEAD_DOUBLE = u"\u201c"
-FOLLOW_DOUBLE = u"\u201d"
-LEAD_SINGLE = u"\u2018"
-FOLLOW_SINGLE = u"\u2019"
 
-
-#TODO: functions that try to read ascii or utf-8 and failover to iso-8859-1, etc.
+#TODO: try to read ascii or utf-8 and failover to iso-8859-1, etc.
 
 def read_lines(file_spec, charset='utf8'):
     '''read and return all lines of a text file as a list of str'''
@@ -86,8 +126,10 @@ def read_lines_to_ascii(file_spec, charset='utf-8'):
     with open(file_spec, 'r', encoding=charset) as text:
         for line in text:
             # utf_print(line.rstrip())
-            line = line.decode(encoding=charset, errors='ignore') # .encode('ascii', errors='ignore')
-            # line = str(line, charset, errors='ignore') # .encode('ascii', errors='ignore')
+            line = line.decode(encoding=charset, errors='ignore')
+            # .encode('ascii', errors='ignore')
+            # line = str(line, charset, errors='ignore')
+            # .encode('ascii', errors='ignore')
             yield line.rstrip()
 
 def read_text_file(file_spec):
@@ -103,7 +145,10 @@ def read_file(file_spec, charset='utf-8'):
         return src.read()
 
 def read_file_eafp(file_spec, charset='utf-8'):
-    '''read contents of file_spec, Easier to Ask for Forgiveness than ask Permission.'''
+    '''
+    Read contents of file_spec.
+    Easier to Ask for Forgiveness than ask Permission.
+    '''
     try:
         src = open(file_spec, 'r', encoding=charset)
     except IOError as ex:
@@ -181,22 +226,35 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
         else:
             utf_print(sentence, outfile=out_file)
 
+def translate_para_file(para_filter, in_path, out_path, charset='utf8'):
+    '''Generator yielding filtered paragraphs from a text file'''
+    with open(in_path, 'r', encoding=charset) as in_text:
+        with open(out_path, 'w') as out_file:
+            for para in paragraph_iter(in_text):
+                output = para_filter.filter_line(para)
+                print(output if output else ' ', file=out_file)
+
+def translate_line_file(line_translators, in_path, out_path, charset='utf8'):
+    '''Translate input line by line to output file'''
+    with open(in_path, 'r', encoding=charset) as in_text:
+        with (sys.stdout if out_path == '-' else open(out_path, 'w')) as out_file:
+            for line in in_text:
+                for translator in line_translators:
+                    line = translator.translate(line)
+                print(line if line else ' ', file=out_file)
+
+
 ########################################################
 
-def unit_test(text_file, opt):
+def translate_file(in_path, out_path, opt):
     """Rewrite a text file."""
 
-    # Read initial text corpus:
-    # text = read_file(text_file, charset)
-
-    # Try to open output (file):
-    out_file = open_out_file(opt.out_file)
-
     # Announce output:
-    print(text_file, '====>', '<stdout>' if out_file == sys.stdout else opt.out_file)
+    print(in_path, '====>', '<stdout>' if out_path == '-' else out_path)
     print('-------------------------------------------------------------------')
-    if out_file and out_file != sys.stdout:
-        out_file.close()
+    translators = [IsoToAscii(), AsciiToCompact(),
+                   JoinContractions(), MonoPunct(), JoinPossessive()]
+    translate_line_file(translators, in_path, out_path, opt.charset)
 
 ###############################################################################
 
@@ -205,19 +263,15 @@ def main():
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="Extractive text summarizer")
-    parser.add_argument('text_file', type=str, nargs='?', default='corpus.txt',
+    parser.add_argument('in_file', type=str, nargs='?', default='Text/train_1000.label',
                         help='file containing text to summarize')
-    parser.add_argument('-index', dest='indices_only', action='store_true',
+    parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='output only the indices of summary sentences')
     parser.add_argument('-list_numbers', action='store_true',
                         help='output list number for each summary sentence')
-    parser.add_argument('-max_freq', type=float, nargs='?', const=1, default=0.9,
-                        help='maximum frequency cut-off (default: 0.9)')
-    parser.add_argument('-min_freq', type=float, nargs='?', const=1, default=0.1,
-                        help='minimum frequency cut-off (default: 0.1)')
     parser.add_argument('-number', dest='sum_count', type=int, nargs='?', const=1, default=0,
                         help='number of sentences to keep (default: 5), overrides -percent')
-    parser.add_argument('-out_file', type=str, nargs='?', const='-',
+    parser.add_argument('-out_file', type=str, nargs='?', default='lab.txt',
                         help='output file for summarized text (default: None)')
     parser.add_argument('-percent', dest='sum_percent', type=float, nargs='?',
                         const=16.6667, default=10.0,
@@ -238,7 +292,7 @@ def main():
         exit(0)
 
     # summary_file = getattr(args, 'out_file', None)
-    unit_test(args.text_file, args)
+    translate_file(args.in_file, args.out_file, args)
 
 if __name__ == '__main__':
     main()
