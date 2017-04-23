@@ -40,13 +40,16 @@ u"\xf0" : '-',
 })
 
 def translate_iso_to_ascii(in_str):
+    '''Replace curly quotes with straight ones, etc.'''
     return in_str.translate(ISO_TO_ASCII)
 
 class IsoToAscii:
     '''Translate non-ASCII characters to ASCII or nothing'''
-    # translation = ISO_TO_ASCII
+    translation = ISO_TO_ASCII
     def translate(self, in_str):
-        return translate_iso_to_ascii(in_str)
+        return in_str.translate(translation)
+    # def translate(self, in_str):
+    #     return translate_iso_to_ascii(in_str)
 
 class AsciiToCompact:
     '''Eliminate extra spaces and punctuation'''
