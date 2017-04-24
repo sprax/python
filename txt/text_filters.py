@@ -83,10 +83,10 @@ class JoinContractions:
     def translate(self, in_str):
         return self.regex.sub(r"\1\2 ", in_str)
 
-class MonoPunct:
-    regex = re.compile(" '' ")
+class TwoSingleQuoteToDoubleQuote:
+    regex = re.compile(" ''([ !\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~])")
     def translate(self, in_str):
-        return self.regex.sub(r' " ', in_str)
+        return self.regex.sub(r' "\1', in_str)
 
 class JoinPossessive:
     regex = re.compile(" ' ")
@@ -258,7 +258,7 @@ def translate_file(in_path, out_path, opt):
     print(in_path, '====>', '<stdout>' if out_path == '-' else out_path)
     print('-------------------------------------------------------------------')
     translators = [IsoToAscii(), AsciiToCompact(), JoinContractions(),
-                   MonoPunct(), JoinPossessive(), JoinQuoted()]
+                   TwoSingleQuoteToDoubleQuote(), JoinPossessive(), JoinQuoted()]
     translate_line_file(translators, in_path, out_path, opt.charset)
 
 ###############################################################################
@@ -274,7 +274,7 @@ def filter_text_file():
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="test text_filters")
-    parser.add_argument('input_file', type=str, nargs='?', default='train_1000.label',
+    parser.add_argument('input_file', type=str, nargs='?', default='train_5500.label',
                         help='file containing text to filter')
     parser.add_argument('-dir', dest='text_dir', type=str, default='/Users/sprax/text',
                         help='directory to search for input_file')
