@@ -233,14 +233,15 @@ def translate_para_file(para_filter, in_path, out_path, charset='utf8'):
                 output = para_filter.filter_line(para)
                 print(output if output else ' ', file=out_file)
 
-def translate_line_file(line_translators, in_path, out_path, charset='utf8'):
+def translate_lines_in_file(line_translators, in_path, out_path, charset='utf8'):
     '''Translate input line by line to output file'''
     with open(in_path, 'r', encoding=charset) as in_text:
         with (sys.stdout if out_path == '-' else open(out_path, 'w')) as out_file:
             for line in in_text:
                 for translator in line_translators:
                     line = translator.translate(line)
-                print(line if line else ' ', file=out_file)
+                    if line:
+                        print(line, file=out_file)
 
 
 ########################################################
@@ -257,7 +258,7 @@ def translate_file(in_path, out_path, opt):
                    TwoSingleQuoteToDoubleQuote(),
                    JoinPossessive(),
                    JoinQuoted()]
-    translate_line_file(translators, in_path, out_path, opt.charset)
+    translate_lines_in_file(translators, in_path, out_path, opt.charset)
 
 ###############################################################################
 
