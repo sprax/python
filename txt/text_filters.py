@@ -4,7 +4,7 @@
 # To re-import a library in Python 3.4+ (re-import), do:
 # import importlib
 # importlib.reload(nameOfModule)
-'''read text file, print regex-split words.'''
+'''text filter functions'''
 
 import argparse
 import errno
@@ -109,10 +109,7 @@ def translate_to_ascii(in_str):
     except:
         return in_str
 
-
-
 ###############################################################################
-
 
 #TODO: try to read ascii or utf-8 and failover to iso-8859-1, etc.
 
@@ -122,7 +119,6 @@ def read_lines(file_spec, charset='utf8'):
         for line in text:
             # utf_print(line.rstrip())
             yield line.rstrip()
-
 
 def read_lines_to_ascii(file_spec, charset='utf-8'):
     '''read and return all lines of a text file as a list of ASCII str'''
