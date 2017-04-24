@@ -4,6 +4,7 @@
 import argparse
 import errno
 import heapq
+import os.path
 import re
 import math
 import sys
@@ -102,6 +103,12 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
             text_ops.print_paragraph_regex_count(sentence, max_words, out_file=out_file)
         else:
             utf_print(sentence, outfile=out_file)
+
+########################################################
+# util functions
+
+def cwd():
+    return os.path.dirname(os.path.realpath('.'))
 
 ########################################################
 
