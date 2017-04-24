@@ -68,25 +68,23 @@ class IsoToAscii:
     # def translate(self, in_str):
     #     return translate_iso_to_ascii(in_str)
 
-class AsciiToCompact:
-    '''Eliminate extra spaces and punctuation'''
-    regex = re.compile(r' ([,;.?!])')
-
+class NoSpaceBeforePunct:
+    '''Eliminate spaces before punctuation'''
+    regex = re.compile(r' ([!%,./:;?])')
     def translate(self, in_str):
         result = re.sub(r'\s+', ' ', in_str)
         return self.regex.sub(r'\1', result)
 
+class TwoSingleQuoteToDoubleQuote:
+    regex = re.compile(" ''([ !\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~]|$)")
+    def translate(self, in_str):
+        return self.regex.sub(r' "\1', in_str)
+
 class JoinContractions:
     "Rejoin tokenized contractions."
     regex = re.compile(r"\b(.*) (n't|'s) ")
-
     def translate(self, in_str):
         return self.regex.sub(r"\1\2 ", in_str)
-
-class TwoSingleQuoteToDoubleQuote:
-    regex = re.compile(" ''([ !\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~])")
-    def translate(self, in_str):
-        return self.regex.sub(r' "\1', in_str)
 
 class JoinPossessive:
     regex = re.compile(" ' ")
@@ -257,8 +255,12 @@ def translate_file(in_path, out_path, opt):
     # Announce output:
     print(in_path, '====>', '<stdout>' if out_path == '-' else out_path)
     print('-------------------------------------------------------------------')
-    translators = [IsoToAscii(), AsciiToCompact(), JoinContractions(),
-                   TwoSingleQuoteToDoubleQuote(), JoinPossessive(), JoinQuoted()]
+    translators = [IsoToAscii(),
+                   JoinContractions(),
+                   NoSpaceBeforePunct(),
+                   TwoSingleQuoteToDoubleQuote(),
+                   JoinPossessive(),
+                   JoinQuoted()]
     translate_line_file(translators, in_path, out_path, opt.charset)
 
 ###############################################################################
