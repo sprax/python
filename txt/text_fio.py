@@ -95,6 +95,7 @@ def print_words(file_spec):
             print(words)
 
 def print_sentences(sentences, list_numbers, max_words, out_file):
+    '''print sentences or any enumerable collection of text to an open file'''
     if list_numbers:
         if 0 < max_words and max_words < 15:
             idx_format = '{} '
