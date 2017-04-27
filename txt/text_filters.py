@@ -60,6 +60,8 @@ def replace_emdashes(in_str):
     '''Replace each em-dash with two hyphens (--).'''
     return in_str.replace("\x97", "--")
 
+#TODO: if really bored, implement reverse_trans for each class
+
 class IsoToAscii:
     '''Translate non-ASCII characters to ASCII or nothing'''
     translation = ISO_TO_ASCII
@@ -229,7 +231,7 @@ def translate_para_file(para_filter, in_path, out_path, charset='utf8'):
     '''Generator yielding filtered paragraphs from a text file'''
     with open(in_path, 'r', encoding=charset) as in_text:
         with open(out_path, 'w') as out_file:
-            for para in paragraph_iter(in_text):
+            for para in text_ops.paragraph_iter(in_text):
                 output = para_filter.filter_line(para)
                 print(output if output else ' ', file=out_file)
 
@@ -240,9 +242,8 @@ def translate_lines_in_file(line_translators, in_path, out_path, charset='utf8')
             for line in in_text:
                 for translator in line_translators:
                     line = translator.translate(line)
-                    if line:
-                        print(line, file=out_file)
-
+                if line:
+                    print(line, file=out_file)
 
 ########################################################
 
@@ -273,7 +274,7 @@ def filter_text_file():
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="test text_filters")
-    parser.add_argument('input_file', type=str, nargs='?', default='train_5500.label',
+    parser.add_argument('input_file', type=str, nargs='?', default='train_1000.label',
                         help='file containing text to filter')
     parser.add_argument('-dir', dest='text_dir', type=str, default='/Users/sprax/text',
                         help='directory to search for input_file')
@@ -299,7 +300,9 @@ def filter_text_file():
         exit(0)
 
     in_path = abs_path(args.text_dir, args.input_file)
-    out_path = abs_path(args.text_dir, args.output_file)
+    out_path = args.output_file
+    if out_path != '-':
+        out_path = abs_path(args.text_dir, args.output_file)
 
     translate_file(in_path, out_path, args)
 
