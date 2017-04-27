@@ -25,10 +25,14 @@ def read_file(file_spec, charset='utf8'):
     with open(file_spec, 'r', encoding=charset) as src:
         return src.read()
 
-def read_file_eafp(file_spec):
-    '''read contents of file_spec, Easier to Ask for Forgiveness than ask Permission.'''
+
+def read_file_eafp(file_spec, charset='utf-8'):
+    '''
+    Read contents of file_spec.
+    Easier to Ask for Forgiveness than ask Permission.
+    '''
     try:
-        src = open(file_spec, 'r')
+        src = open(file_spec, 'r', encoding=charset)
     except IOError as ex:
         if ex.errno != errno.ENOENT:
             raise
@@ -38,6 +42,17 @@ def read_file_eafp(file_spec):
         text = src.read()
         src.close()
         return text
+
+
+#TODO: try to read ascii or utf-8 and failover to iso-8859-1, etc.
+
+def read_text_file(file_spec):
+    '''read and return all contents of file as one str'''
+    try:
+        return read_file(file_spec, 'utf-8')
+    except UnicodeDecodeError:
+        return read_file(file_spec, 'iso-8859-1')
+
 
 def utf_print_words(fspec):
     with open(fspec, 'r', encoding="utf8") as text:
@@ -57,21 +72,6 @@ def print_words(file_spec):
                 if len(word) > 0:
                     print(word)
             print(words)
-
-def rank_dict_by_value(summary_count, ranking):
-    '''Return the highest ranked N dicionary entries.'''
-    return heapq.nlargest(summary_count, ranking, key=ranking.get)
-
-def resolve_count(sub_count, percent, total_count):
-    '''returns reconciled sub-count and percentage of total, where count trumps percentage'''
-    if not sub_count:
-        sub_count = int(math.ceil(percent * total_count / 100.0))
-    if  sub_count > total_count:
-        sub_count = total_count
-    if  sub_count < 1:
-        sub_count = 1
-    percent = sub_count * 100.0 / total_count
-    return sub_count, percent
 
 
 def open_out_file(file_spec, label='text'):
