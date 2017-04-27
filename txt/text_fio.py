@@ -3,15 +3,35 @@
 '''read text file, print regex-split words.'''
 import argparse
 import errno
-import heapq
 import os.path
 import re
-import math
 import sys
 from utf_print import utf_print
 import text_ops
 
-from utf_print import utf_print
+########################################################
+# util functions
+
+def cwd():
+    '''current working directory'''
+    return os.path.dirname(os.path.realpath('.'))
+
+def open_out_file(file_spec, label='text'):
+    '''returns a file handle open for writing, to be closed by the caller, else None'''
+    if file_spec:
+        if file_spec in ['-', 'stdout']:
+            return sys.stdout
+        else:
+            try:
+                out_file = open(file_spec, 'w')
+            except IOError as ex:
+                if ex.errno != errno.ENOENT:
+                    raise
+                print("IOError opening {} file [{}]:".format(label, file_spec), ex)
+                out_file = sys.stdout
+            return out_file
+    else:
+        return None
 
 def read_lines(file_spec, charset='utf8'):
     '''read and return all lines of a text file as a list of str'''
@@ -55,6 +75,7 @@ def read_text_file(file_spec):
 
 
 def utf_print_words(fspec):
+    '''utf_print a text file word-by-word'''
     with open(fspec, 'r', encoding="utf8") as text:
         for line in text:
             words = re.split(r'\W+', line.rstrip())
@@ -73,23 +94,6 @@ def print_words(file_spec):
                     print(word)
             print(words)
 
-
-def open_out_file(file_spec, label='text'):
-    if file_spec:
-        if file_spec in ['-', 'stdout']:
-            return sys.stdout
-        else:
-            try:
-                out_file = open(file_spec, 'w')
-            except IOError as ex:
-                if ex.errno != errno.ENOENT:
-                    raise
-                print("IOError opening {} file [{}]:".format(label, file_spec), ex)
-                out_file = sys.stdout
-            return out_file
-    else:
-        return None
-
 def print_sentences(sentences, list_numbers, max_words, out_file):
     if list_numbers:
         if 0 < max_words and max_words < 15:
@@ -104,11 +108,6 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
         else:
             utf_print(sentence, outfile=out_file)
 
-########################################################
-# util functions
-
-def cwd():
-    return os.path.dirname(os.path.realpath('.'))
 
 ########################################################
 

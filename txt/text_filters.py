@@ -7,7 +7,6 @@
 '''text filter functions'''
 
 import argparse
-import errno
 import heapq
 import os.path
 import re
