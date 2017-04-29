@@ -23,14 +23,17 @@ def xdv(level, *args, **kwargs):
         print("WARNING: XDV_VERBOSITY was None (in {}); setting it to {}"
                 .format(__name__, XDV_DEFAULT))
         set_xdv_verbosity(0)
+        xdv(level, *args, **kwargs)
 
 def try_xdv():
-    '''test xdv'''
-    xdv(0, "0 -- hi from xdv", 1)
+    '''try xdv'''
+    xdv(0, "0 -- hi from xdv", 0)
     xdv(1, "1 -- greetings from xdv")
     xdv(2, "2 -- howdy from xdv")
-    xdv(3, "3 -- hello from xdv", "\n", "goodbye from xdv", sep='')
-    xdv(4, "4 -- hey from xdv", "YO", "\n{}".format("goodbye from xdv"), sep='')
+    xdv(3, "3 -- hello from xdv", "\n",
+        "     -- bonus line, still in xdv(3 ...", sep='')
+    xdv(4, "4 -- hey from xdv", " YO, 4 is as high as I go!",
+        "\n{}".format("goodbye from xdv"), sep='')
 
 def test_xdv():
     '''test xdv module methods'''

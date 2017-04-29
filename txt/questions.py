@@ -1,5 +1,7 @@
-# Sprax Lines       2016.12.27
-'''Process some questions:
+#!/usr/bin/env python3
+# Sprax Lines       2016.12.27      Written with Python 3.5
+'''
+Process some questions:
     Extract questions [and answers or spans] from:
         open text, structured text, xml, html, or csv
         Classify spans as:
@@ -11,7 +13,7 @@
     Tag/Label: for some subset of the above:
         POS-tagged text
         Sentiment-labels
-        Intention-labels (socializing, 'asking for a friend')
+        Intention-labels (socializing, asking for a friend)
         Inferred-request-type
 '''
 
@@ -24,6 +26,7 @@ import nltk
 import text_ops
 from utf_print import utf_print
 from xdv import xdv, set_xdv_verbosity
+
 
 class PosFilter:
     '''Filter out some parts of speech, such as adverbs'''
@@ -80,7 +83,7 @@ def main():
         exit(0)
     set_xdv_verbosity(args.verbose)
 
-    #print('======== Remove Adverbs [RB] ==================================================')
+    # print('======== Remove Adverbs [RB] ==================================================')
     filter = PosFilter()
     for quands in text_ops.filter_file(filter, args.text_spec, charset=args.encoding):
         if quands[0]:
