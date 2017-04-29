@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-# Sprax Lines       2016.12.27      Written with Python 3.5
+# Sprax Lines       2016.12.27-2017     Written with Python 3.5
 '''
-Process some questions:
+Process some questions from text file:
     Extract questions [and answers or spans] from:
         open text, structured text, xml, html, or csv
         Classify spans as:
@@ -51,9 +51,11 @@ class PosFilter:
         return questions, sentences
 
     def is_question(self, sentence):
+        '''True if sentence is a question'''
         if sentence[-1] == '?':
             return True
         return False
+
 
 def join_tokenized(tokens):
     '''Join tokens into a sentence; partial inverse of word_tokenize.'''
@@ -84,8 +86,8 @@ def main():
     set_xdv_verbosity(args.verbose)
 
     # print('======== Remove Adverbs [RB] ==================================================')
-    filter = PosFilter()
-    for quands in text_ops.filter_file(filter, args.text_spec, charset=args.encoding):
+    pos_filter = PosFilter()
+    for quands in text_ops.filter_file(pos_filter, args.text_spec, charset=args.encoding):
         if quands[0]:
             utf_print('  '.join(quands[0]))
     #print('======== Remove Adjectives [JJ] ===============================================')

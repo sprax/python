@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # Sprax Lines       2016.12.27
 '''Filter POS-tagged text'''
 
