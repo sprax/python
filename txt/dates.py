@@ -22,12 +22,7 @@ def print_dates(out_format, start_date, offset_days, num_days, per_day, verbose)
         if verbose > 2:
             print(tstm)
         dstr = time.strftime(out_format, tstm)
-        if tstm.tm_wday < 5:
-            locs = 'Home/CIC'
-        elif tstm.tm_wday == 5:
-            locs = 'Home/NH'
-        else:
-            locs = 'Home/MIT'
+        locs = day_locs(tstm.tm_wday)
         # code = DAY_CODES[tstm.tm_wday]
         # print(tstm)
         # print("%s ==> %s %s\t%s" % (date, dstr, code, locs))
@@ -37,6 +32,14 @@ def print_dates(out_format, start_date, offset_days, num_days, per_day, verbose)
         else:
             print("%s\t%s" % (dstr, locs))
         date += datetime.timedelta(days=1)
+
+def day_locs(wday):
+    ans = 'Home'
+    if wday < 5:
+        ans += '/Talla'
+    if wday in [1, 4, 6]:  # Tues or Friday
+        ans += '/CFC'
+    return ans
 
 def try_parse_date(text, in_formats):
     '''Try to extract a date by matching the input date formats.'''
