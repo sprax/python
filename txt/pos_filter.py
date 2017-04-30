@@ -31,7 +31,7 @@ class PosFilter:
         for sentence in sentences:
             out_sent = self.filter_sentence(sentence)
             filtered.extend(out_sent)
-        return join_tokenized(filtered)
+        return ' '.join(filtered)
 
     def filter_sentence(self, sentence):
         xdv(1)
@@ -66,7 +66,7 @@ class PosFilter:
                     inside = False
                     precon = []
                     xdv(5, "INSIDE precon:", precon)
-        return output
+        return join_tokenized(output)
 
 def join_tokenized(tokens):
     '''Join tokens into a sentence; partial inverse of word_tokenize.'''
@@ -87,11 +87,18 @@ def pos_filter_file(file_spec, charset='utf8'):
     for sent in text_ops.filter_file(pos_filter, file_spec, charset):
         print(sent)
 
-#FIXME
-def pos_filter_sentences(file_spec, charset='utf8'):
-    '''filter one sentence'''
-    raise("IMPLEMENT ME: pos_filter_sentences")
-    return
+def pos_filter_sentences(file_spec, para_filters, verbose, charset='utf8'):
+    '''filter sentences from a file'''
+    for paragraph in text_ops.para_iter_file(file_spec, charset):
+        filtered = []
+        sentences = nltk.sent_tokenize(paragraph)
+        for sentence in sentences:
+            for filt in para_filters:
+                sentence = filt.filter_sentence(sentence)
+                if verbose > 0:
+                    print(sentence)
+            filtered.extend(sentence)
+    return '  '.join(filtered)
 
 
 ###############################################################################
@@ -123,7 +130,8 @@ def main():
     if args.all:
         pos_filter_file(args.text_spec, args.charset)
     else:
-        pos_filter_sentences(args.text_spec, args.charset)
+        para_filters = [PosFilter(), PosFilter(['JJ'], ['RB', 'CC', ',']), PosFilter(['JJ','RB'], ['RB', 'CC', ','])]
+        pos_filter_sentences(args.text_spec, para_filters, args.verbose, args.charset)
 
 if __name__ == '__main__':
     main()
