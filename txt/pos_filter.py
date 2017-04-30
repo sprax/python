@@ -29,45 +29,70 @@ class PosFilter:
         filtered = []
         sentences = nltk.sent_tokenize(paragraph)
         for sentence in sentences:
-            xdv(1)
-            xdv(1, sentence)
-            inside = False
-            output = []
-            tokens = nltk.word_tokenize(sentence)
-            tagged = nltk.pos_tag(tokens)
-            precon = []
-            for (tok, tag) in tagged:
-                if tag in self.out_tags:
-                    if not inside:
-                        inside = True
-                        precon = []
-                    if tag == 'RB' and tok in self.negatives:
-                        output.append(tok)
-                        xdv(3, "Preserve neg:", tag, tok)
-                    else:
-                        xdv(2, "Filter out:", tag, tok)
-                elif inside and tag in self.con_tags:
-                    xdv(4, "Filter con?", tag, tok)
-                    precon.append(tok)      # push
-                else:
-                    # TODO: Heuristics!
-                    if output and len(precon) > 1 and (precon[-2] != precon[-1] or tag == 'PRP'):
-                        con = precon.pop()
-                        xdv(3, "Append con:", con)
-                        output.append(con)
-                    xdv(4, "Append tok:", tag, tok)
+            out_sent = self.filter_sentence(sentence)
+            filtered.extend(out_sent)
+        return join_tokenized(filtered)
+
+    def filter_sentence(self, sentence):
+        xdv(1)
+        xdv(1, sentence)
+        inside = False
+        output = []
+        tokens = nltk.word_tokenize(sentence)
+        tagged = nltk.pos_tag(tokens)
+        precon = []
+        for (tok, tag) in tagged:
+            if tag in self.out_tags:
+                if not inside:
+                    inside = True
+                    precon = []
+                if tag == 'RB' and tok in self.negatives:
                     output.append(tok)
-                    if inside:
-                        inside = False
-                        precon = []
-                        xdv(5, "INSIDE precon:", precon)
-            filtered.extend(output)
-        return join_tokenized(output)
+                    xdv(3, "Preserve neg:", tag, tok)
+                else:
+                    xdv(2, "Filter out:", tag, tok)
+            elif inside and tag in self.con_tags:
+                xdv(4, "Filter con?", tag, tok)
+                precon.append(tok)      # push
+            else:
+                # TODO: Heuristics!
+                if output and len(precon) > 1 and (precon[-2] != precon[-1] or tag == 'PRP'):
+                    con = precon.pop()
+                    xdv(3, "Append con:", con)
+                    output.append(con)
+                xdv(4, "Append tok:", tag, tok)
+                output.append(tok)
+                if inside:
+                    inside = False
+                    precon = []
+                    xdv(5, "INSIDE precon:", precon)
+        return output
 
 def join_tokenized(tokens):
     '''Join tokens into a sentence; partial inverse of word_tokenize.'''
     return "".join([" "+i if not i.startswith("'") and i not in string.punctuation and i not in ["n't"]
         else i for i in tokens]).strip()
+
+def pos_filter_file(file_spec, charset='utf8'):
+    print('======== Remove Adverbs [RB] ==================================================')
+    pos_filter = PosFilter()
+    for sent in text_ops.filter_file(pos_filter, file_spec, charset):
+        print(sent)
+    print('======== Remove Adjectives [JJ] ===============================================')
+    pos_filter = PosFilter(['JJ'], ['RB', 'CC', ','])
+    for sent in text_ops.filter_file(pos_filter, file_spec, charset):
+        print(sent)
+    print('======== Remove Adv and Adj [JJ, RB] ==========================================')
+    pos_filter = PosFilter(['JJ','RB'], ['RB', 'CC', ','])
+    for sent in text_ops.filter_file(pos_filter, file_spec, charset):
+        print(sent)
+
+#FIXME
+def pos_filter_sentences(file_spec, charset='utf8'):
+    '''filter one sentence'''
+    raise("IMPLEMENT ME: pos_filter_sentences")
+    return
+
 
 ###############################################################################
 
@@ -78,6 +103,10 @@ def main():
         description="Extractive text summarizer")
     parser.add_argument('text_spec', type=str, nargs='?', default='corpus.txt',
                         help='text file containing text to summarize')
+    parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
+                        help='output only the indices of summary sentences')
+    parser.add_argument('-all', action='store_true',
+                        help='filter all input at once (as opposed to sentence-by-sentence')
     parser.add_argument('-list_numbers', action='store_true',
                         help='output list number for each filtered sentence')
     parser.add_argument('-verbose', type=int, nargs='?', const=2, default=2,
@@ -90,18 +119,11 @@ def main():
         exit(0)
     set_xdv_verbosity(args.verbose)
 
-    print('======== Remove Adverbs [RB] ==================================================')
-    filter = PosFilter()
-    for sent in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
-        print(sent)
-    print('======== Remove Adjectives [JJ] ===============================================')
-    filter = PosFilter(['JJ'], ['RB', 'CC', ','])
-    for sent in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
-        print(sent)
-    print('======== Remove Adv and Adj [JJ, RB] ==========================================')
-    filter = PosFilter(['JJ','RB'], ['RB', 'CC', ','])
-    for sent in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
-        print(sent)
+
+    if args.all:
+        pos_filter_file(args.text_spec, args.charset)
+    else:
+        pos_filter_sentences(args.text_spec, args.charset)
 
 if __name__ == '__main__':
     main()

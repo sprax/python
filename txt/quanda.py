@@ -12,6 +12,7 @@ import text_ops
 from utf_print import utf_print
 from xdv import xdv, set_xdv_verbosity
 
+
 class PosFilter:
     '''Filter out some parts of speech, such as adverbs'''
 
@@ -66,8 +67,8 @@ def main():
     set_xdv_verbosity(args.verbose)
 
     print('======== Remove Adverbs [RB] ==================================================')
-    filter = PosFilter()
-    for sent in text_ops.filter_file(filter, args.text_spec, charset='utf8'):
+    pos_filter = PosFilter()
+    for sent in text_ops.filter_file(pos_filter, args.text_spec, charset='utf8'):
         print(sent)
     print('======== Remove Adjectives [JJ] ===============================================')
     print('======== Remove Adv and Adj [JJ, RB] ==========================================')
