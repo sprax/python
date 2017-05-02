@@ -1,10 +1,10 @@
 # loops.py
 for j in range(10):
-    print(j, end=',')    
+    print(j, end=',')
 print()
 
 k = 9
-while (k >= 0):
+while k >= 0:
     print(k, end=' ')
     k = k-1
 print('\n')
@@ -40,7 +40,7 @@ print(fib(0))
 
 def printFibGen(n):    # write Fibonacci series up to n
     """Print a Fibonacci series up to n."""
-    print([ y for y in fib_generate(n)] )
+    print([y for y in fib_generate(n)])
 
 printFibGen(18)
 
@@ -55,9 +55,9 @@ def ask_ok(prompt, retries=4, complaint='Yes or no, please!'):
         if retries < 0:
             raise IOError('refusenik user')
         print(complaint)
-        
-ok = ask_ok("You got it? ") 
+
+ok = ask_ok("You got it? ")
 if ok:
     print("You got it!")
 else:
-    print("You don't got it.") 
+    print("You don't got it.")
