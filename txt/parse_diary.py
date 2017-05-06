@@ -62,7 +62,6 @@ def replace_dates(texts, in_formats, out_format, verbose):
         texts_out.append(text_out)
     return texts_out
 
-
 def reformat_journal(jrnl_file, in_formats, out_format, verbose):
     '''rewrite journal file in canonical format'''
     print("convert diary to jrnl format: out_format:", out_format)
