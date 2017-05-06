@@ -34,11 +34,10 @@ def open_out_file(file_spec, label='text'):
         return None
 
 def read_lines(file_spec, charset='utf8'):
-    '''read and return all lines of a text file as a list of str'''
+    '''read and yield all lines of a text file as a iter of str'''
     with open(file_spec, 'r', encoding=charset) as text:
         for line in text:
-            # utf_print(line.rstrip())
-            yield line.rstrip()
+             yield line.rstrip()
 
 def read_file(file_spec, charset='utf8'):
     '''read and return all contents of file as one str'''
@@ -116,7 +115,7 @@ def unit_test(text_file, opt):
     """Output a summary of a text file."""
 
     # Read initial text corpus:
-    # text = read_file(text_file, charset)
+    text = read_file(text_file, opt.charset)
 
     # Try to open output (file):
     out_file = open_out_file(opt.out_file)
@@ -124,6 +123,12 @@ def unit_test(text_file, opt):
     # Announce output:
     print(text_file, '====>', '<stdout>' if out_file == sys.stdout else opt.out_file)
     print('-------------------------------------------------------------------')
+
+    if (opt.repr):
+        print(repr(text), file=out_file)
+    else:
+        print(text, file=out_file)
+
     if out_file and out_file != sys.stdout:
         out_file.close()
 
@@ -136,6 +141,8 @@ def main():
         description="Extractive text summarizer")
     parser.add_argument('text_file', type=str, nargs='?', default='corpus.txt',
                         help='file containing text to summarize')
+    parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
+                        help='charset encoding of input text')
     parser.add_argument('-index', dest='indices_only', action='store_true',
                         help='output only the indices of summary sentences')
     parser.add_argument('-list_numbers', action='store_true',
@@ -151,6 +158,8 @@ def main():
     parser.add_argument('-percent', dest='sum_percent', type=float, nargs='?',
                         const=16.6667, default=10.0,
                         help='percentage of sentences to keep (default: 10.0%%)')
+    parser.add_argument('-repr', action='store_true',
+                        help='output repr of data, not raw data')
     parser.add_argument('-serial', action='store_true',
                         help='summarize each paragraph in series')
     parser.add_argument('-truncate', dest='max_print_words', type=int, nargs='?',
