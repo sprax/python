@@ -83,8 +83,8 @@ def utf_print_words(fspec):
                     utf_print(word)
             utf_print(words)
 
-def print_words(file_spec):
-    '''print all white-space separated words read from a file'''
+def print_file_words(file_spec):
+    '''Open a file 'r' and print all its white-space separated words.'''
     with open(file_spec, 'r') as text:
         for line in text:
             words = re.split(r'\W+', line.rstrip())
@@ -92,6 +92,15 @@ def print_words(file_spec):
                 if len(word) > 0:
                     print(word)
             print(words)
+
+def print_words(text_iter):
+    '''print all white-space separated words read from a text iter (e.g. text file handle)'''
+    for line in text_iter:
+        words = re.split(r'\W+', line.rstrip())
+        for word in words:
+            if len(word) > 0:
+                print(word)
+        print(words)
 
 def print_sentences(sentences, list_numbers, max_words, out_file):
     '''print sentences or any enumerable collection of text to an open file'''
