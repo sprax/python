@@ -16,6 +16,10 @@ def cwd():
     '''current working directory'''
     return os.path.dirname(os.path.realpath('.'))
 
+def print_stdout_stderr(text):
+    print("sys.stdout: ", text, file=sys.stdout)
+    print("sys.stderr: ", text, file=sys.stderr)
+
 def open_out_file(file_spec, label='text'):
     '''returns a file handle open for writing, to be closed by the caller, else None'''
     if file_spec:
@@ -152,6 +156,8 @@ def main():
                         help='file containing text to summarize')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
+    parser.add_argument('-error', dest='error_text', type=str, default='log this msg',
+                        help='write same message to stderr and stdout, then exit')
     parser.add_argument('-index', dest='indices_only', action='store_true',
                         help='output only the indices of summary sentences')
     parser.add_argument('-list_numbers', action='store_true',
@@ -177,6 +183,10 @@ def main():
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
+
+    if args.error_text:
+        print_stdout_stderr(args.error_text)
+        exit(1)
 
     if args.verbose > 3:
         print("outfile: <{}>".format(args.out_file))
