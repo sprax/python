@@ -3,6 +3,16 @@
 '''
 CIRTIFY: Can I Rephrase That Idea For You?
 Interactive paraphrasing program.
+Goals:
+    1.  Parse words of initial idea to guess what it is: Question, Statement, Topic, ...
+            Verify guess, as needed, to decide top-level class (QST-class), and go to 2.
+    2.  Use QST-class to parse: PoS-tags, tree, etc., and identify topic(s) with confidence
+        Loop: When confidence is sufficient, go to 3.
+            Dialog: ask questions to clarify
+    3.  Suggest a paraphrase in a canonical-form and ask:
+            Yes/Done, No/Refine, Add/More paraphrases, Cancel/Abandon
+        Loop: When yes, save and go to 4, or if cancel, delete and go to 4.
+    4.  Acknowledge Finish or Canceled.
 '''
 
 import argparse
