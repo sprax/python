@@ -44,20 +44,31 @@ def printFibGen(n):    # write Fibonacci series up to n
 
 printFibGen(18)
 
-def ask_ok(prompt, retries=4, complaint='Yes or no, please!'):
+def ask_yes_no(prompt, retries=4, complaint='Yes or no, please!', default=False):
     while True:
-        ok = input(prompt)
-        if ok in ('y', 'ye', 'yep', 'yes'):
+        answer = input(prompt)
+        yesno = answer.lower()
+        if yesno.lower() in ('y', 'ye', 'yep', 'yes'):
             return True
-        if ok in ('n', 'no', 'nop', 'nope'):
+        if yesno in ('n', 'no', 'nop', 'nope'):
             return False
         retries = retries - 1
         if retries < 0:
-            raise IOError('refusenik user')
+            return default
         print(complaint)
 
-ok = ask_ok("You got it? ")
-if ok:
-    print("You got it!")
-else:
-    print("You don't got it.")
+def throw_io_error():
+    raise IOError('refusenik user')
+
+def constant_factory(value):
+    return lambda: value
+
+def ask_you_got_it():
+    if ask_yes_no("You got it? ", 3, "Give it a yes or no."):
+        print("You got it!")
+    else:
+        print("You don't got it.")
+
+if __name__ == '__main__':
+    ask_you_got_it()
+
