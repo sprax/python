@@ -44,7 +44,13 @@ def printFibGen(n):    # write Fibonacci series up to n
 
 printFibGen(18)
 
-def ask_yes_no(prompt, retries=4, complaint='Yes or no, please!', default=False):
+def throw_io_error():
+    raise IOError('refusenik user')
+
+def constant_factory(value):
+    return lambda: value
+
+def ask_yes_no(prompt, retries=3, complaint='Yes or no, please!', default_function=constant_factory(False)):
     while True:
         answer = input(prompt)
         yesno = answer.lower()
@@ -53,18 +59,12 @@ def ask_yes_no(prompt, retries=4, complaint='Yes or no, please!', default=False)
         if yesno in ('n', 'no', 'nop', 'nope'):
             return False
         retries = retries - 1
-        if retries < 0:
-            return default
+        if retries <= 0:
+            return default_function()
         print(complaint)
 
-def throw_io_error():
-    raise IOError('refusenik user')
-
-def constant_factory(value):
-    return lambda: value
-
 def ask_you_got_it():
-    if ask_yes_no("You got it? ", 3, "Give it a yes or no."):
+    if ask_yes_no("You got it? ", 2, "Give it a yes or no.", default_function=throw_io_error):
         print("You got it!")
     else:
         print("You don't got it.")
