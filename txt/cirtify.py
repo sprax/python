@@ -101,13 +101,13 @@ def cirtify():
         parts = get_parts(user_input)
         if len(parts) == 1 and 'NN' in parts:
             topic = None
-            for val in parts.values():
-                yesno = ask_yes_no("Is the topic %s?" % (val))
+            for val in parts['NN']:
+                yesno = ask_yes_no("So you want to talk about %s?\n\t" % (val))
                 if yesno:
                     topic = val
                     break
             if topic:
-                resp = "Do you wish to ask a question about %s?" % topic        
+                resp = "Do you wish to ask a question about %s?\n\t" % topic
         else:
             funcs = [f for (n, f) in Responses.__dict__.items() if callable(f)]
             while True:
