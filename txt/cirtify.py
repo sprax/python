@@ -19,12 +19,52 @@ import argparse
 import datetime
 import errno
 import os.path
+import random
 import re
 import sys
 from utf_print import utf_print
 import text_ops
 import time
+import nltk
 
+PROMPT = '> '
+INITIAL_PROMPT = 'How are you feeling?'
+
+class Responses:
+    def response_stock(parts):
+        return random.choice(["How do you feel about that?", "What's your favourite animal?", "Tell me about your mother?"])
+
+    def response_noun1(parts):
+        responses = ["Why do you like %s?", "What do you like most about %s?", "Tell me more about %s?"]
+        if 'NN' in parts:
+            return random.choice(responses) % random.choice(parts['NN'])
+
+    def response_nouns2(parts):
+        if 'NN' in parts:
+            noun = random.choice(parts['NN'])
+            return "%s, %s, %s! Can you talk about something else please!" % (noun, noun.title(), noun.upper())
+
+    def response_nouns1(parts):
+        responses = ["Tell me how %s make you feel?"]
+        if 'NNS' in parts:
+            return random.choice(responses) % random.choice(parts['NNS'])
+
+    def response_verb1(parts):
+        if 'VB' in parts:
+            verb = random.choice(parts['VB'])
+            day = random.choice('Mondays Wednesdays Toast Acid'.split())
+            return "Wow, I love to %s too, especially on %s. When do you like to %s?" % (verb, day, verb)
+
+def get_parts(text):
+    text = nltk.word_tokenize(text)
+    parts = nltk.pos_tag(text)
+    dic = {}
+    for work, part in parts:
+        if part in dic:
+            dic[part].append(work)
+        else:
+            dic[part] = [work]
+    return dic
 
 
 def throw_io_error():
@@ -51,13 +91,21 @@ def ask_for_new_idea():
     return sentence
 
 def cirtify():
+    output = "Please give me a sentence to paraphrase, or an empty line to quit:"
     while True:
-        sentence = ask_for_new_idea()
-        if sentence:
-            print("Let me try to rephrase that for you.  You said:\n\t{}".format(sentence))
-        else:
+        sentence = input(PROMPT + output + "\n\t")
+        if not sentence:
             print("Thanks for playing.")
             return
+        print("Let me try to rephrase that for you.  You said:\n\t{}".format(sentence))
+        parts = get_parts(sentence)
+        funcs = [f for (n, f) in Responses.__dict__.items() if callable(f)]
+        while True:
+            resp = random.choice(funcs)
+            funcs.remove(resp)
+            output = resp(parts)
+            if output:
+                break
 
 def main():
     cirtify()
