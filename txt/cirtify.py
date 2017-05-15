@@ -45,7 +45,7 @@ class Responses:
             return "%s, %s, %s! Can you talk about something else please!" % (noun, noun.title(), noun.upper())
 
     def response_nouns1(parts):
-        responses = ["Tell me how %s make you feel?"]
+        responses = ["Tell me how %s make you feel?", "You want to tell me how you feel about %s?"]
         if 'NNS' in parts:
             return random.choice(responses) % random.choice(parts['NNS'])
 
@@ -93,19 +93,29 @@ def ask_for_new_idea():
 def cirtify():
     output = "Please give me a sentence to paraphrase, or an empty line to quit:"
     while True:
-        sentence = input(PROMPT + output + "\n\t")
-        if not sentence:
+        user_input = input(PROMPT + output + "\n\t")
+        if not user_input:
             print("Thanks for playing.")
             return
-        print("Let me try to rephrase that for you.  You said:\n\t{}".format(sentence))
-        parts = get_parts(sentence)
-        funcs = [f for (n, f) in Responses.__dict__.items() if callable(f)]
-        while True:
-            resp = random.choice(funcs)
-            funcs.remove(resp)
-            output = resp(parts)
-            if output:
-                break
+        print("Let me try to rephrase that for you.  You said:\n\t{}".format(user_input))
+        parts = get_parts(user_input)
+        if len(parts) == 1 and 'NN' in parts:
+            topic = None
+            for val in parts.values():
+                yesno = ask_yes_no("Is the topic %s?" % (val))
+                if yesno:
+                    topic = val
+                    break
+            if topic:
+                resp = "Do you wish to ask a question about %s?" % topic        
+        else:
+            funcs = [f for (n, f) in Responses.__dict__.items() if callable(f)]
+            while True:
+                resp = random.choice(funcs)
+                funcs.remove(resp)
+                output = resp(parts)
+                if output:
+                    break
 
 def main():
     cirtify()
