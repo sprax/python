@@ -87,6 +87,23 @@ def ask_for_new_idea():
     sentence = input("Please give me a sentence to paraphrase, or an empty line to quit:\n\t")
     return sentence
 
+def find_topic(sentence):
+    parts = get_parts_of_speech(sentence)
+    print("parts is", parts)
+    for val in parts['NNP']:
+        yesno = ask_yes_no("So you want to talk about %s?\n\t" % (val))
+        if yesno:
+           return val
+    for val in parts['NN']:
+        yesno = ask_yes_no("Do you wish to ask a question about %s?\n\t" % val)
+        if yesno:
+            return val
+    for val in parts['NNS']:
+        yesno = ask_yes_no("Is the topic %s?\n\t" % val)
+        if yesno:
+            return val
+    return None
+
 def cirtify():
     output = "Please give me a sentence to paraphrase, or an empty line to quit:"
     while True:
@@ -96,25 +113,7 @@ def cirtify():
             return
         parts = get_parts_of_speech(user_input)
         print("Let me try to rephrase that for you.  You said:\n\t{}".format(user_input))
-        print("parts is", parts)
-        topic = None
-        for val in parts['NNP']:
-            yesno = ask_yes_no("So you want to talk about %s?\n\t" % (val))
-            if yesno:
-               topic = val
-            break
-        if not topic:
-            for val in parts['NN']:
-                yesno = ask_yes_no("Do you wish to ask a question about %s?\n\t" % val)
-                if yesno:
-                    topic = val
-                    break
-        if not topic:
-            for val in parts['NNS']:
-                yesno = ask_yes_no("Is the topic %s?\n\t" % val)
-                if yesno:
-                    topic = val
-                    break
+        topic = find_topic(user_input)
         if topic:
             print("Great!  Let's talk about", topic)
             break
