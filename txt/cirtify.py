@@ -105,21 +105,24 @@ def find_topic(sentence, verbose=0):
             return val
     return None
 
-def get_input_text(previous):
-    return input(PROMPT % previous)
+def get_input_text(in_prompt):
+    return input(PROMPT % in_prompt)
 
 
 class InputText(object):
-    def read(self):
+    def read_next(self):
         raise NotImplementedError
 
 class CliInputText(InputText):
-    def __init__(self, prompt = '> %s\n\t'):
+    def __init__(self, prompt = '> %s\n\t', farewell="Thanks for playing."):
         super().__init__()
         self.prompt = prompt
 
-    def read(self, previous):
-        return input(self.prompt % previous)
+    def read_next(self, in_prompt):
+        input_text = input(self.prompt % in_prompt)
+        if not input_text:
+            print(farewell)
+        return input_text
 
 
 class NLPText:
@@ -129,11 +132,10 @@ class NLPText:
 def cirtify(verbose=0):
     output = "Please give me a sentence to paraphrase, or an empty line to quit:"
     cli_reader = CliInputText()
+    # INPUT: Get next input (phrase, sentence, or paragraph)
     while True:
-        # INPUT: Get next input (phrase, sentence, or paragraph)
-        input_text = cli_reader.read(output)
+        input_text = cli_reader.read_next(output)
         if not input_text:
-            print("Thanks for playing.")
             return
         # CLASSIFY: What is it?  Word, phrase, sentence, or paragraph?
         nlpt = NLPText(input_text)
