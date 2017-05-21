@@ -28,8 +28,7 @@ import time
 import nltk
 from collections import defaultdict
 
-PROMPT = '> '
-INITIAL_PROMPT = 'How are you feeling?'
+PROMPT = '> %s\n\t'
 
 class Responses:
     def response_stock(parts):
@@ -56,9 +55,11 @@ class Responses:
             day = random.choice('Mondays Wednesdays Toast Acid'.split())
             return "Wow, I love to %s too, especially on %s. When do you like to %s?" % (verb, day, verb)
 
-def get_parts_of_speech(text):
+def get_parts_of_speech(text, verbose=0):
     text = nltk.word_tokenize(text)
     parts = nltk.pos_tag(text)
+    if verbose:
+        print("parts tags:", parts)
     dic = defaultdict(list)
     for word, part in parts:
         dic[part].append(word)
@@ -87,9 +88,9 @@ def ask_for_new_idea():
     sentence = input("Please give me a sentence to paraphrase, or an empty line to quit:\n\t")
     return sentence
 
-def find_topic(sentence):
-    parts = get_parts_of_speech(sentence)
-    print("parts is", parts)
+def find_topic(sentence, verbose=0):
+    parts = get_parts_of_speech(sentence, verbose)
+    print("parts DD is", parts)
     for val in parts['NNP']:
         yesno = ask_yes_no("So you want to talk about %s?\n\t" % (val))
         if yesno:
@@ -104,18 +105,23 @@ def find_topic(sentence):
             return val
     return None
 
-def cirtify():
+def get_input_text(previous):
+    return input(PROMPT % previous)
+
+def cirtify(verbose=0):
     output = "Please give me a sentence to paraphrase, or an empty line to quit:"
     while True:
-        user_input = input(PROMPT + output + "\n\t")
-        if not user_input:
+        # INPUT: Get next input (phrase, sentence, or paragraph)
+        input_text = get_input_text(output)
+        if not input_text:
             print("Thanks for playing.")
             return
-        parts = get_parts_of_speech(user_input)
-        print("Let me try to rephrase that for you.  You said:\n\t{}".format(user_input))
-        topic = find_topic(user_input)
+        # CLASSIFY: What is it?  Word, phrase, sentence, or paragraph?
+        parts = get_parts_of_speech(input_text, verbose)
+        topic = find_topic(input_text)
         if topic:
-            print("Great!  Let's talk about", topic)
+            print("Can I rephrase that idea for you?  The topic is {}, and you said:\n\t{}".format(
+                topic, input_text))
             break
         else:
             funcs = [f for (n, f) in Responses.__dict__.items() if callable(f)]
@@ -127,7 +133,8 @@ def cirtify():
                     break
 
 def main():
-    cirtify()
+    verbose = 1
+    cirtify(verbose)
 
 if __name__ == '__main__':
     main()
