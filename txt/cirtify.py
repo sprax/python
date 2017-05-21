@@ -108,16 +108,36 @@ def find_topic(sentence, verbose=0):
 def get_input_text(previous):
     return input(PROMPT % previous)
 
+
+class InputText(object):
+    def read(self):
+        raise NotImplementedError
+
+class CliInputText(InputText):
+    def __init__(self, prompt = '> %s\n\t'):
+        super().__init__()
+        self.prompt = prompt
+
+    def read(self, previous):
+        return input(self.prompt % previous)
+
+
+class NLPText:
+    def __init__(self, text):
+        self.text = text
+
 def cirtify(verbose=0):
     output = "Please give me a sentence to paraphrase, or an empty line to quit:"
+    cli_reader = CliInputText()
     while True:
         # INPUT: Get next input (phrase, sentence, or paragraph)
-        input_text = get_input_text(output)
+        input_text = cli_reader.read(output)
         if not input_text:
             print("Thanks for playing.")
             return
         # CLASSIFY: What is it?  Word, phrase, sentence, or paragraph?
-        parts = get_parts_of_speech(input_text, verbose)
+        nlpt = NLPText(input_text)
+        parts = get_parts_of_speech(nlpt.text, verbose)
         topic = find_topic(input_text)
         if topic:
             print("Can I rephrase that idea for you?  The topic is {}, and you said:\n\t{}".format(
