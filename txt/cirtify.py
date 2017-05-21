@@ -26,6 +26,7 @@ from utf_print import utf_print
 import text_ops
 import time
 import nltk
+from collections import defaultdict
 
 PROMPT = '> '
 INITIAL_PROMPT = 'How are you feeling?'
@@ -55,17 +56,13 @@ class Responses:
             day = random.choice('Mondays Wednesdays Toast Acid'.split())
             return "Wow, I love to %s too, especially on %s. When do you like to %s?" % (verb, day, verb)
 
-def get_parts(text):
+def get_parts_of_speech(text):
     text = nltk.word_tokenize(text)
     parts = nltk.pos_tag(text)
-    dic = {}
-    for work, part in parts:
-        if part in dic:
-            dic[part].append(work)
-        else:
-            dic[part] = [work]
+    dic = defaultdict(list)
+    for word, part in parts:
+        dic[part].append(word)
     return dic
-
 
 def throw_io_error():
     raise IOError('refusenik user')
@@ -97,17 +94,30 @@ def cirtify():
         if not user_input:
             print("Thanks for playing.")
             return
+        parts = get_parts_of_speech(user_input)
         print("Let me try to rephrase that for you.  You said:\n\t{}".format(user_input))
-        parts = get_parts(user_input)
-        if len(parts) == 1 and 'NN' in parts:
-            topic = None
+        print("parts is", parts)
+        topic = None
+        for val in parts['NNP']:
+            yesno = ask_yes_no("So you want to talk about %s?\n\t" % (val))
+            if yesno:
+               topic = val
+            break
+        if not topic:
             for val in parts['NN']:
-                yesno = ask_yes_no("So you want to talk about %s?\n\t" % (val))
+                yesno = ask_yes_no("Do you wish to ask a question about %s?\n\t" % val)
                 if yesno:
                     topic = val
                     break
-            if topic:
-                resp = "Do you wish to ask a question about %s?\n\t" % topic
+        if not topic:
+            for val in parts['NNS']:
+                yesno = ask_yes_no("Is the topic %s?\n\t" % val)
+                if yesno:
+                    topic = val
+                    break
+        if topic:
+            print("Great!  Let's talk about", topic)
+            break
         else:
             funcs = [f for (n, f) in Responses.__dict__.items() if callable(f)]
             while True:
