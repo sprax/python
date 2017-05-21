@@ -55,9 +55,20 @@ class Responses:
             day = random.choice('Mondays Wednesdays Toast Acid'.split())
             return "Wow, I love to %s too, especially on %s. When do you like to %s?" % (verb, day, verb)
 
+class PartsOfSpeechMixin(object):
+    def get_parts_of_speech(self, verbose=0):
+        self.words = nltk.word_tokenize(self.text)
+        self.parts = nltk.pos_tag(self.words)
+        if verbose:
+            print("parts tags:", self.parts)
+        self.dic = defaultdict(list)
+        for word, part in self.parts:
+            self.dic[part].append(word)
+        return self.dic
+
 def get_parts_of_speech(text, verbose=0):
-    text = nltk.word_tokenize(text)
-    parts = nltk.pos_tag(text)
+    words = nltk.word_tokenize(text)
+    parts = nltk.pos_tag(words)
     if verbose:
         print("parts tags:", parts)
     dic = defaultdict(list)
@@ -117,29 +128,27 @@ class CliInputText(InputText):
     def __init__(self, prompt = '> %s\n\t', farewell="Thanks for playing."):
         super().__init__()
         self.prompt = prompt
+        self.farewell = farewell
 
     def read_next(self, in_prompt):
         input_text = input(self.prompt % in_prompt)
         if not input_text:
-            print(farewell)
+            print(self.farewell)
         return input_text
 
 
-class NLPText:
+class NLPText(PartsOfSpeechMixin):
     def __init__(self, text):
         self.text = text
 
 def cirtify(verbose=0):
-    output = "Please give me a sentence to paraphrase, or an empty line to quit:"
-    cli_reader = CliInputText()
+    cli = CliInputText()
     # INPUT: Get next input (phrase, sentence, or paragraph)
-    while True:
-        input_text = cli_reader.read_next(output)
-        if not input_text:
-            return
+    input_text = cli.read_next("Please give me a sentence to paraphrase, or hit return to quit:")
+    while input_text:
         # CLASSIFY: What is it?  Word, phrase, sentence, or paragraph?
         nlpt = NLPText(input_text)
-        parts = get_parts_of_speech(nlpt.text, verbose)
+        parts = nlpt.get_parts_of_speech(verbose)
         topic = find_topic(input_text)
         if topic:
             print("Can I rephrase that idea for you?  The topic is {}, and you said:\n\t{}".format(
@@ -153,6 +162,7 @@ def cirtify(verbose=0):
                 output = resp(parts)
                 if output:
                     break
+        input_text = cli.read_next(output)
 
 def main():
     verbose = 1
