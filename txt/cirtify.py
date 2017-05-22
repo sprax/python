@@ -126,7 +126,7 @@ def get_tags_to_words_map(text, verbose=0):
         dic[part].append(word)
     return dic
 
-class PartsOfSpeechMixin(object):
+class PartsOfSpeechInterface(object):
     def get_tags_to_words_map(self, verbose=0):
         raise NotImplementedError
 
@@ -136,8 +136,9 @@ class PartsOfSpeechMixin(object):
     def get_word_tokens(self, verbose=0):
         raise NotImplementedError
 
-class PartsOfSpeechNLTK(PartsOfSpeechMixin):
+class PartsOfSpeechNLTK(PartsOfSpeechInterface):
     def __init__(self, verbose=0):
+        # super().__init__(text)
         print("-------- inside PartsOfSpeechNLTK ----------")
         self.words = nltk.word_tokenize(self.text)
         self.parts = nltk.pos_tag(self.words)
@@ -156,11 +157,15 @@ class PartsOfSpeechNLTK(PartsOfSpeechMixin):
     def get_word_tokens(self, verbose=0):
         return self.words
 
-
 class NLPText(PartsOfSpeechNLTK):
     def __init__(self, text):
-        # super(NLPText, self).__init__(text)
         self.text = text
+
+class TaggedNLPText(PartsOfSpeechNLTK, NLPText):
+    def __init__(self, text):
+        super().__init__(text)
+        self.text = text
+
 
 def cirtify(verbose=0):
     cli = CliInputText()
@@ -168,7 +173,7 @@ def cirtify(verbose=0):
     input_text = cli.read_next("Please give me a sentence to paraphrase, or hit return to quit:")
     while input_text:
         # CLASSIFY: What is it?  Word, phrase, sentence, or paragraph?
-        nlpt = NLPText(input_text)
+        nlpt = TaggedNLPText(input_text)
         parts = nlpt.get_tags_to_words_map(verbose)
         topic = find_topic(input_text)
         if topic:
