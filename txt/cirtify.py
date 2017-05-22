@@ -55,26 +55,6 @@ class Responses:
             day = random.choice('Mondays Wednesdays Toast Acid'.split())
             return "Wow, I love to %s too, especially on %s. When do you like to %s?" % (verb, day, verb)
 
-class PartsOfSpeechMixin(object):
-    def get_parts_of_speech(self, verbose=0):
-        self.words = nltk.word_tokenize(self.text)
-        self.parts = nltk.pos_tag(self.words)
-        if verbose:
-            print("parts tags:", self.parts)
-        self.dic = defaultdict(list)
-        for word, part in self.parts:
-            self.dic[part].append(word)
-        return self.dic
-
-def get_parts_of_speech(text, verbose=0):
-    words = nltk.word_tokenize(text)
-    parts = nltk.pos_tag(words)
-    if verbose:
-        print("parts tags:", parts)
-    dic = defaultdict(list)
-    for word, part in parts:
-        dic[part].append(word)
-    return dic
 
 def throw_io_error():
     raise IOError('refusenik user')
@@ -100,7 +80,7 @@ def ask_for_new_idea():
     return sentence
 
 def find_topic(sentence, verbose=0):
-    parts = get_parts_of_speech(sentence, verbose)
+    parts = get_tags_to_words_map(sentence, verbose)
     print("parts DD is", parts)
     for val in parts['NNP']:
         yesno = ask_yes_no("So you want to talk about %s?\n\t" % (val))
@@ -136,9 +116,50 @@ class CliInputText(InputText):
             print(self.farewell)
         return input_text
 
+def get_tags_to_words_map(text, verbose=0):
+    words = nltk.word_tokenize(text)
+    parts = nltk.pos_tag(words)
+    if verbose:
+        print("parts tags:", parts)
+    dic = defaultdict(list)
+    for word, part in parts:
+        dic[part].append(word)
+    return dic
 
-class NLPText(PartsOfSpeechMixin):
+class PartsOfSpeechMixin(object):
+    def get_tags_to_words_map(self, verbose=0):
+        raise NotImplementedError
+
+    def get_word_tag_pairs(self, verbose=0):
+        raise NotImplementedError
+
+    def get_word_tokens(self, verbose=0):
+        raise NotImplementedError
+
+class PartsOfSpeechNLTK(PartsOfSpeechMixin):
+    def __init__(self, verbose=0):
+        print("-------- inside PartsOfSpeechNLTK ----------")
+        self.words = nltk.word_tokenize(self.text)
+        self.parts = nltk.pos_tag(self.words)
+        if verbose:
+            print("parts tags:", self.parts)
+        self.dic = defaultdict(list)
+        for word, part in self.parts:
+            self.dic[part].append(word)
+
+    def get_tags_to_words_map(self, verbose=0):
+        return self.dic
+
+    def get_word_tag_pairs(self, verbose=0):
+        return self.parts
+
+    def get_word_tokens(self, verbose=0):
+        return self.words
+
+
+class NLPText(PartsOfSpeechNLTK):
     def __init__(self, text):
+        # super(NLPText, self).__init__(text)
         self.text = text
 
 def cirtify(verbose=0):
@@ -148,7 +169,7 @@ def cirtify(verbose=0):
     while input_text:
         # CLASSIFY: What is it?  Word, phrase, sentence, or paragraph?
         nlpt = NLPText(input_text)
-        parts = nlpt.get_parts_of_speech(verbose)
+        parts = nlpt.get_tags_to_words_map(verbose)
         topic = find_topic(input_text)
         if topic:
             print("Can I rephrase that idea for you?  The topic is {}, and you said:\n\t{}".format(
