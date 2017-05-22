@@ -116,7 +116,13 @@ class CliInputText(InputText):
             print(self.farewell)
         return input_text
 
+class NLPText():
+    '''Base class'''
+    def __init__(self, text):
+        self.text = text
+
 def get_tags_to_words_map(text, verbose=0):
+    '''External method version of *get_parts*: throws away temp data'''
     words = nltk.word_tokenize(text)
     parts = nltk.pos_tag(words)
     if verbose:
@@ -127,6 +133,7 @@ def get_tags_to_words_map(text, verbose=0):
     return dic
 
 class PartsOfSpeechInterface(object):
+    '''Interface for *get_parts* functionality'''
     def get_tags_to_words_map(self, verbose=0):
         raise NotImplementedError
 
@@ -136,9 +143,10 @@ class PartsOfSpeechInterface(object):
     def get_word_tokens(self, verbose=0):
         raise NotImplementedError
 
-class PartsOfSpeechNLTK(PartsOfSpeechInterface):
-    def __init__(self, verbose=0):
-        # super().__init__(text)
+class PartsOfSpeechNLTK(PartsOfSpeechInterface, NLPText):
+    '''Concrete *get_parts* class'''
+    def __init__(self, text, verbose=0):
+        super().__init__(text)
         print("-------- inside PartsOfSpeechNLTK ----------")
         self.words = nltk.word_tokenize(self.text)
         self.parts = nltk.pos_tag(self.words)
@@ -157,11 +165,9 @@ class PartsOfSpeechNLTK(PartsOfSpeechInterface):
     def get_word_tokens(self, verbose=0):
         return self.words
 
-class NLPText(PartsOfSpeechNLTK):
-    def __init__(self, text):
-        self.text = text
 
 class TaggedNLPText(PartsOfSpeechNLTK, NLPText):
+    '''Diamond inheritance'''
     def __init__(self, text):
         super().__init__(text)
         self.text = text
