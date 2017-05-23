@@ -117,7 +117,7 @@ class CliInputText(InputText):
         return input_text
 
 class NLPText():
-    '''Base class'''
+    '''Base class: Add data cleaning'''
     def __init__(self, text):
         self.text = text
 
@@ -132,8 +132,19 @@ def get_tags_to_words_map(text, verbose=0):
         dic[part].append(word)
     return dic
 
+class PartsOfSpeechMixin(object):
+    '''One-shot *get_parts* mixin class'''
+    def get_tags_to_words_map(self, verbose=0):
+        return get_tags_to_words_map(self.text, verbose=0)
+
+class NLPTextMixed(PartsOfSpeechMixin, NLPText):
+    '''Lightweight class getting one-shot functionality from mixins'''
+    def __init__(self, text):
+        super().__init__(text)
+        self.text = text
+
 class PartsOfSpeechInterface(object):
-    '''Interface for *get_parts* functionality'''
+    '''Interface for more full-featured *get_parts* functionality'''
     def get_tags_to_words_map(self, verbose=0):
         raise NotImplementedError
 
@@ -143,7 +154,8 @@ class PartsOfSpeechInterface(object):
     def get_word_tokens(self, verbose=0):
         raise NotImplementedError
 
-class PartsOfSpeechNLTK(PartsOfSpeechInterface, NLPText):
+
+class TaggedNLPText(PartsOfSpeechInterface, NLPText):
     '''Concrete *get_parts* class'''
     def __init__(self, text, verbose=0):
         super().__init__(text)
@@ -166,15 +178,9 @@ class PartsOfSpeechNLTK(PartsOfSpeechInterface, NLPText):
         return self.words
 
 
-class TaggedNLPText(PartsOfSpeechNLTK, NLPText):
-    '''Diamond inheritance'''
-    def __init__(self, text):
-        super().__init__(text)
-        self.text = text
-
 
 def cirtify(verbose=0):
-    cli = CliInputText()
+    cli = CliInputText()    # TODO: put this block in class derived from abstract InputText?
     # INPUT: Get next input (phrase, sentence, or paragraph)
     input_text = cli.read_next("Please give me a sentence to paraphrase, or hit return to quit:")
     while input_text:
