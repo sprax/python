@@ -14,17 +14,14 @@ Goals:
         Loop: When yes, save and go to 4, or if cancel, delete and go to 4.
     4.  Acknowledge Finish or Canceled.
 '''
+import text_ops
 
 import argparse
-import datetime
 import errno
 import os.path
 import random
 import re
 import sys
-from utf_print import utf_print
-import text_ops
-import time
 import nltk
 from collections import defaultdict
 
@@ -32,17 +29,21 @@ PROMPT = '> %s\n\t'
 
 class Responses:
     def response_stock(parts):
-        return random.choice(["How do you feel about that?", "What's your favourite animal?", "Tell me about your mother?"])
+        return random.choice(["How do you feel about that?",
+            "What's your favourite animal?",
+            "Tell me about your mother?"])
 
     def response_noun1(parts):
-        responses = ["Why do you like %s?", "What do you like most about %s?", "Tell me more about %s?"]
+        responses = ["Why do you like %s?", "What do you like most about %s?",
+                "Tell me more about %s?"]
         if 'NN' in parts:
             return random.choice(responses) % random.choice(parts['NN'])
 
     def response_nouns2(parts):
         if 'NN' in parts:
             noun = random.choice(parts['NN'])
-            return "%s, %s, %s! Can you talk about something else please!" % (noun, noun.title(), noun.upper())
+            return "%s, %s, %s! Can you talk about something else please!" % (
+                    noun, noun.title(), noun.upper())
 
     def response_nouns1(parts):
         responses = ["Tell me how %s make you feel?", "You want to tell me how you feel about %s?"]
@@ -53,7 +54,8 @@ class Responses:
         if 'VB' in parts:
             verb = random.choice(parts['VB'])
             day = random.choice('Mondays Wednesdays Toast Acid'.split())
-            return "Wow, I love to %s too, especially on %s. When do you like to %s?" % (verb, day, verb)
+            return "Wow, I love to %s too, especially on %s. When do you like to %s?" % (
+                    verb, day, verb)
 
 
 def throw_io_error():
@@ -62,7 +64,9 @@ def throw_io_error():
 def constant_factory(value):
     return lambda: value
 
-def ask_yes_no(prompt, retries=3, complaint='Yes or no, please!', default_function=constant_factory(False)):
+def ask_yes_no(prompt, retries=3, complaint='Yes or no, please!',
+        default_function=constant_factory(False)):
+    '''prompt for and take in y/n response'''
     while True:
         answer = input(prompt)
         yesno = answer.lower()
@@ -85,7 +89,7 @@ def find_topic(sentence, verbose=0):
     for val in parts['NNP']:
         yesno = ask_yes_no("So you want to talk about %s?\n\t" % (val))
         if yesno:
-           return val
+            return val
     for val in parts['NN']:
         yesno = ask_yes_no("Do you wish to ask a question about %s?\n\t" % val)
         if yesno:
@@ -101,11 +105,13 @@ def get_input_text(in_prompt):
 
 
 class InputText(object):
-    def read_next(self):
+    '''get the next unit of text'''
+    def read_next(self, in_prompt):
         raise NotImplementedError
 
 class CliInputText(InputText):
-    def __init__(self, prompt = '> %s\n\t', farewell="Thanks for playing."):
+    '''Command-line input text'''
+    def __init__(self, prompt='> %s\n\t', farewell="Thanks for playing."):
         super().__init__()
         self.prompt = prompt
         self.farewell = farewell
@@ -180,6 +186,7 @@ class TaggedNLPText(PartsOfSpeechInterface, NLPText):
 
 
 def cirtify(verbose=0):
+    '''Can I Rephrase That Idea For You?'''
     cli = CliInputText()    # TODO: put this block in class derived from abstract InputText?
     # INPUT: Get next input (phrase, sentence, or paragraph)
     input_text = cli.read_next("Please give me a sentence to paraphrase, or hit return to quit:")
