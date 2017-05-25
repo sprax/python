@@ -14,16 +14,13 @@ Goals:
         Loop: When yes, save and go to 4, or if cancel, delete and go to 4.
     4.  Acknowledge Finish or Canceled.
 '''
-import text_ops
 
 import argparse
-import errno
-import os.path
 import random
-import re
-import sys
-import nltk
 from collections import defaultdict
+import nltk
+
+import text_fio
 
 PROMPT = '> %s\n\t'
 
@@ -247,7 +244,7 @@ def main():
     args = parser.parse_args()
 
     if args.error_text:
-        print_stdout_stderr(args.error_text)
+        text_fio.print_stdout_stderr(args.error_text)
         exit(1)
 
     if args.verbose > 3:
@@ -257,9 +254,7 @@ def main():
         exit(0)
 
     # summary_file = getattr(args, 'out_file', None)
-    unit_test(args.text_file, args
-    verbose = 1
-    cirtify(verbose)
+    cirtify(args.verbose)
 
 if __name__ == '__main__':
     main()
