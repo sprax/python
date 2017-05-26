@@ -24,7 +24,9 @@ import text_fio
 
 PROMPT = '> %s\n\t'
 
+
 class Responses:
+    '''random responses'''
     def response_stock(parts):
         return random.choice(["How do you feel about that?",
             "What's your favourite animal?",
@@ -56,9 +58,11 @@ class Responses:
 
 
 def throw_io_error():
+    '''throw an error'''
     raise IOError('refusenik user')
 
 def constant_factory(value):
+    '''constant generator'''
     return lambda: value
 
 def ask_yes_no(prompt, retries=3, complaint='Yes or no, please!',
