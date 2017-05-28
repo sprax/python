@@ -219,7 +219,7 @@ def main():
                         help='file containing text to summarize')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
-    parser.add_argument('-error', dest='error_text', type=str, default='log this msg',
+    parser.add_argument('-error', dest='error_text', type=str, nargs='?', const='log this msg',
                         help='write same message to stderr and stdout, then exit')
     parser.add_argument('-index', dest='indices_only', action='store_true',
                         help='output only the indices of summary sentences')
