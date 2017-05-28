@@ -24,8 +24,10 @@ import text_fio
 
 PROMPT = '> %s\n\t'
 
+def get_input_text(in_prompt):
+    return input(PROMPT % in_prompt)
 
-class Responses:
+class DialogResponses:
     '''random responses'''
     def response_stock(parts):
         return random.choice(["How do you feel about that?",
@@ -41,7 +43,7 @@ class Responses:
     def response_nouns2(parts):
         if 'NN' in parts:
             noun = random.choice(parts['NN'])
-            return "%s, %s, %s! Can you talk about something else please!" % (
+            return "%s, %s, %s! Can you talk about something else please?!" % (
                     noun, noun.title(), noun.upper())
 
     def response_nouns1(parts):
@@ -100,9 +102,6 @@ def find_topic(sentence, verbose=0):
         if yesno:
             return val
     return None
-
-def get_input_text(in_prompt):
-    return input(PROMPT % in_prompt)
 
 
 class InputText(object):
@@ -185,6 +184,14 @@ class TaggedNLPText(PartsOfSpeechInterface, NLPText):
         return self.words
 
 
+def next_prompt(parts):
+    funcs = [f for f in DialogResponses.__dict__.values() if callable(f)]
+    while True:
+        resp = random.choice(funcs)
+        funcs.remove(resp)
+        prompt = resp(parts)
+        if prompt:
+            return prompt
 
 def cirtify(verbose=0):
     '''Can I Rephrase That Idea For You?'''
@@ -201,14 +208,8 @@ def cirtify(verbose=0):
                 topic, input_text))
             break
         else:
-            funcs = [f for (n, f) in Responses.__dict__.items() if callable(f)]
-            while True:
-                resp = random.choice(funcs)
-                funcs.remove(resp)
-                output = resp(parts)
-                if output:
-                    break
-        input_text = cli.read_next(output)
+            prompt = next_prompt(parts)
+        input_text = cli.read_next(prompt)
 
 def main():
     '''Extract summary from text.'''
