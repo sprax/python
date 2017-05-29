@@ -16,18 +16,12 @@ Goals:
 '''
 
 import argparse
-import random
-from collections import defaultdict
-import nltk
 import dialog_util
 import dialog_replies
 
-# import text_fio
-
-
 def cirtify(verbose=0):
     '''Can I Rephrase That Idea For You?'''
-    cli = dialog_util.CliInputText()    # TODO: put this block in class derived from abstract InputText?
+    cli = dialog_util.CliInputText()
     # INPUT: Get next input (phrase, sentence, or paragraph)
     input_text = cli.read_next("Please give me a sentence to paraphrase, or hit return to quit:")
     while input_text:
@@ -52,8 +46,6 @@ def main():
                         help='file containing text to summarize')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
-    parser.add_argument('-error', dest='error_text', type=str, nargs='?', const='log this msg',
-                        help='write same message to stderr and stdout, then exit')
     parser.add_argument('-index', dest='indices_only', action='store_true',
                         help='output only the indices of summary sentences')
     parser.add_argument('-list_numbers', action='store_true',
@@ -79,10 +71,6 @@ def main():
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
-
-    if args.error_text:
-        text_fio.print_stdout_stderr(args.error_text)
-        exit(1)
 
     if args.verbose > 3:
         print("outfile: <{}>".format(args.out_file))
