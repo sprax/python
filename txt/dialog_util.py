@@ -2,7 +2,7 @@
 # Sprax Lines       2016.07.12      Written with Python 3.5
 '''
 dialog_promps module: DialogReplies class
-Used by: cirtify.py
+Used by: find_topics.py
 '''
 
 import argparse
@@ -151,31 +151,18 @@ class TaggedNLPText(PartsOfSpeechInterface, NLPText):
         return self.words
 
 
-def next_prompt(parts):
-    funcs = [f for f in DialogResponses.__dict__.values() if callable(f)]
-    while True:
-        resp = random.choice(funcs)
-        funcs.remove(resp)
-        prompt = resp(parts)
-        if prompt:
-            return prompt
-
-def cirtify(verbose=0):
+def find_topics(verbose=0):
     '''Can I Rephrase That Idea For You?'''
     cli = CliInputText()    # TODO: put this block in class derived from abstract InputText?
     # INPUT: Get next input (phrase, sentence, or paragraph)
-    input_text = cli.read_next("Please give me a sentence to paraphrase, or hit return to quit:")
+    prompt = "Please give me a sentence to paraphrase, or hit return to quit:"
+    input_text = cli.read_next(prompt)
     while input_text:
-        # CLASSIFY: What is it?  Word, phrase, sentence, or paragraph?
-        nlpt = TaggedNLPText(input_text)
+        nlpt = NLPTextMixed(input_text)
         parts = nlpt.get_tags_to_words_map(verbose)
-        topic = find_topic(input_text)
+        topic = nlpt.find_topic_from_parts(verbose)
         if topic:
-            print("Can I rephrase that idea for you?  The topic is {}, and you said:\n\t{}".format(
-                topic, input_text))
-            break
-        else:
-            prompt = next_prompt(parts)
+            print("The topic is {}, and you said:\n\t{}".format(topic, input_text))
         input_text = cli.read_next(prompt)
 
 def main():
@@ -226,7 +213,7 @@ def main():
         exit(0)
 
     # summary_file = getattr(args, 'out_file', None)
-    cirtify(args.verbose)
+    find_topics(args.verbose)
 
 if __name__ == '__main__':
     main()

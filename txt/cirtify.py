@@ -19,89 +19,16 @@ import argparse
 import random
 from collections import defaultdict
 import nltk
+import dialog_util
+import dialog_replies
 
 import text_fio
 
 PROMPT = '> %s\n\t'
 
-def get_input_text(in_prompt):
-    return input(PROMPT % in_prompt)
-
-class DialogResponses:
-    '''random responses'''
-    def response_stock(parts):
-        return random.choice(["How do you feel about that?",
-            "What's your favourite animal?",
-            "Tell me about your mother?"])
-
-    def response_noun1(parts):
-        responses = ["Why do you like %s?", "What do you like most about %s?",
-                "Tell me more about %s?"]
-        if 'NN' in parts:
-            return random.choice(responses) % random.choice(parts['NN'])
-
-    def response_nouns2(parts):
-        if 'NN' in parts:
-            noun = random.choice(parts['NN'])
-            return "%s, %s, %s! Can you talk about something else please?!" % (
-                    noun, noun.title(), noun.upper())
-
-    def response_nouns1(parts):
-        responses = ["Tell me how %s make you feel?", "You want to tell me how you feel about %s?"]
-        if 'NNS' in parts:
-            return random.choice(responses) % random.choice(parts['NNS'])
-
-    def response_verb1(parts):
-        if 'VB' in parts:
-            verb = random.choice(parts['VB'])
-            day = random.choice('Mondays Wednesdays Toast Acid'.split())
-            return "Wow, I love to %s too, especially on %s. When do you like to %s?" % (
-                    verb, day, verb)
-
-
-def throw_io_error():
-    '''throw an error'''
-    raise IOError('refusenik user')
-
-def constant_factory(value):
-    '''constant generator'''
-    return lambda: value
-
-def ask_yes_no(prompt, retries=3, complaint='Yes or no, please!',
-        default_function=constant_factory(False)):
-    '''prompt for and take in y/n response'''
-    while True:
-        answer = input(prompt)
-        yesno = answer.lower()
-        if yesno.lower() in ('y', 'ye', 'yep', 'yes'):
-            return True
-        if yesno in ('n', 'no', 'nop', 'nope'):
-            return False
-        retries = retries - 1
-        if retries <= 0:
-            return default_function()
-        print(complaint)
-
 def ask_for_new_idea():
     sentence = input("Please give me a sentence to paraphrase, or an empty line to quit:\n\t")
     return sentence
-
-def find_topic(sentence, verbose=0):
-    parts = get_tags_to_words_map(sentence, verbose)
-    print("parts DD is", parts)
-    for val in parts['NNP']:
-        yesno = ask_yes_no("So you want to talk about %s?\n\t" % (val))
-        if yesno:
-            return val
-    for val in parts['NN']:
-        yesno = ask_yes_no("Do you wish to ask a question about %s?\n\t" % val)
-        if yesno:
-            return val
-    for val in parts['NNS']:
-        yesno = ask_yes_no("Is the topic %s?\n\t" % val)
-        if yesno:
-            return val
-    return None
 
 
 class InputText(object):
@@ -185,7 +112,7 @@ class TaggedNLPText(PartsOfSpeechInterface, NLPText):
 
 
 def next_prompt(parts):
-    funcs = [f for f in DialogResponses.__dict__.values() if callable(f)]
+    funcs = [f for f in dialog_replies.DialogReplies.__dict__.values() if callable(f)]
     while True:
         resp = random.choice(funcs)
         funcs.remove(resp)
@@ -202,7 +129,7 @@ def cirtify(verbose=0):
         # CLASSIFY: What is it?  Word, phrase, sentence, or paragraph?
         nlpt = TaggedNLPText(input_text)
         parts = nlpt.get_tags_to_words_map(verbose)
-        topic = find_topic(input_text)
+        topic = dialog_util.find_topic_from_parts(parts)
         if topic:
             print("Can I rephrase that idea for you?  The topic is {}, and you said:\n\t{}".format(
                 topic, input_text))

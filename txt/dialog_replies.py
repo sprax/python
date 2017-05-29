@@ -58,7 +58,7 @@ def next_prompt(parts):
         if prompt:
             return prompt
 
-def cirtify(verbose=0):
+def dialog(verbose=0):
     '''Responses like Eliza'''
     cli = dutil.CliInputText()    # TODO: put this block in class derived from abstract InputText?
     # INPUT: Get next input (phrase, sentence, or paragraph)
@@ -67,7 +67,7 @@ def cirtify(verbose=0):
         # CLASSIFY: What is it?  Word, phrase, sentence, or paragraph?
         nlpt = dutil.NLPTextMixed(input_text)
         parts = nlpt.get_tags_to_words_map(verbose)
-        topic = nlpt.find_topic_from_parts(input_text)
+        topic = nlpt.find_topic_from_parts(verbose)
         if topic:
             print("Can I rephrase that idea for you?  The topic is {}, and you said:\n\t{}".format(
                 topic, input_text))
@@ -98,7 +98,7 @@ def main():
         exit(0)
 
     # summary_file = getattr(args, 'out_file', None)
-    cirtify(args.verbose)
+    dialog(args.verbose)
 
 if __name__ == '__main__':
     main()
