@@ -22,112 +22,17 @@ import nltk
 import dialog_util
 import dialog_replies
 
-import text_fio
+# import text_fio
 
-PROMPT = '> %s\n\t'
-
-def ask_for_new_idea():
-    sentence = input("Please give me a sentence to paraphrase, or an empty line to quit:\n\t")
-    return sentence
-
-
-class InputText(object):
-    '''get the next unit of text'''
-    def read_next(self, in_prompt):
-        raise NotImplementedError
-
-class CliInputText(InputText):
-    '''Command-line input text'''
-    def __init__(self, prompt='> %s\n\t', farewell="Thanks for playing."):
-        super().__init__()
-        self.prompt = prompt
-        self.farewell = farewell
-
-    def read_next(self, in_prompt):
-        input_text = input(self.prompt % in_prompt)
-        if not input_text:
-            print(self.farewell)
-        return input_text
-
-class NLPText():
-    '''Base class: Add data cleaning'''
-    def __init__(self, text):
-        self.text = text
-
-def get_tags_to_words_map(text, verbose=0):
-    '''External method version of *get_parts*: throws away temp data'''
-    words = nltk.word_tokenize(text)
-    parts = nltk.pos_tag(words)
-    if verbose:
-        print("parts tags:", parts)
-    dic = defaultdict(list)
-    for word, part in parts:
-        dic[part].append(word)
-    return dic
-
-class PartsOfSpeechMixin(object):
-    '''One-shot *get_parts* mixin class'''
-    def get_tags_to_words_map(self, verbose=0):
-        return get_tags_to_words_map(self.text, verbose=0)
-
-class NLPTextMixed(PartsOfSpeechMixin, NLPText):
-    '''Lightweight class getting one-shot functionality from mixins'''
-    def __init__(self, text):
-        super().__init__(text)
-        self.text = text
-
-class PartsOfSpeechInterface(object):
-    '''Interface for more full-featured *get_parts* functionality'''
-    def get_tags_to_words_map(self, verbose=0):
-        raise NotImplementedError
-
-    def get_word_tag_pairs(self, verbose=0):
-        raise NotImplementedError
-
-    def get_word_tokens(self, verbose=0):
-        raise NotImplementedError
-
-
-class TaggedNLPText(PartsOfSpeechInterface, NLPText):
-    '''Concrete *get_parts* class'''
-    def __init__(self, text, verbose=0):
-        super().__init__(text)
-        print("-------- inside PartsOfSpeechNLTK ----------")
-        self.words = nltk.word_tokenize(self.text)
-        self.parts = nltk.pos_tag(self.words)
-        if verbose:
-            print("parts tags:", self.parts)
-        self.dic = defaultdict(list)
-        for word, part in self.parts:
-            self.dic[part].append(word)
-
-    def get_tags_to_words_map(self, verbose=0):
-        return self.dic
-
-    def get_word_tag_pairs(self, verbose=0):
-        return self.parts
-
-    def get_word_tokens(self, verbose=0):
-        return self.words
-
-
-def next_prompt(parts):
-    funcs = [f for f in dialog_replies.DialogReplies.__dict__.values() if callable(f)]
-    while True:
-        resp = random.choice(funcs)
-        funcs.remove(resp)
-        prompt = resp(parts)
-        if prompt:
-            return prompt
 
 def cirtify(verbose=0):
     '''Can I Rephrase That Idea For You?'''
-    cli = CliInputText()    # TODO: put this block in class derived from abstract InputText?
+    cli = dialog_util.CliInputText()    # TODO: put this block in class derived from abstract InputText?
     # INPUT: Get next input (phrase, sentence, or paragraph)
     input_text = cli.read_next("Please give me a sentence to paraphrase, or hit return to quit:")
     while input_text:
         # CLASSIFY: What is it?  Word, phrase, sentence, or paragraph?
-        nlpt = TaggedNLPText(input_text)
+        nlpt = dialog_util.TaggedNLPText(input_text)
         parts = nlpt.get_tags_to_words_map(verbose)
         topic = dialog_util.find_topic_from_parts(parts)
         if topic:
@@ -135,7 +40,7 @@ def cirtify(verbose=0):
                 topic, input_text))
             break
         else:
-            prompt = next_prompt(parts)
+            prompt = dialog_replies.next_prompt(parts)
         input_text = cli.read_next(prompt)
 
 def main():
