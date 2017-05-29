@@ -92,28 +92,33 @@ class CliInputText(InputText):
         return input_text
 
 class NLPText():
-    '''Base class: Add data cleaning'''
+    '''Base class: retains stripped text as read-only property'''
     def __init__(self, text):
-        self._text = text.strip()
-        if not self._text:
+        self.__text = text.strip()
+        if not self.__text:
             raise ValueError("empty text")
 
+    @property
     def text(self):
-        return self._text
+        return self.__text
+
+    @text.setter
+    def text(self, text):
+        raise AttributeError("NLPText.text is immutable")
 
 
 class PartsOfSpeechMixin(object):
-    '''One-shot *get_parts* mixin class'''
+    '''One-shot *parts()* mixin class'''
     def parts(self, verbose=0):
         if hasattr(self, '_parts'):
             return self._parts
         else:
-            self._parts = get_tags_to_words_map(self.text(), verbose=0)
+            self._parts = get_tags_to_words_map(self.text, verbose=0)
             return self._parts
 
 
 class TopicFromPartsMixin(object):
-    '''One-shot *get_parts* mixin class'''
+    '''One-shot *topic()* mixin class'''
     def topic(self):
         try:
             return getattr(self, '_topic')
