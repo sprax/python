@@ -94,27 +94,38 @@ class CliInputText(InputText):
 class NLPText():
     '''Base class: Add data cleaning'''
     def __init__(self, text):
-        self.text = text
+        self._text = text.strip()
+        if not self._text:
+            raise ValueError("empty text")
+
+    def text(self):
+        return self._text
 
 
 class PartsOfSpeechMixin(object):
     '''One-shot *get_parts* mixin class'''
-    def get_tags_to_words_map(self, verbose=0):
-        self.parts = get_tags_to_words_map(self.text, verbose=0)
-        return self.parts
+    def parts(self, verbose=0):
+        if hasattr(self, '_parts'):
+            return self._parts
+        else:
+            self._parts = get_tags_to_words_map(self.text(), verbose=0)
+            return self._parts
 
 
 class TopicFromPartsMixin(object):
     '''One-shot *get_parts* mixin class'''
-    def find_topic_from_parts(self, verbose=0):
-        return find_topic_from_parts(self.parts, verbose=0)
+    def topic(self):
+        try:
+            return getattr(self, '_topic')
+        except AttributeError:
+            self._topic = find_topic_from_parts(self.parts(), verbose=0)
+            return self._topic
 
 
-class NLPTextMixed(TopicFromPartsMixin, PartsOfSpeechMixin, NLPText):
+class NLPTextMixed(PartsOfSpeechMixin, TopicFromPartsMixin, NLPText):
     '''Lightweight class getting one-shot functionality from mixins'''
     def __init__(self, text):
         super().__init__(text)
-        self.text = text
 
 class PartsOfSpeechInterface(object):
     '''Interface for more full-featured *get_parts* functionality'''
