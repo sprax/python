@@ -122,8 +122,14 @@ class TopicFromPartsMixin(object):
             return self._topic
 
 
-class NLPTextMixed(PartsOfSpeechMixin, TopicFromPartsMixin, NLPText):
-    '''Lightweight class getting one-shot functionality from mixins'''
+class NLPTextMixed(TopicFromPartsMixin, PartsOfSpeechMixin, NLPText):
+    '''
+    Lightweight class getting one-shot functionality from mixins.
+    The order of mixin class names in the class signature should not matter,
+    but if the mixins were to have their own __init__ methods, which would require
+    calling super().__init__(), then the calling order would be right-to-left.
+    ProTip: Avoid worring about the order by never defining __init__ in a mixin.
+    '''
     def __init__(self, text):
         super().__init__(text)
 
