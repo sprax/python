@@ -6,7 +6,6 @@ Used by: find_topics.py
 '''
 
 import argparse
-import random
 from collections import defaultdict
 import nltk
 # import text_fio
@@ -14,7 +13,12 @@ import nltk
 PROMPT = '> %s\n\t'
 
 def get_input_text(in_prompt):
+    '''Python 3 prompted input'''
     return input(PROMPT % in_prompt)
+
+def ask_to_paraphrase():
+    '''prompt to paraphrase'''
+    return get_input_text("Please give me a sentence to paraphrase, or an empty line to quit:\n\t")
 
 def get_tags_to_words_map(text, verbose=0):
     '''External method version of *get_parts*: throws away temp data'''
@@ -51,11 +55,8 @@ def ask_yes_no(prompt, retries=3, complaint='Yes or no, please!',
             return default_function()
         print(complaint)
 
-def ask_for_new_idea():
-    sentence = input("Please give me a sentence to paraphrase, or an empty line to quit:\n\t")
-    return sentence
-
 def find_topic_from_parts(parts, verbose=0):
+    '''interactively select topic (or not)'''
     if verbose > 0:
         print("parts DD is", parts)
     for val in parts['NNP']:
@@ -100,6 +101,7 @@ class NLPText():
 
     @property
     def text(self):
+        '''return read-only instance text'''
         return self._text
 
     @text.setter
@@ -141,6 +143,7 @@ class NLPTextMixed(TopicFromPartsMixin, PartsOfSpeechMixin, NLPText):
 class PartsOfSpeechInterface(object):
     '''Interface for more full-featured *get_parts* functionality'''
     def get_tags_to_words_map(self, verbose=0):
+        '''should return a dictionary mapping words to POS tags.'''
         raise NotImplementedError
 
     def get_word_tag_pairs(self, verbose=0):
