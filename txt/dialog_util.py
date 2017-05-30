@@ -92,15 +92,15 @@ class CliInputText(InputText):
         return input_text
 
 class NLPText():
-    '''Base class: retains stripped text as read-only property'''
+    '''Base class: retains stripped text as read-only (protected) property'''
     def __init__(self, text):
-        self.__text = text.strip()
-        if not self.__text:
+        self._text = text.strip()
+        if not self._text:
             raise ValueError("empty text")
 
     @property
     def text(self):
-        return self.__text
+        return self._text
 
     @text.setter
     def text(self, text):
