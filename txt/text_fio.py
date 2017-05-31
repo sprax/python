@@ -17,6 +17,7 @@ def cwd():
     return os.path.dirname(os.path.realpath('.'))
 
 def print_stdout_stderr(text):
+    '''print text to stdout and stderr'''
     print("sys.stdout: ", text, file=sys.stdout)
     print("sys.stderr: ", text, file=sys.stderr)
 
