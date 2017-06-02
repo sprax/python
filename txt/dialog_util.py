@@ -75,8 +75,9 @@ def find_topic_from_parts(parts, verbose=0):
 
 
 class InputText(object):
-    '''get the next unit of text'''
+    '''input text iterator'''
     def read_next(self, in_prompt):
+        '''get the next unit of text'''
         raise NotImplementedError
 
 class CliInputText(InputText):
@@ -105,7 +106,7 @@ class NLPText():
         return self._text
 
     @text.setter
-    def text(self, text):
+    def text(self, _):
         raise AttributeError("NLPText.text is immutable")
 
 
@@ -115,17 +116,18 @@ class PartsOfSpeechMixin(object):
         if hasattr(self, '_parts'):
             return self._parts
         else:
-            self._parts = get_tags_to_words_map(self.text, verbose=0)
+            self._parts = get_tags_to_words_map(self.text, verbose)
             return self._parts
 
 
 class TopicFromPartsMixin(object):
     '''One-shot *topic()* mixin class'''
-    def topic(self):
+    def topic(self, verbose=0):
+        '''find topic (if not already found) and return it'''
         try:
             return getattr(self, '_topic')
         except AttributeError:
-            self._topic = find_topic_from_parts(self.parts(), verbose=0)
+            self._topic = find_topic_from_parts(self.parts(), verbose)
             return self._topic
 
 
@@ -178,14 +180,13 @@ class TaggedNLPText(PartsOfSpeechInterface, NLPText):
 
 def find_topics(verbose=0):
     '''Can I Rephrase That Idea For You?'''
-    cli = CliInputText()    # TODO: put this block in class derived from abstract InputText?
+    cli = CliInputText()
     # INPUT: Get next input (phrase, sentence, or paragraph)
     prompt = "Please give me a sentence to paraphrase, or hit return to quit:"
     input_text = cli.read_next(prompt)
     while input_text:
         nlpt = NLPTextMixed(input_text)
-        parts = nlpt.get_tags_to_words_map(verbose)
-        topic = nlpt.find_topic_from_parts(verbose)
+        topic = nlpt.topic(verbose)
         if topic:
             print("The topic is {}, and you said:\n\t{}".format(topic, input_text))
         input_text = cli.read_next(prompt)
