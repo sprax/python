@@ -42,7 +42,7 @@ def read_lines(file_spec, charset='utf8'):
     '''read and yield all lines of a text file as a iter of str'''
     with open(file_spec, 'r', encoding=charset) as text:
         for line in text:
-             yield line.rstrip()
+            yield line.rstrip()
 
 def read_file(file_spec, charset='utf8'):
     '''read and return all contents of file as one str'''
@@ -68,8 +68,7 @@ def read_file_eafp(file_spec, charset='utf-8'):
         return text
 
 
-#TODO: try to read ascii or utf-8 and failover to iso-8859-1, etc.
-
+# try to read ascii or utf-8 and failover to iso-8859-1, etc.
 def read_text_file(file_spec):
     '''read and return all contents of file as one str'''
     try:
@@ -138,7 +137,7 @@ def unit_test(text_file, opt):
     print(text_file, '====>', '<stdout>' if out_file == sys.stdout else opt.out_file)
     print('-------------------------------------------------------------------')
 
-    if (opt.repr):
+    if opt.repr:
         print(repr(text), file=out_file)
     else:
         print(text, file=out_file)
