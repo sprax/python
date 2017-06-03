@@ -12,13 +12,16 @@ import nltk
 
 PROMPT = '> %s\n\t'
 
+
 def get_input_text(in_prompt):
     '''Python 3 prompted input'''
     return input(PROMPT % in_prompt)
 
+
 def ask_to_paraphrase():
     '''prompt to paraphrase'''
     return get_input_text("Please give me a sentence to paraphrase, or an empty line to quit:\n\t")
+
 
 def get_tags_to_words_map(text, verbose=0):
     '''External method version of *get_parts*: throws away temp data'''
@@ -73,7 +76,6 @@ def find_topic_from_parts(parts, verbose=0):
             return val
     return None
 
-
 class InputText(object):
     '''input text iterator'''
     def read_next(self, in_prompt):
@@ -81,7 +83,7 @@ class InputText(object):
         raise NotImplementedError
 
 class CliInputText(InputText):
-    '''Command-line input text'''
+    '''Command-line input text, derived, concrete, and NOT generic'''
     def __init__(self, prompt='> %s\n\t', farewell="Thanks for playing."):
         super().__init__()
         self.prompt = prompt
@@ -92,6 +94,18 @@ class CliInputText(InputText):
         if not input_text:
             print(self.farewell)
         return input_text
+
+class ConfiguredInputText(InputText):
+    '''Configured Input Text: uses a classmethod configurator in place of __init__'''
+    @classmethod
+    def configure_source(cls, config):
+        raise NotImplementedError('class method not implemented: configure_source')
+
+class PathConfiguredInputText(ConfiguredInputText):
+    @classmethod
+    def configure_source(cls, config):
+        path = config['path']
+        return cls(path)
 
 class NLPText():
     '''Base class: retains stripped text as read-only (protected) property'''
