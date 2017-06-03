@@ -98,14 +98,24 @@ class CliInputText(InputText):
 class ConfiguredInputText(InputText):
     '''Configured Input Text: uses a classmethod configurator in place of __init__'''
     @classmethod
-    def configure_source(cls, config):
-        raise NotImplementedError('class method not implemented: configure_source')
+    def configure(cls, config):
+        raise NotImplementedError('class method not implemented: configure')
 
 class PathConfiguredInputText(ConfiguredInputText):
     @classmethod
-    def configure_source(cls, config):
+    def configure(cls, config):
         path = config['path']
         return cls(path)
+
+class CliConfiguredInputText(ConfiguredInputText):
+    '''Configured Command-Line Input Text'''
+    @classmethod
+    def configure(cls, config):
+        greeting = config['greeting']
+        prompter = config['prompter']
+        farewell = config['farewell']
+        return cls(greeting, prompter, farewell)
+
 
 class NLPText():
     '''Base class: retains stripped text as read-only (protected) property'''
@@ -204,6 +214,11 @@ def find_topics(verbose=0):
         if topic:
             print("The topic is {}, and you said:\n\t{}".format(topic, input_text))
         input_text = cli.read_next(prompt)
+
+class generic_find_topics(configured_input_text, generic_topic_finder, config):
+    input_text = configured_input_text.create(config)
+    # topics = find_topic()
+
 
 def main():
     '''Extract summary from text.'''
