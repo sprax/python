@@ -99,10 +99,12 @@ class ConfiguredInputText(InputText):
     '''Configured Input Text: uses a classmethod configurator in place of __init__'''
     @classmethod
     def configure(cls, config):
+        '''pure virtual config function as polymorphic constructor'''
         raise NotImplementedError('class method not implemented: configure')
 
 class PathConfiguredInputText(ConfiguredInputText):
     @classmethod
+    '''create and configure a path-based input text object'''
     def configure(cls, config):
         path = config['path']
         return cls(path)
