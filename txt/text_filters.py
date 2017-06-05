@@ -97,14 +97,16 @@ class JoinQuoted:
     def translate(self, in_str):
         return self.regex.sub(r"\1\2\1", in_str)
 
-# deprecated because 'filter'
 def filter_non_ascii(in_str):
+    '''deprecated because 'filter'''
     return "".join(filter(lambda x: ord(x) < 128, in_str))
 
 def remove_non_ascii(in_str):
+    '''filter out non-ASCII characters'''
     return "".join(i for i in in_str if ord(i) < 128)
 
 def translate_to_ascii(in_str):
+    '''try to translate any text to ASCII'''
     try:
         return translate_iso_to_ascii(in_str)
     except:
@@ -124,6 +126,7 @@ def read_lines_to_ascii(file_spec, charset='utf-8'):
             yield line.rstrip()
 
 def utf_print_words(fspec):
+    '''print each word in an ASCII or UTF-8 encoded text'''
     with open(fspec, 'r', encoding="utf8") as text:
         for line in text:
             words = re.split(r'\W+', line.rstrip())
