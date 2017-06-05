@@ -77,22 +77,25 @@ class NoSpaceBeforePunct:
         return self.regex.sub(r'\1', result)
 
 class TwoSingleQuoteToDoubleQuote:
+    '''Translate two single-quotes to one double-quote marker'''
     regex = re.compile(" ''([ !\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~]|$)")
     def translate(self, in_str):
         return self.regex.sub(r' "\1', in_str)
 
 class JoinContractions:
-    "Rejoin tokenized contractions."
+    '''Rejoin tokenized contractions.'''
     regex = re.compile(r"\b(.*) (n't|'s) ")
     def translate(self, in_str):
         return self.regex.sub(r"\1\2 ", in_str)
 
 class JoinPossessive:
+    '''Rejoin tokenized word and possive apostrophe marker'''
     regex = re.compile(" ' ")
     def translate(self, in_str):
         return self.regex.sub(r"' ", in_str)
 
 class JoinQuoted:
+    '''Rejoin quatation marks with the text they quote'''
     regex = re.compile(r"([\"']) ((?:\\\1|.)*?) \1")
     def translate(self, in_str):
         return self.regex.sub(r"\1\2\1", in_str)
