@@ -103,8 +103,8 @@ class ConfiguredInputText(InputText):
         raise NotImplementedError('class method not implemented: configure')
 
 class PathConfiguredInputText(ConfiguredInputText):
-    @classmethod
     '''create and configure a path-based input text object'''
+    @classmethod
     def configure(cls, config):
         path = config['path']
         return cls(path)
@@ -217,8 +217,9 @@ def find_topics(verbose=0):
             print("The topic is {}, and you said:\n\t{}".format(topic, input_text))
         input_text = cli.read_next(prompt)
 
-class generic_find_topics(configured_input_text, generic_topic_finder, config):
-    input_text = configured_input_text.create(config)
+class GenericFindTopics(ConfiguredInputText): #, generic_topic_finder, config):
+    pass
+    # input_text = configured_input_text.create(config)
     # topics = find_topic()
 
 

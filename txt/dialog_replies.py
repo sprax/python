@@ -66,8 +66,8 @@ def dialog(verbose=0):
     while input_text:
         # CLASSIFY: What is it?  Word, phrase, sentence, or paragraph?
         nlpt = dutil.NLPTextMixed(input_text)
-        parts = nlpt.get_tags_to_words_map(verbose)
-        topic = nlpt.find_topic_from_parts(verbose)
+        parts = nlpt.parts(verbose)
+        topic = nlpt.topic(verbose)
         if topic:
             print("Can I rephrase that idea for you?  The topic is {}, and you said:\n\t{}".format(
                 topic, input_text))
