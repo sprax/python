@@ -4,29 +4,31 @@
 dialog module: DialogReplies class
 Used by: cirtify.py
 '''
-
 import argparse
 import random
-from collections import defaultdict
-import nltk
-# import text_fio
 import dialog_util as dutil
 
+
 PROMPT = '> %s\n\t'
+
 
 def get_input_text(in_prompt):
     return input(PROMPT % in_prompt)
 
+
 class DialogReplies:
     '''random responses'''
     def response_stock(parts):
-        return random.choice(["How do you feel about that?",
+        return random.choice([
+            "How do you feel about that?",
             "What's your favourite animal?",
             "Tell me about your mother?"])
 
     def response_noun1(parts):
-        responses = ["Why do you like %s?", "What do you like most about %s?",
-                "Tell me more about %s?"]
+        responses = [
+            "Why do you like %s?",
+            "What do you like most about %s?",
+            "Tell me more about %s?"]
         if 'NN' in parts:
             return random.choice(responses) % random.choice(parts['NN'])
 
@@ -37,7 +39,9 @@ class DialogReplies:
                     noun, noun.title(), noun.upper())
 
     def response_nouns1(parts):
-        responses = ["Tell me how %s make you feel?", "You want to tell me how you feel about %s?"]
+        responses = [
+            "Tell me how %s make you feel?",
+            "You want to tell me how you feel about %s?"]
         if 'NNS' in parts:
             return random.choice(responses) % random.choice(parts['NNS'])
 
@@ -60,7 +64,7 @@ def next_prompt(parts):
 
 def dialog(verbose=0):
     '''Responses like Eliza'''
-    cli = dutil.CliInputText()    # TODO: put this block in class derived from abstract InputText?
+    cli = dutil.CliInputText()
     # INPUT: Get next input (phrase, sentence, or paragraph)
     input_text = cli.read_next("Please give me a sentence to paraphrase, or hit return to quit:")
     while input_text:
