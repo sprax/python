@@ -65,6 +65,7 @@ class IsoToAscii:
     '''Translate non-ASCII characters to ASCII or nothing'''
     translation = ISO_TO_ASCII
     def translate(self, in_str):
+        '''Translate non-ASCII characters to ASCII or nothing'''
         return in_str.translate(self.translation)
     # def translate(self, in_str):
     #     return translate_iso_to_ascii(in_str)
@@ -73,6 +74,7 @@ class NoSpaceBeforePunct:
     '''Eliminate spaces before punctuation'''
     regex = re.compile(r' ([!%,./:;?])')
     def translate(self, in_str):
+        '''Eliminate spaces before punctuation'''
         result = re.sub(r'\s+', ' ', in_str)
         return self.regex.sub(r'\1', result)
 
@@ -80,24 +82,28 @@ class TwoSingleQuoteToDoubleQuote:
     '''Translate two single-quotes to one double-quote marker'''
     regex = re.compile(" ''([ !\"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~]|$)")
     def translate(self, in_str):
+        '''Translate two single-quotes to one double-quote marker'''
         return self.regex.sub(r' "\1', in_str)
 
 class JoinContractions:
     '''Rejoin tokenized contractions.'''
     regex = re.compile(r"\b(.*) (n't|'s) ")
     def translate(self, in_str):
+        '''Rejoin tokenized contractions.'''
         return self.regex.sub(r"\1\2 ", in_str)
 
 class JoinPossessive:
     '''Rejoin tokenized word and possive apostrophe marker'''
     regex = re.compile(" ' ")
     def translate(self, in_str):
+        '''Rejoin tokenized word and possive apostrophe marker'''
         return self.regex.sub(r"' ", in_str)
 
 class JoinQuoted:
     '''Rejoin quatation marks with the text they quote'''
     regex = re.compile(r"([\"']) ((?:\\\1|.)*?) \1")
     def translate(self, in_str):
+        '''Rejoin quatation marks with the text they quote'''
         return self.regex.sub(r"\1\2\1", in_str)
 
 def filter_non_ascii(in_str):
@@ -112,7 +118,7 @@ def translate_to_ascii(in_str):
     '''try to translate any text to ASCII'''
     try:
         return translate_iso_to_ascii(in_str)
-    except:
+    except UnicodeDecodeError:
         return in_str
 
 ###############################################################################
