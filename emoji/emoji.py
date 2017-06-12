@@ -1,0 +1,16 @@
+
+
+import emoji
+import re
+
+def extract_emojis(str):
+  return ''.join(c for c in str if c in emoji.UNICODE_EMOJI)
+
+a_list = ['?? ?? me así, bla es se ?? ds ??????']
+
+
+# is_emoji("??") #True
+# is_emoji("????") #False
+
+re.findall(r'[^\w\s,]', a_list[0])
+['??', '??', '??', '??', '??', '??']
