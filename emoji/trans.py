@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-# -*- coding: iso-8859-15 -*-
+# -*- coding: utf-8 -*-
+#
+# # # coding: iso-8859-15
 '''
 Plan:
     Words|phrases -> words >= [phonetic syllables reprs]
@@ -31,3 +33,12 @@ if __name__ == '__main__':
     trans()
     print(u'\U0001f604'.encode('unicode-escape'))
     print(u'\U0001f604')
+    ss = u'\U0001f604'
+    #xx = chr(ss[0])
+    #print("ss({}) xx({})".format(ss, xx))
+    # -*- coding: UTF-8 -*-
+
+    print(emoji.emojize('Water! :water_wave:'))
+    print(emoji.demojize(u'🌊')) # for Python 2.x
+# print(emoji.demojize('🌊')) # for Python 3.x.
+    print(u"And \U0001F60D")
