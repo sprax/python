@@ -28,6 +28,17 @@ def trans():
     for word in words:
         print("{} => {}".format(word, getsyl(wtsl, word)))
 
+def char(i):
+    try:
+        return chr(i)
+    except ValueError:
+        return struct.pack('i', i).decode('utf-32')
+
+def unicode_chr_str(hex_unicode):
+    if '-' not in hex_unicode:
+        return char(int(hex_unicode, 16))
+    parts = hex_unicode.split('-')
+    return ''.join(char(int(x, 16)) for x in parts)
 
 if __name__ == '__main__':
     trans()
@@ -40,6 +51,11 @@ if __name__ == '__main__':
     #convert to unicode
     teststring =  "I am happy \U0001f604"
     # #teststring = unicode(teststring, 'utf-8')
+
+for i, t in enumerate(sorted(jt.items(), key=lambda x: int(x[1]['order']), reverse=True)):
+...     if i < 10:
+...             ck = unicode_chr_str(t[0])
+...             print(ck, "\t", len(ck), "\t", t[1]['order'], "\t", t[0], "\t", t[1]['shortname'])
 
     #encode it with string escape
     teststring = teststring.encode('unicode_escape')
