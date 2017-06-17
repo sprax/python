@@ -14,6 +14,15 @@ from collections import defaultdict
 
     aa = ['??', '??', '??', '??', '??', '??']
 
+:sunny:
+:umbrella:
+:cloud:
+:snowflake:
+:snowman:
+:zap:
+:cyclone:
+:foggy:
+:ocean:
 
 def extract_emojis(str):
     return ''.join(c for c in str if c in emoji.UNICODE_EMOJI)
