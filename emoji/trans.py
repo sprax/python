@@ -52,11 +52,6 @@ if __name__ == '__main__':
     teststring =  "I am happy \U0001f604"
     # #teststring = unicode(teststring, 'utf-8')
 
-for i, t in enumerate(sorted(jt.items(), key=lambda x: int(x[1]['order']), reverse=True)):
-...     if i < 10:
-...             ck = unicode_chr_str(t[0])
-...             print(ck, "\t", len(ck), "\t", t[1]['order'], "\t", t[0], "\t", t[1]['shortname'])
-
     #encode it with string escape
     teststring = teststring.encode('unicode_escape')
     print("💗 Growing Heart")
@@ -74,6 +69,13 @@ for i, t in enumerate(sorted(jt.items(), key=lambda x: int(x[1]['order']), rever
     print(chr(0x001f483)+chr(0x001f3fe))
     print('💃🏾 ')
     print(chr(int('1f483',16))+chr(int('1f3fe',16)))
+
+    emodict = json.loads(open('../../emodict.json').read())
+    for i, t in enumerate(sorted(emodict.items(), key=lambda x: int(x[1]['order']), reverse=True)):
+        if i > 10:
+            break
+        ck = unicode_chr_str(t[0])
+        print(ck, "\t", len(ck), "\t", t[1]['order'], "\t", t[0], "\t", t[1]['shortname'])
 
 dec_emo = {
 	127744: ['🌀 ', 'blue-spiral', ''],
