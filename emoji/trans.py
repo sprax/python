@@ -41,9 +41,11 @@ def unicode_chr_str(hex_unicode):
     parts = hex_unicode.split('-')
     return ''.join(char(int(x, 16)) for x in parts)
 
-def qw(s):
-    return tuple(s.split())
+def qw_list(ss):
+    return ss.split()
 
+def qw_tuple(ss):
+    return tuple(ss.split())
 
 def test_it():
     trans()
