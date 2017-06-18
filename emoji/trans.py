@@ -41,7 +41,11 @@ def unicode_chr_str(hex_unicode):
     parts = hex_unicode.split('-')
     return ''.join(char(int(x, 16)) for x in parts)
 
-if __name__ == '__main__':
+def qw(s):
+    return tuple(s.split())
+
+
+def test_it():
     trans()
     print(u'\U0001f604'.encode('unicode-escape'))
     print(u'\U0001f604')
@@ -70,13 +74,18 @@ if __name__ == '__main__':
     print(chr(0x001f483)+chr(0x001f3fe))
     print('💃🏾 ')
     print(chr(int('1f483',16))+chr(int('1f3fe',16)))
+    print('%8s %8s %8s' % qw('surf wave whitecap'))
+    print("('%s', '%s', '%s')" % qw("surf's-up wave rip-curl"))
 
     emodict = json.loads(open('../../emodict.json').read())
     for i, t in enumerate(sorted(emodict.items(), key=lambda x: int(x[1]['order']), reverse=True)):
-        if i > 10:
+        if i > 5:
             break
         ck = unicode_chr_str(t[0])
         print(ck, "\t", len(ck), "\t", t[1]['order'], "\t", t[0], "\t", t[1]['shortname'])
+
+if __name__ == '__main__':
+    test_it()
 
 dec_emo = {
 	127744: ['🌀 ', 'blue-spiral', ''],
