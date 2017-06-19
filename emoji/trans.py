@@ -9,6 +9,7 @@ Plan:
     Text => <syllabic repr> => <emoji>
 '''
 
+import argparse
 import emoji
 import json
 import random
@@ -2596,8 +2597,8 @@ def emojize(src_to_emo, txt_phrase):
         emo_phrase.append(dst)
     return emo_phrase
 
-def test_emo_tuples():
-    presets = {'a': [''], 'but': [''], 'may': [''], 'the': ['']}
+def test_emo_tuples(options):
+    presets = {'a': [''], 'but': [''], 'may': [''], 'the': ['']} if options.no_articles else {}
     src_to_emo = defaultdict(list, presets)
     for tt in emo_tuples:
         for src in tt[7]:
@@ -2609,8 +2610,30 @@ def test_emo_tuples():
     print("    %s ==>\n    %s" % (txt_phrase, emo_phrase))
 
 def test_it():
+    '''test english -> emoji translation'''
+    parser = argparse.ArgumentParser(
+        # usage='%(prog)s [options]',
+        description="test english -> emoji translation")
+    parser.add_argument('input_file', type=str, nargs='?', default='train_1000.label',
+                        help='file containing text to filter')
+    parser.add_argument('-dir', dest='text_dir', type=str, default='/Users/sprax/text',
+                        help='directory to search for input_file')
+    parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
+                        help='charset encoding of input text')
+    parser.add_argument('-no_articles', action='store_true',
+                        help='replace articles (a, an, the) with nothing')
+    parser.add_argument('-number', dest='max_lines', type=int, nargs='?', const=1, default=0,
+                        help='number of sentences to keep (default: 5), overrides -percent')
+    parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
+                        help='output path for filtered text (default: - <stdout>)')
+    parser.add_argument('-truncate', dest='max_words', type=int, nargs='?',
+                        const=8, default=0,
+                        help='truncate sentences after MAX words (default: INT_MAX)')
+    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
+                        help='verbosity of output (default: 1)')
+    args = parser.parse_args()
     # test_misc()
-    test_emo_tuples()
+    test_emo_tuples(args)
 
 if __name__ == '__main__':
     test_it()
