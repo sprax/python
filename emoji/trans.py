@@ -14,6 +14,14 @@ import json
 import re
 from collections import defaultdict
 
+def test_load():
+    emodict = json.loads(open('../../emodict.json').read())
+    for i, t in enumerate(sorted(emodict.items(), key=lambda x: int(x[1]['order']), reverse=True)):
+        if i > 5:
+            break
+        ck = unicode_chr_str(t[0])
+        print(ck, "\t", len(ck), "\t", t[1]['order'], "\t", t[0], "\t", t[1]['shortname'])
+
 def selflist(word):
     return [word]
 
@@ -45,9 +53,9 @@ def qw_list(ss):
     return ss.split()
 
 def qw_tuple(ss):
-    return tuple(ss.split())
+    return tuple(qw_list(ss))
 
-def test_it():
+def test_misc():
     trans()
     print(u'\U0001f604'.encode('unicode-escape'))
     print(u'\U0001f604')
@@ -76,71 +84,62 @@ def test_it():
     print(chr(0x001f483)+chr(0x001f3fe))
     print('💃🏾 ')
     print(chr(int('1f483',16))+chr(int('1f3fe',16)))
-    print('%8s %8s %8s' % qw('surf wave whitecap'))
-    print("('%s', '%s', '%s')" % qw("surf's-up wave rip-curl"))
+    print('%8s %8s %8s' % qw_tuple('surf wave whitecap'))
+    print("('%s', '%s', '%s')" % qw_tuple("surf's-up wave rip-curl"))
 
-    emodict = json.loads(open('../../emodict.json').read())
-    for i, t in enumerate(sorted(emodict.items(), key=lambda x: int(x[1]['order']), reverse=True)):
-        if i > 5:
-            break
-        ck = unicode_chr_str(t[0])
-        print(ck, "\t", len(ck), "\t", t[1]['order'], "\t", t[0], "\t", t[1]['shortname'])
-
-if __name__ == '__main__':
-    test_it()
 
 dec_emo = {
 	127744: ['🌀 ', 'blue-spiral', ''],
-	127745: ['🌁 ', 'foggy-mountain', ':foggy:'],
-	127746: ['🌂 ', 'umbrella-down', ':closed_umbrella:'],
-	127747: ['🌃 ', 'city-at-night', ':night_with_stars:'],
-	127748: ['🌄 ', 'sunrise-over-mountains', ':sunrise_over_mountains:'],
-	127749: ['🌅 ', 'ocean-sunrise', ':sunrise:'],
-	127750: ['🌆 ', 'city-at-dusk', ':city_dusk:'],
-	127751: ['🌇 ', 'city-sunset', ':city_sunset:'],
-	127752: ['🌈 ', 'rainbow', ':rainbow:'],
-	127753: ['🌉 ', 'bridge-at-night', ':bridge_at_night:'],
-	127754: ['🌊 ', 'wave', ':ocean:'],
-	127755: ['🌋 ', 'volcano', ':volcano:'],
-	127756: ['🌌 ', 'milky-way', ':milky_way:'],
-	127757: ['🌍 ', 'globe-africa', ':earth_africa:'],
-	127758: ['🌎 ', 'globe-americas', ':earth_americas:'],
-	127759: ['🌏 ', 'globe-asia-australia', ':earth_asia:'],
+	127745: ['🌁 ', 'foggy-mountain', 'foggy'],
+	127746: ['🌂 ', 'umbrella-down', 'closed_umbrella'],
+	127747: ['🌃 ', 'city-at-night', 'night_with_stars'],
+	127748: ['🌄 ', 'sunrise-over-mountains', 'sunrise_over_mountains'],
+	127749: ['🌅 ', 'ocean-sunrise', 'sunrise'],
+	127750: ['🌆 ', 'city-at-dusk', 'city_dusk'],
+	127751: ['🌇 ', 'city-sunset', 'city_sunset'],
+	127752: ['🌈 ', 'rainbow', 'rainbow'],
+	127753: ['🌉 ', 'bridge-at-night', 'bridge_at_night'],
+	127754: ['🌊 ', 'wave', 'ocean'],
+	127755: ['🌋 ', 'volcano', 'volcano'],
+	127756: ['🌌 ', 'milky-way', 'milky_way'],
+	127757: ['🌍 ', 'globe-africa', 'earth_africa'],
+	127758: ['🌎 ', 'globe-americas', 'earth_americas'],
+	127759: ['🌏 ', 'globe-asia-australia', 'earth_asia'],
 	127760: ['🌐 ', 'globe with meridians'],
-	127761: ['🌑 ', 'new moon', ':new_moon:'],
-	127762: ['🌒 ', 'quarter moon', ':waxing_crescent_moon:'],
-	127763: ['🌓 ', 'halfmoon', ':first_quarter_moon:'],
+	127761: ['🌑 ', 'new moon', 'new_moon'],
+	127762: ['🌒 ', 'quarter moon', 'waxing_crescent_moon'],
+	127763: ['🌓 ', 'halfmoon', 'first_quarter_moon'],
 	127764: ['🌔 ', 'three-quarter moon'],
-	127765: ['🌕 ', 'full moon', ':full_moon:'],
-	127766: ['🌖 ', 'waning gibbous moon', ':waning_gibbous_moon:'],
-	127767: ['🌗 ', 'waning halfmoon', ':last_quarter_moon:'],
-	127768: ['🌘 ', '', ':waning_crescent_moon:'],
-	127769: ['🌙 ', '', ':crescent_moon:'],
-	127770: ['🌚 ', '', ':new_moon_with_face:'],
-	127771: ['🌛 ', '', ':first_quarter_moon_with_face:'],
-	127772: ['🌜 ', '', ':last_quarter_moon_with_face:'],
-	127773: ['🌝 ', '', ':full_moon_with_face:'],
-	127774: ['🌞 ', '', ':sun_with_face:'],
-	127775: ['🌟 ', '', ':star2:'],
-	127776: ['🌠 ', 'shooting star', ':dizzy:'],
+	127765: ['🌕 ', 'full moon', 'full_moon'],
+	127766: ['🌖 ', 'waning gibbous moon', 'waning_gibbous_moon'],
+	127767: ['🌗 ', 'waning halfmoon', 'last_quarter_moon'],
+	127768: ['🌘 ', '', 'waning_crescent_moon'],
+	127769: ['🌙 ', '', 'crescent_moon'],
+	127770: ['🌚 ', '', 'new_moon_with_face'],
+	127771: ['🌛 ', '', 'first_quarter_moon_with_face'],
+	127772: ['🌜 ', '', 'last_quarter_moon_with_face'],
+	127773: ['🌝 ', '', 'full_moon_with_face'],
+	127774: ['🌞 ', '', 'sun_with_face'],
+	127775: ['🌟 ', '', 'star2'],
+	127776: ['🌠 ', 'shooting star', 'dizzy'],
 	127777: ['🌡 ', 'thermometer', '', 'hot'],
 ##
-	127780: ['🌤 ', '', ':white_sun_small_cloud:'],
-	127781: ['🌥 ', '', ':parly_sunny:'],
-	127782: ['🌦 ', '', ':white_sun_rain_cloud'],
-	127783: ['🌧 ', '', ':cloud_rain:'],
-	127784: ['🌨 ', '', ':cloud_snow:'],
-	127785: ['🌩 ', '', ':cloud_lightning:'],
-	127786: ['🌪 ', '', ':cloud_tornado:'],
-	127787: ['🌫 ', '', ':fog:'],
-	127788: ['🌬 ', '', ':wind_blowing_face'],
-	127789: ['🌭 ', '', ':hotdog:'],
-	127790: ['🌮 ', '', ':taco:'],
-	127791: ['🌯 ', '', ':burrito'],
-	127792: ['🌰 ', '', ':chestnut:'],
-	127793: ['🌱 ', '', ':seedlig:'],
-	127794: ['🌲 ', '', ':evergreen_tree:'],
-	127795: ['🌳 ', '', ':deciduous_tree'],
+	127780: ['🌤 ', '', 'white_sun_small_cloud'],
+	127781: ['🌥 ', '', 'parly_sunny'],
+	127782: ['🌦 ', '', 'white_sun_rain_cloud'],
+	127783: ['🌧 ', '', 'cloud_rain'],
+	127784: ['🌨 ', '', 'cloud_snow'],
+	127785: ['🌩 ', '', 'cloud_lightning'],
+	127786: ['🌪 ', '', 'cloud_tornado'],
+	127787: ['🌫 ', '', 'fog'],
+	127788: ['🌬 ', '', 'wind_blowing_face'],
+	127789: ['🌭 ', '', 'hotdog'],
+	127790: ['🌮 ', '', 'taco'],
+	127791: ['🌯 ', '', 'burrito'],
+	127792: ['🌰 ', '', 'chestnut'],
+	127793: ['🌱 ', '', 'seedling'],
+	127794: ['🌲 ', '', 'evergreen_tree'],
+	127795: ['🌳 ', '', 'deciduous_tree'],
 	127796: ['🌴 ', '', ''],
 }
 
@@ -1237,7 +1236,7 @@ emo_tuples = [
     ('1f416', '🐖', 1083, 1, ':pig2:', [], 'nature', []),
     ('1f410', '🐐', 1084, 1, ':goat:', [], 'nature', []),
     ('1f40f', '🐏', 1085, 1, ':ram:', [], 'nature', []),
-    ('1f411', '🐑', 1086, 1, ':sheep:', [], 'nature', []),
+    ('1f411', '🐑', 1086, 1, ':sheep:', [], 'nature', ['sheep', 'ewe', 'you']),
     ('1f415', '🐕', 1087, 1, ':dog2:', [], 'nature', []),
     ('1f429', '🐩', 1088, 1, ':poodle:', [], 'nature', []),
     ('1f408', '🐈', 1089, 1, ':cat2:', [], 'nature', []),
@@ -1314,11 +1313,11 @@ emo_tuples = [
     ('2603', '☃', 1160, 1, ':snowman2:', [], 'nature', []),
     ('26c4', '⛄', 1161, 1, ':snowman:', [], 'nature', []),
     ('2744', '❄', 1162, 1, ':snowflake:', [], 'nature', []),
-    ('1f32c', '🌬', 1163, 1, ':wind_blowing_face:', [], 'nature', []),
+    ('1f32c', '🌬', 1163, 1, ':wind_blowing_face:', [], 'nature', ['wind', 'blow', 'blowing']),
     ('1f4a8', '💨', 1164, 1, ':dash:', [], 'nature', []),
     ('1f32a', '🌪', 1165, 1, ':cloud_tornado:', [':cloud_with_tornado:'], 'nature', []),
     ('1f32b', '🌫', 1166, 1, ':fog:', [], 'nature', []),
-    ('1f30a', '🌊', 1167, 1, ':ocean:', [], 'nature', []),
+    ('1f30a', '🌊', 1167, 1, ':ocean:', [], 'nature', ['wave', 'waves']),
     ('1f4a7', '💧', 1168, 1, ':droplet:', [], 'nature', []),
     ('1f4a6', '💦', 1169, 1, ':sweat_drops:', [], 'nature', []),
     ('2614', '☔', 1170, 1, ':umbrella:', [], 'nature', []),
@@ -1737,8 +1736,8 @@ emo_tuples = [
     ('1f6f0', '🛰', 1583, 1, ':satellite_orbital:', [], 'travel', []),
     ('1f4ba', '💺', 1584, 1, ':seat:', [], 'travel', []),
     ('1f6f6', '🛶', 1585, 1, ':canoe:', [':kayak:'], 'travel', []),
-    ('26f5', '⛵', 1586, 1, ':sailboat:', [], 'travel', []),
-    ('1f6e5', '🛥', 1587, 1, ':motorboat:', [], 'travel', []),
+    ('26f5', '⛵', 1586, 1, ':sailboat:', [], 'travel', ['boat']),
+    ('1f6e5', '🛥', 1587, 1, ':motorboat:', [], 'travel', ['boat']),
     ('1f6a4', '🚤', 1588, 1, ':speedboat:', [], 'travel', []),
     ('1f6f3', '🛳', 1589, 1, ':cruise_ship:', [':passenger_ship:'], 'travel', []),
     ('26f4', '⛴', 1590, 1, ':ferry:', [], 'travel', []),
@@ -2580,3 +2579,35 @@ emo_tuples = [
     ('1f469-2764-1f468', '👩❤👨', 2426, 3, ':couple_with_heart_woman_man:', [], 'people', []),
     ('1f469-2764-1f48b-1f468', '👩❤💋👨', 2427, 4, ':kiss_woman_man:', [], 'people', []),
 ]
+
+def trans_to_emo(src_to_emo, txt_phrase):
+    srcs = qw_list(txt_phrase)
+    emo_phrase = []
+    for src in srcs:
+        try:
+            dst = src_to_emo[src]
+        except KeyError as ex:
+            # print('KeyError:', ex)
+            dst = src
+        emo_phrase.append(dst)
+    return emo_phrase
+
+
+
+def test_emo_tuples():
+    src_to_emo = {'a': '', 'may': '', 'the': ''}
+    for tt in emo_tuples:
+        for src in tt[7]:
+            src_to_emo[src] = tt[1]
+            # print("src(%s) => emo(%s)" % (src, tt[1]))
+    txt_phrase = "wind and waves may rock the boat, but only you can tip the crew"
+    emo_list = trans_to_emo(src_to_emo, txt_phrase)
+    emo_phrase = ' '.join(emo_list)
+    print("    %s ==>\n    %s" % (txt_phrase, emo_phrase))
+
+def test_it():
+    # test_misc()
+    test_emo_tuples()
+
+if __name__ == '__main__':
+    test_it()
