@@ -11,6 +11,7 @@ Plan:
 
 import emoji
 import json
+import random
 import re
 from collections import defaultdict
 
@@ -2580,28 +2581,30 @@ emo_tuples = [
     ('1f469-2764-1f48b-1f468', '👩❤💋👨', 2427, 4, ':kiss_woman_man:', [], 'people', []),
 ]
 
-def trans_to_emo(src_to_emo, txt_phrase):
+def emojize(src_to_emo, txt_phrase):
     srcs = re.split(r'\W+', txt_phrase.rstrip())
     emo_phrase = []
     for src in srcs:
-        try:
-            dst = src_to_emo[src]
-        except KeyError as ex:
-            # print('KeyError:', ex)
+        lst = src_to_emo[src]
+        num = len(lst)
+        if num > 1:
+            dst = random.choice(lst)
+        elif num == 1:
+            dst = lst[0]
+        else:
             dst = src
         emo_phrase.append(dst)
     return emo_phrase
 
-
-
 def test_emo_tuples():
-    src_to_emo = {'a': '', 'but': '', 'may': '', 'the': ''}
+    presets = {'a': [''], 'but': [''], 'may': [''], 'the': ['']}
+    src_to_emo = defaultdict(list, presets)
     for tt in emo_tuples:
         for src in tt[7]:
             src_to_emo[src] = tt[1]
             # print("src(%s) => emo(%s)" % (src, tt[1]))
     txt_phrase = "wind and waves may rock the boat, but only you can tip the crew"
-    emo_list = trans_to_emo(src_to_emo, txt_phrase)
+    emo_list = emojize(src_to_emo, txt_phrase)
     emo_phrase = ' '.join(emo_list)
     print("    %s ==>\n    %s" % (txt_phrase, emo_phrase))
 
