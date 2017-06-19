@@ -1861,7 +1861,7 @@ emo_tuples = [
     ('1f4b7', '💷', 1708, 1, ':pound:', [], 'objects', []),
     ('1f4b0', '💰', 1709, 1, ':moneybag:', [], 'objects', []),
     ('1f4b3', '💳', 1710, 1, ':credit_card:', [], 'objects', []),
-    ('1f48e', '💎', 1711, 1, ':gem:', [], 'objects', []),
+    ('1f48e', '💎', 1711, 1, ':gem:', [], 'objects', ['gem', 'gemstone', 'rock']),
     ('2696', '⚖', 1712, 1, ':scales:', [], 'objects', []),
     ('1f527', '🔧', 1713, 1, ':wrench:', [], 'objects', []),
     ('1f528', '🔨', 1714, 1, ':hammer:', [], 'objects', []),
@@ -2581,7 +2581,7 @@ emo_tuples = [
 ]
 
 def trans_to_emo(src_to_emo, txt_phrase):
-    srcs = qw_list(txt_phrase)
+    srcs = re.split(r'\W+', txt_phrase.rstrip())
     emo_phrase = []
     for src in srcs:
         try:
@@ -2595,7 +2595,7 @@ def trans_to_emo(src_to_emo, txt_phrase):
 
 
 def test_emo_tuples():
-    src_to_emo = {'a': '', 'may': '', 'the': ''}
+    src_to_emo = {'a': '', 'but': '', 'may': '', 'the': ''}
     for tt in emo_tuples:
         for src in tt[7]:
             src_to_emo[src] = tt[1]
