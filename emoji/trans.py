@@ -16,6 +16,8 @@ import random
 import re
 from collections import defaultdict
 
+WAW = "wind and waves may rock the boat, but only you can tip the crew"
+
 def test_load():
     emodict = json.loads(open('../../emodict.json').read())
     for i, t in enumerate(sorted(emodict.items(), key=lambda x: int(x[1]['order']), reverse=True)):
@@ -33,7 +35,7 @@ def getsyl(map, word):
 
 def trans():
     wtsl = defaultdict(selflist)
-    sent = "wind and waves may rock the boat, but only you can tip the crew"
+    sent = WAW
     words = re.split(r'\W+', sent.rstrip())
     print(words)
     for word in words:
@@ -2607,14 +2609,18 @@ def emojize(src_to_emo, txt_phrase):
     return emo_phrase
 
 def test_emo_tuples(options):
-    presets = {'a': [''], 'but': [''], 'may': [''], 'the': ['']} if options.no_articles else {}
+    presets = {}
+    if options.no_articles:
+        presets.update({'a': [''], 'but': [''], 'may': [''], 'the': ['']})
+    if options.subtraction:
+        presets.update({'can': ['🍬 ➖ D']})
     src_to_emo = defaultdict(list, presets)
     for tt in EMO_TUPLES:
         for src in tt[7]:
             # print("type src is: ", type(src), "and uni:", tt[0])
             src_to_emo[src].append(tt[1])
             # print("src(%s) => emo(%s)" % (src, tt[1]))
-    txt_phrase = "wind and waves may rock the boat, but only you can tip the crew"
+    txt_phrase = WAW
     emo_list = emojize(src_to_emo, txt_phrase)
     emo_phrase = ' '.join(emo_list)
     print("    %s ==>\n    %s" % (txt_phrase, emo_phrase))
@@ -2632,6 +2638,8 @@ def test_it():
                         help='charset encoding of input text')
     parser.add_argument('-no_articles', action='store_true',
                         help='replace articles (a, an, the) with nothing')
+    parser.add_argument('-subtraction', action='store_true',
+                        help='allow subtraction of letters or syllables')
     parser.add_argument('-number', dest='max_lines', type=int, nargs='?', const=1, default=0,
                         help='number of sentences to keep (default: 5), overrides -percent')
     parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
