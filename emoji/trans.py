@@ -93,7 +93,7 @@ def test_misc():
     print("('%s', '%s', '%s')" % qw_tuple("surf's-up wave rip-curl"))
 
 
-dec_emo = {
+DECIMAL_TO_EMO = {
 	127744: ['🌀 ', 'blue-spiral', ''],
 	127745: ['🌁 ', 'foggy-mountain', 'foggy'],
 	127746: ['🌂 ', 'umbrella-down', 'closed_umbrella'],
@@ -155,7 +155,7 @@ def gen_emo_tuples(emo_dict, limit=5000):
         key, val, chk = t[0], t[1], unicode_chr_str(key)
         print("('%s', '%s', %d, %d, '%s', %s, '%s', [])," % (key, chk, int(val['order']), len(chk), val['shortname'], val['shortname_alternates'], val['category']))
 
-emo_tuples = [
+EMO_TUPLES = [
     ('1f600', '😀', 1, 1, ':grinning:', [], 'people', ['grinning', 'smirking']),
     ('1f603', '😃', 2, 1, ':smiley:', [], 'people', ['smiley', 'smile ee']),
     ('1f604', '😄', 3, 1, ':smile:', [], 'people', ['smile']),
@@ -1391,18 +1391,18 @@ emo_tuples = [
     ('1f382', '🎂', 1233, 1, ':birthday:', [], 'food', []),
     ('1f36e', '🍮', 1234, 1, ':custard:', [':pudding:', ':flan:'], 'food', []),
     ('1f36d', '🍭', 1235, 1, ':lollipop:', [], 'food', []),
-    ('1f36c', '🍬', 1236, 1, ':candy:', [], 'food', []),
+    ('1f36c', '🍬', 1236, 1, ':candy:', [], 'food', ['candy', 'can-dee', 'can-D']),
     ('1f36b', '🍫', 1237, 1, ':chocolate_bar:', [], 'food', []),
     ('1f37f', '🍿', 1238, 1, ':popcorn:', [], 'food', []),
     ('1f369', '🍩', 1239, 1, ':doughnut:', [], 'food', []),
     ('1f36a', '🍪', 1240, 1, ':cookie:', [], 'food', []),
     ('1f95b', '🥛', 1241, 1, ':milk:', [':glass_of_milk:'], 'food', []),
     ('1f37c', '🍼', 1242, 1, ':baby_bottle:', [], 'food', ['bottle', 'baby bottle', 'nipple bottle']),
-    ('2615', '☕', 1243, 1, ':coffee:', [], 'food', [qw('coffee joe java cuppa')]),
+    ('2615', '☕', 1243, 1, ':coffee:', [], 'food', qw('coffee joe java cuppa')),
     ('1f375', '🍵', 1244, 1, ':tea:', [], 'food', ['tea', 'brew']),
     ('1f376', '🍶', 1245, 1, ':sake:', [], 'food', ['sake']),
-    ('1f37a', '🍺', 1246, 1, ':beer:', [], 'food', [qw('ale beer mug pint pint brew brewski draft')]),
-    ('1f37b', '🍻', 1247, 1, ':beers:', [], 'food', [qw('ales beers mugs pints brews brewskis drafts']),
+    ('1f37a', '🍺', 1246, 1, ':beer:', [], 'food', qw('ale beer mug pint pint brew brewski draft')),
+    ('1f37b', '🍻', 1247, 1, ':beers:', [], 'food', qw('ales beers mugs pints brews brewskis drafts')),
     # ('1f942', '🥂', 1248, 1, ':champagne_glass:', [':clinking_glass:'], 'food', []),
     ('1f377', '🍷', 1249, 1, ':wine_glass:', [], 'food', ['wine', 'glass', 'vino', 'red', 'red wine', 'vintage']),
     #('1f943', '🥃', 1250, 1, ':tumbler_glass:', [':whisky:'], 'food', []),
@@ -1429,17 +1429,17 @@ emo_tuples = [
     ('26f3', '⛳', 1271, 1, ':golf:', [], 'activity', []),
     ('1f3f9', '🏹', 1272, 1, ':bow_and_arrow:', [':archery:'], 'activity', []),
     ('1f3a3', '🎣', 1273, 1, ':fishing_pole_and_fish:', [], 'activity', []),
-    ('1f94a', '🥊', 1274, 1, ':boxing_glove:', [':boxing_gloves:'], 'activity', []),
-    ('1f94b', '🥋', 1275, 1, ':martial_arts_uniform:', [':karate_uniform:'], 'activity', []),
+    # ('1f94a', '🥊', 1274, 1, ':boxing_glove:', [':boxing_gloves:'], 'activity', []),
+    # ('1f94b', '🥋', 1275, 1, ':martial_arts_uniform:', [':karate_uniform:'], 'activity', []),
     ('26f8', '⛸', 1276, 1, ':ice_skate:', [], 'activity', []),
     ('1f3bf', '🎿', 1277, 1, ':ski:', [], 'activity', []),
     ('26f7', '⛷', 1278, 1, ':skier:', [], 'activity', []),
     ('1f3c2', '🏂', 1279, 1, ':snowboarder:', [], 'activity', []),
-    ('1f3c2-1f3fb', '🏂🏻', 1280, 2, ':snowboarder_tone1:', [':snowboarder_light_skin_tone:'], 'activity', []),
-    ('1f3c2-1f3fc', '🏂🏼', 1281, 2, ':snowboarder_tone2:', [':snowboarder_medium_light_skin_tone:'], 'activity', []),
-    ('1f3c2-1f3fd', '🏂🏽', 1282, 2, ':snowboarder_tone3:', [':snowboarder_medium_skin_tone:'], 'activity', []),
-    ('1f3c2-1f3fe', '🏂🏾', 1283, 2, ':snowboarder_tone4:', [':snowboarder_medium_dark_skin_tone:'], 'activity', []),
-    ('1f3c2-1f3ff', '🏂🏿', 1284, 2, ':snowboarder_tone5:', [':snowboarder_dark_skin_tone:'], 'activity', []),
+    # ('1f3c2-1f3fb', '🏂🏻', 1280, 2, ':snowboarder_tone1:', [':snowboarder_light_skin_tone:'], 'activity', []),
+    # ('1f3c2-1f3fc', '🏂🏼', 1281, 2, ':snowboarder_tone2:', [':snowboarder_medium_light_skin_tone:'], 'activity', []),
+    # ('1f3c2-1f3fd', '🏂🏽', 1282, 2, ':snowboarder_tone3:', [':snowboarder_medium_skin_tone:'], 'activity', []),
+    # ('1f3c2-1f3fe', '🏂🏾', 1283, 2, ':snowboarder_tone4:', [':snowboarder_medium_dark_skin_tone:'], 'activity', []),
+    # ('1f3c2-1f3ff', '🏂🏿', 1284, 2, ':snowboarder_tone5:', [':snowboarder_dark_skin_tone:'], 'activity', []),
     ('1f3cb-2640', '🏋♀', 1285, 2, ':woman_lifting_weights:', [], 'activity', []),
     ('1f3cb-1f3fb-2640', '🏋🏻♀', 1286, 3, ':woman_lifting_weights_tone1:', [':woman_lifting_weights_light_skin_tone:'], 'activity', []),
     ('1f3cb-1f3fc-2640', '🏋🏼♀', 1287, 3, ':woman_lifting_weights_tone2:', [':woman_lifting_weights_medium_light_skin_tone:'], 'activity', []),
@@ -1459,39 +1459,39 @@ emo_tuples = [
     ('1f3cb-1f3fc-2642', '🏋🏼♂', 1301, 3, ':man_lifting_weights_tone2:', [':man_lifting_weights_medium_light_skin_tone:'], 'activity', []),
     ('1f3cb-1f3fb-2642', '🏋🏻♂', 1302, 3, ':man_lifting_weights_tone1:', [':man_lifting_weights_light_skin_tone:'], 'activity', []),
     ('1f93a', '🤺', 1303, 1, ':person_fencing:', [':fencer:', ':fencing:'], 'activity', []),
-    ('1f93c-2640', '🤼♀', 1304, 2, ':women_wrestling:', [], 'activity', []),
-    ('1f93c-2642', '🤼♂', 1305, 2, ':men_wrestling:', [], 'activity', []),
-    ('1f93c', '🤼', 1306, 1, ':people_wrestling:', [':wrestlers:', ':wrestling:'], 'activity', []),
-    ('1f938-2640', '🤸♀', 1307, 2, ':woman_cartwheeling:', [], 'activity', []),
-    ('1f938-1f3fb-2640', '🤸🏻♀', 1308, 3, ':woman_cartwheeling_tone1:', [':woman_cartwheeling_light_skin_tone:'], 'activity', []),
-    ('1f938-1f3fc-2640', '🤸🏼♀', 1309, 3, ':woman_cartwheeling_tone2:', [':woman_cartwheeling_medium_light_skin_tone:'], 'activity', []),
-    ('1f938-1f3fd-2640', '🤸🏽♀', 1310, 3, ':woman_cartwheeling_tone3:', [':woman_cartwheeling_medium_skin_tone:'], 'activity', []),
-    ('1f938-1f3fe-2640', '🤸🏾♀', 1311, 3, ':woman_cartwheeling_tone4:', [':woman_cartwheeling_medium_dark_skin_tone:'], 'activity', []),
-    ('1f938-1f3ff-2640', '🤸🏿♀', 1312, 3, ':woman_cartwheeling_tone5:', [':woman_cartwheeling_dark_skin_tone:'], 'activity', []),
-    ('1f938-2642', '🤸♂', 1313, 2, ':man_cartwheeling:', [], 'activity', []),
-    ('1f938-1f3fb-2642', '🤸🏻♂', 1314, 3, ':man_cartwheeling_tone1:', [':man_cartwheeling_light_skin_tone:'], 'activity', []),
-    ('1f938-1f3fc-2642', '🤸🏼♂', 1315, 3, ':man_cartwheeling_tone2:', [':man_cartwheeling_medium_light_skin_tone:'], 'activity', []),
-    ('1f938-1f3fd-2642', '🤸🏽♂', 1316, 3, ':man_cartwheeling_tone3:', [':man_cartwheeling_medium_skin_tone:'], 'activity', []),
-    ('1f938-1f3fe-2642', '🤸🏾♂', 1317, 3, ':man_cartwheeling_tone4:', [':man_cartwheeling_medium_dark_skin_tone:'], 'activity', []),
-    ('1f938-1f3ff-2642', '🤸🏿♂', 1318, 3, ':man_cartwheeling_tone5:', [':man_cartwheeling_dark_skin_tone:'], 'activity', []),
-    ('1f938', '🤸', 1319, 1, ':person_doing_cartwheel:', [':cartwheel:'], 'activity', []),
-    ('1f938-1f3fb', '🤸🏻', 1320, 2, ':person_doing_cartwheel_tone1:', [':cartwheel_tone1:'], 'activity', []),
-    ('1f938-1f3fc', '🤸🏼', 1321, 2, ':person_doing_cartwheel_tone2:', [':cartwheel_tone2:'], 'activity', []),
-    ('1f938-1f3fd', '🤸🏽', 1322, 2, ':person_doing_cartwheel_tone3:', [':cartwheel_tone3:'], 'activity', []),
-    ('1f938-1f3fe', '🤸🏾', 1323, 2, ':person_doing_cartwheel_tone4:', [':cartwheel_tone4:'], 'activity', []),
-    ('1f938-1f3ff', '🤸🏿', 1324, 2, ':person_doing_cartwheel_tone5:', [':cartwheel_tone5:'], 'activity', []),
+    # ('1f93c-2640', '🤼♀', 1304, 2, ':women_wrestling:', [], 'activity', []),
+    # ('1f93c-2642', '🤼♂', 1305, 2, ':men_wrestling:', [], 'activity', []),
+    # ('1f93c', '🤼', 1306, 1, ':people_wrestling:', [':wrestlers:', ':wrestling:'], 'activity', []),
+    # ('1f938-2640', '🤸♀', 1307, 2, ':woman_cartwheeling:', [], 'activity', []),
+    # ('1f938-1f3fb-2640', '🤸🏻♀', 1308, 3, ':woman_cartwheeling_tone1:', [':woman_cartwheeling_light_skin_tone:'], 'activity', []),
+    # ('1f938-1f3fc-2640', '🤸🏼♀', 1309, 3, ':woman_cartwheeling_tone2:', [':woman_cartwheeling_medium_light_skin_tone:'], 'activity', []),
+    # ('1f938-1f3fd-2640', '🤸🏽♀', 1310, 3, ':woman_cartwheeling_tone3:', [':woman_cartwheeling_medium_skin_tone:'], 'activity', []),
+    # ('1f938-1f3fe-2640', '🤸🏾♀', 1311, 3, ':woman_cartwheeling_tone4:', [':woman_cartwheeling_medium_dark_skin_tone:'], 'activity', []),
+    # ('1f938-1f3ff-2640', '🤸🏿♀', 1312, 3, ':woman_cartwheeling_tone5:', [':woman_cartwheeling_dark_skin_tone:'], 'activity', []),
+    # ('1f938-2642', '🤸♂', 1313, 2, ':man_cartwheeling:', [], 'activity', []),
+    # ('1f938-1f3fb-2642', '🤸🏻♂', 1314, 3, ':man_cartwheeling_tone1:', [':man_cartwheeling_light_skin_tone:'], 'activity', []),
+    # ('1f938-1f3fc-2642', '🤸🏼♂', 1315, 3, ':man_cartwheeling_tone2:', [':man_cartwheeling_medium_light_skin_tone:'], 'activity', []),
+    # ('1f938-1f3fd-2642', '🤸🏽♂', 1316, 3, ':man_cartwheeling_tone3:', [':man_cartwheeling_medium_skin_tone:'], 'activity', []),
+    # ('1f938-1f3fe-2642', '🤸🏾♂', 1317, 3, ':man_cartwheeling_tone4:', [':man_cartwheeling_medium_dark_skin_tone:'], 'activity', []),
+    # ('1f938-1f3ff-2642', '🤸🏿♂', 1318, 3, ':man_cartwheeling_tone5:', [':man_cartwheeling_dark_skin_tone:'], 'activity', []),
+    # ('1f938', '🤸', 1319, 1, ':person_doing_cartwheel:', [':cartwheel:'], 'activity', []),
+    # ('1f938-1f3fb', '🤸🏻', 1320, 2, ':person_doing_cartwheel_tone1:', [':cartwheel_tone1:'], 'activity', []),
+    # ('1f938-1f3fc', '🤸🏼', 1321, 2, ':person_doing_cartwheel_tone2:', [':cartwheel_tone2:'], 'activity', []),
+    # ('1f938-1f3fd', '🤸🏽', 1322, 2, ':person_doing_cartwheel_tone3:', [':cartwheel_tone3:'], 'activity', []),
+    # ('1f938-1f3fe', '🤸🏾', 1323, 2, ':person_doing_cartwheel_tone4:', [':cartwheel_tone4:'], 'activity', []),
+    # ('1f938-1f3ff', '🤸🏿', 1324, 2, ':person_doing_cartwheel_tone5:', [':cartwheel_tone5:'], 'activity', []),
     ('26f9-2640', '⛹♀', 1325, 2, ':woman_bouncing_ball:', [], 'activity', []),
-    ('26f9-1f3fb-2640', '⛹🏻♀', 1326, 3, ':woman_bouncing_ball_tone1:', [':woman_bouncing_ball_light_skin_tone:'], 'activity', []),
-    ('26f9-1f3fc-2640', '⛹🏼♀', 1327, 3, ':woman_bouncing_ball_tone2:', [':woman_bouncing_ball_medium_light_skin_tone:'], 'activity', []),
-    ('26f9-1f3fd-2640', '⛹🏽♀', 1328, 3, ':woman_bouncing_ball_tone3:', [':woman_bouncing_ball_medium_skin_tone:'], 'activity', []),
-    ('26f9-1f3fe-2640', '⛹🏾♀', 1329, 3, ':woman_bouncing_ball_tone4:', [':woman_bouncing_ball_medium_dark_skin_tone:'], 'activity', []),
-    ('26f9-1f3ff-2640', '⛹🏿♀', 1330, 3, ':woman_bouncing_ball_tone5:', [':woman_bouncing_ball_dark_skin_tone:'], 'activity', []),
+    # ('26f9-1f3fb-2640', '⛹🏻♀', 1326, 3, ':woman_bouncing_ball_tone1:', [':woman_bouncing_ball_light_skin_tone:'], 'activity', []),
+    # ('26f9-1f3fc-2640', '⛹🏼♀', 1327, 3, ':woman_bouncing_ball_tone2:', [':woman_bouncing_ball_medium_light_skin_tone:'], 'activity', []),
+    # ('26f9-1f3fd-2640', '⛹🏽♀', 1328, 3, ':woman_bouncing_ball_tone3:', [':woman_bouncing_ball_medium_skin_tone:'], 'activity', []),
+    # ('26f9-1f3fe-2640', '⛹🏾♀', 1329, 3, ':woman_bouncing_ball_tone4:', [':woman_bouncing_ball_medium_dark_skin_tone:'], 'activity', []),
+    # ('26f9-1f3ff-2640', '⛹🏿♀', 1330, 3, ':woman_bouncing_ball_tone5:', [':woman_bouncing_ball_dark_skin_tone:'], 'activity', []),
     ('26f9', '⛹', 1331, 1, ':person_bouncing_ball:', [':basketball_player:', ':person_with_ball:'], 'activity', []),
-    ('26f9-1f3fb', '⛹🏻', 1332, 2, ':person_bouncing_ball_tone1:', [':basketball_player_tone1:', ':person_with_ball_tone1:'], 'activity', []),
-    ('26f9-1f3fc', '⛹🏼', 1333, 2, ':person_bouncing_ball_tone2:', [':basketball_player_tone2:', ':person_with_ball_tone2:'], 'activity', []),
-    ('26f9-1f3fd', '⛹🏽', 1334, 2, ':person_bouncing_ball_tone3:', [':basketball_player_tone3:', ':person_with_ball_tone3:'], 'activity', []),
-    ('26f9-1f3fe', '⛹🏾', 1335, 2, ':person_bouncing_ball_tone4:', [':basketball_player_tone4:', ':person_with_ball_tone4:'], 'activity', []),
-    ('26f9-1f3ff', '⛹🏿', 1336, 2, ':person_bouncing_ball_tone5:', [':basketball_player_tone5:', ':person_with_ball_tone5:'], 'activity', []),
+    # ('26f9-1f3fb', '⛹🏻', 1332, 2, ':person_bouncing_ball_tone1:', [':basketball_player_tone1:', ':person_with_ball_tone1:'], 'activity', []),
+    # ('26f9-1f3fc', '⛹🏼', 1333, 2, ':person_bouncing_ball_tone2:', [':basketball_player_tone2:', ':person_with_ball_tone2:'], 'activity', []),
+    # ('26f9-1f3fd', '⛹🏽', 1334, 2, ':person_bouncing_ball_tone3:', [':basketball_player_tone3:', ':person_with_ball_tone3:'], 'activity', []),
+    # ('26f9-1f3fe', '⛹🏾', 1335, 2, ':person_bouncing_ball_tone4:', [':basketball_player_tone4:', ':person_with_ball_tone4:'], 'activity', []),
+    # ('26f9-1f3ff', '⛹🏿', 1336, 2, ':person_bouncing_ball_tone5:', [':basketball_player_tone5:', ':person_with_ball_tone5:'], 'activity', []),
     ('26f9-2642', '⛹♂', 1337, 2, ':man_bouncing_ball:', [], 'activity', []),
     ('26f9-1f3ff-2642', '⛹🏿♂', 1338, 3, ':man_bouncing_ball_tone5:', [':man_bouncing_ball_dark_skin_tone:'], 'activity', []),
     ('26f9-1f3fe-2642', '⛹🏾♂', 1339, 3, ':man_bouncing_ball_tone4:', [':man_bouncing_ball_medium_dark_skin_tone:'], 'activity', []),
@@ -2585,6 +2585,12 @@ emo_tuples = [
     ('1f469-2764-1f48b-1f468', '👩❤💋👨', 2427, 4, ':kiss_woman_man:', [], 'people', []),
 ]
 
+class EmoTuples:
+    def __init__(self):
+        self.emo_tuples = EMO_TUPLES
+
+
+
 def emojize(src_to_emo, txt_phrase):
     srcs = re.split(r'\W+', txt_phrase.rstrip())
     emo_phrase = []
@@ -2603,9 +2609,10 @@ def emojize(src_to_emo, txt_phrase):
 def test_emo_tuples(options):
     presets = {'a': [''], 'but': [''], 'may': [''], 'the': ['']} if options.no_articles else {}
     src_to_emo = defaultdict(list, presets)
-    for tt in emo_tuples:
+    for tt in EMO_TUPLES:
         for src in tt[7]:
-            src_to_emo[src] = tt[1]
+            # print("type src is: ", type(src), "and uni:", tt[0])
+            src_to_emo[src].append(tt[1])
             # print("src(%s) => emo(%s)" % (src, tt[1]))
     txt_phrase = "wind and waves may rock the boat, but only you can tip the crew"
     emo_list = emojize(src_to_emo, txt_phrase)
