@@ -18,6 +18,14 @@ from collections import defaultdict
 
 WAW = "wind and waves may rock the boat, but only you can tip the crew"
 
+
+def is_emoji(uchar):
+  return uchar in emoji.UNICODE_EMOJI)
+
+def extract_emojis(str):
+  return ''.join(c for c in str if c in emoji.UNICODE_EMOJI)
+
+
 def test_load():
     emodict = json.loads(open('../../emodict.json').read())
     for i, t in enumerate(sorted(emodict.items(), key=lambda x: int(x[1]['order']), reverse=True)):
