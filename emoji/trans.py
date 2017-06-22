@@ -1809,7 +1809,7 @@ EMO_TUPLES = [
     ('1f54c', '🕌', 1640, 1, ':mosque:', [], 'travel', []),
     ('1f54d', '🕍', 1641, 1, ':synagogue:', [], 'travel', []),
     ('1f54b', '🕋', 1642, 1, ':kaaba:', [], 'travel', []),
-    ('26e9', '⛩', 1643, 1, ':shinto_shrine:', [], 'travel', []),
+    ('26e9', '⛩', 1643, 1, ':shinto_shrine:', [], 'travel', ['shrine', 'shinto']),
     ('1f5fe', '🗾', 1644, 1, ':japan:', [], 'travel', []),
     ('1f391', '🎑', 1645, 1, ':rice_scene:', [], 'travel', []),
     ('1f3de', '🏞', 1646, 1, ':park:', [':national_park:'], 'travel', []),
