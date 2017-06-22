@@ -10,17 +10,18 @@ Plan:
 '''
 
 import argparse
-import emoji
 import json
 import random
 import re
 from collections import defaultdict
 
+import emoji
+
 WAW = "wind and waves may rock the boat, but only you can tip the crew"
 
 
 def is_emoji(uchar):
-  return uchar in emoji.UNICODE_EMOJI)
+  return uchar in emoji.UNICODE_EMOJI
 
 def extract_emojis(str):
   return ''.join(c for c in str if c in emoji.UNICODE_EMOJI)
@@ -75,8 +76,8 @@ def test_misc():
     print(u'\U0001f604'.encode('unicode-escape'))
     print(u'\U0001f604')
     ss = u'\U0001f604'
-    #xx = chr(ss[0])
-    #print("ss({}) xx({})".format(ss, xx))
+    xx = chr(ss[0])
+    print("ss({}) xx({})".format(ss, xx))
     # -*- coding: UTF-8 -*-
     #convert to unicode
     teststring =  "I am happy \U0001f604"
@@ -1923,18 +1924,18 @@ EMO_TUPLES = [
     ('1f6cb', '🛋', 1755, 1, ':couch:', [':couch_and_lamp:'], 'objects', []),
     ('1f6cf', '🛏', 1756, 1, ':bed:', [], 'objects', []),
     ('1f6cc', '🛌', 1757, 1, ':sleeping_accommodation:', [], 'objects', []),
-    ('1f6cc-1f3fb', '🛌🏻', 1758, 2, ':person_in_bed_tone1:', [':person_in_bed_light_skin_tone:'], 'objects', []),
-    ('1f6cc-1f3fc', '🛌🏼', 1759, 2, ':person_in_bed_tone2:', [':person_in_bed_medium_light_skin_tone:'], 'objects', []),
-    ('1f6cc-1f3fd', '🛌🏽', 1760, 2, ':person_in_bed_tone3:', [':person_in_bed_medium_skin_tone:'], 'objects', []),
-    ('1f6cc-1f3fe', '🛌🏾', 1761, 2, ':person_in_bed_tone4:', [':person_in_bed_medium_dark_skin_tone:'], 'objects', []),
-    ('1f6cc-1f3ff', '🛌🏿', 1762, 2, ':person_in_bed_tone5:', [':person_in_bed_dark_skin_tone:'], 'objects', []),
-    ('1f5bc', '🖼', 1763, 1, ':frame_photo:', [':frame_with_picture:'], 'objects', []),
+    # ('1f6cc-1f3fb', '🛌🏻', 1758, 2, ':person_in_bed_tone1:', [':person_in_bed_light_skin_tone:'], 'objects', []),
+    # ('1f6cc-1f3fc', '🛌🏼', 1759, 2, ':person_in_bed_tone2:', [':person_in_bed_medium_light_skin_tone:'], 'objects', []),
+    # ('1f6cc-1f3fd', '🛌🏽', 1760, 2, ':person_in_bed_tone3:', [':person_in_bed_medium_skin_tone:'], 'objects', []),
+    # ('1f6cc-1f3fe', '🛌🏾', 1761, 2, ':person_in_bed_tone4:', [':person_in_bed_medium_dark_skin_tone:'], 'objects', []),
+    # ('1f6cc-1f3ff', '🛌🏿', 1762, 2, ':person_in_bed_tone5:', [':person_in_bed_dark_skin_tone:'], 'objects', []),
+    ('1f5bc', '🖼', 1763, 1, ':frame_photo:', [':frame_with_picture:'], 'objects', ['photo', 'picture', 'frame']),
     ('1f6cd', '🛍', 1764, 1, ':shopping_bags:', [], 'objects', []),
     ('1f6d2', '🛒', 1765, 1, ':shopping_cart:', [':shopping_trolley:'], 'objects', []),
-    ('1f381', '🎁', 1766, 1, ':gift:', [], 'objects', []),
-    ('1f388', '🎈', 1767, 1, ':balloon:', [], 'objects', []),
-    ('1f38f', '🎏', 1768, 1, ':flags:', [], 'objects', []),
-    ('1f380', '🎀', 1769, 1, ':ribbon:', [], 'objects', []),
+    ('1f381', '🎁', 1766, 1, ':gift:', [], 'objects', ['gift', 'present']),
+    ('1f388', '🎈', 1767, 1, ':balloon:', [], 'objects', ['balloon']),
+    ('1f38f', '🎏', 1768, 1, ':flags:', [], 'objects', ['flags']),
+    ('1f380', '🎀', 1769, 1, ':ribbon:', [], 'objects', ['ribbon', 'bow', 'tied']),
     ('1f38a', '🎊', 1770, 1, ':confetti_ball:', [], 'objects', []),
     ('1f389', '🎉', 1771, 1, ':tada:', [], 'objects', []),
     ('1f38e', '🎎', 1772, 1, ':dolls:', [], 'objects', []),
@@ -2093,7 +2094,7 @@ EMO_TUPLES = [
     ('1f6ad', '🚭', 1925, 1, ':no_smoking:', [], 'symbols', []),
     ('2757', '❗', 1926, 1, ':exclamation:', [], 'symbols', []),
     ('2755', '❕', 1927, 1, ':grey_exclamation:', [], 'symbols', []),
-    ('2753', '❓', 1928, 1, ':question:', [], 'symbols', []),
+    ('2753', '❓', 1928, 1, ':question:', [], 'symbols', ['question']),
     ('2754', '❔', 1929, 1, ':grey_question:', [], 'symbols', []),
     ('203c', '‼', 1930, 1, ':bangbang:', [], 'symbols', []),
     ('2049', '⁉', 1931, 1, ':interrobang:', [], 'symbols', []),
@@ -2194,39 +2195,39 @@ EMO_TUPLES = [
     ('1f502', '🔂', 2026, 1, ':repeat_one:', [], 'symbols', []),
     ('1f504', '🔄', 2027, 1, ':arrows_counterclockwise:', [], 'symbols', []),
     ('1f503', '🔃', 2028, 1, ':arrows_clockwise:', [], 'symbols', []),
-    ('1f3b5', '🎵', 2029, 1, ':musical_note:', [], 'symbols', []),
-    ('1f3b6', '🎶', 2030, 1, ':notes:', [], 'symbols', []),
-    ('2795', '➕', 2031, 1, ':heavy_plus_sign:', [], 'symbols', []),
-    ('2796', '➖', 2032, 1, ':heavy_minus_sign:', [], 'symbols', []),
-    ('2797', '➗', 2033, 1, ':heavy_division_sign:', [], 'symbols', []),
-    ('2716', '✖', 2034, 1, ':heavy_multiplication_x:', [], 'symbols', []),
-    ('1f4b2', '💲', 2035, 1, ':heavy_dollar_sign:', [], 'symbols', []),
-    ('1f4b1', '💱', 2036, 1, ':currency_exchange:', [], 'symbols', []),
-    ('2122', '™', 2037, 1, ':tm:', [], 'symbols', []),
-    ('00a9', '©', 2038, 1, ':copyright:', [], 'symbols', []),
-    ('00ae', '®', 2039, 1, ':registered:', [], 'symbols', []),
-    ('3030', '〰', 2040, 1, ':wavy_dash:', [], 'symbols', []),
+    ('1f3b5', '🎵', 2029, 1, ':musical_note:', [], 'symbols', ['notes']),
+    ('1f3b6', '🎶', 2030, 1, ':notes:', [], 'symbols', ['notes']),
+    ('2795', '➕', 2031, 1, ':heavy_plus_sign:', [], 'symbols', ['plus', 'and', '&']),
+    ('2796', '➖', 2032, 1, ':heavy_minus_sign:', [], 'symbols', ['minus', 'less']),
+    ('2797', '➗', 2033, 1, ':heavy_division_sign:', [], 'symbols', ['divide', 'divides', 'divided by']),
+    ('2716', '✖', 2034, 1, ':heavy_multiplication_x:', [], 'symbols', ['times', 'multiply']),
+    ('1f4b2', '💲', 2035, 1, ':heavy_dollar_sign:', [], 'symbols', ['dollar', 'dollars']),
+    ('1f4b1', '💱', 2036, 1, ':currency_exchange:', [], 'symbols', ['exchange', 'trade']),
+    ('2122', '™', 2037, 1, ':tm:', [], 'symbols', ['trademark', 'trademarked']),
+    ('00a9', '©', 2038, 1, ':copyright:', [], 'symbols', ['copyright', '(c)']),
+    ('00ae', '®', 2039, 1, ':registered:', [], 'symbols', ['registered', 'brand', 'branded']),
+    ('3030', '〰', 2040, 1, ':wavy_dash:', [], 'symbols', ['wavy', 'zigzag', 'wavy', 'wavy dash']),
     ('27b0', '➰', 2041, 1, ':curly_loop:', [], 'symbols', []),
     ('27bf', '➿', 2042, 1, ':loop:', [], 'symbols', []),
     ('1f51a', '🔚', 2043, 1, ':end:', [], 'symbols', []),
     ('1f519', '🔙', 2044, 1, ':back:', [], 'symbols', []),
     ('1f51b', '🔛', 2045, 1, ':on:', [], 'symbols', []),
-    ('1f51d', '🔝', 2046, 1, ':top:', [], 'symbols', []),
-    ('1f51c', '🔜', 2047, 1, ':soon:', [], 'symbols', []),
-    ('2714', '✔', 2048, 1, ':heavy_check_mark:', [], 'symbols', []),
-    ('2611', '☑', 2049, 1, ':ballot_box_with_check:', [], 'symbols', []),
-    ('1f518', '🔘', 2050, 1, ':radio_button:', [], 'symbols', []),
-    ('26aa', '⚪', 2051, 1, ':white_circle:', [], 'symbols', []),
-    ('26ab', '⚫', 2052, 1, ':black_circle:', [], 'symbols', []),
-    ('1f534', '🔴', 2053, 1, ':red_circle:', [], 'symbols', []),
-    ('1f535', '🔵', 2054, 1, ':blue_circle:', [], 'symbols', []),
+    ('1f51d', '🔝', 2046, 1, ':top:', [], 'symbols', ['top', 'up', 'above']),
+    ('1f51c', '🔜', 2047, 1, ':soon:', [], 'symbols', ['soon']),
+    ('2714', '✔', 2048, 1, ':heavy_check_mark:', [], 'symbols', ['check', 'mark']),
+    ('2611', '☑', 2049, 1, ':ballot_box_with_check:', [], 'symbols', ['checkbox', 'mark']),
+    ('1f518', '🔘', 2050, 1, ':radio_button:', [], 'symbols', ['button']),
+    ('26aa', '⚪', 2051, 1, ':white_circle:', [], 'symbols', ['ball', 'disk']),
+    ('26ab', '⚫', 2052, 1, ':black_circle:', [], 'symbols', ['ball', 'blackball', 'disk']),
+    ('1f534', '🔴', 2053, 1, ':red_circle:', [], 'symbols', ['ball', 'red ball', 'disk', 'circle']),
+    ('1f535', '🔵', 2054, 1, ':blue_circle:', [], 'symbols', ['ball', 'disk', 'circle']),
     ('1f53a', '🔺', 2055, 1, ':small_red_triangle:', [], 'symbols', []),
     ('1f53b', '🔻', 2056, 1, ':small_red_triangle_down:', [], 'symbols', []),
     ('1f538', '🔸', 2057, 1, ':small_orange_diamond:', [], 'symbols', []),
-    ('1f539', '🔹', 2058, 1, ':small_blue_diamond:', [], 'symbols', []),
-    ('1f536', '🔶', 2059, 1, ':large_orange_diamond:', [], 'symbols', []),
-    ('1f537', '🔷', 2060, 1, ':large_blue_diamond:', [], 'symbols', []),
-    ('1f533', '🔳', 2061, 1, ':white_square_button:', [], 'symbols', []),
+    ('1f539', '🔹', 2058, 1, ':small_blue_diamond:', [], 'symbols', ['small diamond', 'gem']),
+    ('1f536', '🔶', 2059, 1, ':large_orange_diamond:', [], 'symbols', ['orange diamond', 'diamond']),
+    ('1f537', '🔷', 2060, 1, ':large_blue_diamond:', [], 'symbols', ['blue diamond', 'diamond']),
+    ('1f533', '🔳', 2061, 1, ':white_square_button:', [], 'symbols', ['square']),
     ('1f532', '🔲', 2062, 1, ':black_square_button:', [], 'symbols', []),
     ('25aa', '▪', 2063, 1, ':black_small_square:', [], 'symbols', []),
     ('25ab', '▫', 2064, 1, ':white_small_square:', [], 'symbols', []),
