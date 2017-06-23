@@ -104,61 +104,6 @@ def test_misc():
     print("('%s', '%s', '%s')" % qw_tuple("surf's-up wave rip-curl"))
 
 
-DECIMAL_TO_EMO = {
-	127744: ['🌀 ', 'blue-spiral', ''],
-	127745: ['🌁 ', 'foggy-mountain', 'foggy'],
-	127746: ['🌂 ', 'umbrella-down', 'closed_umbrella'],
-	127747: ['🌃 ', 'city-at-night', 'night_with_stars'],
-	127748: ['🌄 ', 'sunrise-over-mountains', 'sunrise_over_mountains'],
-	127749: ['🌅 ', 'ocean-sunrise', 'sunrise'],
-	127750: ['🌆 ', 'city-at-dusk', 'city_dusk'],
-	127751: ['🌇 ', 'city-sunset', 'city_sunset'],
-	127752: ['🌈 ', 'rainbow', 'rainbow'],
-	127753: ['🌉 ', 'bridge-at-night', 'bridge_at_night'],
-	127754: ['🌊 ', 'wave', 'ocean'],
-	127755: ['🌋 ', 'volcano', 'volcano'],
-	127756: ['🌌 ', 'milky-way', 'milky_way'],
-	127757: ['🌍 ', 'globe-africa', 'earth_africa'],
-	127758: ['🌎 ', 'globe-americas', 'earth_americas'],
-	127759: ['🌏 ', 'globe-asia-australia', 'earth_asia'],
-	127760: ['🌐 ', 'globe with meridians'],
-	127761: ['🌑 ', 'new moon', 'new_moon'],
-	127762: ['🌒 ', 'quarter moon', 'waxing_crescent_moon'],
-	127763: ['🌓 ', 'halfmoon', 'first_quarter_moon'],
-	127764: ['🌔 ', 'three-quarter moon'],
-	127765: ['🌕 ', 'full moon', 'full_moon'],
-	127766: ['🌖 ', 'waning gibbous moon', 'waning_gibbous_moon'],
-	127767: ['🌗 ', 'waning halfmoon', 'last_quarter_moon'],
-	127768: ['🌘 ', '', 'waning_crescent_moon'],
-	127769: ['🌙 ', '', 'crescent_moon'],
-	127770: ['🌚 ', '', 'new_moon_with_face'],
-	127771: ['🌛 ', '', 'first_quarter_moon_with_face'],
-	127772: ['🌜 ', '', 'last_quarter_moon_with_face'],
-	127773: ['🌝 ', '', 'full_moon_with_face'],
-	127774: ['🌞 ', '', 'sun_with_face'],
-	127775: ['🌟 ', '', 'star2'],
-	127776: ['🌠 ', 'shooting star', 'dizzy'],
-	127777: ['🌡 ', 'thermometer', '', 'hot'],
-##
-	127780: ['🌤 ', '', 'white_sun_small_cloud'],
-	127781: ['🌥 ', '', 'parly_sunny'],
-	127782: ['🌦 ', '', 'white_sun_rain_cloud'],
-	127783: ['🌧 ', '', 'cloud_rain'],
-	127784: ['🌨 ', '', 'cloud_snow'],
-	127785: ['🌩 ', '', 'cloud_lightning'],
-	127786: ['🌪 ', '', 'cloud_tornado'],
-	127787: ['🌫 ', '', 'fog'],
-	127788: ['🌬 ', '', 'wind_blowing_face'],
-	127789: ['🌭 ', '', 'hotdog'],
-	127790: ['🌮 ', '', 'taco'],
-	127791: ['🌯 ', '', 'burrito'],
-	127792: ['🌰 ', '', 'chestnut'],
-	127793: ['🌱 ', '', 'seedling'],
-	127794: ['🌲 ', '', 'evergreen_tree'],
-	127795: ['🌳 ', '', 'deciduous_tree'],
-	127796: ['🌴 ', '', ''],
-}
-
 def gen_emo_tuples(emo_dict, limit=5000):
     for i, t in enumerate(sorted(jt.items(), key=lambda x: int(x[1]['order']))):
         if i > limit:
@@ -166,2434 +111,2435 @@ def gen_emo_tuples(emo_dict, limit=5000):
         key, val, chk = t[0], t[1], unicode_chr_str(key)
         print("('%s', '%s', %d, %d, '%s', %s, '%s', [])," % (key, chk, int(val['order']), len(chk), val['shortname'], val['shortname_alternates'], val['category']))
 
+EMO_HEADER = ('code', 'ord', 'osx', 'len', 'chr', 'monosyls', 'short', 'alts', 'polysyls', 'cat')
 EMO_TUPLES = [
-    ('1f600', '😀', 1, 1, ':grinning:', [], 'people', ['grinning', 'smirking']),
-    ('1f603', '😃', 2, 1, ':smiley:', [], 'people', ['smiley', 'smile ee']),
-    ('1f604', '😄', 3, 1, ':smile:', [], 'people', ['smile']),
-    ('1f601', '😁', 4, 1, ':grin:', [], 'people', ['grin', 'smirk']),
-    ('1f606', '😆', 5, 1, ':laughing:', [':satisfied:'], 'people', ['laugh', 'haha']),
-    ('1f605', '😅', 6, 1, ':sweat_smile:', [], 'people', ['sweat']),
-    ('1f602', '😂', 7, 1, ':joy:', [], 'people', ['joy', 'happy']),
-    ('1f923', '🤣', 8, 1, ':rofl:', [':rolling_on_the_floor_laughing:'], 'people', ['rofl']),
-    ('263a', '☺', 9, 1, ':relaxed:', [], 'people', ['relaxed', 'relax', 'chill']),
-    ('1f60a', '😊', 10, 1, ':blush:', [], 'people', ['blush', 'red face', 'embarass']),
-    ('1f607', '😇', 11, 1, ':innocent:', [], 'people', ['innocent', 'halo', 'angel']),
-    ('1f642', '🙂', 12, 1, ':slight_smile:', [':slightly_smiling_face:'], 'people', ['half smile']),
-    ('1f643', '🙃', 13, 1, ':upside_down:', [':upside_down_face:'], 'people', ['upside down', 'inverted']),
-    ('1f609', '😉', 14, 1, ':wink:', [], 'people', ['wink', 'secret']),
-    ('1f60c', '😌', 15, 1, ':relieved:', [], 'people', ['whew', 'relieve', 'relieved']),
-    ('1f60d', '😍', 16, 1, ':heart_eyes:', [], 'people', ['heart eyes', 'love', 'in love']),
-    ('1f618', '😘', 17, 1, ':kissing_heart:', [], 'people', ['heart kiss', 'kiss heart', 'whistling', 'in love']),
-    ('1f617', '😗', 18, 1, ':kissing:', [], 'people', ['kiss', 'kissing']),
-    ('1f619', '😙', 19, 1, ':kissing_smiling_eyes:', [], 'people', ['smiley kiss']),
-    ('1f61a', '😚', 20, 1, ':kissing_closed_eyes:', [], 'people', ['closed eye kissing']),
-    ('1f60b', '😋', 21, 1, ':yum:', [], 'people', ['yum', 'mmm']),
-    ('1f61c', '😜', 22, 1, ':stuck_out_tongue_winking_eye:', [], 'people', ['wink', 'winking', 'joke', 'joking']),
-    ('1f61d', '😝', 23, 1, ':stuck_out_tongue_closed_eyes:', [], 'people', []),
-    ('1f61b', '😛', 24, 1, ':stuck_out_tongue:', [], 'people', []),
-    ('1f911', '🤑', 25, 1, ':money_mouth:', [':money_mouth_face:'], 'people', []),
-    ('1f917', '🤗', 26, 1, ':hugging:', [':hugging_face:'], 'people', []),
-    ('1f913', '🤓', 27, 1, ':nerd:', [':nerd_face:'], 'people', []),
-    ('1f60e', '😎', 28, 1, ':sunglasses:', [], 'people', []),
-    ('1f921', '🤡', 29, 1, ':clown:', [':clown_face:'], 'people', []),
-    ('1f920', '🤠', 30, 1, ':cowboy:', [':face_with_cowboy_hat:'], 'people', []),
-    ('1f60f', '😏', 31, 1, ':smirk:', [], 'people', []),
-    ('1f612', '😒', 32, 1, ':unamused:', [], 'people', []),
-    ('1f61e', '😞', 33, 1, ':disappointed:', [], 'people', []),
-    ('1f614', '😔', 34, 1, ':pensive:', [], 'people', []),
-    ('1f61f', '😟', 35, 1, ':worried:', [], 'people', []),
-    ('1f615', '😕', 36, 1, ':confused:', [], 'people', []),
-    ('1f641', '🙁', 37, 1, ':slight_frown:', [':slightly_frowning_face:'], 'people', []),
-    ('2639', '☹', 38, 1, ':frowning2:', [':white_frowning_face:'], 'people', []),
-    ('1f623', '😣', 39, 1, ':persevere:', [], 'people', []),
-    ('1f616', '😖', 40, 1, ':confounded:', [], 'people', []),
-    ('1f62b', '😫', 41, 1, ':tired_face:', [], 'people', []),
-    ('1f629', '😩', 42, 1, ':weary:', [], 'people', []),
-    ('1f624', '😤', 43, 1, ':triumph:', [], 'people', []),
-    ('1f620', '😠', 44, 1, ':angry:', [], 'people', []),
-    ('1f621', '😡', 45, 1, ':rage:', [], 'people', []),
-    ('1f636', '😶', 46, 1, ':no_mouth:', [], 'people', []),
-    ('1f610', '😐', 47, 1, ':neutral_face:', [], 'people', []),
-    ('1f611', '😑', 48, 1, ':expressionless:', [], 'people', []),
-    ('1f62f', '😯', 49, 1, ':hushed:', [], 'people', []),
-    ('1f626', '😦', 50, 1, ':frowning:', [], 'people', []),
-    ('1f627', '😧', 51, 1, ':anguished:', [], 'people', []),
-    ('1f62e', '😮', 52, 1, ':open_mouth:', [], 'people', []),
-    ('1f632', '😲', 53, 1, ':astonished:', [], 'people', []),
-    ('1f635', '😵', 54, 1, ':dizzy_face:', [], 'people', []),
-    ('1f633', '😳', 55, 1, ':flushed:', [], 'people', []),
-    ('1f631', '😱', 56, 1, ':scream:', [], 'people', []),
-    ('1f628', '😨', 57, 1, ':fearful:', [], 'people', []),
-    ('1f630', '😰', 58, 1, ':cold_sweat:', [], 'people', []),
-    ('1f622', '😢', 59, 1, ':cry:', [], 'people', []),
-    ('1f625', '😥', 60, 1, ':disappointed_relieved:', [], 'people', []),
-    ('1f924', '🤤', 61, 1, ':drooling_face:', [':drool:'], 'people', []),
-    ('1f62d', '😭', 62, 1, ':sob:', [], 'people', []),
-    ('1f613', '😓', 63, 1, ':sweat:', [], 'people', []),
-    ('1f62a', '😪', 64, 1, ':sleepy:', [], 'people', []),
-    ('1f634', '😴', 65, 1, ':sleeping:', [], 'people', []),
-    ('1f644', '🙄', 66, 1, ':rolling_eyes:', [':face_with_rolling_eyes:'], 'people', []),
-    ('1f914', '🤔', 67, 1, ':thinking:', [':thinking_face:'], 'people', []),
-    ('1f925', '🤥', 68, 1, ':lying_face:', [':liar:'], 'people', []),
-    ('1f62c', '😬', 69, 1, ':grimacing:', [], 'people', []),
-    ('1f910', '🤐', 70, 1, ':zipper_mouth:', [':zipper_mouth_face:'], 'people', []),
-    ('1f922', '🤢', 71, 1, ':nauseated_face:', [':sick:'], 'people', []),
-    ('1f927', '🤧', 72, 1, ':sneezing_face:', [':sneeze:'], 'people', []),
-    ('1f637', '😷', 73, 1, ':mask:', [], 'people', []),
-    ('1f912', '🤒', 74, 1, ':thermometer_face:', [':face_with_thermometer:'], 'people', []),
-    ('1f915', '🤕', 75, 1, ':head_bandage:', [':face_with_head_bandage:'], 'people', []),
-    ('1f608', '😈', 76, 1, ':smiling_imp:', [], 'people', []),
-    ('1f47f', '👿', 77, 1, ':imp:', [], 'people', []),
-    ('1f479', '👹', 78, 1, ':japanese_ogre:', [], 'people', []),
-    ('1f47a', '👺', 79, 1, ':japanese_goblin:', [], 'people', []),
-    ('1f4a9', '💩', 80, 1, ':poop:', [':shit:', ':hankey:', ':poo:'], 'people', []),
-    ('1f47b', '👻', 81, 1, ':ghost:', [], 'people', []),
-    ('1f480', '💀', 82, 1, ':skull:', [':skeleton:'], 'people', []),
-    ('2620', '☠', 83, 1, ':skull_crossbones:', [':skull_and_crossbones:'], 'people', []),
-    ('1f47d', '👽', 84, 1, ':alien:', [], 'people', []),
-    ('1f47e', '👾', 85, 1, ':space_invader:', [], 'people', []),
-    ('1f916', '🤖', 86, 1, ':robot:', [':robot_face:'], 'people', []),
-    ('1f383', '🎃', 87, 1, ':jack_o_lantern:', [], 'people', []),
-    ('1f63a', '😺', 88, 1, ':smiley_cat:', [], 'people', []),
-    ('1f638', '😸', 89, 1, ':smile_cat:', [], 'people', []),
-    ('1f639', '😹', 90, 1, ':joy_cat:', [], 'people', []),
-    ('1f63b', '😻', 91, 1, ':heart_eyes_cat:', [], 'people', []),
-    ('1f63c', '😼', 92, 1, ':smirk_cat:', [], 'people', []),
-    ('1f63d', '😽', 93, 1, ':kissing_cat:', [], 'people', []),
-    ('1f640', '🙀', 94, 1, ':scream_cat:', [], 'people', []),
-    ('1f63f', '😿', 95, 1, ':crying_cat_face:', [], 'people', []),
-    ('1f63e', '😾', 96, 1, ':pouting_cat:', [], 'people', []),
-    ('1f450', '👐', 97, 1, ':open_hands:', [], 'people', []),
-    ('1f450-1f3fb', '👐🏻', 98, 2, ':open_hands_tone1:', [], 'people', []),
-    ('1f450-1f3fc', '👐🏼', 99, 2, ':open_hands_tone2:', [], 'people', []),
-    ('1f450-1f3fd', '👐🏽', 100, 2, ':open_hands_tone3:', [], 'people', []),
-    ('1f450-1f3fe', '👐🏾', 101, 2, ':open_hands_tone4:', [], 'people', []),
-    ('1f450-1f3ff', '👐🏿', 102, 2, ':open_hands_tone5:', [], 'people', []),
-    ('1f64c', '🙌', 103, 1, ':raised_hands:', [], 'people', []),
-    ('1f64c-1f3fb', '🙌🏻', 104, 2, ':raised_hands_tone1:', [], 'people', []),
-    ('1f64c-1f3fc', '🙌🏼', 105, 2, ':raised_hands_tone2:', [], 'people', []),
-    ('1f64c-1f3fd', '🙌🏽', 106, 2, ':raised_hands_tone3:', [], 'people', []),
-    ('1f64c-1f3fe', '🙌🏾', 107, 2, ':raised_hands_tone4:', [], 'people', []),
-    ('1f64c-1f3ff', '🙌🏿', 108, 2, ':raised_hands_tone5:', [], 'people', []),
-    ('1f44f', '👏', 109, 1, ':clap:', [], 'people', []),
-    ('1f44f-1f3fb', '👏🏻', 110, 2, ':clap_tone1:', [], 'people', []),
-    ('1f44f-1f3fc', '👏🏼', 111, 2, ':clap_tone2:', [], 'people', []),
-    ('1f44f-1f3fd', '👏🏽', 112, 2, ':clap_tone3:', [], 'people', []),
-    ('1f44f-1f3fe', '👏🏾', 113, 2, ':clap_tone4:', [], 'people', []),
-    ('1f44f-1f3ff', '👏🏿', 114, 2, ':clap_tone5:', [], 'people', []),
-    ('1f64f', '🙏', 115, 1, ':pray:', [], 'people', []),
-    ('1f64f-1f3fb', '🙏🏻', 116, 2, ':pray_tone1:', [], 'people', []),
-    ('1f64f-1f3fc', '🙏🏼', 117, 2, ':pray_tone2:', [], 'people', []),
-    ('1f64f-1f3fd', '🙏🏽', 118, 2, ':pray_tone3:', [], 'people', []),
-    ('1f64f-1f3fe', '🙏🏾', 119, 2, ':pray_tone4:', [], 'people', []),
-    ('1f64f-1f3ff', '🙏🏿', 120, 2, ':pray_tone5:', [], 'people', []),
-    ('1f91d', '🤝', 121, 1, ':handshake:', [':shaking_hands:'], 'people', []),
-    ('1f44d', '👍', 122, 1, ':thumbsup:', [':+1:', ':thumbup:'], 'people', []),
-    ('1f44d-1f3fb', '👍🏻', 123, 2, ':thumbsup_tone1:', [':+1_tone1:', ':thumbup_tone1:'], 'people', []),
-    ('1f44d-1f3fc', '👍🏼', 124, 2, ':thumbsup_tone2:', [':+1_tone2:', ':thumbup_tone2:'], 'people', []),
-    ('1f44d-1f3fd', '👍🏽', 125, 2, ':thumbsup_tone3:', [':+1_tone3:', ':thumbup_tone3:'], 'people', []),
-    ('1f44d-1f3fe', '👍🏾', 126, 2, ':thumbsup_tone4:', [':+1_tone4:', ':thumbup_tone4:'], 'people', []),
-    ('1f44d-1f3ff', '👍🏿', 127, 2, ':thumbsup_tone5:', [':+1_tone5:', ':thumbup_tone5:'], 'people', []),
-    ('1f44e', '👎', 128, 1, ':thumbsdown:', [':-1:', ':thumbdown:'], 'people', []),
-    ('1f44e-1f3fb', '👎🏻', 129, 2, ':thumbsdown_tone1:', [':-1_tone1:', ':thumbdown_tone1:'], 'people', []),
-    ('1f44e-1f3fc', '👎🏼', 130, 2, ':thumbsdown_tone2:', [':-1_tone2:', ':thumbdown_tone2:'], 'people', []),
-    ('1f44e-1f3fd', '👎🏽', 131, 2, ':thumbsdown_tone3:', [':-1_tone3:', ':thumbdown_tone3:'], 'people', []),
-    ('1f44e-1f3fe', '👎🏾', 132, 2, ':thumbsdown_tone4:', [':-1_tone4:', ':thumbdown_tone4:'], 'people', []),
-    ('1f44e-1f3ff', '👎🏿', 133, 2, ':thumbsdown_tone5:', [':-1_tone5:', ':thumbdown_tone5:'], 'people', []),
-    ('1f44a', '👊', 134, 1, ':punch:', [], 'people', ['punch', 'hit', 'fist']),
-    ('1f44a-1f3fb', '👊🏻', 135, 2, ':punch_tone1:', [], 'people', []),
-    ('1f44a-1f3fc', '👊🏼', 136, 2, ':punch_tone2:', [], 'people', []),
-    ('1f44a-1f3fd', '👊🏽', 137, 2, ':punch_tone3:', [], 'people', []),
-    ('1f44a-1f3fe', '👊🏾', 138, 2, ':punch_tone4:', [], 'people', []),
-    ('1f44a-1f3ff', '👊🏿', 139, 2, ':punch_tone5:', [], 'people', []),
-    ('270a', '✊', 140, 1, ':fist:', [], 'people', []),
-    ('270a-1f3fb', '✊🏻', 141, 2, ':fist_tone1:', [], 'people', []),
-    ('270a-1f3fc', '✊🏼', 142, 2, ':fist_tone2:', [], 'people', []),
-    ('270a-1f3fd', '✊🏽', 143, 2, ':fist_tone3:', [], 'people', []),
-    ('270a-1f3fe', '✊🏾', 144, 2, ':fist_tone4:', [], 'people', []),
-    ('270a-1f3ff', '✊🏿', 145, 2, ':fist_tone5:', [], 'people', []),
-    ('1f91b', '🤛', 146, 1, ':left_facing_fist:', [':left_fist:'], 'people', []),
-    # ('1f91b-1f3fb', '🤛🏻', 147, 2, ':left_facing_fist_tone1:', [':left_fist_tone1:'], 'people', []),
-    # ('1f91b-1f3fc', '🤛🏼', 148, 2, ':left_facing_fist_tone2:', [':left_fist_tone2:'], 'people', []),
-    # ('1f91b-1f3fd', '🤛🏽', 149, 2, ':left_facing_fist_tone3:', [':left_fist_tone3:'], 'people', []),
-    # ('1f91b-1f3fe', '🤛🏾', 150, 2, ':left_facing_fist_tone4:', [':left_fist_tone4:'], 'people', []),
-    # ('1f91b-1f3ff', '🤛🏿', 151, 2, ':left_facing_fist_tone5:', [':left_fist_tone5:'], 'people', []),
-    # ('1f91c', '🤜', 152, 1, ':right_facing_fist:', [':right_fist:'], 'people', []),
-    # ('1f91c-1f3fb', '🤜🏻', 153, 2, ':right_facing_fist_tone1:', [':right_fist_tone1:'], 'people', []),
-    # ('1f91c-1f3fc', '🤜🏼', 154, 2, ':right_facing_fist_tone2:', [':right_fist_tone2:'], 'people', []),
-    # ('1f91c-1f3fd', '🤜🏽', 155, 2, ':right_facing_fist_tone3:', [':right_fist_tone3:'], 'people', []),
-    # ('1f91c-1f3fe', '🤜🏾', 156, 2, ':right_facing_fist_tone4:', [':right_fist_tone4:'], 'people', []),
-    # ('1f91c-1f3ff', '🤜🏿', 157, 2, ':right_facing_fist_tone5:', [':right_fist_tone5:'], 'people', []),
-    # ('1f91e', '🤞', 158, 1, ':fingers_crossed:', [':hand_with_index_and_middle_finger_crossed:'], 'people', []),
-    # ('1f91e-1f3fb', '🤞🏻', 159, 2, ':fingers_crossed_tone1:', [':hand_with_index_and_middle_fingers_crossed_tone1:'], 'people', []),
-    # ('1f91e-1f3fc', '🤞🏼', 160, 2, ':fingers_crossed_tone2:', [':hand_with_index_and_middle_fingers_crossed_tone2:'], 'people', []),
-    # ('1f91e-1f3fd', '🤞🏽', 161, 2, ':fingers_crossed_tone3:', [':hand_with_index_and_middle_fingers_crossed_tone3:'], 'people', []),
-    # ('1f91e-1f3fe', '🤞🏾', 162, 2, ':fingers_crossed_tone4:', [':hand_with_index_and_middle_fingers_crossed_tone4:'], 'people', []),
-    # ('1f91e-1f3ff', '🤞🏿', 163, 2, ':fingers_crossed_tone5:', [':hand_with_index_and_middle_fingers_crossed_tone5:'], 'people', []),
-    ('270c', '✌', 164, 1, ':v:', [], 'people', []),
-    ('270c-1f3fb', '✌🏻', 165, 2, ':v_tone1:', [], 'people', []),
-    ('270c-1f3fc', '✌🏼', 166, 2, ':v_tone2:', [], 'people', []),
-    ('270c-1f3fd', '✌🏽', 167, 2, ':v_tone3:', [], 'people', []),
-    ('270c-1f3fe', '✌🏾', 168, 2, ':v_tone4:', [], 'people', []),
-    ('270c-1f3ff', '✌🏿', 169, 2, ':v_tone5:', [], 'people', []),
-    ('1f918', '🤘', 170, 1, ':metal:', [':sign_of_the_horns:'], 'people', []),
-    ('1f918-1f3fb', '🤘🏻', 171, 2, ':metal_tone1:', [':sign_of_the_horns_tone1:'], 'people', []),
-    ('1f918-1f3fc', '🤘🏼', 172, 2, ':metal_tone2:', [':sign_of_the_horns_tone2:'], 'people', []),
-    ('1f918-1f3fd', '🤘🏽', 173, 2, ':metal_tone3:', [':sign_of_the_horns_tone3:'], 'people', []),
-    ('1f918-1f3fe', '🤘🏾', 174, 2, ':metal_tone4:', [':sign_of_the_horns_tone4:'], 'people', []),
-    ('1f918-1f3ff', '🤘🏿', 175, 2, ':metal_tone5:', [':sign_of_the_horns_tone5:'], 'people', []),
-    ('1f44c', '👌', 176, 1, ':ok_hand:', [], 'people', []),
-    ('1f44c-1f3fb', '👌🏻', 177, 2, ':ok_hand_tone1:', [], 'people', []),
-    ('1f44c-1f3fc', '👌🏼', 178, 2, ':ok_hand_tone2:', [], 'people', []),
-    ('1f44c-1f3fd', '👌🏽', 179, 2, ':ok_hand_tone3:', [], 'people', []),
-    ('1f44c-1f3fe', '👌🏾', 180, 2, ':ok_hand_tone4:', [], 'people', []),
-    ('1f44c-1f3ff', '👌🏿', 181, 2, ':ok_hand_tone5:', [], 'people', []),
-    ('1f448', '👈', 182, 1, ':point_left:', [], 'people', []),
-    ('1f448-1f3fb', '👈🏻', 183, 2, ':point_left_tone1:', [], 'people', []),
-    ('1f448-1f3fc', '👈🏼', 184, 2, ':point_left_tone2:', [], 'people', []),
-    ('1f448-1f3fd', '👈🏽', 185, 2, ':point_left_tone3:', [], 'people', []),
-    ('1f448-1f3fe', '👈🏾', 186, 2, ':point_left_tone4:', [], 'people', []),
-    ('1f448-1f3ff', '👈🏿', 187, 2, ':point_left_tone5:', [], 'people', []),
-    ('1f449', '👉', 188, 1, ':point_right:', [], 'people', []),
-    ('1f449-1f3fb', '👉🏻', 189, 2, ':point_right_tone1:', [], 'people', []),
-    ('1f449-1f3fc', '👉🏼', 190, 2, ':point_right_tone2:', [], 'people', []),
-    ('1f449-1f3fd', '👉🏽', 191, 2, ':point_right_tone3:', [], 'people', []),
-    ('1f449-1f3fe', '👉🏾', 192, 2, ':point_right_tone4:', [], 'people', []),
-    ('1f449-1f3ff', '👉🏿', 193, 2, ':point_right_tone5:', [], 'people', []),
-    ('1f446', '👆', 194, 1, ':point_up_2:', [], 'people', []),
-    ('1f446-1f3fb', '👆🏻', 195, 2, ':point_up_2_tone1:', [], 'people', []),
-    ('1f446-1f3fc', '👆🏼', 196, 2, ':point_up_2_tone2:', [], 'people', []),
-    ('1f446-1f3fd', '👆🏽', 197, 2, ':point_up_2_tone3:', [], 'people', []),
-    ('1f446-1f3fe', '👆🏾', 198, 2, ':point_up_2_tone4:', [], 'people', []),
-    ('1f446-1f3ff', '👆🏿', 199, 2, ':point_up_2_tone5:', [], 'people', []),
-    ('1f447', '👇', 200, 1, ':point_down:', [], 'people', []),
-    ('1f447-1f3fb', '👇🏻', 201, 2, ':point_down_tone1:', [], 'people', []),
-    ('1f447-1f3fc', '👇🏼', 202, 2, ':point_down_tone2:', [], 'people', []),
-    ('1f447-1f3fd', '👇🏽', 203, 2, ':point_down_tone3:', [], 'people', []),
-    ('1f447-1f3fe', '👇🏾', 204, 2, ':point_down_tone4:', [], 'people', []),
-    ('1f447-1f3ff', '👇🏿', 205, 2, ':point_down_tone5:', [], 'people', []),
-    ('261d', '☝', 206, 1, ':point_up:', [], 'people', []),
-    ('261d-1f3fb', '☝🏻', 207, 2, ':point_up_tone1:', [], 'people', []),
-    ('261d-1f3fc', '☝🏼', 208, 2, ':point_up_tone2:', [], 'people', []),
-    ('261d-1f3fd', '☝🏽', 209, 2, ':point_up_tone3:', [], 'people', []),
-    ('261d-1f3fe', '☝🏾', 210, 2, ':point_up_tone4:', [], 'people', []),
-    ('261d-1f3ff', '☝🏿', 211, 2, ':point_up_tone5:', [], 'people', []),
-    ('270b', '✋', 212, 1, ':raised_hand:', [], 'people', []),
-    ('270b-1f3fb', '✋🏻', 213, 2, ':raised_hand_tone1:', [], 'people', []),
-    ('270b-1f3fc', '✋🏼', 214, 2, ':raised_hand_tone2:', [], 'people', []),
-    ('270b-1f3fd', '✋🏽', 215, 2, ':raised_hand_tone3:', [], 'people', []),
-    ('270b-1f3fe', '✋🏾', 216, 2, ':raised_hand_tone4:', [], 'people', []),
-    ('270b-1f3ff', '✋🏿', 217, 2, ':raised_hand_tone5:', [], 'people', []),
-    ('1f91a', '🤚', 218, 1, ':raised_back_of_hand:', [':back_of_hand:'], 'people', []),
-    ('1f91a-1f3fb', '🤚🏻', 219, 2, ':raised_back_of_hand_tone1:', [':back_of_hand_tone1:'], 'people', []),
-    ('1f91a-1f3fc', '🤚🏼', 220, 2, ':raised_back_of_hand_tone2:', [':back_of_hand_tone2:'], 'people', []),
-    ('1f91a-1f3fd', '🤚🏽', 221, 2, ':raised_back_of_hand_tone3:', [':back_of_hand_tone3:'], 'people', []),
-    ('1f91a-1f3fe', '🤚🏾', 222, 2, ':raised_back_of_hand_tone4:', [':back_of_hand_tone4:'], 'people', []),
-    ('1f91a-1f3ff', '🤚🏿', 223, 2, ':raised_back_of_hand_tone5:', [':back_of_hand_tone5:'], 'people', []),
-    ('1f590', '🖐', 224, 1, ':hand_splayed:', [':raised_hand_with_fingers_splayed:'], 'people', []),
-    ('1f590-1f3fb', '🖐🏻', 225, 2, ':hand_splayed_tone1:', [':raised_hand_with_fingers_splayed_tone1:'], 'people', []),
-    ('1f590-1f3fc', '🖐🏼', 226, 2, ':hand_splayed_tone2:', [':raised_hand_with_fingers_splayed_tone2:'], 'people', []),
-    ('1f590-1f3fd', '🖐🏽', 227, 2, ':hand_splayed_tone3:', [':raised_hand_with_fingers_splayed_tone3:'], 'people', []),
-    ('1f590-1f3fe', '🖐🏾', 228, 2, ':hand_splayed_tone4:', [':raised_hand_with_fingers_splayed_tone4:'], 'people', []),
-    ('1f590-1f3ff', '🖐🏿', 229, 2, ':hand_splayed_tone5:', [':raised_hand_with_fingers_splayed_tone5:'], 'people', []),
-    ('1f596', '🖖', 230, 1, ':vulcan:', [':raised_hand_with_part_between_middle_and_ring_fingers:'], 'people', []),
-    ('1f596-1f3fb', '🖖🏻', 231, 2, ':vulcan_tone1:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone1:'], 'people', []),
-    ('1f596-1f3fc', '🖖🏼', 232, 2, ':vulcan_tone2:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone2:'], 'people', []),
-    ('1f596-1f3fd', '🖖🏽', 233, 2, ':vulcan_tone3:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone3:'], 'people', []),
-    ('1f596-1f3fe', '🖖🏾', 234, 2, ':vulcan_tone4:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone4:'], 'people', []),
-    ('1f596-1f3ff', '🖖🏿', 235, 2, ':vulcan_tone5:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone5:'], 'people', []),
-    ('1f44b', '👋', 236, 1, ':wave:', [], 'people', []),
-    ('1f44b-1f3fb', '👋🏻', 237, 2, ':wave_tone1:', [], 'people', []),
-    ('1f44b-1f3fc', '👋🏼', 238, 2, ':wave_tone2:', [], 'people', []),
-    ('1f44b-1f3fd', '👋🏽', 239, 2, ':wave_tone3:', [], 'people', []),
-    ('1f44b-1f3fe', '👋🏾', 240, 2, ':wave_tone4:', [], 'people', []),
-    ('1f44b-1f3ff', '👋🏿', 241, 2, ':wave_tone5:', [], 'people', []),
-    ('1f919', '🤙', 242, 1, ':call_me:', [':call_me_hand:'], 'people', []),
-    ('1f919-1f3fb', '🤙🏻', 243, 2, ':call_me_tone1:', [':call_me_hand_tone1:'], 'people', []),
-    ('1f919-1f3fc', '🤙🏼', 244, 2, ':call_me_tone2:', [':call_me_hand_tone2:'], 'people', []),
-    ('1f919-1f3fd', '🤙🏽', 245, 2, ':call_me_tone3:', [':call_me_hand_tone3:'], 'people', []),
-    ('1f919-1f3fe', '🤙🏾', 246, 2, ':call_me_tone4:', [':call_me_hand_tone4:'], 'people', []),
-    ('1f919-1f3ff', '🤙🏿', 247, 2, ':call_me_tone5:', [':call_me_hand_tone5:'], 'people', []),
-    ('1f4aa', '💪', 248, 1, ':muscle:', [], 'people', []),
-    ('1f4aa-1f3fb', '💪🏻', 249, 2, ':muscle_tone1:', [], 'people', []),
-    ('1f4aa-1f3fc', '💪🏼', 250, 2, ':muscle_tone2:', [], 'people', []),
-    ('1f4aa-1f3fd', '💪🏽', 251, 2, ':muscle_tone3:', [], 'people', []),
-    ('1f4aa-1f3fe', '💪🏾', 252, 2, ':muscle_tone4:', [], 'people', []),
-    ('1f4aa-1f3ff', '💪🏿', 253, 2, ':muscle_tone5:', [], 'people', []),
-    ('1f595', '🖕', 254, 1, ':middle_finger:', [':reversed_hand_with_middle_finger_extended:'], 'people', []),
-    ('1f595-1f3fb', '🖕🏻', 255, 2, ':middle_finger_tone1:', [':reversed_hand_with_middle_finger_extended_tone1:'], 'people', []),
-    ('1f595-1f3fc', '🖕🏼', 256, 2, ':middle_finger_tone2:', [':reversed_hand_with_middle_finger_extended_tone2:'], 'people', []),
-    ('1f595-1f3fd', '🖕🏽', 257, 2, ':middle_finger_tone3:', [':reversed_hand_with_middle_finger_extended_tone3:'], 'people', []),
-    ('1f595-1f3fe', '🖕🏾', 258, 2, ':middle_finger_tone4:', [':reversed_hand_with_middle_finger_extended_tone4:'], 'people', []),
-    ('1f595-1f3ff', '🖕🏿', 259, 2, ':middle_finger_tone5:', [':reversed_hand_with_middle_finger_extended_tone5:'], 'people', []),
-    ('270d', '✍', 260, 1, ':writing_hand:', [], 'people', []),
-    ('270d-1f3fb', '✍🏻', 261, 2, ':writing_hand_tone1:', [], 'people', []),
-    ('270d-1f3fc', '✍🏼', 262, 2, ':writing_hand_tone2:', [], 'people', []),
-    ('270d-1f3fd', '✍🏽', 263, 2, ':writing_hand_tone3:', [], 'people', []),
-    ('270d-1f3fe', '✍🏾', 264, 2, ':writing_hand_tone4:', [], 'people', []),
-    ('270d-1f3ff', '✍🏿', 265, 2, ':writing_hand_tone5:', [], 'people', []),
-    ('1f933', '🤳', 266, 1, ':selfie:', [], 'people', []),
-    ('1f933-1f3fb', '🤳🏻', 267, 2, ':selfie_tone1:', [], 'people', []),
-    ('1f933-1f3fc', '🤳🏼', 268, 2, ':selfie_tone2:', [], 'people', []),
-    ('1f933-1f3fd', '🤳🏽', 269, 2, ':selfie_tone3:', [], 'people', []),
-    ('1f933-1f3fe', '🤳🏾', 270, 2, ':selfie_tone4:', [], 'people', []),
-    ('1f933-1f3ff', '🤳🏿', 271, 2, ':selfie_tone5:', [], 'people', []),
-    ('1f485', '💅', 272, 1, ':nail_care:', [], 'people', []),
-    ('1f485-1f3fb', '💅🏻', 273, 2, ':nail_care_tone1:', [], 'people', []),
-    ('1f485-1f3fc', '💅🏼', 274, 2, ':nail_care_tone2:', [], 'people', []),
-    ('1f485-1f3fd', '💅🏽', 275, 2, ':nail_care_tone3:', [], 'people', []),
-    ('1f485-1f3fe', '💅🏾', 276, 2, ':nail_care_tone4:', [], 'people', []),
-    ('1f485-1f3ff', '💅🏿', 277, 2, ':nail_care_tone5:', [], 'people', []),
-    ('1f48d', '💍', 278, 1, ':ring:', [], 'people', []),
-    ('1f484', '💄', 279, 1, ':lipstick:', [], 'people', []),
-    ('1f48b', '💋', 280, 1, ':kiss:', [], 'people', []),
-    ('1f444', '👄', 281, 1, ':lips:', [], 'people', []),
-    ('1f445', '👅', 282, 1, ':tongue:', [], 'people', []),
-    ('1f442', '👂', 283, 1, ':ear:', [], 'people', []),
-    ('1f442-1f3fb', '👂🏻', 284, 2, ':ear_tone1:', [], 'people', []),
-    ('1f442-1f3fc', '👂🏼', 285, 2, ':ear_tone2:', [], 'people', []),
-    ('1f442-1f3fd', '👂🏽', 286, 2, ':ear_tone3:', [], 'people', []),
-    ('1f442-1f3fe', '👂🏾', 287, 2, ':ear_tone4:', [], 'people', []),
-    ('1f442-1f3ff', '👂🏿', 288, 2, ':ear_tone5:', [], 'people', []),
-    ('1f443', '👃', 289, 1, ':nose:', [], 'people', []),
-    ('1f443-1f3fb', '👃🏻', 290, 2, ':nose_tone1:', [], 'people', []),
-    ('1f443-1f3fc', '👃🏼', 291, 2, ':nose_tone2:', [], 'people', []),
-    ('1f443-1f3fd', '👃🏽', 292, 2, ':nose_tone3:', [], 'people', []),
-    ('1f443-1f3fe', '👃🏾', 293, 2, ':nose_tone4:', [], 'people', []),
-    ('1f443-1f3ff', '👃🏿', 294, 2, ':nose_tone5:', [], 'people', []),
-    ('1f463', '👣', 295, 1, ':footprints:', [], 'people', []),
-    ('1f441', '👁', 296, 1, ':eye:', [], 'people', []),
-    ('1f440', '👀', 297, 1, ':eyes:', [], 'people', ['look', 'looking', 'looked', 'eyes', 'search']),
-    ('1f5e3', '🗣', 298, 1, ':speaking_head:', [':speaking_head_in_silhouette:'], 'people', ['speak', 'speaking', 'talk', 'talking', 'talking head']),
-    ('1f464', '👤', 299, 1, ':bust_in_silhouette:', [], 'people', ['bust', 'silhouette']),
-    ('1f465', '👥', 300, 1, ':busts_in_silhouette:', [], 'people', []),
-    ('1f476', '👶', 301, 1, ':baby:', [], 'people', ['baby', 'infant']),
-    ('1f476-1f3fb', '👶🏻', 302, 2, ':baby_tone1:', [], 'people', []),
-    ('1f476-1f3fc', '👶🏼', 303, 2, ':baby_tone2:', [], 'people', []),
-    ('1f476-1f3fd', '👶🏽', 304, 2, ':baby_tone3:', [], 'people', []),
-    ('1f476-1f3fe', '👶🏾', 305, 2, ':baby_tone4:', [], 'people', []),
-    ('1f476-1f3ff', '👶🏿', 306, 2, ':baby_tone5:', [], 'people', []),
-    ('1f466', '👦', 307, 1, ':boy:', [], 'people', []),
-    ('1f466-1f3fb', '👦🏻', 308, 2, ':boy_tone1:', [], 'people', []),
-    ('1f466-1f3fc', '👦🏼', 309, 2, ':boy_tone2:', [], 'people', []),
-    ('1f466-1f3fd', '👦🏽', 310, 2, ':boy_tone3:', [], 'people', []),
-    ('1f466-1f3fe', '👦🏾', 311, 2, ':boy_tone4:', [], 'people', []),
-    ('1f466-1f3ff', '👦🏿', 312, 2, ':boy_tone5:', [], 'people', []),
-    ('1f467', '👧', 313, 1, ':girl:', [], 'people', []),
-    ('1f467-1f3fb', '👧🏻', 314, 2, ':girl_tone1:', [], 'people', []),
-    ('1f467-1f3fc', '👧🏼', 315, 2, ':girl_tone2:', [], 'people', []),
-    ('1f467-1f3fd', '👧🏽', 316, 2, ':girl_tone3:', [], 'people', []),
-    ('1f467-1f3fe', '👧🏾', 317, 2, ':girl_tone4:', [], 'people', []),
-    ('1f467-1f3ff', '👧🏿', 318, 2, ':girl_tone5:', [], 'people', []),
-    ('1f468', '👨', 319, 1, ':man:', [], 'people', []),
-    ('1f468-1f3fb', '👨🏻', 320, 2, ':man_tone1:', [], 'people', []),
-    ('1f468-1f3fc', '👨🏼', 321, 2, ':man_tone2:', [], 'people', []),
-    ('1f468-1f3fd', '👨🏽', 322, 2, ':man_tone3:', [], 'people', []),
-    ('1f468-1f3fe', '👨🏾', 323, 2, ':man_tone4:', [], 'people', []),
-    ('1f468-1f3ff', '👨🏿', 324, 2, ':man_tone5:', [], 'people', []),
-    ('1f469', '👩', 325, 1, ':woman:', [], 'people', []),
-    ('1f469-1f3fb', '👩🏻', 326, 2, ':woman_tone1:', [], 'people', []),
-    ('1f469-1f3fc', '👩🏼', 327, 2, ':woman_tone2:', [], 'people', []),
-    ('1f469-1f3fd', '👩🏽', 328, 2, ':woman_tone3:', [], 'people', []),
-    ('1f469-1f3fe', '👩🏾', 329, 2, ':woman_tone4:', [], 'people', []),
-    ('1f469-1f3ff', '👩🏿', 330, 2, ':woman_tone5:', [], 'people', []),
-    ('1f471-2640', '👱♀', 331, 2, ':blond-haired_woman:', [], 'people', []),
-    ('1f471-1f3fb-2640', '👱🏻♀', 332, 3, ':blond-haired_woman_tone1:', [':blond-haired_woman_light_skin_tone:'], 'people', []),
-    ('1f471-1f3fc-2640', '👱🏼♀', 333, 3, ':blond-haired_woman_tone2:', [':blond-haired_woman_medium_light_skin_tone:'], 'people', []),
-    ('1f471-1f3fd-2640', '👱🏽♀', 334, 3, ':blond-haired_woman_tone3:', [':blond-haired_woman_medium_skin_tone:'], 'people', []),
-    ('1f471-1f3fe-2640', '👱🏾♀', 335, 3, ':blond-haired_woman_tone4:', [':blond-haired_woman_medium_dark_skin_tone:'], 'people', []),
-    ('1f471-1f3ff-2640', '👱🏿♀', 336, 3, ':blond-haired_woman_tone5:', [':blond-haired_woman_dark_skin_tone:'], 'people', []),
-    ('1f471', '👱', 337, 1, ':blond_haired_person:', [':person_with_blond_hair:'], 'people', []),
-    ('1f471-1f3fb', '👱🏻', 338, 2, ':blond_haired_person_tone1:', [':person_with_blond_hair_tone1:'], 'people', []),
-    ('1f471-1f3fc', '👱🏼', 339, 2, ':blond_haired_person_tone2:', [':person_with_blond_hair_tone2:'], 'people', []),
-    ('1f471-1f3fd', '👱🏽', 340, 2, ':blond_haired_person_tone3:', [':person_with_blond_hair_tone3:'], 'people', []),
-    ('1f471-1f3fe', '👱🏾', 341, 2, ':blond_haired_person_tone4:', [':person_with_blond_hair_tone4:'], 'people', []),
-    ('1f471-1f3ff', '👱🏿', 342, 2, ':blond_haired_person_tone5:', [':person_with_blond_hair_tone5:'], 'people', []),
-    ('1f471-2642', '👱♂', 343, 2, ':blond-haired_man:', [], 'people', []),
-    ('1f471-1f3ff-2642', '👱🏿♂', 344, 3, ':blond-haired_man_tone5:', [':blond-haired_man_dark_skin_tone:'], 'people', []),
-    ('1f471-1f3fe-2642', '👱🏾♂', 345, 3, ':blond-haired_man_tone4:', [':blond-haired_man_medium_dark_skin_tone:'], 'people', []),
-    ('1f471-1f3fd-2642', '👱🏽♂', 346, 3, ':blond-haired_man_tone3:', [':blond-haired_man_medium_skin_tone:'], 'people', []),
-    ('1f471-1f3fc-2642', '👱🏼♂', 347, 3, ':blond-haired_man_tone2:', [':blond-haired_man_medium_light_skin_tone:'], 'people', []),
-    ('1f471-1f3fb-2642', '👱🏻♂', 348, 3, ':blond-haired_man_tone1:', [':blond-haired_man_light_skin_tone:'], 'people', []),
-    ('1f474', '👴', 349, 1, ':older_man:', [], 'people', []),
-    ('1f474-1f3fb', '👴🏻', 350, 2, ':older_man_tone1:', [], 'people', []),
-    ('1f474-1f3fc', '👴🏼', 351, 2, ':older_man_tone2:', [], 'people', []),
-    ('1f474-1f3fd', '👴🏽', 352, 2, ':older_man_tone3:', [], 'people', []),
-    ('1f474-1f3fe', '👴🏾', 353, 2, ':older_man_tone4:', [], 'people', []),
-    ('1f474-1f3ff', '👴🏿', 354, 2, ':older_man_tone5:', [], 'people', []),
-    ('1f475', '👵', 355, 1, ':older_woman:', [':grandma:'], 'people', []),
-    ('1f475-1f3fb', '👵🏻', 356, 2, ':older_woman_tone1:', [':grandma_tone1:'], 'people', []),
-    ('1f475-1f3fc', '👵🏼', 357, 2, ':older_woman_tone2:', [':grandma_tone2:'], 'people', []),
-    ('1f475-1f3fd', '👵🏽', 358, 2, ':older_woman_tone3:', [':grandma_tone3:'], 'people', []),
-    ('1f475-1f3fe', '👵🏾', 359, 2, ':older_woman_tone4:', [':grandma_tone4:'], 'people', []),
-    ('1f475-1f3ff', '👵🏿', 360, 2, ':older_woman_tone5:', [':grandma_tone5:'], 'people', []),
-    ('1f472', '👲', 361, 1, ':man_with_chinese_cap:', [':man_with_gua_pi_mao:'], 'people', []),
-    ('1f472-1f3fb', '👲🏻', 362, 2, ':man_with_chinese_cap_tone1:', [':man_with_gua_pi_mao_tone1:'], 'people', []),
-    ('1f472-1f3fc', '👲🏼', 363, 2, ':man_with_chinese_cap_tone2:', [':man_with_gua_pi_mao_tone2:'], 'people', []),
-    ('1f472-1f3fd', '👲🏽', 364, 2, ':man_with_chinese_cap_tone3:', [':man_with_gua_pi_mao_tone3:'], 'people', []),
-    ('1f472-1f3fe', '👲🏾', 365, 2, ':man_with_chinese_cap_tone4:', [':man_with_gua_pi_mao_tone4:'], 'people', []),
-    ('1f472-1f3ff', '👲🏿', 366, 2, ':man_with_chinese_cap_tone5:', [':man_with_gua_pi_mao_tone5:'], 'people', []),
-    ('1f473-2640', '👳♀', 367, 2, ':woman_wearing_turban:', [], 'people', []),
-    ('1f473-1f3fb-2640', '👳🏻♀', 368, 3, ':woman_wearing_turban_tone1:', [':woman_wearing_turban_light_skin_tone:'], 'people', []),
-    ('1f473-1f3fc-2640', '👳🏼♀', 369, 3, ':woman_wearing_turban_tone2:', [':woman_wearing_turban_medium_light_skin_tone:'], 'people', []),
-    ('1f473-1f3fd-2640', '👳🏽♀', 370, 3, ':woman_wearing_turban_tone3:', [':woman_wearing_turban_medium_skin_tone:'], 'people', []),
-    ('1f473-1f3fe-2640', '👳🏾♀', 371, 3, ':woman_wearing_turban_tone4:', [':woman_wearing_turban_medium_dark_skin_tone:'], 'people', []),
-    ('1f473-1f3ff-2640', '👳🏿♀', 372, 3, ':woman_wearing_turban_tone5:', [':woman_wearing_turban_dark_skin_tone:'], 'people', []),
-    ('1f473', '👳', 373, 1, ':person_wearing_turban:', [':man_with_turban:'], 'people', []),
-    ('1f473-1f3fb', '👳🏻', 374, 2, ':person_wearing_turban_tone1:', [':man_with_turban_tone1:'], 'people', []),
-    ('1f473-1f3fc', '👳🏼', 375, 2, ':person_wearing_turban_tone2:', [':man_with_turban_tone2:'], 'people', []),
-    ('1f473-1f3fd', '👳🏽', 376, 2, ':person_wearing_turban_tone3:', [':man_with_turban_tone3:'], 'people', []),
-    ('1f473-1f3fe', '👳🏾', 377, 2, ':person_wearing_turban_tone4:', [':man_with_turban_tone4:'], 'people', []),
-    ('1f473-1f3ff', '👳🏿', 378, 2, ':person_wearing_turban_tone5:', [':man_with_turban_tone5:'], 'people', []),
-    ('1f473-2642', '👳♂', 379, 2, ':man_wearing_turban:', [], 'people', []),
-    ('1f473-1f3ff-2642', '👳🏿♂', 380, 3, ':man_wearing_turban_tone5:', [':man_wearing_turban_dark_skin_tone:'], 'people', []),
-    ('1f473-1f3fe-2642', '👳🏾♂', 381, 3, ':man_wearing_turban_tone4:', [':man_wearing_turban_medium_dark_skin_tone:'], 'people', []),
-    ('1f473-1f3fd-2642', '👳🏽♂', 382, 3, ':man_wearing_turban_tone3:', [':man_wearing_turban_medium_skin_tone:'], 'people', []),
-    ('1f473-1f3fc-2642', '👳🏼♂', 383, 3, ':man_wearing_turban_tone2:', [':man_wearing_turban_medium_light_skin_tone:'], 'people', []),
-    ('1f473-1f3fb-2642', '👳🏻♂', 384, 3, ':man_wearing_turban_tone1:', [':man_wearing_turban_light_skin_tone:'], 'people', []),
-    ('1f46e-2640', '👮♀', 385, 2, ':woman_police_officer:', [], 'people', []),
-    ('1f46e-1f3fb-2640', '👮🏻♀', 386, 3, ':woman_police_officer_tone1:', [':woman_police_officer_light_skin_tone:'], 'people', []),
-    ('1f46e-1f3fc-2640', '👮🏼♀', 387, 3, ':woman_police_officer_tone2:', [':woman_police_officer_medium_light_skin_tone:'], 'people', []),
-    ('1f46e-1f3fd-2640', '👮🏽♀', 388, 3, ':woman_police_officer_tone3:', [':woman_police_officer_medium_skin_tone:'], 'people', []),
-    ('1f46e-1f3fe-2640', '👮🏾♀', 389, 3, ':woman_police_officer_tone4:', [':woman_police_officer_medium_dark_skin_tone:'], 'people', []),
-    ('1f46e-1f3ff-2640', '👮🏿♀', 390, 3, ':woman_police_officer_tone5:', [':woman_police_officer_dark_skin_tone:'], 'people', []),
-    ('1f46e', '👮', 391, 1, ':police_officer:', [':cop:'], 'people', ['cop', 'fuzz', 'law', 'pig', 'police']),
-    ('1f46e-1f3fb', '👮🏻', 392, 2, ':police_officer_tone1:', [':cop_tone1:'], 'people', []),
-    ('1f46e-1f3fc', '👮🏼', 393, 2, ':police_officer_tone2:', [':cop_tone2:'], 'people', []),
-    ('1f46e-1f3fd', '👮🏽', 394, 2, ':police_officer_tone3:', [':cop_tone3:'], 'people', []),
-    ('1f46e-1f3fe', '👮🏾', 395, 2, ':police_officer_tone4:', [':cop_tone4:'], 'people', []),
-    ('1f46e-1f3ff', '👮🏿', 396, 2, ':police_officer_tone5:', [':cop_tone5:'], 'people', []),
-    ('1f46e-2642', '👮♂', 397, 2, ':man_police_officer:', [], 'people', []),
-    ('1f46e-1f3ff-2642', '👮🏿♂', 398, 3, ':man_police_officer_tone5:', [':man_police_officer_dark_skin_tone:'], 'people', []),
-    ('1f46e-1f3fe-2642', '👮🏾♂', 399, 3, ':man_police_officer_tone4:', [':man_police_officer_medium_dark_skin_tone:'], 'people', []),
-    ('1f46e-1f3fd-2642', '👮🏽♂', 400, 3, ':man_police_officer_tone3:', [':man_police_officer_medium_skin_tone:'], 'people', []),
-    ('1f46e-1f3fc-2642', '👮🏼♂', 401, 3, ':man_police_officer_tone2:', [':man_police_officer_medium_light_skin_tone:'], 'people', []),
-    ('1f46e-1f3fb-2642', '👮🏻♂', 402, 3, ':man_police_officer_tone1:', [':man_police_officer_light_skin_tone:'], 'people', []),
-    ('1f477-2640', '👷♀', 403, 2, ':woman_construction_worker:', [], 'people', []),
-    ('1f477-1f3fb-2640', '👷🏻♀', 404, 3, ':woman_construction_worker_tone1:', [':woman_construction_worker_light_skin_tone:'], 'people', []),
-    ('1f477-1f3fc-2640', '👷🏼♀', 405, 3, ':woman_construction_worker_tone2:', [':woman_construction_worker_medium_light_skin_tone:'], 'people', []),
-    ('1f477-1f3fd-2640', '👷🏽♀', 406, 3, ':woman_construction_worker_tone3:', [':woman_construction_worker_medium_skin_tone:'], 'people', []),
-    ('1f477-1f3fe-2640', '👷🏾♀', 407, 3, ':woman_construction_worker_tone4:', [':woman_construction_worker_medium_dark_skin_tone:'], 'people', []),
-    ('1f477-1f3ff-2640', '👷🏿♀', 408, 3, ':woman_construction_worker_tone5:', [':woman_construction_worker_dark_skin_tone:'], 'people', []),
-    ('1f477', '👷', 409, 1, ':construction_worker:', [], 'people', []),
-    ('1f477-1f3fb', '👷🏻', 410, 2, ':construction_worker_tone1:', [], 'people', []),
-    ('1f477-1f3fc', '👷🏼', 411, 2, ':construction_worker_tone2:', [], 'people', []),
-    ('1f477-1f3fd', '👷🏽', 412, 2, ':construction_worker_tone3:', [], 'people', []),
-    ('1f477-1f3fe', '👷🏾', 413, 2, ':construction_worker_tone4:', [], 'people', []),
-    ('1f477-1f3ff', '👷🏿', 414, 2, ':construction_worker_tone5:', [], 'people', []),
-    ('1f477-2642', '👷♂', 415, 2, ':man_construction_worker:', [], 'people', []),
-    ('1f477-1f3ff-2642', '👷🏿♂', 416, 3, ':man_construction_worker_tone5:', [':man_construction_worker_dark_skin_tone:'], 'people', []),
-    ('1f477-1f3fe-2642', '👷🏾♂', 417, 3, ':man_construction_worker_tone4:', [':man_construction_worker_medium_dark_skin_tone:'], 'people', []),
-    ('1f477-1f3fd-2642', '👷🏽♂', 418, 3, ':man_construction_worker_tone3:', [':man_construction_worker_medium_skin_tone:'], 'people', []),
-    ('1f477-1f3fc-2642', '👷🏼♂', 419, 3, ':man_construction_worker_tone2:', [':man_construction_worker_medium_light_skin_tone:'], 'people', []),
-    ('1f477-1f3fb-2642', '👷🏻♂', 420, 3, ':man_construction_worker_tone1:', [':man_construction_worker_light_skin_tone:'], 'people', []),
-    ('1f482-2640', '💂♀', 421, 2, ':woman_guard:', [], 'people', []),
-    ('1f482-1f3fb-2640', '💂🏻♀', 422, 3, ':woman_guard_tone1:', [':woman_guard_light_skin_tone:'], 'people', []),
-    ('1f482-1f3fc-2640', '💂🏼♀', 423, 3, ':woman_guard_tone2:', [':woman_guard_medium_light_skin_tone:'], 'people', []),
-    ('1f482-1f3fd-2640', '💂🏽♀', 424, 3, ':woman_guard_tone3:', [':woman_guard_medium_skin_tone:'], 'people', []),
-    ('1f482-1f3fe-2640', '💂🏾♀', 425, 3, ':woman_guard_tone4:', [':woman_guard_medium_dark_skin_tone:'], 'people', []),
-    ('1f482-1f3ff-2640', '💂🏿♀', 426, 3, ':woman_guard_tone5:', [':woman_guard_dark_skin_tone:'], 'people', []),
-    ('1f482', '💂', 427, 1, ':guard:', [':guardsman:'], 'people', []),
-    ('1f482-1f3fb', '💂🏻', 428, 2, ':guard_tone1:', [':guardsman_tone1:'], 'people', []),
-    ('1f482-1f3fc', '💂🏼', 429, 2, ':guard_tone2:', [':guardsman_tone2:'], 'people', []),
-    ('1f482-1f3fd', '💂🏽', 430, 2, ':guard_tone3:', [':guardsman_tone3:'], 'people', []),
-    ('1f482-1f3fe', '💂🏾', 431, 2, ':guard_tone4:', [':guardsman_tone4:'], 'people', []),
-    ('1f482-1f3ff', '💂🏿', 432, 2, ':guard_tone5:', [':guardsman_tone5:'], 'people', []),
-    ('1f482-2642', '💂♂', 433, 2, ':man_guard:', [], 'people', []),
-    ('1f482-1f3ff-2642', '💂🏿♂', 434, 3, ':man_guard_tone5:', [':man_guard_dark_skin_tone:'], 'people', []),
-    ('1f482-1f3fe-2642', '💂🏾♂', 435, 3, ':man_guard_tone4:', [':man_guard_medium_dark_skin_tone:'], 'people', []),
-    ('1f482-1f3fd-2642', '💂🏽♂', 436, 3, ':man_guard_tone3:', [':man_guard_medium_skin_tone:'], 'people', []),
-    ('1f482-1f3fc-2642', '💂🏼♂', 437, 3, ':man_guard_tone2:', [':man_guard_medium_light_skin_tone:'], 'people', []),
-    ('1f482-1f3fb-2642', '💂🏻♂', 438, 3, ':man_guard_tone1:', [':man_guard_light_skin_tone:'], 'people', []),
-    ('1f575-2640', '🕵♀', 439, 2, ':woman_detective:', [], 'people', []),
-    ('1f575-1f3fb-2640', '🕵🏻♀', 440, 3, ':woman_detective_tone1:', [':woman_detective_light_skin_tone:'], 'people', []),
-    ('1f575-1f3fc-2640', '🕵🏼♀', 441, 3, ':woman_detective_tone2:', [':woman_detective_medium_light_skin_tone:'], 'people', []),
-    ('1f575-1f3fd-2640', '🕵🏽♀', 442, 3, ':woman_detective_tone3:', [':woman_detective_medium_skin_tone:'], 'people', []),
-    ('1f575-1f3fe-2640', '🕵🏾♀', 443, 3, ':woman_detective_tone4:', [':woman_detective_medium_dark_skin_tone:'], 'people', []),
-    ('1f575-1f3ff-2640', '🕵🏿♀', 444, 3, ':woman_detective_tone5:', [':woman_detective_dark_skin_tone:'], 'people', []),
-    ('1f575', '🕵', 445, 1, ':detective:', [':spy:', ':sleuth_or_spy:'], 'people', []),
-    ('1f575-1f3fb', '🕵🏻', 446, 2, ':detective_tone1:', [':spy_tone1:', ':sleuth_or_spy_tone1:'], 'people', []),
-    ('1f575-1f3fc', '🕵🏼', 447, 2, ':detective_tone2:', [':spy_tone2:', ':sleuth_or_spy_tone2:'], 'people', []),
-    ('1f575-1f3fd', '🕵🏽', 448, 2, ':detective_tone3:', [':spy_tone3:', ':sleuth_or_spy_tone3:'], 'people', []),
-    ('1f575-1f3fe', '🕵🏾', 449, 2, ':detective_tone4:', [':spy_tone4:', ':sleuth_or_spy_tone4:'], 'people', []),
-    ('1f575-1f3ff', '🕵🏿', 450, 2, ':detective_tone5:', [':spy_tone5:', ':sleuth_or_spy_tone5:'], 'people', []),
-    ('1f575-2642', '🕵♂', 451, 2, ':man_detective:', [], 'people', []),
-    ('1f575-1f3ff-2642', '🕵🏿♂', 452, 3, ':man_detective_tone5:', [':man_detective_dark_skin_tone:'], 'people', []),
-    ('1f575-1f3fe-2642', '🕵🏾♂', 453, 3, ':man_detective_tone4:', [':man_detective_medium_dark_skin_tone:'], 'people', []),
-    ('1f575-1f3fd-2642', '🕵🏽♂', 454, 3, ':man_detective_tone3:', [':man_detective_medium_skin_tone:'], 'people', []),
-    ('1f575-1f3fc-2642', '🕵🏼♂', 455, 3, ':man_detective_tone2:', [':man_detective_medium_light_skin_tone:'], 'people', []),
-    ('1f575-1f3fb-2642', '🕵🏻♂', 456, 3, ':man_detective_tone1:', [':man_detective_light_skin_tone:'], 'people', []),
-    ('1f469-2695', '👩⚕', 457, 2, ':woman_health_worker:', [], 'people', []),
-    ('1f469-1f3fb-2695', '👩🏻⚕', 458, 3, ':woman_health_worker_tone1:', [':woman_health_worker_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-2695', '👩🏼⚕', 459, 3, ':woman_health_worker_tone2:', [':woman_health_worker_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-2695', '👩🏽⚕', 460, 3, ':woman_health_worker_tone3:', [':woman_health_worker_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-2695', '👩🏾⚕', 461, 3, ':woman_health_worker_tone4:', [':woman_health_worker_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-2695', '👩🏿⚕', 462, 3, ':woman_health_worker_tone5:', [':woman_health_worker_dark_skin_tone:'], 'people', []),
-    ('1f468-2695', '👨⚕', 463, 2, ':man_health_worker:', [], 'people', []),
-    ('1f468-1f3fb-2695', '👨🏻⚕', 464, 3, ':man_health_worker_tone1:', [':man_health_worker_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-2695', '👨🏼⚕', 465, 3, ':man_health_worker_tone2:', [':man_health_worker_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-2695', '👨🏽⚕', 466, 3, ':man_health_worker_tone3:', [':man_health_worker_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-2695', '👨🏾⚕', 467, 3, ':man_health_worker_tone4:', [':man_health_worker_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-2695', '👨🏿⚕', 468, 3, ':man_health_worker_tone5:', [':man_health_worker_dark_skin_tone:'], 'people', []),
-    ('1f469-1f33e', '👩🌾', 469, 2, ':woman_farmer:', [], 'people', []),
-    ('1f469-1f3fb-1f33e', '👩🏻🌾', 470, 3, ':woman_farmer_tone1:', [':woman_farmer_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-1f33e', '👩🏼🌾', 471, 3, ':woman_farmer_tone2:', [':woman_farmer_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-1f33e', '👩🏽🌾', 472, 3, ':woman_farmer_tone3:', [':woman_farmer_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-1f33e', '👩🏾🌾', 473, 3, ':woman_farmer_tone4:', [':woman_farmer_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-1f33e', '👩🏿🌾', 474, 3, ':woman_farmer_tone5:', [':woman_farmer_dark_skin_tone:'], 'people', []),
-    ('1f468-1f33e', '👨🌾', 475, 2, ':man_farmer:', [], 'people', []),
-    ('1f468-1f3fb-1f33e', '👨🏻🌾', 476, 3, ':man_farmer_tone1:', [':man_farmer_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-1f33e', '👨🏼🌾', 477, 3, ':man_farmer_tone2:', [':man_farmer_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-1f33e', '👨🏽🌾', 478, 3, ':man_farmer_tone3:', [':man_farmer_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-1f33e', '👨🏾🌾', 479, 3, ':man_farmer_tone4:', [':man_farmer_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-1f33e', '👨🏿🌾', 480, 3, ':man_farmer_tone5:', [':man_farmer_dark_skin_tone:'], 'people', []),
-    ('1f469-1f373', '👩🍳', 481, 2, ':woman_cook:', [], 'people', []),
-    ('1f469-1f3fb-1f373', '👩🏻🍳', 482, 3, ':woman_cook_tone1:', [':woman_cook_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-1f373', '👩🏼🍳', 483, 3, ':woman_cook_tone2:', [':woman_cook_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-1f373', '👩🏽🍳', 484, 3, ':woman_cook_tone3:', [':woman_cook_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-1f373', '👩🏾🍳', 485, 3, ':woman_cook_tone4:', [':woman_cook_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-1f373', '👩🏿🍳', 486, 3, ':woman_cook_tone5:', [':woman_cook_dark_skin_tone:'], 'people', []),
-    ('1f468-1f373', '👨🍳', 487, 2, ':man_cook:', [], 'people', []),
-    ('1f468-1f3fb-1f373', '👨🏻🍳', 488, 3, ':man_cook_tone1:', [':man_cook_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-1f373', '👨🏼🍳', 489, 3, ':man_cook_tone2:', [':man_cook_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-1f373', '👨🏽🍳', 490, 3, ':man_cook_tone3:', [':man_cook_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-1f373', '👨🏾🍳', 491, 3, ':man_cook_tone4:', [':man_cook_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-1f373', '👨🏿🍳', 492, 3, ':man_cook_tone5:', [':man_cook_dark_skin_tone:'], 'people', []),
-    ('1f469-1f393', '👩🎓', 493, 2, ':woman_student:', [], 'people', []),
-    ('1f469-1f3fb-1f393', '👩🏻🎓', 494, 3, ':woman_student_tone1:', [':woman_student_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-1f393', '👩🏼🎓', 495, 3, ':woman_student_tone2:', [':woman_student_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-1f393', '👩🏽🎓', 496, 3, ':woman_student_tone3:', [':woman_student_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-1f393', '👩🏾🎓', 497, 3, ':woman_student_tone4:', [':woman_student_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-1f393', '👩🏿🎓', 498, 3, ':woman_student_tone5:', [':woman_student_dark_skin_tone:'], 'people', []),
-    ('1f468-1f393', '👨🎓', 499, 2, ':man_student:', [], 'people', []),
-    ('1f468-1f3fb-1f393', '👨🏻🎓', 500, 3, ':man_student_tone1:', [':man_student_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-1f393', '👨🏼🎓', 501, 3, ':man_student_tone2:', [':man_student_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-1f393', '👨🏽🎓', 502, 3, ':man_student_tone3:', [':man_student_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-1f393', '👨🏾🎓', 503, 3, ':man_student_tone4:', [':man_student_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-1f393', '👨🏿🎓', 504, 3, ':man_student_tone5:', [':man_student_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3a4', '👩🎤', 505, 2, ':woman_singer:', [], 'people', []),
-    ('1f469-1f3fb-1f3a4', '👩🏻🎤', 506, 3, ':woman_singer_tone1:', [':woman_singer_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-1f3a4', '👩🏼🎤', 507, 3, ':woman_singer_tone2:', [':woman_singer_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-1f3a4', '👩🏽🎤', 508, 3, ':woman_singer_tone3:', [':woman_singer_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-1f3a4', '👩🏾🎤', 509, 3, ':woman_singer_tone4:', [':woman_singer_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-1f3a4', '👩🏿🎤', 510, 3, ':woman_singer_tone5:', [':woman_singer_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3a4', '👨🎤', 511, 2, ':man_singer:', [], 'people', []),
-    ('1f468-1f3fb-1f3a4', '👨🏻🎤', 512, 3, ':man_singer_tone1:', [':man_singer_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-1f3a4', '👨🏼🎤', 513, 3, ':man_singer_tone2:', [':man_singer_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-1f3a4', '👨🏽🎤', 514, 3, ':man_singer_tone3:', [':man_singer_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-1f3a4', '👨🏾🎤', 515, 3, ':man_singer_tone4:', [':man_singer_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-1f3a4', '👨🏿🎤', 516, 3, ':man_singer_tone5:', [':man_singer_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3eb', '👩🏫', 517, 2, ':woman_teacher:', [], 'people', []),
-    ('1f469-1f3fb-1f3eb', '👩🏻🏫', 518, 3, ':woman_teacher_tone1:', [':woman_teacher_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-1f3eb', '👩🏼🏫', 519, 3, ':woman_teacher_tone2:', [':woman_teacher_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-1f3eb', '👩🏽🏫', 520, 3, ':woman_teacher_tone3:', [':woman_teacher_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-1f3eb', '👩🏾🏫', 521, 3, ':woman_teacher_tone4:', [':woman_teacher_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-1f3eb', '👩🏿🏫', 522, 3, ':woman_teacher_tone5:', [':woman_teacher_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3eb', '👨🏫', 523, 2, ':man_teacher:', [], 'people', []),
-    ('1f468-1f3fb-1f3eb', '👨🏻🏫', 524, 3, ':man_teacher_tone1:', [':man_teacher_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-1f3eb', '👨🏼🏫', 525, 3, ':man_teacher_tone2:', [':man_teacher_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-1f3eb', '👨🏽🏫', 526, 3, ':man_teacher_tone3:', [':man_teacher_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-1f3eb', '👨🏾🏫', 527, 3, ':man_teacher_tone4:', [':man_teacher_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-1f3eb', '👨🏿🏫', 528, 3, ':man_teacher_tone5:', [':man_teacher_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ed', '👩🏭', 529, 2, ':woman_factory_worker:', [], 'people', []),
-    ('1f469-1f3fb-1f3ed', '👩🏻🏭', 530, 3, ':woman_factory_worker_tone1:', [':woman_factory_worker_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-1f3ed', '👩🏼🏭', 531, 3, ':woman_factory_worker_tone2:', [':woman_factory_worker_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-1f3ed', '👩🏽🏭', 532, 3, ':woman_factory_worker_tone3:', [':woman_factory_worker_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-1f3ed', '👩🏾🏭', 533, 3, ':woman_factory_worker_tone4:', [':woman_factory_worker_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-1f3ed', '👩🏿🏭', 534, 3, ':woman_factory_worker_tone5:', [':woman_factory_worker_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ed', '👨🏭', 535, 2, ':man_factory_worker:', [], 'people', []),
-    ('1f468-1f3fb-1f3ed', '👨🏻🏭', 536, 3, ':man_factory_worker_tone1:', [':man_factory_worker_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-1f3ed', '👨🏼🏭', 537, 3, ':man_factory_worker_tone2:', [':man_factory_worker_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-1f3ed', '👨🏽🏭', 538, 3, ':man_factory_worker_tone3:', [':man_factory_worker_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-1f3ed', '👨🏾🏭', 539, 3, ':man_factory_worker_tone4:', [':man_factory_worker_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-1f3ed', '👨🏿🏭', 540, 3, ':man_factory_worker_tone5:', [':man_factory_worker_dark_skin_tone:'], 'people', []),
-    ('1f469-1f4bb', '👩💻', 541, 2, ':woman_technologist:', [], 'people', []),
-    ('1f469-1f3fb-1f4bb', '👩🏻💻', 542, 3, ':woman_technologist_tone1:', [':woman_technologist_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-1f4bb', '👩🏼💻', 543, 3, ':woman_technologist_tone2:', [':woman_technologist_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-1f4bb', '👩🏽💻', 544, 3, ':woman_technologist_tone3:', [':woman_technologist_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-1f4bb', '👩🏾💻', 545, 3, ':woman_technologist_tone4:', [':woman_technologist_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-1f4bb', '👩🏿💻', 546, 3, ':woman_technologist_tone5:', [':woman_technologist_dark_skin_tone:'], 'people', []),
-    ('1f468-1f4bb', '👨💻', 547, 2, ':man_technologist:', [], 'people', []),
-    ('1f468-1f3fb-1f4bb', '👨🏻💻', 548, 3, ':man_technologist_tone1:', [':man_technologist_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-1f4bb', '👨🏼💻', 549, 3, ':man_technologist_tone2:', [':man_technologist_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-1f4bb', '👨🏽💻', 550, 3, ':man_technologist_tone3:', [':man_technologist_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-1f4bb', '👨🏾💻', 551, 3, ':man_technologist_tone4:', [':man_technologist_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-1f4bb', '👨🏿💻', 552, 3, ':man_technologist_tone5:', [':man_technologist_dark_skin_tone:'], 'people', []),
-    ('1f469-1f4bc', '👩💼', 553, 2, ':woman_office_worker:', [], 'people', []),
-    ('1f469-1f3fb-1f4bc', '👩🏻💼', 554, 3, ':woman_office_worker_tone1:', [':woman_office_worker_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-1f4bc', '👩🏼💼', 555, 3, ':woman_office_worker_tone2:', [':woman_office_worker_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-1f4bc', '👩🏽💼', 556, 3, ':woman_office_worker_tone3:', [':woman_office_worker_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-1f4bc', '👩🏾💼', 557, 3, ':woman_office_worker_tone4:', [':woman_office_worker_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-1f4bc', '👩🏿💼', 558, 3, ':woman_office_worker_tone5:', [':woman_office_worker_dark_skin_tone:'], 'people', []),
-    ('1f468-1f4bc', '👨💼', 559, 2, ':man_office_worker:', [], 'people', []),
-    ('1f468-1f3fb-1f4bc', '👨🏻💼', 560, 3, ':man_office_worker_tone1:', [':man_office_worker_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-1f4bc', '👨🏼💼', 561, 3, ':man_office_worker_tone2:', [':man_office_worker_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-1f4bc', '👨🏽💼', 562, 3, ':man_office_worker_tone3:', [':man_office_worker_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-1f4bc', '👨🏾💼', 563, 3, ':man_office_worker_tone4:', [':man_office_worker_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-1f4bc', '👨🏿💼', 564, 3, ':man_office_worker_tone5:', [':man_office_worker_dark_skin_tone:'], 'people', []),
-    ('1f469-1f527', '👩🔧', 565, 2, ':woman_mechanic:', [], 'people', []),
-    ('1f469-1f3fb-1f527', '👩🏻🔧', 566, 3, ':woman_mechanic_tone1:', [':woman_mechanic_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-1f527', '👩🏼🔧', 567, 3, ':woman_mechanic_tone2:', [':woman_mechanic_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-1f527', '👩🏽🔧', 568, 3, ':woman_mechanic_tone3:', [':woman_mechanic_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-1f527', '👩🏾🔧', 569, 3, ':woman_mechanic_tone4:', [':woman_mechanic_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-1f527', '👩🏿🔧', 570, 3, ':woman_mechanic_tone5:', [':woman_mechanic_dark_skin_tone:'], 'people', []),
-    ('1f468-1f527', '👨🔧', 571, 2, ':man_mechanic:', [], 'people', []),
-    ('1f468-1f3fb-1f527', '👨🏻🔧', 572, 3, ':man_mechanic_tone1:', [':man_mechanic_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-1f527', '👨🏼🔧', 573, 3, ':man_mechanic_tone2:', [':man_mechanic_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-1f527', '👨🏽🔧', 574, 3, ':man_mechanic_tone3:', [':man_mechanic_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-1f527', '👨🏾🔧', 575, 3, ':man_mechanic_tone4:', [':man_mechanic_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-1f527', '👨🏿🔧', 576, 3, ':man_mechanic_tone5:', [':man_mechanic_dark_skin_tone:'], 'people', []),
-    ('1f469-1f52c', '👩🔬', 577, 2, ':woman_scientist:', [], 'people', []),
-    ('1f469-1f3fb-1f52c', '👩🏻🔬', 578, 3, ':woman_scientist_tone1:', [':woman_scientist_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-1f52c', '👩🏼🔬', 579, 3, ':woman_scientist_tone2:', [':woman_scientist_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-1f52c', '👩🏽🔬', 580, 3, ':woman_scientist_tone3:', [':woman_scientist_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-1f52c', '👩🏾🔬', 581, 3, ':woman_scientist_tone4:', [':woman_scientist_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-1f52c', '👩🏿🔬', 582, 3, ':woman_scientist_tone5:', [':woman_scientist_dark_skin_tone:'], 'people', []),
-    ('1f468-1f52c', '👨🔬', 583, 2, ':man_scientist:', [], 'people', []),
-    ('1f468-1f3fb-1f52c', '👨🏻🔬', 584, 3, ':man_scientist_tone1:', [':man_scientist_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-1f52c', '👨🏼🔬', 585, 3, ':man_scientist_tone2:', [':man_scientist_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-1f52c', '👨🏽🔬', 586, 3, ':man_scientist_tone3:', [':man_scientist_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-1f52c', '👨🏾🔬', 587, 3, ':man_scientist_tone4:', [':man_scientist_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-1f52c', '👨🏿🔬', 588, 3, ':man_scientist_tone5:', [':man_scientist_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3a8', '👩🎨', 589, 2, ':woman_artist:', [], 'people', []),
-    ('1f469-1f3fb-1f3a8', '👩🏻🎨', 590, 3, ':woman_artist_tone1:', [':woman_artist_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-1f3a8', '👩🏼🎨', 591, 3, ':woman_artist_tone2:', [':woman_artist_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-1f3a8', '👩🏽🎨', 592, 3, ':woman_artist_tone3:', [':woman_artist_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-1f3a8', '👩🏾🎨', 593, 3, ':woman_artist_tone4:', [':woman_artist_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-1f3a8', '👩🏿🎨', 594, 3, ':woman_artist_tone5:', [':woman_artist_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3a8', '👨🎨', 595, 2, ':man_artist:', [], 'people', []),
-    ('1f468-1f3fb-1f3a8', '👨🏻🎨', 596, 3, ':man_artist_tone1:', [':man_artist_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-1f3a8', '👨🏼🎨', 597, 3, ':man_artist_tone2:', [':man_artist_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-1f3a8', '👨🏽🎨', 598, 3, ':man_artist_tone3:', [':man_artist_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-1f3a8', '👨🏾🎨', 599, 3, ':man_artist_tone4:', [':man_artist_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-1f3a8', '👨🏿🎨', 600, 3, ':man_artist_tone5:', [':man_artist_dark_skin_tone:'], 'people', []),
-    ('1f469-1f692', '👩🚒', 601, 2, ':woman_firefighter:', [], 'people', []),
-    ('1f469-1f3fb-1f692', '👩🏻🚒', 602, 3, ':woman_firefighter_tone1:', [':woman_firefighter_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-1f692', '👩🏼🚒', 603, 3, ':woman_firefighter_tone2:', [':woman_firefighter_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-1f692', '👩🏽🚒', 604, 3, ':woman_firefighter_tone3:', [':woman_firefighter_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-1f692', '👩🏾🚒', 605, 3, ':woman_firefighter_tone4:', [':woman_firefighter_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-1f692', '👩🏿🚒', 606, 3, ':woman_firefighter_tone5:', [':woman_firefighter_dark_skin_tone:'], 'people', []),
-    ('1f468-1f692', '👨🚒', 607, 2, ':man_firefighter:', [], 'people', []),
-    ('1f468-1f3fb-1f692', '👨🏻🚒', 608, 3, ':man_firefighter_tone1:', [':man_firefighter_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-1f692', '👨🏼🚒', 609, 3, ':man_firefighter_tone2:', [':man_firefighter_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-1f692', '👨🏽🚒', 610, 3, ':man_firefighter_tone3:', [':man_firefighter_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-1f692', '👨🏾🚒', 611, 3, ':man_firefighter_tone4:', [':man_firefighter_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-1f692', '👨🏿🚒', 612, 3, ':man_firefighter_tone5:', [':man_firefighter_dark_skin_tone:'], 'people', []),
-    ('1f469-2708', '👩✈', 613, 2, ':woman_pilot:', [], 'people', []),
-    ('1f469-1f3fb-2708', '👩🏻✈', 614, 3, ':woman_pilot_tone1:', [':woman_pilot_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-2708', '👩🏼✈', 615, 3, ':woman_pilot_tone2:', [':woman_pilot_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-2708', '👩🏽✈', 616, 3, ':woman_pilot_tone3:', [':woman_pilot_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-2708', '👩🏾✈', 617, 3, ':woman_pilot_tone4:', [':woman_pilot_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-2708', '👩🏿✈', 618, 3, ':woman_pilot_tone5:', [':woman_pilot_dark_skin_tone:'], 'people', []),
-    ('1f468-2708', '👨✈', 619, 2, ':man_pilot:', [], 'people', []),
-    ('1f468-1f3fb-2708', '👨🏻✈', 620, 3, ':man_pilot_tone1:', [':man_pilot_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-2708', '👨🏼✈', 621, 3, ':man_pilot_tone2:', [':man_pilot_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-2708', '👨🏽✈', 622, 3, ':man_pilot_tone3:', [':man_pilot_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-2708', '👨🏾✈', 623, 3, ':man_pilot_tone4:', [':man_pilot_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-2708', '👨🏿✈', 624, 3, ':man_pilot_tone5:', [':man_pilot_dark_skin_tone:'], 'people', []),
-    ('1f469-1f680', '👩🚀', 625, 2, ':woman_astronaut:', [], 'people', []),
-    ('1f469-1f3fb-1f680', '👩🏻🚀', 626, 3, ':woman_astronaut_tone1:', [':woman_astronaut_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-1f680', '👩🏼🚀', 627, 3, ':woman_astronaut_tone2:', [':woman_astronaut_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-1f680', '👩🏽🚀', 628, 3, ':woman_astronaut_tone3:', [':woman_astronaut_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-1f680', '👩🏾🚀', 629, 3, ':woman_astronaut_tone4:', [':woman_astronaut_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-1f680', '👩🏿🚀', 630, 3, ':woman_astronaut_tone5:', [':woman_astronaut_dark_skin_tone:'], 'people', []),
-    ('1f468-1f680', '👨🚀', 631, 2, ':man_astronaut:', [], 'people', []),
-    ('1f468-1f3fb-1f680', '👨🏻🚀', 632, 3, ':man_astronaut_tone1:', [':man_astronaut_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-1f680', '👨🏼🚀', 633, 3, ':man_astronaut_tone2:', [':man_astronaut_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-1f680', '👨🏽🚀', 634, 3, ':man_astronaut_tone3:', [':man_astronaut_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-1f680', '👨🏾🚀', 635, 3, ':man_astronaut_tone4:', [':man_astronaut_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-1f680', '👨🏿🚀', 636, 3, ':man_astronaut_tone5:', [':man_astronaut_dark_skin_tone:'], 'people', []),
-    ('1f469-2696', '👩⚖', 637, 2, ':woman_judge:', [], 'people', []),
-    ('1f469-1f3fb-2696', '👩🏻⚖', 638, 3, ':woman_judge_tone1:', [':woman_judge_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fc-2696', '👩🏼⚖', 639, 3, ':woman_judge_tone2:', [':woman_judge_medium_light_skin_tone:'], 'people', []),
-    ('1f469-1f3fd-2696', '👩🏽⚖', 640, 3, ':woman_judge_tone3:', [':woman_judge_medium_skin_tone:'], 'people', []),
-    ('1f469-1f3fe-2696', '👩🏾⚖', 641, 3, ':woman_judge_tone4:', [':woman_judge_medium_dark_skin_tone:'], 'people', []),
-    ('1f469-1f3ff-2696', '👩🏿⚖', 642, 3, ':woman_judge_tone5:', [':woman_judge_dark_skin_tone:'], 'people', []),
-    ('1f468-2696', '👨⚖', 643, 2, ':man_judge:', [], 'people', []),
-    ('1f468-1f3fb-2696', '👨🏻⚖', 644, 3, ':man_judge_tone1:', [':man_judge_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fc-2696', '👨🏼⚖', 645, 3, ':man_judge_tone2:', [':man_judge_medium_light_skin_tone:'], 'people', []),
-    ('1f468-1f3fd-2696', '👨🏽⚖', 646, 3, ':man_judge_tone3:', [':man_judge_medium_skin_tone:'], 'people', []),
-    ('1f468-1f3fe-2696', '👨🏾⚖', 647, 3, ':man_judge_tone4:', [':man_judge_medium_dark_skin_tone:'], 'people', []),
-    ('1f468-1f3ff-2696', '👨🏿⚖', 648, 3, ':man_judge_tone5:', [':man_judge_dark_skin_tone:'], 'people', []),
-    ('1f936', '🤶', 649, 1, ':mrs_claus:', [':mother_christmas:'], 'people', []),
-    ('1f936-1f3fb', '🤶🏻', 650, 2, ':mrs_claus_tone1:', [':mother_christmas_tone1:'], 'people', []),
-    ('1f936-1f3fc', '🤶🏼', 651, 2, ':mrs_claus_tone2:', [':mother_christmas_tone2:'], 'people', []),
-    ('1f936-1f3fd', '🤶🏽', 652, 2, ':mrs_claus_tone3:', [':mother_christmas_tone3:'], 'people', []),
-    ('1f936-1f3fe', '🤶🏾', 653, 2, ':mrs_claus_tone4:', [':mother_christmas_tone4:'], 'people', []),
-    ('1f936-1f3ff', '🤶🏿', 654, 2, ':mrs_claus_tone5:', [':mother_christmas_tone5:'], 'people', []),
-    ('1f385', '🎅', 655, 1, ':santa:', [], 'people', []),
-    ('1f385-1f3fb', '🎅🏻', 656, 2, ':santa_tone1:', [], 'people', []),
-    ('1f385-1f3fc', '🎅🏼', 657, 2, ':santa_tone2:', [], 'people', []),
-    ('1f385-1f3fd', '🎅🏽', 658, 2, ':santa_tone3:', [], 'people', []),
-    ('1f385-1f3fe', '🎅🏾', 659, 2, ':santa_tone4:', [], 'people', []),
-    ('1f385-1f3ff', '🎅🏿', 660, 2, ':santa_tone5:', [], 'people', []),
-    ('1f478', '👸', 661, 1, ':princess:', [], 'people', []),
-    ('1f478-1f3fb', '👸🏻', 662, 2, ':princess_tone1:', [], 'people', []),
-    ('1f478-1f3fc', '👸🏼', 663, 2, ':princess_tone2:', [], 'people', []),
-    ('1f478-1f3fd', '👸🏽', 664, 2, ':princess_tone3:', [], 'people', []),
-    ('1f478-1f3fe', '👸🏾', 665, 2, ':princess_tone4:', [], 'people', []),
-    ('1f478-1f3ff', '👸🏿', 666, 2, ':princess_tone5:', [], 'people', []),
-    ('1f934', '🤴', 667, 1, ':prince:', [], 'people', []),
-    ('1f934-1f3fb', '🤴🏻', 668, 2, ':prince_tone1:', [], 'people', []),
-    ('1f934-1f3fc', '🤴🏼', 669, 2, ':prince_tone2:', [], 'people', []),
-    ('1f934-1f3fd', '🤴🏽', 670, 2, ':prince_tone3:', [], 'people', []),
-    ('1f934-1f3fe', '🤴🏾', 671, 2, ':prince_tone4:', [], 'people', []),
-    ('1f934-1f3ff', '🤴🏿', 672, 2, ':prince_tone5:', [], 'people', []),
-    ('1f470', '👰', 673, 1, ':bride_with_veil:', [], 'people', []),
-    ('1f470-1f3fb', '👰🏻', 674, 2, ':bride_with_veil_tone1:', [], 'people', []),
-    ('1f470-1f3fc', '👰🏼', 675, 2, ':bride_with_veil_tone2:', [], 'people', []),
-    ('1f470-1f3fd', '👰🏽', 676, 2, ':bride_with_veil_tone3:', [], 'people', []),
-    ('1f470-1f3fe', '👰🏾', 677, 2, ':bride_with_veil_tone4:', [], 'people', []),
-    ('1f470-1f3ff', '👰🏿', 678, 2, ':bride_with_veil_tone5:', [], 'people', []),
-    ('1f935', '🤵', 679, 1, ':man_in_tuxedo:', [], 'people', []),
-    ('1f935-1f3fb', '🤵🏻', 680, 2, ':man_in_tuxedo_tone1:', [':tuxedo_tone1:'], 'people', []),
-    ('1f935-1f3fc', '🤵🏼', 681, 2, ':man_in_tuxedo_tone2:', [':tuxedo_tone2:'], 'people', []),
-    ('1f935-1f3fd', '🤵🏽', 682, 2, ':man_in_tuxedo_tone3:', [':tuxedo_tone3:'], 'people', []),
-    ('1f935-1f3fe', '🤵🏾', 683, 2, ':man_in_tuxedo_tone4:', [':tuxedo_tone4:'], 'people', []),
-    ('1f935-1f3ff', '🤵🏿', 684, 2, ':man_in_tuxedo_tone5:', [':tuxedo_tone5:'], 'people', []),
-    ('1f47c', '👼', 685, 1, ':angel:', [], 'people', []),
-    ('1f47c-1f3fb', '👼🏻', 686, 2, ':angel_tone1:', [], 'people', []),
-    ('1f47c-1f3fc', '👼🏼', 687, 2, ':angel_tone2:', [], 'people', []),
-    ('1f47c-1f3fd', '👼🏽', 688, 2, ':angel_tone3:', [], 'people', []),
-    ('1f47c-1f3fe', '👼🏾', 689, 2, ':angel_tone4:', [], 'people', []),
-    ('1f47c-1f3ff', '👼🏿', 690, 2, ':angel_tone5:', [], 'people', []),
-    ('1f930', '🤰', 691, 1, ':pregnant_woman:', [':expecting_woman:'], 'people', []),
-    ('1f930-1f3fb', '🤰🏻', 692, 2, ':pregnant_woman_tone1:', [':expecting_woman_tone1:'], 'people', []),
-    ('1f930-1f3fc', '🤰🏼', 693, 2, ':pregnant_woman_tone2:', [':expecting_woman_tone2:'], 'people', []),
-    ('1f930-1f3fd', '🤰🏽', 694, 2, ':pregnant_woman_tone3:', [':expecting_woman_tone3:'], 'people', []),
-    ('1f930-1f3fe', '🤰🏾', 695, 2, ':pregnant_woman_tone4:', [':expecting_woman_tone4:'], 'people', []),
-    ('1f930-1f3ff', '🤰🏿', 696, 2, ':pregnant_woman_tone5:', [':expecting_woman_tone5:'], 'people', []),
-    ('1f647-2640', '🙇♀', 697, 2, ':woman_bowing:', [], 'people', []),
-    ('1f647-1f3fb-2640', '🙇🏻♀', 698, 3, ':woman_bowing_tone1:', [':woman_bowing_light_skin_tone:'], 'people', []),
-    ('1f647-1f3fc-2640', '🙇🏼♀', 699, 3, ':woman_bowing_tone2:', [':woman_bowing_medium_light_skin_tone:'], 'people', []),
-    ('1f647-1f3fd-2640', '🙇🏽♀', 700, 3, ':woman_bowing_tone3:', [':woman_bowing_medium_skin_tone:'], 'people', []),
-    ('1f647-1f3fe-2640', '🙇🏾♀', 701, 3, ':woman_bowing_tone4:', [':woman_bowing_medium_dark_skin_tone:'], 'people', []),
-    ('1f647-1f3ff-2640', '🙇🏿♀', 702, 3, ':woman_bowing_tone5:', [':woman_bowing_dark_skin_tone:'], 'people', []),
-    ('1f647', '🙇', 703, 1, ':person_bowing:', [':bow:'], 'people', []),
-    ('1f647-1f3fb', '🙇🏻', 704, 2, ':person_bowing_tone1:', [':bow_tone1:'], 'people', []),
-    ('1f647-1f3fc', '🙇🏼', 705, 2, ':person_bowing_tone2:', [':bow_tone2:'], 'people', []),
-    ('1f647-1f3fd', '🙇🏽', 706, 2, ':person_bowing_tone3:', [':bow_tone3:'], 'people', []),
-    ('1f647-1f3fe', '🙇🏾', 707, 2, ':person_bowing_tone4:', [':bow_tone4:'], 'people', []),
-    ('1f647-1f3ff', '🙇🏿', 708, 2, ':person_bowing_tone5:', [':bow_tone5:'], 'people', []),
-    ('1f647-2642', '🙇♂', 709, 2, ':man_bowing:', [], 'people', []),
-    ('1f647-1f3ff-2642', '🙇🏿♂', 710, 3, ':man_bowing_tone5:', [':man_bowing_dark_skin_tone:'], 'people', []),
-    ('1f647-1f3fe-2642', '🙇🏾♂', 711, 3, ':man_bowing_tone4:', [':man_bowing_medium_dark_skin_tone:'], 'people', []),
-    ('1f647-1f3fd-2642', '🙇🏽♂', 712, 3, ':man_bowing_tone3:', [':man_bowing_medium_skin_tone:'], 'people', []),
-    ('1f647-1f3fc-2642', '🙇🏼♂', 713, 3, ':man_bowing_tone2:', [':man_bowing_medium_light_skin_tone:'], 'people', []),
-    ('1f647-1f3fb-2642', '🙇🏻♂', 714, 3, ':man_bowing_tone1:', [':man_bowing_light_skin_tone:'], 'people', []),
-    ('1f481', '💁', 715, 1, ':person_tipping_hand:', [':information_desk_person:'], 'people', ['tip']),
-    ('1f481-1f3fb', '💁🏻', 716, 2, ':person_tipping_hand_tone1:', [':information_desk_person_tone1:'], 'people', ['tip']),
-    ('1f481-1f3fc', '💁🏼', 717, 2, ':person_tipping_hand_tone2:', [':information_desk_person_tone2:'], 'people', ['tip']),
-    ('1f481-1f3fd', '💁🏽', 718, 2, ':person_tipping_hand_tone3:', [':information_desk_person_tone3:'], 'people', ['tip']),
-    ('1f481-1f3fe', '💁🏾', 719, 2, ':person_tipping_hand_tone4:', [':information_desk_person_tone4:'], 'people', ['tip']),
-    ('1f481-1f3ff', '💁🏿', 720, 2, ':person_tipping_hand_tone5:', [':information_desk_person_tone5:'], 'people', ['tip']),
-    ('1f481-2642', '💁♂', 721, 2, ':man_tipping_hand:', [], 'people', ['tip']),
-    ('1f481-1f3fb-2642', '💁🏻♂', 722, 3, ':man_tipping_hand_tone1:', [':man_tipping_hand_light_skin_tone:'], 'people', ['tip']),
-    ('1f481-1f3fc-2642', '💁🏼♂', 723, 3, ':man_tipping_hand_tone2:', [':man_tipping_hand_medium_light_skin_tone:'], 'people', ['tip']),
-    ('1f481-1f3fd-2642', '💁🏽♂', 724, 3, ':man_tipping_hand_tone3:', [':man_tipping_hand_medium_skin_tone:'], 'people', ['tip']),
-    ('1f481-1f3fe-2642', '💁🏾♂', 725, 3, ':man_tipping_hand_tone4:', [':man_tipping_hand_medium_dark_skin_tone:'], 'people', ['tip']),
-    ('1f481-1f3ff-2642', '💁🏿♂', 726, 3, ':man_tipping_hand_tone5:', [':man_tipping_hand_dark_skin_tone:'], 'people', ['tip']),
-    ('1f481-2640', '💁♀', 727, 2, ':woman_tipping_hand:', [], 'people', ['tip']),
-    ('1f481-1f3ff-2640', '💁🏿♀', 728, 3, ':woman_tipping_hand_tone5:', [':woman_tipping_hand_dark_skin_tone:'], 'people', ['tip']),
-    ('1f481-1f3fe-2640', '💁🏾♀', 729, 3, ':woman_tipping_hand_tone4:', [':woman_tipping_hand_medium_dark_skin_tone:'], 'people', ['tip']),
-    ('1f481-1f3fd-2640', '💁🏽♀', 730, 3, ':woman_tipping_hand_tone3:', [':woman_tipping_hand_medium_skin_tone:'], 'people', ['tip']),
-    ('1f481-1f3fc-2640', '💁🏼♀', 731, 3, ':woman_tipping_hand_tone2:', [':woman_tipping_hand_medium_light_skin_tone:'], 'people', ['tip']),
-    ('1f481-1f3fb-2640', '💁🏻♀', 732, 3, ':woman_tipping_hand_tone1:', [':woman_tipping_hand_light_skin_tone:'], 'people', ['tip']),
-    ('1f645', '🙅', 733, 1, ':person_gesturing_no:', [':no_good:'], 'people', []),
-    ('1f645-1f3fb', '🙅🏻', 734, 2, ':person_gesturing_no_tone1:', [':no_good_tone1:'], 'people', []),
-    ('1f645-1f3fc', '🙅🏼', 735, 2, ':person_gesturing_no_tone2:', [':no_good_tone2:'], 'people', []),
-    ('1f645-1f3fd', '🙅🏽', 736, 2, ':person_gesturing_no_tone3:', [':no_good_tone3:'], 'people', []),
-    ('1f645-1f3fe', '🙅🏾', 737, 2, ':person_gesturing_no_tone4:', [':no_good_tone4:'], 'people', []),
-    ('1f645-1f3ff', '🙅🏿', 738, 2, ':person_gesturing_no_tone5:', [':no_good_tone5:'], 'people', []),
-    ('1f645-2642', '🙅♂', 739, 2, ':man_gesturing_no:', [], 'people', []),
-    ('1f645-1f3fb-2642', '🙅🏻♂', 740, 3, ':man_gesturing_no_tone1:', [':man_gesturing_no_light_skin_tone:'], 'people', []),
-    ('1f645-1f3fc-2642', '🙅🏼♂', 741, 3, ':man_gesturing_no_tone2:', [':man_gesturing_no_medium_light_skin_tone:'], 'people', []),
-    ('1f645-1f3fd-2642', '🙅🏽♂', 742, 3, ':man_gesturing_no_tone3:', [':man_gesturing_no_medium_skin_tone:'], 'people', []),
-    ('1f645-1f3fe-2642', '🙅🏾♂', 743, 3, ':man_gesturing_no_tone4:', [':man_gesturing_no_medium_dark_skin_tone:'], 'people', []),
-    ('1f645-1f3ff-2642', '🙅🏿♂', 744, 3, ':man_gesturing_no_tone5:', [':man_gesturing_no_dark_skin_tone:'], 'people', []),
-    ('1f645-2640', '🙅♀', 745, 2, ':woman_gesturing_no:', [], 'people', []),
-    ('1f645-1f3ff-2640', '🙅🏿♀', 746, 3, ':woman_gesturing_no_tone5:', [':woman_gesturing_no_dark_skin_tone:'], 'people', []),
-    ('1f645-1f3fe-2640', '🙅🏾♀', 747, 3, ':woman_gesturing_no_tone4:', [':woman_gesturing_no_medium_dark_skin_tone:'], 'people', []),
-    ('1f645-1f3fd-2640', '🙅🏽♀', 748, 3, ':woman_gesturing_no_tone3:', [':woman_gesturing_no_medium_skin_tone:'], 'people', []),
-    ('1f645-1f3fc-2640', '🙅🏼♀', 749, 3, ':woman_gesturing_no_tone2:', [':woman_gesturing_no_medium_light_skin_tone:'], 'people', []),
-    ('1f645-1f3fb-2640', '🙅🏻♀', 750, 3, ':woman_gesturing_no_tone1:', [':woman_gesturing_no_light_skin_tone:'], 'people', []),
-    ('1f646', '🙆', 751, 1, ':person_gesturing_ok:', [':ok_woman:'], 'people', []),
-    ('1f646-1f3fb', '🙆🏻', 752, 2, ':person_gesturing_ok_tone1:', [':ok_woman_tone1:'], 'people', []),
-    ('1f646-1f3fc', '🙆🏼', 753, 2, ':person_gesturing_ok_tone2:', [':ok_woman_tone2:'], 'people', []),
-    ('1f646-1f3fd', '🙆🏽', 754, 2, ':person_gesturing_ok_tone3:', [':ok_woman_tone3:'], 'people', []),
-    ('1f646-1f3fe', '🙆🏾', 755, 2, ':person_gesturing_ok_tone4:', [':ok_woman_tone4:'], 'people', []),
-    ('1f646-1f3ff', '🙆🏿', 756, 2, ':person_gesturing_ok_tone5:', [':ok_woman_tone5:'], 'people', []),
-    ('1f646-2642', '🙆♂', 757, 2, ':man_gesturing_ok:', [], 'people', []),
-    ('1f646-1f3fb-2642', '🙆🏻♂', 758, 3, ':man_gesturing_ok_tone1:', [':man_gesturing_ok_light_skin_tone:'], 'people', []),
-    ('1f646-1f3fc-2642', '🙆🏼♂', 759, 3, ':man_gesturing_ok_tone2:', [':man_gesturing_ok_medium_light_skin_tone:'], 'people', []),
-    ('1f646-1f3fd-2642', '🙆🏽♂', 760, 3, ':man_gesturing_ok_tone3:', [':man_gesturing_ok_medium_skin_tone:'], 'people', []),
-    ('1f646-1f3fe-2642', '🙆🏾♂', 761, 3, ':man_gesturing_ok_tone4:', [':man_gesturing_ok_medium_dark_skin_tone:'], 'people', []),
-    ('1f646-1f3ff-2642', '🙆🏿♂', 762, 3, ':man_gesturing_ok_tone5:', [':man_gesturing_ok_dark_skin_tone:'], 'people', []),
-    ('1f646-2640', '🙆♀', 763, 2, ':woman_gesturing_ok:', [], 'people', []),
-    ('1f646-1f3ff-2640', '🙆🏿♀', 764, 3, ':woman_gesturing_ok_tone5:', [':woman_gesturing_ok_dark_skin_tone:'], 'people', []),
-    ('1f646-1f3fe-2640', '🙆🏾♀', 765, 3, ':woman_gesturing_ok_tone4:', [':woman_gesturing_ok_medium_dark_skin_tone:'], 'people', []),
-    ('1f646-1f3fd-2640', '🙆🏽♀', 766, 3, ':woman_gesturing_ok_tone3:', [':woman_gesturing_ok_medium_skin_tone:'], 'people', []),
-    ('1f646-1f3fc-2640', '🙆🏼♀', 767, 3, ':woman_gesturing_ok_tone2:', [':woman_gesturing_ok_medium_light_skin_tone:'], 'people', []),
-    ('1f646-1f3fb-2640', '🙆🏻♀', 768, 3, ':woman_gesturing_ok_tone1:', [':woman_gesturing_ok_light_skin_tone:'], 'people', []),
-    ('1f64b', '🙋', 769, 1, ':person_raising_hand:', [':raising_hand:'], 'people', []),
-    ('1f64b-1f3fb', '🙋🏻', 770, 2, ':person_raising_hand_tone1:', [':raising_hand_tone1:'], 'people', []),
-    ('1f64b-1f3fc', '🙋🏼', 771, 2, ':person_raising_hand_tone2:', [':raising_hand_tone2:'], 'people', []),
-    ('1f64b-1f3fd', '🙋🏽', 772, 2, ':person_raising_hand_tone3:', [':raising_hand_tone3:'], 'people', []),
-    ('1f64b-1f3fe', '🙋🏾', 773, 2, ':person_raising_hand_tone4:', [':raising_hand_tone4:'], 'people', []),
-    ('1f64b-1f3ff', '🙋🏿', 774, 2, ':person_raising_hand_tone5:', [':raising_hand_tone5:'], 'people', []),
-    ('1f64b-2642', '🙋♂', 775, 2, ':man_raising_hand:', [], 'people', []),
-    ('1f64b-1f3fb-2642', '🙋🏻♂', 776, 3, ':man_raising_hand_tone1:', [':man_raising_hand_light_skin_tone:'], 'people', []),
-    ('1f64b-1f3fc-2642', '🙋🏼♂', 777, 3, ':man_raising_hand_tone2:', [':man_raising_hand_medium_light_skin_tone:'], 'people', []),
-    ('1f64b-1f3fd-2642', '🙋🏽♂', 778, 3, ':man_raising_hand_tone3:', [':man_raising_hand_medium_skin_tone:'], 'people', []),
-    ('1f64b-1f3fe-2642', '🙋🏾♂', 779, 3, ':man_raising_hand_tone4:', [':man_raising_hand_medium_dark_skin_tone:'], 'people', []),
-    ('1f64b-1f3ff-2642', '🙋🏿♂', 780, 3, ':man_raising_hand_tone5:', [':man_raising_hand_dark_skin_tone:'], 'people', []),
-    ('1f64b-2640', '🙋♀', 781, 2, ':woman_raising_hand:', [], 'people', []),
-    ('1f64b-1f3ff-2640', '🙋🏿♀', 782, 3, ':woman_raising_hand_tone5:', [':woman_raising_hand_dark_skin_tone:'], 'people', []),
-    ('1f64b-1f3fe-2640', '🙋🏾♀', 783, 3, ':woman_raising_hand_tone4:', [':woman_raising_hand_medium_dark_skin_tone:'], 'people', []),
-    ('1f64b-1f3fd-2640', '🙋🏽♀', 784, 3, ':woman_raising_hand_tone3:', [':woman_raising_hand_medium_skin_tone:'], 'people', []),
-    ('1f64b-1f3fc-2640', '🙋🏼♀', 785, 3, ':woman_raising_hand_tone2:', [':woman_raising_hand_medium_light_skin_tone:'], 'people', []),
-    ('1f64b-1f3fb-2640', '🙋🏻♀', 786, 3, ':woman_raising_hand_tone1:', [':woman_raising_hand_light_skin_tone:'], 'people', []),
-    # ('1f926-2640', '🤦♀', 787, 2, ':woman_facepalming:', [], 'people', []),
-    # ('1f926-1f3fb-2640', '🤦🏻♀', 788, 3, ':woman_facepalming_tone1:', [':woman_facepalming_light_skin_tone:'], 'people', []),
-    # ('1f926-1f3fc-2640', '🤦🏼♀', 789, 3, ':woman_facepalming_tone2:', [':woman_facepalming_medium_light_skin_tone:'], 'people', []),
-    # ('1f926-1f3fd-2640', '🤦🏽♀', 790, 3, ':woman_facepalming_tone3:', [':woman_facepalming_medium_skin_tone:'], 'people', []),
-    # ('1f926-1f3fe-2640', '🤦🏾♀', 791, 3, ':woman_facepalming_tone4:', [':woman_facepalming_medium_dark_skin_tone:'], 'people', []),
-    # ('1f926-1f3ff-2640', '🤦🏿♀', 792, 3, ':woman_facepalming_tone5:', [':woman_facepalming_dark_skin_tone:'], 'people', []),
-    # ('1f926-2642', '🤦♂', 793, 2, ':man_facepalming:', [], 'people', []),
-    ('1f926-1f3fb-2642', '🤦🏻♂', 794, 3, ':man_facepalming_tone1:', [':man_facepalming_light_skin_tone:'], 'people', []),
-    ('1f926-1f3fc-2642', '🤦🏼♂', 795, 3, ':man_facepalming_tone2:', [':man_facepalming_medium_light_skin_tone:'], 'people', []),
-    ('1f926-1f3fd-2642', '🤦🏽♂', 796, 3, ':man_facepalming_tone3:', [':man_facepalming_medium_skin_tone:'], 'people', []),
-    ('1f926-1f3fe-2642', '🤦🏾♂', 797, 3, ':man_facepalming_tone4:', [':man_facepalming_medium_dark_skin_tone:'], 'people', []),
-    ('1f926-1f3ff-2642', '🤦🏿♂', 798, 3, ':man_facepalming_tone5:', [':man_facepalming_dark_skin_tone:'], 'people', []),
-    ('1f926', '🤦', 799, 1, ':person_facepalming:', [':face_palm:', ':facepalm:'], 'people', []),
-    ('1f926-1f3fb', '🤦🏻', 800, 2, ':person_facepalming_tone1:', [':face_palm_tone1:', ':facepalm_tone1:'], 'people', []),
-    ('1f926-1f3fc', '🤦🏼', 801, 2, ':person_facepalming_tone2:', [':face_palm_tone2:', ':facepalm_tone2:'], 'people', []),
-    ('1f926-1f3fd', '🤦🏽', 802, 2, ':person_facepalming_tone3:', [':face_palm_tone3:', ':facepalm_tone3:'], 'people', []),
-    ('1f926-1f3fe', '🤦🏾', 803, 2, ':person_facepalming_tone4:', [':face_palm_tone4:', ':facepalm_tone4:'], 'people', []),
-    ('1f926-1f3ff', '🤦🏿', 804, 2, ':person_facepalming_tone5:', [':face_palm_tone5:', ':facepalm_tone5:'], 'people', []),
-    ('1f937-2640', '🤷♀', 805, 2, ':woman_shrugging:', [], 'people', []),
-    ('1f937-1f3fb-2640', '🤷🏻♀', 806, 3, ':woman_shrugging_tone1:', [':woman_shrugging_light_skin_tone:'], 'people', []),
-    ('1f937-1f3fc-2640', '🤷🏼♀', 807, 3, ':woman_shrugging_tone2:', [':woman_shrugging_medium_light_skin_tone:'], 'people', []),
-    ('1f937-1f3fd-2640', '🤷🏽♀', 808, 3, ':woman_shrugging_tone3:', [':woman_shrugging_medium_skin_tone:'], 'people', []),
-    ('1f937-1f3fe-2640', '🤷🏾♀', 809, 3, ':woman_shrugging_tone4:', [':woman_shrugging_medium_dark_skin_tone:'], 'people', []),
-    ('1f937-1f3ff-2640', '🤷🏿♀', 810, 3, ':woman_shrugging_tone5:', [':woman_shrugging_dark_skin_tone:'], 'people', []),
-    ('1f937-2642', '🤷♂', 811, 2, ':man_shrugging:', [], 'people', []),
-    ('1f937-1f3fb-2642', '🤷🏻♂', 812, 3, ':man_shrugging_tone1:', [':man_shrugging_light_skin_tone:'], 'people', []),
-    ('1f937-1f3fc-2642', '🤷🏼♂', 813, 3, ':man_shrugging_tone2:', [':man_shrugging_medium_light_skin_tone:'], 'people', []),
-    ('1f937-1f3fd-2642', '🤷🏽♂', 814, 3, ':man_shrugging_tone3:', [':man_shrugging_medium_skin_tone:'], 'people', []),
-    ('1f937-1f3fe-2642', '🤷🏾♂', 815, 3, ':man_shrugging_tone4:', [':man_shrugging_medium_dark_skin_tone:'], 'people', []),
-    ('1f937-1f3ff-2642', '🤷🏿♂', 816, 3, ':man_shrugging_tone5:', [':man_shrugging_dark_skin_tone:'], 'people', []),
-    ('1f937', '🤷', 817, 1, ':person_shrugging:', [':shrug:'], 'people', []),
-    ('1f937-1f3fb', '🤷🏻', 818, 2, ':person_shrugging_tone1:', [':shrug_tone1:'], 'people', []),
-    ('1f937-1f3fc', '🤷🏼', 819, 2, ':person_shrugging_tone2:', [':shrug_tone2:'], 'people', []),
-    ('1f937-1f3fd', '🤷🏽', 820, 2, ':person_shrugging_tone3:', [':shrug_tone3:'], 'people', []),
-    ('1f937-1f3fe', '🤷🏾', 821, 2, ':person_shrugging_tone4:', [':shrug_tone4:'], 'people', []),
-    ('1f937-1f3ff', '🤷🏿', 822, 2, ':person_shrugging_tone5:', [':shrug_tone5:'], 'people', []),
-    ('1f64e', '🙎', 823, 1, ':person_pouting:', [':person_with_pouting_face:'], 'people', []),
-    ('1f64e-1f3fb', '🙎🏻', 824, 2, ':person_pouting_tone1:', [':person_with_pouting_face_tone1:'], 'people', []),
-    ('1f64e-1f3fc', '🙎🏼', 825, 2, ':person_pouting_tone2:', [':person_with_pouting_face_tone2:'], 'people', []),
-    ('1f64e-1f3fd', '🙎🏽', 826, 2, ':person_pouting_tone3:', [':person_with_pouting_face_tone3:'], 'people', []),
-    ('1f64e-1f3fe', '🙎🏾', 827, 2, ':person_pouting_tone4:', [':person_with_pouting_face_tone4:'], 'people', []),
-    ('1f64e-1f3ff', '🙎🏿', 828, 2, ':person_pouting_tone5:', [':person_with_pouting_face_tone5:'], 'people', []),
-    ('1f64e-2642', '🙎♂', 829, 2, ':man_pouting:', [], 'people', []),
-    ('1f64e-1f3fb-2642', '🙎🏻♂', 830, 3, ':man_pouting_tone1:', [':man_pouting_light_skin_tone:'], 'people', []),
-    ('1f64e-1f3fc-2642', '🙎🏼♂', 831, 3, ':man_pouting_tone2:', [':man_pouting_medium_light_skin_tone:'], 'people', []),
-    ('1f64e-1f3fd-2642', '🙎🏽♂', 832, 3, ':man_pouting_tone3:', [':man_pouting_medium_skin_tone:'], 'people', []),
-    ('1f64e-1f3fe-2642', '🙎🏾♂', 833, 3, ':man_pouting_tone4:', [':man_pouting_medium_dark_skin_tone:'], 'people', []),
-    ('1f64e-1f3ff-2642', '🙎🏿♂', 834, 3, ':man_pouting_tone5:', [':man_pouting_dark_skin_tone:'], 'people', []),
-    ('1f64e-2640', '🙎♀', 835, 2, ':woman_pouting:', [], 'people', []),
-    ('1f64e-1f3ff-2640', '🙎🏿♀', 836, 3, ':woman_pouting_tone5:', [':woman_pouting_dark_skin_tone:'], 'people', []),
-    ('1f64e-1f3fe-2640', '🙎🏾♀', 837, 3, ':woman_pouting_tone4:', [':woman_pouting_medium_dark_skin_tone:'], 'people', []),
-    ('1f64e-1f3fd-2640', '🙎🏽♀', 838, 3, ':woman_pouting_tone3:', [':woman_pouting_medium_skin_tone:'], 'people', []),
-    ('1f64e-1f3fc-2640', '🙎🏼♀', 839, 3, ':woman_pouting_tone2:', [':woman_pouting_medium_light_skin_tone:'], 'people', []),
-    ('1f64e-1f3fb-2640', '🙎🏻♀', 840, 3, ':woman_pouting_tone1:', [':woman_pouting_light_skin_tone:'], 'people', []),
-    ('1f64d', '🙍', 841, 1, ':person_frowning:', [], 'people', []),
-    ('1f64d-1f3fb', '🙍🏻', 842, 2, ':person_frowning_tone1:', [], 'people', []),
-    ('1f64d-1f3fc', '🙍🏼', 843, 2, ':person_frowning_tone2:', [], 'people', []),
-    ('1f64d-1f3fd', '🙍🏽', 844, 2, ':person_frowning_tone3:', [], 'people', []),
-    ('1f64d-1f3fe', '🙍🏾', 845, 2, ':person_frowning_tone4:', [], 'people', []),
-    ('1f64d-1f3ff', '🙍🏿', 846, 2, ':person_frowning_tone5:', [], 'people', []),
-    ('1f64d-2642', '🙍♂', 847, 2, ':man_frowning:', [], 'people', []),
-    ('1f64d-1f3fb-2642', '🙍🏻♂', 848, 3, ':man_frowning_tone1:', [':man_frowning_light_skin_tone:'], 'people', []),
-    ('1f64d-1f3fc-2642', '🙍🏼♂', 849, 3, ':man_frowning_tone2:', [':man_frowning_medium_light_skin_tone:'], 'people', []),
-    ('1f64d-1f3fd-2642', '🙍🏽♂', 850, 3, ':man_frowning_tone3:', [':man_frowning_medium_skin_tone:'], 'people', []),
-    ('1f64d-1f3fe-2642', '🙍🏾♂', 851, 3, ':man_frowning_tone4:', [':man_frowning_medium_dark_skin_tone:'], 'people', []),
-    ('1f64d-1f3ff-2642', '🙍🏿♂', 852, 3, ':man_frowning_tone5:', [':man_frowning_dark_skin_tone:'], 'people', []),
-    ('1f64d-2640', '🙍♀', 853, 2, ':woman_frowning:', [], 'people', []),
-    ('1f64d-1f3ff-2640', '🙍🏿♀', 854, 3, ':woman_frowning_tone5:', [':woman_frowning_dark_skin_tone:'], 'people', []),
-    ('1f64d-1f3fe-2640', '🙍🏾♀', 855, 3, ':woman_frowning_tone4:', [':woman_frowning_medium_dark_skin_tone:'], 'people', []),
-    ('1f64d-1f3fd-2640', '🙍🏽♀', 856, 3, ':woman_frowning_tone3:', [':woman_frowning_medium_skin_tone:'], 'people', []),
-    ('1f64d-1f3fc-2640', '🙍🏼♀', 857, 3, ':woman_frowning_tone2:', [':woman_frowning_medium_light_skin_tone:'], 'people', []),
-    ('1f64d-1f3fb-2640', '🙍🏻♀', 858, 3, ':woman_frowning_tone1:', [':woman_frowning_light_skin_tone:'], 'people', []),
-    ('1f487', '💇', 859, 1, ':person_getting_haircut:', [':haircut:'], 'people', []),
-    ('1f487-1f3fb', '💇🏻', 860, 2, ':person_getting_haircut_tone1:', [':haircut_tone1:'], 'people', []),
-    ('1f487-1f3fc', '💇🏼', 861, 2, ':person_getting_haircut_tone2:', [':haircut_tone2:'], 'people', []),
-    ('1f487-1f3fd', '💇🏽', 862, 2, ':person_getting_haircut_tone3:', [':haircut_tone3:'], 'people', []),
-    ('1f487-1f3fe', '💇🏾', 863, 2, ':person_getting_haircut_tone4:', [':haircut_tone4:'], 'people', []),
-    ('1f487-1f3ff', '💇🏿', 864, 2, ':person_getting_haircut_tone5:', [':haircut_tone5:'], 'people', []),
-    ('1f487-2642', '💇♂', 865, 2, ':man_getting_haircut:', [], 'people', []),
-    ('1f487-1f3fb-2642', '💇🏻♂', 866, 3, ':man_getting_haircut_tone1:', [':man_getting_haircut_light_skin_tone:'], 'people', []),
-    ('1f487-1f3fc-2642', '💇🏼♂', 867, 3, ':man_getting_haircut_tone2:', [':man_getting_haircut_medium_light_skin_tone:'], 'people', []),
-    ('1f487-1f3fd-2642', '💇🏽♂', 868, 3, ':man_getting_haircut_tone3:', [':man_getting_haircut_medium_skin_tone:'], 'people', []),
-    ('1f487-1f3fe-2642', '💇🏾♂', 869, 3, ':man_getting_haircut_tone4:', [':man_getting_haircut_medium_dark_skin_tone:'], 'people', []),
-    ('1f487-1f3ff-2642', '💇🏿♂', 870, 3, ':man_getting_haircut_tone5:', [':man_getting_haircut_dark_skin_tone:'], 'people', []),
-    ('1f487-2640', '💇♀', 871, 2, ':woman_getting_haircut:', [], 'people', []),
-    ('1f487-1f3ff-2640', '💇🏿♀', 872, 3, ':woman_getting_haircut_tone5:', [':woman_getting_haircut_dark_skin_tone:'], 'people', []),
-    ('1f487-1f3fe-2640', '💇🏾♀', 873, 3, ':woman_getting_haircut_tone4:', [':woman_getting_haircut_medium_dark_skin_tone:'], 'people', []),
-    ('1f487-1f3fd-2640', '💇🏽♀', 874, 3, ':woman_getting_haircut_tone3:', [':woman_getting_haircut_medium_skin_tone:'], 'people', []),
-    ('1f487-1f3fc-2640', '💇🏼♀', 875, 3, ':woman_getting_haircut_tone2:', [':woman_getting_haircut_medium_light_skin_tone:'], 'people', []),
-    ('1f487-1f3fb-2640', '💇🏻♀', 876, 3, ':woman_getting_haircut_tone1:', [':woman_getting_haircut_light_skin_tone:'], 'people', []),
-    ('1f486', '💆', 877, 1, ':person_getting_massage:', [':massage:'], 'people', []),
-    ('1f486-1f3fb', '💆🏻', 878, 2, ':person_getting_massage_tone1:', [':massage_tone1:'], 'people', []),
-    ('1f486-1f3fc', '💆🏼', 879, 2, ':person_getting_massage_tone2:', [':massage_tone2:'], 'people', []),
-    ('1f486-1f3fd', '💆🏽', 880, 2, ':person_getting_massage_tone3:', [':massage_tone3:'], 'people', []),
-    ('1f486-1f3fe', '💆🏾', 881, 2, ':person_getting_massage_tone4:', [':massage_tone4:'], 'people', []),
-    ('1f486-1f3ff', '💆🏿', 882, 2, ':person_getting_massage_tone5:', [':massage_tone5:'], 'people', []),
-    ('1f486-2642', '💆♂', 883, 2, ':man_getting_face_massage:', [], 'people', []),
-    ('1f486-1f3fb-2642', '💆🏻♂', 884, 3, ':man_getting_face_massage_tone1:', [':man_getting_face_massage_light_skin_tone:'], 'people', []),
-    ('1f486-1f3fc-2642', '💆🏼♂', 885, 3, ':man_getting_face_massage_tone2:', [':man_getting_face_massage_medium_light_skin_tone:'], 'people', []),
-    ('1f486-1f3fd-2642', '💆🏽♂', 886, 3, ':man_getting_face_massage_tone3:', [':man_getting_face_massage_medium_skin_tone:'], 'people', []),
-    ('1f486-1f3fe-2642', '💆🏾♂', 887, 3, ':man_getting_face_massage_tone4:', [':man_getting_face_massage_medium_dark_skin_tone:'], 'people', []),
-    ('1f486-1f3ff-2642', '💆🏿♂', 888, 3, ':man_getting_face_massage_tone5:', [':man_getting_face_massage_dark_skin_tone:'], 'people', []),
-    ('1f486-2640', '💆♀', 889, 2, ':woman_getting_face_massage:', [], 'people', []),
-    ('1f486-1f3ff-2640', '💆🏿♀', 890, 3, ':woman_getting_face_massage_tone5:', [':woman_getting_face_massage_dark_skin_tone:'], 'people', []),
-    ('1f486-1f3fe-2640', '💆🏾♀', 891, 3, ':woman_getting_face_massage_tone4:', [':woman_getting_face_massage_medium_dark_skin_tone:'], 'people', []),
-    ('1f486-1f3fd-2640', '💆🏽♀', 892, 3, ':woman_getting_face_massage_tone3:', [':woman_getting_face_massage_medium_skin_tone:'], 'people', []),
-    ('1f486-1f3fc-2640', '💆🏼♀', 893, 3, ':woman_getting_face_massage_tone2:', [':woman_getting_face_massage_medium_light_skin_tone:'], 'people', []),
-    ('1f486-1f3fb-2640', '💆🏻♀', 894, 3, ':woman_getting_face_massage_tone1:', [':woman_getting_face_massage_light_skin_tone:'], 'people', []),
-    ('1f574', '🕴', 895, 1, ':levitate:', [], 'people', []),
-    ('1f574-1f3fb', '🕴🏻', 896, 2, ':man_in_business_suit_levitating_tone1:', [':man_in_business_suit_levitating_light_skin_tone:'], 'people', []),
-    ('1f574-1f3fc', '🕴🏼', 897, 2, ':man_in_business_suit_levitating_tone2:', [':man_in_business_suit_levitating_medium_light_skin_tone:'], 'people', []),
-    ('1f574-1f3fd', '🕴🏽', 898, 2, ':man_in_business_suit_levitating_tone3:', [':man_in_business_suit_levitating_medium_skin_tone:'], 'people', []),
-    ('1f574-1f3fe', '🕴🏾', 899, 2, ':man_in_business_suit_levitating_tone4:', [':man_in_business_suit_levitating_medium_dark_skin_tone:'], 'people', []),
-    ('1f574-1f3ff', '🕴🏿', 900, 2, ':man_in_business_suit_levitating_tone5:', [':man_in_business_suit_levitating_dark_skin_tone:'], 'people', []),
-    ('1f483', '💃', 901, 1, ':dancer:', [], 'people', []),
-    ('1f483-1f3fb', '💃🏻', 902, 2, ':dancer_tone1:', [], 'people', []),
-    ('1f483-1f3fc', '💃🏼', 903, 2, ':dancer_tone2:', [], 'people', []),
-    ('1f483-1f3fd', '💃🏽', 904, 2, ':dancer_tone3:', [], 'people', []),
-    ('1f483-1f3fe', '💃🏾', 905, 2, ':dancer_tone4:', [], 'people', []),
-    ('1f483-1f3ff', '💃🏿', 906, 2, ':dancer_tone5:', [], 'people', []),
-    # ('1f57a', '🕺', 907, 1, ':man_dancing:', [':male_dancer:'], 'people', []),
-    # ('1f57a-1f3fb', '🕺🏻', 908, 2, ':man_dancing_tone1:', [':male_dancer_tone1:'], 'people', []),
-    # ('1f57a-1f3fc', '🕺🏼', 909, 2, ':man_dancing_tone2:', [':male_dancer_tone2:'], 'people', []),
-    # ('1f57a-1f3fd', '🕺🏽', 910, 2, ':man_dancing_tone3:', [':male_dancer_tone3:'], 'people', []),
-    # ('1f57a-1f3fe', '🕺🏾', 911, 2, ':man_dancing_tone4:', [':male_dancer_tone4:'], 'people', []),
-    # ('1f57a-1f3ff', '🕺🏿', 912, 2, ':man_dancing_tone5:', [':male_dancer_tone5:'], 'people', []),
-    ('1f46f', '👯', 913, 1, ':people_with_bunny_ears_partying:', [':dancers:'], 'people', []),
-    ('1f46f-2642', '👯♂', 914, 2, ':men_with_bunny_ears_partying:', [], 'people', []),
-    ('1f46f-2640', '👯♀', 915, 2, ':women_with_bunny_ears_partying:', [], 'people', []),
-    ('1f6b6-2640', '🚶♀', 916, 2, ':woman_walking:', [], 'people', []),
-    ('1f6b6-1f3fb-2640', '🚶🏻♀', 917, 3, ':woman_walking_tone1:', [':woman_walking_light_skin_tone:'], 'people', []),
-    ('1f6b6-1f3fc-2640', '🚶🏼♀', 918, 3, ':woman_walking_tone2:', [':woman_walking_medium_light_skin_tone:'], 'people', []),
-    ('1f6b6-1f3fd-2640', '🚶🏽♀', 919, 3, ':woman_walking_tone3:', [':woman_walking_medium_skin_tone:'], 'people', []),
-    ('1f6b6-1f3fe-2640', '🚶🏾♀', 920, 3, ':woman_walking_tone4:', [':woman_walking_medium_dark_skin_tone:'], 'people', []),
-    ('1f6b6-1f3ff-2640', '🚶🏿♀', 921, 3, ':woman_walking_tone5:', [':woman_walking_dark_skin_tone:'], 'people', []),
-    ('1f6b6', '🚶', 922, 1, ':person_walking:', [':walking:'], 'people', []),
-    ('1f6b6-1f3fb', '🚶🏻', 923, 2, ':person_walking_tone1:', [':walking_tone1:'], 'people', []),
-    ('1f6b6-1f3fc', '🚶🏼', 924, 2, ':person_walking_tone2:', [':walking_tone2:'], 'people', []),
-    ('1f6b6-1f3fd', '🚶🏽', 925, 2, ':person_walking_tone3:', [':walking_tone3:'], 'people', []),
-    ('1f6b6-1f3fe', '🚶🏾', 926, 2, ':person_walking_tone4:', [':walking_tone4:'], 'people', []),
-    ('1f6b6-1f3ff', '🚶🏿', 927, 2, ':person_walking_tone5:', [':walking_tone5:'], 'people', []),
-    ('1f6b6-2642', '🚶♂', 928, 2, ':man_walking:', [], 'people', []),
-    ('1f6b6-1f3ff-2642', '🚶🏿♂', 929, 3, ':man_walking_tone5:', [':man_walking_dark_skin_tone:'], 'people', []),
-    ('1f6b6-1f3fe-2642', '🚶🏾♂', 930, 3, ':man_walking_tone4:', [':man_walking_medium_dark_skin_tone:'], 'people', []),
-    ('1f6b6-1f3fd-2642', '🚶🏽♂', 931, 3, ':man_walking_tone3:', [':man_walking_medium_skin_tone:'], 'people', []),
-    ('1f6b6-1f3fc-2642', '🚶🏼♂', 932, 3, ':man_walking_tone2:', [':man_walking_medium_light_skin_tone:'], 'people', []),
-    ('1f6b6-1f3fb-2642', '🚶🏻♂', 933, 3, ':man_walking_tone1:', [':man_walking_light_skin_tone:'], 'people', []),
-    ('1f3c3-2640', '🏃♀', 934, 2, ':woman_running:', [], 'people', []),
-    ('1f3c3-1f3fb-2640', '🏃🏻♀', 935, 3, ':woman_running_tone1:', [':woman_running_light_skin_tone:'], 'people', []),
-    ('1f3c3-1f3fc-2640', '🏃🏼♀', 936, 3, ':woman_running_tone2:', [':woman_running_medium_light_skin_tone:'], 'people', []),
-    ('1f3c3-1f3fd-2640', '🏃🏽♀', 937, 3, ':woman_running_tone3:', [':woman_running_medium_skin_tone:'], 'people', []),
-    ('1f3c3-1f3fe-2640', '🏃🏾♀', 938, 3, ':woman_running_tone4:', [':woman_running_medium_dark_skin_tone:'], 'people', []),
-    ('1f3c3-1f3ff-2640', '🏃🏿♀', 939, 3, ':woman_running_tone5:', [':woman_running_dark_skin_tone:'], 'people', []),
-    ('1f3c3', '🏃', 940, 1, ':person_running:', [':runner:'], 'people', []),
-    ('1f3c3-1f3fb', '🏃🏻', 941, 2, ':person_running_tone1:', [':runner_tone1:'], 'people', []),
-    ('1f3c3-1f3fc', '🏃🏼', 942, 2, ':person_running_tone2:', [':runner_tone2:'], 'people', []),
-    ('1f3c3-1f3fd', '🏃🏽', 943, 2, ':person_running_tone3:', [':runner_tone3:'], 'people', []),
-    ('1f3c3-1f3fe', '🏃🏾', 944, 2, ':person_running_tone4:', [':runner_tone4:'], 'people', []),
-    ('1f3c3-1f3ff', '🏃🏿', 945, 2, ':person_running_tone5:', [':runner_tone5:'], 'people', []),
-    ('1f3c3-2642', '🏃♂', 946, 2, ':man_running:', [], 'people', []),
-    ('1f3c3-1f3ff-2642', '🏃🏿♂', 947, 3, ':man_running_tone5:', [':man_running_dark_skin_tone:'], 'people', []),
-    ('1f3c3-1f3fe-2642', '🏃🏾♂', 948, 3, ':man_running_tone4:', [':man_running_medium_dark_skin_tone:'], 'people', []),
-    ('1f3c3-1f3fd-2642', '🏃🏽♂', 949, 3, ':man_running_tone3:', [':man_running_medium_skin_tone:'], 'people', []),
-    ('1f3c3-1f3fc-2642', '🏃🏼♂', 950, 3, ':man_running_tone2:', [':man_running_medium_light_skin_tone:'], 'people', []),
-    ('1f3c3-1f3fb-2642', '🏃🏻♂', 951, 3, ':man_running_tone1:', [':man_running_light_skin_tone:'], 'people', []),
-    ('1f46b', '👫', 952, 1, ':couple:', [], 'people', []),
-    ('1f46d', '👭', 953, 1, ':two_women_holding_hands:', [], 'people', []),
-    ('1f46c', '👬', 954, 1, ':two_men_holding_hands:', [], 'people', []),
-    ('1f491', '💑', 955, 1, ':couple_with_heart:', [], 'people', []),
-    ('1f469-2764-1f469', '👩❤👩', 956, 3, ':couple_ww:', [':couple_with_heart_ww:'], 'people', []),
-    ('1f468-2764-1f468', '👨❤👨', 957, 3, ':couple_mm:', [':couple_with_heart_mm:'], 'people', []),
-    ('1f48f', '💏', 958, 1, ':couplekiss:', [], 'people', []),
-    ('1f469-2764-1f48b-1f469', '👩❤💋👩', 959, 4, ':kiss_ww:', [':couplekiss_ww:'], 'people', []),
-    ('1f468-2764-1f48b-1f468', '👨❤💋👨', 960, 4, ':kiss_mm:', [':couplekiss_mm:'], 'people', []),
-    ('1f46a', '👪', 961, 1, ':family:', [], 'people', []),
-    ('1f468-1f469-1f467', '👨👩👧', 962, 3, ':family_mwg:', [], 'people', []),
-    ('1f468-1f469-1f467-1f466', '👨👩👧👦', 963, 4, ':family_mwgb:', [], 'people', []),
-    ('1f468-1f469-1f466-1f466', '👨👩👦👦', 964, 4, ':family_mwbb:', [], 'people', []),
-    ('1f468-1f469-1f467-1f467', '👨👩👧👧', 965, 4, ':family_mwgg:', [], 'people', []),
-    ('1f469-1f469-1f466', '👩👩👦', 966, 3, ':family_wwb:', [], 'people', []),
-    ('1f469-1f469-1f467', '👩👩👧', 967, 3, ':family_wwg:', [], 'people', []),
-    ('1f469-1f469-1f467-1f466', '👩👩👧👦', 968, 4, ':family_wwgb:', [], 'people', []),
-    ('1f469-1f469-1f466-1f466', '👩👩👦👦', 969, 4, ':family_wwbb:', [], 'people', []),
-    ('1f469-1f469-1f467-1f467', '👩👩👧👧', 970, 4, ':family_wwgg:', [], 'people', []),
-    ('1f468-1f468-1f466', '👨👨👦', 971, 3, ':family_mmb:', [], 'people', []),
-    ('1f468-1f468-1f467', '👨👨👧', 972, 3, ':family_mmg:', [], 'people', []),
-    ('1f468-1f468-1f467-1f466', '👨👨👧👦', 973, 4, ':family_mmgb:', [], 'people', []),
-    ('1f468-1f468-1f466-1f466', '👨👨👦👦', 974, 4, ':family_mmbb:', [], 'people', []),
-    ('1f468-1f468-1f467-1f467', '👨👨👧👧', 975, 4, ':family_mmgg:', [], 'people', []),
-    ('1f469-1f466', '👩👦', 976, 2, ':family_woman_boy:', [], 'people', []),
-    ('1f469-1f467', '👩👧', 977, 2, ':family_woman_girl:', [], 'people', []),
-    ('1f469-1f467-1f466', '👩👧👦', 978, 3, ':family_woman_girl_boy:', [], 'people', []),
-    ('1f469-1f466-1f466', '👩👦👦', 979, 3, ':family_woman_boy_boy:', [], 'people', []),
-    ('1f469-1f467-1f467', '👩👧👧', 980, 3, ':family_woman_girl_girl:', [], 'people', []),
-    ('1f468-1f466', '👨👦', 981, 2, ':family_man_boy:', [], 'people', []),
-    ('1f468-1f467', '👨👧', 982, 2, ':family_man_girl:', [], 'people', []),
-    ('1f468-1f467-1f466', '👨👧👦', 983, 3, ':family_man_girl_boy:', [], 'people', []),
-    ('1f468-1f466-1f466', '👨👦👦', 984, 3, ':family_man_boy_boy:', [], 'people', []),
-    ('1f468-1f467-1f467', '👨👧👧', 985, 3, ':family_man_girl_girl:', [], 'people', []),
-    ('1f45a', '👚', 986, 1, ':womans_clothes:', [], 'people', []),
-    ('1f455', '👕', 987, 1, ':shirt:', [], 'people', []),
-    ('1f456', '👖', 988, 1, ':jeans:', [], 'people', []),
-    ('1f454', '👔', 989, 1, ':necktie:', [], 'people', []),
-    ('1f457', '👗', 990, 1, ':dress:', [], 'people', []),
-    ('1f459', '👙', 991, 1, ':bikini:', [], 'people', []),
-    ('1f458', '👘', 992, 1, ':kimono:', [], 'people', []),
-    ('1f460', '👠', 993, 1, ':high_heel:', [], 'people', []),
-    ('1f461', '👡', 994, 1, ':sandal:', [], 'people', []),
-    ('1f462', '👢', 995, 1, ':boot:', [], 'people', []),
-    ('1f45e', '👞', 996, 1, ':mans_shoe:', [], 'people', []),
-    ('1f45f', '👟', 997, 1, ':athletic_shoe:', [], 'people', []),
-    ('1f452', '👒', 998, 1, ':womans_hat:', [], 'people', []),
-    ('1f3a9', '🎩', 999, 1, ':tophat:', [], 'people', []),
-    ('1f393', '🎓', 1000, 1, ':mortar_board:', [], 'people', []),
-    ('1f451', '👑', 1001, 1, ':crown:', [], 'people', []),
-    ('26d1', '⛑', 1002, 1, ':helmet_with_cross:', [':helmet_with_white_cross:'], 'people', []),
-    ('1f392', '🎒', 1003, 1, ':school_satchel:', [], 'people', []),
-    ('1f45d', '👝', 1004, 1, ':pouch:', [], 'people', []),
-    ('1f45b', '👛', 1005, 1, ':purse:', [], 'people', []),
-    ('1f45c', '👜', 1006, 1, ':handbag:', [], 'people', []),
-    ('1f4bc', '💼', 1007, 1, ':briefcase:', [], 'people', []),
-    ('1f453', '👓', 1008, 1, ':eyeglasses:', [], 'people', []),
-    ('1f576', '🕶', 1009, 1, ':dark_sunglasses:', [], 'people', []),
-    ('1f302', '🌂', 1010, 1, ':closed_umbrella:', [], 'people', []),
-    ('2602', '☂', 1011, 1, ':umbrella2:', [], 'people', []),
-    ('1f436', '🐶', 1012, 1, ':dog:', [], 'nature', []),
-    ('1f431', '🐱', 1013, 1, ':cat:', [], 'nature', []),
-    ('1f42d', '🐭', 1014, 1, ':mouse:', [], 'nature', []),
-    ('1f439', '🐹', 1015, 1, ':hamster:', [], 'nature', []),
-    ('1f430', '🐰', 1016, 1, ':rabbit:', [], 'nature', []),
-    ('1f98a', '🦊', 1017, 1, ':fox:', [':fox_face:'], 'nature', []),
-    ('1f43b', '🐻', 1018, 1, ':bear:', [], 'nature', []),
-    ('1f43c', '🐼', 1019, 1, ':panda_face:', [], 'nature', []),
-    ('1f428', '🐨', 1020, 1, ':koala:', [], 'nature', []),
-    ('1f42f', '🐯', 1021, 1, ':tiger:', [], 'nature', []),
-    ('1f981', '🦁', 1022, 1, ':lion_face:', [':lion:'], 'nature', []),
-    ('1f42e', '🐮', 1023, 1, ':cow:', [], 'nature', []),
-    ('1f437', '🐷', 1024, 1, ':pig:', [], 'nature', []),
-    ('1f43d', '🐽', 1025, 1, ':pig_nose:', [], 'nature', []),
-    ('1f438', '🐸', 1026, 1, ':frog:', [], 'nature', []),
-    ('1f435', '🐵', 1027, 1, ':monkey_face:', [], 'nature', []),
-    ('1f648', '🙈', 1028, 1, ':see_no_evil:', [], 'nature', []),
-    ('1f649', '🙉', 1029, 1, ':hear_no_evil:', [], 'nature', []),
-    ('1f64a', '🙊', 1030, 1, ':speak_no_evil:', [], 'nature', []),
-    ('1f412', '🐒', 1031, 1, ':monkey:', [], 'nature', []),
-    ('1f414', '🐔', 1032, 1, ':chicken:', [], 'nature', []),
-    ('1f427', '🐧', 1033, 1, ':penguin:', [], 'nature', []),
-    ('1f426', '🐦', 1034, 1, ':bird:', [], 'nature', []),
-    ('1f424', '🐤', 1035, 1, ':baby_chick:', [], 'nature', []),
-    ('1f423', '🐣', 1036, 1, ':hatching_chick:', [], 'nature', []),
-    ('1f425', '🐥', 1037, 1, ':hatched_chick:', [], 'nature', []),
-    ('1f986', '🦆', 1038, 1, ':duck:', [], 'nature', []),
-    ('1f985', '🦅', 1039, 1, ':eagle:', [], 'nature', []),
-    ('1f989', '🦉', 1040, 1, ':owl:', [], 'nature', []),
-    ('1f987', '🦇', 1041, 1, ':bat:', [], 'nature', []),
-    ('1f43a', '🐺', 1042, 1, ':wolf:', [], 'nature', []),
-    ('1f417', '🐗', 1043, 1, ':boar:', [], 'nature', []),
-    ('1f434', '🐴', 1044, 1, ':horse:', [], 'nature', []),
-    ('1f984', '🦄', 1045, 1, ':unicorn:', [':unicorn_face:'], 'nature', []),
-    ('1f41d', '🐝', 1046, 1, ':bee:', [], 'nature', []),
-    ('1f41b', '🐛', 1047, 1, ':bug:', [], 'nature', []),
-    ('1f98b', '🦋', 1048, 1, ':butterfly:', [], 'nature', []),
-    ('1f40c', '🐌', 1049, 1, ':snail:', [], 'nature', []),
-    ('1f41a', '🐚', 1050, 1, ':shell:', [], 'nature', []),
-    ('1f41e', '🐞', 1051, 1, ':beetle:', [], 'nature', []),
-    ('1f41c', '🐜', 1052, 1, ':ant:', [], 'nature', []),
-    ('1f577', '🕷', 1053, 1, ':spider:', [], 'nature', []),
-    ('1f578', '🕸', 1054, 1, ':spider_web:', [], 'nature', []),
-    ('1f422', '🐢', 1055, 1, ':turtle:', [], 'nature', []),
-    ('1f40d', '🐍', 1056, 1, ':snake:', [], 'nature', []),
-    ('1f98e', '🦎', 1057, 1, ':lizard:', [], 'nature', []),
-    ('1f982', '🦂', 1058, 1, ':scorpion:', [], 'nature', []),
-    ('1f980', '🦀', 1059, 1, ':crab:', [], 'nature', []),
-    ('1f991', '🦑', 1060, 1, ':squid:', [], 'nature', []),
-    ('1f419', '🐙', 1061, 1, ':octopus:', [], 'nature', []),
-    ('1f990', '🦐', 1062, 1, ':shrimp:', [], 'nature', []),
-    ('1f420', '🐠', 1063, 1, ':tropical_fish:', [], 'nature', []),
-    ('1f41f', '🐟', 1064, 1, ':fish:', [], 'nature', []),
-    ('1f421', '🐡', 1065, 1, ':blowfish:', [], 'nature', []),
-    ('1f42c', '🐬', 1066, 1, ':dolphin:', [], 'nature', []),
-    ('1f988', '🦈', 1067, 1, ':shark:', [], 'nature', []),
-    ('1f433', '🐳', 1068, 1, ':whale:', [], 'nature', []),
-    ('1f40b', '🐋', 1069, 1, ':whale2:', [], 'nature', []),
-    ('1f40a', '🐊', 1070, 1, ':crocodile:', [], 'nature', []),
-    ('1f406', '🐆', 1071, 1, ':leopard:', [], 'nature', []),
-    ('1f405', '🐅', 1072, 1, ':tiger2:', [], 'nature', []),
-    ('1f403', '🐃', 1073, 1, ':water_buffalo:', [], 'nature', []),
-    ('1f402', '🐂', 1074, 1, ':ox:', [], 'nature', []),
-    ('1f404', '🐄', 1075, 1, ':cow2:', [], 'nature', []),
-    ('1f98c', '🦌', 1076, 1, ':deer:', [], 'nature', []),
-    ('1f42a', '🐪', 1077, 1, ':dromedary_camel:', [], 'nature', []),
-    ('1f42b', '🐫', 1078, 1, ':camel:', [], 'nature', []),
-    ('1f418', '🐘', 1079, 1, ':elephant:', [], 'nature', []),
-    ('1f98f', '🦏', 1080, 1, ':rhino:', [':rhinoceros:'], 'nature', []),
-    ('1f98d', '🦍', 1081, 1, ':gorilla:', [], 'nature', []),
-    ('1f40e', '🐎', 1082, 1, ':racehorse:', [], 'nature', []),
-    ('1f416', '🐖', 1083, 1, ':pig2:', [], 'nature', []),
-    ('1f410', '🐐', 1084, 1, ':goat:', [], 'nature', []),
-    ('1f40f', '🐏', 1085, 1, ':ram:', [], 'nature', []),
-    ('1f411', '🐑', 1086, 1, ':sheep:', [], 'nature', ['sheep', 'ewe', 'you']),
-    ('1f415', '🐕', 1087, 1, ':dog2:', [], 'nature', []),
-    ('1f429', '🐩', 1088, 1, ':poodle:', [], 'nature', []),
-    ('1f408', '🐈', 1089, 1, ':cat2:', [], 'nature', []),
-    ('1f413', '🐓', 1090, 1, ':rooster:', [], 'nature', []),
-    ('1f983', '🦃', 1091, 1, ':turkey:', [], 'nature', []),
-    ('1f54a', '🕊', 1092, 1, ':dove:', [':dove_of_peace:'], 'nature', []),
-    ('1f407', '🐇', 1093, 1, ':rabbit2:', [], 'nature', []),
-    ('1f401', '🐁', 1094, 1, ':mouse2:', [], 'nature', []),
-    ('1f400', '🐀', 1095, 1, ':rat:', [], 'nature', []),
-    ('1f43f', '🐿', 1096, 1, ':chipmunk:', [], 'nature', []),
-    ('1f43e', '🐾', 1097, 1, ':feet:', [':paw_prints:'], 'nature', []),
-    ('1f409', '🐉', 1098, 1, ':dragon:', [], 'nature', []),
-    ('1f432', '🐲', 1099, 1, ':dragon_face:', [], 'nature', []),
-    ('1f335', '🌵', 1100, 1, ':cactus:', [], 'nature', []),
-    ('1f384', '🎄', 1101, 1, ':christmas_tree:', [], 'nature', []),
-    ('1f332', '🌲', 1102, 1, ':evergreen_tree:', [], 'nature', []),
-    ('1f333', '🌳', 1103, 1, ':deciduous_tree:', [], 'nature', []),
-    ('1f334', '🌴', 1104, 1, ':palm_tree:', [], 'nature', []),
-    ('1f331', '🌱', 1105, 1, ':seedling:', [], 'nature', []),
-    ('1f33f', '🌿', 1106, 1, ':herb:', [], 'nature', []),
-    ('2618', '☘', 1107, 1, ':shamrock:', [], 'nature', []),
-    ('1f340', '🍀', 1108, 1, ':four_leaf_clover:', [], 'nature', []),
-    ('1f38d', '🎍', 1109, 1, ':bamboo:', [], 'nature', []),
-    ('1f38b', '🎋', 1110, 1, ':tanabata_tree:', [], 'nature', []),
-    ('1f343', '🍃', 1111, 1, ':leaves:', [], 'nature', []),
-    ('1f342', '🍂', 1112, 1, ':fallen_leaf:', [], 'nature', []),
-    ('1f341', '🍁', 1113, 1, ':maple_leaf:', [], 'nature', []),
-    ('1f344', '🍄', 1114, 1, ':mushroom:', [], 'nature', []),
-    ('1f33e', '🌾', 1115, 1, ':ear_of_rice:', [], 'nature', []),
-    ('1f490', '💐', 1116, 1, ':bouquet:', [], 'nature', []),
-    ('1f337', '🌷', 1117, 1, ':tulip:', [], 'nature', []),
-    ('1f339', '🌹', 1118, 1, ':rose:', [], 'nature', []),
-    ('1f940', '🥀', 1119, 1, ':wilted_rose:', [':wilted_flower:'], 'nature', []),
-    ('1f33b', '🌻', 1120, 1, ':sunflower:', [], 'nature', []),
-    ('1f33c', '🌼', 1121, 1, ':blossom:', [], 'nature', []),
-    ('1f338', '🌸', 1122, 1, ':cherry_blossom:', [], 'nature', []),
-    ('1f33a', '🌺', 1123, 1, ':hibiscus:', [], 'nature', []),
-    ('1f30e', '🌎', 1124, 1, ':earth_americas:', [], 'nature', []),
-    ('1f30d', '🌍', 1125, 1, ':earth_africa:', [], 'nature', []),
-    ('1f30f', '🌏', 1126, 1, ':earth_asia:', [], 'nature', []),
-    ('1f315', '🌕', 1127, 1, ':full_moon:', [], 'nature', []),
-    ('1f316', '🌖', 1128, 1, ':waning_gibbous_moon:', [], 'nature', []),
-    ('1f317', '🌗', 1129, 1, ':last_quarter_moon:', [], 'nature', []),
-    ('1f318', '🌘', 1130, 1, ':waning_crescent_moon:', [], 'nature', []),
-    ('1f311', '🌑', 1131, 1, ':new_moon:', [], 'nature', []),
-    ('1f312', '🌒', 1132, 1, ':waxing_crescent_moon:', [], 'nature', []),
-    ('1f313', '🌓', 1133, 1, ':first_quarter_moon:', [], 'nature', []),
-    ('1f314', '🌔', 1134, 1, ':waxing_gibbous_moon:', [], 'nature', []),
-    ('1f31a', '🌚', 1135, 1, ':new_moon_with_face:', [], 'nature', []),
-    ('1f31d', '🌝', 1136, 1, ':full_moon_with_face:', [], 'nature', []),
-    ('1f31e', '🌞', 1137, 1, ':sun_with_face:', [], 'nature', []),
-    ('1f31b', '🌛', 1138, 1, ':first_quarter_moon_with_face:', [], 'nature', []),
-    ('1f31c', '🌜', 1139, 1, ':last_quarter_moon_with_face:', [], 'nature', []),
-    ('1f319', '🌙', 1140, 1, ':crescent_moon:', [], 'nature', []),
-    ('1f4ab', '💫', 1141, 1, ':dizzy:', [], 'nature', []),
-    ('2b50', '⭐', 1142, 1, ':star:', [], 'nature', []),
-    ('1f31f', '🌟', 1143, 1, ':star2:', [], 'nature', []),
-    ('2728', '✨', 1144, 1, ':sparkles:', [], 'nature', []),
-    ('26a1', '⚡', 1145, 1, ':zap:', [], 'nature', []),
-    ('1f525', '🔥', 1146, 1, ':fire:', [':flame:'], 'nature', []),
-    ('1f4a5', '💥', 1147, 1, ':boom:', [], 'nature', []),
-    ('2604', '☄', 1148, 1, ':comet:', [], 'nature', []),
-    ('2600', '☀', 1149, 1, ':sunny:', [], 'nature', []),
-    ('1f324', '🌤', 1150, 1, ':white_sun_small_cloud:', [':white_sun_with_small_cloud:'], 'nature', []),
-    ('26c5', '⛅', 1151, 1, ':partly_sunny:', [], 'nature', []),
-    ('1f325', '🌥', 1152, 1, ':white_sun_cloud:', [':white_sun_behind_cloud:'], 'nature', []),
-    ('1f326', '🌦', 1153, 1, ':white_sun_rain_cloud:', [':white_sun_behind_cloud_with_rain:'], 'nature', []),
-    ('1f308', '🌈', 1154, 1, ':rainbow:', [], 'nature', []),
-    ('2601', '☁', 1155, 1, ':cloud:', [], 'nature', []),
-    ('1f327', '🌧', 1156, 1, ':cloud_rain:', [':cloud_with_rain:'], 'nature', []),
-    ('26c8', '⛈', 1157, 1, ':thunder_cloud_rain:', [':thunder_cloud_and_rain:'], 'nature', []),
-    ('1f329', '🌩', 1158, 1, ':cloud_lightning:', [':cloud_with_lightning:'], 'nature', []),
-    ('1f328', '🌨', 1159, 1, ':cloud_snow:', [':cloud_with_snow:'], 'nature', []),
-    ('2603', '☃', 1160, 1, ':snowman2:', [], 'nature', []),
-    ('26c4', '⛄', 1161, 1, ':snowman:', [], 'nature', []),
-    ('2744', '❄', 1162, 1, ':snowflake:', [], 'nature', []),
-    ('1f32c', '🌬', 1163, 1, ':wind_blowing_face:', [], 'nature', ['wind', 'blow', 'blowing']),
-    ('1f4a8', '💨', 1164, 1, ':dash:', [], 'nature', []),
-    ('1f32a', '🌪', 1165, 1, ':cloud_tornado:', [':cloud_with_tornado:'], 'nature', []),
-    ('1f32b', '🌫', 1166, 1, ':fog:', [], 'nature', []),
-    ('1f30a', '🌊', 1167, 1, ':ocean:', [], 'nature', ['wave', 'waves']),
-    ('1f4a7', '💧', 1168, 1, ':droplet:', [], 'nature', []),
-    ('1f4a6', '💦', 1169, 1, ':sweat_drops:', [], 'nature', []),
-    ('2614', '☔', 1170, 1, ':umbrella:', [], 'nature', []),
-    ('1f34f', '🍏', 1171, 1, ':green_apple:', [], 'food', []),
-    ('1f34e', '🍎', 1172, 1, ':apple:', [], 'food', []),
-    ('1f350', '🍐', 1173, 1, ':pear:', [], 'food', []),
-    ('1f34a', '🍊', 1174, 1, ':tangerine:', [], 'food', []),
-    ('1f34b', '🍋', 1175, 1, ':lemon:', [], 'food', []),
-    ('1f34c', '🍌', 1176, 1, ':banana:', [], 'food', []),
-    ('1f349', '🍉', 1177, 1, ':watermelon:', [], 'food', []),
-    ('1f347', '🍇', 1178, 1, ':grapes:', [], 'food', []),
-    ('1f353', '🍓', 1179, 1, ':strawberry:', [], 'food', []),
-    ('1f348', '🍈', 1180, 1, ':melon:', [], 'food', []),
-    ('1f352', '🍒', 1181, 1, ':cherries:', [], 'food', []),
-    ('1f351', '🍑', 1182, 1, ':peach:', [], 'food', []),
-    ('1f34d', '🍍', 1183, 1, ':pineapple:', [], 'food', []),
-    ('1f95d', '🥝', 1184, 1, ':kiwi:', [':kiwifruit:'], 'food', []),
-    ('1f951', '🥑', 1185, 1, ':avocado:', [], 'food', []),
-    ('1f345', '🍅', 1186, 1, ':tomato:', [], 'food', []),
-    ('1f346', '🍆', 1187, 1, ':eggplant:', [], 'food', []),
-    ('1f952', '🥒', 1188, 1, ':cucumber:', [], 'food', []),
-    ('1f955', '🥕', 1189, 1, ':carrot:', [], 'food', []),
-    ('1f33d', '🌽', 1190, 1, ':corn:', [], 'food', []),
-    ('1f336', '🌶', 1191, 1, ':hot_pepper:', [], 'food', []),
-    ('1f954', '🥔', 1192, 1, ':potato:', [], 'food', []),
-    ('1f360', '🍠', 1193, 1, ':sweet_potato:', [], 'food', []),
-    ('1f330', '🌰', 1194, 1, ':chestnut:', [], 'food', []),
-    ('1f95c', '🥜', 1195, 1, ':peanuts:', [':shelled_peanut:'], 'food', []),
-    ('1f36f', '🍯', 1196, 1, ':honey_pot:', [], 'food', []),
-    ('1f950', '🥐', 1197, 1, ':croissant:', [], 'food', []),
-    ('1f35e', '🍞', 1198, 1, ':bread:', [], 'food', []),
-    ('1f956', '🥖', 1199, 1, ':french_bread:', [':baguette_bread:'], 'food', []),
-    ('1f9c0', '🧀', 1200, 1, ':cheese:', [':cheese_wedge:'], 'food', []),
-    ('1f95a', '🥚', 1201, 1, ':egg:', [], 'food', []),
-    ('1f373', '🍳', 1202, 1, ':cooking:', [], 'food', []),
-    ('1f953', '🥓', 1203, 1, ':bacon:', [], 'food', []),
-    ('1f95e', '🥞', 1204, 1, ':pancakes:', [], 'food', []),
-    ('1f364', '🍤', 1205, 1, ':fried_shrimp:', [], 'food', []),
-    ('1f357', '🍗', 1206, 1, ':poultry_leg:', [], 'food', []),
-    ('1f356', '🍖', 1207, 1, ':meat_on_bone:', [], 'food', []),
-    ('1f355', '🍕', 1208, 1, ':pizza:', [], 'food', []),
-    ('1f32d', '🌭', 1209, 1, ':hotdog:', [':hot_dog:'], 'food', []),
-    ('1f354', '🍔', 1210, 1, ':hamburger:', [], 'food', []),
-    ('1f35f', '🍟', 1211, 1, ':fries:', [], 'food', []),
-    ('1f959', '🥙', 1212, 1, ':stuffed_flatbread:', [':stuffed_pita:'], 'food', []),
-    ('1f32e', '🌮', 1213, 1, ':taco:', [], 'food', []),
-    ('1f32f', '🌯', 1214, 1, ':burrito:', [], 'food', []),
-    ('1f957', '🥗', 1215, 1, ':salad:', [':green_salad:'], 'food', []),
-    ('1f958', '🥘', 1216, 1, ':shallow_pan_of_food:', [':paella:'], 'food', []),
-    ('1f35d', '🍝', 1217, 1, ':spaghetti:', [], 'food', []),
-    ('1f35c', '🍜', 1218, 1, ':ramen:', [], 'food', []),
-    ('1f372', '🍲', 1219, 1, ':stew:', [], 'food', []),
-    ('1f365', '🍥', 1220, 1, ':fish_cake:', [], 'food', []),
-    ('1f363', '🍣', 1221, 1, ':sushi:', [], 'food', []),
-    ('1f371', '🍱', 1222, 1, ':bento:', [], 'food', []),
-    ('1f35b', '🍛', 1223, 1, ':curry:', [], 'food', []),
-    ('1f359', '🍙', 1224, 1, ':rice_ball:', [], 'food', []),
-    ('1f35a', '🍚', 1225, 1, ':rice:', [], 'food', []),
-    ('1f358', '🍘', 1226, 1, ':rice_cracker:', [], 'food', []),
-    ('1f362', '🍢', 1227, 1, ':oden:', [], 'food', []),
-    ('1f361', '🍡', 1228, 1, ':dango:', [], 'food', []),
-    ('1f367', '🍧', 1229, 1, ':shaved_ice:', [], 'food', []),
-    ('1f368', '🍨', 1230, 1, ':ice_cream:', [], 'food', []),
-    ('1f366', '🍦', 1231, 1, ':icecream:', [], 'food', []),
-    ('1f370', '🍰', 1232, 1, ':cake:', [], 'food', []),
-    ('1f382', '🎂', 1233, 1, ':birthday:', [], 'food', []),
-    ('1f36e', '🍮', 1234, 1, ':custard:', [':pudding:', ':flan:'], 'food', []),
-    ('1f36d', '🍭', 1235, 1, ':lollipop:', [], 'food', []),
-    ('1f36c', '🍬', 1236, 1, ':candy:', [], 'food', ['candy', 'can-dee', 'can-D']),
-    ('1f36b', '🍫', 1237, 1, ':chocolate_bar:', [], 'food', []),
-    ('1f37f', '🍿', 1238, 1, ':popcorn:', [], 'food', []),
-    ('1f369', '🍩', 1239, 1, ':doughnut:', [], 'food', []),
-    ('1f36a', '🍪', 1240, 1, ':cookie:', [], 'food', []),
-    ('1f95b', '🥛', 1241, 1, ':milk:', [':glass_of_milk:'], 'food', []),
-    ('1f37c', '🍼', 1242, 1, ':baby_bottle:', [], 'food', ['bottle', 'baby bottle', 'nipple bottle']),
-    ('2615', '☕', 1243, 1, ':coffee:', [], 'food', qw('coffee joe java cuppa')),
-    ('1f375', '🍵', 1244, 1, ':tea:', [], 'food', ['tea', 'brew']),
-    ('1f376', '🍶', 1245, 1, ':sake:', [], 'food', ['sake']),
-    ('1f37a', '🍺', 1246, 1, ':beer:', [], 'food', qw('ale beer mug pint pint brew brewski draft')),
-    ('1f37b', '🍻', 1247, 1, ':beers:', [], 'food', qw('ales beers mugs pints brews brewskis drafts')),
-    # ('1f942', '🥂', 1248, 1, ':champagne_glass:', [':clinking_glass:'], 'food', []),
-    ('1f377', '🍷', 1249, 1, ':wine_glass:', [], 'food', ['wine', 'glass', 'vino', 'red', 'red wine', 'vintage']),
-    #('1f943', '🥃', 1250, 1, ':tumbler_glass:', [':whisky:'], 'food', []),
-    ('1f378', '🍸', 1251, 1, ':cocktail:', [], 'food', ['cocktail', 'martini', 'vodka', 'drink', 'liquor', 'hard liquor']),
-    ('1f379', '🍹', 1252, 1, ':tropical_drink:', [], 'food', ['daqueri']),
-    ('1f37e', '🍾', 1253, 1, ':champagne:', [':bottle_with_popping_cork:'], 'food', ['champagne', 'pop', 'celebrate']),
-    # ('1f944', '🥄', 1254, 1, ':spoon:', [], 'food', []),
-    ('1f374', '🍴', 1255, 1, ':fork_and_knife:', [], 'food', ['fork and knife', 'knife and fork']),
-    ('1f37d', '🍽', 1256, 1, ':fork_knife_plate:', [':fork_and_knife_with_plate:'], 'food', ['fork and plate and knife', 'place setting']),
-    ('26bd', '⚽', 1257, 1, ':soccer:', [], 'activity', []),
-    ('1f3c0', '🏀', 1258, 1, ':basketball:', [], 'activity', []),
-    ('1f3c8', '🏈', 1259, 1, ':football:', [], 'activity', ['football']),
-    ('26be', '⚾', 1260, 1, ':baseball:', [], 'activity', ['baseball']),
-    ('1f3be', '🎾', 1261, 1, ':tennis:', [], 'activity', ['tennis']),
-    ('1f3d0', '🏐', 1262, 1, ':volleyball:', [], 'activity', ['soccer', 'futboll']),
-    ('1f3c9', '🏉', 1263, 1, ':rugby_football:', [], 'activity', ['rugby']),
-    ('1f3b1', '🎱', 1264, 1, ':8ball:', [], 'activity', []),
-    ('1f3d3', '🏓', 1265, 1, ':ping_pong:', [':table_tennis:'], 'activity', []),
-    ('1f3f8', '🏸', 1266, 1, ':badminton:', [], 'activity', []),
-    ('1f945', '🥅', 1267, 1, ':goal:', [':goal_net:'], 'activity', []),
-    ('1f3d2', '🏒', 1268, 1, ':hockey:', [], 'activity', []),
-    ('1f3d1', '🏑', 1269, 1, ':field_hockey:', [], 'activity', []),
-    ('1f3cf', '🏏', 1270, 1, ':cricket:', [':cricket_bat_ball:'], 'activity', []),
-    ('26f3', '⛳', 1271, 1, ':golf:', [], 'activity', []),
-    ('1f3f9', '🏹', 1272, 1, ':bow_and_arrow:', [':archery:'], 'activity', []),
-    ('1f3a3', '🎣', 1273, 1, ':fishing_pole_and_fish:', [], 'activity', []),
-    # ('1f94a', '🥊', 1274, 1, ':boxing_glove:', [':boxing_gloves:'], 'activity', []),
-    # ('1f94b', '🥋', 1275, 1, ':martial_arts_uniform:', [':karate_uniform:'], 'activity', []),
-    ('26f8', '⛸', 1276, 1, ':ice_skate:', [], 'activity', ['skate']),
-    ('1f3bf', '🎿', 1277, 1, ':ski:', [], 'activity', ['skis', 'ski']),
-    ('26f7', '⛷', 1278, 1, ':skier:', [], 'activity', []),
-    ('1f3c2', '🏂', 1279, 1, ':snowboarder:', [], 'activity', ['snowboarder', 'boarder']),
-    # ('1f3c2-1f3fb', '🏂🏻', 1280, 2, ':snowboarder_tone1:', [':snowboarder_light_skin_tone:'], 'activity', []),
-    # ('1f3c2-1f3fc', '🏂🏼', 1281, 2, ':snowboarder_tone2:', [':snowboarder_medium_light_skin_tone:'], 'activity', []),
-    # ('1f3c2-1f3fd', '🏂🏽', 1282, 2, ':snowboarder_tone3:', [':snowboarder_medium_skin_tone:'], 'activity', []),
-    # ('1f3c2-1f3fe', '🏂🏾', 1283, 2, ':snowboarder_tone4:', [':snowboarder_medium_dark_skin_tone:'], 'activity', []),
-    # ('1f3c2-1f3ff', '🏂🏿', 1284, 2, ':snowboarder_tone5:', [':snowboarder_dark_skin_tone:'], 'activity', []),
-    ('1f3cb-2640', '🏋♀', 1285, 2, ':woman_lifting_weights:', [], 'activity', []),
-    ('1f3cb-1f3fb-2640', '🏋🏻♀', 1286, 3, ':woman_lifting_weights_tone1:', [':woman_lifting_weights_light_skin_tone:'], 'activity', []),
-    ('1f3cb-1f3fc-2640', '🏋🏼♀', 1287, 3, ':woman_lifting_weights_tone2:', [':woman_lifting_weights_medium_light_skin_tone:'], 'activity', []),
-    ('1f3cb-1f3fd-2640', '🏋🏽♀', 1288, 3, ':woman_lifting_weights_tone3:', [':woman_lifting_weights_medium_skin_tone:'], 'activity', []),
-    ('1f3cb-1f3fe-2640', '🏋🏾♀', 1289, 3, ':woman_lifting_weights_tone4:', [':woman_lifting_weights_medium_dark_skin_tone:'], 'activity', []),
-    ('1f3cb-1f3ff-2640', '🏋🏿♀', 1290, 3, ':woman_lifting_weights_tone5:', [':woman_lifting_weights_dark_skin_tone:'], 'activity', []),
-    ('1f3cb', '🏋', 1291, 1, ':person_lifting_weights:', [':lifter:', ':weight_lifter:'], 'activity', []),
-    ('1f3cb-1f3fb', '🏋🏻', 1292, 2, ':person_lifting_weights_tone1:', [':lifter_tone1:', ':weight_lifter_tone1:'], 'activity', []),
-    ('1f3cb-1f3fc', '🏋🏼', 1293, 2, ':person_lifting_weights_tone2:', [':lifter_tone2:', ':weight_lifter_tone2:'], 'activity', []),
-    ('1f3cb-1f3fd', '🏋🏽', 1294, 2, ':person_lifting_weights_tone3:', [':lifter_tone3:', ':weight_lifter_tone3:'], 'activity', []),
-    ('1f3cb-1f3fe', '🏋🏾', 1295, 2, ':person_lifting_weights_tone4:', [':lifter_tone4:', ':weight_lifter_tone4:'], 'activity', []),
-    ('1f3cb-1f3ff', '🏋🏿', 1296, 2, ':person_lifting_weights_tone5:', [':lifter_tone5:', ':weight_lifter_tone5:'], 'activity', []),
-    ('1f3cb-2642', '🏋♂', 1297, 2, ':man_lifting_weights:', [], 'activity', []),
-    ('1f3cb-1f3ff-2642', '🏋🏿♂', 1298, 3, ':man_lifting_weights_tone5:', [':man_lifting_weights_dark_skin_tone:'], 'activity', []),
-    ('1f3cb-1f3fe-2642', '🏋🏾♂', 1299, 3, ':man_lifting_weights_tone4:', [':man_lifting_weights_medium_dark_skin_tone:'], 'activity', []),
-    ('1f3cb-1f3fd-2642', '🏋🏽♂', 1300, 3, ':man_lifting_weights_tone3:', [':man_lifting_weights_medium_skin_tone:'], 'activity', []),
-    ('1f3cb-1f3fc-2642', '🏋🏼♂', 1301, 3, ':man_lifting_weights_tone2:', [':man_lifting_weights_medium_light_skin_tone:'], 'activity', []),
-    ('1f3cb-1f3fb-2642', '🏋🏻♂', 1302, 3, ':man_lifting_weights_tone1:', [':man_lifting_weights_light_skin_tone:'], 'activity', []),
-    ('1f93a', '🤺', 1303, 1, ':person_fencing:', [':fencer:', ':fencing:'], 'activity', []),
-    # ('1f93c-2640', '🤼♀', 1304, 2, ':women_wrestling:', [], 'activity', []),
-    # ('1f93c-2642', '🤼♂', 1305, 2, ':men_wrestling:', [], 'activity', []),
-    # ('1f93c', '🤼', 1306, 1, ':people_wrestling:', [':wrestlers:', ':wrestling:'], 'activity', []),
-    # ('1f938-2640', '🤸♀', 1307, 2, ':woman_cartwheeling:', [], 'activity', []),
-    # ('1f938-1f3fb-2640', '🤸🏻♀', 1308, 3, ':woman_cartwheeling_tone1:', [':woman_cartwheeling_light_skin_tone:'], 'activity', []),
-    # ('1f938-1f3fc-2640', '🤸🏼♀', 1309, 3, ':woman_cartwheeling_tone2:', [':woman_cartwheeling_medium_light_skin_tone:'], 'activity', []),
-    # ('1f938-1f3fd-2640', '🤸🏽♀', 1310, 3, ':woman_cartwheeling_tone3:', [':woman_cartwheeling_medium_skin_tone:'], 'activity', []),
-    # ('1f938-1f3fe-2640', '🤸🏾♀', 1311, 3, ':woman_cartwheeling_tone4:', [':woman_cartwheeling_medium_dark_skin_tone:'], 'activity', []),
-    # ('1f938-1f3ff-2640', '🤸🏿♀', 1312, 3, ':woman_cartwheeling_tone5:', [':woman_cartwheeling_dark_skin_tone:'], 'activity', []),
-    # ('1f938-2642', '🤸♂', 1313, 2, ':man_cartwheeling:', [], 'activity', []),
-    # ('1f938-1f3fb-2642', '🤸🏻♂', 1314, 3, ':man_cartwheeling_tone1:', [':man_cartwheeling_light_skin_tone:'], 'activity', []),
-    # ('1f938-1f3fc-2642', '🤸🏼♂', 1315, 3, ':man_cartwheeling_tone2:', [':man_cartwheeling_medium_light_skin_tone:'], 'activity', []),
-    # ('1f938-1f3fd-2642', '🤸🏽♂', 1316, 3, ':man_cartwheeling_tone3:', [':man_cartwheeling_medium_skin_tone:'], 'activity', []),
-    # ('1f938-1f3fe-2642', '🤸🏾♂', 1317, 3, ':man_cartwheeling_tone4:', [':man_cartwheeling_medium_dark_skin_tone:'], 'activity', []),
-    # ('1f938-1f3ff-2642', '🤸🏿♂', 1318, 3, ':man_cartwheeling_tone5:', [':man_cartwheeling_dark_skin_tone:'], 'activity', []),
-    # ('1f938', '🤸', 1319, 1, ':person_doing_cartwheel:', [':cartwheel:'], 'activity', []),
-    # ('1f938-1f3fb', '🤸🏻', 1320, 2, ':person_doing_cartwheel_tone1:', [':cartwheel_tone1:'], 'activity', []),
-    # ('1f938-1f3fc', '🤸🏼', 1321, 2, ':person_doing_cartwheel_tone2:', [':cartwheel_tone2:'], 'activity', []),
-    # ('1f938-1f3fd', '🤸🏽', 1322, 2, ':person_doing_cartwheel_tone3:', [':cartwheel_tone3:'], 'activity', []),
-    # ('1f938-1f3fe', '🤸🏾', 1323, 2, ':person_doing_cartwheel_tone4:', [':cartwheel_tone4:'], 'activity', []),
-    # ('1f938-1f3ff', '🤸🏿', 1324, 2, ':person_doing_cartwheel_tone5:', [':cartwheel_tone5:'], 'activity', []),
-    ('26f9-2640', '⛹♀', 1325, 2, ':woman_bouncing_ball:', [], 'activity', []),
-    # ('26f9-1f3fb-2640', '⛹🏻♀', 1326, 3, ':woman_bouncing_ball_tone1:', [':woman_bouncing_ball_light_skin_tone:'], 'activity', []),
-    # ('26f9-1f3fc-2640', '⛹🏼♀', 1327, 3, ':woman_bouncing_ball_tone2:', [':woman_bouncing_ball_medium_light_skin_tone:'], 'activity', []),
-    # ('26f9-1f3fd-2640', '⛹🏽♀', 1328, 3, ':woman_bouncing_ball_tone3:', [':woman_bouncing_ball_medium_skin_tone:'], 'activity', []),
-    # ('26f9-1f3fe-2640', '⛹🏾♀', 1329, 3, ':woman_bouncing_ball_tone4:', [':woman_bouncing_ball_medium_dark_skin_tone:'], 'activity', []),
-    # ('26f9-1f3ff-2640', '⛹🏿♀', 1330, 3, ':woman_bouncing_ball_tone5:', [':woman_bouncing_ball_dark_skin_tone:'], 'activity', []),
-    ('26f9', '⛹', 1331, 1, ':person_bouncing_ball:', [':basketball_player:', ':person_with_ball:'], 'activity', []),
-    # ('26f9-1f3fb', '⛹🏻', 1332, 2, ':person_bouncing_ball_tone1:', [':basketball_player_tone1:', ':person_with_ball_tone1:'], 'activity', []),
-    # ('26f9-1f3fc', '⛹🏼', 1333, 2, ':person_bouncing_ball_tone2:', [':basketball_player_tone2:', ':person_with_ball_tone2:'], 'activity', []),
-    # ('26f9-1f3fd', '⛹🏽', 1334, 2, ':person_bouncing_ball_tone3:', [':basketball_player_tone3:', ':person_with_ball_tone3:'], 'activity', []),
-    # ('26f9-1f3fe', '⛹🏾', 1335, 2, ':person_bouncing_ball_tone4:', [':basketball_player_tone4:', ':person_with_ball_tone4:'], 'activity', []),
-    # ('26f9-1f3ff', '⛹🏿', 1336, 2, ':person_bouncing_ball_tone5:', [':basketball_player_tone5:', ':person_with_ball_tone5:'], 'activity', []),
-    ('26f9-2642', '⛹♂', 1337, 2, ':man_bouncing_ball:', [], 'activity', []),
-    ('26f9-1f3ff-2642', '⛹🏿♂', 1338, 3, ':man_bouncing_ball_tone5:', [':man_bouncing_ball_dark_skin_tone:'], 'activity', []),
-    ('26f9-1f3fe-2642', '⛹🏾♂', 1339, 3, ':man_bouncing_ball_tone4:', [':man_bouncing_ball_medium_dark_skin_tone:'], 'activity', []),
-    ('26f9-1f3fd-2642', '⛹🏽♂', 1340, 3, ':man_bouncing_ball_tone3:', [':man_bouncing_ball_medium_skin_tone:'], 'activity', []),
-    ('26f9-1f3fc-2642', '⛹🏼♂', 1341, 3, ':man_bouncing_ball_tone2:', [':man_bouncing_ball_medium_light_skin_tone:'], 'activity', []),
-    ('26f9-1f3fb-2642', '⛹🏻♂', 1342, 3, ':man_bouncing_ball_tone1:', [':man_bouncing_ball_light_skin_tone:'], 'activity', []),
-    ('1f93e-2640', '🤾♀', 1343, 2, ':woman_playing_handball:', [], 'activity', []),
-    ('1f93e-1f3fb-2640', '🤾🏻♀', 1344, 3, ':woman_playing_handball_tone1:', [':woman_playing_handball_light_skin_tone:'], 'activity', []),
-    ('1f93e-1f3fc-2640', '🤾🏼♀', 1345, 3, ':woman_playing_handball_tone2:', [':woman_playing_handball_medium_light_skin_tone:'], 'activity', []),
-    ('1f93e-1f3fd-2640', '🤾🏽♀', 1346, 3, ':woman_playing_handball_tone3:', [':woman_playing_handball_medium_skin_tone:'], 'activity', []),
-    ('1f93e-1f3fe-2640', '🤾🏾♀', 1347, 3, ':woman_playing_handball_tone4:', [':woman_playing_handball_medium_dark_skin_tone:'], 'activity', []),
-    ('1f93e-1f3ff-2640', '🤾🏿♀', 1348, 3, ':woman_playing_handball_tone5:', [':woman_playing_handball_dark_skin_tone:'], 'activity', []),
-    ('1f93e-2642', '🤾♂', 1349, 2, ':man_playing_handball:', [], 'activity', []),
-    ('1f93e-1f3fb-2642', '🤾🏻♂', 1350, 3, ':man_playing_handball_tone1:', [':man_playing_handball_light_skin_tone:'], 'activity', []),
-    ('1f93e-1f3fc-2642', '🤾🏼♂', 1351, 3, ':man_playing_handball_tone2:', [':man_playing_handball_medium_light_skin_tone:'], 'activity', []),
-    ('1f93e-1f3fd-2642', '🤾🏽♂', 1352, 3, ':man_playing_handball_tone3:', [':man_playing_handball_medium_skin_tone:'], 'activity', []),
-    ('1f93e-1f3fe-2642', '🤾🏾♂', 1353, 3, ':man_playing_handball_tone4:', [':man_playing_handball_medium_dark_skin_tone:'], 'activity', []),
-    ('1f93e-1f3ff-2642', '🤾🏿♂', 1354, 3, ':man_playing_handball_tone5:', [':man_playing_handball_dark_skin_tone:'], 'activity', []),
-    ('1f93e', '🤾', 1355, 1, ':person_playing_handball:', [':handball:'], 'activity', []),
-    ('1f93e-1f3fb', '🤾🏻', 1356, 2, ':person_playing_handball_tone1:', [':handball_tone1:'], 'activity', []),
-    ('1f93e-1f3fc', '🤾🏼', 1357, 2, ':person_playing_handball_tone2:', [':handball_tone2:'], 'activity', []),
-    ('1f93e-1f3fd', '🤾🏽', 1358, 2, ':person_playing_handball_tone3:', [':handball_tone3:'], 'activity', []),
-    ('1f93e-1f3fe', '🤾🏾', 1359, 2, ':person_playing_handball_tone4:', [':handball_tone4:'], 'activity', []),
-    ('1f93e-1f3ff', '🤾🏿', 1360, 2, ':person_playing_handball_tone5:', [':handball_tone5:'], 'activity', []),
-    ('1f3cc-2640', '🏌♀', 1361, 2, ':woman_golfing:', [], 'activity', []),
-    ('1f3cc-1f3fb-2640', '🏌🏻♀', 1362, 3, ':woman_golfing_tone1:', [':woman_golfing_light_skin_tone:'], 'activity', []),
-    ('1f3cc-1f3fc-2640', '🏌🏼♀', 1363, 3, ':woman_golfing_tone2:', [':woman_golfing_medium_light_skin_tone:'], 'activity', []),
-    ('1f3cc-1f3fd-2640', '🏌🏽♀', 1364, 3, ':woman_golfing_tone3:', [':woman_golfing_medium_skin_tone:'], 'activity', []),
-    ('1f3cc-1f3fe-2640', '🏌🏾♀', 1365, 3, ':woman_golfing_tone4:', [':woman_golfing_medium_dark_skin_tone:'], 'activity', []),
-    ('1f3cc-1f3ff-2640', '🏌🏿♀', 1366, 3, ':woman_golfing_tone5:', [':woman_golfing_dark_skin_tone:'], 'activity', []),
-    ('1f3cc', '🏌', 1367, 1, ':person_golfing:', [':golfer:'], 'activity', []),
-    ('1f3cc-1f3fb', '🏌🏻', 1368, 2, ':person_golfing_tone1:', [':person_golfing_light_skin_tone:'], 'activity', []),
-    ('1f3cc-1f3fc', '🏌🏼', 1369, 2, ':person_golfing_tone2:', [':person_golfing_medium_light_skin_tone:'], 'activity', []),
-    ('1f3cc-1f3fd', '🏌🏽', 1370, 2, ':person_golfing_tone3:', [':person_golfing_medium_skin_tone:'], 'activity', []),
-    ('1f3cc-1f3fe', '🏌🏾', 1371, 2, ':person_golfing_tone4:', [':person_golfing_medium_dark_skin_tone:'], 'activity', []),
-    ('1f3cc-1f3ff', '🏌🏿', 1372, 2, ':person_golfing_tone5:', [':person_golfing_dark_skin_tone:'], 'activity', []),
-    ('1f3cc-2642', '🏌♂', 1373, 2, ':man_golfing:', [], 'activity', []),
-    ('1f3cc-1f3fb-2642', '🏌🏻♂', 1374, 3, ':man_golfing_tone1:', [':man_golfing_light_skin_tone:'], 'activity', []),
-    ('1f3cc-1f3fc-2642', '🏌🏼♂', 1375, 3, ':man_golfing_tone2:', [':man_golfing_medium_light_skin_tone:'], 'activity', []),
-    ('1f3cc-1f3fd-2642', '🏌🏽♂', 1376, 3, ':man_golfing_tone3:', [':man_golfing_medium_skin_tone:'], 'activity', []),
-    ('1f3cc-1f3fe-2642', '🏌🏾♂', 1377, 3, ':man_golfing_tone4:', [':man_golfing_medium_dark_skin_tone:'], 'activity', []),
-    ('1f3cc-1f3ff-2642', '🏌🏿♂', 1378, 3, ':man_golfing_tone5:', [':man_golfing_dark_skin_tone:'], 'activity', []),
-    ('1f3c4-2640', '🏄♀', 1379, 2, ':woman_surfing:', [], 'activity', []),
-    ('1f3c4-1f3fb-2640', '🏄🏻♀', 1380, 3, ':woman_surfing_tone1:', [':woman_surfing_light_skin_tone:'], 'activity', []),
-    ('1f3c4-1f3fc-2640', '🏄🏼♀', 1381, 3, ':woman_surfing_tone2:', [':woman_surfing_medium_light_skin_tone:'], 'activity', []),
-    ('1f3c4-1f3fd-2640', '🏄🏽♀', 1382, 3, ':woman_surfing_tone3:', [':woman_surfing_medium_skin_tone:'], 'activity', []),
-    ('1f3c4-1f3fe-2640', '🏄🏾♀', 1383, 3, ':woman_surfing_tone4:', [':woman_surfing_medium_dark_skin_tone:'], 'activity', []),
-    ('1f3c4-1f3ff-2640', '🏄🏿♀', 1384, 3, ':woman_surfing_tone5:', [':woman_surfing_dark_skin_tone:'], 'activity', []),
-    ('1f3c4', '🏄', 1385, 1, ':person_surfing:', [':surfer:'], 'activity', []),
-    ('1f3c4-1f3fb', '🏄🏻', 1386, 2, ':person_surfing_tone1:', [':surfer_tone1:'], 'activity', []),
-    ('1f3c4-1f3fc', '🏄🏼', 1387, 2, ':person_surfing_tone2:', [':surfer_tone2:'], 'activity', []),
-    ('1f3c4-1f3fd', '🏄🏽', 1388, 2, ':person_surfing_tone3:', [':surfer_tone3:'], 'activity', []),
-    ('1f3c4-1f3fe', '🏄🏾', 1389, 2, ':person_surfing_tone4:', [':surfer_tone4:'], 'activity', []),
-    ('1f3c4-1f3ff', '🏄🏿', 1390, 2, ':person_surfing_tone5:', [':surfer_tone5:'], 'activity', []),
-    ('1f3c4-2642', '🏄♂', 1391, 2, ':man_surfing:', [], 'activity', []),
-    ('1f3c4-1f3ff-2642', '🏄🏿♂', 1392, 3, ':man_surfing_tone5:', [':man_surfing_dark_skin_tone:'], 'activity', []),
-    ('1f3c4-1f3fe-2642', '🏄🏾♂', 1393, 3, ':man_surfing_tone4:', [':man_surfing_medium_dark_skin_tone:'], 'activity', []),
-    ('1f3c4-1f3fd-2642', '🏄🏽♂', 1394, 3, ':man_surfing_tone3:', [':man_surfing_medium_skin_tone:'], 'activity', []),
-    ('1f3c4-1f3fc-2642', '🏄🏼♂', 1395, 3, ':man_surfing_tone2:', [':man_surfing_medium_light_skin_tone:'], 'activity', []),
-    ('1f3c4-1f3fb-2642', '🏄🏻♂', 1396, 3, ':man_surfing_tone1:', [':man_surfing_light_skin_tone:'], 'activity', []),
-    ('1f3ca-2640', '🏊♀', 1397, 2, ':woman_swimming:', [], 'activity', []),
-    ('1f3ca-1f3fb-2640', '🏊🏻♀', 1398, 3, ':woman_swimming_tone1:', [':woman_swimming_light_skin_tone:'], 'activity', []),
-    ('1f3ca-1f3fc-2640', '🏊🏼♀', 1399, 3, ':woman_swimming_tone2:', [':woman_swimming_medium_light_skin_tone:'], 'activity', []),
-    ('1f3ca-1f3fd-2640', '🏊🏽♀', 1400, 3, ':woman_swimming_tone3:', [':woman_swimming_medium_skin_tone:'], 'activity', []),
-    ('1f3ca-1f3fe-2640', '🏊🏾♀', 1401, 3, ':woman_swimming_tone4:', [':woman_swimming_medium_dark_skin_tone:'], 'activity', []),
-    ('1f3ca-1f3ff-2640', '🏊🏿♀', 1402, 3, ':woman_swimming_tone5:', [':woman_swimming_dark_skin_tone:'], 'activity', []),
-    ('1f3ca', '🏊', 1403, 1, ':person_swimming:', [':swimmer:'], 'activity', []),
-    ('1f3ca-1f3fb', '🏊🏻', 1404, 2, ':person_swimming_tone1:', [':swimmer_tone1:'], 'activity', []),
-    ('1f3ca-1f3fc', '🏊🏼', 1405, 2, ':person_swimming_tone2:', [':swimmer_tone2:'], 'activity', []),
-    ('1f3ca-1f3fd', '🏊🏽', 1406, 2, ':person_swimming_tone3:', [':swimmer_tone3:'], 'activity', []),
-    ('1f3ca-1f3fe', '🏊🏾', 1407, 2, ':person_swimming_tone4:', [':swimmer_tone4:'], 'activity', []),
-    ('1f3ca-1f3ff', '🏊🏿', 1408, 2, ':person_swimming_tone5:', [':swimmer_tone5:'], 'activity', []),
-    ('1f3ca-2642', '🏊♂', 1409, 2, ':man_swimming:', [], 'activity', []),
-    ('1f3ca-1f3ff-2642', '🏊🏿♂', 1410, 3, ':man_swimming_tone5:', [':man_swimming_dark_skin_tone:'], 'activity', []),
-    ('1f3ca-1f3fe-2642', '🏊🏾♂', 1411, 3, ':man_swimming_tone4:', [':man_swimming_medium_dark_skin_tone:'], 'activity', []),
-    ('1f3ca-1f3fd-2642', '🏊🏽♂', 1412, 3, ':man_swimming_tone3:', [':man_swimming_medium_skin_tone:'], 'activity', []),
-    ('1f3ca-1f3fc-2642', '🏊🏼♂', 1413, 3, ':man_swimming_tone2:', [':man_swimming_medium_light_skin_tone:'], 'activity', []),
-    ('1f3ca-1f3fb-2642', '🏊🏻♂', 1414, 3, ':man_swimming_tone1:', [':man_swimming_light_skin_tone:'], 'activity', []),
-    ('1f93d-2640', '🤽♀', 1415, 2, ':woman_playing_water_polo:', [], 'activity', []),
-    ('1f93d-1f3fb-2640', '🤽🏻♀', 1416, 3, ':woman_playing_water_polo_tone1:', [':woman_playing_water_polo_light_skin_tone:'], 'activity', []),
-    ('1f93d-1f3fc-2640', '🤽🏼♀', 1417, 3, ':woman_playing_water_polo_tone2:', [':woman_playing_water_polo_medium_light_skin_tone:'], 'activity', []),
-    ('1f93d-1f3fd-2640', '🤽🏽♀', 1418, 3, ':woman_playing_water_polo_tone3:', [':woman_playing_water_polo_medium_skin_tone:'], 'activity', []),
-    ('1f93d-1f3fe-2640', '🤽🏾♀', 1419, 3, ':woman_playing_water_polo_tone4:', [':woman_playing_water_polo_medium_dark_skin_tone:'], 'activity', []),
-    ('1f93d-1f3ff-2640', '🤽🏿♀', 1420, 3, ':woman_playing_water_polo_tone5:', [':woman_playing_water_polo_dark_skin_tone:'], 'activity', []),
-    ('1f93d-2642', '🤽♂', 1421, 2, ':man_playing_water_polo:', [], 'activity', []),
-    ('1f93d-1f3fb-2642', '🤽🏻♂', 1422, 3, ':man_playing_water_polo_tone1:', [':man_playing_water_polo_light_skin_tone:'], 'activity', []),
-    ('1f93d-1f3fc-2642', '🤽🏼♂', 1423, 3, ':man_playing_water_polo_tone2:', [':man_playing_water_polo_medium_light_skin_tone:'], 'activity', []),
-    ('1f93d-1f3fd-2642', '🤽🏽♂', 1424, 3, ':man_playing_water_polo_tone3:', [':man_playing_water_polo_medium_skin_tone:'], 'activity', []),
-    ('1f93d-1f3fe-2642', '🤽🏾♂', 1425, 3, ':man_playing_water_polo_tone4:', [':man_playing_water_polo_medium_dark_skin_tone:'], 'activity', []),
-    ('1f93d-1f3ff-2642', '🤽🏿♂', 1426, 3, ':man_playing_water_polo_tone5:', [':man_playing_water_polo_dark_skin_tone:'], 'activity', []),
-    ('1f93d', '🤽', 1427, 1, ':person_playing_water_polo:', [':water_polo:'], 'activity', []),
-    ('1f93d-1f3fb', '🤽🏻', 1428, 2, ':person_playing_water_polo_tone1:', [':water_polo_tone1:'], 'activity', []),
-    ('1f93d-1f3fc', '🤽🏼', 1429, 2, ':person_playing_water_polo_tone2:', [':water_polo_tone2:'], 'activity', []),
-    ('1f93d-1f3fd', '🤽🏽', 1430, 2, ':person_playing_water_polo_tone3:', [':water_polo_tone3:'], 'activity', []),
-    ('1f93d-1f3fe', '🤽🏾', 1431, 2, ':person_playing_water_polo_tone4:', [':water_polo_tone4:'], 'activity', []),
-    ('1f93d-1f3ff', '🤽🏿', 1432, 2, ':person_playing_water_polo_tone5:', [':water_polo_tone5:'], 'activity', []),
-    ('1f6a3-2640', '🚣♀', 1433, 2, ':woman_rowing_boat:', [], 'activity', []),
-    ('1f6a3-1f3fb-2640', '🚣🏻♀', 1434, 3, ':woman_rowing_boat_tone1:', [':woman_rowing_boat_light_skin_tone:'], 'activity', []),
-    ('1f6a3-1f3fc-2640', '🚣🏼♀', 1435, 3, ':woman_rowing_boat_tone2:', [':woman_rowing_boat_medium_light_skin_tone:'], 'activity', []),
-    ('1f6a3-1f3fd-2640', '🚣🏽♀', 1436, 3, ':woman_rowing_boat_tone3:', [':woman_rowing_boat_medium_skin_tone:'], 'activity', []),
-    ('1f6a3-1f3fe-2640', '🚣🏾♀', 1437, 3, ':woman_rowing_boat_tone4:', [':woman_rowing_boat_medium_dark_skin_tone:'], 'activity', []),
-    ('1f6a3-1f3ff-2640', '🚣🏿♀', 1438, 3, ':woman_rowing_boat_tone5:', [':woman_rowing_boat_dark_skin_tone:'], 'activity', []),
-    ('1f6a3', '🚣', 1439, 1, ':person_rowing_boat:', [':rowboat:'], 'activity', []),
-    ('1f6a3-1f3fb', '🚣🏻', 1440, 2, ':person_rowing_boat_tone1:', [':rowboat_tone1:'], 'activity', []),
-    ('1f6a3-1f3fc', '🚣🏼', 1441, 2, ':person_rowing_boat_tone2:', [':rowboat_tone2:'], 'activity', []),
-    ('1f6a3-1f3fd', '🚣🏽', 1442, 2, ':person_rowing_boat_tone3:', [':rowboat_tone3:'], 'activity', []),
-    ('1f6a3-1f3fe', '🚣🏾', 1443, 2, ':person_rowing_boat_tone4:', [':rowboat_tone4:'], 'activity', []),
-    ('1f6a3-1f3ff', '🚣🏿', 1444, 2, ':person_rowing_boat_tone5:', [':rowboat_tone5:'], 'activity', []),
-    ('1f6a3-2642', '🚣♂', 1445, 2, ':man_rowing_boat:', [], 'activity', []),
-    ('1f6a3-1f3ff-2642', '🚣🏿♂', 1446, 3, ':man_rowing_boat_tone5:', [':man_rowing_boat_dark_skin_tone:'], 'activity', []),
-    ('1f6a3-1f3fe-2642', '🚣🏾♂', 1447, 3, ':man_rowing_boat_tone4:', [':man_rowing_boat_medium_dark_skin_tone:'], 'activity', []),
-    ('1f6a3-1f3fd-2642', '🚣🏽♂', 1448, 3, ':man_rowing_boat_tone3:', [':man_rowing_boat_medium_skin_tone:'], 'activity', []),
-    ('1f6a3-1f3fc-2642', '🚣🏼♂', 1449, 3, ':man_rowing_boat_tone2:', [':man_rowing_boat_medium_light_skin_tone:'], 'activity', []),
-    ('1f6a3-1f3fb-2642', '🚣🏻♂', 1450, 3, ':man_rowing_boat_tone1:', [':man_rowing_boat_light_skin_tone:'], 'activity', []),
-    ('1f3c7', '🏇', 1451, 1, ':horse_racing:', [], 'activity', []),
-    ('1f3c7-1f3fb', '🏇🏻', 1452, 2, ':horse_racing_tone1:', [], 'activity', []),
-    ('1f3c7-1f3fc', '🏇🏼', 1453, 2, ':horse_racing_tone2:', [], 'activity', []),
-    ('1f3c7-1f3fd', '🏇🏽', 1454, 2, ':horse_racing_tone3:', [], 'activity', []),
-    ('1f3c7-1f3fe', '🏇🏾', 1455, 2, ':horse_racing_tone4:', [], 'activity', []),
-    ('1f3c7-1f3ff', '🏇🏿', 1456, 2, ':horse_racing_tone5:', [], 'activity', []),
-    ('1f6b4-2640', '🚴♀', 1457, 2, ':woman_biking:', [], 'activity', []),
-    ('1f6b4-1f3fb-2640', '🚴🏻♀', 1458, 3, ':woman_biking_tone1:', [':woman_biking_light_skin_tone:'], 'activity', []),
-    ('1f6b4-1f3fc-2640', '🚴🏼♀', 1459, 3, ':woman_biking_tone2:', [':woman_biking_medium_light_skin_tone:'], 'activity', []),
-    ('1f6b4-1f3fd-2640', '🚴🏽♀', 1460, 3, ':woman_biking_tone3:', [':woman_biking_medium_skin_tone:'], 'activity', []),
-    ('1f6b4-1f3fe-2640', '🚴🏾♀', 1461, 3, ':woman_biking_tone4:', [':woman_biking_medium_dark_skin_tone:'], 'activity', []),
-    ('1f6b4-1f3ff-2640', '🚴🏿♀', 1462, 3, ':woman_biking_tone5:', [':woman_biking_dark_skin_tone:'], 'activity', []),
-    ('1f6b4', '🚴', 1463, 1, ':person_biking:', [':bicyclist:'], 'activity', []),
-    ('1f6b4-1f3fb', '🚴🏻', 1464, 2, ':person_biking_tone1:', [':bicyclist_tone1:'], 'activity', []),
-    ('1f6b4-1f3fc', '🚴🏼', 1465, 2, ':person_biking_tone2:', [':bicyclist_tone2:'], 'activity', []),
-    ('1f6b4-1f3fd', '🚴🏽', 1466, 2, ':person_biking_tone3:', [':bicyclist_tone3:'], 'activity', []),
-    ('1f6b4-1f3fe', '🚴🏾', 1467, 2, ':person_biking_tone4:', [':bicyclist_tone4:'], 'activity', []),
-    ('1f6b4-1f3ff', '🚴🏿', 1468, 2, ':person_biking_tone5:', [':bicyclist_tone5:'], 'activity', []),
-    ('1f6b4-2642', '🚴♂', 1469, 2, ':man_biking:', [], 'activity', []),
-    ('1f6b4-1f3ff-2642', '🚴🏿♂', 1470, 3, ':man_biking_tone5:', [':man_biking_dark_skin_tone:'], 'activity', []),
-    ('1f6b4-1f3fe-2642', '🚴🏾♂', 1471, 3, ':man_biking_tone4:', [':man_biking_medium_dark_skin_tone:'], 'activity', []),
-    ('1f6b4-1f3fd-2642', '🚴🏽♂', 1472, 3, ':man_biking_tone3:', [':man_biking_medium_skin_tone:'], 'activity', []),
-    ('1f6b4-1f3fc-2642', '🚴🏼♂', 1473, 3, ':man_biking_tone2:', [':man_biking_medium_light_skin_tone:'], 'activity', []),
-    ('1f6b4-1f3fb-2642', '🚴🏻♂', 1474, 3, ':man_biking_tone1:', [':man_biking_light_skin_tone:'], 'activity', []),
-    ('1f6b5-2640', '🚵♀', 1475, 2, ':woman_mountain_biking:', [], 'activity', []),
-    ('1f6b5-1f3fb-2640', '🚵🏻♀', 1476, 3, ':woman_mountain_biking_tone1:', [':woman_mountain_biking_light_skin_tone:'], 'activity', []),
-    ('1f6b5-1f3fc-2640', '🚵🏼♀', 1477, 3, ':woman_mountain_biking_tone2:', [':woman_mountain_biking_medium_light_skin_tone:'], 'activity', []),
-    ('1f6b5-1f3fd-2640', '🚵🏽♀', 1478, 3, ':woman_mountain_biking_tone3:', [':woman_mountain_biking_medium_skin_tone:'], 'activity', []),
-    ('1f6b5-1f3fe-2640', '🚵🏾♀', 1479, 3, ':woman_mountain_biking_tone4:', [':woman_mountain_biking_medium_dark_skin_tone:'], 'activity', []),
-    ('1f6b5-1f3ff-2640', '🚵🏿♀', 1480, 3, ':woman_mountain_biking_tone5:', [':woman_mountain_biking_dark_skin_tone:'], 'activity', []),
-    ('1f6b5', '🚵', 1481, 1, ':person_mountain_biking:', [':mountain_bicyclist:'], 'activity', []),
-    ('1f6b5-1f3fb', '🚵🏻', 1482, 2, ':person_mountain_biking_tone1:', [':mountain_bicyclist_tone1:'], 'activity', []),
-    ('1f6b5-1f3fc', '🚵🏼', 1483, 2, ':person_mountain_biking_tone2:', [':mountain_bicyclist_tone2:'], 'activity', []),
-    ('1f6b5-1f3fd', '🚵🏽', 1484, 2, ':person_mountain_biking_tone3:', [':mountain_bicyclist_tone3:'], 'activity', []),
-    ('1f6b5-1f3fe', '🚵🏾', 1485, 2, ':person_mountain_biking_tone4:', [':mountain_bicyclist_tone4:'], 'activity', []),
-    ('1f6b5-1f3ff', '🚵🏿', 1486, 2, ':person_mountain_biking_tone5:', [':mountain_bicyclist_tone5:'], 'activity', []),
-    ('1f6b5-2642', '🚵♂', 1487, 2, ':man_mountain_biking:', [], 'activity', []),
-    ('1f6b5-1f3ff-2642', '🚵🏿♂', 1488, 3, ':man_mountain_biking_tone5:', [':man_mountain_biking_dark_skin_tone:'], 'activity', []),
-    ('1f6b5-1f3fe-2642', '🚵🏾♂', 1489, 3, ':man_mountain_biking_tone4:', [':man_mountain_biking_medium_dark_skin_tone:'], 'activity', []),
-    ('1f6b5-1f3fd-2642', '🚵🏽♂', 1490, 3, ':man_mountain_biking_tone3:', [':man_mountain_biking_medium_skin_tone:'], 'activity', []),
-    ('1f6b5-1f3fc-2642', '🚵🏼♂', 1491, 3, ':man_mountain_biking_tone2:', [':man_mountain_biking_medium_light_skin_tone:'], 'activity', []),
-    ('1f6b5-1f3fb-2642', '🚵🏻♂', 1492, 3, ':man_mountain_biking_tone1:', [':man_mountain_biking_light_skin_tone:'], 'activity', []),
-    ('1f3bd', '🎽', 1493, 1, ':running_shirt_with_sash:', [], 'activity', []),
-    ('1f3c5', '🏅', 1494, 1, ':medal:', [':sports_medal:'], 'activity', []),
-    ('1f396', '🎖', 1495, 1, ':military_medal:', [], 'activity', []),
-    ('1f947', '🥇', 1496, 1, ':first_place:', [':first_place_medal:'], 'activity', []),
-    ('1f948', '🥈', 1497, 1, ':second_place:', [':second_place_medal:'], 'activity', []),
-    ('1f949', '🥉', 1498, 1, ':third_place:', [':third_place_medal:'], 'activity', []),
-    ('1f3c6', '🏆', 1499, 1, ':trophy:', [], 'activity', []),
-    ('1f3f5', '🏵', 1500, 1, ':rosette:', [], 'activity', []),
-    ('1f397', '🎗', 1501, 1, ':reminder_ribbon:', [], 'activity', []),
-    ('1f3ab', '🎫', 1502, 1, ':ticket:', [], 'activity', []),
-    ('1f39f', '🎟', 1503, 1, ':tickets:', [':admission_tickets:'], 'activity', []),
-    ('1f3aa', '🎪', 1504, 1, ':circus_tent:', [], 'activity', []),
-    ('1f939-2640', '🤹♀', 1505, 2, ':woman_juggling:', [], 'activity', []),
-    ('1f939-1f3fb-2640', '🤹🏻♀', 1506, 3, ':woman_juggling_tone1:', [':woman_juggling_light_skin_tone:'], 'activity', []),
-    ('1f939-1f3fc-2640', '🤹🏼♀', 1507, 3, ':woman_juggling_tone2:', [':woman_juggling_medium_light_skin_tone:'], 'activity', []),
-    ('1f939-1f3fd-2640', '🤹🏽♀', 1508, 3, ':woman_juggling_tone3:', [':woman_juggling_medium_skin_tone:'], 'activity', []),
-    ('1f939-1f3fe-2640', '🤹🏾♀', 1509, 3, ':woman_juggling_tone4:', [':woman_juggling_medium_dark_skin_tone:'], 'activity', []),
-    ('1f939-1f3ff-2640', '🤹🏿♀', 1510, 3, ':woman_juggling_tone5:', [':woman_juggling_dark_skin_tone:'], 'activity', []),
-    ('1f939-2642', '🤹♂', 1511, 2, ':man_juggling:', [], 'activity', []),
-    ('1f939-1f3fb-2642', '🤹🏻♂', 1512, 3, ':man_juggling_tone1:', [':man_juggling_light_skin_tone:'], 'activity', []),
-    ('1f939-1f3fc-2642', '🤹🏼♂', 1513, 3, ':man_juggling_tone2:', [':man_juggling_medium_light_skin_tone:'], 'activity', []),
-    ('1f939-1f3fd-2642', '🤹🏽♂', 1514, 3, ':man_juggling_tone3:', [':man_juggling_medium_skin_tone:'], 'activity', []),
-    ('1f939-1f3fe-2642', '🤹🏾♂', 1515, 3, ':man_juggling_tone4:', [':man_juggling_medium_dark_skin_tone:'], 'activity', []),
-    ('1f939-1f3ff-2642', '🤹🏿♂', 1516, 3, ':man_juggling_tone5:', [':man_juggling_dark_skin_tone:'], 'activity', []),
-    ('1f939', '🤹', 1517, 1, ':person_juggling:', [':juggling:', ':juggler:'], 'activity', []),
-    ('1f939-1f3fb', '🤹🏻', 1518, 2, ':person_juggling_tone1:', [':juggling_tone1:', ':juggler_tone1:'], 'activity', []),
-    ('1f939-1f3fc', '🤹🏼', 1519, 2, ':person_juggling_tone2:', [':juggling_tone2:', ':juggler_tone2:'], 'activity', []),
-    ('1f939-1f3fd', '🤹🏽', 1520, 2, ':person_juggling_tone3:', [':juggling_tone3:', ':juggler_tone3:'], 'activity', []),
-    ('1f939-1f3fe', '🤹🏾', 1521, 2, ':person_juggling_tone4:', [':juggling_tone4:', ':juggler_tone4:'], 'activity', []),
-    ('1f939-1f3ff', '🤹🏿', 1522, 2, ':person_juggling_tone5:', [':juggling_tone5:', ':juggler_tone5:'], 'activity', []),
-    ('1f3ad', '🎭', 1523, 1, ':performing_arts:', [], 'activity', []),
-    ('1f3a8', '🎨', 1524, 1, ':art:', [], 'activity', []),
-    ('1f3ac', '🎬', 1525, 1, ':clapper:', [], 'activity', []),
-    ('1f3a4', '🎤', 1526, 1, ':microphone:', [], 'activity', []),
-    ('1f3a7', '🎧', 1527, 1, ':headphones:', [], 'activity', []),
-    ('1f3bc', '🎼', 1528, 1, ':musical_score:', [], 'activity', []),
-    ('1f3b9', '🎹', 1529, 1, ':musical_keyboard:', [], 'activity', []),
-    ('1f941', '🥁', 1530, 1, ':drum:', [':drum_with_drumsticks:'], 'activity', []),
-    ('1f3b7', '🎷', 1531, 1, ':saxophone:', [], 'activity', []),
-    ('1f3ba', '🎺', 1532, 1, ':trumpet:', [], 'activity', []),
-    ('1f3b8', '🎸', 1533, 1, ':guitar:', [], 'activity', []),
-    ('1f3bb', '🎻', 1534, 1, ':violin:', [], 'activity', []),
-    ('1f3b2', '🎲', 1535, 1, ':game_die:', [], 'activity', []),
-    ('1f3af', '🎯', 1536, 1, ':dart:', [], 'activity', []),
-    ('1f3b3', '🎳', 1537, 1, ':bowling:', [], 'activity', []),
-    ('1f3ae', '🎮', 1538, 1, ':video_game:', [], 'activity', []),
-    ('1f3b0', '🎰', 1539, 1, ':slot_machine:', [], 'activity', []),
-    ('1f697', '🚗', 1540, 1, ':red_car:', [], 'travel', []),
-    ('1f695', '🚕', 1541, 1, ':taxi:', [], 'travel', []),
-    ('1f699', '🚙', 1542, 1, ':blue_car:', [], 'travel', []),
-    ('1f68c', '🚌', 1543, 1, ':bus:', [], 'travel', []),
-    ('1f68e', '🚎', 1544, 1, ':trolleybus:', [], 'travel', []),
-    ('1f3ce', '🏎', 1545, 1, ':race_car:', [':racing_car:'], 'travel', []),
-    ('1f693', '🚓', 1546, 1, ':police_car:', [], 'travel', []),
-    ('1f691', '🚑', 1547, 1, ':ambulance:', [], 'travel', []),
-    ('1f692', '🚒', 1548, 1, ':fire_engine:', [], 'travel', []),
-    ('1f690', '🚐', 1549, 1, ':minibus:', [], 'travel', []),
-    ('1f69a', '🚚', 1550, 1, ':truck:', [], 'travel', []),
-    ('1f69b', '🚛', 1551, 1, ':articulated_lorry:', [], 'travel', []),
-    ('1f69c', '🚜', 1552, 1, ':tractor:', [], 'travel', []),
-    ('1f6f4', '🛴', 1553, 1, ':scooter:', [], 'travel', []),
-    ('1f6b2', '🚲', 1554, 1, ':bike:', [], 'travel', []),
-    ('1f6f5', '🛵', 1555, 1, ':motor_scooter:', [':motorbike:'], 'travel', []),
-    ('1f3cd', '🏍', 1556, 1, ':motorcycle:', [':racing_motorcycle:'], 'travel', []),
-    ('1f6a8', '🚨', 1557, 1, ':rotating_light:', [], 'travel', []),
-    ('1f694', '🚔', 1558, 1, ':oncoming_police_car:', [], 'travel', []),
-    ('1f68d', '🚍', 1559, 1, ':oncoming_bus:', [], 'travel', []),
-    ('1f698', '🚘', 1560, 1, ':oncoming_automobile:', [], 'travel', []),
-    ('1f696', '🚖', 1561, 1, ':oncoming_taxi:', [], 'travel', []),
-    ('1f6a1', '🚡', 1562, 1, ':aerial_tramway:', [], 'travel', []),
-    ('1f6a0', '🚠', 1563, 1, ':mountain_cableway:', [], 'travel', []),
-    ('1f69f', '🚟', 1564, 1, ':suspension_railway:', [], 'travel', []),
-    ('1f683', '🚃', 1565, 1, ':railway_car:', [], 'travel', []),
-    ('1f68b', '🚋', 1566, 1, ':train:', [], 'travel', []),
-    ('1f69e', '🚞', 1567, 1, ':mountain_railway:', [], 'travel', []),
-    ('1f69d', '🚝', 1568, 1, ':monorail:', [], 'travel', []),
-    ('1f684', '🚄', 1569, 1, ':bullettrain_side:', [], 'travel', []),
-    ('1f685', '🚅', 1570, 1, ':bullettrain_front:', [], 'travel', []),
-    ('1f688', '🚈', 1571, 1, ':light_rail:', [], 'travel', []),
-    ('1f682', '🚂', 1572, 1, ':steam_locomotive:', [], 'travel', []),
-    ('1f686', '🚆', 1573, 1, ':train2:', [], 'travel', []),
-    ('1f687', '🚇', 1574, 1, ':metro:', [], 'travel', []),
-    ('1f68a', '🚊', 1575, 1, ':tram:', [], 'travel', []),
-    ('1f689', '🚉', 1576, 1, ':station:', [], 'travel', []),
-    ('1f681', '🚁', 1577, 1, ':helicopter:', [], 'travel', []),
-    ('1f6e9', '🛩', 1578, 1, ':airplane_small:', [':small_airplane:'], 'travel', []),
-    ('2708', '✈', 1579, 1, ':airplane:', [], 'travel', []),
-    ('1f6eb', '🛫', 1580, 1, ':airplane_departure:', [], 'travel', []),
-    ('1f6ec', '🛬', 1581, 1, ':airplane_arriving:', [], 'travel', []),
-    ('1f680', '🚀', 1582, 1, ':rocket:', [], 'travel', []),
-    ('1f6f0', '🛰', 1583, 1, ':satellite_orbital:', [], 'travel', []),
-    ('1f4ba', '💺', 1584, 1, ':seat:', [], 'travel', []),
-    ('1f6f6', '🛶', 1585, 1, ':canoe:', [':kayak:'], 'travel', []),
-    ('26f5', '⛵', 1586, 1, ':sailboat:', [], 'travel', ['boat']),
-    ('1f6e5', '🛥', 1587, 1, ':motorboat:', [], 'travel', ['boat']),
-    ('1f6a4', '🚤', 1588, 1, ':speedboat:', [], 'travel', []),
-    ('1f6f3', '🛳', 1589, 1, ':cruise_ship:', [':passenger_ship:'], 'travel', []),
-    ('26f4', '⛴', 1590, 1, ':ferry:', [], 'travel', []),
-    ('1f6a2', '🚢', 1591, 1, ':ship:', [], 'travel', []),
-    ('2693', '⚓', 1592, 1, ':anchor:', [], 'travel', []),
-    ('1f6a7', '🚧', 1593, 1, ':construction:', [], 'travel', []),
-    ('26fd', '⛽', 1594, 1, ':fuelpump:', [], 'travel', []),
-    ('1f68f', '🚏', 1595, 1, ':busstop:', [], 'travel', []),
-    ('1f6a6', '🚦', 1596, 1, ':vertical_traffic_light:', [], 'travel', []),
-    ('1f6a5', '🚥', 1597, 1, ':traffic_light:', [], 'travel', []),
-    ('1f5fa', '🗺', 1598, 1, ':map:', [':world_map:'], 'travel', []),
-    ('1f5ff', '🗿', 1599, 1, ':moyai:', [], 'travel', []),
-    ('1f5fd', '🗽', 1600, 1, ':statue_of_liberty:', [], 'travel', []),
-    ('26f2', '⛲', 1601, 1, ':fountain:', [], 'travel', []),
-    ('1f5fc', '🗼', 1602, 1, ':tokyo_tower:', [], 'travel', []),
-    ('1f3f0', '🏰', 1603, 1, ':european_castle:', [], 'travel', []),
-    ('1f3ef', '🏯', 1604, 1, ':japanese_castle:', [], 'travel', []),
-    ('1f3df', '🏟', 1605, 1, ':stadium:', [], 'travel', []),
-    ('1f3a1', '🎡', 1606, 1, ':ferris_wheel:', [], 'travel', []),
-    ('1f3a2', '🎢', 1607, 1, ':roller_coaster:', [], 'travel', []),
-    ('1f3a0', '🎠', 1608, 1, ':carousel_horse:', [], 'travel', []),
-    ('26f1', '⛱', 1609, 1, ':beach_umbrella:', [':umbrella_on_ground:'], 'travel', []),
-    ('1f3d6', '🏖', 1610, 1, ':beach:', [':beach_with_umbrella:'], 'travel', []),
-    ('1f3dd', '🏝', 1611, 1, ':island:', [':desert_island:'], 'travel', []),
-    ('26f0', '⛰', 1612, 1, ':mountain:', [], 'travel', []),
-    ('1f3d4', '🏔', 1613, 1, ':mountain_snow:', [':snow_capped_mountain:'], 'travel', []),
-    ('1f5fb', '🗻', 1614, 1, ':mount_fuji:', [], 'travel', []),
-    ('1f30b', '🌋', 1615, 1, ':volcano:', [], 'travel', []),
-    ('1f3dc', '🏜', 1616, 1, ':desert:', [], 'travel', []),
-    ('1f3d5', '🏕', 1617, 1, ':camping:', [], 'travel', []),
-    ('26fa', '⛺', 1618, 1, ':tent:', [], 'travel', []),
-    ('1f6e4', '🛤', 1619, 1, ':railway_track:', [':railroad_track:'], 'travel', []),
-    ('1f6e3', '🛣', 1620, 1, ':motorway:', [], 'travel', []),
-    ('1f3d7', '🏗', 1621, 1, ':construction_site:', [':building_construction:'], 'travel', []),
-    ('1f3ed', '🏭', 1622, 1, ':factory:', [], 'travel', []),
-    ('1f3e0', '🏠', 1623, 1, ':house:', [], 'travel', []),
-    ('1f3e1', '🏡', 1624, 1, ':house_with_garden:', [], 'travel', []),
-    ('1f3d8', '🏘', 1625, 1, ':homes:', [':house_buildings:'], 'travel', []),
-    ('1f3da', '🏚', 1626, 1, ':house_abandoned:', [':derelict_house_building:'], 'travel', []),
-    ('1f3e2', '🏢', 1627, 1, ':office:', [], 'travel', []),
-    ('1f3ec', '🏬', 1628, 1, ':department_store:', [], 'travel', []),
-    ('1f3e3', '🏣', 1629, 1, ':post_office:', [], 'travel', []),
-    ('1f3e4', '🏤', 1630, 1, ':european_post_office:', [], 'travel', []),
-    ('1f3e5', '🏥', 1631, 1, ':hospital:', [], 'travel', []),
-    ('1f3e6', '🏦', 1632, 1, ':bank:', [], 'travel', []),
-    ('1f3e8', '🏨', 1633, 1, ':hotel:', [], 'travel', []),
-    ('1f3ea', '🏪', 1634, 1, ':convenience_store:', [], 'travel', []),
-    ('1f3eb', '🏫', 1635, 1, ':school:', [], 'travel', []),
-    ('1f3e9', '🏩', 1636, 1, ':love_hotel:', [], 'travel', []),
-    ('1f492', '💒', 1637, 1, ':wedding:', [], 'travel', []),
-    ('1f3db', '🏛', 1638, 1, ':classical_building:', [], 'travel', []),
-    ('26ea', '⛪', 1639, 1, ':church:', [], 'travel', []),
-    ('1f54c', '🕌', 1640, 1, ':mosque:', [], 'travel', []),
-    ('1f54d', '🕍', 1641, 1, ':synagogue:', [], 'travel', []),
-    ('1f54b', '🕋', 1642, 1, ':kaaba:', [], 'travel', []),
-    ('26e9', '⛩', 1643, 1, ':shinto_shrine:', [], 'travel', ['shrine', 'shinto']),
-    ('1f5fe', '🗾', 1644, 1, ':japan:', [], 'travel', []),
-    ('1f391', '🎑', 1645, 1, ':rice_scene:', [], 'travel', []),
-    ('1f3de', '🏞', 1646, 1, ':park:', [':national_park:'], 'travel', []),
-    ('1f305', '🌅', 1647, 1, ':sunrise:', [], 'travel', []),
-    ('1f304', '🌄', 1648, 1, ':sunrise_over_mountains:', [], 'travel', []),
-    ('1f320', '🌠', 1649, 1, ':stars:', [], 'travel', []),
-    ('1f387', '🎇', 1650, 1, ':sparkler:', [], 'travel', []),
-    ('1f386', '🎆', 1651, 1, ':fireworks:', [], 'travel', []),
-    ('1f307', '🌇', 1652, 1, ':city_sunset:', [':city_sunrise:'], 'travel', []),
-    ('1f306', '🌆', 1653, 1, ':city_dusk:', [], 'travel', []),
-    ('1f3d9', '🏙', 1654, 1, ':cityscape:', [], 'travel', []),
-    ('1f303', '🌃', 1655, 1, ':night_with_stars:', [], 'travel', []),
-    ('1f30c', '🌌', 1656, 1, ':milky_way:', [], 'travel', []),
-    ('1f309', '🌉', 1657, 1, ':bridge_at_night:', [], 'travel', []),
-    ('1f301', '🌁', 1658, 1, ':foggy:', [], 'travel', []),
-    ('231a', '⌚', 1659, 1, ':watch:', [], 'objects', []),
-    ('1f4f1', '📱', 1660, 1, ':iphone:', [], 'objects', []),
-    ('1f4f2', '📲', 1661, 1, ':calling:', [], 'objects', []),
-    ('1f4bb', '💻', 1662, 1, ':computer:', [], 'objects', []),
-    ('2328', '⌨', 1663, 1, ':keyboard:', [], 'objects', []),
-    ('1f5a5', '🖥', 1664, 1, ':desktop:', [':desktop_computer:'], 'objects', []),
-    ('1f5a8', '🖨', 1665, 1, ':printer:', [], 'objects', []),
-    ('1f5b1', '🖱', 1666, 1, ':mouse_three_button:', [':three_button_mouse:'], 'objects', []),
-    ('1f5b2', '🖲', 1667, 1, ':trackball:', [], 'objects', []),
-    ('1f579', '🕹', 1668, 1, ':joystick:', [], 'objects', []),
-    ('1f5dc', '🗜', 1669, 1, ':compression:', [], 'objects', []),
-    ('1f4bd', '💽', 1670, 1, ':minidisc:', [], 'objects', []),
-    ('1f4be', '💾', 1671, 1, ':floppy_disk:', [], 'objects', []),
-    ('1f4bf', '💿', 1672, 1, ':cd:', [], 'objects', []),
-    ('1f4c0', '📀', 1673, 1, ':dvd:', [], 'objects', []),
-    ('1f4fc', '📼', 1674, 1, ':vhs:', [], 'objects', []),
-    ('1f4f7', '📷', 1675, 1, ':camera:', [], 'objects', []),
-    ('1f4f8', '📸', 1676, 1, ':camera_with_flash:', [], 'objects', []),
-    ('1f4f9', '📹', 1677, 1, ':video_camera:', [], 'objects', []),
-    ('1f3a5', '🎥', 1678, 1, ':movie_camera:', [], 'objects', []),
-    ('1f4fd', '📽', 1679, 1, ':projector:', [':film_projector:'], 'objects', []),
-    ('1f39e', '🎞', 1680, 1, ':film_frames:', [], 'objects', ['film', 'roll']),
-    ('1f4de', '📞', 1681, 1, ':telephone_receiver:', [], 'objects', ['receiver', 'handset']),
-    ('260e', '☎', 1682, 1, ':telephone:', [], 'objects', ['phone', 'telephone']),
-    ('1f4df', '📟', 1683, 1, ':pager:', [], 'objects', ['pager', 'beeper']),
-    ('1f4e0', '📠', 1684, 1, ':fax:', [], 'objects', ['fax']),
-    ('1f4fa', '📺', 1685, 1, ':tv:', [], 'objects', ['tv', 'TV']),
-    ('1f4fb', '📻', 1686, 1, ':radio:', [], 'objects', ['radio', 'wireless']),
-    ('1f399', '🎙', 1687, 1, ':microphone2:', [':studio_microphone:'], 'objects', ['microphone', 'mic']),
-    ('1f39a', '🎚', 1688, 1, ':level_slider:', [], 'objects', ['slider', 'dimmer']),
-    ('1f39b', '🎛', 1689, 1, ':control_knobs:', [], 'objects', ['knobs', 'controls', 'control knobs']),
-    ('23f1', '⏱', 1690, 1, ':stopwatch:', [], 'objects', ['stopwatch', 'watch']),
-    ('23f2', '⏲', 1691, 1, ':timer:', [':timer_clock:'], 'objects', ['timer', 'time']),
-    ('23f0', '⏰', 1692, 1, ':alarm_clock:', [], 'objects', ['alarm', 'alarm clock', 'clock']),
-    ('1f570', '🕰', 1693, 1, ':clock:', [':mantlepiece_clock:'], 'objects', ['clock', 'time', 'alarm']),
-    ('231b', '⌛', 1694, 1, ':hourglass:', [], 'objects', ['hourglass']),
-    ('23f3', '⏳', 1695, 1, ':hourglass_flowing_sand:', [], 'objects', ['hourglass', 'time']),
-    ('1f4e1', '📡', 1696, 1, ':satellite:', [], 'objects', ['dish', 'satellite']),
-    ('1f50b', '🔋', 1697, 1, ':battery:', [], 'objects', ['battery', 'cell']),
-    ('1f50c', '🔌', 1698, 1, ':electric_plug:', [], 'objects', ['plug']),
-    ('1f4a1', '💡', 1699, 1, ':bulb:', [], 'objects', ['bulb', 'light']),
-    ('1f526', '🔦', 1700, 1, ':flashlight:', [], 'objects', ['flashlight', 'torch', 'light']),
-    ('1f56f', '🕯', 1701, 1, ':candle:', [], 'objects', ['candle', 'wick', 'can dull']),
-    ('1f5d1', '🗑', 1702, 1, ':wastebasket:', [], 'objects', ['bin', 'trash', 'waste', 'wastebasket', 'basura', 'rubbish']),
-    ('1f6e2', '🛢', 1703, 1, ':oil:', [':oil_drum:'], 'objects', ['drum', 'can', 'oil']),
-    ('1f4b8', '💸', 1704, 1, ':money_with_wings:', [], 'objects', ['flying money', 'winged money']),
-    ('1f4b5', '💵', 1705, 1, ':dollar:', [], 'objects', ['dollar', 'buck', 'greenback']),
-    ('1f4b4', '💴', 1706, 1, ':yen:', [], 'objects', ['yen']),
-    ('1f4b6', '💶', 1707, 1, ':euro:', [], 'objects', ['euro']),
-    ('1f4b7', '💷', 1708, 1, ':pound:', [], 'objects', ['pound', 'quid']),
-    ('1f4b0', '💰', 1709, 1, ':moneybag:', [], 'objects', ['money', 'loot']),
-    ('1f4b3', '💳', 1710, 1, ':credit_card:', [], 'objects', ['credit', 'card']),
-    ('1f48e', '💎', 1711, 1, ':gem:', [], 'objects', ['gem', 'gemstone', 'rock']),
-    ('2696', '⚖', 1712, 1, ':scales:', [], 'objects', ['scales', 'justice']),
-    ('1f527', '🔧', 1713, 1, ':wrench:', [], 'objects', ['wrench']),
-    ('1f528', '🔨', 1714, 1, ':hammer:', [], 'objects', ['hammer', 'sledge']),
-    ('2692', '⚒', 1715, 1, ':hammer_pick:', [':hammer_and_pick:'], 'objects', []),
-    ('1f6e0', '🛠', 1716, 1, ':tools:', [':hammer_and_wrench:'], 'objects', []),
-    ('26cf', '⛏', 1717, 1, ':pick:', [], 'objects', []),
-    ('1f529', '🔩', 1718, 1, ':nut_and_bolt:', [], 'objects', []),
-    ('2699', '⚙', 1719, 1, ':gear:', [], 'objects', []),
-    ('26d3', '⛓', 1720, 1, ':chains:', [], 'objects', []),
-    ('1f52b', '🔫', 1721, 1, ':gun:', [], 'objects', []),
-    ('1f4a3', '💣', 1722, 1, ':bomb:', [], 'objects', []),
-    ('1f52a', '🔪', 1723, 1, ':knife:', [], 'objects', []),
-    ('1f5e1', '🗡', 1724, 1, ':dagger:', [':dagger_knife:'], 'objects', []),
-    ('2694', '⚔', 1725, 1, ':crossed_swords:', [], 'objects', []),
-    ('1f6e1', '🛡', 1726, 1, ':shield:', [], 'objects', []),
-    ('1f6ac', '🚬', 1727, 1, ':smoking:', [], 'objects', []),
-    ('26b0', '⚰', 1728, 1, ':coffin:', [], 'objects', []),
-    ('26b1', '⚱', 1729, 1, ':urn:', [':funeral_urn:'], 'objects', []),
-    ('1f3fa', '🏺', 1730, 1, ':amphora:', [], 'objects', []),
-    ('1f52e', '🔮', 1731, 1, ':crystal_ball:', [], 'objects', []),
-    ('1f4ff', '📿', 1732, 1, ':prayer_beads:', [], 'objects', []),
-    ('1f488', '💈', 1733, 1, ':barber:', [], 'objects', []),
-    ('2697', '⚗', 1734, 1, ':alembic:', [], 'objects', []),
-    ('1f52d', '🔭', 1735, 1, ':telescope:', [], 'objects', []),
-    ('1f52c', '🔬', 1736, 1, ':microscope:', [], 'objects', []),
-    ('1f573', '🕳', 1737, 1, ':hole:', [], 'objects', []),
-    ('1f48a', '💊', 1738, 1, ':pill:', [], 'objects', []),
-    ('1f489', '💉', 1739, 1, ':syringe:', [], 'objects', []),
-    ('1f321', '🌡', 1740, 1, ':thermometer:', [], 'objects', []),
-    ('1f6bd', '🚽', 1741, 1, ':toilet:', [], 'objects', []),
-    ('1f6b0', '🚰', 1742, 1, ':potable_water:', [], 'objects', []),
-    ('1f6bf', '🚿', 1743, 1, ':shower:', [], 'objects', []),
-    ('1f6c1', '🛁', 1744, 1, ':bathtub:', [], 'objects', []),
-    ('1f6c0', '🛀', 1745, 1, ':bath:', [], 'objects', []),
-    ('1f6c0-1f3fb', '🛀🏻', 1746, 2, ':bath_tone1:', [], 'objects', []),
-    ('1f6c0-1f3fc', '🛀🏼', 1747, 2, ':bath_tone2:', [], 'objects', []),
-    ('1f6c0-1f3fd', '🛀🏽', 1748, 2, ':bath_tone3:', [], 'objects', []),
-    ('1f6c0-1f3fe', '🛀🏾', 1749, 2, ':bath_tone4:', [], 'objects', []),
-    ('1f6c0-1f3ff', '🛀🏿', 1750, 2, ':bath_tone5:', [], 'objects', []),
-    ('1f6ce', '🛎', 1751, 1, ':bellhop:', [':bellhop_bell:'], 'objects', []),
-    ('1f511', '🔑', 1752, 1, ':key:', [], 'objects', []),
-    ('1f5dd', '🗝', 1753, 1, ':key2:', [':old_key:'], 'objects', []),
-    ('1f6aa', '🚪', 1754, 1, ':door:', [], 'objects', []),
-    ('1f6cb', '🛋', 1755, 1, ':couch:', [':couch_and_lamp:'], 'objects', []),
-    ('1f6cf', '🛏', 1756, 1, ':bed:', [], 'objects', []),
-    ('1f6cc', '🛌', 1757, 1, ':sleeping_accommodation:', [], 'objects', []),
-    # ('1f6cc-1f3fb', '🛌🏻', 1758, 2, ':person_in_bed_tone1:', [':person_in_bed_light_skin_tone:'], 'objects', []),
-    # ('1f6cc-1f3fc', '🛌🏼', 1759, 2, ':person_in_bed_tone2:', [':person_in_bed_medium_light_skin_tone:'], 'objects', []),
-    # ('1f6cc-1f3fd', '🛌🏽', 1760, 2, ':person_in_bed_tone3:', [':person_in_bed_medium_skin_tone:'], 'objects', []),
-    # ('1f6cc-1f3fe', '🛌🏾', 1761, 2, ':person_in_bed_tone4:', [':person_in_bed_medium_dark_skin_tone:'], 'objects', []),
-    # ('1f6cc-1f3ff', '🛌🏿', 1762, 2, ':person_in_bed_tone5:', [':person_in_bed_dark_skin_tone:'], 'objects', []),
-    ('1f5bc', '🖼', 1763, 1, ':frame_photo:', [':frame_with_picture:'], 'objects', ['photo', 'picture', 'frame']),
-    ('1f6cd', '🛍', 1764, 1, ':shopping_bags:', [], 'objects', []),
-    ('1f6d2', '🛒', 1765, 1, ':shopping_cart:', [':shopping_trolley:'], 'objects', []),
-    ('1f381', '🎁', 1766, 1, ':gift:', [], 'objects', ['gift', 'present']),
-    ('1f388', '🎈', 1767, 1, ':balloon:', [], 'objects', ['balloon']),
-    ('1f38f', '🎏', 1768, 1, ':flags:', [], 'objects', ['flags']),
-    ('1f380', '🎀', 1769, 1, ':ribbon:', [], 'objects', ['ribbon', 'bow', 'tied']),
-    ('1f38a', '🎊', 1770, 1, ':confetti_ball:', [], 'objects', ['yay', 'hurray', 'confetti']),
-    ('1f389', '🎉', 1771, 1, ':tada:', [], 'objects', ['tada']),
-    ('1f38e', '🎎', 1772, 1, ':dolls:', [], 'objects', ['dolls']),
-    ('1f3ee', '🏮', 1773, 1, ':izakaya_lantern:', [], 'objects', ['lantern', 'glow']),
-    ('1f390', '🎐', 1774, 1, ':wind_chime:', [], 'objects', []),
-    ('2709', '✉', 1775, 1, ':envelope:', [], 'objects', []),
-    ('1f4e9', '📩', 1776, 1, ':envelope_with_arrow:', [], 'objects', []),
-    ('1f4e8', '📨', 1777, 1, ':incoming_envelope:', [], 'objects', []),
-    ('1f4e7', '📧', 1778, 1, ':e-mail:', [':email:'], 'objects', []),
-    ('1f48c', '💌', 1779, 1, ':love_letter:', [], 'objects', []),
-    ('1f4e5', '📥', 1780, 1, ':inbox_tray:', [], 'objects', []),
-    ('1f4e4', '📤', 1781, 1, ':outbox_tray:', [], 'objects', []),
-    ('1f4e6', '📦', 1782, 1, ':package:', [], 'objects', []),
-    ('1f3f7', '🏷', 1783, 1, ':label:', [], 'objects', []),
-    ('1f4ea', '📪', 1784, 1, ':mailbox_closed:', [], 'objects', []),
-    ('1f4eb', '📫', 1785, 1, ':mailbox:', [], 'objects', []),
-    ('1f4ec', '📬', 1786, 1, ':mailbox_with_mail:', [], 'objects', []),
-    ('1f4ed', '📭', 1787, 1, ':mailbox_with_no_mail:', [], 'objects', []),
-    ('1f4ee', '📮', 1788, 1, ':postbox:', [], 'objects', []),
-    ('1f4ef', '📯', 1789, 1, ':postal_horn:', [], 'objects', []),
-    ('1f4dc', '📜', 1790, 1, ':scroll:', [], 'objects', []),
-    ('1f4c3', '📃', 1791, 1, ':page_with_curl:', [], 'objects', []),
-    ('1f4c4', '📄', 1792, 1, ':page_facing_up:', [], 'objects', []),
-    ('1f4d1', '📑', 1793, 1, ':bookmark_tabs:', [], 'objects', []),
-    ('1f4ca', '📊', 1794, 1, ':bar_chart:', [], 'objects', []),
-    ('1f4c8', '📈', 1795, 1, ':chart_with_upwards_trend:', [], 'objects', []),
-    ('1f4c9', '📉', 1796, 1, ':chart_with_downwards_trend:', [], 'objects', []),
-    ('1f5d2', '🗒', 1797, 1, ':notepad_spiral:', [':spiral_note_pad:'], 'objects', []),
-    ('1f5d3', '🗓', 1798, 1, ':calendar_spiral:', [':spiral_calendar_pad:'], 'objects', []),
-    ('1f4c6', '📆', 1799, 1, ':calendar:', [], 'objects', []),
-    ('1f4c5', '📅', 1800, 1, ':date:', [], 'objects', []),
-    ('1f4c7', '📇', 1801, 1, ':card_index:', [], 'objects', []),
-    ('1f5c3', '🗃', 1802, 1, ':card_box:', [':card_file_box:'], 'objects', []),
-    ('1f5f3', '🗳', 1803, 1, ':ballot_box:', [':ballot_box_with_ballot:'], 'objects', []),
-    ('1f5c4', '🗄', 1804, 1, ':file_cabinet:', [], 'objects', []),
-    ('1f4cb', '📋', 1805, 1, ':clipboard:', [], 'objects', []),
-    ('1f4c1', '📁', 1806, 1, ':file_folder:', [], 'objects', []),
-    ('1f4c2', '📂', 1807, 1, ':open_file_folder:', [], 'objects', []),
-    ('1f5c2', '🗂', 1808, 1, ':dividers:', [':card_index_dividers:'], 'objects', []),
-    ('1f5de', '🗞', 1809, 1, ':newspaper2:', [':rolled_up_newspaper:'], 'objects', []),
-    ('1f4f0', '📰', 1810, 1, ':newspaper:', [], 'objects', []),
-    ('1f4d3', '📓', 1811, 1, ':notebook:', [], 'objects', []),
-    ('1f4d4', '📔', 1812, 1, ':notebook_with_decorative_cover:', [], 'objects', []),
-    ('1f4d2', '📒', 1813, 1, ':ledger:', [], 'objects', []),
-    ('1f4d5', '📕', 1814, 1, ':closed_book:', [], 'objects', []),
-    ('1f4d7', '📗', 1815, 1, ':green_book:', [], 'objects', []),
-    ('1f4d8', '📘', 1816, 1, ':blue_book:', [], 'objects', []),
-    ('1f4d9', '📙', 1817, 1, ':orange_book:', [], 'objects', []),
-    ('1f4da', '📚', 1818, 1, ':books:', [], 'objects', []),
-    ('1f4d6', '📖', 1819, 1, ':book:', [], 'objects', []),
-    ('1f516', '🔖', 1820, 1, ':bookmark:', [], 'objects', []),
-    ('1f517', '🔗', 1821, 1, ':link:', [], 'objects', []),
-    ('1f4ce', '📎', 1822, 1, ':paperclip:', [], 'objects', []),
-    ('1f587', '🖇', 1823, 1, ':paperclips:', [':linked_paperclips:'], 'objects', []),
-    ('1f4d0', '📐', 1824, 1, ':triangular_ruler:', [], 'objects', []),
-    ('1f4cf', '📏', 1825, 1, ':straight_ruler:', [], 'objects', []),
-    ('1f4cc', '📌', 1826, 1, ':pushpin:', [], 'objects', []),
-    ('1f4cd', '📍', 1827, 1, ':round_pushpin:', [], 'objects', []),
-    ('2702', '✂', 1828, 1, ':scissors:', [], 'objects', []),
-    ('1f58a', '🖊', 1829, 1, ':pen_ballpoint:', [':lower_left_ballpoint_pen:'], 'objects', []),
-    ('1f58b', '🖋', 1830, 1, ':pen_fountain:', [':lower_left_fountain_pen:'], 'objects', []),
-    ('2712', '✒', 1831, 1, ':black_nib:', [], 'objects', []),
-    ('1f58c', '🖌', 1832, 1, ':paintbrush:', [':lower_left_paintbrush:'], 'objects', []),
-    ('1f58d', '🖍', 1833, 1, ':crayon:', [':lower_left_crayon:'], 'objects', []),
-    ('1f4dd', '📝', 1834, 1, ':pencil:', [], 'objects', []),
-    ('270f', '✏', 1835, 1, ':pencil2:', [], 'objects', []),
-    ('1f50d', '🔍', 1836, 1, ':mag:', [], 'objects', []),
-    ('1f50e', '🔎', 1837, 1, ':mag_right:', [], 'objects', []),
-    ('1f50f', '🔏', 1838, 1, ':lock_with_ink_pen:', [], 'objects', []),
-    ('1f510', '🔐', 1839, 1, ':closed_lock_with_key:', [], 'objects', []),
-    ('1f512', '🔒', 1840, 1, ':lock:', [], 'objects', []),
-    ('1f513', '🔓', 1841, 1, ':unlock:', [], 'objects', []),
-    ('2764', '❤', 1842, 1, ':heart:', [], 'symbols', []),
-    ('1f49b', '💛', 1843, 1, ':yellow_heart:', [], 'symbols', []),
-    ('1f49a', '💚', 1844, 1, ':green_heart:', [], 'symbols', []),
-    ('1f499', '💙', 1845, 1, ':blue_heart:', [], 'symbols', []),
-    ('1f49c', '💜', 1846, 1, ':purple_heart:', [], 'symbols', []),
-    ('1f5a4', '🖤', 1847, 1, ':black_heart:', [], 'symbols', []),
-    ('1f494', '💔', 1848, 1, ':broken_heart:', [], 'symbols', []),
-    ('2763', '❣', 1849, 1, ':heart_exclamation:', [':heavy_heart_exclamation_mark_ornament:'], 'symbols', []),
-    ('1f495', '💕', 1850, 1, ':two_hearts:', [], 'symbols', []),
-    ('1f49e', '💞', 1851, 1, ':revolving_hearts:', [], 'symbols', []),
-    ('1f493', '💓', 1852, 1, ':heartbeat:', [], 'symbols', []),
-    ('1f497', '💗', 1853, 1, ':heartpulse:', [], 'symbols', []),
-    ('1f496', '💖', 1854, 1, ':sparkling_heart:', [], 'symbols', []),
-    ('1f498', '💘', 1855, 1, ':cupid:', [], 'symbols', []),
-    ('1f49d', '💝', 1856, 1, ':gift_heart:', [], 'symbols', []),
-    ('1f49f', '💟', 1857, 1, ':heart_decoration:', [], 'symbols', []),
-    ('262e', '☮', 1858, 1, ':peace:', [':peace_symbol:'], 'symbols', []),
-    ('271d', '✝', 1859, 1, ':cross:', [':latin_cross:'], 'symbols', []),
-    ('262a', '☪', 1860, 1, ':star_and_crescent:', [], 'symbols', []),
-    ('1f549', '🕉', 1861, 1, ':om_symbol:', [], 'symbols', []),
-    ('2638', '☸', 1862, 1, ':wheel_of_dharma:', [], 'symbols', []),
-    ('2721', '✡', 1863, 1, ':star_of_david:', [], 'symbols', []),
-    ('1f52f', '🔯', 1864, 1, ':six_pointed_star:', [], 'symbols', []),
-    ('1f54e', '🕎', 1865, 1, ':menorah:', [], 'symbols', []),
-    ('262f', '☯', 1866, 1, ':yin_yang:', [], 'symbols', []),
-    ('2626', '☦', 1867, 1, ':orthodox_cross:', [], 'symbols', []),
-    ('1f6d0', '🛐', 1868, 1, ':place_of_worship:', [':worship_symbol:'], 'symbols', []),
-    ('26ce', '⛎', 1869, 1, ':ophiuchus:', [], 'symbols', []),
-    ('2648', '♈', 1870, 1, ':aries:', [], 'symbols', []),
-    ('2649', '♉', 1871, 1, ':taurus:', [], 'symbols', []),
-    ('264a', '♊', 1872, 1, ':gemini:', [], 'symbols', []),
-    ('264b', '♋', 1873, 1, ':cancer:', [], 'symbols', []),
-    ('264c', '♌', 1874, 1, ':leo:', [], 'symbols', []),
-    ('264d', '♍', 1875, 1, ':virgo:', [], 'symbols', []),
-    ('264e', '♎', 1876, 1, ':libra:', [], 'symbols', []),
-    ('264f', '♏', 1877, 1, ':scorpius:', [], 'symbols', []),
-    ('2650', '♐', 1878, 1, ':sagittarius:', [], 'symbols', []),
-    ('2651', '♑', 1879, 1, ':capricorn:', [], 'symbols', []),
-    ('2652', '♒', 1880, 1, ':aquarius:', [], 'symbols', []),
-    ('2653', '♓', 1881, 1, ':pisces:', [], 'symbols', []),
-    ('1f194', '🆔', 1882, 1, ':id:', [], 'symbols', []),
-    ('269b', '⚛', 1883, 1, ':atom:', [':atom_symbol:'], 'symbols', []),
-    ('1f251', '🉑', 1884, 1, ':accept:', [], 'symbols', []),
-    ('2622', '☢', 1885, 1, ':radioactive:', [':radioactive_sign:'], 'symbols', []),
-    ('2623', '☣', 1886, 1, ':biohazard:', [':biohazard_sign:'], 'symbols', []),
-    ('1f4f4', '📴', 1887, 1, ':mobile_phone_off:', [], 'symbols', []),
-    ('1f4f3', '📳', 1888, 1, ':vibration_mode:', [], 'symbols', []),
-    ('1f236', '🈶', 1889, 1, ':u6709:', [], 'symbols', []),
-    ('1f21a', '🈚', 1890, 1, ':u7121:', [], 'symbols', []),
-    ('1f238', '🈸', 1891, 1, ':u7533:', [], 'symbols', []),
-    ('1f23a', '🈺', 1892, 1, ':u55b6:', [], 'symbols', []),
-    ('1f237', '🈷', 1893, 1, ':u6708:', [], 'symbols', []),
-    ('2734', '✴', 1894, 1, ':eight_pointed_black_star:', [], 'symbols', []),
-    ('1f19a', '🆚', 1895, 1, ':vs:', [], 'symbols', []),
-    ('1f4ae', '💮', 1896, 1, ':white_flower:', [], 'symbols', []),
-    ('1f250', '🉐', 1897, 1, ':ideograph_advantage:', [], 'symbols', []),
-    ('3299', '㊙', 1898, 1, ':secret:', [], 'symbols', []),
-    ('3297', '㊗', 1899, 1, ':congratulations:', [], 'symbols', []),
-    ('1f234', '🈴', 1900, 1, ':u5408:', [], 'symbols', []),
-    ('1f235', '🈵', 1901, 1, ':u6e80:', [], 'symbols', []),
-    ('1f239', '🈹', 1902, 1, ':u5272:', [], 'symbols', []),
-    ('1f232', '🈲', 1903, 1, ':u7981:', [], 'symbols', []),
-    ('1f170', '🅰', 1904, 1, ':a:', [], 'symbols', []),
-    ('1f171', '🅱', 1905, 1, ':b:', [], 'symbols', []),
-    ('1f18e', '🆎', 1906, 1, ':ab:', [], 'symbols', []),
-    ('1f191', '🆑', 1907, 1, ':cl:', [], 'symbols', []),
-    ('1f17e', '🅾', 1908, 1, ':o2:', [], 'symbols', []),
-    ('1f198', '🆘', 1909, 1, ':sos:', [], 'symbols', []),
-    ('274c', '❌', 1910, 1, ':x:', [], 'symbols', []),
-    ('2b55', '⭕', 1911, 1, ':o:', [], 'symbols', []),
-    ('1f6d1', '🛑', 1912, 1, ':octagonal_sign:', [':stop_sign:'], 'symbols', []),
-    ('26d4', '⛔', 1913, 1, ':no_entry:', [], 'symbols', []),
-    ('1f4db', '📛', 1914, 1, ':name_badge:', [], 'symbols', []),
-    ('1f6ab', '🚫', 1915, 1, ':no_entry_sign:', [], 'symbols', []),
-    ('1f4af', '💯', 1916, 1, ':100:', [], 'symbols', []),
-    ('1f4a2', '💢', 1917, 1, ':anger:', [], 'symbols', []),
-    ('2668', '♨', 1918, 1, ':hotsprings:', [], 'symbols', []),
-    ('1f6b7', '🚷', 1919, 1, ':no_pedestrians:', [], 'symbols', []),
-    ('1f6af', '🚯', 1920, 1, ':do_not_litter:', [], 'symbols', []),
-    ('1f6b3', '🚳', 1921, 1, ':no_bicycles:', [], 'symbols', []),
-    ('1f6b1', '🚱', 1922, 1, ':non-potable_water:', [], 'symbols', []),
-    ('1f51e', '🔞', 1923, 1, ':underage:', [], 'symbols', []),
-    ('1f4f5', '📵', 1924, 1, ':no_mobile_phones:', [], 'symbols', []),
-    ('1f6ad', '🚭', 1925, 1, ':no_smoking:', [], 'symbols', []),
-    ('2757', '❗', 1926, 1, ':exclamation:', [], 'symbols', []),
-    ('2755', '❕', 1927, 1, ':grey_exclamation:', [], 'symbols', []),
-    ('2753', '❓', 1928, 1, ':question:', [], 'symbols', ['question']),
-    ('2754', '❔', 1929, 1, ':grey_question:', [], 'symbols', []),
-    ('203c', '‼', 1930, 1, ':bangbang:', [], 'symbols', []),
-    ('2049', '⁉', 1931, 1, ':interrobang:', [], 'symbols', []),
-    ('1f505', '🔅', 1932, 1, ':low_brightness:', [], 'symbols', []),
-    ('1f506', '🔆', 1933, 1, ':high_brightness:', [], 'symbols', []),
-    ('303d', '〽', 1934, 1, ':part_alternation_mark:', [], 'symbols', []),
-    ('26a0', '⚠', 1935, 1, ':warning:', [], 'symbols', []),
-    ('1f6b8', '🚸', 1936, 1, ':children_crossing:', [], 'symbols', []),
-    ('1f531', '🔱', 1937, 1, ':trident:', [], 'symbols', []),
-    ('269c', '⚜', 1938, 1, ':fleur-de-lis:', [], 'symbols', []),
-    ('1f530', '🔰', 1939, 1, ':beginner:', [], 'symbols', []),
-    ('267b', '♻', 1940, 1, ':recycle:', [], 'symbols', []),
-    ('2705', '✅', 1941, 1, ':white_check_mark:', [], 'symbols', []),
-    ('1f22f', '🈯', 1942, 1, ':u6307:', [], 'symbols', []),
-    ('1f4b9', '💹', 1943, 1, ':chart:', [], 'symbols', []),
-    ('2747', '❇', 1944, 1, ':sparkle:', [], 'symbols', []),
-    ('2733', '✳', 1945, 1, ':eight_spoked_asterisk:', [], 'symbols', []),
-    ('274e', '❎', 1946, 1, ':negative_squared_cross_mark:', [], 'symbols', []),
-    ('1f310', '🌐', 1947, 1, ':globe_with_meridians:', [], 'symbols', []),
-    ('1f4a0', '💠', 1948, 1, ':diamond_shape_with_a_dot_inside:', [], 'symbols', []),
-    ('24c2', 'Ⓜ', 1949, 1, ':m:', [], 'symbols', []),
-    ('1f300', '🌀', 1950, 1, ':cyclone:', [], 'symbols', []),
-    ('1f4a4', '💤', 1951, 1, ':zzz:', [], 'symbols', []),
-    ('1f3e7', '🏧', 1952, 1, ':atm:', [], 'symbols', []),
-    ('1f6be', '🚾', 1953, 1, ':wc:', [], 'symbols', []),
-    ('267f', '♿', 1954, 1, ':wheelchair:', [], 'symbols', []),
-    ('1f17f', '🅿', 1955, 1, ':parking:', [], 'symbols', []),
-    ('1f233', '🈳', 1956, 1, ':u7a7a:', [], 'symbols', []),
-    ('1f202', '🈂', 1957, 1, ':sa:', [], 'symbols', []),
-    ('1f6c2', '🛂', 1958, 1, ':passport_control:', [], 'symbols', []),
-    ('1f6c3', '🛃', 1959, 1, ':customs:', [], 'symbols', []),
-    ('1f6c4', '🛄', 1960, 1, ':baggage_claim:', [], 'symbols', []),
-    ('1f6c5', '🛅', 1961, 1, ':left_luggage:', [], 'symbols', []),
-    ('1f6b9', '🚹', 1962, 1, ':mens:', [], 'symbols', []),
-    ('1f6ba', '🚺', 1963, 1, ':womens:', [], 'symbols', []),
-    ('1f6bc', '🚼', 1964, 1, ':baby_symbol:', [], 'symbols', []),
-    ('1f6bb', '🚻', 1965, 1, ':restroom:', [], 'symbols', []),
-    ('1f6ae', '🚮', 1966, 1, ':put_litter_in_its_place:', [], 'symbols', []),
-    ('1f3a6', '🎦', 1967, 1, ':cinema:', [], 'symbols', []),
-    ('1f4f6', '📶', 1968, 1, ':signal_strength:', [], 'symbols', []),
-    ('1f201', '🈁', 1969, 1, ':koko:', [], 'symbols', []),
-    ('1f523', '🔣', 1970, 1, ':symbols:', [], 'symbols', []),
-    ('2139', 'ℹ', 1971, 1, ':information_source:', [], 'symbols', []),
-    ('1f524', '🔤', 1972, 1, ':abc:', [], 'symbols', []),
-    ('1f521', '🔡', 1973, 1, ':abcd:', [], 'symbols', []),
-    ('1f520', '🔠', 1974, 1, ':capital_abcd:', [], 'symbols', []),
-    ('1f196', '🆖', 1975, 1, ':ng:', [], 'symbols', []),
-    ('1f197', '🆗', 1976, 1, ':ok:', [], 'symbols', []),
-    ('1f199', '🆙', 1977, 1, ':up:', [], 'symbols', []),
-    ('1f192', '🆒', 1978, 1, ':cool:', [], 'symbols', []),
-    ('1f195', '🆕', 1979, 1, ':new:', [], 'symbols', []),
-    ('1f193', '🆓', 1980, 1, ':free:', [], 'symbols', []),
-    ('0030-20e3', '0⃣', 1981, 2, ':zero:', [], 'symbols', []),
-    ('0031-20e3', '1⃣', 1982, 2, ':one:', [], 'symbols', []),
-    ('0032-20e3', '2⃣', 1983, 2, ':two:', [], 'symbols', []),
-    ('0033-20e3', '3⃣', 1984, 2, ':three:', [], 'symbols', []),
-    ('0034-20e3', '4⃣', 1985, 2, ':four:', [], 'symbols', []),
-    ('0035-20e3', '5⃣', 1986, 2, ':five:', [], 'symbols', []),
-    ('0036-20e3', '6⃣', 1987, 2, ':six:', [], 'symbols', []),
-    ('0037-20e3', '7⃣', 1988, 2, ':seven:', [], 'symbols', []),
-    ('0038-20e3', '8⃣', 1989, 2, ':eight:', [], 'symbols', []),
-    ('0039-20e3', '9⃣', 1990, 2, ':nine:', [], 'symbols', []),
-    ('1f51f', '🔟', 1991, 1, ':keycap_ten:', [], 'symbols', []),
-    ('1f522', '🔢', 1992, 1, ':1234:', [], 'symbols', []),
-    ('0023-20e3', '#⃣', 1993, 2, ':hash:', [], 'symbols', []),
-    ('002a-20e3', '*⃣', 1994, 2, ':asterisk:', [':keycap_asterisk:'], 'symbols', []),
-    ('25b6', '▶', 1995, 1, ':arrow_forward:', [], 'symbols', []),
-    ('23f8', '⏸', 1996, 1, ':pause_button:', [':double_vertical_bar:'], 'symbols', []),
-    ('23ef', '⏯', 1997, 1, ':play_pause:', [], 'symbols', []),
-    ('23f9', '⏹', 1998, 1, ':stop_button:', [], 'symbols', []),
-    ('23fa', '⏺', 1999, 1, ':record_button:', [], 'symbols', []),
-    ('23cf', '⏏', 2000, 1, ':eject:', [':eject_symbol:'], 'symbols', []),
-    ('23ed', '⏭', 2001, 1, ':track_next:', [':next_track:'], 'symbols', []),
-    ('23ee', '⏮', 2002, 1, ':track_previous:', [':previous_track:'], 'symbols', []),
-    ('23e9', '⏩', 2003, 1, ':fast_forward:', [], 'symbols', []),
-    ('23ea', '⏪', 2004, 1, ':rewind:', [], 'symbols', []),
-    ('23eb', '⏫', 2005, 1, ':arrow_double_up:', [], 'symbols', []),
-    ('23ec', '⏬', 2006, 1, ':arrow_double_down:', [], 'symbols', []),
-    ('25c0', '◀', 2007, 1, ':arrow_backward:', [], 'symbols', []),
-    ('1f53c', '🔼', 2008, 1, ':arrow_up_small:', [], 'symbols', []),
-    ('1f53d', '🔽', 2009, 1, ':arrow_down_small:', [], 'symbols', []),
-    ('27a1', '➡', 2010, 1, ':arrow_right:', [], 'symbols', []),
-    ('2b05', '⬅', 2011, 1, ':arrow_left:', [], 'symbols', []),
-    ('2b06', '⬆', 2012, 1, ':arrow_up:', [], 'symbols', []),
-    ('2b07', '⬇', 2013, 1, ':arrow_down:', [], 'symbols', []),
-    ('2197', '↗', 2014, 1, ':arrow_upper_right:', [], 'symbols', []),
-    ('2198', '↘', 2015, 1, ':arrow_lower_right:', [], 'symbols', []),
-    ('2199', '↙', 2016, 1, ':arrow_lower_left:', [], 'symbols', []),
-    ('2196', '↖', 2017, 1, ':arrow_upper_left:', [], 'symbols', []),
-    ('2195', '↕', 2018, 1, ':arrow_up_down:', [], 'symbols', []),
-    ('2194', '↔', 2019, 1, ':left_right_arrow:', [], 'symbols', []),
-    ('21aa', '↪', 2020, 1, ':arrow_right_hook:', [], 'symbols', []),
-    ('21a9', '↩', 2021, 1, ':leftwards_arrow_with_hook:', [], 'symbols', []),
-    ('2934', '⤴', 2022, 1, ':arrow_heading_up:', [], 'symbols', []),
-    ('2935', '⤵', 2023, 1, ':arrow_heading_down:', [], 'symbols', []),
-    ('1f500', '🔀', 2024, 1, ':twisted_rightwards_arrows:', [], 'symbols', []),
-    ('1f501', '🔁', 2025, 1, ':repeat:', [], 'symbols', []),
-    ('1f502', '🔂', 2026, 1, ':repeat_one:', [], 'symbols', []),
-    ('1f504', '🔄', 2027, 1, ':arrows_counterclockwise:', [], 'symbols', []),
-    ('1f503', '🔃', 2028, 1, ':arrows_clockwise:', [], 'symbols', []),
-    ('1f3b5', '🎵', 2029, 1, ':musical_note:', [], 'symbols', ['notes']),
-    ('1f3b6', '🎶', 2030, 1, ':notes:', [], 'symbols', ['notes']),
-    ('2795', '➕', 2031, 1, ':heavy_plus_sign:', [], 'symbols', ['plus', 'and', '&']),
-    ('2796', '➖', 2032, 1, ':heavy_minus_sign:', [], 'symbols', ['minus', 'less']),
-    ('2797', '➗', 2033, 1, ':heavy_division_sign:', [], 'symbols', ['divide', 'divides', 'divided by']),
-    ('2716', '✖', 2034, 1, ':heavy_multiplication_x:', [], 'symbols', ['times', 'multiply']),
-    ('1f4b2', '💲', 2035, 1, ':heavy_dollar_sign:', [], 'symbols', ['dollar', 'dollars']),
-    ('1f4b1', '💱', 2036, 1, ':currency_exchange:', [], 'symbols', ['exchange', 'trade']),
-    ('2122', '™', 2037, 1, ':tm:', [], 'symbols', ['trademark', 'trademarked']),
-    ('00a9', '©', 2038, 1, ':copyright:', [], 'symbols', ['copyright', '(c)']),
-    ('00ae', '®', 2039, 1, ':registered:', [], 'symbols', ['registered', 'brand', 'branded']),
-    ('3030', '〰', 2040, 1, ':wavy_dash:', [], 'symbols', ['wavy', 'zigzag', 'wavy', 'wavy dash']),
-    ('27b0', '➰', 2041, 1, ':curly_loop:', [], 'symbols', []),
-    ('27bf', '➿', 2042, 1, ':loop:', [], 'symbols', []),
-    ('1f51a', '🔚', 2043, 1, ':end:', [], 'symbols', []),
-    ('1f519', '🔙', 2044, 1, ':back:', [], 'symbols', []),
-    ('1f51b', '🔛', 2045, 1, ':on:', [], 'symbols', []),
-    ('1f51d', '🔝', 2046, 1, ':top:', [], 'symbols', ['top', 'up', 'above']),
-    ('1f51c', '🔜', 2047, 1, ':soon:', [], 'symbols', ['soon']),
-    ('2714', '✔', 2048, 1, ':heavy_check_mark:', [], 'symbols', ['check', 'mark']),
-    ('2611', '☑', 2049, 1, ':ballot_box_with_check:', [], 'symbols', ['checkbox', 'mark']),
-    ('1f518', '🔘', 2050, 1, ':radio_button:', [], 'symbols', ['button']),
-    ('26aa', '⚪', 2051, 1, ':white_circle:', [], 'symbols', ['ball', 'disk']),
-    ('26ab', '⚫', 2052, 1, ':black_circle:', [], 'symbols', ['ball', 'blackball', 'disk']),
-    ('1f534', '🔴', 2053, 1, ':red_circle:', [], 'symbols', ['ball', 'red ball', 'disk', 'circle']),
-    ('1f535', '🔵', 2054, 1, ':blue_circle:', [], 'symbols', ['ball', 'disk', 'circle']),
-    ('1f53a', '🔺', 2055, 1, ':small_red_triangle:', [], 'symbols', []),
-    ('1f53b', '🔻', 2056, 1, ':small_red_triangle_down:', [], 'symbols', []),
-    ('1f538', '🔸', 2057, 1, ':small_orange_diamond:', [], 'symbols', []),
-    ('1f539', '🔹', 2058, 1, ':small_blue_diamond:', [], 'symbols', ['small diamond', 'gem']),
-    ('1f536', '🔶', 2059, 1, ':large_orange_diamond:', [], 'symbols', ['orange diamond', 'diamond']),
-    ('1f537', '🔷', 2060, 1, ':large_blue_diamond:', [], 'symbols', ['blue diamond', 'diamond']),
-    ('1f533', '🔳', 2061, 1, ':white_square_button:', [], 'symbols', ['square']),
-    ('1f532', '🔲', 2062, 1, ':black_square_button:', [], 'symbols', []),
-    ('25aa', '▪', 2063, 1, ':black_small_square:', [], 'symbols', []),
-    ('25ab', '▫', 2064, 1, ':white_small_square:', [], 'symbols', []),
-    ('25fe', '◾', 2065, 1, ':black_medium_small_square:', [], 'symbols', []),
-    ('25fd', '◽', 2066, 1, ':white_medium_small_square:', [], 'symbols', []),
-    ('25fc', '◼', 2067, 1, ':black_medium_square:', [], 'symbols', []),
-    ('25fb', '◻', 2068, 1, ':white_medium_square:', [], 'symbols', []),
-    ('2b1b', '⬛', 2069, 1, ':black_large_square:', [], 'symbols', []),
-    ('2b1c', '⬜', 2070, 1, ':white_large_square:', [], 'symbols', []),
-    ('1f508', '🔈', 2071, 1, ':speaker:', [], 'symbols', []),
-    ('1f507', '🔇', 2072, 1, ':mute:', [], 'symbols', []),
-    ('1f509', '🔉', 2073, 1, ':sound:', [], 'symbols', []),
-    ('1f50a', '🔊', 2074, 1, ':loud_sound:', [], 'symbols', []),
-    ('1f514', '🔔', 2075, 1, ':bell:', [], 'symbols', []),
-    ('1f515', '🔕', 2076, 1, ':no_bell:', [], 'symbols', []),
-    ('1f4e3', '📣', 2077, 1, ':mega:', [], 'symbols', []),
-    ('1f4e2', '📢', 2078, 1, ':loudspeaker:', [], 'symbols', []),
-    ('1f5e8', '🗨', 2079, 1, ':speech_left:', [':left_speech_bubble:'], 'symbols', []),
-    ('1f441-1f5e8', '👁🗨', 2080, 2, ':eye_in_speech_bubble:', [], 'symbols', []),
-    ('1f4ac', '💬', 2081, 1, ':speech_balloon:', [], 'symbols', []),
-    ('1f4ad', '💭', 2082, 1, ':thought_balloon:', [], 'symbols', []),
-    ('1f5ef', '🗯', 2083, 1, ':anger_right:', [':right_anger_bubble:'], 'symbols', []),
-    ('2660', '♠', 2084, 1, ':spades:', [], 'symbols', []),
-    ('2663', '♣', 2085, 1, ':clubs:', [], 'symbols', []),
-    ('2665', '♥', 2086, 1, ':hearts:', [], 'symbols', []),
-    ('2666', '♦', 2087, 1, ':diamonds:', [], 'symbols', []),
-    ('1f0cf', '🃏', 2088, 1, ':black_joker:', [], 'symbols', []),
-    ('1f3b4', '🎴', 2089, 1, ':flower_playing_cards:', [], 'symbols', []),
-    ('1f004', '🀄', 2090, 1, ':mahjong:', [], 'symbols', []),
-    ('1f550', '🕐', 2091, 1, ':clock1:', [], 'symbols', []),
-    ('1f551', '🕑', 2092, 1, ':clock2:', [], 'symbols', []),
-    ('1f552', '🕒', 2093, 1, ':clock3:', [], 'symbols', []),
-    ('1f553', '🕓', 2094, 1, ':clock4:', [], 'symbols', []),
-    ('1f554', '🕔', 2095, 1, ':clock5:', [], 'symbols', []),
-    ('1f555', '🕕', 2096, 1, ':clock6:', [], 'symbols', []),
-    ('1f556', '🕖', 2097, 1, ':clock7:', [], 'symbols', []),
-    ('1f557', '🕗', 2098, 1, ':clock8:', [], 'symbols', []),
-    ('1f558', '🕘', 2099, 1, ':clock9:', [], 'symbols', []),
-    ('1f559', '🕙', 2100, 1, ':clock10:', [], 'symbols', []),
-    ('1f55a', '🕚', 2101, 1, ':clock11:', [], 'symbols', []),
-    ('1f55b', '🕛', 2102, 1, ':clock12:', [], 'symbols', []),
-    ('1f55c', '🕜', 2103, 1, ':clock130:', [], 'symbols', []),
-    ('1f55d', '🕝', 2104, 1, ':clock230:', [], 'symbols', []),
-    ('1f55e', '🕞', 2105, 1, ':clock330:', [], 'symbols', []),
-    ('1f55f', '🕟', 2106, 1, ':clock430:', [], 'symbols', []),
-    ('1f560', '🕠', 2107, 1, ':clock530:', [], 'symbols', []),
-    ('1f561', '🕡', 2108, 1, ':clock630:', [], 'symbols', []),
-    ('1f562', '🕢', 2109, 1, ':clock730:', [], 'symbols', []),
-    ('1f563', '🕣', 2110, 1, ':clock830:', [], 'symbols', []),
-    ('1f564', '🕤', 2111, 1, ':clock930:', [], 'symbols', []),
-    ('1f565', '🕥', 2112, 1, ':clock1030:', [], 'symbols', []),
-    ('1f566', '🕦', 2113, 1, ':clock1130:', [], 'symbols', []),
-    ('1f567', '🕧', 2114, 1, ':clock1230:', [], 'symbols', []),
-    ('1f3f3', '🏳', 2115, 1, ':flag_white:', [':waving_white_flag:'], 'flags', []),
-    ('1f3f4', '🏴', 2116, 1, ':flag_black:', [':waving_black_flag:'], 'flags', []),
-    ('1f3c1', '🏁', 2117, 1, ':checkered_flag:', [], 'flags', []),
-    ('1f6a9', '🚩', 2118, 1, ':triangular_flag_on_post:', [], 'flags', []),
-    ('1f3f3-1f308', '🏳🌈', 2119, 2, ':rainbow_flag:', [':gay_pride_flag:'], 'flags', []),
-    ('1f1e6-1f1eb', '🇦🇫', 2120, 2, ':flag_af:', [':af:'], 'flags', []),
-    ('1f1e6-1f1fd', '🇦🇽', 2121, 2, ':flag_ax:', [':ax:'], 'flags', []),
-    ('1f1e6-1f1f1', '🇦🇱', 2122, 2, ':flag_al:', [':al:'], 'flags', []),
-    ('1f1e9-1f1ff', '🇩🇿', 2123, 2, ':flag_dz:', [':dz:'], 'flags', []),
-    ('1f1e6-1f1f8', '🇦🇸', 2124, 2, ':flag_as:', [':as:'], 'flags', []),
-    ('1f1e6-1f1e9', '🇦🇩', 2125, 2, ':flag_ad:', [':ad:'], 'flags', []),
-    ('1f1e6-1f1f4', '🇦🇴', 2126, 2, ':flag_ao:', [':ao:'], 'flags', []),
-    ('1f1e6-1f1ee', '🇦🇮', 2127, 2, ':flag_ai:', [':ai:'], 'flags', []),
-    ('1f1e6-1f1f6', '🇦🇶', 2128, 2, ':flag_aq:', [':aq:'], 'flags', []),
-    ('1f1e6-1f1ec', '🇦🇬', 2129, 2, ':flag_ag:', [':ag:'], 'flags', []),
-    ('1f1e6-1f1f7', '🇦🇷', 2130, 2, ':flag_ar:', [':ar:'], 'flags', []),
-    ('1f1e6-1f1f2', '🇦🇲', 2131, 2, ':flag_am:', [':am:'], 'flags', []),
-    ('1f1e6-1f1fc', '🇦🇼', 2132, 2, ':flag_aw:', [':aw:'], 'flags', []),
-    ('1f1e6-1f1fa', '🇦🇺', 2133, 2, ':flag_au:', [':au:'], 'flags', []),
-    ('1f1e6-1f1f9', '🇦🇹', 2134, 2, ':flag_at:', [':at:'], 'flags', []),
-    ('1f1e6-1f1ff', '🇦🇿', 2135, 2, ':flag_az:', [':az:'], 'flags', []),
-    ('1f1e7-1f1f8', '🇧🇸', 2136, 2, ':flag_bs:', [':bs:'], 'flags', []),
-    ('1f1e7-1f1ed', '🇧🇭', 2137, 2, ':flag_bh:', [':bh:'], 'flags', []),
-    ('1f1e7-1f1e9', '🇧🇩', 2138, 2, ':flag_bd:', [':bd:'], 'flags', []),
-    ('1f1e7-1f1e7', '🇧🇧', 2139, 2, ':flag_bb:', [':bb:'], 'flags', []),
-    ('1f1e7-1f1fe', '🇧🇾', 2140, 2, ':flag_by:', [':by:'], 'flags', []),
-    ('1f1e7-1f1ea', '🇧🇪', 2141, 2, ':flag_be:', [':be:'], 'flags', []),
-    ('1f1e7-1f1ff', '🇧🇿', 2142, 2, ':flag_bz:', [':bz:'], 'flags', []),
-    ('1f1e7-1f1ef', '🇧🇯', 2143, 2, ':flag_bj:', [':bj:'], 'flags', []),
-    ('1f1e7-1f1f2', '🇧🇲', 2144, 2, ':flag_bm:', [':bm:'], 'flags', []),
-    ('1f1e7-1f1f9', '🇧🇹', 2145, 2, ':flag_bt:', [':bt:'], 'flags', []),
-    ('1f1e7-1f1f4', '🇧🇴', 2146, 2, ':flag_bo:', [':bo:'], 'flags', []),
-    ('1f1e7-1f1e6', '🇧🇦', 2147, 2, ':flag_ba:', [':ba:'], 'flags', []),
-    ('1f1e7-1f1fc', '🇧🇼', 2148, 2, ':flag_bw:', [':bw:'], 'flags', []),
-    ('1f1e7-1f1f7', '🇧🇷', 2149, 2, ':flag_br:', [':br:'], 'flags', []),
-    ('1f1ee-1f1f4', '🇮🇴', 2150, 2, ':flag_io:', [':io:'], 'flags', []),
-    ('1f1fb-1f1ec', '🇻🇬', 2151, 2, ':flag_vg:', [':vg:'], 'flags', []),
-    ('1f1e7-1f1f3', '🇧🇳', 2152, 2, ':flag_bn:', [':bn:'], 'flags', []),
-    ('1f1e7-1f1ec', '🇧🇬', 2153, 2, ':flag_bg:', [':bg:'], 'flags', []),
-    ('1f1e7-1f1eb', '🇧🇫', 2154, 2, ':flag_bf:', [':bf:'], 'flags', []),
-    ('1f1e7-1f1ee', '🇧🇮', 2155, 2, ':flag_bi:', [':bi:'], 'flags', []),
-    ('1f1f0-1f1ed', '🇰🇭', 2156, 2, ':flag_kh:', [':kh:'], 'flags', []),
-    ('1f1e8-1f1f2', '🇨🇲', 2157, 2, ':flag_cm:', [':cm:'], 'flags', []),
-    ('1f1e8-1f1e6', '🇨🇦', 2158, 2, ':flag_ca:', [':ca:'], 'flags', []),
-    ('1f1ee-1f1e8', '🇮🇨', 2159, 2, ':flag_ic:', [':ic:'], 'flags', []),
-    ('1f1e8-1f1fb', '🇨🇻', 2160, 2, ':flag_cv:', [':cv:'], 'flags', []),
-    ('1f1e7-1f1f6', '🇧🇶', 2161, 2, ':flag_bq:', [':bq:'], 'flags', []),
-    ('1f1f0-1f1fe', '🇰🇾', 2162, 2, ':flag_ky:', [':ky:'], 'flags', []),
-    ('1f1e8-1f1eb', '🇨🇫', 2163, 2, ':flag_cf:', [':cf:'], 'flags', []),
-    ('1f1f9-1f1e9', '🇹🇩', 2164, 2, ':flag_td:', [':td:'], 'flags', []),
-    ('1f1e8-1f1f1', '🇨🇱', 2165, 2, ':flag_cl:', [':chile:'], 'flags', []),
-    ('1f1e8-1f1f3', '🇨🇳', 2166, 2, ':flag_cn:', [':cn:'], 'flags', []),
-    ('1f1e8-1f1fd', '🇨🇽', 2167, 2, ':flag_cx:', [':cx:'], 'flags', []),
-    ('1f1e8-1f1e8', '🇨🇨', 2168, 2, ':flag_cc:', [':cc:'], 'flags', []),
-    ('1f1e8-1f1f4', '🇨🇴', 2169, 2, ':flag_co:', [':co:'], 'flags', []),
-    ('1f1f0-1f1f2', '🇰🇲', 2170, 2, ':flag_km:', [':km:'], 'flags', []),
-    ('1f1e8-1f1ec', '🇨🇬', 2171, 2, ':flag_cg:', [':cg:'], 'flags', []),
-    ('1f1e8-1f1e9', '🇨🇩', 2172, 2, ':flag_cd:', [':congo:'], 'flags', []),
-    ('1f1e8-1f1f0', '🇨🇰', 2173, 2, ':flag_ck:', [':ck:'], 'flags', []),
-    ('1f1e8-1f1f7', '🇨🇷', 2174, 2, ':flag_cr:', [':cr:'], 'flags', []),
-    ('1f1e8-1f1ee', '🇨🇮', 2175, 2, ':flag_ci:', [':ci:'], 'flags', []),
-    ('1f1ed-1f1f7', '🇭🇷', 2176, 2, ':flag_hr:', [':hr:'], 'flags', []),
-    ('1f1e8-1f1fa', '🇨🇺', 2177, 2, ':flag_cu:', [':cu:'], 'flags', []),
-    ('1f1e8-1f1fc', '🇨🇼', 2178, 2, ':flag_cw:', [':cw:'], 'flags', []),
-    ('1f1e8-1f1fe', '🇨🇾', 2179, 2, ':flag_cy:', [':cy:'], 'flags', []),
-    ('1f1e8-1f1ff', '🇨🇿', 2180, 2, ':flag_cz:', [':cz:'], 'flags', []),
-    ('1f1e9-1f1f0', '🇩🇰', 2181, 2, ':flag_dk:', [':dk:'], 'flags', []),
-    ('1f1e9-1f1ef', '🇩🇯', 2182, 2, ':flag_dj:', [':dj:'], 'flags', []),
-    ('1f1e9-1f1f2', '🇩🇲', 2183, 2, ':flag_dm:', [':dm:'], 'flags', []),
-    ('1f1e9-1f1f4', '🇩🇴', 2184, 2, ':flag_do:', [':do:'], 'flags', []),
-    ('1f1ea-1f1e8', '🇪🇨', 2185, 2, ':flag_ec:', [':ec:'], 'flags', []),
-    ('1f1ea-1f1ec', '🇪🇬', 2186, 2, ':flag_eg:', [':eg:'], 'flags', []),
-    ('1f1f8-1f1fb', '🇸🇻', 2187, 2, ':flag_sv:', [':sv:'], 'flags', []),
-    ('1f1ec-1f1f6', '🇬🇶', 2188, 2, ':flag_gq:', [':gq:'], 'flags', []),
-    ('1f1ea-1f1f7', '🇪🇷', 2189, 2, ':flag_er:', [':er:'], 'flags', []),
-    ('1f1ea-1f1ea', '🇪🇪', 2190, 2, ':flag_ee:', [':ee:'], 'flags', []),
-    ('1f1ea-1f1f9', '🇪🇹', 2191, 2, ':flag_et:', [':et:'], 'flags', []),
-    ('1f1ea-1f1fa', '🇪🇺', 2192, 2, ':flag_eu:', [':eu:'], 'flags', []),
-    ('1f1eb-1f1f0', '🇫🇰', 2193, 2, ':flag_fk:', [':fk:'], 'flags', []),
-    ('1f1eb-1f1f4', '🇫🇴', 2194, 2, ':flag_fo:', [':fo:'], 'flags', []),
-    ('1f1eb-1f1ef', '🇫🇯', 2195, 2, ':flag_fj:', [':fj:'], 'flags', []),
-    ('1f1eb-1f1ee', '🇫🇮', 2196, 2, ':flag_fi:', [':fi:'], 'flags', []),
-    ('1f1eb-1f1f7', '🇫🇷', 2197, 2, ':flag_fr:', [':fr:'], 'flags', []),
-    ('1f1ec-1f1eb', '🇬🇫', 2198, 2, ':flag_gf:', [':gf:'], 'flags', []),
-    ('1f1f5-1f1eb', '🇵🇫', 2199, 2, ':flag_pf:', [':pf:'], 'flags', []),
-    ('1f1f9-1f1eb', '🇹🇫', 2200, 2, ':flag_tf:', [':tf:'], 'flags', []),
-    ('1f1ec-1f1e6', '🇬🇦', 2201, 2, ':flag_ga:', [':ga:'], 'flags', []),
-    ('1f1ec-1f1f2', '🇬🇲', 2202, 2, ':flag_gm:', [':gm:'], 'flags', []),
-    ('1f1ec-1f1ea', '🇬🇪', 2203, 2, ':flag_ge:', [':ge:'], 'flags', []),
-    ('1f1e9-1f1ea', '🇩🇪', 2204, 2, ':flag_de:', [':de:'], 'flags', []),
-    ('1f1ec-1f1ed', '🇬🇭', 2205, 2, ':flag_gh:', [':gh:'], 'flags', []),
-    ('1f1ec-1f1ee', '🇬🇮', 2206, 2, ':flag_gi:', [':gi:'], 'flags', []),
-    ('1f1ec-1f1f7', '🇬🇷', 2207, 2, ':flag_gr:', [':gr:'], 'flags', []),
-    ('1f1ec-1f1f1', '🇬🇱', 2208, 2, ':flag_gl:', [':gl:'], 'flags', []),
-    ('1f1ec-1f1e9', '🇬🇩', 2209, 2, ':flag_gd:', [':gd:'], 'flags', []),
-    ('1f1ec-1f1f5', '🇬🇵', 2210, 2, ':flag_gp:', [':gp:'], 'flags', []),
-    ('1f1ec-1f1fa', '🇬🇺', 2211, 2, ':flag_gu:', [':gu:'], 'flags', []),
-    ('1f1ec-1f1f9', '🇬🇹', 2212, 2, ':flag_gt:', [':gt:'], 'flags', []),
-    ('1f1ec-1f1ec', '🇬🇬', 2213, 2, ':flag_gg:', [':gg:'], 'flags', []),
-    ('1f1ec-1f1f3', '🇬🇳', 2214, 2, ':flag_gn:', [':gn:'], 'flags', []),
-    ('1f1ec-1f1fc', '🇬🇼', 2215, 2, ':flag_gw:', [':gw:'], 'flags', []),
-    ('1f1ec-1f1fe', '🇬🇾', 2216, 2, ':flag_gy:', [':gy:'], 'flags', []),
-    ('1f1ed-1f1f9', '🇭🇹', 2217, 2, ':flag_ht:', [':ht:'], 'flags', []),
-    ('1f1ed-1f1f3', '🇭🇳', 2218, 2, ':flag_hn:', [':hn:'], 'flags', []),
-    ('1f1ed-1f1f0', '🇭🇰', 2219, 2, ':flag_hk:', [':hk:'], 'flags', []),
-    ('1f1ed-1f1fa', '🇭🇺', 2220, 2, ':flag_hu:', [':hu:'], 'flags', []),
-    ('1f1ee-1f1f8', '🇮🇸', 2221, 2, ':flag_is:', [':is:'], 'flags', []),
-    ('1f1ee-1f1f3', '🇮🇳', 2222, 2, ':flag_in:', [':in:'], 'flags', []),
-    ('1f1ee-1f1e9', '🇮🇩', 2223, 2, ':flag_id:', [':indonesia:'], 'flags', []),
-    ('1f1ee-1f1f7', '🇮🇷', 2224, 2, ':flag_ir:', [':ir:'], 'flags', []),
-    ('1f1ee-1f1f6', '🇮🇶', 2225, 2, ':flag_iq:', [':iq:'], 'flags', []),
-    ('1f1ee-1f1ea', '🇮🇪', 2226, 2, ':flag_ie:', [':ie:'], 'flags', []),
-    ('1f1ee-1f1f2', '🇮🇲', 2227, 2, ':flag_im:', [':im:'], 'flags', []),
-    ('1f1ee-1f1f1', '🇮🇱', 2228, 2, ':flag_il:', [':il:'], 'flags', []),
-    ('1f1ee-1f1f9', '🇮🇹', 2229, 2, ':flag_it:', [':it:'], 'flags', []),
-    ('1f1ef-1f1f2', '🇯🇲', 2230, 2, ':flag_jm:', [':jm:'], 'flags', []),
-    ('1f1ef-1f1f5', '🇯🇵', 2231, 2, ':flag_jp:', [':jp:'], 'flags', []),
-    ('1f38c', '🎌', 2232, 1, ':crossed_flags:', [], 'flags', []),
-    ('1f1ef-1f1ea', '🇯🇪', 2233, 2, ':flag_je:', [':je:'], 'flags', []),
-    ('1f1ef-1f1f4', '🇯🇴', 2234, 2, ':flag_jo:', [':jo:'], 'flags', []),
-    ('1f1f0-1f1ff', '🇰🇿', 2235, 2, ':flag_kz:', [':kz:'], 'flags', []),
-    ('1f1f0-1f1ea', '🇰🇪', 2236, 2, ':flag_ke:', [':ke:'], 'flags', []),
-    ('1f1f0-1f1ee', '🇰🇮', 2237, 2, ':flag_ki:', [':ki:'], 'flags', []),
-    ('1f1fd-1f1f0', '🇽🇰', 2238, 2, ':flag_xk:', [':xk:'], 'flags', []),
-    ('1f1f0-1f1fc', '🇰🇼', 2239, 2, ':flag_kw:', [':kw:'], 'flags', []),
-    ('1f1f0-1f1ec', '🇰🇬', 2240, 2, ':flag_kg:', [':kg:'], 'flags', []),
-    ('1f1f1-1f1e6', '🇱🇦', 2241, 2, ':flag_la:', [':la:'], 'flags', []),
-    ('1f1f1-1f1fb', '🇱🇻', 2242, 2, ':flag_lv:', [':lv:'], 'flags', []),
-    ('1f1f1-1f1e7', '🇱🇧', 2243, 2, ':flag_lb:', [':lb:'], 'flags', []),
-    ('1f1f1-1f1f8', '🇱🇸', 2244, 2, ':flag_ls:', [':ls:'], 'flags', []),
-    ('1f1f1-1f1f7', '🇱🇷', 2245, 2, ':flag_lr:', [':lr:'], 'flags', []),
-    ('1f1f1-1f1fe', '🇱🇾', 2246, 2, ':flag_ly:', [':ly:'], 'flags', []),
-    ('1f1f1-1f1ee', '🇱🇮', 2247, 2, ':flag_li:', [':li:'], 'flags', []),
-    ('1f1f1-1f1f9', '🇱🇹', 2248, 2, ':flag_lt:', [':lt:'], 'flags', []),
-    ('1f1f1-1f1fa', '🇱🇺', 2249, 2, ':flag_lu:', [':lu:'], 'flags', []),
-    ('1f1f2-1f1f4', '🇲🇴', 2250, 2, ':flag_mo:', [':mo:'], 'flags', []),
-    ('1f1f2-1f1f0', '🇲🇰', 2251, 2, ':flag_mk:', [':mk:'], 'flags', []),
-    ('1f1f2-1f1ec', '🇲🇬', 2252, 2, ':flag_mg:', [':mg:'], 'flags', []),
-    ('1f1f2-1f1fc', '🇲🇼', 2253, 2, ':flag_mw:', [':mw:'], 'flags', []),
-    ('1f1f2-1f1fe', '🇲🇾', 2254, 2, ':flag_my:', [':my:'], 'flags', []),
-    ('1f1f2-1f1fb', '🇲🇻', 2255, 2, ':flag_mv:', [':mv:'], 'flags', []),
-    ('1f1f2-1f1f1', '🇲🇱', 2256, 2, ':flag_ml:', [':ml:'], 'flags', []),
-    ('1f1f2-1f1f9', '🇲🇹', 2257, 2, ':flag_mt:', [':mt:'], 'flags', []),
-    ('1f1f2-1f1ed', '🇲🇭', 2258, 2, ':flag_mh:', [':mh:'], 'flags', []),
-    ('1f1f2-1f1f6', '🇲🇶', 2259, 2, ':flag_mq:', [':mq:'], 'flags', []),
-    ('1f1f2-1f1f7', '🇲🇷', 2260, 2, ':flag_mr:', [':mr:'], 'flags', []),
-    ('1f1f2-1f1fa', '🇲🇺', 2261, 2, ':flag_mu:', [':mu:'], 'flags', []),
-    ('1f1fe-1f1f9', '🇾🇹', 2262, 2, ':flag_yt:', [':yt:'], 'flags', []),
-    ('1f1f2-1f1fd', '🇲🇽', 2263, 2, ':flag_mx:', [':mx:'], 'flags', []),
-    ('1f1eb-1f1f2', '🇫🇲', 2264, 2, ':flag_fm:', [':fm:'], 'flags', []),
-    ('1f1f2-1f1e9', '🇲🇩', 2265, 2, ':flag_md:', [':md:'], 'flags', []),
-    ('1f1f2-1f1e8', '🇲🇨', 2266, 2, ':flag_mc:', [':mc:'], 'flags', []),
-    ('1f1f2-1f1f3', '🇲🇳', 2267, 2, ':flag_mn:', [':mn:'], 'flags', []),
-    ('1f1f2-1f1ea', '🇲🇪', 2268, 2, ':flag_me:', [':me:'], 'flags', []),
-    ('1f1f2-1f1f8', '🇲🇸', 2269, 2, ':flag_ms:', [':ms:'], 'flags', []),
-    ('1f1f2-1f1e6', '🇲🇦', 2270, 2, ':flag_ma:', [':ma:'], 'flags', []),
-    ('1f1f2-1f1ff', '🇲🇿', 2271, 2, ':flag_mz:', [':mz:'], 'flags', []),
-    ('1f1f2-1f1f2', '🇲🇲', 2272, 2, ':flag_mm:', [':mm:'], 'flags', []),
-    ('1f1f3-1f1e6', '🇳🇦', 2273, 2, ':flag_na:', [':na:'], 'flags', []),
-    ('1f1f3-1f1f7', '🇳🇷', 2274, 2, ':flag_nr:', [':nr:'], 'flags', []),
-    ('1f1f3-1f1f5', '🇳🇵', 2275, 2, ':flag_np:', [':np:'], 'flags', []),
-    ('1f1f3-1f1f1', '🇳🇱', 2276, 2, ':flag_nl:', [':nl:'], 'flags', []),
-    ('1f1f3-1f1e8', '🇳🇨', 2277, 2, ':flag_nc:', [':nc:'], 'flags', []),
-    ('1f1f3-1f1ff', '🇳🇿', 2278, 2, ':flag_nz:', [':nz:'], 'flags', []),
-    ('1f1f3-1f1ee', '🇳🇮', 2279, 2, ':flag_ni:', [':ni:'], 'flags', []),
-    ('1f1f3-1f1ea', '🇳🇪', 2280, 2, ':flag_ne:', [':ne:'], 'flags', []),
-    ('1f1f3-1f1ec', '🇳🇬', 2281, 2, ':flag_ng:', [':nigeria:'], 'flags', []),
-    ('1f1f3-1f1fa', '🇳🇺', 2282, 2, ':flag_nu:', [':nu:'], 'flags', []),
-    ('1f1f3-1f1eb', '🇳🇫', 2283, 2, ':flag_nf:', [':nf:'], 'flags', []),
-    ('1f1f0-1f1f5', '🇰🇵', 2284, 2, ':flag_kp:', [':kp:'], 'flags', []),
-    ('1f1f2-1f1f5', '🇲🇵', 2285, 2, ':flag_mp:', [':mp:'], 'flags', []),
-    ('1f1f3-1f1f4', '🇳🇴', 2286, 2, ':flag_no:', [':no:'], 'flags', []),
-    ('1f1f4-1f1f2', '🇴🇲', 2287, 2, ':flag_om:', [':om:'], 'flags', []),
-    ('1f1f5-1f1f0', '🇵🇰', 2288, 2, ':flag_pk:', [':pk:'], 'flags', []),
-    ('1f1f5-1f1fc', '🇵🇼', 2289, 2, ':flag_pw:', [':pw:'], 'flags', []),
-    ('1f1f5-1f1f8', '🇵🇸', 2290, 2, ':flag_ps:', [':ps:'], 'flags', []),
-    ('1f1f5-1f1e6', '🇵🇦', 2291, 2, ':flag_pa:', [':pa:'], 'flags', []),
-    ('1f1f5-1f1ec', '🇵🇬', 2292, 2, ':flag_pg:', [':pg:'], 'flags', []),
-    ('1f1f5-1f1fe', '🇵🇾', 2293, 2, ':flag_py:', [':py:'], 'flags', []),
-    ('1f1f5-1f1ea', '🇵🇪', 2294, 2, ':flag_pe:', [':pe:'], 'flags', []),
-    ('1f1f5-1f1ed', '🇵🇭', 2295, 2, ':flag_ph:', [':ph:'], 'flags', []),
-    ('1f1f5-1f1f3', '🇵🇳', 2296, 2, ':flag_pn:', [':pn:'], 'flags', []),
-    ('1f1f5-1f1f1', '🇵🇱', 2297, 2, ':flag_pl:', [':pl:'], 'flags', []),
-    ('1f1f5-1f1f9', '🇵🇹', 2298, 2, ':flag_pt:', [':pt:'], 'flags', []),
-    ('1f1f5-1f1f7', '🇵🇷', 2299, 2, ':flag_pr:', [':pr:'], 'flags', []),
-    ('1f1f6-1f1e6', '🇶🇦', 2300, 2, ':flag_qa:', [':qa:'], 'flags', []),
-    ('1f1f7-1f1ea', '🇷🇪', 2301, 2, ':flag_re:', [':re:'], 'flags', []),
-    ('1f1f7-1f1f4', '🇷🇴', 2302, 2, ':flag_ro:', [':ro:'], 'flags', []),
-    ('1f1f7-1f1fa', '🇷🇺', 2303, 2, ':flag_ru:', [':ru:'], 'flags', []),
-    ('1f1f7-1f1fc', '🇷🇼', 2304, 2, ':flag_rw:', [':rw:'], 'flags', []),
-    ('1f1fc-1f1f8', '🇼🇸', 2305, 2, ':flag_ws:', [':ws:'], 'flags', []),
-    ('1f1f8-1f1f2', '🇸🇲', 2306, 2, ':flag_sm:', [':sm:'], 'flags', []),
-    ('1f1f8-1f1f9', '🇸🇹', 2307, 2, ':flag_st:', [':st:'], 'flags', []),
-    ('1f1f8-1f1e6', '🇸🇦', 2308, 2, ':flag_sa:', [':saudiarabia:', ':saudi:'], 'flags', []),
-    ('1f1f8-1f1f3', '🇸🇳', 2309, 2, ':flag_sn:', [':sn:'], 'flags', []),
-    ('1f1f7-1f1f8', '🇷🇸', 2310, 2, ':flag_rs:', [':rs:'], 'flags', []),
-    ('1f1f8-1f1e8', '🇸🇨', 2311, 2, ':flag_sc:', [':sc:'], 'flags', []),
-    ('1f1f8-1f1f1', '🇸🇱', 2312, 2, ':flag_sl:', [':sl:'], 'flags', []),
-    ('1f1f8-1f1ec', '🇸🇬', 2313, 2, ':flag_sg:', [':sg:'], 'flags', []),
-    ('1f1f8-1f1fd', '🇸🇽', 2314, 2, ':flag_sx:', [':sx:'], 'flags', []),
-    ('1f1f8-1f1f0', '🇸🇰', 2315, 2, ':flag_sk:', [':sk:'], 'flags', []),
-    ('1f1f8-1f1ee', '🇸🇮', 2316, 2, ':flag_si:', [':si:'], 'flags', []),
-    ('1f1ec-1f1f8', '🇬🇸', 2317, 2, ':flag_gs:', [':gs:'], 'flags', []),
-    ('1f1f8-1f1e7', '🇸🇧', 2318, 2, ':flag_sb:', [':sb:'], 'flags', []),
-    ('1f1f8-1f1f4', '🇸🇴', 2319, 2, ':flag_so:', [':so:'], 'flags', []),
-    ('1f1ff-1f1e6', '🇿🇦', 2320, 2, ':flag_za:', [':za:'], 'flags', []),
-    ('1f1f0-1f1f7', '🇰🇷', 2321, 2, ':flag_kr:', [':kr:'], 'flags', []),
-    ('1f1f8-1f1f8', '🇸🇸', 2322, 2, ':flag_ss:', [':ss:'], 'flags', []),
-    ('1f1ea-1f1f8', '🇪🇸', 2323, 2, ':flag_es:', [':es:'], 'flags', []),
-    ('1f1f1-1f1f0', '🇱🇰', 2324, 2, ':flag_lk:', [':lk:'], 'flags', []),
-    ('1f1e7-1f1f1', '🇧🇱', 2325, 2, ':flag_bl:', [':bl:'], 'flags', []),
-    ('1f1f8-1f1ed', '🇸🇭', 2326, 2, ':flag_sh:', [':sh:'], 'flags', []),
-    ('1f1f0-1f1f3', '🇰🇳', 2327, 2, ':flag_kn:', [':kn:'], 'flags', []),
-    ('1f1f1-1f1e8', '🇱🇨', 2328, 2, ':flag_lc:', [':lc:'], 'flags', []),
-    ('1f1f5-1f1f2', '🇵🇲', 2329, 2, ':flag_pm:', [':pm:'], 'flags', []),
-    ('1f1fb-1f1e8', '🇻🇨', 2330, 2, ':flag_vc:', [':vc:'], 'flags', []),
-    ('1f1f8-1f1e9', '🇸🇩', 2331, 2, ':flag_sd:', [':sd:'], 'flags', []),
-    ('1f1f8-1f1f7', '🇸🇷', 2332, 2, ':flag_sr:', [':sr:'], 'flags', []),
-    ('1f1f8-1f1ff', '🇸🇿', 2333, 2, ':flag_sz:', [':sz:'], 'flags', []),
-    ('1f1f8-1f1ea', '🇸🇪', 2334, 2, ':flag_se:', [':se:'], 'flags', []),
-    ('1f1e8-1f1ed', '🇨🇭', 2335, 2, ':flag_ch:', [':ch:'], 'flags', []),
-    ('1f1f8-1f1fe', '🇸🇾', 2336, 2, ':flag_sy:', [':sy:'], 'flags', []),
-    ('1f1f9-1f1fc', '🇹🇼', 2337, 2, ':flag_tw:', [':tw:'], 'flags', []),
-    ('1f1f9-1f1ef', '🇹🇯', 2338, 2, ':flag_tj:', [':tj:'], 'flags', []),
-    ('1f1f9-1f1ff', '🇹🇿', 2339, 2, ':flag_tz:', [':tz:'], 'flags', []),
-    ('1f1f9-1f1ed', '🇹🇭', 2340, 2, ':flag_th:', [':th:'], 'flags', []),
-    ('1f1f9-1f1f1', '🇹🇱', 2341, 2, ':flag_tl:', [':tl:'], 'flags', []),
-    ('1f1f9-1f1ec', '🇹🇬', 2342, 2, ':flag_tg:', [':tg:'], 'flags', []),
-    ('1f1f9-1f1f0', '🇹🇰', 2343, 2, ':flag_tk:', [':tk:'], 'flags', []),
-    ('1f1f9-1f1f4', '🇹🇴', 2344, 2, ':flag_to:', [':to:'], 'flags', []),
-    ('1f1f9-1f1f9', '🇹🇹', 2345, 2, ':flag_tt:', [':tt:'], 'flags', []),
-    ('1f1f9-1f1f3', '🇹🇳', 2346, 2, ':flag_tn:', [':tn:'], 'flags', []),
-    ('1f1f9-1f1f7', '🇹🇷', 2347, 2, ':flag_tr:', [':tr:'], 'flags', []),
-    ('1f1f9-1f1f2', '🇹🇲', 2348, 2, ':flag_tm:', [':turkmenistan:'], 'flags', []),
-    ('1f1f9-1f1e8', '🇹🇨', 2349, 2, ':flag_tc:', [':tc:'], 'flags', []),
-    ('1f1f9-1f1fb', '🇹🇻', 2350, 2, ':flag_tv:', [':tuvalu:'], 'flags', []),
-    ('1f1fb-1f1ee', '🇻🇮', 2351, 2, ':flag_vi:', [':vi:'], 'flags', []),
-    ('1f1fa-1f1ec', '🇺🇬', 2352, 2, ':flag_ug:', [':ug:'], 'flags', []),
-    ('1f1fa-1f1e6', '🇺🇦', 2353, 2, ':flag_ua:', [':ua:'], 'flags', []),
-    ('1f1e6-1f1ea', '🇦🇪', 2354, 2, ':flag_ae:', [':ae:'], 'flags', []),
-    ('1f1ec-1f1e7', '🇬🇧', 2355, 2, ':flag_gb:', [':gb:'], 'flags', []),
-    ('1f1fa-1f1f8', '🇺🇸', 2356, 2, ':flag_us:', [':us:'], 'flags', []),
-    ('1f1fa-1f1fe', '🇺🇾', 2357, 2, ':flag_uy:', [':uy:'], 'flags', []),
-    ('1f1fa-1f1ff', '🇺🇿', 2358, 2, ':flag_uz:', [':uz:'], 'flags', []),
-    ('1f1fb-1f1fa', '🇻🇺', 2359, 2, ':flag_vu:', [':vu:'], 'flags', []),
-    ('1f1fb-1f1e6', '🇻🇦', 2360, 2, ':flag_va:', [':va:'], 'flags', []),
-    ('1f1fb-1f1ea', '🇻🇪', 2361, 2, ':flag_ve:', [':ve:'], 'flags', []),
-    ('1f1fb-1f1f3', '🇻🇳', 2362, 2, ':flag_vn:', [':vn:'], 'flags', []),
-    ('1f1fc-1f1eb', '🇼🇫', 2363, 2, ':flag_wf:', [':wf:'], 'flags', []),
-    ('1f1ea-1f1ed', '🇪🇭', 2364, 2, ':flag_eh:', [':eh:'], 'flags', []),
-    ('1f1fe-1f1ea', '🇾🇪', 2365, 2, ':flag_ye:', [':ye:'], 'flags', []),
-    ('1f1ff-1f1f2', '🇿🇲', 2366, 2, ':flag_zm:', [':zm:'], 'flags', []),
-    ('1f1ff-1f1fc', '🇿🇼', 2367, 2, ':flag_zw:', [':zw:'], 'flags', []),
-    ('1f1e6-1f1e8', '🇦🇨', 2368, 2, ':flag_ac:', [':ac:'], 'flags', []),
-    ('1f1f9-1f1e6', '🇹🇦', 2369, 2, ':flag_ta:', [':ta:'], 'flags', []),
-    ('1f1e7-1f1fb', '🇧🇻', 2370, 2, ':flag_bv:', [':bv:'], 'flags', []),
-    ('1f1ed-1f1f2', '🇭🇲', 2371, 2, ':flag_hm:', [':hm:'], 'flags', []),
-    ('1f1f8-1f1ef', '🇸🇯', 2372, 2, ':flag_sj:', [':sj:'], 'flags', []),
-    ('1f1fa-1f1f2', '🇺🇲', 2373, 2, ':flag_um:', [':um:'], 'flags', []),
-    ('1f1ea-1f1e6', '🇪🇦', 2374, 2, ':flag_ea:', [':ea:'], 'flags', []),
-    ('1f1e8-1f1f5', '🇨🇵', 2375, 2, ':flag_cp:', [':cp:'], 'flags', []),
-    ('1f1e9-1f1ec', '🇩🇬', 2376, 2, ':flag_dg:', [':dg:'], 'flags', []),
-    ('1f1f2-1f1eb', '🇲🇫', 2377, 2, ':flag_mf:', [':mf:'], 'flags', []),
-    ('1f1fa-1f1f3', '🇺🇳', 2378, 2, ':united_nations:', [], 'flags', []),
-    ('002a', '*', 2379, 1, ':asterisk_symbol:', [], 'symbols', []),
-    ('1f1ff', '🇿', 2380, 1, ':regional_indicator_z:', [], 'regional', []),
-    ('1f1fe', '🇾', 2381, 1, ':regional_indicator_y:', [], 'regional', []),
-    ('1f1fd', '🇽', 2382, 1, ':regional_indicator_x:', [], 'regional', []),
-    ('0023', '#', 2383, 1, ':pound_symbol:', [], 'symbols', []),
-    ('1f3fb', '🏻', 2384, 1, ':tone1:', [], 'modifier', []),
-    ('1f3fc', '🏼', 2385, 1, ':tone2:', [], 'modifier', []),
-    ('1f3fd', '🏽', 2386, 1, ':tone3:', [], 'modifier', []),
-    ('1f3fe', '🏾', 2387, 1, ':tone4:', [], 'modifier', []),
-    ('1f3ff', '🏿', 2388, 1, ':tone5:', [], 'modifier', []),
-    ('1f1fc', '🇼', 2389, 1, ':regional_indicator_w:', [], 'regional', []),
-    ('1f1fb', '🇻', 2390, 1, ':regional_indicator_v:', [], 'regional', []),
-    ('1f1fa', '🇺', 2391, 1, ':regional_indicator_u:', [], 'regional', []),
-    ('1f1f9', '🇹', 2392, 1, ':regional_indicator_t:', [], 'regional', []),
-    ('1f1f8', '🇸', 2393, 1, ':regional_indicator_s:', [], 'regional', []),
-    ('1f1f7', '🇷', 2394, 1, ':regional_indicator_r:', [], 'regional', []),
-    ('1f1f6', '🇶', 2395, 1, ':regional_indicator_q:', [], 'regional', []),
-    ('1f1f5', '🇵', 2396, 1, ':regional_indicator_p:', [], 'regional', []),
-    ('1f1f4', '🇴', 2397, 1, ':regional_indicator_o:', [], 'regional', []),
-    ('1f1f3', '🇳', 2398, 1, ':regional_indicator_n:', [], 'regional', []),
-    ('1f1f2', '🇲', 2399, 1, ':regional_indicator_m:', [], 'regional', []),
-    ('1f1f1', '🇱', 2400, 1, ':regional_indicator_l:', [], 'regional', []),
-    ('1f1f0', '🇰', 2401, 1, ':regional_indicator_k:', [], 'regional', []),
-    ('1f1ef', '🇯', 2402, 1, ':regional_indicator_j:', [], 'regional', []),
-    ('1f1ee', '🇮', 2403, 1, ':regional_indicator_i:', [], 'regional', []),
-    ('1f1ed', '🇭', 2404, 1, ':regional_indicator_h:', [], 'regional', []),
-    ('1f1ec', '🇬', 2405, 1, ':regional_indicator_g:', [], 'regional', []),
-    ('1f1eb', '🇫', 2406, 1, ':regional_indicator_f:', [], 'regional', []),
-    ('1f1ea', '🇪', 2407, 1, ':regional_indicator_e:', [], 'regional', []),
-    ('1f1e9', '🇩', 2408, 1, ':regional_indicator_d:', [], 'regional', []),
-    ('1f1e8', '🇨', 2409, 1, ':regional_indicator_c:', [], 'regional', []),
-    ('1f1e7', '🇧', 2410, 1, ':regional_indicator_b:', [], 'regional', []),
-    ('1f1e6', '🇦', 2411, 1, ':regional_indicator_a:', [], 'regional', []),
-    ('0039', '9', 2412, 1, ':digit_nine:', [], 'symbols', []),
-    ('0038', '8', 2413, 1, ':digit_eight:', [], 'symbols', []),
-    ('0037', '7', 2414, 1, ':digit_seven:', [], 'symbols', []),
-    ('0036', '6', 2415, 1, ':digit_six:', [], 'symbols', []),
-    ('0035', '5', 2416, 1, ':digit_five:', [], 'symbols', []),
-    ('0034', '4', 2417, 1, ':digit_four:', [], 'symbols', []),
-    ('0033', '3', 2418, 1, ':digit_three:', [], 'symbols', []),
-    ('0032', '2', 2419, 1, ':digit_two:', [], 'symbols', []),
-    ('0031', '1', 2420, 1, ':digit_one:', [], 'symbols', []),
-    ('0030', '0', 2421, 1, ':digit_zero:', [], 'symbols', []),
-    ('2640', '♀', 2422, 1, ':female_sign:', [], 'people', []),
-    ('2642', '♂', 2423, 1, ':male_sign:', [], 'people', []),
-    ('2695', '⚕', 2424, 1, ':medical_symbol:', [], 'people', []),
-    ('1f468-1f469-1f466', '👨👩👦', 2425, 3, ':family_man_woman_boy:', [], 'people', []),
-    ('1f469-2764-1f468', '👩❤👨', 2426, 3, ':couple_with_heart_woman_man:', [], 'people', []),
-    ('1f469-2764-1f48b-1f468', '👩❤💋👨', 2427, 4, ':kiss_woman_man:', [], 'people', []),
+    ('1f600', 1, 1, 1, '😀', ['grinning', 'smirking'], ':grinning:', [], [], 'people')
+    ('1f603', 2, 1, 1, '😃', ['smiley', 'smile ee'], ':smiley:', [], [], 'people')
+    ('1f604', 3, 1, 1, '😄', ['smile'], ':smile:', [], [], 'people')
+    ('1f601', 4, 1, 1, '😁', ['grin', 'smirk', 'SEG'], ':grin:', [], [], 'people')
+    ('1f606', 5, 1, 1, '😆', ['laugh', 'haha'], ':laughing:', [':satisfied:'], [], 'people')
+    ('1f605', 6, 1, 1, '😅', ['sweat', 'sweaty', 'wet face'], ':sweat_smile:', [], [], 'people')
+    ('1f602', 7, 1, 1, '😂', ['joy', 'happy'], ':joy:', [], [], 'people')
+    ('1f923', 8, 1, 1, '\U0001f923', ['rofl'], ':rofl:', [':rolling_on_the_floor_laughing:'], [], 'people')
+    ('263a', 9, 1, 1, '☺', ['relaxed', 'relax', 'chill'], ':relaxed:', [], [], 'people')
+    ('1f60a', 10, 1, 1, '😊', ['blush', 'red face', 'embarass'], ':blush:', [], [], 'people')
+    ('1f607', 11, 1, 1, '😇', ['innocent', 'halo', 'angel'], ':innocent:', [], [], 'people')
+    ('1f642', 12, 1, 1, '🙂', ['half smile'], ':slight_smile:', [':slightly_smiling_face:'], [], 'people')
+    ('1f643', 13, 1, 1, '🙃', ['upside down', 'inverted'], ':upside_down:', [':upside_down_face:'], [], 'people')
+    ('1f609', 14, 1, 1, '😉', ['wink', 'secret'], ':wink:', [], [], 'people')
+    ('1f60c', 15, 1, 1, '😌', ['whew', 'relieve', 'relieved'], ':relieved:', [], [], 'people')
+    ('1f60d', 16, 1, 1, '😍', ['heart eyes', 'love', 'in love'], ':heart_eyes:', [], [], 'people')
+    ('1f618', 17, 1, 1, '😘', ['heart kiss', 'kiss heart', 'whistling', 'in love'], ':kissing_heart:', [], [], 'people')
+    ('1f617', 18, 1, 1, '😗', ['kiss', 'kissing'], ':kissing:', [], [], 'people')
+    ('1f619', 19, 1, 1, '😙', ['smiley kiss'], ':kissing_smiling_eyes:', [], [], 'people')
+    ('1f61a', 20, 1, 1, '😚', ['closed eye kissing'], ':kissing_closed_eyes:', [], [], 'people')
+    ('1f60b', 21, 1, 1, '😋', ['yum', 'mmm'], ':yum:', [], [], 'people')
+    ('1f61c', 22, 1, 1, '😜', ['wink', 'winking', 'joke', 'joking'], ':stuck_out_tongue_winking_eye:', [], [], 'people')
+    ('1f61d', 23, 1, 1, '😝', ['craz'], ':stuck_out_tongue_closed_eyes:', [], [], 'people')
+    ('1f61b', 24, 1, 1, '😛', [], ':stuck_out_tongue:', [], [], 'people')
+    ('1f911', 25, 1, 1, '🤑', [], ':money_mouth:', [':money_mouth_face:'], [], 'people')
+    ('1f917', 26, 1, 1, '🤗', [], ':hugging:', [':hugging_face:'], [], 'people')
+    ('1f913', 27, 1, 1, '🤓', [], ':nerd:', [':nerd_face:'], [], 'people')
+    ('1f60e', 28, 1, 1, '😎', [], ':sunglasses:', [], [], 'people')
+    ('1f921', 29, 1, 1, '\U0001f921', [], ':clown:', [':clown_face:'], [], 'people')
+    ('1f920', 30, 1, 1, '\U0001f920', [], ':cowboy:', [':face_with_cowboy_hat:'], [], 'people')
+    ('1f60f', 31, 1, 1, '😏', [], ':smirk:', [], [], 'people')
+    ('1f612', 32, 1, 1, '😒', [], ':unamused:', [], [], 'people')
+    ('1f61e', 33, 1, 1, '😞', [], ':disappointed:', [], [], 'people')
+    ('1f614', 34, 1, 1, '😔', [], ':pensive:', [], [], 'people')
+    ('1f61f', 35, 1, 1, '😟', [], ':worried:', [], [], 'people')
+    ('1f615', 36, 1, 1, '😕', [], ':confused:', [], [], 'people')
+    ('1f641', 37, 1, 1, '🙁', [], ':slight_frown:', [':slightly_frowning_face:'], [], 'people')
+    ('2639', 38, 1, 1, '☹', [], ':frowning2:', [':white_frowning_face:'], [], 'people')
+    ('1f623', 39, 1, 1, '😣', [], ':persevere:', [], [], 'people')
+    ('1f616', 40, 1, 1, '😖', [], ':confounded:', [], [], 'people')
+    ('1f62b', 41, 1, 1, '😫', [], ':tired_face:', [], [], 'people')
+    ('1f629', 42, 1, 1, '😩', [], ':weary:', [], [], 'people')
+    ('1f624', 43, 1, 1, '😤', [], ':triumph:', [], [], 'people')
+    ('1f620', 44, 1, 1, '😠', [], ':angry:', [], [], 'people')
+    ('1f621', 45, 1, 1, '😡', [], ':rage:', [], [], 'people')
+    ('1f636', 46, 1, 1, '😶', [], ':no_mouth:', [], [], 'people')
+    ('1f610', 47, 1, 1, '😐', [], ':neutral_face:', [], [], 'people')
+    ('1f611', 48, 1, 1, '😑', [], ':expressionless:', [], [], 'people')
+    ('1f62f', 49, 1, 1, '😯', [], ':hushed:', [], [], 'people')
+    ('1f626', 50, 1, 1, '😦', [], ':frowning:', [], [], 'people')
+    ('1f627', 51, 1, 1, '😧', [], ':anguished:', [], [], 'people')
+    ('1f62e', 52, 1, 1, '😮', [], ':open_mouth:', [], [], 'people')
+    ('1f632', 53, 1, 1, '😲', [], ':astonished:', [], [], 'people')
+    ('1f635', 54, 1, 1, '😵', [], ':dizzy_face:', [], [], 'people')
+    ('1f633', 55, 1, 1, '😳', [], ':flushed:', [], [], 'people')
+    ('1f631', 56, 1, 1, '😱', [], ':scream:', [], [], 'people')
+    ('1f628', 57, 1, 1, '😨', [], ':fearful:', [], [], 'people')
+    ('1f630', 58, 1, 1, '😰', [], ':cold_sweat:', [], [], 'people')
+    ('1f622', 59, 1, 1, '😢', ['cry', 'tears'], ':cry:', [], [], 'people')
+    ('1f625', 60, 1, 1, '😥', [], ':disappointed_relieved:', [], [], 'people')
+    ('1f924', 61, 1, 1, '\U0001f924', [], ':drooling_face:', [':drool:'], [], 'people')
+    ('1f62d', 62, 1, 1, '😭', [], ':sob:', [], [], 'people')
+    ('1f613', 63, 1, 1, '😓', [], ':sweat:', [], [], 'people')
+    ('1f62a', 64, 1, 1, '😪', [], ':sleepy:', [], [], 'people')
+    ('1f634', 65, 1, 1, '😴', [], ':sleeping:', [], [], 'people')
+    ('1f644', 66, 1, 1, '🙄', [], ':rolling_eyes:', [':face_with_rolling_eyes:'], [], 'people')
+    ('1f914', 67, 1, 1, '🤔', [], ':thinking:', [':thinking_face:'], [], 'people')
+    ('1f925', 68, 1, 1, '\U0001f925', [], ':lying_face:', [':liar:'], [], 'people')
+    ('1f62c', 69, 1, 1, '😬', [], ':grimacing:', [], [], 'people')
+    ('1f910', 70, 1, 1, '🤐', [], ':zipper_mouth:', [':zipper_mouth_face:'], [], 'people')
+    ('1f922', 71, 1, 1, '\U0001f922', [], ':nauseated_face:', [':sick:'], [], 'people')
+    ('1f927', 72, 1, 1, '\U0001f927', [], ':sneezing_face:', [':sneeze:'], [], 'people')
+    ('1f637', 73, 1, 1, '😷', [], ':mask:', [], [], 'people')
+    ('1f912', 74, 1, 1, '🤒', [], ':thermometer_face:', [':face_with_thermometer:'], [], 'people')
+    ('1f915', 75, 1, 1, '🤕', [], ':head_bandage:', [':face_with_head_bandage:'], [], 'people')
+    ('1f608', 76, 1, 1, '😈', [], ':smiling_imp:', [], [], 'people')
+    ('1f47f', 77, 1, 1, '👿', [], ':imp:', [], [], 'people')
+    ('1f479', 78, 1, 1, '👹', [], ':japanese_ogre:', [], [], 'people')
+    ('1f47a', 79, 1, 1, '👺', [], ':japanese_goblin:', [], [], 'people')
+    ('1f4a9', 80, 1, 1, '💩', [], ':poop:', [':shit:', ':hankey:', ':poo:'], [], 'people')
+    ('1f47b', 81, 1, 1, '👻', [], ':ghost:', [], [], 'people')
+    ('1f480', 82, 1, 1, '💀', [], ':skull:', [':skeleton:'], [], 'people')
+    ('2620', 83, 1, 1, '☠', [], ':skull_crossbones:', [':skull_and_crossbones:'], [], 'people')
+    ('1f47d', 84, 1, 1, '👽', [], ':alien:', [], [], 'people')
+    ('1f47e', 85, 1, 1, '👾', [], ':space_invader:', [], [], 'people')
+    ('1f916', 86, 1, 1, '🤖', [], ':robot:', [':robot_face:'], [], 'people')
+    ('1f383', 87, 1, 1, '🎃', [], ':jack_o_lantern:', [], [], 'people')
+    ('1f63a', 88, 1, 1, '😺', [], ':smiley_cat:', [], [], 'people')
+    ('1f638', 89, 1, 1, '😸', [], ':smile_cat:', [], [], 'people')
+    ('1f639', 90, 1, 1, '😹', [], ':joy_cat:', [], [], 'people')
+    ('1f63b', 91, 1, 1, '😻', [], ':heart_eyes_cat:', [], [], 'people')
+    ('1f63c', 92, 1, 1, '😼', [], ':smirk_cat:', [], [], 'people')
+    ('1f63d', 93, 1, 1, '😽', [], ':kissing_cat:', [], [], 'people')
+    ('1f640', 94, 1, 1, '🙀', [], ':scream_cat:', [], [], 'people')
+    ('1f63f', 95, 1, 1, '😿', [], ':crying_cat_face:', [], [], 'people')
+    ('1f63e', 96, 1, 1, '😾', [], ':pouting_cat:', [], [], 'people')
+    ('1f450', 97, 1, 1, '👐', [], ':open_hands:', [], [], 'people')
+    ('1f450-1f3fb', 98, 1, 2, '👐🏻', [], ':open_hands_tone1:', [], [], 'people')
+    ('1f450-1f3fc', 99, 1, 2, '👐🏼', [], ':open_hands_tone2:', [], [], 'people')
+    ('1f450-1f3fd', 100, 1, 2, '👐🏽', [], ':open_hands_tone3:', [], [], 'people')
+    ('1f450-1f3fe', 101, 1, 2, '👐🏾', [], ':open_hands_tone4:', [], [], 'people')
+    ('1f450-1f3ff', 102, 1, 2, '👐🏿', [], ':open_hands_tone5:', [], [], 'people')
+    ('1f64c', 103, 1, 1, '🙌', [], ':raised_hands:', [], [], 'people')
+    ('1f64c-1f3fb', 104, 1, 2, '🙌🏻', [], ':raised_hands_tone1:', [], [], 'people')
+    ('1f64c-1f3fc', 105, 1, 2, '🙌🏼', [], ':raised_hands_tone2:', [], [], 'people')
+    ('1f64c-1f3fd', 106, 1, 2, '🙌🏽', [], ':raised_hands_tone3:', [], [], 'people')
+    ('1f64c-1f3fe', 107, 1, 2, '🙌🏾', [], ':raised_hands_tone4:', [], [], 'people')
+    ('1f64c-1f3ff', 108, 1, 2, '🙌🏿', [], ':raised_hands_tone5:', [], [], 'people')
+    ('1f44f', 109, 1, 1, '👏', [], ':clap:', [], [], 'people')
+    ('1f44f-1f3fb', 110, 1, 2, '👏🏻', [], ':clap_tone1:', [], [], 'people')
+    ('1f44f-1f3fc', 111, 1, 2, '👏🏼', [], ':clap_tone2:', [], [], 'people')
+    ('1f44f-1f3fd', 112, 1, 2, '👏🏽', [], ':clap_tone3:', [], [], 'people')
+    ('1f44f-1f3fe', 113, 1, 2, '👏🏾', [], ':clap_tone4:', [], [], 'people')
+    ('1f44f-1f3ff', 114, 1, 2, '👏🏿', [], ':clap_tone5:', [], [], 'people')
+    ('1f64f', 115, 1, 1, '🙏', [], ':pray:', [], [], 'people')
+    ('1f64f-1f3fb', 116, 1, 2, '🙏🏻', [], ':pray_tone1:', [], [], 'people')
+    ('1f64f-1f3fc', 117, 1, 2, '🙏🏼', [], ':pray_tone2:', [], [], 'people')
+    ('1f64f-1f3fd', 118, 1, 2, '🙏🏽', [], ':pray_tone3:', [], [], 'people')
+    ('1f64f-1f3fe', 119, 1, 2, '🙏🏾', [], ':pray_tone4:', [], [], 'people')
+    ('1f64f-1f3ff', 120, 1, 2, '🙏🏿', [], ':pray_tone5:', [], [], 'people')
+    ('1f91d', 121, 1, 1, '\U0001f91d', [], ':handshake:', [':shaking_hands:'], [], 'people')
+    ('1f44d', 122, 1, 1, '👍', [], ':thumbsup:', [':+1:', ':thumbup:'], [], 'people')
+    ('1f44d-1f3fb', 123, 1, 2, '👍🏻', [], ':thumbsup_tone1:', [':+1_tone1:', ':thumbup_tone1:'], [], 'people')
+    ('1f44d-1f3fc', 124, 1, 2, '👍🏼', [], ':thumbsup_tone2:', [':+1_tone2:', ':thumbup_tone2:'], [], 'people')
+    ('1f44d-1f3fd', 125, 1, 2, '👍🏽', [], ':thumbsup_tone3:', [':+1_tone3:', ':thumbup_tone3:'], [], 'people')
+    ('1f44d-1f3fe', 126, 1, 2, '👍🏾', [], ':thumbsup_tone4:', [':+1_tone4:', ':thumbup_tone4:'], [], 'people')
+    ('1f44d-1f3ff', 127, 1, 2, '👍🏿', [], ':thumbsup_tone5:', [':+1_tone5:', ':thumbup_tone5:'], [], 'people')
+    ('1f44e', 128, 1, 1, '👎', [], ':thumbsdown:', [':-1:', ':thumbdown:'], [], 'people')
+    ('1f44e-1f3fb', 129, 1, 2, '👎🏻', [], ':thumbsdown_tone1:', [':-1_tone1:', ':thumbdown_tone1:'], [], 'people')
+    ('1f44e-1f3fc', 130, 1, 2, '👎🏼', [], ':thumbsdown_tone2:', [':-1_tone2:', ':thumbdown_tone2:'], [], 'people')
+    ('1f44e-1f3fd', 131, 1, 2, '👎🏽', [], ':thumbsdown_tone3:', [':-1_tone3:', ':thumbdown_tone3:'], [], 'people')
+    ('1f44e-1f3fe', 132, 1, 2, '👎🏾', [], ':thumbsdown_tone4:', [':-1_tone4:', ':thumbdown_tone4:'], [], 'people')
+    ('1f44e-1f3ff', 133, 1, 2, '👎🏿', [], ':thumbsdown_tone5:', [':-1_tone5:', ':thumbdown_tone5:'], [], 'people')
+    ('1f44a', 134, 1, 1, '👊', ['punch', 'hit', 'fist'], ':punch:', [], [], 'people')
+    ('1f44a-1f3fb', 135, 1, 2, '👊🏻', [], ':punch_tone1:', [], [], 'people')
+    ('1f44a-1f3fc', 136, 1, 2, '👊🏼', [], ':punch_tone2:', [], [], 'people')
+    ('1f44a-1f3fd', 137, 1, 2, '👊🏽', [], ':punch_tone3:', [], [], 'people')
+    ('1f44a-1f3fe', 138, 1, 2, '👊🏾', [], ':punch_tone4:', [], [], 'people')
+    ('1f44a-1f3ff', 139, 1, 2, '👊🏿', [], ':punch_tone5:', [], [], 'people')
+    ('270a', 140, 1, 1, '✊', [], ':fist:', [], [], 'people')
+    ('270a-1f3fb', 141, 1, 2, '✊🏻', [], ':fist_tone1:', [], [], 'people')
+    ('270a-1f3fc', 142, 1, 2, '✊🏼', [], ':fist_tone2:', [], [], 'people')
+    ('270a-1f3fd', 143, 1, 2, '✊🏽', [], ':fist_tone3:', [], [], 'people')
+    ('270a-1f3fe', 144, 1, 2, '✊🏾', [], ':fist_tone4:', [], [], 'people')
+    ('270a-1f3ff', 145, 1, 2, '✊🏿', [], ':fist_tone5:', [], [], 'people')
+    ('1f91b', 146, 1, 1, '\U0001f91b', [], ':left_facing_fist:', [':left_fist:'], [], 'people')
+    ('1f91b-1f3fb', 147, 1, 2, '\U0001f91b🏻', [], ':left_facing_fist_tone1:', [':left_fist_tone1:'], [], 'people')
+    ('1f91b-1f3fc', 148, 1, 2, '\U0001f91b🏼', [], ':left_facing_fist_tone2:', [':left_fist_tone2:'], [], 'people')
+    ('1f91b-1f3fd', 149, 1, 2, '\U0001f91b🏽', [], ':left_facing_fist_tone3:', [':left_fist_tone3:'], [], 'people')
+    ('1f91b-1f3fe', 150, 1, 2, '\U0001f91b🏾', [], ':left_facing_fist_tone4:', [':left_fist_tone4:'], [], 'people')
+    ('1f91b-1f3ff', 151, 1, 2, '\U0001f91b🏿', [], ':left_facing_fist_tone5:', [':left_fist_tone5:'], [], 'people')
+    ('1f91c', 152, 1, 1, '\U0001f91c', [], ':right_facing_fist:', [':right_fist:'], [], 'people')
+    ('1f91c-1f3fb', 153, 1, 2, '\U0001f91c🏻', [], ':right_facing_fist_tone1:', [':right_fist_tone1:'], [], 'people')
+    ('1f91c-1f3fc', 154, 1, 2, '\U0001f91c🏼', [], ':right_facing_fist_tone2:', [':right_fist_tone2:'], [], 'people')
+    ('1f91c-1f3fd', 155, 1, 2, '\U0001f91c🏽', [], ':right_facing_fist_tone3:', [':right_fist_tone3:'], [], 'people')
+    ('1f91c-1f3fe', 156, 1, 2, '\U0001f91c🏾', [], ':right_facing_fist_tone4:', [':right_fist_tone4:'], [], 'people')
+    ('1f91c-1f3ff', 157, 1, 2, '\U0001f91c🏿', [], ':right_facing_fist_tone5:', [':right_fist_tone5:'], [], 'people')
+    ('1f91e', 158, 1, 1, '\U0001f91e', [], ':fingers_crossed:', [':hand_with_index_and_middle_finger_crossed:'], [], 'people')
+    ('1f91e-1f3fb', 159, 1, 2, '\U0001f91e🏻', [], ':fingers_crossed_tone1:', [':hand_with_index_and_middle_fingers_crossed_tone1:'], [], 'people')
+    ('1f91e-1f3fc', 160, 1, 2, '\U0001f91e🏼', [], ':fingers_crossed_tone2:', [':hand_with_index_and_middle_fingers_crossed_tone2:'], [], 'people')
+    ('1f91e-1f3fd', 161, 1, 2, '\U0001f91e🏽', [], ':fingers_crossed_tone3:', [':hand_with_index_and_middle_fingers_crossed_tone3:'], [], 'people')
+    ('1f91e-1f3fe', 162, 1, 2, '\U0001f91e🏾', [], ':fingers_crossed_tone4:', [':hand_with_index_and_middle_fingers_crossed_tone4:'], [], 'people')
+    ('1f91e-1f3ff', 163, 1, 2, '\U0001f91e🏿', [], ':fingers_crossed_tone5:', [':hand_with_index_and_middle_fingers_crossed_tone5:'], [], 'people')
+    ('270c', 164, 1, 1, '✌', [], ':v:', [], [], 'people')
+    ('270c-1f3fb', 165, 1, 2, '✌🏻', [], ':v_tone1:', [], [], 'people')
+    ('270c-1f3fc', 166, 1, 2, '✌🏼', [], ':v_tone2:', [], [], 'people')
+    ('270c-1f3fd', 167, 1, 2, '✌🏽', [], ':v_tone3:', [], [], 'people')
+    ('270c-1f3fe', 168, 1, 2, '✌🏾', [], ':v_tone4:', [], [], 'people')
+    ('270c-1f3ff', 169, 1, 2, '✌🏿', [], ':v_tone5:', [], [], 'people')
+    ('1f918', 170, 1, 1, '🤘', [], ':metal:', [':sign_of_the_horns:'], [], 'people')
+    ('1f918-1f3fb', 171, 1, 2, '🤘🏻', [], ':metal_tone1:', [':sign_of_the_horns_tone1:'], [], 'people')
+    ('1f918-1f3fc', 172, 1, 2, '🤘🏼', [], ':metal_tone2:', [':sign_of_the_horns_tone2:'], [], 'people')
+    ('1f918-1f3fd', 173, 1, 2, '🤘🏽', [], ':metal_tone3:', [':sign_of_the_horns_tone3:'], [], 'people')
+    ('1f918-1f3fe', 174, 1, 2, '🤘🏾', [], ':metal_tone4:', [':sign_of_the_horns_tone4:'], [], 'people')
+    ('1f918-1f3ff', 175, 1, 2, '🤘🏿', [], ':metal_tone5:', [':sign_of_the_horns_tone5:'], [], 'people')
+    ('1f44c', 176, 1, 1, '👌', [], ':ok_hand:', [], [], 'people')
+    ('1f44c-1f3fb', 177, 1, 2, '👌🏻', [], ':ok_hand_tone1:', [], [], 'people')
+    ('1f44c-1f3fc', 178, 1, 2, '👌🏼', [], ':ok_hand_tone2:', [], [], 'people')
+    ('1f44c-1f3fd', 179, 1, 2, '👌🏽', [], ':ok_hand_tone3:', [], [], 'people')
+    ('1f44c-1f3fe', 180, 1, 2, '👌🏾', [], ':ok_hand_tone4:', [], [], 'people')
+    ('1f44c-1f3ff', 181, 1, 2, '👌🏿', [], ':ok_hand_tone5:', [], [], 'people')
+    ('1f448', 182, 1, 1, '👈', [], ':point_left:', [], [], 'people')
+    ('1f448-1f3fb', 183, 1, 2, '👈🏻', [], ':point_left_tone1:', [], [], 'people')
+    ('1f448-1f3fc', 184, 1, 2, '👈🏼', [], ':point_left_tone2:', [], [], 'people')
+    ('1f448-1f3fd', 185, 1, 2, '👈🏽', [], ':point_left_tone3:', [], [], 'people')
+    ('1f448-1f3fe', 186, 1, 2, '👈🏾', [], ':point_left_tone4:', [], [], 'people')
+    ('1f448-1f3ff', 187, 1, 2, '👈🏿', [], ':point_left_tone5:', [], [], 'people')
+    ('1f449', 188, 1, 1, '👉', [], ':point_right:', [], [], 'people')
+    ('1f449-1f3fb', 189, 1, 2, '👉🏻', [], ':point_right_tone1:', [], [], 'people')
+    ('1f449-1f3fc', 190, 1, 2, '👉🏼', [], ':point_right_tone2:', [], [], 'people')
+    ('1f449-1f3fd', 191, 1, 2, '👉🏽', [], ':point_right_tone3:', [], [], 'people')
+    ('1f449-1f3fe', 192, 1, 2, '👉🏾', [], ':point_right_tone4:', [], [], 'people')
+    ('1f449-1f3ff', 193, 1, 2, '👉🏿', [], ':point_right_tone5:', [], [], 'people')
+    ('1f446', 194, 1, 1, '👆', [], ':point_up_2:', [], [], 'people')
+    ('1f446-1f3fb', 195, 1, 2, '👆🏻', [], ':point_up_2_tone1:', [], [], 'people')
+    ('1f446-1f3fc', 196, 1, 2, '👆🏼', [], ':point_up_2_tone2:', [], [], 'people')
+    ('1f446-1f3fd', 197, 1, 2, '👆🏽', [], ':point_up_2_tone3:', [], [], 'people')
+    ('1f446-1f3fe', 198, 1, 2, '👆🏾', [], ':point_up_2_tone4:', [], [], 'people')
+    ('1f446-1f3ff', 199, 1, 2, '👆🏿', [], ':point_up_2_tone5:', [], [], 'people')
+    ('1f447', 200, 1, 1, '👇', [], ':point_down:', [], [], 'people')
+    ('1f447-1f3fb', 201, 1, 2, '👇🏻', [], ':point_down_tone1:', [], [], 'people')
+    ('1f447-1f3fc', 202, 1, 2, '👇🏼', [], ':point_down_tone2:', [], [], 'people')
+    ('1f447-1f3fd', 203, 1, 2, '👇🏽', [], ':point_down_tone3:', [], [], 'people')
+    ('1f447-1f3fe', 204, 1, 2, '👇🏾', [], ':point_down_tone4:', [], [], 'people')
+    ('1f447-1f3ff', 205, 1, 2, '👇🏿', [], ':point_down_tone5:', [], [], 'people')
+    ('261d', 206, 1, 1, '☝', [], ':point_up:', [], [], 'people')
+    ('261d-1f3fb', 207, 1, 2, '☝🏻', [], ':point_up_tone1:', [], [], 'people')
+    ('261d-1f3fc', 208, 1, 2, '☝🏼', [], ':point_up_tone2:', [], [], 'people')
+    ('261d-1f3fd', 209, 1, 2, '☝🏽', [], ':point_up_tone3:', [], [], 'people')
+    ('261d-1f3fe', 210, 1, 2, '☝🏾', [], ':point_up_tone4:', [], [], 'people')
+    ('261d-1f3ff', 211, 1, 2, '☝🏿', [], ':point_up_tone5:', [], [], 'people')
+    ('270b', 212, 1, 1, '✋', [], ':raised_hand:', [], [], 'people')
+    ('270b-1f3fb', 213, 1, 2, '✋🏻', [], ':raised_hand_tone1:', [], [], 'people')
+    ('270b-1f3fc', 214, 1, 2, '✋🏼', [], ':raised_hand_tone2:', [], [], 'people')
+    ('270b-1f3fd', 215, 1, 2, '✋🏽', [], ':raised_hand_tone3:', [], [], 'people')
+    ('270b-1f3fe', 216, 1, 2, '✋🏾', [], ':raised_hand_tone4:', [], [], 'people')
+    ('270b-1f3ff', 217, 1, 2, '✋🏿', [], ':raised_hand_tone5:', [], [], 'people')
+    ('1f91a', 218, 1, 1, '\U0001f91a', [], ':raised_back_of_hand:', [':back_of_hand:'], [], 'people')
+    ('1f91a-1f3fb', 219, 1, 2, '\U0001f91a🏻', [], ':raised_back_of_hand_tone1:', [':back_of_hand_tone1:'], [], 'people')
+    ('1f91a-1f3fc', 220, 1, 2, '\U0001f91a🏼', [], ':raised_back_of_hand_tone2:', [':back_of_hand_tone2:'], [], 'people')
+    ('1f91a-1f3fd', 221, 1, 2, '\U0001f91a🏽', [], ':raised_back_of_hand_tone3:', [':back_of_hand_tone3:'], [], 'people')
+    ('1f91a-1f3fe', 222, 1, 2, '\U0001f91a🏾', [], ':raised_back_of_hand_tone4:', [':back_of_hand_tone4:'], [], 'people')
+    ('1f91a-1f3ff', 223, 1, 2, '\U0001f91a🏿', [], ':raised_back_of_hand_tone5:', [':back_of_hand_tone5:'], [], 'people')
+    ('1f590', 224, 1, 1, '🖐', [], ':hand_splayed:', [':raised_hand_with_fingers_splayed:'], [], 'people')
+    ('1f590-1f3fb', 225, 1, 2, '🖐🏻', [], ':hand_splayed_tone1:', [':raised_hand_with_fingers_splayed_tone1:'], [], 'people')
+    ('1f590-1f3fc', 226, 1, 2, '🖐🏼', [], ':hand_splayed_tone2:', [':raised_hand_with_fingers_splayed_tone2:'], [], 'people')
+    ('1f590-1f3fd', 227, 1, 2, '🖐🏽', [], ':hand_splayed_tone3:', [':raised_hand_with_fingers_splayed_tone3:'], [], 'people')
+    ('1f590-1f3fe', 228, 1, 2, '🖐🏾', [], ':hand_splayed_tone4:', [':raised_hand_with_fingers_splayed_tone4:'], [], 'people')
+    ('1f590-1f3ff', 229, 1, 2, '🖐🏿', [], ':hand_splayed_tone5:', [':raised_hand_with_fingers_splayed_tone5:'], [], 'people')
+    ('1f596', 230, 1, 1, '🖖', [], ':vulcan:', [':raised_hand_with_part_between_middle_and_ring_fingers:'], [], 'people')
+    ('1f596-1f3fb', 231, 1, 2, '🖖🏻', [], ':vulcan_tone1:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone1:'], [], 'people')
+    ('1f596-1f3fc', 232, 1, 2, '🖖🏼', [], ':vulcan_tone2:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone2:'], [], 'people')
+    ('1f596-1f3fd', 233, 1, 2, '🖖🏽', [], ':vulcan_tone3:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone3:'], [], 'people')
+    ('1f596-1f3fe', 234, 1, 2, '🖖🏾', [], ':vulcan_tone4:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone4:'], [], 'people')
+    ('1f596-1f3ff', 235, 1, 2, '🖖🏿', [], ':vulcan_tone5:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone5:'], [], 'people')
+    ('1f44b', 236, 1, 1, '👋', [], ':wave:', [], [], 'people')
+    ('1f44b-1f3fb', 237, 1, 2, '👋🏻', [], ':wave_tone1:', [], [], 'people')
+    ('1f44b-1f3fc', 238, 1, 2, '👋🏼', [], ':wave_tone2:', [], [], 'people')
+    ('1f44b-1f3fd', 239, 1, 2, '👋🏽', [], ':wave_tone3:', [], [], 'people')
+    ('1f44b-1f3fe', 240, 1, 2, '👋🏾', [], ':wave_tone4:', [], [], 'people')
+    ('1f44b-1f3ff', 241, 1, 2, '👋🏿', [], ':wave_tone5:', [], [], 'people')
+    ('1f919', 242, 1, 1, '\U0001f919', [], ':call_me:', [':call_me_hand:'], [], 'people')
+    ('1f919-1f3fb', 243, 1, 2, '\U0001f919🏻', [], ':call_me_tone1:', [':call_me_hand_tone1:'], [], 'people')
+    ('1f919-1f3fc', 244, 1, 2, '\U0001f919🏼', [], ':call_me_tone2:', [':call_me_hand_tone2:'], [], 'people')
+    ('1f919-1f3fd', 245, 1, 2, '\U0001f919🏽', [], ':call_me_tone3:', [':call_me_hand_tone3:'], [], 'people')
+    ('1f919-1f3fe', 246, 1, 2, '\U0001f919🏾', [], ':call_me_tone4:', [':call_me_hand_tone4:'], [], 'people')
+    ('1f919-1f3ff', 247, 1, 2, '\U0001f919🏿', [], ':call_me_tone5:', [':call_me_hand_tone5:'], [], 'people')
+    ('1f4aa', 248, 1, 1, '💪', [], ':muscle:', [], [], 'people')
+    ('1f4aa-1f3fb', 249, 1, 2, '💪🏻', [], ':muscle_tone1:', [], [], 'people')
+    ('1f4aa-1f3fc', 250, 1, 2, '💪🏼', [], ':muscle_tone2:', [], [], 'people')
+    ('1f4aa-1f3fd', 251, 1, 2, '💪🏽', [], ':muscle_tone3:', [], [], 'people')
+    ('1f4aa-1f3fe', 252, 1, 2, '💪🏾', [], ':muscle_tone4:', [], [], 'people')
+    ('1f4aa-1f3ff', 253, 1, 2, '💪🏿', [], ':muscle_tone5:', [], [], 'people')
+    ('1f595', 254, 1, 1, '🖕', [], ':middle_finger:', [':reversed_hand_with_middle_finger_extended:'], [], 'people')
+    ('1f595-1f3fb', 255, 1, 2, '🖕🏻', [], ':middle_finger_tone1:', [':reversed_hand_with_middle_finger_extended_tone1:'], [], 'people')
+    ('1f595-1f3fc', 256, 1, 2, '🖕🏼', [], ':middle_finger_tone2:', [':reversed_hand_with_middle_finger_extended_tone2:'], [], 'people')
+    ('1f595-1f3fd', 257, 1, 2, '🖕🏽', [], ':middle_finger_tone3:', [':reversed_hand_with_middle_finger_extended_tone3:'], [], 'people')
+    ('1f595-1f3fe', 258, 1, 2, '🖕🏾', [], ':middle_finger_tone4:', [':reversed_hand_with_middle_finger_extended_tone4:'], [], 'people')
+    ('1f595-1f3ff', 259, 1, 2, '🖕🏿', [], ':middle_finger_tone5:', [':reversed_hand_with_middle_finger_extended_tone5:'], [], 'people')
+    ('270d', 260, 1, 1, '✍', [], ':writing_hand:', [], [], 'people')
+    ('270d-1f3fb', 261, 1, 2, '✍🏻', [], ':writing_hand_tone1:', [], [], 'people')
+    ('270d-1f3fc', 262, 1, 2, '✍🏼', [], ':writing_hand_tone2:', [], [], 'people')
+    ('270d-1f3fd', 263, 1, 2, '✍🏽', [], ':writing_hand_tone3:', [], [], 'people')
+    ('270d-1f3fe', 264, 1, 2, '✍🏾', [], ':writing_hand_tone4:', [], [], 'people')
+    ('270d-1f3ff', 265, 1, 2, '✍🏿', [], ':writing_hand_tone5:', [], [], 'people')
+    ('1f933', 266, 1, 1, '\U0001f933', [], ':selfie:', [], [], 'people')
+    ('1f933-1f3fb', 267, 1, 2, '\U0001f933🏻', [], ':selfie_tone1:', [], [], 'people')
+    ('1f933-1f3fc', 268, 1, 2, '\U0001f933🏼', [], ':selfie_tone2:', [], [], 'people')
+    ('1f933-1f3fd', 269, 1, 2, '\U0001f933🏽', [], ':selfie_tone3:', [], [], 'people')
+    ('1f933-1f3fe', 270, 1, 2, '\U0001f933🏾', [], ':selfie_tone4:', [], [], 'people')
+    ('1f933-1f3ff', 271, 1, 2, '\U0001f933🏿', [], ':selfie_tone5:', [], [], 'people')
+    ('1f485', 272, 1, 1, '💅', [], ':nail_care:', [], [], 'people')
+    ('1f485-1f3fb', 273, 1, 2, '💅🏻', [], ':nail_care_tone1:', [], [], 'people')
+    ('1f485-1f3fc', 274, 1, 2, '💅🏼', [], ':nail_care_tone2:', [], [], 'people')
+    ('1f485-1f3fd', 275, 1, 2, '💅🏽', [], ':nail_care_tone3:', [], [], 'people')
+    ('1f485-1f3fe', 276, 1, 2, '💅🏾', [], ':nail_care_tone4:', [], [], 'people')
+    ('1f485-1f3ff', 277, 1, 2, '💅🏿', [], ':nail_care_tone5:', [], [], 'people')
+    ('1f48d', 278, 1, 1, '💍', [], ':ring:', [], [], 'people')
+    ('1f484', 279, 1, 1, '💄', [], ':lipstick:', [], [], 'people')
+    ('1f48b', 280, 1, 1, '💋', [], ':kiss:', [], [], 'people')
+    ('1f444', 281, 1, 1, '👄', [], ':lips:', [], [], 'people')
+    ('1f445', 282, 1, 1, '👅', [], ':tongue:', [], [], 'people')
+    ('1f442', 283, 1, 1, '👂', [], ':ear:', [], [], 'people')
+    ('1f442-1f3fb', 284, 1, 2, '👂🏻', [], ':ear_tone1:', [], [], 'people')
+    ('1f442-1f3fc', 285, 1, 2, '👂🏼', [], ':ear_tone2:', [], [], 'people')
+    ('1f442-1f3fd', 286, 1, 2, '👂🏽', [], ':ear_tone3:', [], [], 'people')
+    ('1f442-1f3fe', 287, 1, 2, '👂🏾', [], ':ear_tone4:', [], [], 'people')
+    ('1f442-1f3ff', 288, 1, 2, '👂🏿', [], ':ear_tone5:', [], [], 'people')
+    ('1f443', 289, 1, 1, '👃', [], ':nose:', [], [], 'people')
+    ('1f443-1f3fb', 290, 1, 2, '👃🏻', [], ':nose_tone1:', [], [], 'people')
+    ('1f443-1f3fc', 291, 1, 2, '👃🏼', [], ':nose_tone2:', [], [], 'people')
+    ('1f443-1f3fd', 292, 1, 2, '👃🏽', [], ':nose_tone3:', [], [], 'people')
+    ('1f443-1f3fe', 293, 1, 2, '👃🏾', [], ':nose_tone4:', [], [], 'people')
+    ('1f443-1f3ff', 294, 1, 2, '👃🏿', [], ':nose_tone5:', [], [], 'people')
+    ('1f463', 295, 1, 1, '👣', [], ':footprints:', [], [], 'people')
+    ('1f441', 296, 1, 1, '👁', [], ':eye:', [], [], 'people')
+    ('1f440', 297, 1, 1, '👀', ['look', 'looking', 'looked', 'eyes', 'search'], ':eyes:', [], [], 'people')
+    ('1f5e3', 298, 1, 1, '🗣', ['speak', 'speaking', 'talk', 'talking', 'talking head'], ':speaking_head:', [':speaking_head_in_silhouette:'], [], 'people')
+    ('1f464', 299, 1, 1, '👤', ['bust', 'silhouette'], ':bust_in_silhouette:', [], [], 'people')
+    ('1f465', 300, 1, 1, '👥', [], ':busts_in_silhouette:', [], [], 'people')
+    ('1f476', 301, 1, 1, '👶', ['baby', 'infant'], ':baby:', [], [], 'people')
+    ('1f476-1f3fb', 302, 1, 2, '👶🏻', [], ':baby_tone1:', [], [], 'people')
+    ('1f476-1f3fc', 303, 1, 2, '👶🏼', [], ':baby_tone2:', [], [], 'people')
+    ('1f476-1f3fd', 304, 1, 2, '👶🏽', [], ':baby_tone3:', [], [], 'people')
+    ('1f476-1f3fe', 305, 1, 2, '👶🏾', [], ':baby_tone4:', [], [], 'people')
+    ('1f476-1f3ff', 306, 1, 2, '👶🏿', [], ':baby_tone5:', [], [], 'people')
+    ('1f466', 307, 1, 1, '👦', [], ':boy:', [], [], 'people')
+    ('1f466-1f3fb', 308, 1, 2, '👦🏻', [], ':boy_tone1:', [], [], 'people')
+    ('1f466-1f3fc', 309, 1, 2, '👦🏼', [], ':boy_tone2:', [], [], 'people')
+    ('1f466-1f3fd', 310, 1, 2, '👦🏽', [], ':boy_tone3:', [], [], 'people')
+    ('1f466-1f3fe', 311, 1, 2, '👦🏾', [], ':boy_tone4:', [], [], 'people')
+    ('1f466-1f3ff', 312, 1, 2, '👦🏿', [], ':boy_tone5:', [], [], 'people')
+    ('1f467', 313, 1, 1, '👧', [], ':girl:', [], [], 'people')
+    ('1f467-1f3fb', 314, 1, 2, '👧🏻', [], ':girl_tone1:', [], [], 'people')
+    ('1f467-1f3fc', 315, 1, 2, '👧🏼', [], ':girl_tone2:', [], [], 'people')
+    ('1f467-1f3fd', 316, 1, 2, '👧🏽', [], ':girl_tone3:', [], [], 'people')
+    ('1f467-1f3fe', 317, 1, 2, '👧🏾', [], ':girl_tone4:', [], [], 'people')
+    ('1f467-1f3ff', 318, 1, 2, '👧🏿', [], ':girl_tone5:', [], [], 'people')
+    ('1f468', 319, 1, 1, '👨', [], ':man:', [], [], 'people')
+    ('1f468-1f3fb', 320, 1, 2, '👨🏻', [], ':man_tone1:', [], [], 'people')
+    ('1f468-1f3fc', 321, 1, 2, '👨🏼', [], ':man_tone2:', [], [], 'people')
+    ('1f468-1f3fd', 322, 1, 2, '👨🏽', [], ':man_tone3:', [], [], 'people')
+    ('1f468-1f3fe', 323, 1, 2, '👨🏾', [], ':man_tone4:', [], [], 'people')
+    ('1f468-1f3ff', 324, 1, 2, '👨🏿', [], ':man_tone5:', [], [], 'people')
+    ('1f469', 325, 1, 1, '👩', [], ':woman:', [], [], 'people')
+    ('1f469-1f3fb', 326, 1, 2, '👩🏻', [], ':woman_tone1:', [], [], 'people')
+    ('1f469-1f3fc', 327, 1, 2, '👩🏼', [], ':woman_tone2:', [], [], 'people')
+    ('1f469-1f3fd', 328, 1, 2, '👩🏽', [], ':woman_tone3:', [], [], 'people')
+    ('1f469-1f3fe', 329, 1, 2, '👩🏾', [], ':woman_tone4:', [], [], 'people')
+    ('1f469-1f3ff', 330, 1, 2, '👩🏿', [], ':woman_tone5:', [], [], 'people')
+    ('1f471-2640', 331, 1, 2, '👱♀', [], ':blond-haired_woman:', [], [], 'people')
+    ('1f471-1f3fb-2640', 332, 1, 3, '👱🏻♀', [], ':blond-haired_woman_tone1:', [':blond-haired_woman_light_skin_tone:'], [], 'people')
+    ('1f471-1f3fc-2640', 333, 1, 3, '👱🏼♀', [], ':blond-haired_woman_tone2:', [':blond-haired_woman_medium_light_skin_tone:'], [], 'people')
+    ('1f471-1f3fd-2640', 334, 1, 3, '👱🏽♀', [], ':blond-haired_woman_tone3:', [':blond-haired_woman_medium_skin_tone:'], [], 'people')
+    ('1f471-1f3fe-2640', 335, 1, 3, '👱🏾♀', [], ':blond-haired_woman_tone4:', [':blond-haired_woman_medium_dark_skin_tone:'], [], 'people')
+    ('1f471-1f3ff-2640', 336, 1, 3, '👱🏿♀', [], ':blond-haired_woman_tone5:', [':blond-haired_woman_dark_skin_tone:'], [], 'people')
+    ('1f471', 337, 1, 1, '👱', [], ':blond_haired_person:', [':person_with_blond_hair:'], [], 'people')
+    ('1f471-1f3fb', 338, 1, 2, '👱🏻', [], ':blond_haired_person_tone1:', [':person_with_blond_hair_tone1:'], [], 'people')
+    ('1f471-1f3fc', 339, 1, 2, '👱🏼', [], ':blond_haired_person_tone2:', [':person_with_blond_hair_tone2:'], [], 'people')
+    ('1f471-1f3fd', 340, 1, 2, '👱🏽', [], ':blond_haired_person_tone3:', [':person_with_blond_hair_tone3:'], [], 'people')
+    ('1f471-1f3fe', 341, 1, 2, '👱🏾', [], ':blond_haired_person_tone4:', [':person_with_blond_hair_tone4:'], [], 'people')
+    ('1f471-1f3ff', 342, 1, 2, '👱🏿', [], ':blond_haired_person_tone5:', [':person_with_blond_hair_tone5:'], [], 'people')
+    ('1f471-2642', 343, 1, 2, '👱♂', [], ':blond-haired_man:', [], [], 'people')
+    ('1f471-1f3ff-2642', 344, 1, 3, '👱🏿♂', [], ':blond-haired_man_tone5:', [':blond-haired_man_dark_skin_tone:'], [], 'people')
+    ('1f471-1f3fe-2642', 345, 1, 3, '👱🏾♂', [], ':blond-haired_man_tone4:', [':blond-haired_man_medium_dark_skin_tone:'], [], 'people')
+    ('1f471-1f3fd-2642', 346, 1, 3, '👱🏽♂', [], ':blond-haired_man_tone3:', [':blond-haired_man_medium_skin_tone:'], [], 'people')
+    ('1f471-1f3fc-2642', 347, 1, 3, '👱🏼♂', [], ':blond-haired_man_tone2:', [':blond-haired_man_medium_light_skin_tone:'], [], 'people')
+    ('1f471-1f3fb-2642', 348, 1, 3, '👱🏻♂', [], ':blond-haired_man_tone1:', [':blond-haired_man_light_skin_tone:'], [], 'people')
+    ('1f474', 349, 1, 1, '👴', [], ':older_man:', [], [], 'people')
+    ('1f474-1f3fb', 350, 1, 2, '👴🏻', [], ':older_man_tone1:', [], [], 'people')
+    ('1f474-1f3fc', 351, 1, 2, '👴🏼', [], ':older_man_tone2:', [], [], 'people')
+    ('1f474-1f3fd', 352, 1, 2, '👴🏽', [], ':older_man_tone3:', [], [], 'people')
+    ('1f474-1f3fe', 353, 1, 2, '👴🏾', [], ':older_man_tone4:', [], [], 'people')
+    ('1f474-1f3ff', 354, 1, 2, '👴🏿', [], ':older_man_tone5:', [], [], 'people')
+    ('1f475', 355, 1, 1, '👵', [], ':older_woman:', [':grandma:'], [], 'people')
+    ('1f475-1f3fb', 356, 1, 2, '👵🏻', [], ':older_woman_tone1:', [':grandma_tone1:'], [], 'people')
+    ('1f475-1f3fc', 357, 1, 2, '👵🏼', [], ':older_woman_tone2:', [':grandma_tone2:'], [], 'people')
+    ('1f475-1f3fd', 358, 1, 2, '👵🏽', [], ':older_woman_tone3:', [':grandma_tone3:'], [], 'people')
+    ('1f475-1f3fe', 359, 1, 2, '👵🏾', [], ':older_woman_tone4:', [':grandma_tone4:'], [], 'people')
+    ('1f475-1f3ff', 360, 1, 2, '👵🏿', [], ':older_woman_tone5:', [':grandma_tone5:'], [], 'people')
+    ('1f472', 361, 1, 1, '👲', [], ':man_with_chinese_cap:', [':man_with_gua_pi_mao:'], [], 'people')
+    ('1f472-1f3fb', 362, 1, 2, '👲🏻', [], ':man_with_chinese_cap_tone1:', [':man_with_gua_pi_mao_tone1:'], [], 'people')
+    ('1f472-1f3fc', 363, 1, 2, '👲🏼', [], ':man_with_chinese_cap_tone2:', [':man_with_gua_pi_mao_tone2:'], [], 'people')
+    ('1f472-1f3fd', 364, 1, 2, '👲🏽', [], ':man_with_chinese_cap_tone3:', [':man_with_gua_pi_mao_tone3:'], [], 'people')
+    ('1f472-1f3fe', 365, 1, 2, '👲🏾', [], ':man_with_chinese_cap_tone4:', [':man_with_gua_pi_mao_tone4:'], [], 'people')
+    ('1f472-1f3ff', 366, 1, 2, '👲🏿', [], ':man_with_chinese_cap_tone5:', [':man_with_gua_pi_mao_tone5:'], [], 'people')
+    ('1f473-2640', 367, 1, 2, '👳♀', [], ':woman_wearing_turban:', [], [], 'people')
+    ('1f473-1f3fb-2640', 368, 1, 3, '👳🏻♀', [], ':woman_wearing_turban_tone1:', [':woman_wearing_turban_light_skin_tone:'], [], 'people')
+    ('1f473-1f3fc-2640', 369, 1, 3, '👳🏼♀', [], ':woman_wearing_turban_tone2:', [':woman_wearing_turban_medium_light_skin_tone:'], [], 'people')
+    ('1f473-1f3fd-2640', 370, 1, 3, '👳🏽♀', [], ':woman_wearing_turban_tone3:', [':woman_wearing_turban_medium_skin_tone:'], [], 'people')
+    ('1f473-1f3fe-2640', 371, 1, 3, '👳🏾♀', [], ':woman_wearing_turban_tone4:', [':woman_wearing_turban_medium_dark_skin_tone:'], [], 'people')
+    ('1f473-1f3ff-2640', 372, 1, 3, '👳🏿♀', [], ':woman_wearing_turban_tone5:', [':woman_wearing_turban_dark_skin_tone:'], [], 'people')
+    ('1f473', 373, 1, 1, '👳', [], ':person_wearing_turban:', [':man_with_turban:'], [], 'people')
+    ('1f473-1f3fb', 374, 1, 2, '👳🏻', [], ':person_wearing_turban_tone1:', [':man_with_turban_tone1:'], [], 'people')
+    ('1f473-1f3fc', 375, 1, 2, '👳🏼', [], ':person_wearing_turban_tone2:', [':man_with_turban_tone2:'], [], 'people')
+    ('1f473-1f3fd', 376, 1, 2, '👳🏽', [], ':person_wearing_turban_tone3:', [':man_with_turban_tone3:'], [], 'people')
+    ('1f473-1f3fe', 377, 1, 2, '👳🏾', [], ':person_wearing_turban_tone4:', [':man_with_turban_tone4:'], [], 'people')
+    ('1f473-1f3ff', 378, 1, 2, '👳🏿', [], ':person_wearing_turban_tone5:', [':man_with_turban_tone5:'], [], 'people')
+    ('1f473-2642', 379, 1, 2, '👳♂', [], ':man_wearing_turban:', [], [], 'people')
+    ('1f473-1f3ff-2642', 380, 1, 3, '👳🏿♂', [], ':man_wearing_turban_tone5:', [':man_wearing_turban_dark_skin_tone:'], [], 'people')
+    ('1f473-1f3fe-2642', 381, 1, 3, '👳🏾♂', [], ':man_wearing_turban_tone4:', [':man_wearing_turban_medium_dark_skin_tone:'], [], 'people')
+    ('1f473-1f3fd-2642', 382, 1, 3, '👳🏽♂', [], ':man_wearing_turban_tone3:', [':man_wearing_turban_medium_skin_tone:'], [], 'people')
+    ('1f473-1f3fc-2642', 383, 1, 3, '👳🏼♂', [], ':man_wearing_turban_tone2:', [':man_wearing_turban_medium_light_skin_tone:'], [], 'people')
+    ('1f473-1f3fb-2642', 384, 1, 3, '👳🏻♂', [], ':man_wearing_turban_tone1:', [':man_wearing_turban_light_skin_tone:'], [], 'people')
+    ('1f46e-2640', 385, 1, 2, '👮♀', [], ':woman_police_officer:', [], [], 'people')
+    ('1f46e-1f3fb-2640', 386, 1, 3, '👮🏻♀', [], ':woman_police_officer_tone1:', [':woman_police_officer_light_skin_tone:'], [], 'people')
+    ('1f46e-1f3fc-2640', 387, 1, 3, '👮🏼♀', [], ':woman_police_officer_tone2:', [':woman_police_officer_medium_light_skin_tone:'], [], 'people')
+    ('1f46e-1f3fd-2640', 388, 1, 3, '👮🏽♀', [], ':woman_police_officer_tone3:', [':woman_police_officer_medium_skin_tone:'], [], 'people')
+    ('1f46e-1f3fe-2640', 389, 1, 3, '👮🏾♀', [], ':woman_police_officer_tone4:', [':woman_police_officer_medium_dark_skin_tone:'], [], 'people')
+    ('1f46e-1f3ff-2640', 390, 1, 3, '👮🏿♀', [], ':woman_police_officer_tone5:', [':woman_police_officer_dark_skin_tone:'], [], 'people')
+    ('1f46e', 391, 1, 1, '👮', ['cop', 'fuzz', 'law', 'pig', 'police'], ':police_officer:', [':cop:'], [], 'people')
+    ('1f46e-1f3fb', 392, 1, 2, '👮🏻', [], ':police_officer_tone1:', [':cop_tone1:'], [], 'people')
+    ('1f46e-1f3fc', 393, 1, 2, '👮🏼', [], ':police_officer_tone2:', [':cop_tone2:'], [], 'people')
+    ('1f46e-1f3fd', 394, 1, 2, '👮🏽', [], ':police_officer_tone3:', [':cop_tone3:'], [], 'people')
+    ('1f46e-1f3fe', 395, 1, 2, '👮🏾', [], ':police_officer_tone4:', [':cop_tone4:'], [], 'people')
+    ('1f46e-1f3ff', 396, 1, 2, '👮🏿', [], ':police_officer_tone5:', [':cop_tone5:'], [], 'people')
+    ('1f46e-2642', 397, 1, 2, '👮♂', [], ':man_police_officer:', [], [], 'people')
+    ('1f46e-1f3ff-2642', 398, 1, 3, '👮🏿♂', [], ':man_police_officer_tone5:', [':man_police_officer_dark_skin_tone:'], [], 'people')
+    ('1f46e-1f3fe-2642', 399, 1, 3, '👮🏾♂', [], ':man_police_officer_tone4:', [':man_police_officer_medium_dark_skin_tone:'], [], 'people')
+    ('1f46e-1f3fd-2642', 400, 1, 3, '👮🏽♂', [], ':man_police_officer_tone3:', [':man_police_officer_medium_skin_tone:'], [], 'people')
+    ('1f46e-1f3fc-2642', 401, 1, 3, '👮🏼♂', [], ':man_police_officer_tone2:', [':man_police_officer_medium_light_skin_tone:'], [], 'people')
+    ('1f46e-1f3fb-2642', 402, 1, 3, '👮🏻♂', [], ':man_police_officer_tone1:', [':man_police_officer_light_skin_tone:'], [], 'people')
+    ('1f477-2640', 403, 1, 2, '👷♀', [], ':woman_construction_worker:', [], [], 'people')
+    ('1f477-1f3fb-2640', 404, 1, 3, '👷🏻♀', [], ':woman_construction_worker_tone1:', [':woman_construction_worker_light_skin_tone:'], [], 'people')
+    ('1f477-1f3fc-2640', 405, 1, 3, '👷🏼♀', [], ':woman_construction_worker_tone2:', [':woman_construction_worker_medium_light_skin_tone:'], [], 'people')
+    ('1f477-1f3fd-2640', 406, 1, 3, '👷🏽♀', [], ':woman_construction_worker_tone3:', [':woman_construction_worker_medium_skin_tone:'], [], 'people')
+    ('1f477-1f3fe-2640', 407, 1, 3, '👷🏾♀', [], ':woman_construction_worker_tone4:', [':woman_construction_worker_medium_dark_skin_tone:'], [], 'people')
+    ('1f477-1f3ff-2640', 408, 1, 3, '👷🏿♀', [], ':woman_construction_worker_tone5:', [':woman_construction_worker_dark_skin_tone:'], [], 'people')
+    ('1f477', 409, 1, 1, '👷', [], ':construction_worker:', [], [], 'people')
+    ('1f477-1f3fb', 410, 1, 2, '👷🏻', [], ':construction_worker_tone1:', [], [], 'people')
+    ('1f477-1f3fc', 411, 1, 2, '👷🏼', [], ':construction_worker_tone2:', [], [], 'people')
+    ('1f477-1f3fd', 412, 1, 2, '👷🏽', [], ':construction_worker_tone3:', [], [], 'people')
+    ('1f477-1f3fe', 413, 1, 2, '👷🏾', [], ':construction_worker_tone4:', [], [], 'people')
+    ('1f477-1f3ff', 414, 1, 2, '👷🏿', [], ':construction_worker_tone5:', [], [], 'people')
+    ('1f477-2642', 415, 1, 2, '👷♂', [], ':man_construction_worker:', [], [], 'people')
+    ('1f477-1f3ff-2642', 416, 1, 3, '👷🏿♂', [], ':man_construction_worker_tone5:', [':man_construction_worker_dark_skin_tone:'], [], 'people')
+    ('1f477-1f3fe-2642', 417, 1, 3, '👷🏾♂', [], ':man_construction_worker_tone4:', [':man_construction_worker_medium_dark_skin_tone:'], [], 'people')
+    ('1f477-1f3fd-2642', 418, 1, 3, '👷🏽♂', [], ':man_construction_worker_tone3:', [':man_construction_worker_medium_skin_tone:'], [], 'people')
+    ('1f477-1f3fc-2642', 419, 1, 3, '👷🏼♂', [], ':man_construction_worker_tone2:', [':man_construction_worker_medium_light_skin_tone:'], [], 'people')
+    ('1f477-1f3fb-2642', 420, 1, 3, '👷🏻♂', [], ':man_construction_worker_tone1:', [':man_construction_worker_light_skin_tone:'], [], 'people')
+    ('1f482-2640', 421, 1, 2, '💂♀', [], ':woman_guard:', [], [], 'people')
+    ('1f482-1f3fb-2640', 422, 1, 3, '💂🏻♀', [], ':woman_guard_tone1:', [':woman_guard_light_skin_tone:'], [], 'people')
+    ('1f482-1f3fc-2640', 423, 1, 3, '💂🏼♀', [], ':woman_guard_tone2:', [':woman_guard_medium_light_skin_tone:'], [], 'people')
+    ('1f482-1f3fd-2640', 424, 1, 3, '💂🏽♀', [], ':woman_guard_tone3:', [':woman_guard_medium_skin_tone:'], [], 'people')
+    ('1f482-1f3fe-2640', 425, 1, 3, '💂🏾♀', [], ':woman_guard_tone4:', [':woman_guard_medium_dark_skin_tone:'], [], 'people')
+    ('1f482-1f3ff-2640', 426, 1, 3, '💂🏿♀', [], ':woman_guard_tone5:', [':woman_guard_dark_skin_tone:'], [], 'people')
+    ('1f482', 427, 1, 1, '💂', [], ':guard:', [':guardsman:'], [], 'people')
+    ('1f482-1f3fb', 428, 1, 2, '💂🏻', [], ':guard_tone1:', [':guardsman_tone1:'], [], 'people')
+    ('1f482-1f3fc', 429, 1, 2, '💂🏼', [], ':guard_tone2:', [':guardsman_tone2:'], [], 'people')
+    ('1f482-1f3fd', 430, 1, 2, '💂🏽', [], ':guard_tone3:', [':guardsman_tone3:'], [], 'people')
+    ('1f482-1f3fe', 431, 1, 2, '💂🏾', [], ':guard_tone4:', [':guardsman_tone4:'], [], 'people')
+    ('1f482-1f3ff', 432, 1, 2, '💂🏿', [], ':guard_tone5:', [':guardsman_tone5:'], [], 'people')
+    ('1f482-2642', 433, 1, 2, '💂♂', [], ':man_guard:', [], [], 'people')
+    ('1f482-1f3ff-2642', 434, 1, 3, '💂🏿♂', [], ':man_guard_tone5:', [':man_guard_dark_skin_tone:'], [], 'people')
+    ('1f482-1f3fe-2642', 435, 1, 3, '💂🏾♂', [], ':man_guard_tone4:', [':man_guard_medium_dark_skin_tone:'], [], 'people')
+    ('1f482-1f3fd-2642', 436, 1, 3, '💂🏽♂', [], ':man_guard_tone3:', [':man_guard_medium_skin_tone:'], [], 'people')
+    ('1f482-1f3fc-2642', 437, 1, 3, '💂🏼♂', [], ':man_guard_tone2:', [':man_guard_medium_light_skin_tone:'], [], 'people')
+    ('1f482-1f3fb-2642', 438, 1, 3, '💂🏻♂', [], ':man_guard_tone1:', [':man_guard_light_skin_tone:'], [], 'people')
+    ('1f575-2640', 439, 1, 2, '🕵♀', [], ':woman_detective:', [], [], 'people')
+    ('1f575-1f3fb-2640', 440, 1, 3, '🕵🏻♀', [], ':woman_detective_tone1:', [':woman_detective_light_skin_tone:'], [], 'people')
+    ('1f575-1f3fc-2640', 441, 1, 3, '🕵🏼♀', [], ':woman_detective_tone2:', [':woman_detective_medium_light_skin_tone:'], [], 'people')
+    ('1f575-1f3fd-2640', 442, 1, 3, '🕵🏽♀', [], ':woman_detective_tone3:', [':woman_detective_medium_skin_tone:'], [], 'people')
+    ('1f575-1f3fe-2640', 443, 1, 3, '🕵🏾♀', [], ':woman_detective_tone4:', [':woman_detective_medium_dark_skin_tone:'], [], 'people')
+    ('1f575-1f3ff-2640', 444, 1, 3, '🕵🏿♀', [], ':woman_detective_tone5:', [':woman_detective_dark_skin_tone:'], [], 'people')
+    ('1f575', 445, 1, 1, '🕵', [], ':detective:', [':spy:', ':sleuth_or_spy:'], [], 'people')
+    ('1f575-1f3fb', 446, 1, 2, '🕵🏻', [], ':detective_tone1:', [':spy_tone1:', ':sleuth_or_spy_tone1:'], [], 'people')
+    ('1f575-1f3fc', 447, 1, 2, '🕵🏼', [], ':detective_tone2:', [':spy_tone2:', ':sleuth_or_spy_tone2:'], [], 'people')
+    ('1f575-1f3fd', 448, 1, 2, '🕵🏽', [], ':detective_tone3:', [':spy_tone3:', ':sleuth_or_spy_tone3:'], [], 'people')
+    ('1f575-1f3fe', 449, 1, 2, '🕵🏾', [], ':detective_tone4:', [':spy_tone4:', ':sleuth_or_spy_tone4:'], [], 'people')
+    ('1f575-1f3ff', 450, 1, 2, '🕵🏿', [], ':detective_tone5:', [':spy_tone5:', ':sleuth_or_spy_tone5:'], [], 'people')
+    ('1f575-2642', 451, 1, 2, '🕵♂', [], ':man_detective:', [], [], 'people')
+    ('1f575-1f3ff-2642', 452, 1, 3, '🕵🏿♂', [], ':man_detective_tone5:', [':man_detective_dark_skin_tone:'], [], 'people')
+    ('1f575-1f3fe-2642', 453, 1, 3, '🕵🏾♂', [], ':man_detective_tone4:', [':man_detective_medium_dark_skin_tone:'], [], 'people')
+    ('1f575-1f3fd-2642', 454, 1, 3, '🕵🏽♂', [], ':man_detective_tone3:', [':man_detective_medium_skin_tone:'], [], 'people')
+    ('1f575-1f3fc-2642', 455, 1, 3, '🕵🏼♂', [], ':man_detective_tone2:', [':man_detective_medium_light_skin_tone:'], [], 'people')
+    ('1f575-1f3fb-2642', 456, 1, 3, '🕵🏻♂', [], ':man_detective_tone1:', [':man_detective_light_skin_tone:'], [], 'people')
+    ('1f469-2695', 457, 1, 2, '👩⚕', [], ':woman_health_worker:', [], [], 'people')
+    ('1f469-1f3fb-2695', 458, 1, 3, '👩🏻⚕', [], ':woman_health_worker_tone1:', [':woman_health_worker_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-2695', 459, 1, 3, '👩🏼⚕', [], ':woman_health_worker_tone2:', [':woman_health_worker_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-2695', 460, 1, 3, '👩🏽⚕', [], ':woman_health_worker_tone3:', [':woman_health_worker_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-2695', 461, 1, 3, '👩🏾⚕', [], ':woman_health_worker_tone4:', [':woman_health_worker_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-2695', 462, 1, 3, '👩🏿⚕', [], ':woman_health_worker_tone5:', [':woman_health_worker_dark_skin_tone:'], [], 'people')
+    ('1f468-2695', 463, 1, 2, '👨⚕', [], ':man_health_worker:', [], [], 'people')
+    ('1f468-1f3fb-2695', 464, 1, 3, '👨🏻⚕', [], ':man_health_worker_tone1:', [':man_health_worker_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-2695', 465, 1, 3, '👨🏼⚕', [], ':man_health_worker_tone2:', [':man_health_worker_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-2695', 466, 1, 3, '👨🏽⚕', [], ':man_health_worker_tone3:', [':man_health_worker_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-2695', 467, 1, 3, '👨🏾⚕', [], ':man_health_worker_tone4:', [':man_health_worker_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-2695', 468, 1, 3, '👨🏿⚕', [], ':man_health_worker_tone5:', [':man_health_worker_dark_skin_tone:'], [], 'people')
+    ('1f469-1f33e', 469, 1, 2, '👩🌾', [], ':woman_farmer:', [], [], 'people')
+    ('1f469-1f3fb-1f33e', 470, 1, 3, '👩🏻🌾', [], ':woman_farmer_tone1:', [':woman_farmer_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-1f33e', 471, 1, 3, '👩🏼🌾', [], ':woman_farmer_tone2:', [':woman_farmer_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-1f33e', 472, 1, 3, '👩🏽🌾', [], ':woman_farmer_tone3:', [':woman_farmer_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-1f33e', 473, 1, 3, '👩🏾🌾', [], ':woman_farmer_tone4:', [':woman_farmer_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-1f33e', 474, 1, 3, '👩🏿🌾', [], ':woman_farmer_tone5:', [':woman_farmer_dark_skin_tone:'], [], 'people')
+    ('1f468-1f33e', 475, 1, 2, '👨🌾', [], ':man_farmer:', [], [], 'people')
+    ('1f468-1f3fb-1f33e', 476, 1, 3, '👨🏻🌾', [], ':man_farmer_tone1:', [':man_farmer_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-1f33e', 477, 1, 3, '👨🏼🌾', [], ':man_farmer_tone2:', [':man_farmer_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-1f33e', 478, 1, 3, '👨🏽🌾', [], ':man_farmer_tone3:', [':man_farmer_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-1f33e', 479, 1, 3, '👨🏾🌾', [], ':man_farmer_tone4:', [':man_farmer_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-1f33e', 480, 1, 3, '👨🏿🌾', [], ':man_farmer_tone5:', [':man_farmer_dark_skin_tone:'], [], 'people')
+    ('1f469-1f373', 481, 1, 2, '👩🍳', [], ':woman_cook:', [], [], 'people')
+    ('1f469-1f3fb-1f373', 482, 1, 3, '👩🏻🍳', [], ':woman_cook_tone1:', [':woman_cook_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-1f373', 483, 1, 3, '👩🏼🍳', [], ':woman_cook_tone2:', [':woman_cook_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-1f373', 484, 1, 3, '👩🏽🍳', [], ':woman_cook_tone3:', [':woman_cook_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-1f373', 485, 1, 3, '👩🏾🍳', [], ':woman_cook_tone4:', [':woman_cook_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-1f373', 486, 1, 3, '👩🏿🍳', [], ':woman_cook_tone5:', [':woman_cook_dark_skin_tone:'], [], 'people')
+    ('1f468-1f373', 487, 1, 2, '👨🍳', [], ':man_cook:', [], [], 'people')
+    ('1f468-1f3fb-1f373', 488, 1, 3, '👨🏻🍳', [], ':man_cook_tone1:', [':man_cook_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-1f373', 489, 1, 3, '👨🏼🍳', [], ':man_cook_tone2:', [':man_cook_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-1f373', 490, 1, 3, '👨🏽🍳', [], ':man_cook_tone3:', [':man_cook_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-1f373', 491, 1, 3, '👨🏾🍳', [], ':man_cook_tone4:', [':man_cook_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-1f373', 492, 1, 3, '👨🏿🍳', [], ':man_cook_tone5:', [':man_cook_dark_skin_tone:'], [], 'people')
+    ('1f469-1f393', 493, 1, 2, '👩🎓', [], ':woman_student:', [], [], 'people')
+    ('1f469-1f3fb-1f393', 494, 1, 3, '👩🏻🎓', [], ':woman_student_tone1:', [':woman_student_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-1f393', 495, 1, 3, '👩🏼🎓', [], ':woman_student_tone2:', [':woman_student_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-1f393', 496, 1, 3, '👩🏽🎓', [], ':woman_student_tone3:', [':woman_student_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-1f393', 497, 1, 3, '👩🏾🎓', [], ':woman_student_tone4:', [':woman_student_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-1f393', 498, 1, 3, '👩🏿🎓', [], ':woman_student_tone5:', [':woman_student_dark_skin_tone:'], [], 'people')
+    ('1f468-1f393', 499, 1, 2, '👨🎓', [], ':man_student:', [], [], 'people')
+    ('1f468-1f3fb-1f393', 500, 1, 3, '👨🏻🎓', [], ':man_student_tone1:', [':man_student_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-1f393', 501, 1, 3, '👨🏼🎓', [], ':man_student_tone2:', [':man_student_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-1f393', 502, 1, 3, '👨🏽🎓', [], ':man_student_tone3:', [':man_student_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-1f393', 503, 1, 3, '👨🏾🎓', [], ':man_student_tone4:', [':man_student_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-1f393', 504, 1, 3, '👨🏿🎓', [], ':man_student_tone5:', [':man_student_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3a4', 505, 1, 2, '👩🎤', [], ':woman_singer:', [], [], 'people')
+    ('1f469-1f3fb-1f3a4', 506, 1, 3, '👩🏻🎤', [], ':woman_singer_tone1:', [':woman_singer_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-1f3a4', 507, 1, 3, '👩🏼🎤', [], ':woman_singer_tone2:', [':woman_singer_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-1f3a4', 508, 1, 3, '👩🏽🎤', [], ':woman_singer_tone3:', [':woman_singer_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-1f3a4', 509, 1, 3, '👩🏾🎤', [], ':woman_singer_tone4:', [':woman_singer_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-1f3a4', 510, 1, 3, '👩🏿🎤', [], ':woman_singer_tone5:', [':woman_singer_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3a4', 511, 1, 2, '👨🎤', [], ':man_singer:', [], [], 'people')
+    ('1f468-1f3fb-1f3a4', 512, 1, 3, '👨🏻🎤', [], ':man_singer_tone1:', [':man_singer_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-1f3a4', 513, 1, 3, '👨🏼🎤', [], ':man_singer_tone2:', [':man_singer_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-1f3a4', 514, 1, 3, '👨🏽🎤', [], ':man_singer_tone3:', [':man_singer_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-1f3a4', 515, 1, 3, '👨🏾🎤', [], ':man_singer_tone4:', [':man_singer_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-1f3a4', 516, 1, 3, '👨🏿🎤', [], ':man_singer_tone5:', [':man_singer_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3eb', 517, 1, 2, '👩🏫', [], ':woman_teacher:', [], [], 'people')
+    ('1f469-1f3fb-1f3eb', 518, 1, 3, '👩🏻🏫', [], ':woman_teacher_tone1:', [':woman_teacher_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-1f3eb', 519, 1, 3, '👩🏼🏫', [], ':woman_teacher_tone2:', [':woman_teacher_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-1f3eb', 520, 1, 3, '👩🏽🏫', [], ':woman_teacher_tone3:', [':woman_teacher_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-1f3eb', 521, 1, 3, '👩🏾🏫', [], ':woman_teacher_tone4:', [':woman_teacher_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-1f3eb', 522, 1, 3, '👩🏿🏫', [], ':woman_teacher_tone5:', [':woman_teacher_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3eb', 523, 1, 2, '👨🏫', [], ':man_teacher:', [], [], 'people')
+    ('1f468-1f3fb-1f3eb', 524, 1, 3, '👨🏻🏫', [], ':man_teacher_tone1:', [':man_teacher_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-1f3eb', 525, 1, 3, '👨🏼🏫', [], ':man_teacher_tone2:', [':man_teacher_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-1f3eb', 526, 1, 3, '👨🏽🏫', [], ':man_teacher_tone3:', [':man_teacher_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-1f3eb', 527, 1, 3, '👨🏾🏫', [], ':man_teacher_tone4:', [':man_teacher_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-1f3eb', 528, 1, 3, '👨🏿🏫', [], ':man_teacher_tone5:', [':man_teacher_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ed', 529, 1, 2, '👩🏭', [], ':woman_factory_worker:', [], [], 'people')
+    ('1f469-1f3fb-1f3ed', 530, 1, 3, '👩🏻🏭', [], ':woman_factory_worker_tone1:', [':woman_factory_worker_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-1f3ed', 531, 1, 3, '👩🏼🏭', [], ':woman_factory_worker_tone2:', [':woman_factory_worker_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-1f3ed', 532, 1, 3, '👩🏽🏭', [], ':woman_factory_worker_tone3:', [':woman_factory_worker_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-1f3ed', 533, 1, 3, '👩🏾🏭', [], ':woman_factory_worker_tone4:', [':woman_factory_worker_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-1f3ed', 534, 1, 3, '👩🏿🏭', [], ':woman_factory_worker_tone5:', [':woman_factory_worker_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ed', 535, 1, 2, '👨🏭', [], ':man_factory_worker:', [], [], 'people')
+    ('1f468-1f3fb-1f3ed', 536, 1, 3, '👨🏻🏭', [], ':man_factory_worker_tone1:', [':man_factory_worker_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-1f3ed', 537, 1, 3, '👨🏼🏭', [], ':man_factory_worker_tone2:', [':man_factory_worker_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-1f3ed', 538, 1, 3, '👨🏽🏭', [], ':man_factory_worker_tone3:', [':man_factory_worker_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-1f3ed', 539, 1, 3, '👨🏾🏭', [], ':man_factory_worker_tone4:', [':man_factory_worker_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-1f3ed', 540, 1, 3, '👨🏿🏭', [], ':man_factory_worker_tone5:', [':man_factory_worker_dark_skin_tone:'], [], 'people')
+    ('1f469-1f4bb', 541, 1, 2, '👩💻', [], ':woman_technologist:', [], [], 'people')
+    ('1f469-1f3fb-1f4bb', 542, 1, 3, '👩🏻💻', [], ':woman_technologist_tone1:', [':woman_technologist_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-1f4bb', 543, 1, 3, '👩🏼💻', [], ':woman_technologist_tone2:', [':woman_technologist_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-1f4bb', 544, 1, 3, '👩🏽💻', [], ':woman_technologist_tone3:', [':woman_technologist_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-1f4bb', 545, 1, 3, '👩🏾💻', [], ':woman_technologist_tone4:', [':woman_technologist_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-1f4bb', 546, 1, 3, '👩🏿💻', [], ':woman_technologist_tone5:', [':woman_technologist_dark_skin_tone:'], [], 'people')
+    ('1f468-1f4bb', 547, 1, 2, '👨💻', [], ':man_technologist:', [], [], 'people')
+    ('1f468-1f3fb-1f4bb', 548, 1, 3, '👨🏻💻', [], ':man_technologist_tone1:', [':man_technologist_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-1f4bb', 549, 1, 3, '👨🏼💻', [], ':man_technologist_tone2:', [':man_technologist_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-1f4bb', 550, 1, 3, '👨🏽💻', [], ':man_technologist_tone3:', [':man_technologist_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-1f4bb', 551, 1, 3, '👨🏾💻', [], ':man_technologist_tone4:', [':man_technologist_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-1f4bb', 552, 1, 3, '👨🏿💻', [], ':man_technologist_tone5:', [':man_technologist_dark_skin_tone:'], [], 'people')
+    ('1f469-1f4bc', 553, 1, 2, '👩💼', [], ':woman_office_worker:', [], [], 'people')
+    ('1f469-1f3fb-1f4bc', 554, 1, 3, '👩🏻💼', [], ':woman_office_worker_tone1:', [':woman_office_worker_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-1f4bc', 555, 1, 3, '👩🏼💼', [], ':woman_office_worker_tone2:', [':woman_office_worker_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-1f4bc', 556, 1, 3, '👩🏽💼', [], ':woman_office_worker_tone3:', [':woman_office_worker_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-1f4bc', 557, 1, 3, '👩🏾💼', [], ':woman_office_worker_tone4:', [':woman_office_worker_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-1f4bc', 558, 1, 3, '👩🏿💼', [], ':woman_office_worker_tone5:', [':woman_office_worker_dark_skin_tone:'], [], 'people')
+    ('1f468-1f4bc', 559, 1, 2, '👨💼', [], ':man_office_worker:', [], [], 'people')
+    ('1f468-1f3fb-1f4bc', 560, 1, 3, '👨🏻💼', [], ':man_office_worker_tone1:', [':man_office_worker_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-1f4bc', 561, 1, 3, '👨🏼💼', [], ':man_office_worker_tone2:', [':man_office_worker_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-1f4bc', 562, 1, 3, '👨🏽💼', [], ':man_office_worker_tone3:', [':man_office_worker_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-1f4bc', 563, 1, 3, '👨🏾💼', [], ':man_office_worker_tone4:', [':man_office_worker_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-1f4bc', 564, 1, 3, '👨🏿💼', [], ':man_office_worker_tone5:', [':man_office_worker_dark_skin_tone:'], [], 'people')
+    ('1f469-1f527', 565, 1, 2, '👩🔧', [], ':woman_mechanic:', [], [], 'people')
+    ('1f469-1f3fb-1f527', 566, 1, 3, '👩🏻🔧', [], ':woman_mechanic_tone1:', [':woman_mechanic_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-1f527', 567, 1, 3, '👩🏼🔧', [], ':woman_mechanic_tone2:', [':woman_mechanic_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-1f527', 568, 1, 3, '👩🏽🔧', [], ':woman_mechanic_tone3:', [':woman_mechanic_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-1f527', 569, 1, 3, '👩🏾🔧', [], ':woman_mechanic_tone4:', [':woman_mechanic_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-1f527', 570, 1, 3, '👩🏿🔧', [], ':woman_mechanic_tone5:', [':woman_mechanic_dark_skin_tone:'], [], 'people')
+    ('1f468-1f527', 571, 1, 2, '👨🔧', [], ':man_mechanic:', [], [], 'people')
+    ('1f468-1f3fb-1f527', 572, 1, 3, '👨🏻🔧', [], ':man_mechanic_tone1:', [':man_mechanic_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-1f527', 573, 1, 3, '👨🏼🔧', [], ':man_mechanic_tone2:', [':man_mechanic_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-1f527', 574, 1, 3, '👨🏽🔧', [], ':man_mechanic_tone3:', [':man_mechanic_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-1f527', 575, 1, 3, '👨🏾🔧', [], ':man_mechanic_tone4:', [':man_mechanic_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-1f527', 576, 1, 3, '👨🏿🔧', [], ':man_mechanic_tone5:', [':man_mechanic_dark_skin_tone:'], [], 'people')
+    ('1f469-1f52c', 577, 1, 2, '👩🔬', [], ':woman_scientist:', [], [], 'people')
+    ('1f469-1f3fb-1f52c', 578, 1, 3, '👩🏻🔬', [], ':woman_scientist_tone1:', [':woman_scientist_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-1f52c', 579, 1, 3, '👩🏼🔬', [], ':woman_scientist_tone2:', [':woman_scientist_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-1f52c', 580, 1, 3, '👩🏽🔬', [], ':woman_scientist_tone3:', [':woman_scientist_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-1f52c', 581, 1, 3, '👩🏾🔬', [], ':woman_scientist_tone4:', [':woman_scientist_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-1f52c', 582, 1, 3, '👩🏿🔬', [], ':woman_scientist_tone5:', [':woman_scientist_dark_skin_tone:'], [], 'people')
+    ('1f468-1f52c', 583, 1, 2, '👨🔬', [], ':man_scientist:', [], [], 'people')
+    ('1f468-1f3fb-1f52c', 584, 1, 3, '👨🏻🔬', [], ':man_scientist_tone1:', [':man_scientist_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-1f52c', 585, 1, 3, '👨🏼🔬', [], ':man_scientist_tone2:', [':man_scientist_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-1f52c', 586, 1, 3, '👨🏽🔬', [], ':man_scientist_tone3:', [':man_scientist_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-1f52c', 587, 1, 3, '👨🏾🔬', [], ':man_scientist_tone4:', [':man_scientist_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-1f52c', 588, 1, 3, '👨🏿🔬', [], ':man_scientist_tone5:', [':man_scientist_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3a8', 589, 1, 2, '👩🎨', [], ':woman_artist:', [], [], 'people')
+    ('1f469-1f3fb-1f3a8', 590, 1, 3, '👩🏻🎨', [], ':woman_artist_tone1:', [':woman_artist_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-1f3a8', 591, 1, 3, '👩🏼🎨', [], ':woman_artist_tone2:', [':woman_artist_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-1f3a8', 592, 1, 3, '👩🏽🎨', [], ':woman_artist_tone3:', [':woman_artist_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-1f3a8', 593, 1, 3, '👩🏾🎨', [], ':woman_artist_tone4:', [':woman_artist_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-1f3a8', 594, 1, 3, '👩🏿🎨', [], ':woman_artist_tone5:', [':woman_artist_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3a8', 595, 1, 2, '👨🎨', [], ':man_artist:', [], [], 'people')
+    ('1f468-1f3fb-1f3a8', 596, 1, 3, '👨🏻🎨', [], ':man_artist_tone1:', [':man_artist_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-1f3a8', 597, 1, 3, '👨🏼🎨', [], ':man_artist_tone2:', [':man_artist_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-1f3a8', 598, 1, 3, '👨🏽🎨', [], ':man_artist_tone3:', [':man_artist_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-1f3a8', 599, 1, 3, '👨🏾🎨', [], ':man_artist_tone4:', [':man_artist_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-1f3a8', 600, 1, 3, '👨🏿🎨', [], ':man_artist_tone5:', [':man_artist_dark_skin_tone:'], [], 'people')
+    ('1f469-1f692', 601, 1, 2, '👩🚒', [], ':woman_firefighter:', [], [], 'people')
+    ('1f469-1f3fb-1f692', 602, 1, 3, '👩🏻🚒', [], ':woman_firefighter_tone1:', [':woman_firefighter_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-1f692', 603, 1, 3, '👩🏼🚒', [], ':woman_firefighter_tone2:', [':woman_firefighter_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-1f692', 604, 1, 3, '👩🏽🚒', [], ':woman_firefighter_tone3:', [':woman_firefighter_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-1f692', 605, 1, 3, '👩🏾🚒', [], ':woman_firefighter_tone4:', [':woman_firefighter_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-1f692', 606, 1, 3, '👩🏿🚒', [], ':woman_firefighter_tone5:', [':woman_firefighter_dark_skin_tone:'], [], 'people')
+    ('1f468-1f692', 607, 1, 2, '👨🚒', [], ':man_firefighter:', [], [], 'people')
+    ('1f468-1f3fb-1f692', 608, 1, 3, '👨🏻🚒', [], ':man_firefighter_tone1:', [':man_firefighter_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-1f692', 609, 1, 3, '👨🏼🚒', [], ':man_firefighter_tone2:', [':man_firefighter_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-1f692', 610, 1, 3, '👨🏽🚒', [], ':man_firefighter_tone3:', [':man_firefighter_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-1f692', 611, 1, 3, '👨🏾🚒', [], ':man_firefighter_tone4:', [':man_firefighter_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-1f692', 612, 1, 3, '👨🏿🚒', [], ':man_firefighter_tone5:', [':man_firefighter_dark_skin_tone:'], [], 'people')
+    ('1f469-2708', 613, 1, 2, '👩✈', [], ':woman_pilot:', [], [], 'people')
+    ('1f469-1f3fb-2708', 614, 1, 3, '👩🏻✈', [], ':woman_pilot_tone1:', [':woman_pilot_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-2708', 615, 1, 3, '👩🏼✈', [], ':woman_pilot_tone2:', [':woman_pilot_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-2708', 616, 1, 3, '👩🏽✈', [], ':woman_pilot_tone3:', [':woman_pilot_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-2708', 617, 1, 3, '👩🏾✈', [], ':woman_pilot_tone4:', [':woman_pilot_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-2708', 618, 1, 3, '👩🏿✈', [], ':woman_pilot_tone5:', [':woman_pilot_dark_skin_tone:'], [], 'people')
+    ('1f468-2708', 619, 1, 2, '👨✈', [], ':man_pilot:', [], [], 'people')
+    ('1f468-1f3fb-2708', 620, 1, 3, '👨🏻✈', [], ':man_pilot_tone1:', [':man_pilot_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-2708', 621, 1, 3, '👨🏼✈', [], ':man_pilot_tone2:', [':man_pilot_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-2708', 622, 1, 3, '👨🏽✈', [], ':man_pilot_tone3:', [':man_pilot_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-2708', 623, 1, 3, '👨🏾✈', [], ':man_pilot_tone4:', [':man_pilot_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-2708', 624, 1, 3, '👨🏿✈', [], ':man_pilot_tone5:', [':man_pilot_dark_skin_tone:'], [], 'people')
+    ('1f469-1f680', 625, 1, 2, '👩🚀', [], ':woman_astronaut:', [], [], 'people')
+    ('1f469-1f3fb-1f680', 626, 1, 3, '👩🏻🚀', [], ':woman_astronaut_tone1:', [':woman_astronaut_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-1f680', 627, 1, 3, '👩🏼🚀', [], ':woman_astronaut_tone2:', [':woman_astronaut_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-1f680', 628, 1, 3, '👩🏽🚀', [], ':woman_astronaut_tone3:', [':woman_astronaut_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-1f680', 629, 1, 3, '👩🏾🚀', [], ':woman_astronaut_tone4:', [':woman_astronaut_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-1f680', 630, 1, 3, '👩🏿🚀', [], ':woman_astronaut_tone5:', [':woman_astronaut_dark_skin_tone:'], [], 'people')
+    ('1f468-1f680', 631, 1, 2, '👨🚀', [], ':man_astronaut:', [], [], 'people')
+    ('1f468-1f3fb-1f680', 632, 1, 3, '👨🏻🚀', [], ':man_astronaut_tone1:', [':man_astronaut_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-1f680', 633, 1, 3, '👨🏼🚀', [], ':man_astronaut_tone2:', [':man_astronaut_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-1f680', 634, 1, 3, '👨🏽🚀', [], ':man_astronaut_tone3:', [':man_astronaut_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-1f680', 635, 1, 3, '👨🏾🚀', [], ':man_astronaut_tone4:', [':man_astronaut_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-1f680', 636, 1, 3, '👨🏿🚀', [], ':man_astronaut_tone5:', [':man_astronaut_dark_skin_tone:'], [], 'people')
+    ('1f469-2696', 637, 1, 2, '👩⚖', [], ':woman_judge:', [], [], 'people')
+    ('1f469-1f3fb-2696', 638, 1, 3, '👩🏻⚖', [], ':woman_judge_tone1:', [':woman_judge_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fc-2696', 639, 1, 3, '👩🏼⚖', [], ':woman_judge_tone2:', [':woman_judge_medium_light_skin_tone:'], [], 'people')
+    ('1f469-1f3fd-2696', 640, 1, 3, '👩🏽⚖', [], ':woman_judge_tone3:', [':woman_judge_medium_skin_tone:'], [], 'people')
+    ('1f469-1f3fe-2696', 641, 1, 3, '👩🏾⚖', [], ':woman_judge_tone4:', [':woman_judge_medium_dark_skin_tone:'], [], 'people')
+    ('1f469-1f3ff-2696', 642, 1, 3, '👩🏿⚖', [], ':woman_judge_tone5:', [':woman_judge_dark_skin_tone:'], [], 'people')
+    ('1f468-2696', 643, 1, 2, '👨⚖', [], ':man_judge:', [], [], 'people')
+    ('1f468-1f3fb-2696', 644, 1, 3, '👨🏻⚖', [], ':man_judge_tone1:', [':man_judge_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fc-2696', 645, 1, 3, '👨🏼⚖', [], ':man_judge_tone2:', [':man_judge_medium_light_skin_tone:'], [], 'people')
+    ('1f468-1f3fd-2696', 646, 1, 3, '👨🏽⚖', [], ':man_judge_tone3:', [':man_judge_medium_skin_tone:'], [], 'people')
+    ('1f468-1f3fe-2696', 647, 1, 3, '👨🏾⚖', [], ':man_judge_tone4:', [':man_judge_medium_dark_skin_tone:'], [], 'people')
+    ('1f468-1f3ff-2696', 648, 1, 3, '👨🏿⚖', [], ':man_judge_tone5:', [':man_judge_dark_skin_tone:'], [], 'people')
+    ('1f936', 649, 1, 1, '\U0001f936', [], ':mrs_claus:', [':mother_christmas:'], [], 'people')
+    ('1f936-1f3fb', 650, 1, 2, '\U0001f936🏻', [], ':mrs_claus_tone1:', [':mother_christmas_tone1:'], [], 'people')
+    ('1f936-1f3fc', 651, 1, 2, '\U0001f936🏼', [], ':mrs_claus_tone2:', [':mother_christmas_tone2:'], [], 'people')
+    ('1f936-1f3fd', 652, 1, 2, '\U0001f936🏽', [], ':mrs_claus_tone3:', [':mother_christmas_tone3:'], [], 'people')
+    ('1f936-1f3fe', 653, 1, 2, '\U0001f936🏾', [], ':mrs_claus_tone4:', [':mother_christmas_tone4:'], [], 'people')
+    ('1f936-1f3ff', 654, 1, 2, '\U0001f936🏿', [], ':mrs_claus_tone5:', [':mother_christmas_tone5:'], [], 'people')
+    ('1f385', 655, 1, 1, '🎅', [], ':santa:', [], [], 'people')
+    ('1f385-1f3fb', 656, 1, 2, '🎅🏻', [], ':santa_tone1:', [], [], 'people')
+    ('1f385-1f3fc', 657, 1, 2, '🎅🏼', [], ':santa_tone2:', [], [], 'people')
+    ('1f385-1f3fd', 658, 1, 2, '🎅🏽', [], ':santa_tone3:', [], [], 'people')
+    ('1f385-1f3fe', 659, 1, 2, '🎅🏾', [], ':santa_tone4:', [], [], 'people')
+    ('1f385-1f3ff', 660, 1, 2, '🎅🏿', [], ':santa_tone5:', [], [], 'people')
+    ('1f478', 661, 1, 1, '👸', [], ':princess:', [], [], 'people')
+    ('1f478-1f3fb', 662, 1, 2, '👸🏻', [], ':princess_tone1:', [], [], 'people')
+    ('1f478-1f3fc', 663, 1, 2, '👸🏼', [], ':princess_tone2:', [], [], 'people')
+    ('1f478-1f3fd', 664, 1, 2, '👸🏽', [], ':princess_tone3:', [], [], 'people')
+    ('1f478-1f3fe', 665, 1, 2, '👸🏾', [], ':princess_tone4:', [], [], 'people')
+    ('1f478-1f3ff', 666, 1, 2, '👸🏿', [], ':princess_tone5:', [], [], 'people')
+    ('1f934', 667, 1, 1, '\U0001f934', [], ':prince:', [], [], 'people')
+    ('1f934-1f3fb', 668, 1, 2, '\U0001f934🏻', [], ':prince_tone1:', [], [], 'people')
+    ('1f934-1f3fc', 669, 1, 2, '\U0001f934🏼', [], ':prince_tone2:', [], [], 'people')
+    ('1f934-1f3fd', 670, 1, 2, '\U0001f934🏽', [], ':prince_tone3:', [], [], 'people')
+    ('1f934-1f3fe', 671, 1, 2, '\U0001f934🏾', [], ':prince_tone4:', [], [], 'people')
+    ('1f934-1f3ff', 672, 1, 2, '\U0001f934🏿', [], ':prince_tone5:', [], [], 'people')
+    ('1f470', 673, 1, 1, '👰', [], ':bride_with_veil:', [], [], 'people')
+    ('1f470-1f3fb', 674, 1, 2, '👰🏻', [], ':bride_with_veil_tone1:', [], [], 'people')
+    ('1f470-1f3fc', 675, 1, 2, '👰🏼', [], ':bride_with_veil_tone2:', [], [], 'people')
+    ('1f470-1f3fd', 676, 1, 2, '👰🏽', [], ':bride_with_veil_tone3:', [], [], 'people')
+    ('1f470-1f3fe', 677, 1, 2, '👰🏾', [], ':bride_with_veil_tone4:', [], [], 'people')
+    ('1f470-1f3ff', 678, 1, 2, '👰🏿', [], ':bride_with_veil_tone5:', [], [], 'people')
+    ('1f935', 679, 1, 1, '\U0001f935', [], ':man_in_tuxedo:', [], [], 'people')
+    ('1f935-1f3fb', 680, 1, 2, '\U0001f935🏻', [], ':man_in_tuxedo_tone1:', [':tuxedo_tone1:'], [], 'people')
+    ('1f935-1f3fc', 681, 1, 2, '\U0001f935🏼', [], ':man_in_tuxedo_tone2:', [':tuxedo_tone2:'], [], 'people')
+    ('1f935-1f3fd', 682, 1, 2, '\U0001f935🏽', [], ':man_in_tuxedo_tone3:', [':tuxedo_tone3:'], [], 'people')
+    ('1f935-1f3fe', 683, 1, 2, '\U0001f935🏾', [], ':man_in_tuxedo_tone4:', [':tuxedo_tone4:'], [], 'people')
+    ('1f935-1f3ff', 684, 1, 2, '\U0001f935🏿', [], ':man_in_tuxedo_tone5:', [':tuxedo_tone5:'], [], 'people')
+    ('1f47c', 685, 1, 1, '👼', [], ':angel:', [], [], 'people')
+    ('1f47c-1f3fb', 686, 1, 2, '👼🏻', [], ':angel_tone1:', [], [], 'people')
+    ('1f47c-1f3fc', 687, 1, 2, '👼🏼', [], ':angel_tone2:', [], [], 'people')
+    ('1f47c-1f3fd', 688, 1, 2, '👼🏽', [], ':angel_tone3:', [], [], 'people')
+    ('1f47c-1f3fe', 689, 1, 2, '👼🏾', [], ':angel_tone4:', [], [], 'people')
+    ('1f47c-1f3ff', 690, 1, 2, '👼🏿', [], ':angel_tone5:', [], [], 'people')
+    ('1f930', 691, 1, 1, '\U0001f930', [], ':pregnant_woman:', [':expecting_woman:'], [], 'people')
+    ('1f930-1f3fb', 692, 1, 2, '\U0001f930🏻', [], ':pregnant_woman_tone1:', [':expecting_woman_tone1:'], [], 'people')
+    ('1f930-1f3fc', 693, 1, 2, '\U0001f930🏼', [], ':pregnant_woman_tone2:', [':expecting_woman_tone2:'], [], 'people')
+    ('1f930-1f3fd', 694, 1, 2, '\U0001f930🏽', [], ':pregnant_woman_tone3:', [':expecting_woman_tone3:'], [], 'people')
+    ('1f930-1f3fe', 695, 1, 2, '\U0001f930🏾', [], ':pregnant_woman_tone4:', [':expecting_woman_tone4:'], [], 'people')
+    ('1f930-1f3ff', 696, 1, 2, '\U0001f930🏿', [], ':pregnant_woman_tone5:', [':expecting_woman_tone5:'], [], 'people')
+    ('1f647-2640', 697, 1, 2, '🙇♀', [], ':woman_bowing:', [], [], 'people')
+    ('1f647-1f3fb-2640', 698, 1, 3, '🙇🏻♀', [], ':woman_bowing_tone1:', [':woman_bowing_light_skin_tone:'], [], 'people')
+    ('1f647-1f3fc-2640', 699, 1, 3, '🙇🏼♀', [], ':woman_bowing_tone2:', [':woman_bowing_medium_light_skin_tone:'], [], 'people')
+    ('1f647-1f3fd-2640', 700, 1, 3, '🙇🏽♀', [], ':woman_bowing_tone3:', [':woman_bowing_medium_skin_tone:'], [], 'people')
+    ('1f647-1f3fe-2640', 701, 1, 3, '🙇🏾♀', [], ':woman_bowing_tone4:', [':woman_bowing_medium_dark_skin_tone:'], [], 'people')
+    ('1f647-1f3ff-2640', 702, 1, 3, '🙇🏿♀', [], ':woman_bowing_tone5:', [':woman_bowing_dark_skin_tone:'], [], 'people')
+    ('1f647', 703, 1, 1, '🙇', [], ':person_bowing:', [':bow:'], [], 'people')
+    ('1f647-1f3fb', 704, 1, 2, '🙇🏻', [], ':person_bowing_tone1:', [':bow_tone1:'], [], 'people')
+    ('1f647-1f3fc', 705, 1, 2, '🙇🏼', [], ':person_bowing_tone2:', [':bow_tone2:'], [], 'people')
+    ('1f647-1f3fd', 706, 1, 2, '🙇🏽', [], ':person_bowing_tone3:', [':bow_tone3:'], [], 'people')
+    ('1f647-1f3fe', 707, 1, 2, '🙇🏾', [], ':person_bowing_tone4:', [':bow_tone4:'], [], 'people')
+    ('1f647-1f3ff', 708, 1, 2, '🙇🏿', [], ':person_bowing_tone5:', [':bow_tone5:'], [], 'people')
+    ('1f647-2642', 709, 1, 2, '🙇♂', [], ':man_bowing:', [], [], 'people')
+    ('1f647-1f3ff-2642', 710, 1, 3, '🙇🏿♂', [], ':man_bowing_tone5:', [':man_bowing_dark_skin_tone:'], [], 'people')
+    ('1f647-1f3fe-2642', 711, 1, 3, '🙇🏾♂', [], ':man_bowing_tone4:', [':man_bowing_medium_dark_skin_tone:'], [], 'people')
+    ('1f647-1f3fd-2642', 712, 1, 3, '🙇🏽♂', [], ':man_bowing_tone3:', [':man_bowing_medium_skin_tone:'], [], 'people')
+    ('1f647-1f3fc-2642', 713, 1, 3, '🙇🏼♂', [], ':man_bowing_tone2:', [':man_bowing_medium_light_skin_tone:'], [], 'people')
+    ('1f647-1f3fb-2642', 714, 1, 3, '🙇🏻♂', [], ':man_bowing_tone1:', [':man_bowing_light_skin_tone:'], [], 'people')
+    ('1f481', 715, 1, 1, '💁', ['tip'], ':person_tipping_hand:', [':information_desk_person:'], [], 'people')
+    ('1f481-1f3fb', 716, 1, 2, '💁🏻', ['tip'], ':person_tipping_hand_tone1:', [':information_desk_person_tone1:'], [], 'people')
+    ('1f481-1f3fc', 717, 1, 2, '💁🏼', ['tip'], ':person_tipping_hand_tone2:', [':information_desk_person_tone2:'], [], 'people')
+    ('1f481-1f3fd', 718, 1, 2, '💁🏽', ['tip'], ':person_tipping_hand_tone3:', [':information_desk_person_tone3:'], [], 'people')
+    ('1f481-1f3fe', 719, 1, 2, '💁🏾', ['tip'], ':person_tipping_hand_tone4:', [':information_desk_person_tone4:'], [], 'people')
+    ('1f481-1f3ff', 720, 1, 2, '💁🏿', ['tip'], ':person_tipping_hand_tone5:', [':information_desk_person_tone5:'], [], 'people')
+    ('1f481-2642', 721, 1, 2, '💁♂', ['tip'], ':man_tipping_hand:', [], [], 'people')
+    ('1f481-1f3fb-2642', 722, 1, 3, '💁🏻♂', ['tip'], ':man_tipping_hand_tone1:', [':man_tipping_hand_light_skin_tone:'], [], 'people')
+    ('1f481-1f3fc-2642', 723, 1, 3, '💁🏼♂', ['tip'], ':man_tipping_hand_tone2:', [':man_tipping_hand_medium_light_skin_tone:'], [], 'people')
+    ('1f481-1f3fd-2642', 724, 1, 3, '💁🏽♂', ['tip'], ':man_tipping_hand_tone3:', [':man_tipping_hand_medium_skin_tone:'], [], 'people')
+    ('1f481-1f3fe-2642', 725, 1, 3, '💁🏾♂', ['tip'], ':man_tipping_hand_tone4:', [':man_tipping_hand_medium_dark_skin_tone:'], [], 'people')
+    ('1f481-1f3ff-2642', 726, 1, 3, '💁🏿♂', ['tip'], ':man_tipping_hand_tone5:', [':man_tipping_hand_dark_skin_tone:'], [], 'people')
+    ('1f481-2640', 727, 1, 2, '💁♀', ['tip'], ':woman_tipping_hand:', [], [], 'people')
+    ('1f481-1f3ff-2640', 728, 1, 3, '💁🏿♀', ['tip'], ':woman_tipping_hand_tone5:', [':woman_tipping_hand_dark_skin_tone:'], [], 'people')
+    ('1f481-1f3fe-2640', 729, 1, 3, '💁🏾♀', ['tip'], ':woman_tipping_hand_tone4:', [':woman_tipping_hand_medium_dark_skin_tone:'], [], 'people')
+    ('1f481-1f3fd-2640', 730, 1, 3, '💁🏽♀', ['tip'], ':woman_tipping_hand_tone3:', [':woman_tipping_hand_medium_skin_tone:'], [], 'people')
+    ('1f481-1f3fc-2640', 731, 1, 3, '💁🏼♀', ['tip'], ':woman_tipping_hand_tone2:', [':woman_tipping_hand_medium_light_skin_tone:'], [], 'people')
+    ('1f481-1f3fb-2640', 732, 1, 3, '💁🏻♀', ['tip'], ':woman_tipping_hand_tone1:', [':woman_tipping_hand_light_skin_tone:'], [], 'people')
+    ('1f645', 733, 1, 1, '🙅', [], ':person_gesturing_no:', [':no_good:'], [], 'people')
+    ('1f645-1f3fb', 734, 1, 2, '🙅🏻', [], ':person_gesturing_no_tone1:', [':no_good_tone1:'], [], 'people')
+    ('1f645-1f3fc', 735, 1, 2, '🙅🏼', [], ':person_gesturing_no_tone2:', [':no_good_tone2:'], [], 'people')
+    ('1f645-1f3fd', 736, 1, 2, '🙅🏽', [], ':person_gesturing_no_tone3:', [':no_good_tone3:'], [], 'people')
+    ('1f645-1f3fe', 737, 1, 2, '🙅🏾', [], ':person_gesturing_no_tone4:', [':no_good_tone4:'], [], 'people')
+    ('1f645-1f3ff', 738, 1, 2, '🙅🏿', [], ':person_gesturing_no_tone5:', [':no_good_tone5:'], [], 'people')
+    ('1f645-2642', 739, 1, 2, '🙅♂', [], ':man_gesturing_no:', [], [], 'people')
+    ('1f645-1f3fb-2642', 740, 1, 3, '🙅🏻♂', [], ':man_gesturing_no_tone1:', [':man_gesturing_no_light_skin_tone:'], [], 'people')
+    ('1f645-1f3fc-2642', 741, 1, 3, '🙅🏼♂', [], ':man_gesturing_no_tone2:', [':man_gesturing_no_medium_light_skin_tone:'], [], 'people')
+    ('1f645-1f3fd-2642', 742, 1, 3, '🙅🏽♂', [], ':man_gesturing_no_tone3:', [':man_gesturing_no_medium_skin_tone:'], [], 'people')
+    ('1f645-1f3fe-2642', 743, 1, 3, '🙅🏾♂', [], ':man_gesturing_no_tone4:', [':man_gesturing_no_medium_dark_skin_tone:'], [], 'people')
+    ('1f645-1f3ff-2642', 744, 1, 3, '🙅🏿♂', [], ':man_gesturing_no_tone5:', [':man_gesturing_no_dark_skin_tone:'], [], 'people')
+    ('1f645-2640', 745, 1, 2, '🙅♀', [], ':woman_gesturing_no:', [], [], 'people')
+    ('1f645-1f3ff-2640', 746, 1, 3, '🙅🏿♀', [], ':woman_gesturing_no_tone5:', [':woman_gesturing_no_dark_skin_tone:'], [], 'people')
+    ('1f645-1f3fe-2640', 747, 1, 3, '🙅🏾♀', [], ':woman_gesturing_no_tone4:', [':woman_gesturing_no_medium_dark_skin_tone:'], [], 'people')
+    ('1f645-1f3fd-2640', 748, 1, 3, '🙅🏽♀', [], ':woman_gesturing_no_tone3:', [':woman_gesturing_no_medium_skin_tone:'], [], 'people')
+    ('1f645-1f3fc-2640', 749, 1, 3, '🙅🏼♀', [], ':woman_gesturing_no_tone2:', [':woman_gesturing_no_medium_light_skin_tone:'], [], 'people')
+    ('1f645-1f3fb-2640', 750, 1, 3, '🙅🏻♀', [], ':woman_gesturing_no_tone1:', [':woman_gesturing_no_light_skin_tone:'], [], 'people')
+    ('1f646', 751, 1, 1, '🙆', [], ':person_gesturing_ok:', [':ok_woman:'], [], 'people')
+    ('1f646-1f3fb', 752, 1, 2, '🙆🏻', [], ':person_gesturing_ok_tone1:', [':ok_woman_tone1:'], [], 'people')
+    ('1f646-1f3fc', 753, 1, 2, '🙆🏼', [], ':person_gesturing_ok_tone2:', [':ok_woman_tone2:'], [], 'people')
+    ('1f646-1f3fd', 754, 1, 2, '🙆🏽', [], ':person_gesturing_ok_tone3:', [':ok_woman_tone3:'], [], 'people')
+    ('1f646-1f3fe', 755, 1, 2, '🙆🏾', [], ':person_gesturing_ok_tone4:', [':ok_woman_tone4:'], [], 'people')
+    ('1f646-1f3ff', 756, 1, 2, '🙆🏿', [], ':person_gesturing_ok_tone5:', [':ok_woman_tone5:'], [], 'people')
+    ('1f646-2642', 757, 1, 2, '🙆♂', [], ':man_gesturing_ok:', [], [], 'people')
+    ('1f646-1f3fb-2642', 758, 1, 3, '🙆🏻♂', [], ':man_gesturing_ok_tone1:', [':man_gesturing_ok_light_skin_tone:'], [], 'people')
+    ('1f646-1f3fc-2642', 759, 1, 3, '🙆🏼♂', [], ':man_gesturing_ok_tone2:', [':man_gesturing_ok_medium_light_skin_tone:'], [], 'people')
+    ('1f646-1f3fd-2642', 760, 1, 3, '🙆🏽♂', [], ':man_gesturing_ok_tone3:', [':man_gesturing_ok_medium_skin_tone:'], [], 'people')
+    ('1f646-1f3fe-2642', 761, 1, 3, '🙆🏾♂', [], ':man_gesturing_ok_tone4:', [':man_gesturing_ok_medium_dark_skin_tone:'], [], 'people')
+    ('1f646-1f3ff-2642', 762, 1, 3, '🙆🏿♂', [], ':man_gesturing_ok_tone5:', [':man_gesturing_ok_dark_skin_tone:'], [], 'people')
+    ('1f646-2640', 763, 1, 2, '🙆♀', [], ':woman_gesturing_ok:', [], [], 'people')
+    ('1f646-1f3ff-2640', 764, 1, 3, '🙆🏿♀', [], ':woman_gesturing_ok_tone5:', [':woman_gesturing_ok_dark_skin_tone:'], [], 'people')
+    ('1f646-1f3fe-2640', 765, 1, 3, '🙆🏾♀', [], ':woman_gesturing_ok_tone4:', [':woman_gesturing_ok_medium_dark_skin_tone:'], [], 'people')
+    ('1f646-1f3fd-2640', 766, 1, 3, '🙆🏽♀', [], ':woman_gesturing_ok_tone3:', [':woman_gesturing_ok_medium_skin_tone:'], [], 'people')
+    ('1f646-1f3fc-2640', 767, 1, 3, '🙆🏼♀', [], ':woman_gesturing_ok_tone2:', [':woman_gesturing_ok_medium_light_skin_tone:'], [], 'people')
+    ('1f646-1f3fb-2640', 768, 1, 3, '🙆🏻♀', [], ':woman_gesturing_ok_tone1:', [':woman_gesturing_ok_light_skin_tone:'], [], 'people')
+    ('1f64b', 769, 1, 1, '🙋', [], ':person_raising_hand:', [':raising_hand:'], [], 'people')
+    ('1f64b-1f3fb', 770, 1, 2, '🙋🏻', [], ':person_raising_hand_tone1:', [':raising_hand_tone1:'], [], 'people')
+    ('1f64b-1f3fc', 771, 1, 2, '🙋🏼', [], ':person_raising_hand_tone2:', [':raising_hand_tone2:'], [], 'people')
+    ('1f64b-1f3fd', 772, 1, 2, '🙋🏽', [], ':person_raising_hand_tone3:', [':raising_hand_tone3:'], [], 'people')
+    ('1f64b-1f3fe', 773, 1, 2, '🙋🏾', [], ':person_raising_hand_tone4:', [':raising_hand_tone4:'], [], 'people')
+    ('1f64b-1f3ff', 774, 1, 2, '🙋🏿', [], ':person_raising_hand_tone5:', [':raising_hand_tone5:'], [], 'people')
+    ('1f64b-2642', 775, 1, 2, '🙋♂', [], ':man_raising_hand:', [], [], 'people')
+    ('1f64b-1f3fb-2642', 776, 1, 3, '🙋🏻♂', [], ':man_raising_hand_tone1:', [':man_raising_hand_light_skin_tone:'], [], 'people')
+    ('1f64b-1f3fc-2642', 777, 1, 3, '🙋🏼♂', [], ':man_raising_hand_tone2:', [':man_raising_hand_medium_light_skin_tone:'], [], 'people')
+    ('1f64b-1f3fd-2642', 778, 1, 3, '🙋🏽♂', [], ':man_raising_hand_tone3:', [':man_raising_hand_medium_skin_tone:'], [], 'people')
+    ('1f64b-1f3fe-2642', 779, 1, 3, '🙋🏾♂', [], ':man_raising_hand_tone4:', [':man_raising_hand_medium_dark_skin_tone:'], [], 'people')
+    ('1f64b-1f3ff-2642', 780, 1, 3, '🙋🏿♂', [], ':man_raising_hand_tone5:', [':man_raising_hand_dark_skin_tone:'], [], 'people')
+    ('1f64b-2640', 781, 1, 2, '🙋♀', [], ':woman_raising_hand:', [], [], 'people')
+    ('1f64b-1f3ff-2640', 782, 1, 3, '🙋🏿♀', [], ':woman_raising_hand_tone5:', [':woman_raising_hand_dark_skin_tone:'], [], 'people')
+    ('1f64b-1f3fe-2640', 783, 1, 3, '🙋🏾♀', [], ':woman_raising_hand_tone4:', [':woman_raising_hand_medium_dark_skin_tone:'], [], 'people')
+    ('1f64b-1f3fd-2640', 784, 1, 3, '🙋🏽♀', [], ':woman_raising_hand_tone3:', [':woman_raising_hand_medium_skin_tone:'], [], 'people')
+    ('1f64b-1f3fc-2640', 785, 1, 3, '🙋🏼♀', [], ':woman_raising_hand_tone2:', [':woman_raising_hand_medium_light_skin_tone:'], [], 'people')
+    ('1f64b-1f3fb-2640', 786, 1, 3, '🙋🏻♀', [], ':woman_raising_hand_tone1:', [':woman_raising_hand_light_skin_tone:'], [], 'people')
+    ('1f926-2640', 787, 1, 2, '\U0001f926♀', [], ':woman_facepalming:', [], [], 'people')
+    ('1f926-1f3fb-2640', 788, 1, 3, '\U0001f926🏻♀', [], ':woman_facepalming_tone1:', [':woman_facepalming_light_skin_tone:'], [], 'people')
+    ('1f926-1f3fc-2640', 789, 1, 3, '\U0001f926🏼♀', [], ':woman_facepalming_tone2:', [':woman_facepalming_medium_light_skin_tone:'], [], 'people')
+    ('1f926-1f3fd-2640', 790, 1, 3, '\U0001f926🏽♀', [], ':woman_facepalming_tone3:', [':woman_facepalming_medium_skin_tone:'], [], 'people')
+    ('1f926-1f3fe-2640', 791, 1, 3, '\U0001f926🏾♀', [], ':woman_facepalming_tone4:', [':woman_facepalming_medium_dark_skin_tone:'], [], 'people')
+    ('1f926-1f3ff-2640', 792, 1, 3, '\U0001f926🏿♀', [], ':woman_facepalming_tone5:', [':woman_facepalming_dark_skin_tone:'], [], 'people')
+    ('1f926-2642', 793, 1, 2, '\U0001f926♂', [], ':man_facepalming:', [], [], 'people')
+    ('1f926-1f3fb-2642', 794, 1, 3, '\U0001f926🏻♂', [], ':man_facepalming_tone1:', [':man_facepalming_light_skin_tone:'], [], 'people')
+    ('1f926-1f3fc-2642', 795, 1, 3, '\U0001f926🏼♂', [], ':man_facepalming_tone2:', [':man_facepalming_medium_light_skin_tone:'], [], 'people')
+    ('1f926-1f3fd-2642', 796, 1, 3, '\U0001f926🏽♂', [], ':man_facepalming_tone3:', [':man_facepalming_medium_skin_tone:'], [], 'people')
+    ('1f926-1f3fe-2642', 797, 1, 3, '\U0001f926🏾♂', [], ':man_facepalming_tone4:', [':man_facepalming_medium_dark_skin_tone:'], [], 'people')
+    ('1f926-1f3ff-2642', 798, 1, 3, '\U0001f926🏿♂', [], ':man_facepalming_tone5:', [':man_facepalming_dark_skin_tone:'], [], 'people')
+    ('1f926', 799, 1, 1, '\U0001f926', [], ':person_facepalming:', [':face_palm:', ':facepalm:'], [], 'people')
+    ('1f926-1f3fb', 800, 1, 2, '\U0001f926🏻', [], ':person_facepalming_tone1:', [':face_palm_tone1:', ':facepalm_tone1:'], [], 'people')
+    ('1f926-1f3fc', 801, 1, 2, '\U0001f926🏼', [], ':person_facepalming_tone2:', [':face_palm_tone2:', ':facepalm_tone2:'], [], 'people')
+    ('1f926-1f3fd', 802, 1, 2, '\U0001f926🏽', [], ':person_facepalming_tone3:', [':face_palm_tone3:', ':facepalm_tone3:'], [], 'people')
+    ('1f926-1f3fe', 803, 1, 2, '\U0001f926🏾', [], ':person_facepalming_tone4:', [':face_palm_tone4:', ':facepalm_tone4:'], [], 'people')
+    ('1f926-1f3ff', 804, 1, 2, '\U0001f926🏿', [], ':person_facepalming_tone5:', [':face_palm_tone5:', ':facepalm_tone5:'], [], 'people')
+    ('1f937-2640', 805, 1, 2, '\U0001f937♀', [], ':woman_shrugging:', [], [], 'people')
+    ('1f937-1f3fb-2640', 806, 1, 3, '\U0001f937🏻♀', [], ':woman_shrugging_tone1:', [':woman_shrugging_light_skin_tone:'], [], 'people')
+    ('1f937-1f3fc-2640', 807, 1, 3, '\U0001f937🏼♀', [], ':woman_shrugging_tone2:', [':woman_shrugging_medium_light_skin_tone:'], [], 'people')
+    ('1f937-1f3fd-2640', 808, 1, 3, '\U0001f937🏽♀', [], ':woman_shrugging_tone3:', [':woman_shrugging_medium_skin_tone:'], [], 'people')
+    ('1f937-1f3fe-2640', 809, 1, 3, '\U0001f937🏾♀', [], ':woman_shrugging_tone4:', [':woman_shrugging_medium_dark_skin_tone:'], [], 'people')
+    ('1f937-1f3ff-2640', 810, 1, 3, '\U0001f937🏿♀', [], ':woman_shrugging_tone5:', [':woman_shrugging_dark_skin_tone:'], [], 'people')
+    ('1f937-2642', 811, 1, 2, '\U0001f937♂', [], ':man_shrugging:', [], [], 'people')
+    ('1f937-1f3fb-2642', 812, 1, 3, '\U0001f937🏻♂', [], ':man_shrugging_tone1:', [':man_shrugging_light_skin_tone:'], [], 'people')
+    ('1f937-1f3fc-2642', 813, 1, 3, '\U0001f937🏼♂', [], ':man_shrugging_tone2:', [':man_shrugging_medium_light_skin_tone:'], [], 'people')
+    ('1f937-1f3fd-2642', 814, 1, 3, '\U0001f937🏽♂', [], ':man_shrugging_tone3:', [':man_shrugging_medium_skin_tone:'], [], 'people')
+    ('1f937-1f3fe-2642', 815, 1, 3, '\U0001f937🏾♂', [], ':man_shrugging_tone4:', [':man_shrugging_medium_dark_skin_tone:'], [], 'people')
+    ('1f937-1f3ff-2642', 816, 1, 3, '\U0001f937🏿♂', [], ':man_shrugging_tone5:', [':man_shrugging_dark_skin_tone:'], [], 'people')
+    ('1f937', 817, 1, 1, '\U0001f937', [], ':person_shrugging:', [':shrug:'], [], 'people')
+    ('1f937-1f3fb', 818, 1, 2, '\U0001f937🏻', [], ':person_shrugging_tone1:', [':shrug_tone1:'], [], 'people')
+    ('1f937-1f3fc', 819, 1, 2, '\U0001f937🏼', [], ':person_shrugging_tone2:', [':shrug_tone2:'], [], 'people')
+    ('1f937-1f3fd', 820, 1, 2, '\U0001f937🏽', [], ':person_shrugging_tone3:', [':shrug_tone3:'], [], 'people')
+    ('1f937-1f3fe', 821, 1, 2, '\U0001f937🏾', [], ':person_shrugging_tone4:', [':shrug_tone4:'], [], 'people')
+    ('1f937-1f3ff', 822, 1, 2, '\U0001f937🏿', [], ':person_shrugging_tone5:', [':shrug_tone5:'], [], 'people')
+    ('1f64e', 823, 1, 1, '🙎', [], ':person_pouting:', [':person_with_pouting_face:'], [], 'people')
+    ('1f64e-1f3fb', 824, 1, 2, '🙎🏻', [], ':person_pouting_tone1:', [':person_with_pouting_face_tone1:'], [], 'people')
+    ('1f64e-1f3fc', 825, 1, 2, '🙎🏼', [], ':person_pouting_tone2:', [':person_with_pouting_face_tone2:'], [], 'people')
+    ('1f64e-1f3fd', 826, 1, 2, '🙎🏽', [], ':person_pouting_tone3:', [':person_with_pouting_face_tone3:'], [], 'people')
+    ('1f64e-1f3fe', 827, 1, 2, '🙎🏾', [], ':person_pouting_tone4:', [':person_with_pouting_face_tone4:'], [], 'people')
+    ('1f64e-1f3ff', 828, 1, 2, '🙎🏿', [], ':person_pouting_tone5:', [':person_with_pouting_face_tone5:'], [], 'people')
+    ('1f64e-2642', 829, 1, 2, '🙎♂', [], ':man_pouting:', [], [], 'people')
+    ('1f64e-1f3fb-2642', 830, 1, 3, '🙎🏻♂', [], ':man_pouting_tone1:', [':man_pouting_light_skin_tone:'], [], 'people')
+    ('1f64e-1f3fc-2642', 831, 1, 3, '🙎🏼♂', [], ':man_pouting_tone2:', [':man_pouting_medium_light_skin_tone:'], [], 'people')
+    ('1f64e-1f3fd-2642', 832, 1, 3, '🙎🏽♂', [], ':man_pouting_tone3:', [':man_pouting_medium_skin_tone:'], [], 'people')
+    ('1f64e-1f3fe-2642', 833, 1, 3, '🙎🏾♂', [], ':man_pouting_tone4:', [':man_pouting_medium_dark_skin_tone:'], [], 'people')
+    ('1f64e-1f3ff-2642', 834, 1, 3, '🙎🏿♂', [], ':man_pouting_tone5:', [':man_pouting_dark_skin_tone:'], [], 'people')
+    ('1f64e-2640', 835, 1, 2, '🙎♀', [], ':woman_pouting:', [], [], 'people')
+    ('1f64e-1f3ff-2640', 836, 1, 3, '🙎🏿♀', [], ':woman_pouting_tone5:', [':woman_pouting_dark_skin_tone:'], [], 'people')
+    ('1f64e-1f3fe-2640', 837, 1, 3, '🙎🏾♀', [], ':woman_pouting_tone4:', [':woman_pouting_medium_dark_skin_tone:'], [], 'people')
+    ('1f64e-1f3fd-2640', 838, 1, 3, '🙎🏽♀', [], ':woman_pouting_tone3:', [':woman_pouting_medium_skin_tone:'], [], 'people')
+    ('1f64e-1f3fc-2640', 839, 1, 3, '🙎🏼♀', [], ':woman_pouting_tone2:', [':woman_pouting_medium_light_skin_tone:'], [], 'people')
+    ('1f64e-1f3fb-2640', 840, 1, 3, '🙎🏻♀', [], ':woman_pouting_tone1:', [':woman_pouting_light_skin_tone:'], [], 'people')
+    ('1f64d', 841, 1, 1, '🙍', [], ':person_frowning:', [], [], 'people')
+    ('1f64d-1f3fb', 842, 1, 2, '🙍🏻', [], ':person_frowning_tone1:', [], [], 'people')
+    ('1f64d-1f3fc', 843, 1, 2, '🙍🏼', [], ':person_frowning_tone2:', [], [], 'people')
+    ('1f64d-1f3fd', 844, 1, 2, '🙍🏽', [], ':person_frowning_tone3:', [], [], 'people')
+    ('1f64d-1f3fe', 845, 1, 2, '🙍🏾', [], ':person_frowning_tone4:', [], [], 'people')
+    ('1f64d-1f3ff', 846, 1, 2, '🙍🏿', [], ':person_frowning_tone5:', [], [], 'people')
+    ('1f64d-2642', 847, 1, 2, '🙍♂', [], ':man_frowning:', [], [], 'people')
+    ('1f64d-1f3fb-2642', 848, 1, 3, '🙍🏻♂', [], ':man_frowning_tone1:', [':man_frowning_light_skin_tone:'], [], 'people')
+    ('1f64d-1f3fc-2642', 849, 1, 3, '🙍🏼♂', [], ':man_frowning_tone2:', [':man_frowning_medium_light_skin_tone:'], [], 'people')
+    ('1f64d-1f3fd-2642', 850, 1, 3, '🙍🏽♂', [], ':man_frowning_tone3:', [':man_frowning_medium_skin_tone:'], [], 'people')
+    ('1f64d-1f3fe-2642', 851, 1, 3, '🙍🏾♂', [], ':man_frowning_tone4:', [':man_frowning_medium_dark_skin_tone:'], [], 'people')
+    ('1f64d-1f3ff-2642', 852, 1, 3, '🙍🏿♂', [], ':man_frowning_tone5:', [':man_frowning_dark_skin_tone:'], [], 'people')
+    ('1f64d-2640', 853, 1, 2, '🙍♀', [], ':woman_frowning:', [], [], 'people')
+    ('1f64d-1f3ff-2640', 854, 1, 3, '🙍🏿♀', [], ':woman_frowning_tone5:', [':woman_frowning_dark_skin_tone:'], [], 'people')
+    ('1f64d-1f3fe-2640', 855, 1, 3, '🙍🏾♀', [], ':woman_frowning_tone4:', [':woman_frowning_medium_dark_skin_tone:'], [], 'people')
+    ('1f64d-1f3fd-2640', 856, 1, 3, '🙍🏽♀', [], ':woman_frowning_tone3:', [':woman_frowning_medium_skin_tone:'], [], 'people')
+    ('1f64d-1f3fc-2640', 857, 1, 3, '🙍🏼♀', [], ':woman_frowning_tone2:', [':woman_frowning_medium_light_skin_tone:'], [], 'people')
+    ('1f64d-1f3fb-2640', 858, 1, 3, '🙍🏻♀', [], ':woman_frowning_tone1:', [':woman_frowning_light_skin_tone:'], [], 'people')
+    ('1f487', 859, 1, 1, '💇', [], ':person_getting_haircut:', [':haircut:'], [], 'people')
+    ('1f487-1f3fb', 860, 1, 2, '💇🏻', [], ':person_getting_haircut_tone1:', [':haircut_tone1:'], [], 'people')
+    ('1f487-1f3fc', 861, 1, 2, '💇🏼', [], ':person_getting_haircut_tone2:', [':haircut_tone2:'], [], 'people')
+    ('1f487-1f3fd', 862, 1, 2, '💇🏽', [], ':person_getting_haircut_tone3:', [':haircut_tone3:'], [], 'people')
+    ('1f487-1f3fe', 863, 1, 2, '💇🏾', [], ':person_getting_haircut_tone4:', [':haircut_tone4:'], [], 'people')
+    ('1f487-1f3ff', 864, 1, 2, '💇🏿', [], ':person_getting_haircut_tone5:', [':haircut_tone5:'], [], 'people')
+    ('1f487-2642', 865, 1, 2, '💇♂', [], ':man_getting_haircut:', [], [], 'people')
+    ('1f487-1f3fb-2642', 866, 1, 3, '💇🏻♂', [], ':man_getting_haircut_tone1:', [':man_getting_haircut_light_skin_tone:'], [], 'people')
+    ('1f487-1f3fc-2642', 867, 1, 3, '💇🏼♂', [], ':man_getting_haircut_tone2:', [':man_getting_haircut_medium_light_skin_tone:'], [], 'people')
+    ('1f487-1f3fd-2642', 868, 1, 3, '💇🏽♂', [], ':man_getting_haircut_tone3:', [':man_getting_haircut_medium_skin_tone:'], [], 'people')
+    ('1f487-1f3fe-2642', 869, 1, 3, '💇🏾♂', [], ':man_getting_haircut_tone4:', [':man_getting_haircut_medium_dark_skin_tone:'], [], 'people')
+    ('1f487-1f3ff-2642', 870, 1, 3, '💇🏿♂', [], ':man_getting_haircut_tone5:', [':man_getting_haircut_dark_skin_tone:'], [], 'people')
+    ('1f487-2640', 871, 1, 2, '💇♀', [], ':woman_getting_haircut:', [], [], 'people')
+    ('1f487-1f3ff-2640', 872, 1, 3, '💇🏿♀', [], ':woman_getting_haircut_tone5:', [':woman_getting_haircut_dark_skin_tone:'], [], 'people')
+    ('1f487-1f3fe-2640', 873, 1, 3, '💇🏾♀', [], ':woman_getting_haircut_tone4:', [':woman_getting_haircut_medium_dark_skin_tone:'], [], 'people')
+    ('1f487-1f3fd-2640', 874, 1, 3, '💇🏽♀', [], ':woman_getting_haircut_tone3:', [':woman_getting_haircut_medium_skin_tone:'], [], 'people')
+    ('1f487-1f3fc-2640', 875, 1, 3, '💇🏼♀', [], ':woman_getting_haircut_tone2:', [':woman_getting_haircut_medium_light_skin_tone:'], [], 'people')
+    ('1f487-1f3fb-2640', 876, 1, 3, '💇🏻♀', [], ':woman_getting_haircut_tone1:', [':woman_getting_haircut_light_skin_tone:'], [], 'people')
+    ('1f486', 877, 1, 1, '💆', [], ':person_getting_massage:', [':massage:'], [], 'people')
+    ('1f486-1f3fb', 878, 1, 2, '💆🏻', [], ':person_getting_massage_tone1:', [':massage_tone1:'], [], 'people')
+    ('1f486-1f3fc', 879, 1, 2, '💆🏼', [], ':person_getting_massage_tone2:', [':massage_tone2:'], [], 'people')
+    ('1f486-1f3fd', 880, 1, 2, '💆🏽', [], ':person_getting_massage_tone3:', [':massage_tone3:'], [], 'people')
+    ('1f486-1f3fe', 881, 1, 2, '💆🏾', [], ':person_getting_massage_tone4:', [':massage_tone4:'], [], 'people')
+    ('1f486-1f3ff', 882, 1, 2, '💆🏿', [], ':person_getting_massage_tone5:', [':massage_tone5:'], [], 'people')
+    ('1f486-2642', 883, 1, 2, '💆♂', [], ':man_getting_face_massage:', [], [], 'people')
+    ('1f486-1f3fb-2642', 884, 1, 3, '💆🏻♂', [], ':man_getting_face_massage_tone1:', [':man_getting_face_massage_light_skin_tone:'], [], 'people')
+    ('1f486-1f3fc-2642', 885, 1, 3, '💆🏼♂', [], ':man_getting_face_massage_tone2:', [':man_getting_face_massage_medium_light_skin_tone:'], [], 'people')
+    ('1f486-1f3fd-2642', 886, 1, 3, '💆🏽♂', [], ':man_getting_face_massage_tone3:', [':man_getting_face_massage_medium_skin_tone:'], [], 'people')
+    ('1f486-1f3fe-2642', 887, 1, 3, '💆🏾♂', [], ':man_getting_face_massage_tone4:', [':man_getting_face_massage_medium_dark_skin_tone:'], [], 'people')
+    ('1f486-1f3ff-2642', 888, 1, 3, '💆🏿♂', [], ':man_getting_face_massage_tone5:', [':man_getting_face_massage_dark_skin_tone:'], [], 'people')
+    ('1f486-2640', 889, 1, 2, '💆♀', [], ':woman_getting_face_massage:', [], [], 'people')
+    ('1f486-1f3ff-2640', 890, 1, 3, '💆🏿♀', [], ':woman_getting_face_massage_tone5:', [':woman_getting_face_massage_dark_skin_tone:'], [], 'people')
+    ('1f486-1f3fe-2640', 891, 1, 3, '💆🏾♀', [], ':woman_getting_face_massage_tone4:', [':woman_getting_face_massage_medium_dark_skin_tone:'], [], 'people')
+    ('1f486-1f3fd-2640', 892, 1, 3, '💆🏽♀', [], ':woman_getting_face_massage_tone3:', [':woman_getting_face_massage_medium_skin_tone:'], [], 'people')
+    ('1f486-1f3fc-2640', 893, 1, 3, '💆🏼♀', [], ':woman_getting_face_massage_tone2:', [':woman_getting_face_massage_medium_light_skin_tone:'], [], 'people')
+    ('1f486-1f3fb-2640', 894, 1, 3, '💆🏻♀', [], ':woman_getting_face_massage_tone1:', [':woman_getting_face_massage_light_skin_tone:'], [], 'people')
+    ('1f574', 895, 1, 1, '🕴', [], ':levitate:', [], [], 'people')
+    ('1f574-1f3fb', 896, 1, 2, '🕴🏻', [], ':man_in_business_suit_levitating_tone1:', [':man_in_business_suit_levitating_light_skin_tone:'], [], 'people')
+    ('1f574-1f3fc', 897, 1, 2, '🕴🏼', [], ':man_in_business_suit_levitating_tone2:', [':man_in_business_suit_levitating_medium_light_skin_tone:'], [], 'people')
+    ('1f574-1f3fd', 898, 1, 2, '🕴🏽', [], ':man_in_business_suit_levitating_tone3:', [':man_in_business_suit_levitating_medium_skin_tone:'], [], 'people')
+    ('1f574-1f3fe', 899, 1, 2, '🕴🏾', [], ':man_in_business_suit_levitating_tone4:', [':man_in_business_suit_levitating_medium_dark_skin_tone:'], [], 'people')
+    ('1f574-1f3ff', 900, 1, 2, '🕴🏿', [], ':man_in_business_suit_levitating_tone5:', [':man_in_business_suit_levitating_dark_skin_tone:'], [], 'people')
+    ('1f483', 901, 1, 1, '💃', [], ':dancer:', [], [], 'people')
+    ('1f483-1f3fb', 902, 1, 2, '💃🏻', [], ':dancer_tone1:', [], [], 'people')
+    ('1f483-1f3fc', 903, 1, 2, '💃🏼', [], ':dancer_tone2:', [], [], 'people')
+    ('1f483-1f3fd', 904, 1, 2, '💃🏽', [], ':dancer_tone3:', [], [], 'people')
+    ('1f483-1f3fe', 905, 1, 2, '💃🏾', [], ':dancer_tone4:', [], [], 'people')
+    ('1f483-1f3ff', 906, 1, 2, '💃🏿', [], ':dancer_tone5:', [], [], 'people')
+    ('1f57a', 907, 1, 1, '\U0001f57a', [], ':man_dancing:', [':male_dancer:'], [], 'people')
+    ('1f57a-1f3fb', 908, 1, 2, '\U0001f57a🏻', [], ':man_dancing_tone1:', [':male_dancer_tone1:'], [], 'people')
+    ('1f57a-1f3fc', 909, 1, 2, '\U0001f57a🏼', [], ':man_dancing_tone2:', [':male_dancer_tone2:'], [], 'people')
+    ('1f57a-1f3fd', 910, 1, 2, '\U0001f57a🏽', [], ':man_dancing_tone3:', [':male_dancer_tone3:'], [], 'people')
+    ('1f57a-1f3fe', 911, 1, 2, '\U0001f57a🏾', [], ':man_dancing_tone4:', [':male_dancer_tone4:'], [], 'people')
+    ('1f57a-1f3ff', 912, 1, 2, '\U0001f57a🏿', [], ':man_dancing_tone5:', [':male_dancer_tone5:'], [], 'people')
+    ('1f46f', 913, 1, 1, '👯', [], ':people_with_bunny_ears_partying:', [':dancers:'], [], 'people')
+    ('1f46f-2642', 914, 1, 2, '👯♂', [], ':men_with_bunny_ears_partying:', [], [], 'people')
+    ('1f46f-2640', 915, 1, 2, '👯♀', [], ':women_with_bunny_ears_partying:', [], [], 'people')
+    ('1f6b6-2640', 916, 1, 2, '🚶♀', [], ':woman_walking:', [], [], 'people')
+    ('1f6b6-1f3fb-2640', 917, 1, 3, '🚶🏻♀', [], ':woman_walking_tone1:', [':woman_walking_light_skin_tone:'], [], 'people')
+    ('1f6b6-1f3fc-2640', 918, 1, 3, '🚶🏼♀', [], ':woman_walking_tone2:', [':woman_walking_medium_light_skin_tone:'], [], 'people')
+    ('1f6b6-1f3fd-2640', 919, 1, 3, '🚶🏽♀', [], ':woman_walking_tone3:', [':woman_walking_medium_skin_tone:'], [], 'people')
+    ('1f6b6-1f3fe-2640', 920, 1, 3, '🚶🏾♀', [], ':woman_walking_tone4:', [':woman_walking_medium_dark_skin_tone:'], [], 'people')
+    ('1f6b6-1f3ff-2640', 921, 1, 3, '🚶🏿♀', [], ':woman_walking_tone5:', [':woman_walking_dark_skin_tone:'], [], 'people')
+    ('1f6b6', 922, 1, 1, '🚶', [], ':person_walking:', [':walking:'], [], 'people')
+    ('1f6b6-1f3fb', 923, 1, 2, '🚶🏻', [], ':person_walking_tone1:', [':walking_tone1:'], [], 'people')
+    ('1f6b6-1f3fc', 924, 1, 2, '🚶🏼', [], ':person_walking_tone2:', [':walking_tone2:'], [], 'people')
+    ('1f6b6-1f3fd', 925, 1, 2, '🚶🏽', [], ':person_walking_tone3:', [':walking_tone3:'], [], 'people')
+    ('1f6b6-1f3fe', 926, 1, 2, '🚶🏾', [], ':person_walking_tone4:', [':walking_tone4:'], [], 'people')
+    ('1f6b6-1f3ff', 927, 1, 2, '🚶🏿', [], ':person_walking_tone5:', [':walking_tone5:'], [], 'people')
+    ('1f6b6-2642', 928, 1, 2, '🚶♂', [], ':man_walking:', [], [], 'people')
+    ('1f6b6-1f3ff-2642', 929, 1, 3, '🚶🏿♂', [], ':man_walking_tone5:', [':man_walking_dark_skin_tone:'], [], 'people')
+    ('1f6b6-1f3fe-2642', 930, 1, 3, '🚶🏾♂', [], ':man_walking_tone4:', [':man_walking_medium_dark_skin_tone:'], [], 'people')
+    ('1f6b6-1f3fd-2642', 931, 1, 3, '🚶🏽♂', [], ':man_walking_tone3:', [':man_walking_medium_skin_tone:'], [], 'people')
+    ('1f6b6-1f3fc-2642', 932, 1, 3, '🚶🏼♂', [], ':man_walking_tone2:', [':man_walking_medium_light_skin_tone:'], [], 'people')
+    ('1f6b6-1f3fb-2642', 933, 1, 3, '🚶🏻♂', [], ':man_walking_tone1:', [':man_walking_light_skin_tone:'], [], 'people')
+    ('1f3c3-2640', 934, 1, 2, '🏃♀', [], ':woman_running:', [], [], 'people')
+    ('1f3c3-1f3fb-2640', 935, 1, 3, '🏃🏻♀', [], ':woman_running_tone1:', [':woman_running_light_skin_tone:'], [], 'people')
+    ('1f3c3-1f3fc-2640', 936, 1, 3, '🏃🏼♀', [], ':woman_running_tone2:', [':woman_running_medium_light_skin_tone:'], [], 'people')
+    ('1f3c3-1f3fd-2640', 937, 1, 3, '🏃🏽♀', [], ':woman_running_tone3:', [':woman_running_medium_skin_tone:'], [], 'people')
+    ('1f3c3-1f3fe-2640', 938, 1, 3, '🏃🏾♀', [], ':woman_running_tone4:', [':woman_running_medium_dark_skin_tone:'], [], 'people')
+    ('1f3c3-1f3ff-2640', 939, 1, 3, '🏃🏿♀', [], ':woman_running_tone5:', [':woman_running_dark_skin_tone:'], [], 'people')
+    ('1f3c3', 940, 1, 1, '🏃', [], ':person_running:', [':runner:'], [], 'people')
+    ('1f3c3-1f3fb', 941, 1, 2, '🏃🏻', [], ':person_running_tone1:', [':runner_tone1:'], [], 'people')
+    ('1f3c3-1f3fc', 942, 1, 2, '🏃🏼', [], ':person_running_tone2:', [':runner_tone2:'], [], 'people')
+    ('1f3c3-1f3fd', 943, 1, 2, '🏃🏽', [], ':person_running_tone3:', [':runner_tone3:'], [], 'people')
+    ('1f3c3-1f3fe', 944, 1, 2, '🏃🏾', [], ':person_running_tone4:', [':runner_tone4:'], [], 'people')
+    ('1f3c3-1f3ff', 945, 1, 2, '🏃🏿', [], ':person_running_tone5:', [':runner_tone5:'], [], 'people')
+    ('1f3c3-2642', 946, 1, 2, '🏃♂', [], ':man_running:', [], [], 'people')
+    ('1f3c3-1f3ff-2642', 947, 1, 3, '🏃🏿♂', [], ':man_running_tone5:', [':man_running_dark_skin_tone:'], [], 'people')
+    ('1f3c3-1f3fe-2642', 948, 1, 3, '🏃🏾♂', [], ':man_running_tone4:', [':man_running_medium_dark_skin_tone:'], [], 'people')
+    ('1f3c3-1f3fd-2642', 949, 1, 3, '🏃🏽♂', [], ':man_running_tone3:', [':man_running_medium_skin_tone:'], [], 'people')
+    ('1f3c3-1f3fc-2642', 950, 1, 3, '🏃🏼♂', [], ':man_running_tone2:', [':man_running_medium_light_skin_tone:'], [], 'people')
+    ('1f3c3-1f3fb-2642', 951, 1, 3, '🏃🏻♂', [], ':man_running_tone1:', [':man_running_light_skin_tone:'], [], 'people')
+    ('1f46b', 952, 1, 1, '👫', [], ':couple:', [], [], 'people')
+    ('1f46d', 953, 1, 1, '👭', [], ':two_women_holding_hands:', [], [], 'people')
+    ('1f46c', 954, 1, 1, '👬', [], ':two_men_holding_hands:', [], [], 'people')
+    ('1f491', 955, 1, 1, '💑', [], ':couple_with_heart:', [], [], 'people')
+    ('1f469-2764-1f469', 956, 1, 3, '👩❤👩', [], ':couple_ww:', [':couple_with_heart_ww:'], [], 'people')
+    ('1f468-2764-1f468', 957, 1, 3, '👨❤👨', [], ':couple_mm:', [':couple_with_heart_mm:'], [], 'people')
+    ('1f48f', 958, 1, 1, '💏', [], ':couplekiss:', [], [], 'people')
+    ('1f469-2764-1f48b-1f469', 959, 1, 4, '👩❤💋👩', [], ':kiss_ww:', [':couplekiss_ww:'], [], 'people')
+    ('1f468-2764-1f48b-1f468', 960, 1, 4, '👨❤💋👨', [], ':kiss_mm:', [':couplekiss_mm:'], [], 'people')
+    ('1f46a', 961, 1, 1, '👪', [], ':family:', [], [], 'people')
+    ('1f468-1f469-1f467', 962, 1, 3, '👨👩👧', [], ':family_mwg:', [], [], 'people')
+    ('1f468-1f469-1f467-1f466', 963, 1, 4, '👨👩👧👦', [], ':family_mwgb:', [], [], 'people')
+    ('1f468-1f469-1f466-1f466', 964, 1, 4, '👨👩👦👦', [], ':family_mwbb:', [], [], 'people')
+    ('1f468-1f469-1f467-1f467', 965, 1, 4, '👨👩👧👧', [], ':family_mwgg:', [], [], 'people')
+    ('1f469-1f469-1f466', 966, 1, 3, '👩👩👦', [], ':family_wwb:', [], [], 'people')
+    ('1f469-1f469-1f467', 967, 1, 3, '👩👩👧', [], ':family_wwg:', [], [], 'people')
+    ('1f469-1f469-1f467-1f466', 968, 1, 4, '👩👩👧👦', [], ':family_wwgb:', [], [], 'people')
+    ('1f469-1f469-1f466-1f466', 969, 1, 4, '👩👩👦👦', [], ':family_wwbb:', [], [], 'people')
+    ('1f469-1f469-1f467-1f467', 970, 1, 4, '👩👩👧👧', [], ':family_wwgg:', [], [], 'people')
+    ('1f468-1f468-1f466', 971, 1, 3, '👨👨👦', [], ':family_mmb:', [], [], 'people')
+    ('1f468-1f468-1f467', 972, 1, 3, '👨👨👧', [], ':family_mmg:', [], [], 'people')
+    ('1f468-1f468-1f467-1f466', 973, 1, 4, '👨👨👧👦', [], ':family_mmgb:', [], [], 'people')
+    ('1f468-1f468-1f466-1f466', 974, 1, 4, '👨👨👦👦', [], ':family_mmbb:', [], [], 'people')
+    ('1f468-1f468-1f467-1f467', 975, 1, 4, '👨👨👧👧', [], ':family_mmgg:', [], [], 'people')
+    ('1f469-1f466', 976, 1, 2, '👩👦', [], ':family_woman_boy:', [], [], 'people')
+    ('1f469-1f467', 977, 1, 2, '👩👧', [], ':family_woman_girl:', [], [], 'people')
+    ('1f469-1f467-1f466', 978, 1, 3, '👩👧👦', [], ':family_woman_girl_boy:', [], [], 'people')
+    ('1f469-1f466-1f466', 979, 1, 3, '👩👦👦', [], ':family_woman_boy_boy:', [], [], 'people')
+    ('1f469-1f467-1f467', 980, 1, 3, '👩👧👧', [], ':family_woman_girl_girl:', [], [], 'people')
+    ('1f468-1f466', 981, 1, 2, '👨👦', [], ':family_man_boy:', [], [], 'people')
+    ('1f468-1f467', 982, 1, 2, '👨👧', [], ':family_man_girl:', [], [], 'people')
+    ('1f468-1f467-1f466', 983, 1, 3, '👨👧👦', [], ':family_man_girl_boy:', [], [], 'people')
+    ('1f468-1f466-1f466', 984, 1, 3, '👨👦👦', [], ':family_man_boy_boy:', [], [], 'people')
+    ('1f468-1f467-1f467', 985, 1, 3, '👨👧👧', [], ':family_man_girl_girl:', [], [], 'people')
+    ('1f45a', 986, 1, 1, '👚', [], ':womans_clothes:', [], [], 'people')
+    ('1f455', 987, 1, 1, '👕', [], ':shirt:', [], [], 'people')
+    ('1f456', 988, 1, 1, '👖', [], ':jeans:', [], [], 'people')
+    ('1f454', 989, 1, 1, '👔', [], ':necktie:', [], [], 'people')
+    ('1f457', 990, 1, 1, '👗', [], ':dress:', [], [], 'people')
+    ('1f459', 991, 1, 1, '👙', [], ':bikini:', [], [], 'people')
+    ('1f458', 992, 1, 1, '👘', [], ':kimono:', [], [], 'people')
+    ('1f460', 993, 1, 1, '👠', [], ':high_heel:', [], [], 'people')
+    ('1f461', 994, 1, 1, '👡', [], ':sandal:', [], [], 'people')
+    ('1f462', 995, 1, 1, '👢', [], ':boot:', [], [], 'people')
+    ('1f45e', 996, 1, 1, '👞', [], ':mans_shoe:', [], [], 'people')
+    ('1f45f', 997, 1, 1, '👟', [], ':athletic_shoe:', [], [], 'people')
+    ('1f452', 998, 1, 1, '👒', [], ':womans_hat:', [], [], 'people')
+    ('1f3a9', 999, 1, 1, '🎩', [], ':tophat:', [], [], 'people')
+    ('1f393', 1000, 1, 1, '🎓', [], ':mortar_board:', [], [], 'people')
+    ('1f451', 1001, 1, 1, '👑', [], ':crown:', [], [], 'people')
+    ('26d1', 1002, 1, 1, '⛑', [], ':helmet_with_cross:', [':helmet_with_white_cross:'], [], 'people')
+    ('1f392', 1003, 1, 1, '🎒', [], ':school_satchel:', [], [], 'people')
+    ('1f45d', 1004, 1, 1, '👝', [], ':pouch:', [], [], 'people')
+    ('1f45b', 1005, 1, 1, '👛', [], ':purse:', [], [], 'people')
+    ('1f45c', 1006, 1, 1, '👜', [], ':handbag:', [], [], 'people')
+    ('1f4bc', 1007, 1, 1, '💼', [], ':briefcase:', [], [], 'people')
+    ('1f453', 1008, 1, 1, '👓', [], ':eyeglasses:', [], [], 'people')
+    ('1f576', 1009, 1, 1, '🕶', [], ':dark_sunglasses:', [], [], 'people')
+    ('1f302', 1010, 1, 1, '🌂', [], ':closed_umbrella:', [], [], 'people')
+    ('2602', 1011, 1, 1, '☂', [], ':umbrella2:', [], [], 'people')
+    ('1f436', 1012, 1, 1, '🐶', [], ':dog:', [], [], 'nature')
+    ('1f431', 1013, 1, 1, '🐱', [], ':cat:', [], [], 'nature')
+    ('1f42d', 1014, 1, 1, '🐭', [], ':mouse:', [], [], 'nature')
+    ('1f439', 1015, 1, 1, '🐹', [], ':hamster:', [], [], 'nature')
+    ('1f430', 1016, 1, 1, '🐰', [], ':rabbit:', [], [], 'nature')
+    ('1f98a', 1017, 1, 1, '\U0001f98a', [], ':fox:', [':fox_face:'], [], 'nature')
+    ('1f43b', 1018, 1, 1, '🐻', [], ':bear:', [], [], 'nature')
+    ('1f43c', 1019, 1, 1, '🐼', [], ':panda_face:', [], [], 'nature')
+    ('1f428', 1020, 1, 1, '🐨', [], ':koala:', [], [], 'nature')
+    ('1f42f', 1021, 1, 1, '🐯', [], ':tiger:', [], [], 'nature')
+    ('1f981', 1022, 1, 1, '🦁', [], ':lion_face:', [':lion:'], [], 'nature')
+    ('1f42e', 1023, 1, 1, '🐮', [], ':cow:', [], [], 'nature')
+    ('1f437', 1024, 1, 1, '🐷', [], ':pig:', [], [], 'nature')
+    ('1f43d', 1025, 1, 1, '🐽', [], ':pig_nose:', [], [], 'nature')
+    ('1f438', 1026, 1, 1, '🐸', [], ':frog:', [], [], 'nature')
+    ('1f435', 1027, 1, 1, '🐵', [], ':monkey_face:', [], [], 'nature')
+    ('1f648', 1028, 1, 1, '🙈', [], ':see_no_evil:', [], [], 'nature')
+    ('1f649', 1029, 1, 1, '🙉', [], ':hear_no_evil:', [], [], 'nature')
+    ('1f64a', 1030, 1, 1, '🙊', [], ':speak_no_evil:', [], [], 'nature')
+    ('1f412', 1031, 1, 1, '🐒', [], ':monkey:', [], [], 'nature')
+    ('1f414', 1032, 1, 1, '🐔', [], ':chicken:', [], [], 'nature')
+    ('1f427', 1033, 1, 1, '🐧', [], ':penguin:', [], [], 'nature')
+    ('1f426', 1034, 1, 1, '🐦', [], ':bird:', [], [], 'nature')
+    ('1f424', 1035, 1, 1, '🐤', [], ':baby_chick:', [], [], 'nature')
+    ('1f423', 1036, 1, 1, '🐣', [], ':hatching_chick:', [], [], 'nature')
+    ('1f425', 1037, 1, 1, '🐥', [], ':hatched_chick:', [], [], 'nature')
+    ('1f986', 1038, 1, 1, '\U0001f986', [], ':duck:', [], [], 'nature')
+    ('1f985', 1039, 1, 1, '\U0001f985', [], ':eagle:', [], [], 'nature')
+    ('1f989', 1040, 1, 1, '\U0001f989', [], ':owl:', [], [], 'nature')
+    ('1f987', 1041, 1, 1, '\U0001f987', [], ':bat:', [], [], 'nature')
+    ('1f43a', 1042, 1, 1, '🐺', [], ':wolf:', [], [], 'nature')
+    ('1f417', 1043, 1, 1, '🐗', [], ':boar:', [], [], 'nature')
+    ('1f434', 1044, 1, 1, '🐴', [], ':horse:', [], [], 'nature')
+    ('1f984', 1045, 1, 1, '🦄', [], ':unicorn:', [':unicorn_face:'], [], 'nature')
+    ('1f41d', 1046, 1, 1, '🐝', [], ':bee:', [], [], 'nature')
+    ('1f41b', 1047, 1, 1, '🐛', [], ':bug:', [], [], 'nature')
+    ('1f98b', 1048, 1, 1, '\U0001f98b', [], ':butterfly:', [], [], 'nature')
+    ('1f40c', 1049, 1, 1, '🐌', [], ':snail:', [], [], 'nature')
+    ('1f41a', 1050, 1, 1, '🐚', [], ':shell:', [], [], 'nature')
+    ('1f41e', 1051, 1, 1, '🐞', [], ':beetle:', [], [], 'nature')
+    ('1f41c', 1052, 1, 1, '🐜', [], ':ant:', [], [], 'nature')
+    ('1f577', 1053, 1, 1, '🕷', [], ':spider:', [], [], 'nature')
+    ('1f578', 1054, 1, 1, '🕸', [], ':spider_web:', [], [], 'nature')
+    ('1f422', 1055, 1, 1, '🐢', [], ':turtle:', [], [], 'nature')
+    ('1f40d', 1056, 1, 1, '🐍', [], ':snake:', [], [], 'nature')
+    ('1f98e', 1057, 1, 1, '\U0001f98e', [], ':lizard:', [], [], 'nature')
+    ('1f982', 1058, 1, 1, '🦂', [], ':scorpion:', [], [], 'nature')
+    ('1f980', 1059, 1, 1, '🦀', [], ':crab:', [], [], 'nature')
+    ('1f991', 1060, 1, 1, '\U0001f991', [], ':squid:', [], [], 'nature')
+    ('1f419', 1061, 1, 1, '🐙', [], ':octopus:', [], [], 'nature')
+    ('1f990', 1062, 1, 1, '\U0001f990', [], ':shrimp:', [], [], 'nature')
+    ('1f420', 1063, 1, 1, '🐠', [], ':tropical_fish:', [], [], 'nature')
+    ('1f41f', 1064, 1, 1, '🐟', [], ':fish:', [], [], 'nature')
+    ('1f421', 1065, 1, 1, '🐡', [], ':blowfish:', [], [], 'nature')
+    ('1f42c', 1066, 1, 1, '🐬', [], ':dolphin:', [], [], 'nature')
+    ('1f988', 1067, 1, 1, '\U0001f988', [], ':shark:', [], [], 'nature')
+    ('1f433', 1068, 1, 1, '🐳', [], ':whale:', [], [], 'nature')
+    ('1f40b', 1069, 1, 1, '🐋', [], ':whale2:', [], [], 'nature')
+    ('1f40a', 1070, 1, 1, '🐊', [], ':crocodile:', [], [], 'nature')
+    ('1f406', 1071, 1, 1, '🐆', [], ':leopard:', [], [], 'nature')
+    ('1f405', 1072, 1, 1, '🐅', [], ':tiger2:', [], [], 'nature')
+    ('1f403', 1073, 1, 1, '🐃', [], ':water_buffalo:', [], [], 'nature')
+    ('1f402', 1074, 1, 1, '🐂', [], ':ox:', [], [], 'nature')
+    ('1f404', 1075, 1, 1, '🐄', [], ':cow2:', [], [], 'nature')
+    ('1f98c', 1076, 1, 1, '\U0001f98c', [], ':deer:', [], [], 'nature')
+    ('1f42a', 1077, 1, 1, '🐪', [], ':dromedary_camel:', [], [], 'nature')
+    ('1f42b', 1078, 1, 1, '🐫', [], ':camel:', [], [], 'nature')
+    ('1f418', 1079, 1, 1, '🐘', [], ':elephant:', [], [], 'nature')
+    ('1f98f', 1080, 1, 1, '\U0001f98f', [], ':rhino:', [':rhinoceros:'], [], 'nature')
+    ('1f98d', 1081, 1, 1, '\U0001f98d', [], ':gorilla:', [], [], 'nature')
+    ('1f40e', 1082, 1, 1, '🐎', [], ':racehorse:', [], [], 'nature')
+    ('1f416', 1083, 1, 1, '🐖', [], ':pig2:', [], [], 'nature')
+    ('1f410', 1084, 1, 1, '🐐', [], ':goat:', [], [], 'nature')
+    ('1f40f', 1085, 1, 1, '🐏', [], ':ram:', [], [], 'nature')
+    ('1f411', 1086, 1, 1, '🐑', ['sheep', 'ewe', 'you'], ':sheep:', [], [], 'nature')
+    ('1f415', 1087, 1, 1, '🐕', [], ':dog2:', [], [], 'nature')
+    ('1f429', 1088, 1, 1, '🐩', [], ':poodle:', [], [], 'nature')
+    ('1f408', 1089, 1, 1, '🐈', [], ':cat2:', [], [], 'nature')
+    ('1f413', 1090, 1, 1, '🐓', [], ':rooster:', [], [], 'nature')
+    ('1f983', 1091, 1, 1, '🦃', [], ':turkey:', [], [], 'nature')
+    ('1f54a', 1092, 1, 1, '🕊', [], ':dove:', [':dove_of_peace:'], [], 'nature')
+    ('1f407', 1093, 1, 1, '🐇', [], ':rabbit2:', [], [], 'nature')
+    ('1f401', 1094, 1, 1, '🐁', [], ':mouse2:', [], [], 'nature')
+    ('1f400', 1095, 1, 1, '🐀', [], ':rat:', [], [], 'nature')
+    ('1f43f', 1096, 1, 1, '🐿', [], ':chipmunk:', [], [], 'nature')
+    ('1f43e', 1097, 1, 1, '🐾', [], ':feet:', [':paw_prints:'], [], 'nature')
+    ('1f409', 1098, 1, 1, '🐉', [], ':dragon:', [], [], 'nature')
+    ('1f432', 1099, 1, 1, '🐲', [], ':dragon_face:', [], [], 'nature')
+    ('1f335', 1100, 1, 1, '🌵', [], ':cactus:', [], [], 'nature')
+    ('1f384', 1101, 1, 1, '🎄', [], ':christmas_tree:', [], [], 'nature')
+    ('1f332', 1102, 1, 1, '🌲', [], ':evergreen_tree:', [], [], 'nature')
+    ('1f333', 1103, 1, 1, '🌳', [], ':deciduous_tree:', [], [], 'nature')
+    ('1f334', 1104, 1, 1, '🌴', [], ':palm_tree:', [], [], 'nature')
+    ('1f331', 1105, 1, 1, '🌱', [], ':seedling:', [], [], 'nature')
+    ('1f33f', 1106, 1, 1, '🌿', [], ':herb:', [], [], 'nature')
+    ('2618', 1107, 1, 1, '☘', [], ':shamrock:', [], [], 'nature')
+    ('1f340', 1108, 1, 1, '🍀', [], ':four_leaf_clover:', [], [], 'nature')
+    ('1f38d', 1109, 1, 1, '🎍', [], ':bamboo:', [], [], 'nature')
+    ('1f38b', 1110, 1, 1, '🎋', [], ':tanabata_tree:', [], [], 'nature')
+    ('1f343', 1111, 1, 1, '🍃', [], ':leaves:', [], [], 'nature')
+    ('1f342', 1112, 1, 1, '🍂', [], ':fallen_leaf:', [], [], 'nature')
+    ('1f341', 1113, 1, 1, '🍁', [], ':maple_leaf:', [], [], 'nature')
+    ('1f344', 1114, 1, 1, '🍄', [], ':mushroom:', [], [], 'nature')
+    ('1f33e', 1115, 1, 1, '🌾', [], ':ear_of_rice:', [], [], 'nature')
+    ('1f490', 1116, 1, 1, '💐', [], ':bouquet:', [], [], 'nature')
+    ('1f337', 1117, 1, 1, '🌷', [], ':tulip:', [], [], 'nature')
+    ('1f339', 1118, 1, 1, '🌹', [], ':rose:', [], [], 'nature')
+    ('1f940', 1119, 1, 1, '\U0001f940', [], ':wilted_rose:', [':wilted_flower:'], [], 'nature')
+    ('1f33b', 1120, 1, 1, '🌻', [], ':sunflower:', [], [], 'nature')
+    ('1f33c', 1121, 1, 1, '🌼', [], ':blossom:', [], [], 'nature')
+    ('1f338', 1122, 1, 1, '🌸', [], ':cherry_blossom:', [], [], 'nature')
+    ('1f33a', 1123, 1, 1, '🌺', [], ':hibiscus:', [], [], 'nature')
+    ('1f30e', 1124, 1, 1, '🌎', [], ':earth_americas:', [], [], 'nature')
+    ('1f30d', 1125, 1, 1, '🌍', [], ':earth_africa:', [], [], 'nature')
+    ('1f30f', 1126, 1, 1, '🌏', [], ':earth_asia:', [], [], 'nature')
+    ('1f315', 1127, 1, 1, '🌕', [], ':full_moon:', [], [], 'nature')
+    ('1f316', 1128, 1, 1, '🌖', [], ':waning_gibbous_moon:', [], [], 'nature')
+    ('1f317', 1129, 1, 1, '🌗', [], ':last_quarter_moon:', [], [], 'nature')
+    ('1f318', 1130, 1, 1, '🌘', [], ':waning_crescent_moon:', [], [], 'nature')
+    ('1f311', 1131, 1, 1, '🌑', [], ':new_moon:', [], [], 'nature')
+    ('1f312', 1132, 1, 1, '🌒', [], ':waxing_crescent_moon:', [], [], 'nature')
+    ('1f313', 1133, 1, 1, '🌓', [], ':first_quarter_moon:', [], [], 'nature')
+    ('1f314', 1134, 1, 1, '🌔', [], ':waxing_gibbous_moon:', [], [], 'nature')
+    ('1f31a', 1135, 1, 1, '🌚', [], ':new_moon_with_face:', [], [], 'nature')
+    ('1f31d', 1136, 1, 1, '🌝', [], ':full_moon_with_face:', [], [], 'nature')
+    ('1f31e', 1137, 1, 1, '🌞', [], ':sun_with_face:', [], [], 'nature')
+    ('1f31b', 1138, 1, 1, '🌛', [], ':first_quarter_moon_with_face:', [], [], 'nature')
+    ('1f31c', 1139, 1, 1, '🌜', [], ':last_quarter_moon_with_face:', [], [], 'nature')
+    ('1f319', 1140, 1, 1, '🌙', [], ':crescent_moon:', [], [], 'nature')
+    ('1f4ab', 1141, 1, 1, '💫', [], ':dizzy:', [], [], 'nature')
+    ('2b50', 1142, 1, 1, '⭐', [], ':star:', [], [], 'nature')
+    ('1f31f', 1143, 1, 1, '🌟', [], ':star2:', [], [], 'nature')
+    ('2728', 1144, 1, 1, '✨', [], ':sparkles:', [], [], 'nature')
+    ('26a1', 1145, 1, 1, '⚡', [], ':zap:', [], [], 'nature')
+    ('1f525', 1146, 1, 1, '🔥', [], ':fire:', [':flame:'], [], 'nature')
+    ('1f4a5', 1147, 1, 1, '💥', [], ':boom:', [], [], 'nature')
+    ('2604', 1148, 1, 1, '☄', [], ':comet:', [], [], 'nature')
+    ('2600', 1149, 1, 1, '☀', [], ':sunny:', [], [], 'nature')
+    ('1f324', 1150, 1, 1, '🌤', [], ':white_sun_small_cloud:', [':white_sun_with_small_cloud:'], [], 'nature')
+    ('26c5', 1151, 1, 1, '⛅', [], ':partly_sunny:', [], [], 'nature')
+    ('1f325', 1152, 1, 1, '🌥', [], ':white_sun_cloud:', [':white_sun_behind_cloud:'], [], 'nature')
+    ('1f326', 1153, 1, 1, '🌦', [], ':white_sun_rain_cloud:', [':white_sun_behind_cloud_with_rain:'], [], 'nature')
+    ('1f308', 1154, 1, 1, '🌈', [], ':rainbow:', [], [], 'nature')
+    ('2601', 1155, 1, 1, '☁', [], ':cloud:', [], [], 'nature')
+    ('1f327', 1156, 1, 1, '🌧', [], ':cloud_rain:', [':cloud_with_rain:'], [], 'nature')
+    ('26c8', 1157, 1, 1, '⛈', [], ':thunder_cloud_rain:', [':thunder_cloud_and_rain:'], [], 'nature')
+    ('1f329', 1158, 1, 1, '🌩', [], ':cloud_lightning:', [':cloud_with_lightning:'], [], 'nature')
+    ('1f328', 1159, 1, 1, '🌨', [], ':cloud_snow:', [':cloud_with_snow:'], [], 'nature')
+    ('2603', 1160, 1, 1, '☃', [], ':snowman2:', [], [], 'nature')
+    ('26c4', 1161, 1, 1, '⛄', [], ':snowman:', [], [], 'nature')
+    ('2744', 1162, 1, 1, '❄', [], ':snowflake:', [], [], 'nature')
+    ('1f32c', 1163, 1, 1, '🌬', ['wind', 'blow', 'blowing'], ':wind_blowing_face:', [], [], 'nature')
+    ('1f4a8', 1164, 1, 1, '💨', [], ':dash:', [], [], 'nature')
+    ('1f32a', 1165, 1, 1, '🌪', [], ':cloud_tornado:', [':cloud_with_tornado:'], [], 'nature')
+    ('1f32b', 1166, 1, 1, '🌫', [], ':fog:', [], [], 'nature')
+    ('1f30a', 1167, 1, 1, '🌊', ['wave', 'waves'], ':ocean:', [], [], 'nature')
+    ('1f4a7', 1168, 1, 1, '💧', [], ':droplet:', [], [], 'nature')
+    ('1f4a6', 1169, 1, 1, '💦', [], ':sweat_drops:', [], [], 'nature')
+    ('2614', 1170, 1, 1, '☔', [], ':umbrella:', [], [], 'nature')
+    ('1f34f', 1171, 1, 1, '🍏', [], ':green_apple:', [], [], 'food')
+    ('1f34e', 1172, 1, 1, '🍎', [], ':apple:', [], [], 'food')
+    ('1f350', 1173, 1, 1, '🍐', [], ':pear:', [], [], 'food')
+    ('1f34a', 1174, 1, 1, '🍊', [], ':tangerine:', [], [], 'food')
+    ('1f34b', 1175, 1, 1, '🍋', [], ':lemon:', [], [], 'food')
+    ('1f34c', 1176, 1, 1, '🍌', [], ':banana:', [], [], 'food')
+    ('1f349', 1177, 1, 1, '🍉', [], ':watermelon:', [], [], 'food')
+    ('1f347', 1178, 1, 1, '🍇', [], ':grapes:', [], [], 'food')
+    ('1f353', 1179, 1, 1, '🍓', [], ':strawberry:', [], [], 'food')
+    ('1f348', 1180, 1, 1, '🍈', [], ':melon:', [], [], 'food')
+    ('1f352', 1181, 1, 1, '🍒', [], ':cherries:', [], [], 'food')
+    ('1f351', 1182, 1, 1, '🍑', [], ':peach:', [], [], 'food')
+    ('1f34d', 1183, 1, 1, '🍍', [], ':pineapple:', [], [], 'food')
+    ('1f95d', 1184, 1, 1, '\U0001f95d', [], ':kiwi:', [':kiwifruit:'], [], 'food')
+    ('1f951', 1185, 1, 1, '\U0001f951', [], ':avocado:', [], [], 'food')
+    ('1f345', 1186, 1, 1, '🍅', [], ':tomato:', [], [], 'food')
+    ('1f346', 1187, 1, 1, '🍆', [], ':eggplant:', [], [], 'food')
+    ('1f952', 1188, 1, 1, '\U0001f952', [], ':cucumber:', [], [], 'food')
+    ('1f955', 1189, 1, 1, '\U0001f955', [], ':carrot:', [], [], 'food')
+    ('1f33d', 1190, 1, 1, '🌽', [], ':corn:', [], [], 'food')
+    ('1f336', 1191, 1, 1, '🌶', [], ':hot_pepper:', [], [], 'food')
+    ('1f954', 1192, 1, 1, '\U0001f954', [], ':potato:', [], [], 'food')
+    ('1f360', 1193, 1, 1, '🍠', [], ':sweet_potato:', [], [], 'food')
+    ('1f330', 1194, 1, 1, '🌰', [], ':chestnut:', [], [], 'food')
+    ('1f95c', 1195, 1, 1, '\U0001f95c', [], ':peanuts:', [':shelled_peanut:'], [], 'food')
+    ('1f36f', 1196, 1, 1, '🍯', [], ':honey_pot:', [], [], 'food')
+    ('1f950', 1197, 1, 1, '\U0001f950', [], ':croissant:', [], [], 'food')
+    ('1f35e', 1198, 1, 1, '🍞', [], ':bread:', [], [], 'food')
+    ('1f956', 1199, 1, 1, '\U0001f956', [], ':french_bread:', [':baguette_bread:'], [], 'food')
+    ('1f9c0', 1200, 1, 1, '🧀', [], ':cheese:', [':cheese_wedge:'], [], 'food')
+    ('1f95a', 1201, 1, 1, '\U0001f95a', [], ':egg:', [], [], 'food')
+    ('1f373', 1202, 1, 1, '🍳', [], ':cooking:', [], [], 'food')
+    ('1f953', 1203, 1, 1, '\U0001f953', [], ':bacon:', [], [], 'food')
+    ('1f95e', 1204, 1, 1, '\U0001f95e', [], ':pancakes:', [], [], 'food')
+    ('1f364', 1205, 1, 1, '🍤', [], ':fried_shrimp:', [], [], 'food')
+    ('1f357', 1206, 1, 1, '🍗', [], ':poultry_leg:', [], [], 'food')
+    ('1f356', 1207, 1, 1, '🍖', [], ':meat_on_bone:', [], [], 'food')
+    ('1f355', 1208, 1, 1, '🍕', [], ':pizza:', [], [], 'food')
+    ('1f32d', 1209, 1, 1, '🌭', [], ':hotdog:', [':hot_dog:'], [], 'food')
+    ('1f354', 1210, 1, 1, '🍔', [], ':hamburger:', [], [], 'food')
+    ('1f35f', 1211, 1, 1, '🍟', [], ':fries:', [], [], 'food')
+    ('1f959', 1212, 1, 1, '\U0001f959', [], ':stuffed_flatbread:', [':stuffed_pita:'], [], 'food')
+    ('1f32e', 1213, 1, 1, '🌮', [], ':taco:', [], [], 'food')
+    ('1f32f', 1214, 1, 1, '🌯', [], ':burrito:', [], [], 'food')
+    ('1f957', 1215, 1, 1, '\U0001f957', [], ':salad:', [':green_salad:'], [], 'food')
+    ('1f958', 1216, 1, 1, '\U0001f958', [], ':shallow_pan_of_food:', [':paella:'], [], 'food')
+    ('1f35d', 1217, 1, 1, '🍝', [], ':spaghetti:', [], [], 'food')
+    ('1f35c', 1218, 1, 1, '🍜', [], ':ramen:', [], [], 'food')
+    ('1f372', 1219, 1, 1, '🍲', [], ':stew:', [], [], 'food')
+    ('1f365', 1220, 1, 1, '🍥', [], ':fish_cake:', [], [], 'food')
+    ('1f363', 1221, 1, 1, '🍣', [], ':sushi:', [], [], 'food')
+    ('1f371', 1222, 1, 1, '🍱', [], ':bento:', [], [], 'food')
+    ('1f35b', 1223, 1, 1, '🍛', [], ':curry:', [], [], 'food')
+    ('1f359', 1224, 1, 1, '🍙', [], ':rice_ball:', [], [], 'food')
+    ('1f35a', 1225, 1, 1, '🍚', [], ':rice:', [], [], 'food')
+    ('1f358', 1226, 1, 1, '🍘', [], ':rice_cracker:', [], [], 'food')
+    ('1f362', 1227, 1, 1, '🍢', [], ':oden:', [], [], 'food')
+    ('1f361', 1228, 1, 1, '🍡', [], ':dango:', [], [], 'food')
+    ('1f367', 1229, 1, 1, '🍧', [], ':shaved_ice:', [], [], 'food')
+    ('1f368', 1230, 1, 1, '🍨', [], ':ice_cream:', [], [], 'food')
+    ('1f366', 1231, 1, 1, '🍦', [], ':icecream:', [], [], 'food')
+    ('1f370', 1232, 1, 1, '🍰', [], ':cake:', [], [], 'food')
+    ('1f382', 1233, 1, 1, '🎂', [], ':birthday:', [], [], 'food')
+    ('1f36e', 1234, 1, 1, '🍮', [], ':custard:', [':pudding:', ':flan:'], [], 'food')
+    ('1f36d', 1235, 1, 1, '🍭', [], ':lollipop:', [], [], 'food')
+    ('1f36c', 1236, 1, 1, '🍬', ['candy', 'can-dee', 'can-D'], ':candy:', [], [], 'food')
+    ('1f36b', 1237, 1, 1, '🍫', [], ':chocolate_bar:', [], [], 'food')
+    ('1f37f', 1238, 1, 1, '🍿', [], ':popcorn:', [], [], 'food')
+    ('1f369', 1239, 1, 1, '🍩', [], ':doughnut:', [], [], 'food')
+    ('1f36a', 1240, 1, 1, '🍪', [], ':cookie:', [], [], 'food')
+    ('1f95b', 1241, 1, 1, '\U0001f95b', [], ':milk:', [':glass_of_milk:'], [], 'food')
+    ('1f37c', 1242, 1, 1, '🍼', ['bottle', 'baby bottle', 'nipple bottle'], ':baby_bottle:', [], [], 'food')
+    ('2615', 1243, 1, 1, '☕', ['coffee', 'joe', 'java', 'cuppa'], ':coffee:', [], [], 'food')
+    ('1f375', 1244, 1, 1, '🍵', ['tea', 'brew'], ':tea:', [], [], 'food')
+    ('1f376', 1245, 1, 1, '🍶', ['sake'], ':sake:', [], [], 'food')
+    ('1f37a', 1246, 1, 1, '🍺', ['ale', 'beer', 'mug', 'pint', 'pint', 'brew', 'brewski', 'draft'], ':beer:', [], [], 'food')
+    ('1f37b', 1247, 1, 1, '🍻', ['ales', 'beers', 'mugs', 'pints', 'brews', 'brewskis', 'drafts'], ':beers:', [], [], 'food')
+    ('1f942', 1248, 1, 1, '\U0001f942', [], ':champagne_glass:', [':clinking_glass:'], [], 'food')
+    ('1f377', 1249, 1, 1, '🍷', ['wine', 'glass', 'vino', 'red', 'red wine', 'vintage'], ':wine_glass:', [], [], 'food')
+    ('1f943', 1250, 1, 1, '\U0001f943', [], ':tumbler_glass:', [':whisky:'], [], 'food')
+    ('1f378', 1251, 1, 1, '🍸', ['cocktail', 'martini', 'vodka', 'drink', 'liquor', 'hard liquor'], ':cocktail:', [], [], 'food')
+    ('1f379', 1252, 1, 1, '🍹', ['daqueri'], ':tropical_drink:', [], [], 'food')
+    ('1f37e', 1253, 1, 1, '🍾', ['champagne', 'pop', 'celebrate'], ':champagne:', [':bottle_with_popping_cork:'], [], 'food')
+    ('1f944', 1254, 1, 1, '\U0001f944', [], ':spoon:', [], [], 'food')
+    ('1f374', 1255, 1, 1, '🍴', ['fork and knife', 'knife and fork'], ':fork_and_knife:', [], [], 'food')
+    ('1f37d', 1256, 1, 1, '🍽', ['fork and plate and knife', 'place setting'], ':fork_knife_plate:', [':fork_and_knife_with_plate:'], [], 'food')
+    ('26bd', 1257, 1, 1, '⚽', [], ':soccer:', [], [], 'activity')
+    ('1f3c0', 1258, 1, 1, '🏀', [], ':basketball:', [], [], 'activity')
+    ('1f3c8', 1259, 1, 1, '🏈', ['football'], ':football:', [], [], 'activity')
+    ('26be', 1260, 1, 1, '⚾', ['baseball'], ':baseball:', [], [], 'activity')
+    ('1f3be', 1261, 1, 1, '🎾', ['tennis'], ':tennis:', [], [], 'activity')
+    ('1f3d0', 1262, 1, 1, '🏐', ['soccer', 'futboll'], ':volleyball:', [], [], 'activity')
+    ('1f3c9', 1263, 1, 1, '🏉', ['rugby'], ':rugby_football:', [], [], 'activity')
+    ('1f3b1', 1264, 1, 1, '🎱', [], ':8ball:', [], [], 'activity')
+    ('1f3d3', 1265, 1, 1, '🏓', [], ':ping_pong:', [':table_tennis:'], [], 'activity')
+    ('1f3f8', 1266, 1, 1, '🏸', [], ':badminton:', [], [], 'activity')
+    ('1f945', 1267, 1, 1, '\U0001f945', [], ':goal:', [':goal_net:'], [], 'activity')
+    ('1f3d2', 1268, 1, 1, '🏒', [], ':hockey:', [], [], 'activity')
+    ('1f3d1', 1269, 1, 1, '🏑', [], ':field_hockey:', [], [], 'activity')
+    ('1f3cf', 1270, 1, 1, '🏏', [], ':cricket:', [':cricket_bat_ball:'], [], 'activity')
+    ('26f3', 1271, 1, 1, '⛳', [], ':golf:', [], [], 'activity')
+    ('1f3f9', 1272, 1, 1, '🏹', [], ':bow_and_arrow:', [':archery:'], [], 'activity')
+    ('1f3a3', 1273, 1, 1, '🎣', [], ':fishing_pole_and_fish:', [], [], 'activity')
+    ('1f94a', 1274, 1, 1, '\U0001f94a', [], ':boxing_glove:', [':boxing_gloves:'], [], 'activity')
+    ('1f94b', 1275, 1, 1, '\U0001f94b', [], ':martial_arts_uniform:', [':karate_uniform:'], [], 'activity')
+    ('26f8', 1276, 1, 1, '⛸', ['skate'], ':ice_skate:', [], [], 'activity')
+    ('1f3bf', 1277, 1, 1, '🎿', ['skis', 'ski'], ':ski:', [], [], 'activity')
+    ('26f7', 1278, 1, 1, '⛷', [], ':skier:', [], [], 'activity')
+    ('1f3c2', 1279, 1, 1, '🏂', ['snowboarder', 'boarder'], ':snowboarder:', [], [], 'activity')
+    ('1f3c2-1f3fb', 1280, 1, 2, '🏂🏻', [], ':snowboarder_tone1:', [':snowboarder_light_skin_tone:'], [], 'activity')
+    ('1f3c2-1f3fc', 1281, 1, 2, '🏂🏼', [], ':snowboarder_tone2:', [':snowboarder_medium_light_skin_tone:'], [], 'activity')
+    ('1f3c2-1f3fd', 1282, 1, 2, '🏂🏽', [], ':snowboarder_tone3:', [':snowboarder_medium_skin_tone:'], [], 'activity')
+    ('1f3c2-1f3fe', 1283, 1, 2, '🏂🏾', [], ':snowboarder_tone4:', [':snowboarder_medium_dark_skin_tone:'], [], 'activity')
+    ('1f3c2-1f3ff', 1284, 1, 2, '🏂🏿', [], ':snowboarder_tone5:', [':snowboarder_dark_skin_tone:'], [], 'activity')
+    ('1f3cb-2640', 1285, 1, 2, '🏋♀', [], ':woman_lifting_weights:', [], [], 'activity')
+    ('1f3cb-1f3fb-2640', 1286, 1, 3, '🏋🏻♀', [], ':woman_lifting_weights_tone1:', [':woman_lifting_weights_light_skin_tone:'], [], 'activity')
+    ('1f3cb-1f3fc-2640', 1287, 1, 3, '🏋🏼♀', [], ':woman_lifting_weights_tone2:', [':woman_lifting_weights_medium_light_skin_tone:'], [], 'activity')
+    ('1f3cb-1f3fd-2640', 1288, 1, 3, '🏋🏽♀', [], ':woman_lifting_weights_tone3:', [':woman_lifting_weights_medium_skin_tone:'], [], 'activity')
+    ('1f3cb-1f3fe-2640', 1289, 1, 3, '🏋🏾♀', [], ':woman_lifting_weights_tone4:', [':woman_lifting_weights_medium_dark_skin_tone:'], [], 'activity')
+    ('1f3cb-1f3ff-2640', 1290, 1, 3, '🏋🏿♀', [], ':woman_lifting_weights_tone5:', [':woman_lifting_weights_dark_skin_tone:'], [], 'activity')
+    ('1f3cb', 1291, 1, 1, '🏋', [], ':person_lifting_weights:', [':lifter:', ':weight_lifter:'], [], 'activity')
+    ('1f3cb-1f3fb', 1292, 1, 2, '🏋🏻', [], ':person_lifting_weights_tone1:', [':lifter_tone1:', ':weight_lifter_tone1:'], [], 'activity')
+    ('1f3cb-1f3fc', 1293, 1, 2, '🏋🏼', [], ':person_lifting_weights_tone2:', [':lifter_tone2:', ':weight_lifter_tone2:'], [], 'activity')
+    ('1f3cb-1f3fd', 1294, 1, 2, '🏋🏽', [], ':person_lifting_weights_tone3:', [':lifter_tone3:', ':weight_lifter_tone3:'], [], 'activity')
+    ('1f3cb-1f3fe', 1295, 1, 2, '🏋🏾', [], ':person_lifting_weights_tone4:', [':lifter_tone4:', ':weight_lifter_tone4:'], [], 'activity')
+    ('1f3cb-1f3ff', 1296, 1, 2, '🏋🏿', [], ':person_lifting_weights_tone5:', [':lifter_tone5:', ':weight_lifter_tone5:'], [], 'activity')
+    ('1f3cb-2642', 1297, 1, 2, '🏋♂', [], ':man_lifting_weights:', [], [], 'activity')
+    ('1f3cb-1f3ff-2642', 1298, 1, 3, '🏋🏿♂', [], ':man_lifting_weights_tone5:', [':man_lifting_weights_dark_skin_tone:'], [], 'activity')
+    ('1f3cb-1f3fe-2642', 1299, 1, 3, '🏋🏾♂', [], ':man_lifting_weights_tone4:', [':man_lifting_weights_medium_dark_skin_tone:'], [], 'activity')
+    ('1f3cb-1f3fd-2642', 1300, 1, 3, '🏋🏽♂', [], ':man_lifting_weights_tone3:', [':man_lifting_weights_medium_skin_tone:'], [], 'activity')
+    ('1f3cb-1f3fc-2642', 1301, 1, 3, '🏋🏼♂', [], ':man_lifting_weights_tone2:', [':man_lifting_weights_medium_light_skin_tone:'], [], 'activity')
+    ('1f3cb-1f3fb-2642', 1302, 1, 3, '🏋🏻♂', [], ':man_lifting_weights_tone1:', [':man_lifting_weights_light_skin_tone:'], [], 'activity')
+    ('1f93a', 1303, 1, 1, '\U0001f93a', [], ':person_fencing:', [':fencer:', ':fencing:'], [], 'activity')
+    ('1f93c-2640', 1304, 1, 2, '\U0001f93c♀', [], ':women_wrestling:', [], [], 'activity')
+    ('1f93c-2642', 1305, 1, 2, '\U0001f93c♂', [], ':men_wrestling:', [], [], 'activity')
+    ('1f93c', 1306, 1, 1, '\U0001f93c', [], ':people_wrestling:', [':wrestlers:', ':wrestling:'], [], 'activity')
+    ('1f938-2640', 1307, 1, 2, '\U0001f938♀', [], ':woman_cartwheeling:', [], [], 'activity')
+    ('1f938-1f3fb-2640', 1308, 1, 3, '\U0001f938🏻♀', [], ':woman_cartwheeling_tone1:', [':woman_cartwheeling_light_skin_tone:'], [], 'activity')
+    ('1f938-1f3fc-2640', 1309, 1, 3, '\U0001f938🏼♀', [], ':woman_cartwheeling_tone2:', [':woman_cartwheeling_medium_light_skin_tone:'], [], 'activity')
+    ('1f938-1f3fd-2640', 1310, 1, 3, '\U0001f938🏽♀', [], ':woman_cartwheeling_tone3:', [':woman_cartwheeling_medium_skin_tone:'], [], 'activity')
+    ('1f938-1f3fe-2640', 1311, 1, 3, '\U0001f938🏾♀', [], ':woman_cartwheeling_tone4:', [':woman_cartwheeling_medium_dark_skin_tone:'], [], 'activity')
+    ('1f938-1f3ff-2640', 1312, 1, 3, '\U0001f938🏿♀', [], ':woman_cartwheeling_tone5:', [':woman_cartwheeling_dark_skin_tone:'], [], 'activity')
+    ('1f938-2642', 1313, 1, 2, '\U0001f938♂', [], ':man_cartwheeling:', [], [], 'activity')
+    ('1f938-1f3fb-2642', 1314, 1, 3, '\U0001f938🏻♂', [], ':man_cartwheeling_tone1:', [':man_cartwheeling_light_skin_tone:'], [], 'activity')
+    ('1f938-1f3fc-2642', 1315, 1, 3, '\U0001f938🏼♂', [], ':man_cartwheeling_tone2:', [':man_cartwheeling_medium_light_skin_tone:'], [], 'activity')
+    ('1f938-1f3fd-2642', 1316, 1, 3, '\U0001f938🏽♂', [], ':man_cartwheeling_tone3:', [':man_cartwheeling_medium_skin_tone:'], [], 'activity')
+    ('1f938-1f3fe-2642', 1317, 1, 3, '\U0001f938🏾♂', [], ':man_cartwheeling_tone4:', [':man_cartwheeling_medium_dark_skin_tone:'], [], 'activity')
+    ('1f938-1f3ff-2642', 1318, 1, 3, '\U0001f938🏿♂', [], ':man_cartwheeling_tone5:', [':man_cartwheeling_dark_skin_tone:'], [], 'activity')
+    ('1f938', 1319, 1, 1, '\U0001f938', [], ':person_doing_cartwheel:', [':cartwheel:'], [], 'activity')
+    ('1f938-1f3fb', 1320, 1, 2, '\U0001f938🏻', [], ':person_doing_cartwheel_tone1:', [':cartwheel_tone1:'], [], 'activity')
+    ('1f938-1f3fc', 1321, 1, 2, '\U0001f938🏼', [], ':person_doing_cartwheel_tone2:', [':cartwheel_tone2:'], [], 'activity')
+    ('1f938-1f3fd', 1322, 1, 2, '\U0001f938🏽', [], ':person_doing_cartwheel_tone3:', [':cartwheel_tone3:'], [], 'activity')
+    ('1f938-1f3fe', 1323, 1, 2, '\U0001f938🏾', [], ':person_doing_cartwheel_tone4:', [':cartwheel_tone4:'], [], 'activity')
+    ('1f938-1f3ff', 1324, 1, 2, '\U0001f938🏿', [], ':person_doing_cartwheel_tone5:', [':cartwheel_tone5:'], [], 'activity')
+    ('26f9-2640', 1325, 1, 2, '⛹♀', [], ':woman_bouncing_ball:', [], [], 'activity')
+    ('26f9-1f3fb-2640', 1326, 1, 3, '⛹🏻♀', [], ':woman_bouncing_ball_tone1:', [':woman_bouncing_ball_light_skin_tone:'], [], 'activity')
+    ('26f9-1f3fc-2640', 1327, 1, 3, '⛹🏼♀', [], ':woman_bouncing_ball_tone2:', [':woman_bouncing_ball_medium_light_skin_tone:'], [], 'activity')
+    ('26f9-1f3fd-2640', 1328, 1, 3, '⛹🏽♀', [], ':woman_bouncing_ball_tone3:', [':woman_bouncing_ball_medium_skin_tone:'], [], 'activity')
+    ('26f9-1f3fe-2640', 1329, 1, 3, '⛹🏾♀', [], ':woman_bouncing_ball_tone4:', [':woman_bouncing_ball_medium_dark_skin_tone:'], [], 'activity')
+    ('26f9-1f3ff-2640', 1330, 1, 3, '⛹🏿♀', [], ':woman_bouncing_ball_tone5:', [':woman_bouncing_ball_dark_skin_tone:'], [], 'activity')
+    ('26f9', 1331, 1, 1, '⛹', [], ':person_bouncing_ball:', [':basketball_player:', ':person_with_ball:'], [], 'activity')
+    ('26f9-1f3fb', 1332, 1, 2, '⛹🏻', [], ':person_bouncing_ball_tone1:', [':basketball_player_tone1:', ':person_with_ball_tone1:'], [], 'activity')
+    ('26f9-1f3fc', 1333, 1, 2, '⛹🏼', [], ':person_bouncing_ball_tone2:', [':basketball_player_tone2:', ':person_with_ball_tone2:'], [], 'activity')
+    ('26f9-1f3fd', 1334, 1, 2, '⛹🏽', [], ':person_bouncing_ball_tone3:', [':basketball_player_tone3:', ':person_with_ball_tone3:'], [], 'activity')
+    ('26f9-1f3fe', 1335, 1, 2, '⛹🏾', [], ':person_bouncing_ball_tone4:', [':basketball_player_tone4:', ':person_with_ball_tone4:'], [], 'activity')
+    ('26f9-1f3ff', 1336, 1, 2, '⛹🏿', [], ':person_bouncing_ball_tone5:', [':basketball_player_tone5:', ':person_with_ball_tone5:'], [], 'activity')
+    ('26f9-2642', 1337, 1, 2, '⛹♂', [], ':man_bouncing_ball:', [], [], 'activity')
+    ('26f9-1f3ff-2642', 1338, 1, 3, '⛹🏿♂', [], ':man_bouncing_ball_tone5:', [':man_bouncing_ball_dark_skin_tone:'], [], 'activity')
+    ('26f9-1f3fe-2642', 1339, 1, 3, '⛹🏾♂', [], ':man_bouncing_ball_tone4:', [':man_bouncing_ball_medium_dark_skin_tone:'], [], 'activity')
+    ('26f9-1f3fd-2642', 1340, 1, 3, '⛹🏽♂', [], ':man_bouncing_ball_tone3:', [':man_bouncing_ball_medium_skin_tone:'], [], 'activity')
+    ('26f9-1f3fc-2642', 1341, 1, 3, '⛹🏼♂', [], ':man_bouncing_ball_tone2:', [':man_bouncing_ball_medium_light_skin_tone:'], [], 'activity')
+    ('26f9-1f3fb-2642', 1342, 1, 3, '⛹🏻♂', [], ':man_bouncing_ball_tone1:', [':man_bouncing_ball_light_skin_tone:'], [], 'activity')
+    ('1f93e-2640', 1343, 1, 2, '\U0001f93e♀', [], ':woman_playing_handball:', [], [], 'activity')
+    ('1f93e-1f3fb-2640', 1344, 1, 3, '\U0001f93e🏻♀', [], ':woman_playing_handball_tone1:', [':woman_playing_handball_light_skin_tone:'], [], 'activity')
+    ('1f93e-1f3fc-2640', 1345, 1, 3, '\U0001f93e🏼♀', [], ':woman_playing_handball_tone2:', [':woman_playing_handball_medium_light_skin_tone:'], [], 'activity')
+    ('1f93e-1f3fd-2640', 1346, 1, 3, '\U0001f93e🏽♀', [], ':woman_playing_handball_tone3:', [':woman_playing_handball_medium_skin_tone:'], [], 'activity')
+    ('1f93e-1f3fe-2640', 1347, 1, 3, '\U0001f93e🏾♀', [], ':woman_playing_handball_tone4:', [':woman_playing_handball_medium_dark_skin_tone:'], [], 'activity')
+    ('1f93e-1f3ff-2640', 1348, 1, 3, '\U0001f93e🏿♀', [], ':woman_playing_handball_tone5:', [':woman_playing_handball_dark_skin_tone:'], [], 'activity')
+    ('1f93e-2642', 1349, 1, 2, '\U0001f93e♂', [], ':man_playing_handball:', [], [], 'activity')
+    ('1f93e-1f3fb-2642', 1350, 1, 3, '\U0001f93e🏻♂', [], ':man_playing_handball_tone1:', [':man_playing_handball_light_skin_tone:'], [], 'activity')
+    ('1f93e-1f3fc-2642', 1351, 1, 3, '\U0001f93e🏼♂', [], ':man_playing_handball_tone2:', [':man_playing_handball_medium_light_skin_tone:'], [], 'activity')
+    ('1f93e-1f3fd-2642', 1352, 1, 3, '\U0001f93e🏽♂', [], ':man_playing_handball_tone3:', [':man_playing_handball_medium_skin_tone:'], [], 'activity')
+    ('1f93e-1f3fe-2642', 1353, 1, 3, '\U0001f93e🏾♂', [], ':man_playing_handball_tone4:', [':man_playing_handball_medium_dark_skin_tone:'], [], 'activity')
+    ('1f93e-1f3ff-2642', 1354, 1, 3, '\U0001f93e🏿♂', [], ':man_playing_handball_tone5:', [':man_playing_handball_dark_skin_tone:'], [], 'activity')
+    ('1f93e', 1355, 1, 1, '\U0001f93e', [], ':person_playing_handball:', [':handball:'], [], 'activity')
+    ('1f93e-1f3fb', 1356, 1, 2, '\U0001f93e🏻', [], ':person_playing_handball_tone1:', [':handball_tone1:'], [], 'activity')
+    ('1f93e-1f3fc', 1357, 1, 2, '\U0001f93e🏼', [], ':person_playing_handball_tone2:', [':handball_tone2:'], [], 'activity')
+    ('1f93e-1f3fd', 1358, 1, 2, '\U0001f93e🏽', [], ':person_playing_handball_tone3:', [':handball_tone3:'], [], 'activity')
+    ('1f93e-1f3fe', 1359, 1, 2, '\U0001f93e🏾', [], ':person_playing_handball_tone4:', [':handball_tone4:'], [], 'activity')
+    ('1f93e-1f3ff', 1360, 1, 2, '\U0001f93e🏿', [], ':person_playing_handball_tone5:', [':handball_tone5:'], [], 'activity')
+    ('1f3cc-2640', 1361, 1, 2, '🏌♀', [], ':woman_golfing:', [], [], 'activity')
+    ('1f3cc-1f3fb-2640', 1362, 1, 3, '🏌🏻♀', [], ':woman_golfing_tone1:', [':woman_golfing_light_skin_tone:'], [], 'activity')
+    ('1f3cc-1f3fc-2640', 1363, 1, 3, '🏌🏼♀', [], ':woman_golfing_tone2:', [':woman_golfing_medium_light_skin_tone:'], [], 'activity')
+    ('1f3cc-1f3fd-2640', 1364, 1, 3, '🏌🏽♀', [], ':woman_golfing_tone3:', [':woman_golfing_medium_skin_tone:'], [], 'activity')
+    ('1f3cc-1f3fe-2640', 1365, 1, 3, '🏌🏾♀', [], ':woman_golfing_tone4:', [':woman_golfing_medium_dark_skin_tone:'], [], 'activity')
+    ('1f3cc-1f3ff-2640', 1366, 1, 3, '🏌🏿♀', [], ':woman_golfing_tone5:', [':woman_golfing_dark_skin_tone:'], [], 'activity')
+    ('1f3cc', 1367, 1, 1, '🏌', [], ':person_golfing:', [':golfer:'], [], 'activity')
+    ('1f3cc-1f3fb', 1368, 1, 2, '🏌🏻', [], ':person_golfing_tone1:', [':person_golfing_light_skin_tone:'], [], 'activity')
+    ('1f3cc-1f3fc', 1369, 1, 2, '🏌🏼', [], ':person_golfing_tone2:', [':person_golfing_medium_light_skin_tone:'], [], 'activity')
+    ('1f3cc-1f3fd', 1370, 1, 2, '🏌🏽', [], ':person_golfing_tone3:', [':person_golfing_medium_skin_tone:'], [], 'activity')
+    ('1f3cc-1f3fe', 1371, 1, 2, '🏌🏾', [], ':person_golfing_tone4:', [':person_golfing_medium_dark_skin_tone:'], [], 'activity')
+    ('1f3cc-1f3ff', 1372, 1, 2, '🏌🏿', [], ':person_golfing_tone5:', [':person_golfing_dark_skin_tone:'], [], 'activity')
+    ('1f3cc-2642', 1373, 1, 2, '🏌♂', [], ':man_golfing:', [], [], 'activity')
+    ('1f3cc-1f3fb-2642', 1374, 1, 3, '🏌🏻♂', [], ':man_golfing_tone1:', [':man_golfing_light_skin_tone:'], [], 'activity')
+    ('1f3cc-1f3fc-2642', 1375, 1, 3, '🏌🏼♂', [], ':man_golfing_tone2:', [':man_golfing_medium_light_skin_tone:'], [], 'activity')
+    ('1f3cc-1f3fd-2642', 1376, 1, 3, '🏌🏽♂', [], ':man_golfing_tone3:', [':man_golfing_medium_skin_tone:'], [], 'activity')
+    ('1f3cc-1f3fe-2642', 1377, 1, 3, '🏌🏾♂', [], ':man_golfing_tone4:', [':man_golfing_medium_dark_skin_tone:'], [], 'activity')
+    ('1f3cc-1f3ff-2642', 1378, 1, 3, '🏌🏿♂', [], ':man_golfing_tone5:', [':man_golfing_dark_skin_tone:'], [], 'activity')
+    ('1f3c4-2640', 1379, 1, 2, '🏄♀', [], ':woman_surfing:', [], [], 'activity')
+    ('1f3c4-1f3fb-2640', 1380, 1, 3, '🏄🏻♀', [], ':woman_surfing_tone1:', [':woman_surfing_light_skin_tone:'], [], 'activity')
+    ('1f3c4-1f3fc-2640', 1381, 1, 3, '🏄🏼♀', [], ':woman_surfing_tone2:', [':woman_surfing_medium_light_skin_tone:'], [], 'activity')
+    ('1f3c4-1f3fd-2640', 1382, 1, 3, '🏄🏽♀', [], ':woman_surfing_tone3:', [':woman_surfing_medium_skin_tone:'], [], 'activity')
+    ('1f3c4-1f3fe-2640', 1383, 1, 3, '🏄🏾♀', [], ':woman_surfing_tone4:', [':woman_surfing_medium_dark_skin_tone:'], [], 'activity')
+    ('1f3c4-1f3ff-2640', 1384, 1, 3, '🏄🏿♀', [], ':woman_surfing_tone5:', [':woman_surfing_dark_skin_tone:'], [], 'activity')
+    ('1f3c4', 1385, 1, 1, '🏄', [], ':person_surfing:', [':surfer:'], [], 'activity')
+    ('1f3c4-1f3fb', 1386, 1, 2, '🏄🏻', [], ':person_surfing_tone1:', [':surfer_tone1:'], [], 'activity')
+    ('1f3c4-1f3fc', 1387, 1, 2, '🏄🏼', [], ':person_surfing_tone2:', [':surfer_tone2:'], [], 'activity')
+    ('1f3c4-1f3fd', 1388, 1, 2, '🏄🏽', [], ':person_surfing_tone3:', [':surfer_tone3:'], [], 'activity')
+    ('1f3c4-1f3fe', 1389, 1, 2, '🏄🏾', [], ':person_surfing_tone4:', [':surfer_tone4:'], [], 'activity')
+    ('1f3c4-1f3ff', 1390, 1, 2, '🏄🏿', [], ':person_surfing_tone5:', [':surfer_tone5:'], [], 'activity')
+    ('1f3c4-2642', 1391, 1, 2, '🏄♂', [], ':man_surfing:', [], [], 'activity')
+    ('1f3c4-1f3ff-2642', 1392, 1, 3, '🏄🏿♂', [], ':man_surfing_tone5:', [':man_surfing_dark_skin_tone:'], [], 'activity')
+    ('1f3c4-1f3fe-2642', 1393, 1, 3, '🏄🏾♂', [], ':man_surfing_tone4:', [':man_surfing_medium_dark_skin_tone:'], [], 'activity')
+    ('1f3c4-1f3fd-2642', 1394, 1, 3, '🏄🏽♂', [], ':man_surfing_tone3:', [':man_surfing_medium_skin_tone:'], [], 'activity')
+    ('1f3c4-1f3fc-2642', 1395, 1, 3, '🏄🏼♂', [], ':man_surfing_tone2:', [':man_surfing_medium_light_skin_tone:'], [], 'activity')
+    ('1f3c4-1f3fb-2642', 1396, 1, 3, '🏄🏻♂', [], ':man_surfing_tone1:', [':man_surfing_light_skin_tone:'], [], 'activity')
+    ('1f3ca-2640', 1397, 1, 2, '🏊♀', [], ':woman_swimming:', [], [], 'activity')
+    ('1f3ca-1f3fb-2640', 1398, 1, 3, '🏊🏻♀', [], ':woman_swimming_tone1:', [':woman_swimming_light_skin_tone:'], [], 'activity')
+    ('1f3ca-1f3fc-2640', 1399, 1, 3, '🏊🏼♀', [], ':woman_swimming_tone2:', [':woman_swimming_medium_light_skin_tone:'], [], 'activity')
+    ('1f3ca-1f3fd-2640', 1400, 1, 3, '🏊🏽♀', [], ':woman_swimming_tone3:', [':woman_swimming_medium_skin_tone:'], [], 'activity')
+    ('1f3ca-1f3fe-2640', 1401, 1, 3, '🏊🏾♀', [], ':woman_swimming_tone4:', [':woman_swimming_medium_dark_skin_tone:'], [], 'activity')
+    ('1f3ca-1f3ff-2640', 1402, 1, 3, '🏊🏿♀', [], ':woman_swimming_tone5:', [':woman_swimming_dark_skin_tone:'], [], 'activity')
+    ('1f3ca', 1403, 1, 1, '🏊', [], ':person_swimming:', [':swimmer:'], [], 'activity')
+    ('1f3ca-1f3fb', 1404, 1, 2, '🏊🏻', [], ':person_swimming_tone1:', [':swimmer_tone1:'], [], 'activity')
+    ('1f3ca-1f3fc', 1405, 1, 2, '🏊🏼', [], ':person_swimming_tone2:', [':swimmer_tone2:'], [], 'activity')
+    ('1f3ca-1f3fd', 1406, 1, 2, '🏊🏽', [], ':person_swimming_tone3:', [':swimmer_tone3:'], [], 'activity')
+    ('1f3ca-1f3fe', 1407, 1, 2, '🏊🏾', [], ':person_swimming_tone4:', [':swimmer_tone4:'], [], 'activity')
+    ('1f3ca-1f3ff', 1408, 1, 2, '🏊🏿', [], ':person_swimming_tone5:', [':swimmer_tone5:'], [], 'activity')
+    ('1f3ca-2642', 1409, 1, 2, '🏊♂', [], ':man_swimming:', [], [], 'activity')
+    ('1f3ca-1f3ff-2642', 1410, 1, 3, '🏊🏿♂', [], ':man_swimming_tone5:', [':man_swimming_dark_skin_tone:'], [], 'activity')
+    ('1f3ca-1f3fe-2642', 1411, 1, 3, '🏊🏾♂', [], ':man_swimming_tone4:', [':man_swimming_medium_dark_skin_tone:'], [], 'activity')
+    ('1f3ca-1f3fd-2642', 1412, 1, 3, '🏊🏽♂', [], ':man_swimming_tone3:', [':man_swimming_medium_skin_tone:'], [], 'activity')
+    ('1f3ca-1f3fc-2642', 1413, 1, 3, '🏊🏼♂', [], ':man_swimming_tone2:', [':man_swimming_medium_light_skin_tone:'], [], 'activity')
+    ('1f3ca-1f3fb-2642', 1414, 1, 3, '🏊🏻♂', [], ':man_swimming_tone1:', [':man_swimming_light_skin_tone:'], [], 'activity')
+    ('1f93d-2640', 1415, 1, 2, '\U0001f93d♀', [], ':woman_playing_water_polo:', [], [], 'activity')
+    ('1f93d-1f3fb-2640', 1416, 1, 3, '\U0001f93d🏻♀', [], ':woman_playing_water_polo_tone1:', [':woman_playing_water_polo_light_skin_tone:'], [], 'activity')
+    ('1f93d-1f3fc-2640', 1417, 1, 3, '\U0001f93d🏼♀', [], ':woman_playing_water_polo_tone2:', [':woman_playing_water_polo_medium_light_skin_tone:'], [], 'activity')
+    ('1f93d-1f3fd-2640', 1418, 1, 3, '\U0001f93d🏽♀', [], ':woman_playing_water_polo_tone3:', [':woman_playing_water_polo_medium_skin_tone:'], [], 'activity')
+    ('1f93d-1f3fe-2640', 1419, 1, 3, '\U0001f93d🏾♀', [], ':woman_playing_water_polo_tone4:', [':woman_playing_water_polo_medium_dark_skin_tone:'], [], 'activity')
+    ('1f93d-1f3ff-2640', 1420, 1, 3, '\U0001f93d🏿♀', [], ':woman_playing_water_polo_tone5:', [':woman_playing_water_polo_dark_skin_tone:'], [], 'activity')
+    ('1f93d-2642', 1421, 1, 2, '\U0001f93d♂', [], ':man_playing_water_polo:', [], [], 'activity')
+    ('1f93d-1f3fb-2642', 1422, 1, 3, '\U0001f93d🏻♂', [], ':man_playing_water_polo_tone1:', [':man_playing_water_polo_light_skin_tone:'], [], 'activity')
+    ('1f93d-1f3fc-2642', 1423, 1, 3, '\U0001f93d🏼♂', [], ':man_playing_water_polo_tone2:', [':man_playing_water_polo_medium_light_skin_tone:'], [], 'activity')
+    ('1f93d-1f3fd-2642', 1424, 1, 3, '\U0001f93d🏽♂', [], ':man_playing_water_polo_tone3:', [':man_playing_water_polo_medium_skin_tone:'], [], 'activity')
+    ('1f93d-1f3fe-2642', 1425, 1, 3, '\U0001f93d🏾♂', [], ':man_playing_water_polo_tone4:', [':man_playing_water_polo_medium_dark_skin_tone:'], [], 'activity')
+    ('1f93d-1f3ff-2642', 1426, 1, 3, '\U0001f93d🏿♂', [], ':man_playing_water_polo_tone5:', [':man_playing_water_polo_dark_skin_tone:'], [], 'activity')
+    ('1f93d', 1427, 1, 1, '\U0001f93d', [], ':person_playing_water_polo:', [':water_polo:'], [], 'activity')
+    ('1f93d-1f3fb', 1428, 1, 2, '\U0001f93d🏻', [], ':person_playing_water_polo_tone1:', [':water_polo_tone1:'], [], 'activity')
+    ('1f93d-1f3fc', 1429, 1, 2, '\U0001f93d🏼', [], ':person_playing_water_polo_tone2:', [':water_polo_tone2:'], [], 'activity')
+    ('1f93d-1f3fd', 1430, 1, 2, '\U0001f93d🏽', [], ':person_playing_water_polo_tone3:', [':water_polo_tone3:'], [], 'activity')
+    ('1f93d-1f3fe', 1431, 1, 2, '\U0001f93d🏾', [], ':person_playing_water_polo_tone4:', [':water_polo_tone4:'], [], 'activity')
+    ('1f93d-1f3ff', 1432, 1, 2, '\U0001f93d🏿', [], ':person_playing_water_polo_tone5:', [':water_polo_tone5:'], [], 'activity')
+    ('1f6a3-2640', 1433, 1, 2, '🚣♀', [], ':woman_rowing_boat:', [], [], 'activity')
+    ('1f6a3-1f3fb-2640', 1434, 1, 3, '🚣🏻♀', [], ':woman_rowing_boat_tone1:', [':woman_rowing_boat_light_skin_tone:'], [], 'activity')
+    ('1f6a3-1f3fc-2640', 1435, 1, 3, '🚣🏼♀', [], ':woman_rowing_boat_tone2:', [':woman_rowing_boat_medium_light_skin_tone:'], [], 'activity')
+    ('1f6a3-1f3fd-2640', 1436, 1, 3, '🚣🏽♀', [], ':woman_rowing_boat_tone3:', [':woman_rowing_boat_medium_skin_tone:'], [], 'activity')
+    ('1f6a3-1f3fe-2640', 1437, 1, 3, '🚣🏾♀', [], ':woman_rowing_boat_tone4:', [':woman_rowing_boat_medium_dark_skin_tone:'], [], 'activity')
+    ('1f6a3-1f3ff-2640', 1438, 1, 3, '🚣🏿♀', [], ':woman_rowing_boat_tone5:', [':woman_rowing_boat_dark_skin_tone:'], [], 'activity')
+    ('1f6a3', 1439, 1, 1, '🚣', [], ':person_rowing_boat:', [':rowboat:'], [], 'activity')
+    ('1f6a3-1f3fb', 1440, 1, 2, '🚣🏻', [], ':person_rowing_boat_tone1:', [':rowboat_tone1:'], [], 'activity')
+    ('1f6a3-1f3fc', 1441, 1, 2, '🚣🏼', [], ':person_rowing_boat_tone2:', [':rowboat_tone2:'], [], 'activity')
+    ('1f6a3-1f3fd', 1442, 1, 2, '🚣🏽', [], ':person_rowing_boat_tone3:', [':rowboat_tone3:'], [], 'activity')
+    ('1f6a3-1f3fe', 1443, 1, 2, '🚣🏾', [], ':person_rowing_boat_tone4:', [':rowboat_tone4:'], [], 'activity')
+    ('1f6a3-1f3ff', 1444, 1, 2, '🚣🏿', [], ':person_rowing_boat_tone5:', [':rowboat_tone5:'], [], 'activity')
+    ('1f6a3-2642', 1445, 1, 2, '🚣♂', [], ':man_rowing_boat:', [], [], 'activity')
+    ('1f6a3-1f3ff-2642', 1446, 1, 3, '🚣🏿♂', [], ':man_rowing_boat_tone5:', [':man_rowing_boat_dark_skin_tone:'], [], 'activity')
+    ('1f6a3-1f3fe-2642', 1447, 1, 3, '🚣🏾♂', [], ':man_rowing_boat_tone4:', [':man_rowing_boat_medium_dark_skin_tone:'], [], 'activity')
+    ('1f6a3-1f3fd-2642', 1448, 1, 3, '🚣🏽♂', [], ':man_rowing_boat_tone3:', [':man_rowing_boat_medium_skin_tone:'], [], 'activity')
+    ('1f6a3-1f3fc-2642', 1449, 1, 3, '🚣🏼♂', [], ':man_rowing_boat_tone2:', [':man_rowing_boat_medium_light_skin_tone:'], [], 'activity')
+    ('1f6a3-1f3fb-2642', 1450, 1, 3, '🚣🏻♂', [], ':man_rowing_boat_tone1:', [':man_rowing_boat_light_skin_tone:'], [], 'activity')
+    ('1f3c7', 1451, 1, 1, '🏇', [], ':horse_racing:', [], [], 'activity')
+    ('1f3c7-1f3fb', 1452, 1, 2, '🏇🏻', [], ':horse_racing_tone1:', [], [], 'activity')
+    ('1f3c7-1f3fc', 1453, 1, 2, '🏇🏼', [], ':horse_racing_tone2:', [], [], 'activity')
+    ('1f3c7-1f3fd', 1454, 1, 2, '🏇🏽', [], ':horse_racing_tone3:', [], [], 'activity')
+    ('1f3c7-1f3fe', 1455, 1, 2, '🏇🏾', [], ':horse_racing_tone4:', [], [], 'activity')
+    ('1f3c7-1f3ff', 1456, 1, 2, '🏇🏿', [], ':horse_racing_tone5:', [], [], 'activity')
+    ('1f6b4-2640', 1457, 1, 2, '🚴♀', [], ':woman_biking:', [], [], 'activity')
+    ('1f6b4-1f3fb-2640', 1458, 1, 3, '🚴🏻♀', [], ':woman_biking_tone1:', [':woman_biking_light_skin_tone:'], [], 'activity')
+    ('1f6b4-1f3fc-2640', 1459, 1, 3, '🚴🏼♀', [], ':woman_biking_tone2:', [':woman_biking_medium_light_skin_tone:'], [], 'activity')
+    ('1f6b4-1f3fd-2640', 1460, 1, 3, '🚴🏽♀', [], ':woman_biking_tone3:', [':woman_biking_medium_skin_tone:'], [], 'activity')
+    ('1f6b4-1f3fe-2640', 1461, 1, 3, '🚴🏾♀', [], ':woman_biking_tone4:', [':woman_biking_medium_dark_skin_tone:'], [], 'activity')
+    ('1f6b4-1f3ff-2640', 1462, 1, 3, '🚴🏿♀', [], ':woman_biking_tone5:', [':woman_biking_dark_skin_tone:'], [], 'activity')
+    ('1f6b4', 1463, 1, 1, '🚴', [], ':person_biking:', [':bicyclist:'], [], 'activity')
+    ('1f6b4-1f3fb', 1464, 1, 2, '🚴🏻', [], ':person_biking_tone1:', [':bicyclist_tone1:'], [], 'activity')
+    ('1f6b4-1f3fc', 1465, 1, 2, '🚴🏼', [], ':person_biking_tone2:', [':bicyclist_tone2:'], [], 'activity')
+    ('1f6b4-1f3fd', 1466, 1, 2, '🚴🏽', [], ':person_biking_tone3:', [':bicyclist_tone3:'], [], 'activity')
+    ('1f6b4-1f3fe', 1467, 1, 2, '🚴🏾', [], ':person_biking_tone4:', [':bicyclist_tone4:'], [], 'activity')
+    ('1f6b4-1f3ff', 1468, 1, 2, '🚴🏿', [], ':person_biking_tone5:', [':bicyclist_tone5:'], [], 'activity')
+    ('1f6b4-2642', 1469, 1, 2, '🚴♂', [], ':man_biking:', [], [], 'activity')
+    ('1f6b4-1f3ff-2642', 1470, 1, 3, '🚴🏿♂', [], ':man_biking_tone5:', [':man_biking_dark_skin_tone:'], [], 'activity')
+    ('1f6b4-1f3fe-2642', 1471, 1, 3, '🚴🏾♂', [], ':man_biking_tone4:', [':man_biking_medium_dark_skin_tone:'], [], 'activity')
+    ('1f6b4-1f3fd-2642', 1472, 1, 3, '🚴🏽♂', [], ':man_biking_tone3:', [':man_biking_medium_skin_tone:'], [], 'activity')
+    ('1f6b4-1f3fc-2642', 1473, 1, 3, '🚴🏼♂', [], ':man_biking_tone2:', [':man_biking_medium_light_skin_tone:'], [], 'activity')
+    ('1f6b4-1f3fb-2642', 1474, 1, 3, '🚴🏻♂', [], ':man_biking_tone1:', [':man_biking_light_skin_tone:'], [], 'activity')
+    ('1f6b5-2640', 1475, 1, 2, '🚵♀', [], ':woman_mountain_biking:', [], [], 'activity')
+    ('1f6b5-1f3fb-2640', 1476, 1, 3, '🚵🏻♀', [], ':woman_mountain_biking_tone1:', [':woman_mountain_biking_light_skin_tone:'], [], 'activity')
+    ('1f6b5-1f3fc-2640', 1477, 1, 3, '🚵🏼♀', [], ':woman_mountain_biking_tone2:', [':woman_mountain_biking_medium_light_skin_tone:'], [], 'activity')
+    ('1f6b5-1f3fd-2640', 1478, 1, 3, '🚵🏽♀', [], ':woman_mountain_biking_tone3:', [':woman_mountain_biking_medium_skin_tone:'], [], 'activity')
+    ('1f6b5-1f3fe-2640', 1479, 1, 3, '🚵🏾♀', [], ':woman_mountain_biking_tone4:', [':woman_mountain_biking_medium_dark_skin_tone:'], [], 'activity')
+    ('1f6b5-1f3ff-2640', 1480, 1, 3, '🚵🏿♀', [], ':woman_mountain_biking_tone5:', [':woman_mountain_biking_dark_skin_tone:'], [], 'activity')
+    ('1f6b5', 1481, 1, 1, '🚵', [], ':person_mountain_biking:', [':mountain_bicyclist:'], [], 'activity')
+    ('1f6b5-1f3fb', 1482, 1, 2, '🚵🏻', [], ':person_mountain_biking_tone1:', [':mountain_bicyclist_tone1:'], [], 'activity')
+    ('1f6b5-1f3fc', 1483, 1, 2, '🚵🏼', [], ':person_mountain_biking_tone2:', [':mountain_bicyclist_tone2:'], [], 'activity')
+    ('1f6b5-1f3fd', 1484, 1, 2, '🚵🏽', [], ':person_mountain_biking_tone3:', [':mountain_bicyclist_tone3:'], [], 'activity')
+    ('1f6b5-1f3fe', 1485, 1, 2, '🚵🏾', [], ':person_mountain_biking_tone4:', [':mountain_bicyclist_tone4:'], [], 'activity')
+    ('1f6b5-1f3ff', 1486, 1, 2, '🚵🏿', [], ':person_mountain_biking_tone5:', [':mountain_bicyclist_tone5:'], [], 'activity')
+    ('1f6b5-2642', 1487, 1, 2, '🚵♂', [], ':man_mountain_biking:', [], [], 'activity')
+    ('1f6b5-1f3ff-2642', 1488, 1, 3, '🚵🏿♂', [], ':man_mountain_biking_tone5:', [':man_mountain_biking_dark_skin_tone:'], [], 'activity')
+    ('1f6b5-1f3fe-2642', 1489, 1, 3, '🚵🏾♂', [], ':man_mountain_biking_tone4:', [':man_mountain_biking_medium_dark_skin_tone:'], [], 'activity')
+    ('1f6b5-1f3fd-2642', 1490, 1, 3, '🚵🏽♂', [], ':man_mountain_biking_tone3:', [':man_mountain_biking_medium_skin_tone:'], [], 'activity')
+    ('1f6b5-1f3fc-2642', 1491, 1, 3, '🚵🏼♂', [], ':man_mountain_biking_tone2:', [':man_mountain_biking_medium_light_skin_tone:'], [], 'activity')
+    ('1f6b5-1f3fb-2642', 1492, 1, 3, '🚵🏻♂', [], ':man_mountain_biking_tone1:', [':man_mountain_biking_light_skin_tone:'], [], 'activity')
+    ('1f3bd', 1493, 1, 1, '🎽', [], ':running_shirt_with_sash:', [], [], 'activity')
+    ('1f3c5', 1494, 1, 1, '🏅', [], ':medal:', [':sports_medal:'], [], 'activity')
+    ('1f396', 1495, 1, 1, '🎖', [], ':military_medal:', [], [], 'activity')
+    ('1f947', 1496, 1, 1, '\U0001f947', [], ':first_place:', [':first_place_medal:'], [], 'activity')
+    ('1f948', 1497, 1, 1, '\U0001f948', [], ':second_place:', [':second_place_medal:'], [], 'activity')
+    ('1f949', 1498, 1, 1, '\U0001f949', [], ':third_place:', [':third_place_medal:'], [], 'activity')
+    ('1f3c6', 1499, 1, 1, '🏆', [], ':trophy:', [], [], 'activity')
+    ('1f3f5', 1500, 1, 1, '🏵', [], ':rosette:', [], [], 'activity')
+    ('1f397', 1501, 1, 1, '🎗', [], ':reminder_ribbon:', [], [], 'activity')
+    ('1f3ab', 1502, 1, 1, '🎫', [], ':ticket:', [], [], 'activity')
+    ('1f39f', 1503, 1, 1, '🎟', [], ':tickets:', [':admission_tickets:'], [], 'activity')
+    ('1f3aa', 1504, 1, 1, '🎪', [], ':circus_tent:', [], [], 'activity')
+    ('1f939-2640', 1505, 1, 2, '\U0001f939♀', [], ':woman_juggling:', [], [], 'activity')
+    ('1f939-1f3fb-2640', 1506, 1, 3, '\U0001f939🏻♀', [], ':woman_juggling_tone1:', [':woman_juggling_light_skin_tone:'], [], 'activity')
+    ('1f939-1f3fc-2640', 1507, 1, 3, '\U0001f939🏼♀', [], ':woman_juggling_tone2:', [':woman_juggling_medium_light_skin_tone:'], [], 'activity')
+    ('1f939-1f3fd-2640', 1508, 1, 3, '\U0001f939🏽♀', [], ':woman_juggling_tone3:', [':woman_juggling_medium_skin_tone:'], [], 'activity')
+    ('1f939-1f3fe-2640', 1509, 1, 3, '\U0001f939🏾♀', [], ':woman_juggling_tone4:', [':woman_juggling_medium_dark_skin_tone:'], [], 'activity')
+    ('1f939-1f3ff-2640', 1510, 1, 3, '\U0001f939🏿♀', [], ':woman_juggling_tone5:', [':woman_juggling_dark_skin_tone:'], [], 'activity')
+    ('1f939-2642', 1511, 1, 2, '\U0001f939♂', [], ':man_juggling:', [], [], 'activity')
+    ('1f939-1f3fb-2642', 1512, 1, 3, '\U0001f939🏻♂', [], ':man_juggling_tone1:', [':man_juggling_light_skin_tone:'], [], 'activity')
+    ('1f939-1f3fc-2642', 1513, 1, 3, '\U0001f939🏼♂', [], ':man_juggling_tone2:', [':man_juggling_medium_light_skin_tone:'], [], 'activity')
+    ('1f939-1f3fd-2642', 1514, 1, 3, '\U0001f939🏽♂', [], ':man_juggling_tone3:', [':man_juggling_medium_skin_tone:'], [], 'activity')
+    ('1f939-1f3fe-2642', 1515, 1, 3, '\U0001f939🏾♂', [], ':man_juggling_tone4:', [':man_juggling_medium_dark_skin_tone:'], [], 'activity')
+    ('1f939-1f3ff-2642', 1516, 1, 3, '\U0001f939🏿♂', [], ':man_juggling_tone5:', [':man_juggling_dark_skin_tone:'], [], 'activity')
+    ('1f939', 1517, 1, 1, '\U0001f939', [], ':person_juggling:', [':juggling:', ':juggler:'], [], 'activity')
+    ('1f939-1f3fb', 1518, 1, 2, '\U0001f939🏻', [], ':person_juggling_tone1:', [':juggling_tone1:', ':juggler_tone1:'], [], 'activity')
+    ('1f939-1f3fc', 1519, 1, 2, '\U0001f939🏼', [], ':person_juggling_tone2:', [':juggling_tone2:', ':juggler_tone2:'], [], 'activity')
+    ('1f939-1f3fd', 1520, 1, 2, '\U0001f939🏽', [], ':person_juggling_tone3:', [':juggling_tone3:', ':juggler_tone3:'], [], 'activity')
+    ('1f939-1f3fe', 1521, 1, 2, '\U0001f939🏾', [], ':person_juggling_tone4:', [':juggling_tone4:', ':juggler_tone4:'], [], 'activity')
+    ('1f939-1f3ff', 1522, 1, 2, '\U0001f939🏿', [], ':person_juggling_tone5:', [':juggling_tone5:', ':juggler_tone5:'], [], 'activity')
+    ('1f3ad', 1523, 1, 1, '🎭', [], ':performing_arts:', [], [], 'activity')
+    ('1f3a8', 1524, 1, 1, '🎨', [], ':art:', [], [], 'activity')
+    ('1f3ac', 1525, 1, 1, '🎬', [], ':clapper:', [], [], 'activity')
+    ('1f3a4', 1526, 1, 1, '🎤', [], ':microphone:', [], [], 'activity')
+    ('1f3a7', 1527, 1, 1, '🎧', [], ':headphones:', [], [], 'activity')
+    ('1f3bc', 1528, 1, 1, '🎼', [], ':musical_score:', [], [], 'activity')
+    ('1f3b9', 1529, 1, 1, '🎹', [], ':musical_keyboard:', [], [], 'activity')
+    ('1f941', 1530, 1, 1, '\U0001f941', [], ':drum:', [':drum_with_drumsticks:'], [], 'activity')
+    ('1f3b7', 1531, 1, 1, '🎷', [], ':saxophone:', [], [], 'activity')
+    ('1f3ba', 1532, 1, 1, '🎺', [], ':trumpet:', [], [], 'activity')
+    ('1f3b8', 1533, 1, 1, '🎸', [], ':guitar:', [], [], 'activity')
+    ('1f3bb', 1534, 1, 1, '🎻', [], ':violin:', [], [], 'activity')
+    ('1f3b2', 1535, 1, 1, '🎲', [], ':game_die:', [], [], 'activity')
+    ('1f3af', 1536, 1, 1, '🎯', [], ':dart:', [], [], 'activity')
+    ('1f3b3', 1537, 1, 1, '🎳', [], ':bowling:', [], [], 'activity')
+    ('1f3ae', 1538, 1, 1, '🎮', [], ':video_game:', [], [], 'activity')
+    ('1f3b0', 1539, 1, 1, '🎰', [], ':slot_machine:', [], [], 'activity')
+    ('1f697', 1540, 1, 1, '🚗', [], ':red_car:', [], [], 'travel')
+    ('1f695', 1541, 1, 1, '🚕', [], ':taxi:', [], [], 'travel')
+    ('1f699', 1542, 1, 1, '🚙', [], ':blue_car:', [], [], 'travel')
+    ('1f68c', 1543, 1, 1, '🚌', [], ':bus:', [], [], 'travel')
+    ('1f68e', 1544, 1, 1, '🚎', [], ':trolleybus:', [], [], 'travel')
+    ('1f3ce', 1545, 1, 1, '🏎', [], ':race_car:', [':racing_car:'], [], 'travel')
+    ('1f693', 1546, 1, 1, '🚓', [], ':police_car:', [], [], 'travel')
+    ('1f691', 1547, 1, 1, '🚑', [], ':ambulance:', [], [], 'travel')
+    ('1f692', 1548, 1, 1, '🚒', [], ':fire_engine:', [], [], 'travel')
+    ('1f690', 1549, 1, 1, '🚐', [], ':minibus:', [], [], 'travel')
+    ('1f69a', 1550, 1, 1, '🚚', [], ':truck:', [], [], 'travel')
+    ('1f69b', 1551, 1, 1, '🚛', [], ':articulated_lorry:', [], [], 'travel')
+    ('1f69c', 1552, 1, 1, '🚜', [], ':tractor:', [], [], 'travel')
+    ('1f6f4', 1553, 1, 1, '\U0001f6f4', [], ':scooter:', [], [], 'travel')
+    ('1f6b2', 1554, 1, 1, '🚲', [], ':bike:', [], [], 'travel')
+    ('1f6f5', 1555, 1, 1, '\U0001f6f5', [], ':motor_scooter:', [':motorbike:'], [], 'travel')
+    ('1f3cd', 1556, 1, 1, '🏍', [], ':motorcycle:', [':racing_motorcycle:'], [], 'travel')
+    ('1f6a8', 1557, 1, 1, '🚨', [], ':rotating_light:', [], [], 'travel')
+    ('1f694', 1558, 1, 1, '🚔', [], ':oncoming_police_car:', [], [], 'travel')
+    ('1f68d', 1559, 1, 1, '🚍', [], ':oncoming_bus:', [], [], 'travel')
+    ('1f698', 1560, 1, 1, '🚘', [], ':oncoming_automobile:', [], [], 'travel')
+    ('1f696', 1561, 1, 1, '🚖', [], ':oncoming_taxi:', [], [], 'travel')
+    ('1f6a1', 1562, 1, 1, '🚡', [], ':aerial_tramway:', [], [], 'travel')
+    ('1f6a0', 1563, 1, 1, '🚠', [], ':mountain_cableway:', [], [], 'travel')
+    ('1f69f', 1564, 1, 1, '🚟', [], ':suspension_railway:', [], [], 'travel')
+    ('1f683', 1565, 1, 1, '🚃', [], ':railway_car:', [], [], 'travel')
+    ('1f68b', 1566, 1, 1, '🚋', [], ':train:', [], [], 'travel')
+    ('1f69e', 1567, 1, 1, '🚞', [], ':mountain_railway:', [], [], 'travel')
+    ('1f69d', 1568, 1, 1, '🚝', [], ':monorail:', [], [], 'travel')
+    ('1f684', 1569, 1, 1, '🚄', [], ':bullettrain_side:', [], [], 'travel')
+    ('1f685', 1570, 1, 1, '🚅', [], ':bullettrain_front:', [], [], 'travel')
+    ('1f688', 1571, 1, 1, '🚈', [], ':light_rail:', [], [], 'travel')
+    ('1f682', 1572, 1, 1, '🚂', [], ':steam_locomotive:', [], [], 'travel')
+    ('1f686', 1573, 1, 1, '🚆', [], ':train2:', [], [], 'travel')
+    ('1f687', 1574, 1, 1, '🚇', [], ':metro:', [], [], 'travel')
+    ('1f68a', 1575, 1, 1, '🚊', [], ':tram:', [], [], 'travel')
+    ('1f689', 1576, 1, 1, '🚉', [], ':station:', [], [], 'travel')
+    ('1f681', 1577, 1, 1, '🚁', [], ':helicopter:', [], [], 'travel')
+    ('1f6e9', 1578, 1, 1, '🛩', [], ':airplane_small:', [':small_airplane:'], [], 'travel')
+    ('2708', 1579, 1, 1, '✈', [], ':airplane:', [], [], 'travel')
+    ('1f6eb', 1580, 1, 1, '🛫', [], ':airplane_departure:', [], [], 'travel')
+    ('1f6ec', 1581, 1, 1, '🛬', [], ':airplane_arriving:', [], [], 'travel')
+    ('1f680', 1582, 1, 1, '🚀', [], ':rocket:', [], [], 'travel')
+    ('1f6f0', 1583, 1, 1, '🛰', [], ':satellite_orbital:', [], [], 'travel')
+    ('1f4ba', 1584, 1, 1, '💺', [], ':seat:', [], [], 'travel')
+    ('1f6f6', 1585, 1, 1, '\U0001f6f6', [], ':canoe:', [':kayak:'], [], 'travel')
+    ('26f5', 1586, 1, 1, '⛵', ['boat'], ':sailboat:', [], [], 'travel')
+    ('1f6e5', 1587, 1, 1, '🛥', ['boat'], ':motorboat:', [], [], 'travel')
+    ('1f6a4', 1588, 1, 1, '🚤', [], ':speedboat:', [], [], 'travel')
+    ('1f6f3', 1589, 1, 1, '🛳', [], ':cruise_ship:', [':passenger_ship:'], [], 'travel')
+    ('26f4', 1590, 1, 1, '⛴', [], ':ferry:', [], [], 'travel')
+    ('1f6a2', 1591, 1, 1, '🚢', [], ':ship:', [], [], 'travel')
+    ('2693', 1592, 1, 1, '⚓', [], ':anchor:', [], [], 'travel')
+    ('1f6a7', 1593, 1, 1, '🚧', [], ':construction:', [], [], 'travel')
+    ('26fd', 1594, 1, 1, '⛽', [], ':fuelpump:', [], [], 'travel')
+    ('1f68f', 1595, 1, 1, '🚏', [], ':busstop:', [], [], 'travel')
+    ('1f6a6', 1596, 1, 1, '🚦', [], ':vertical_traffic_light:', [], [], 'travel')
+    ('1f6a5', 1597, 1, 1, '🚥', [], ':traffic_light:', [], [], 'travel')
+    ('1f5fa', 1598, 1, 1, '🗺', [], ':map:', [':world_map:'], [], 'travel')
+    ('1f5ff', 1599, 1, 1, '🗿', [], ':moyai:', [], [], 'travel')
+    ('1f5fd', 1600, 1, 1, '🗽', [], ':statue_of_liberty:', [], [], 'travel')
+    ('26f2', 1601, 1, 1, '⛲', [], ':fountain:', [], [], 'travel')
+    ('1f5fc', 1602, 1, 1, '🗼', [], ':tokyo_tower:', [], [], 'travel')
+    ('1f3f0', 1603, 1, 1, '🏰', [], ':european_castle:', [], [], 'travel')
+    ('1f3ef', 1604, 1, 1, '🏯', [], ':japanese_castle:', [], [], 'travel')
+    ('1f3df', 1605, 1, 1, '🏟', [], ':stadium:', [], [], 'travel')
+    ('1f3a1', 1606, 1, 1, '🎡', [], ':ferris_wheel:', [], [], 'travel')
+    ('1f3a2', 1607, 1, 1, '🎢', [], ':roller_coaster:', [], [], 'travel')
+    ('1f3a0', 1608, 1, 1, '🎠', [], ':carousel_horse:', [], [], 'travel')
+    ('26f1', 1609, 1, 1, '⛱', [], ':beach_umbrella:', [':umbrella_on_ground:'], [], 'travel')
+    ('1f3d6', 1610, 1, 1, '🏖', [], ':beach:', [':beach_with_umbrella:'], [], 'travel')
+    ('1f3dd', 1611, 1, 1, '🏝', [], ':island:', [':desert_island:'], [], 'travel')
+    ('26f0', 1612, 1, 1, '⛰', [], ':mountain:', [], [], 'travel')
+    ('1f3d4', 1613, 1, 1, '🏔', [], ':mountain_snow:', [':snow_capped_mountain:'], [], 'travel')
+    ('1f5fb', 1614, 1, 1, '🗻', [], ':mount_fuji:', [], [], 'travel')
+    ('1f30b', 1615, 1, 1, '🌋', [], ':volcano:', [], [], 'travel')
+    ('1f3dc', 1616, 1, 1, '🏜', [], ':desert:', [], [], 'travel')
+    ('1f3d5', 1617, 1, 1, '🏕', [], ':camping:', [], [], 'travel')
+    ('26fa', 1618, 1, 1, '⛺', [], ':tent:', [], [], 'travel')
+    ('1f6e4', 1619, 1, 1, '🛤', [], ':railway_track:', [':railroad_track:'], [], 'travel')
+    ('1f6e3', 1620, 1, 1, '🛣', [], ':motorway:', [], [], 'travel')
+    ('1f3d7', 1621, 1, 1, '🏗', [], ':construction_site:', [':building_construction:'], [], 'travel')
+    ('1f3ed', 1622, 1, 1, '🏭', [], ':factory:', [], [], 'travel')
+    ('1f3e0', 1623, 1, 1, '🏠', [], ':house:', [], [], 'travel')
+    ('1f3e1', 1624, 1, 1, '🏡', [], ':house_with_garden:', [], [], 'travel')
+    ('1f3d8', 1625, 1, 1, '🏘', [], ':homes:', [':house_buildings:'], [], 'travel')
+    ('1f3da', 1626, 1, 1, '🏚', [], ':house_abandoned:', [':derelict_house_building:'], [], 'travel')
+    ('1f3e2', 1627, 1, 1, '🏢', [], ':office:', [], [], 'travel')
+    ('1f3ec', 1628, 1, 1, '🏬', [], ':department_store:', [], [], 'travel')
+    ('1f3e3', 1629, 1, 1, '🏣', [], ':post_office:', [], [], 'travel')
+    ('1f3e4', 1630, 1, 1, '🏤', [], ':european_post_office:', [], [], 'travel')
+    ('1f3e5', 1631, 1, 1, '🏥', [], ':hospital:', [], [], 'travel')
+    ('1f3e6', 1632, 1, 1, '🏦', [], ':bank:', [], [], 'travel')
+    ('1f3e8', 1633, 1, 1, '🏨', [], ':hotel:', [], [], 'travel')
+    ('1f3ea', 1634, 1, 1, '🏪', [], ':convenience_store:', [], [], 'travel')
+    ('1f3eb', 1635, 1, 1, '🏫', [], ':school:', [], [], 'travel')
+    ('1f3e9', 1636, 1, 1, '🏩', [], ':love_hotel:', [], [], 'travel')
+    ('1f492', 1637, 1, 1, '💒', [], ':wedding:', [], [], 'travel')
+    ('1f3db', 1638, 1, 1, '🏛', [], ':classical_building:', [], [], 'travel')
+    ('26ea', 1639, 1, 1, '⛪', [], ':church:', [], [], 'travel')
+    ('1f54c', 1640, 1, 1, '🕌', [], ':mosque:', [], [], 'travel')
+    ('1f54d', 1641, 1, 1, '🕍', [], ':synagogue:', [], [], 'travel')
+    ('1f54b', 1642, 1, 1, '🕋', [], ':kaaba:', [], [], 'travel')
+    ('26e9', 1643, 1, 1, '⛩', ['shrine', 'shinto'], ':shinto_shrine:', [], [], 'travel')
+    ('1f5fe', 1644, 1, 1, '🗾', [], ':japan:', [], [], 'travel')
+    ('1f391', 1645, 1, 1, '🎑', [], ':rice_scene:', [], [], 'travel')
+    ('1f3de', 1646, 1, 1, '🏞', [], ':park:', [':national_park:'], [], 'travel')
+    ('1f305', 1647, 1, 1, '🌅', [], ':sunrise:', [], [], 'travel')
+    ('1f304', 1648, 1, 1, '🌄', [], ':sunrise_over_mountains:', [], [], 'travel')
+    ('1f320', 1649, 1, 1, '🌠', [], ':stars:', [], [], 'travel')
+    ('1f387', 1650, 1, 1, '🎇', [], ':sparkler:', [], [], 'travel')
+    ('1f386', 1651, 1, 1, '🎆', [], ':fireworks:', [], [], 'travel')
+    ('1f307', 1652, 1, 1, '🌇', [], ':city_sunset:', [':city_sunrise:'], [], 'travel')
+    ('1f306', 1653, 1, 1, '🌆', [], ':city_dusk:', [], [], 'travel')
+    ('1f3d9', 1654, 1, 1, '🏙', [], ':cityscape:', [], [], 'travel')
+    ('1f303', 1655, 1, 1, '🌃', [], ':night_with_stars:', [], [], 'travel')
+    ('1f30c', 1656, 1, 1, '🌌', [], ':milky_way:', [], [], 'travel')
+    ('1f309', 1657, 1, 1, '🌉', [], ':bridge_at_night:', [], [], 'travel')
+    ('1f301', 1658, 1, 1, '🌁', [], ':foggy:', [], [], 'travel')
+    ('231a', 1659, 1, 1, '⌚', [], ':watch:', [], [], 'objects')
+    ('1f4f1', 1660, 1, 1, '📱', [], ':iphone:', [], [], 'objects')
+    ('1f4f2', 1661, 1, 1, '📲', [], ':calling:', [], [], 'objects')
+    ('1f4bb', 1662, 1, 1, '💻', [], ':computer:', [], [], 'objects')
+    ('2328', 1663, 1, 1, '⌨', [], ':keyboard:', [], [], 'objects')
+    ('1f5a5', 1664, 1, 1, '🖥', [], ':desktop:', [':desktop_computer:'], [], 'objects')
+    ('1f5a8', 1665, 1, 1, '🖨', [], ':printer:', [], [], 'objects')
+    ('1f5b1', 1666, 1, 1, '🖱', [], ':mouse_three_button:', [':three_button_mouse:'], [], 'objects')
+    ('1f5b2', 1667, 1, 1, '🖲', [], ':trackball:', [], [], 'objects')
+    ('1f579', 1668, 1, 1, '🕹', [], ':joystick:', [], [], 'objects')
+    ('1f5dc', 1669, 1, 1, '🗜', [], ':compression:', [], [], 'objects')
+    ('1f4bd', 1670, 1, 1, '💽', [], ':minidisc:', [], [], 'objects')
+    ('1f4be', 1671, 1, 1, '💾', [], ':floppy_disk:', [], [], 'objects')
+    ('1f4bf', 1672, 1, 1, '💿', [], ':cd:', [], [], 'objects')
+    ('1f4c0', 1673, 1, 1, '📀', [], ':dvd:', [], [], 'objects')
+    ('1f4fc', 1674, 1, 1, '📼', [], ':vhs:', [], [], 'objects')
+    ('1f4f7', 1675, 1, 1, '📷', [], ':camera:', [], [], 'objects')
+    ('1f4f8', 1676, 1, 1, '📸', [], ':camera_with_flash:', [], [], 'objects')
+    ('1f4f9', 1677, 1, 1, '📹', [], ':video_camera:', [], [], 'objects')
+    ('1f3a5', 1678, 1, 1, '🎥', [], ':movie_camera:', [], [], 'objects')
+    ('1f4fd', 1679, 1, 1, '📽', [], ':projector:', [':film_projector:'], [], 'objects')
+    ('1f39e', 1680, 1, 1, '🎞', ['film', 'roll'], ':film_frames:', [], [], 'objects')
+    ('1f4de', 1681, 1, 1, '📞', ['receiver', 'handset'], ':telephone_receiver:', [], [], 'objects')
+    ('260e', 1682, 1, 1, '☎', ['phone', 'telephone'], ':telephone:', [], [], 'objects')
+    ('1f4df', 1683, 1, 1, '📟', ['pager', 'beeper'], ':pager:', [], [], 'objects')
+    ('1f4e0', 1684, 1, 1, '📠', ['fax'], ':fax:', [], [], 'objects')
+    ('1f4fa', 1685, 1, 1, '📺', ['tv', 'TV'], ':tv:', [], [], 'objects')
+    ('1f4fb', 1686, 1, 1, '📻', ['radio', 'wireless'], ':radio:', [], [], 'objects')
+    ('1f399', 1687, 1, 1, '🎙', ['microphone', 'mic'], ':microphone2:', [':studio_microphone:'], [], 'objects')
+    ('1f39a', 1688, 1, 1, '🎚', ['slider', 'dimmer'], ':level_slider:', [], [], 'objects')
+    ('1f39b', 1689, 1, 1, '🎛', ['knobs', 'controls', 'control knobs'], ':control_knobs:', [], [], 'objects')
+    ('23f1', 1690, 1, 1, '⏱', ['stopwatch', 'watch'], ':stopwatch:', [], [], 'objects')
+    ('23f2', 1691, 1, 1, '⏲', ['timer', 'time'], ':timer:', [':timer_clock:'], [], 'objects')
+    ('23f0', 1692, 1, 1, '⏰', ['alarm', 'alarm clock', 'clock'], ':alarm_clock:', [], [], 'objects')
+    ('1f570', 1693, 1, 1, '🕰', ['clock', 'time', 'alarm'], ':clock:', [':mantlepiece_clock:'], [], 'objects')
+    ('231b', 1694, 1, 1, '⌛', ['hourglass'], ':hourglass:', [], [], 'objects')
+    ('23f3', 1695, 1, 1, '⏳', ['hourglass', 'time'], ':hourglass_flowing_sand:', [], [], 'objects')
+    ('1f4e1', 1696, 1, 1, '📡', ['dish', 'satellite'], ':satellite:', [], [], 'objects')
+    ('1f50b', 1697, 1, 1, '🔋', ['battery', 'cell'], ':battery:', [], [], 'objects')
+    ('1f50c', 1698, 1, 1, '🔌', ['plug'], ':electric_plug:', [], [], 'objects')
+    ('1f4a1', 1699, 1, 1, '💡', ['bulb', 'light'], ':bulb:', [], [], 'objects')
+    ('1f526', 1700, 1, 1, '🔦', ['flashlight', 'torch', 'light'], ':flashlight:', [], [], 'objects')
+    ('1f56f', 1701, 1, 1, '🕯', ['candle', 'wick', 'can dull'], ':candle:', [], [], 'objects')
+    ('1f5d1', 1702, 1, 1, '🗑', ['bin', 'trash', 'waste', 'wastebasket', 'basura', 'rubbish'], ':wastebasket:', [], [], 'objects')
+    ('1f6e2', 1703, 1, 1, '🛢', ['drum', 'can', 'oil'], ':oil:', [':oil_drum:'], [], 'objects')
+    ('1f4b8', 1704, 1, 1, '💸', ['flying money', 'winged money'], ':money_with_wings:', [], [], 'objects')
+    ('1f4b5', 1705, 1, 1, '💵', ['dollar', 'buck', 'greenback'], ':dollar:', [], [], 'objects')
+    ('1f4b4', 1706, 1, 1, '💴', ['yen'], ':yen:', [], [], 'objects')
+    ('1f4b6', 1707, 1, 1, '💶', ['euro'], ':euro:', [], [], 'objects')
+    ('1f4b7', 1708, 1, 1, '💷', ['pound', 'quid'], ':pound:', [], [], 'objects')
+    ('1f4b0', 1709, 1, 1, '💰', ['money', 'loot'], ':moneybag:', [], [], 'objects')
+    ('1f4b3', 1710, 1, 1, '💳', ['credit', 'card'], ':credit_card:', [], [], 'objects')
+    ('1f48e', 1711, 1, 1, '💎', ['gem', 'gemstone', 'rock'], ':gem:', [], [], 'objects')
+    ('2696', 1712, 1, 1, '⚖', ['scales', 'justice'], ':scales:', [], [], 'objects')
+    ('1f527', 1713, 1, 1, '🔧', ['wrench'], ':wrench:', [], [], 'objects')
+    ('1f528', 1714, 1, 1, '🔨', ['hammer', 'sledge'], ':hammer:', [], [], 'objects')
+    ('2692', 1715, 1, 1, '⚒', [], ':hammer_pick:', [':hammer_and_pick:'], [], 'objects')
+    ('1f6e0', 1716, 1, 1, '🛠', [], ':tools:', [':hammer_and_wrench:'], [], 'objects')
+    ('26cf', 1717, 1, 1, '⛏', [], ':pick:', [], [], 'objects')
+    ('1f529', 1718, 1, 1, '🔩', [], ':nut_and_bolt:', [], [], 'objects')
+    ('2699', 1719, 1, 1, '⚙', [], ':gear:', [], [], 'objects')
+    ('26d3', 1720, 1, 1, '⛓', [], ':chains:', [], [], 'objects')
+    ('1f52b', 1721, 1, 1, '🔫', [], ':gun:', [], [], 'objects')
+    ('1f4a3', 1722, 1, 1, '💣', [], ':bomb:', [], [], 'objects')
+    ('1f52a', 1723, 1, 1, '🔪', [], ':knife:', [], [], 'objects')
+    ('1f5e1', 1724, 1, 1, '🗡', [], ':dagger:', [':dagger_knife:'], [], 'objects')
+    ('2694', 1725, 1, 1, '⚔', [], ':crossed_swords:', [], [], 'objects')
+    ('1f6e1', 1726, 1, 1, '🛡', [], ':shield:', [], [], 'objects')
+    ('1f6ac', 1727, 1, 1, '🚬', [], ':smoking:', [], [], 'objects')
+    ('26b0', 1728, 1, 1, '⚰', [], ':coffin:', [], [], 'objects')
+    ('26b1', 1729, 1, 1, '⚱', [], ':urn:', [':funeral_urn:'], [], 'objects')
+    ('1f3fa', 1730, 1, 1, '🏺', [], ':amphora:', [], [], 'objects')
+    ('1f52e', 1731, 1, 1, '🔮', [], ':crystal_ball:', [], [], 'objects')
+    ('1f4ff', 1732, 1, 1, '📿', [], ':prayer_beads:', [], [], 'objects')
+    ('1f488', 1733, 1, 1, '💈', [], ':barber:', [], [], 'objects')
+    ('2697', 1734, 1, 1, '⚗', [], ':alembic:', [], [], 'objects')
+    ('1f52d', 1735, 1, 1, '🔭', [], ':telescope:', [], [], 'objects')
+    ('1f52c', 1736, 1, 1, '🔬', [], ':microscope:', [], [], 'objects')
+    ('1f573', 1737, 1, 1, '🕳', [], ':hole:', [], [], 'objects')
+    ('1f48a', 1738, 1, 1, '💊', [], ':pill:', [], [], 'objects')
+    ('1f489', 1739, 1, 1, '💉', [], ':syringe:', [], [], 'objects')
+    ('1f321', 1740, 1, 1, '🌡', [], ':thermometer:', [], [], 'objects')
+    ('1f6bd', 1741, 1, 1, '🚽', [], ':toilet:', [], [], 'objects')
+    ('1f6b0', 1742, 1, 1, '🚰', [], ':potable_water:', [], [], 'objects')
+    ('1f6bf', 1743, 1, 1, '🚿', [], ':shower:', [], [], 'objects')
+    ('1f6c1', 1744, 1, 1, '🛁', [], ':bathtub:', [], [], 'objects')
+    ('1f6c0', 1745, 1, 1, '🛀', [], ':bath:', [], [], 'objects')
+    ('1f6c0-1f3fb', 1746, 1, 2, '🛀🏻', [], ':bath_tone1:', [], [], 'objects')
+    ('1f6c0-1f3fc', 1747, 1, 2, '🛀🏼', [], ':bath_tone2:', [], [], 'objects')
+    ('1f6c0-1f3fd', 1748, 1, 2, '🛀🏽', [], ':bath_tone3:', [], [], 'objects')
+    ('1f6c0-1f3fe', 1749, 1, 2, '🛀🏾', [], ':bath_tone4:', [], [], 'objects')
+    ('1f6c0-1f3ff', 1750, 1, 2, '🛀🏿', [], ':bath_tone5:', [], [], 'objects')
+    ('1f6ce', 1751, 1, 1, '🛎', [], ':bellhop:', [':bellhop_bell:'], [], 'objects')
+    ('1f511', 1752, 1, 1, '🔑', [], ':key:', [], [], 'objects')
+    ('1f5dd', 1753, 1, 1, '🗝', [], ':key2:', [':old_key:'], [], 'objects')
+    ('1f6aa', 1754, 1, 1, '🚪', [], ':door:', [], [], 'objects')
+    ('1f6cb', 1755, 1, 1, '🛋', [], ':couch:', [':couch_and_lamp:'], [], 'objects')
+    ('1f6cf', 1756, 1, 1, '🛏', [], ':bed:', [], [], 'objects')
+    ('1f6cc', 1757, 1, 1, '🛌', [], ':sleeping_accommodation:', [], [], 'objects')
+    ('1f6cc-1f3fb', 1758, 1, 2, '🛌🏻', [], ':person_in_bed_tone1:', [':person_in_bed_light_skin_tone:'], [], 'objects')
+    ('1f6cc-1f3fc', 1759, 1, 2, '🛌🏼', [], ':person_in_bed_tone2:', [':person_in_bed_medium_light_skin_tone:'], [], 'objects')
+    ('1f6cc-1f3fd', 1760, 1, 2, '🛌🏽', [], ':person_in_bed_tone3:', [':person_in_bed_medium_skin_tone:'], [], 'objects')
+    ('1f6cc-1f3fe', 1761, 1, 2, '🛌🏾', [], ':person_in_bed_tone4:', [':person_in_bed_medium_dark_skin_tone:'], [], 'objects')
+    ('1f6cc-1f3ff', 1762, 1, 2, '🛌🏿', [], ':person_in_bed_tone5:', [':person_in_bed_dark_skin_tone:'], [], 'objects')
+    ('1f5bc', 1763, 1, 1, '🖼', ['photo', 'picture', 'frame'], ':frame_photo:', [':frame_with_picture:'], [], 'objects')
+    ('1f6cd', 1764, 1, 1, '🛍', [], ':shopping_bags:', [], [], 'objects')
+    ('1f6d2', 1765, 1, 1, '\U0001f6d2', [], ':shopping_cart:', [':shopping_trolley:'], [], 'objects')
+    ('1f381', 1766, 1, 1, '🎁', ['gift', 'present'], ':gift:', [], [], 'objects')
+    ('1f388', 1767, 1, 1, '🎈', ['balloon'], ':balloon:', [], [], 'objects')
+    ('1f38f', 1768, 1, 1, '🎏', ['flags'], ':flags:', [], [], 'objects')
+    ('1f380', 1769, 1, 1, '🎀', ['ribbon', 'bow', 'tied'], ':ribbon:', [], [], 'objects')
+    ('1f38a', 1770, 1, 1, '🎊', ['yay', 'hurray', 'confetti'], ':confetti_ball:', [], [], 'objects')
+    ('1f389', 1771, 1, 1, '🎉', ['tada'], ':tada:', [], [], 'objects')
+    ('1f38e', 1772, 1, 1, '🎎', ['dolls'], ':dolls:', [], [], 'objects')
+    ('1f3ee', 1773, 1, 1, '🏮', ['lantern', 'glow'], ':izakaya_lantern:', [], [], 'objects')
+    ('1f390', 1774, 1, 1, '🎐', [], ':wind_chime:', [], [], 'objects')
+    ('2709', 1775, 1, 1, '✉', [], ':envelope:', [], [], 'objects')
+    ('1f4e9', 1776, 1, 1, '📩', [], ':envelope_with_arrow:', [], [], 'objects')
+    ('1f4e8', 1777, 1, 1, '📨', [], ':incoming_envelope:', [], [], 'objects')
+    ('1f4e7', 1778, 1, 1, '📧', [], ':e-mail:', [':email:'], [], 'objects')
+    ('1f48c', 1779, 1, 1, '💌', [], ':love_letter:', [], [], 'objects')
+    ('1f4e5', 1780, 1, 1, '📥', [], ':inbox_tray:', [], [], 'objects')
+    ('1f4e4', 1781, 1, 1, '📤', [], ':outbox_tray:', [], [], 'objects')
+    ('1f4e6', 1782, 1, 1, '📦', [], ':package:', [], [], 'objects')
+    ('1f3f7', 1783, 1, 1, '🏷', [], ':label:', [], [], 'objects')
+    ('1f4ea', 1784, 1, 1, '📪', [], ':mailbox_closed:', [], [], 'objects')
+    ('1f4eb', 1785, 1, 1, '📫', [], ':mailbox:', [], [], 'objects')
+    ('1f4ec', 1786, 1, 1, '📬', [], ':mailbox_with_mail:', [], [], 'objects')
+    ('1f4ed', 1787, 1, 1, '📭', [], ':mailbox_with_no_mail:', [], [], 'objects')
+    ('1f4ee', 1788, 1, 1, '📮', [], ':postbox:', [], [], 'objects')
+    ('1f4ef', 1789, 1, 1, '📯', [], ':postal_horn:', [], [], 'objects')
+    ('1f4dc', 1790, 1, 1, '📜', [], ':scroll:', [], [], 'objects')
+    ('1f4c3', 1791, 1, 1, '📃', [], ':page_with_curl:', [], [], 'objects')
+    ('1f4c4', 1792, 1, 1, '📄', [], ':page_facing_up:', [], [], 'objects')
+    ('1f4d1', 1793, 1, 1, '📑', [], ':bookmark_tabs:', [], [], 'objects')
+    ('1f4ca', 1794, 1, 1, '📊', [], ':bar_chart:', [], [], 'objects')
+    ('1f4c8', 1795, 1, 1, '📈', [], ':chart_with_upwards_trend:', [], [], 'objects')
+    ('1f4c9', 1796, 1, 1, '📉', [], ':chart_with_downwards_trend:', [], [], 'objects')
+    ('1f5d2', 1797, 1, 1, '🗒', [], ':notepad_spiral:', [':spiral_note_pad:'], [], 'objects')
+    ('1f5d3', 1798, 1, 1, '🗓', [], ':calendar_spiral:', [':spiral_calendar_pad:'], [], 'objects')
+    ('1f4c6', 1799, 1, 1, '📆', [], ':calendar:', [], [], 'objects')
+    ('1f4c5', 1800, 1, 1, '📅', [], ':date:', [], [], 'objects')
+    ('1f4c7', 1801, 1, 1, '📇', [], ':card_index:', [], [], 'objects')
+    ('1f5c3', 1802, 1, 1, '🗃', [], ':card_box:', [':card_file_box:'], [], 'objects')
+    ('1f5f3', 1803, 1, 1, '🗳', [], ':ballot_box:', [':ballot_box_with_ballot:'], [], 'objects')
+    ('1f5c4', 1804, 1, 1, '🗄', [], ':file_cabinet:', [], [], 'objects')
+    ('1f4cb', 1805, 1, 1, '📋', [], ':clipboard:', [], [], 'objects')
+    ('1f4c1', 1806, 1, 1, '📁', [], ':file_folder:', [], [], 'objects')
+    ('1f4c2', 1807, 1, 1, '📂', [], ':open_file_folder:', [], [], 'objects')
+    ('1f5c2', 1808, 1, 1, '🗂', [], ':dividers:', [':card_index_dividers:'], [], 'objects')
+    ('1f5de', 1809, 1, 1, '🗞', [], ':newspaper2:', [':rolled_up_newspaper:'], [], 'objects')
+    ('1f4f0', 1810, 1, 1, '📰', [], ':newspaper:', [], [], 'objects')
+    ('1f4d3', 1811, 1, 1, '📓', [], ':notebook:', [], [], 'objects')
+    ('1f4d4', 1812, 1, 1, '📔', [], ':notebook_with_decorative_cover:', [], [], 'objects')
+    ('1f4d2', 1813, 1, 1, '📒', [], ':ledger:', [], [], 'objects')
+    ('1f4d5', 1814, 1, 1, '📕', [], ':closed_book:', [], [], 'objects')
+    ('1f4d7', 1815, 1, 1, '📗', [], ':green_book:', [], [], 'objects')
+    ('1f4d8', 1816, 1, 1, '📘', [], ':blue_book:', [], [], 'objects')
+    ('1f4d9', 1817, 1, 1, '📙', [], ':orange_book:', [], [], 'objects')
+    ('1f4da', 1818, 1, 1, '📚', [], ':books:', [], [], 'objects')
+    ('1f4d6', 1819, 1, 1, '📖', [], ':book:', [], [], 'objects')
+    ('1f516', 1820, 1, 1, '🔖', [], ':bookmark:', [], [], 'objects')
+    ('1f517', 1821, 1, 1, '🔗', [], ':link:', [], [], 'objects')
+    ('1f4ce', 1822, 1, 1, '📎', [], ':paperclip:', [], [], 'objects')
+    ('1f587', 1823, 1, 1, '🖇', [], ':paperclips:', [':linked_paperclips:'], [], 'objects')
+    ('1f4d0', 1824, 1, 1, '📐', [], ':triangular_ruler:', [], [], 'objects')
+    ('1f4cf', 1825, 1, 1, '📏', [], ':straight_ruler:', [], [], 'objects')
+    ('1f4cc', 1826, 1, 1, '📌', [], ':pushpin:', [], [], 'objects')
+    ('1f4cd', 1827, 1, 1, '📍', [], ':round_pushpin:', [], [], 'objects')
+    ('2702', 1828, 1, 1, '✂', [], ':scissors:', [], [], 'objects')
+    ('1f58a', 1829, 1, 1, '🖊', [], ':pen_ballpoint:', [':lower_left_ballpoint_pen:'], [], 'objects')
+    ('1f58b', 1830, 1, 1, '🖋', [], ':pen_fountain:', [':lower_left_fountain_pen:'], [], 'objects')
+    ('2712', 1831, 1, 1, '✒', [], ':black_nib:', [], [], 'objects')
+    ('1f58c', 1832, 1, 1, '🖌', [], ':paintbrush:', [':lower_left_paintbrush:'], [], 'objects')
+    ('1f58d', 1833, 1, 1, '🖍', [], ':crayon:', [':lower_left_crayon:'], [], 'objects')
+    ('1f4dd', 1834, 1, 1, '📝', [], ':pencil:', [], [], 'objects')
+    ('270f', 1835, 1, 1, '✏', [], ':pencil2:', [], [], 'objects')
+    ('1f50d', 1836, 1, 1, '🔍', [], ':mag:', [], [], 'objects')
+    ('1f50e', 1837, 1, 1, '🔎', [], ':mag_right:', [], [], 'objects')
+    ('1f50f', 1838, 1, 1, '🔏', [], ':lock_with_ink_pen:', [], [], 'objects')
+    ('1f510', 1839, 1, 1, '🔐', [], ':closed_lock_with_key:', [], [], 'objects')
+    ('1f512', 1840, 1, 1, '🔒', [], ':lock:', [], [], 'objects')
+    ('1f513', 1841, 1, 1, '🔓', [], ':unlock:', [], [], 'objects')
+    ('2764', 1842, 1, 1, '❤', [], ':heart:', [], [], 'symbols')
+    ('1f49b', 1843, 1, 1, '💛', [], ':yellow_heart:', [], [], 'symbols')
+    ('1f49a', 1844, 1, 1, '💚', [], ':green_heart:', [], [], 'symbols')
+    ('1f499', 1845, 1, 1, '💙', [], ':blue_heart:', [], [], 'symbols')
+    ('1f49c', 1846, 1, 1, '💜', [], ':purple_heart:', [], [], 'symbols')
+    ('1f5a4', 1847, 1, 1, '\U0001f5a4', [], ':black_heart:', [], [], 'symbols')
+    ('1f494', 1848, 1, 1, '💔', [], ':broken_heart:', [], [], 'symbols')
+    ('2763', 1849, 1, 1, '❣', [], ':heart_exclamation:', [':heavy_heart_exclamation_mark_ornament:'], [], 'symbols')
+    ('1f495', 1850, 1, 1, '💕', [], ':two_hearts:', [], [], 'symbols')
+    ('1f49e', 1851, 1, 1, '💞', [], ':revolving_hearts:', [], [], 'symbols')
+    ('1f493', 1852, 1, 1, '💓', [], ':heartbeat:', [], [], 'symbols')
+    ('1f497', 1853, 1, 1, '💗', [], ':heartpulse:', [], [], 'symbols')
+    ('1f496', 1854, 1, 1, '💖', [], ':sparkling_heart:', [], [], 'symbols')
+    ('1f498', 1855, 1, 1, '💘', [], ':cupid:', [], [], 'symbols')
+    ('1f49d', 1856, 1, 1, '💝', [], ':gift_heart:', [], [], 'symbols')
+    ('1f49f', 1857, 1, 1, '💟', [], ':heart_decoration:', [], [], 'symbols')
+    ('262e', 1858, 1, 1, '☮', [], ':peace:', [':peace_symbol:'], [], 'symbols')
+    ('271d', 1859, 1, 1, '✝', [], ':cross:', [':latin_cross:'], [], 'symbols')
+    ('262a', 1860, 1, 1, '☪', [], ':star_and_crescent:', [], [], 'symbols')
+    ('1f549', 1861, 1, 1, '🕉', [], ':om_symbol:', [], [], 'symbols')
+    ('2638', 1862, 1, 1, '☸', [], ':wheel_of_dharma:', [], [], 'symbols')
+    ('2721', 1863, 1, 1, '✡', [], ':star_of_david:', [], [], 'symbols')
+    ('1f52f', 1864, 1, 1, '🔯', [], ':six_pointed_star:', [], [], 'symbols')
+    ('1f54e', 1865, 1, 1, '🕎', [], ':menorah:', [], [], 'symbols')
+    ('262f', 1866, 1, 1, '☯', [], ':yin_yang:', [], [], 'symbols')
+    ('2626', 1867, 1, 1, '☦', [], ':orthodox_cross:', [], [], 'symbols')
+    ('1f6d0', 1868, 1, 1, '🛐', [], ':place_of_worship:', [':worship_symbol:'], [], 'symbols')
+    ('26ce', 1869, 1, 1, '⛎', [], ':ophiuchus:', [], [], 'symbols')
+    ('2648', 1870, 1, 1, '♈', [], ':aries:', [], [], 'symbols')
+    ('2649', 1871, 1, 1, '♉', [], ':taurus:', [], [], 'symbols')
+    ('264a', 1872, 1, 1, '♊', [], ':gemini:', [], [], 'symbols')
+    ('264b', 1873, 1, 1, '♋', [], ':cancer:', [], [], 'symbols')
+    ('264c', 1874, 1, 1, '♌', [], ':leo:', [], [], 'symbols')
+    ('264d', 1875, 1, 1, '♍', [], ':virgo:', [], [], 'symbols')
+    ('264e', 1876, 1, 1, '♎', [], ':libra:', [], [], 'symbols')
+    ('264f', 1877, 1, 1, '♏', [], ':scorpius:', [], [], 'symbols')
+    ('2650', 1878, 1, 1, '♐', [], ':sagittarius:', [], [], 'symbols')
+    ('2651', 1879, 1, 1, '♑', [], ':capricorn:', [], [], 'symbols')
+    ('2652', 1880, 1, 1, '♒', [], ':aquarius:', [], [], 'symbols')
+    ('2653', 1881, 1, 1, '♓', [], ':pisces:', [], [], 'symbols')
+    ('1f194', 1882, 1, 1, '🆔', [], ':id:', [], [], 'symbols')
+    ('269b', 1883, 1, 1, '⚛', [], ':atom:', [':atom_symbol:'], [], 'symbols')
+    ('1f251', 1884, 1, 1, '🉑', [], ':accept:', [], [], 'symbols')
+    ('2622', 1885, 1, 1, '☢', [], ':radioactive:', [':radioactive_sign:'], [], 'symbols')
+    ('2623', 1886, 1, 1, '☣', [], ':biohazard:', [':biohazard_sign:'], [], 'symbols')
+    ('1f4f4', 1887, 1, 1, '📴', [], ':mobile_phone_off:', [], [], 'symbols')
+    ('1f4f3', 1888, 1, 1, '📳', [], ':vibration_mode:', [], [], 'symbols')
+    ('1f236', 1889, 1, 1, '🈶', [], ':u6709:', [], [], 'symbols')
+    ('1f21a', 1890, 1, 1, '🈚', [], ':u7121:', [], [], 'symbols')
+    ('1f238', 1891, 1, 1, '🈸', [], ':u7533:', [], [], 'symbols')
+    ('1f23a', 1892, 1, 1, '🈺', [], ':u55b6:', [], [], 'symbols')
+    ('1f237', 1893, 1, 1, '🈷', [], ':u6708:', [], [], 'symbols')
+    ('2734', 1894, 1, 1, '✴', [], ':eight_pointed_black_star:', [], [], 'symbols')
+    ('1f19a', 1895, 1, 1, '🆚', [], ':vs:', [], [], 'symbols')
+    ('1f4ae', 1896, 1, 1, '💮', [], ':white_flower:', [], [], 'symbols')
+    ('1f250', 1897, 1, 1, '🉐', [], ':ideograph_advantage:', [], [], 'symbols')
+    ('3299', 1898, 1, 1, '㊙', [], ':secret:', [], [], 'symbols')
+    ('3297', 1899, 1, 1, '㊗', [], ':congratulations:', [], [], 'symbols')
+    ('1f234', 1900, 1, 1, '🈴', [], ':u5408:', [], [], 'symbols')
+    ('1f235', 1901, 1, 1, '🈵', [], ':u6e80:', [], [], 'symbols')
+    ('1f239', 1902, 1, 1, '🈹', [], ':u5272:', [], [], 'symbols')
+    ('1f232', 1903, 1, 1, '🈲', [], ':u7981:', [], [], 'symbols')
+    ('1f170', 1904, 1, 1, '🅰', [], ':a:', [], [], 'symbols')
+    ('1f171', 1905, 1, 1, '🅱', [], ':b:', [], [], 'symbols')
+    ('1f18e', 1906, 1, 1, '🆎', [], ':ab:', [], [], 'symbols')
+    ('1f191', 1907, 1, 1, '🆑', [], ':cl:', [], [], 'symbols')
+    ('1f17e', 1908, 1, 1, '🅾', [], ':o2:', [], [], 'symbols')
+    ('1f198', 1909, 1, 1, '🆘', [], ':sos:', [], [], 'symbols')
+    ('274c', 1910, 1, 1, '❌', [], ':x:', [], [], 'symbols')
+    ('2b55', 1911, 1, 1, '⭕', [], ':o:', [], [], 'symbols')
+    ('1f6d1', 1912, 1, 1, '\U0001f6d1', [], ':octagonal_sign:', [':stop_sign:'], [], 'symbols')
+    ('26d4', 1913, 1, 1, '⛔', [], ':no_entry:', [], [], 'symbols')
+    ('1f4db', 1914, 1, 1, '📛', [], ':name_badge:', [], [], 'symbols')
+    ('1f6ab', 1915, 1, 1, '🚫', [], ':no_entry_sign:', [], [], 'symbols')
+    ('1f4af', 1916, 1, 1, '💯', [], ':100:', [], [], 'symbols')
+    ('1f4a2', 1917, 1, 1, '💢', [], ':anger:', [], [], 'symbols')
+    ('2668', 1918, 1, 1, '♨', [], ':hotsprings:', [], [], 'symbols')
+    ('1f6b7', 1919, 1, 1, '🚷', [], ':no_pedestrians:', [], [], 'symbols')
+    ('1f6af', 1920, 1, 1, '🚯', [], ':do_not_litter:', [], [], 'symbols')
+    ('1f6b3', 1921, 1, 1, '🚳', [], ':no_bicycles:', [], [], 'symbols')
+    ('1f6b1', 1922, 1, 1, '🚱', [], ':non-potable_water:', [], [], 'symbols')
+    ('1f51e', 1923, 1, 1, '🔞', [], ':underage:', [], [], 'symbols')
+    ('1f4f5', 1924, 1, 1, '📵', [], ':no_mobile_phones:', [], [], 'symbols')
+    ('1f6ad', 1925, 1, 1, '🚭', [], ':no_smoking:', [], [], 'symbols')
+    ('2757', 1926, 1, 1, '❗', [], ':exclamation:', [], [], 'symbols')
+    ('2755', 1927, 1, 1, '❕', [], ':grey_exclamation:', [], [], 'symbols')
+    ('2753', 1928, 1, 1, '❓', ['question'], ':question:', [], [], 'symbols')
+    ('2754', 1929, 1, 1, '❔', [], ':grey_question:', [], [], 'symbols')
+    ('203c', 1930, 1, 1, '‼', [], ':bangbang:', [], [], 'symbols')
+    ('2049', 1931, 1, 1, '⁉', [], ':interrobang:', [], [], 'symbols')
+    ('1f505', 1932, 1, 1, '🔅', [], ':low_brightness:', [], [], 'symbols')
+    ('1f506', 1933, 1, 1, '🔆', [], ':high_brightness:', [], [], 'symbols')
+    ('303d', 1934, 1, 1, '〽', [], ':part_alternation_mark:', [], [], 'symbols')
+    ('26a0', 1935, 1, 1, '⚠', [], ':warning:', [], [], 'symbols')
+    ('1f6b8', 1936, 1, 1, '🚸', [], ':children_crossing:', [], [], 'symbols')
+    ('1f531', 1937, 1, 1, '🔱', [], ':trident:', [], [], 'symbols')
+    ('269c', 1938, 1, 1, '⚜', [], ':fleur-de-lis:', [], [], 'symbols')
+    ('1f530', 1939, 1, 1, '🔰', [], ':beginner:', [], [], 'symbols')
+    ('267b', 1940, 1, 1, '♻', [], ':recycle:', [], [], 'symbols')
+    ('2705', 1941, 1, 1, '✅', [], ':white_check_mark:', [], [], 'symbols')
+    ('1f22f', 1942, 1, 1, '🈯', [], ':u6307:', [], [], 'symbols')
+    ('1f4b9', 1943, 1, 1, '💹', [], ':chart:', [], [], 'symbols')
+    ('2747', 1944, 1, 1, '❇', [], ':sparkle:', [], [], 'symbols')
+    ('2733', 1945, 1, 1, '✳', [], ':eight_spoked_asterisk:', [], [], 'symbols')
+    ('274e', 1946, 1, 1, '❎', [], ':negative_squared_cross_mark:', [], [], 'symbols')
+    ('1f310', 1947, 1, 1, '🌐', [], ':globe_with_meridians:', [], [], 'symbols')
+    ('1f4a0', 1948, 1, 1, '💠', [], ':diamond_shape_with_a_dot_inside:', [], [], 'symbols')
+    ('24c2', 1949, 1, 1, 'Ⓜ', [], ':m:', [], [], 'symbols')
+    ('1f300', 1950, 1, 1, '🌀', [], ':cyclone:', [], [], 'symbols')
+    ('1f4a4', 1951, 1, 1, '💤', [], ':zzz:', [], [], 'symbols')
+    ('1f3e7', 1952, 1, 1, '🏧', [], ':atm:', [], [], 'symbols')
+    ('1f6be', 1953, 1, 1, '🚾', [], ':wc:', [], [], 'symbols')
+    ('267f', 1954, 1, 1, '♿', [], ':wheelchair:', [], [], 'symbols')
+    ('1f17f', 1955, 1, 1, '🅿', [], ':parking:', [], [], 'symbols')
+    ('1f233', 1956, 1, 1, '🈳', [], ':u7a7a:', [], [], 'symbols')
+    ('1f202', 1957, 1, 1, '🈂', [], ':sa:', [], [], 'symbols')
+    ('1f6c2', 1958, 1, 1, '🛂', [], ':passport_control:', [], [], 'symbols')
+    ('1f6c3', 1959, 1, 1, '🛃', [], ':customs:', [], [], 'symbols')
+    ('1f6c4', 1960, 1, 1, '🛄', [], ':baggage_claim:', [], [], 'symbols')
+    ('1f6c5', 1961, 1, 1, '🛅', [], ':left_luggage:', [], [], 'symbols')
+    ('1f6b9', 1962, 1, 1, '🚹', [], ':mens:', [], [], 'symbols')
+    ('1f6ba', 1963, 1, 1, '🚺', [], ':womens:', [], [], 'symbols')
+    ('1f6bc', 1964, 1, 1, '🚼', [], ':baby_symbol:', [], [], 'symbols')
+    ('1f6bb', 1965, 1, 1, '🚻', [], ':restroom:', [], [], 'symbols')
+    ('1f6ae', 1966, 1, 1, '🚮', [], ':put_litter_in_its_place:', [], [], 'symbols')
+    ('1f3a6', 1967, 1, 1, '🎦', [], ':cinema:', [], [], 'symbols')
+    ('1f4f6', 1968, 1, 1, '📶', [], ':signal_strength:', [], [], 'symbols')
+    ('1f201', 1969, 1, 1, '🈁', [], ':koko:', [], [], 'symbols')
+    ('1f523', 1970, 1, 1, '🔣', [], ':symbols:', [], [], 'symbols')
+    ('2139', 1971, 1, 1, 'ℹ', [], ':information_source:', [], [], 'symbols')
+    ('1f524', 1972, 1, 1, '🔤', [], ':abc:', [], [], 'symbols')
+    ('1f521', 1973, 1, 1, '🔡', [], ':abcd:', [], [], 'symbols')
+    ('1f520', 1974, 1, 1, '🔠', [], ':capital_abcd:', [], [], 'symbols')
+    ('1f196', 1975, 1, 1, '🆖', [], ':ng:', [], [], 'symbols')
+    ('1f197', 1976, 1, 1, '🆗', [], ':ok:', [], [], 'symbols')
+    ('1f199', 1977, 1, 1, '🆙', [], ':up:', [], [], 'symbols')
+    ('1f192', 1978, 1, 1, '🆒', [], ':cool:', [], [], 'symbols')
+    ('1f195', 1979, 1, 1, '🆕', [], ':new:', [], [], 'symbols')
+    ('1f193', 1980, 1, 1, '🆓', [], ':free:', [], [], 'symbols')
+    ('0030-20e3', 1981, 1, 2, '0⃣', [], ':zero:', [], [], 'symbols')
+    ('0031-20e3', 1982, 1, 2, '1⃣', [], ':one:', [], [], 'symbols')
+    ('0032-20e3', 1983, 1, 2, '2⃣', [], ':two:', [], [], 'symbols')
+    ('0033-20e3', 1984, 1, 2, '3⃣', [], ':three:', [], [], 'symbols')
+    ('0034-20e3', 1985, 1, 2, '4⃣', [], ':four:', [], [], 'symbols')
+    ('0035-20e3', 1986, 1, 2, '5⃣', [], ':five:', [], [], 'symbols')
+    ('0036-20e3', 1987, 1, 2, '6⃣', [], ':six:', [], [], 'symbols')
+    ('0037-20e3', 1988, 1, 2, '7⃣', [], ':seven:', [], [], 'symbols')
+    ('0038-20e3', 1989, 1, 2, '8⃣', [], ':eight:', [], [], 'symbols')
+    ('0039-20e3', 1990, 1, 2, '9⃣', [], ':nine:', [], [], 'symbols')
+    ('1f51f', 1991, 1, 1, '🔟', [], ':keycap_ten:', [], [], 'symbols')
+    ('1f522', 1992, 1, 1, '🔢', [], ':1234:', [], [], 'symbols')
+    ('0023-20e3', 1993, 1, 2, '#⃣', [], ':hash:', [], [], 'symbols')
+    ('002a-20e3', 1994, 1, 2, '*⃣', [], ':asterisk:', [':keycap_asterisk:'], [], 'symbols')
+    ('25b6', 1995, 1, 1, '▶', [], ':arrow_forward:', [], [], 'symbols')
+    ('23f8', 1996, 1, 1, '⏸', [], ':pause_button:', [':double_vertical_bar:'], [], 'symbols')
+    ('23ef', 1997, 1, 1, '⏯', [], ':play_pause:', [], [], 'symbols')
+    ('23f9', 1998, 1, 1, '⏹', [], ':stop_button:', [], [], 'symbols')
+    ('23fa', 1999, 1, 1, '⏺', [], ':record_button:', [], [], 'symbols')
+    ('23cf', 2000, 1, 1, '⏏', [], ':eject:', [':eject_symbol:'], [], 'symbols')
+    ('23ed', 2001, 1, 1, '⏭', [], ':track_next:', [':next_track:'], [], 'symbols')
+    ('23ee', 2002, 1, 1, '⏮', [], ':track_previous:', [':previous_track:'], [], 'symbols')
+    ('23e9', 2003, 1, 1, '⏩', [], ':fast_forward:', [], [], 'symbols')
+    ('23ea', 2004, 1, 1, '⏪', [], ':rewind:', [], [], 'symbols')
+    ('23eb', 2005, 1, 1, '⏫', [], ':arrow_double_up:', [], [], 'symbols')
+    ('23ec', 2006, 1, 1, '⏬', [], ':arrow_double_down:', [], [], 'symbols')
+    ('25c0', 2007, 1, 1, '◀', [], ':arrow_backward:', [], [], 'symbols')
+    ('1f53c', 2008, 1, 1, '🔼', [], ':arrow_up_small:', [], [], 'symbols')
+    ('1f53d', 2009, 1, 1, '🔽', [], ':arrow_down_small:', [], [], 'symbols')
+    ('27a1', 2010, 1, 1, '➡', [], ':arrow_right:', [], [], 'symbols')
+    ('2b05', 2011, 1, 1, '⬅', [], ':arrow_left:', [], [], 'symbols')
+    ('2b06', 2012, 1, 1, '⬆', [], ':arrow_up:', [], [], 'symbols')
+    ('2b07', 2013, 1, 1, '⬇', [], ':arrow_down:', [], [], 'symbols')
+    ('2197', 2014, 1, 1, '↗', [], ':arrow_upper_right:', [], [], 'symbols')
+    ('2198', 2015, 1, 1, '↘', [], ':arrow_lower_right:', [], [], 'symbols')
+    ('2199', 2016, 1, 1, '↙', [], ':arrow_lower_left:', [], [], 'symbols')
+    ('2196', 2017, 1, 1, '↖', [], ':arrow_upper_left:', [], [], 'symbols')
+    ('2195', 2018, 1, 1, '↕', [], ':arrow_up_down:', [], [], 'symbols')
+    ('2194', 2019, 1, 1, '↔', [], ':left_right_arrow:', [], [], 'symbols')
+    ('21aa', 2020, 1, 1, '↪', [], ':arrow_right_hook:', [], [], 'symbols')
+    ('21a9', 2021, 1, 1, '↩', [], ':leftwards_arrow_with_hook:', [], [], 'symbols')
+    ('2934', 2022, 1, 1, '⤴', [], ':arrow_heading_up:', [], [], 'symbols')
+    ('2935', 2023, 1, 1, '⤵', [], ':arrow_heading_down:', [], [], 'symbols')
+    ('1f500', 2024, 1, 1, '🔀', [], ':twisted_rightwards_arrows:', [], [], 'symbols')
+    ('1f501', 2025, 1, 1, '🔁', [], ':repeat:', [], [], 'symbols')
+    ('1f502', 2026, 1, 1, '🔂', [], ':repeat_one:', [], [], 'symbols')
+    ('1f504', 2027, 1, 1, '🔄', [], ':arrows_counterclockwise:', [], [], 'symbols')
+    ('1f503', 2028, 1, 1, '🔃', [], ':arrows_clockwise:', [], [], 'symbols')
+    ('1f3b5', 2029, 1, 1, '🎵', ['notes'], ':musical_note:', [], [], 'symbols')
+    ('1f3b6', 2030, 1, 1, '🎶', ['notes'], ':notes:', [], [], 'symbols')
+    ('2795', 2031, 1, 1, '➕', ['plus', 'and', '&'], ':heavy_plus_sign:', [], [], 'symbols')
+    ('2796', 2032, 1, 1, '➖', ['minus', 'less'], ':heavy_minus_sign:', [], [], 'symbols')
+    ('2797', 2033, 1, 1, '➗', ['divide', 'divides', 'divided by'], ':heavy_division_sign:', [], [], 'symbols')
+    ('2716', 2034, 1, 1, '✖', ['times', 'multiply'], ':heavy_multiplication_x:', [], [], 'symbols')
+    ('1f4b2', 2035, 1, 1, '💲', ['dollar', 'dollars'], ':heavy_dollar_sign:', [], [], 'symbols')
+    ('1f4b1', 2036, 1, 1, '💱', ['exchange', 'trade'], ':currency_exchange:', [], [], 'symbols')
+    ('2122', 2037, 1, 1, '™', ['trademark', 'trademarked'], ':tm:', [], [], 'symbols')
+    ('00a9', 2038, 1, 1, '©', ['copyright', '(c)'], ':copyright:', [], [], 'symbols')
+    ('00ae', 2039, 1, 1, '®', ['registered', 'brand', 'branded'], ':registered:', [], [], 'symbols')
+    ('3030', 2040, 1, 1, '〰', ['wavy', 'zigzag', 'wavy', 'wavy dash'], ':wavy_dash:', [], [], 'symbols')
+    ('27b0', 2041, 1, 1, '➰', [], ':curly_loop:', [], [], 'symbols')
+    ('27bf', 2042, 1, 1, '➿', [], ':loop:', [], [], 'symbols')
+    ('1f51a', 2043, 1, 1, '🔚', [], ':end:', [], [], 'symbols')
+    ('1f519', 2044, 1, 1, '🔙', [], ':back:', [], [], 'symbols')
+    ('1f51b', 2045, 1, 1, '🔛', [], ':on:', [], [], 'symbols')
+    ('1f51d', 2046, 1, 1, '🔝', ['top', 'up', 'above'], ':top:', [], [], 'symbols')
+    ('1f51c', 2047, 1, 1, '🔜', ['soon'], ':soon:', [], [], 'symbols')
+    ('2714', 2048, 1, 1, '✔', ['check', 'mark'], ':heavy_check_mark:', [], [], 'symbols')
+    ('2611', 2049, 1, 1, '☑', ['checkbox', 'mark'], ':ballot_box_with_check:', [], [], 'symbols')
+    ('1f518', 2050, 1, 1, '🔘', ['button'], ':radio_button:', [], [], 'symbols')
+    ('26aa', 2051, 1, 1, '⚪', ['ball', 'disk'], ':white_circle:', [], [], 'symbols')
+    ('26ab', 2052, 1, 1, '⚫', ['ball', 'blackball', 'disk'], ':black_circle:', [], [], 'symbols')
+    ('1f534', 2053, 1, 1, '🔴', ['ball', 'red ball', 'disk', 'circle'], ':red_circle:', [], [], 'symbols')
+    ('1f535', 2054, 1, 1, '🔵', ['ball', 'disk', 'circle'], ':blue_circle:', [], [], 'symbols')
+    ('1f53a', 2055, 1, 1, '🔺', [], ':small_red_triangle:', [], [], 'symbols')
+    ('1f53b', 2056, 1, 1, '🔻', [], ':small_red_triangle_down:', [], [], 'symbols')
+    ('1f538', 2057, 1, 1, '🔸', [], ':small_orange_diamond:', [], [], 'symbols')
+    ('1f539', 2058, 1, 1, '🔹', ['small diamond', 'gem'], ':small_blue_diamond:', [], [], 'symbols')
+    ('1f536', 2059, 1, 1, '🔶', ['orange diamond', 'diamond'], ':large_orange_diamond:', [], [], 'symbols')
+    ('1f537', 2060, 1, 1, '🔷', ['blue diamond', 'diamond'], ':large_blue_diamond:', [], [], 'symbols')
+    ('1f533', 2061, 1, 1, '🔳', ['square'], ':white_square_button:', [], [], 'symbols')
+    ('1f532', 2062, 1, 1, '🔲', [], ':black_square_button:', [], [], 'symbols')
+    ('25aa', 2063, 1, 1, '▪', [], ':black_small_square:', [], [], 'symbols')
+    ('25ab', 2064, 1, 1, '▫', [], ':white_small_square:', [], [], 'symbols')
+    ('25fe', 2065, 1, 1, '◾', [], ':black_medium_small_square:', [], [], 'symbols')
+    ('25fd', 2066, 1, 1, '◽', [], ':white_medium_small_square:', [], [], 'symbols')
+    ('25fc', 2067, 1, 1, '◼', [], ':black_medium_square:', [], [], 'symbols')
+    ('25fb', 2068, 1, 1, '◻', [], ':white_medium_square:', [], [], 'symbols')
+    ('2b1b', 2069, 1, 1, '⬛', [], ':black_large_square:', [], [], 'symbols')
+    ('2b1c', 2070, 1, 1, '⬜', [], ':white_large_square:', [], [], 'symbols')
+    ('1f508', 2071, 1, 1, '🔈', [], ':speaker:', [], [], 'symbols')
+    ('1f507', 2072, 1, 1, '🔇', [], ':mute:', [], [], 'symbols')
+    ('1f509', 2073, 1, 1, '🔉', [], ':sound:', [], [], 'symbols')
+    ('1f50a', 2074, 1, 1, '🔊', [], ':loud_sound:', [], [], 'symbols')
+    ('1f514', 2075, 1, 1, '🔔', [], ':bell:', [], [], 'symbols')
+    ('1f515', 2076, 1, 1, '🔕', [], ':no_bell:', [], [], 'symbols')
+    ('1f4e3', 2077, 1, 1, '📣', [], ':mega:', [], [], 'symbols')
+    ('1f4e2', 2078, 1, 1, '📢', [], ':loudspeaker:', [], [], 'symbols')
+    ('1f5e8', 2079, 1, 1, '🗨', [], ':speech_left:', [':left_speech_bubble:'], [], 'symbols')
+    ('1f441-1f5e8', 2080, 1, 2, '👁🗨', [], ':eye_in_speech_bubble:', [], [], 'symbols')
+    ('1f4ac', 2081, 1, 1, '💬', [], ':speech_balloon:', [], [], 'symbols')
+    ('1f4ad', 2082, 1, 1, '💭', [], ':thought_balloon:', [], [], 'symbols')
+    ('1f5ef', 2083, 1, 1, '🗯', [], ':anger_right:', [':right_anger_bubble:'], [], 'symbols')
+    ('2660', 2084, 1, 1, '♠', [], ':spades:', [], [], 'symbols')
+    ('2663', 2085, 1, 1, '♣', [], ':clubs:', [], [], 'symbols')
+    ('2665', 2086, 1, 1, '♥', [], ':hearts:', [], [], 'symbols')
+    ('2666', 2087, 1, 1, '♦', [], ':diamonds:', [], [], 'symbols')
+    ('1f0cf', 2088, 1, 1, '🃏', [], ':black_joker:', [], [], 'symbols')
+    ('1f3b4', 2089, 1, 1, '🎴', [], ':flower_playing_cards:', [], [], 'symbols')
+    ('1f004', 2090, 1, 1, '🀄', [], ':mahjong:', [], [], 'symbols')
+    ('1f550', 2091, 1, 1, '🕐', [], ':clock1:', [], [], 'symbols')
+    ('1f551', 2092, 1, 1, '🕑', [], ':clock2:', [], [], 'symbols')
+    ('1f552', 2093, 1, 1, '🕒', [], ':clock3:', [], [], 'symbols')
+    ('1f553', 2094, 1, 1, '🕓', [], ':clock4:', [], [], 'symbols')
+    ('1f554', 2095, 1, 1, '🕔', [], ':clock5:', [], [], 'symbols')
+    ('1f555', 2096, 1, 1, '🕕', [], ':clock6:', [], [], 'symbols')
+    ('1f556', 2097, 1, 1, '🕖', [], ':clock7:', [], [], 'symbols')
+    ('1f557', 2098, 1, 1, '🕗', [], ':clock8:', [], [], 'symbols')
+    ('1f558', 2099, 1, 1, '🕘', [], ':clock9:', [], [], 'symbols')
+    ('1f559', 2100, 1, 1, '🕙', [], ':clock10:', [], [], 'symbols')
+    ('1f55a', 2101, 1, 1, '🕚', [], ':clock11:', [], [], 'symbols')
+    ('1f55b', 2102, 1, 1, '🕛', [], ':clock12:', [], [], 'symbols')
+    ('1f55c', 2103, 1, 1, '🕜', [], ':clock130:', [], [], 'symbols')
+    ('1f55d', 2104, 1, 1, '🕝', [], ':clock230:', [], [], 'symbols')
+    ('1f55e', 2105, 1, 1, '🕞', [], ':clock330:', [], [], 'symbols')
+    ('1f55f', 2106, 1, 1, '🕟', [], ':clock430:', [], [], 'symbols')
+    ('1f560', 2107, 1, 1, '🕠', [], ':clock530:', [], [], 'symbols')
+    ('1f561', 2108, 1, 1, '🕡', [], ':clock630:', [], [], 'symbols')
+    ('1f562', 2109, 1, 1, '🕢', [], ':clock730:', [], [], 'symbols')
+    ('1f563', 2110, 1, 1, '🕣', [], ':clock830:', [], [], 'symbols')
+    ('1f564', 2111, 1, 1, '🕤', [], ':clock930:', [], [], 'symbols')
+    ('1f565', 2112, 1, 1, '🕥', [], ':clock1030:', [], [], 'symbols')
+    ('1f566', 2113, 1, 1, '🕦', [], ':clock1130:', [], [], 'symbols')
+    ('1f567', 2114, 1, 1, '🕧', [], ':clock1230:', [], [], 'symbols')
+    ('1f3f3', 2115, 1, 1, '🏳', [], ':flag_white:', [':waving_white_flag:'], [], 'flags')
+    ('1f3f4', 2116, 1, 1, '🏴', [], ':flag_black:', [':waving_black_flag:'], [], 'flags')
+    ('1f3c1', 2117, 1, 1, '🏁', [], ':checkered_flag:', [], [], 'flags')
+    ('1f6a9', 2118, 1, 1, '🚩', [], ':triangular_flag_on_post:', [], [], 'flags')
+    ('1f3f3-1f308', 2119, 1, 2, '🏳🌈', [], ':rainbow_flag:', [':gay_pride_flag:'], [], 'flags')
+    ('1f1e6-1f1eb', 2120, 1, 2, '🇦🇫', [], ':flag_af:', [':af:'], [], 'flags')
+    ('1f1e6-1f1fd', 2121, 1, 2, '🇦🇽', [], ':flag_ax:', [':ax:'], [], 'flags')
+    ('1f1e6-1f1f1', 2122, 1, 2, '🇦🇱', [], ':flag_al:', [':al:'], [], 'flags')
+    ('1f1e9-1f1ff', 2123, 1, 2, '🇩🇿', [], ':flag_dz:', [':dz:'], [], 'flags')
+    ('1f1e6-1f1f8', 2124, 1, 2, '🇦🇸', [], ':flag_as:', [':as:'], [], 'flags')
+    ('1f1e6-1f1e9', 2125, 1, 2, '🇦🇩', [], ':flag_ad:', [':ad:'], [], 'flags')
+    ('1f1e6-1f1f4', 2126, 1, 2, '🇦🇴', [], ':flag_ao:', [':ao:'], [], 'flags')
+    ('1f1e6-1f1ee', 2127, 1, 2, '🇦🇮', [], ':flag_ai:', [':ai:'], [], 'flags')
+    ('1f1e6-1f1f6', 2128, 1, 2, '🇦🇶', [], ':flag_aq:', [':aq:'], [], 'flags')
+    ('1f1e6-1f1ec', 2129, 1, 2, '🇦🇬', [], ':flag_ag:', [':ag:'], [], 'flags')
+    ('1f1e6-1f1f7', 2130, 1, 2, '🇦🇷', [], ':flag_ar:', [':ar:'], [], 'flags')
+    ('1f1e6-1f1f2', 2131, 1, 2, '🇦🇲', [], ':flag_am:', [':am:'], [], 'flags')
+    ('1f1e6-1f1fc', 2132, 1, 2, '🇦🇼', [], ':flag_aw:', [':aw:'], [], 'flags')
+    ('1f1e6-1f1fa', 2133, 1, 2, '🇦🇺', [], ':flag_au:', [':au:'], [], 'flags')
+    ('1f1e6-1f1f9', 2134, 1, 2, '🇦🇹', [], ':flag_at:', [':at:'], [], 'flags')
+    ('1f1e6-1f1ff', 2135, 1, 2, '🇦🇿', [], ':flag_az:', [':az:'], [], 'flags')
+    ('1f1e7-1f1f8', 2136, 1, 2, '🇧🇸', [], ':flag_bs:', [':bs:'], [], 'flags')
+    ('1f1e7-1f1ed', 2137, 1, 2, '🇧🇭', [], ':flag_bh:', [':bh:'], [], 'flags')
+    ('1f1e7-1f1e9', 2138, 1, 2, '🇧🇩', [], ':flag_bd:', [':bd:'], [], 'flags')
+    ('1f1e7-1f1e7', 2139, 1, 2, '🇧🇧', [], ':flag_bb:', [':bb:'], [], 'flags')
+    ('1f1e7-1f1fe', 2140, 1, 2, '🇧🇾', [], ':flag_by:', [':by:'], [], 'flags')
+    ('1f1e7-1f1ea', 2141, 1, 2, '🇧🇪', [], ':flag_be:', [':be:'], [], 'flags')
+    ('1f1e7-1f1ff', 2142, 1, 2, '🇧🇿', [], ':flag_bz:', [':bz:'], [], 'flags')
+    ('1f1e7-1f1ef', 2143, 1, 2, '🇧🇯', [], ':flag_bj:', [':bj:'], [], 'flags')
+    ('1f1e7-1f1f2', 2144, 1, 2, '🇧🇲', [], ':flag_bm:', [':bm:'], [], 'flags')
+    ('1f1e7-1f1f9', 2145, 1, 2, '🇧🇹', [], ':flag_bt:', [':bt:'], [], 'flags')
+    ('1f1e7-1f1f4', 2146, 1, 2, '🇧🇴', [], ':flag_bo:', [':bo:'], [], 'flags')
+    ('1f1e7-1f1e6', 2147, 1, 2, '🇧🇦', [], ':flag_ba:', [':ba:'], [], 'flags')
+    ('1f1e7-1f1fc', 2148, 1, 2, '🇧🇼', [], ':flag_bw:', [':bw:'], [], 'flags')
+    ('1f1e7-1f1f7', 2149, 1, 2, '🇧🇷', [], ':flag_br:', [':br:'], [], 'flags')
+    ('1f1ee-1f1f4', 2150, 1, 2, '🇮🇴', [], ':flag_io:', [':io:'], [], 'flags')
+    ('1f1fb-1f1ec', 2151, 1, 2, '🇻🇬', [], ':flag_vg:', [':vg:'], [], 'flags')
+    ('1f1e7-1f1f3', 2152, 1, 2, '🇧🇳', [], ':flag_bn:', [':bn:'], [], 'flags')
+    ('1f1e7-1f1ec', 2153, 1, 2, '🇧🇬', [], ':flag_bg:', [':bg:'], [], 'flags')
+    ('1f1e7-1f1eb', 2154, 1, 2, '🇧🇫', [], ':flag_bf:', [':bf:'], [], 'flags')
+    ('1f1e7-1f1ee', 2155, 1, 2, '🇧🇮', [], ':flag_bi:', [':bi:'], [], 'flags')
+    ('1f1f0-1f1ed', 2156, 1, 2, '🇰🇭', [], ':flag_kh:', [':kh:'], [], 'flags')
+    ('1f1e8-1f1f2', 2157, 1, 2, '🇨🇲', [], ':flag_cm:', [':cm:'], [], 'flags')
+    ('1f1e8-1f1e6', 2158, 1, 2, '🇨🇦', [], ':flag_ca:', [':ca:'], [], 'flags')
+    ('1f1ee-1f1e8', 2159, 1, 2, '🇮🇨', [], ':flag_ic:', [':ic:'], [], 'flags')
+    ('1f1e8-1f1fb', 2160, 1, 2, '🇨🇻', [], ':flag_cv:', [':cv:'], [], 'flags')
+    ('1f1e7-1f1f6', 2161, 1, 2, '🇧🇶', [], ':flag_bq:', [':bq:'], [], 'flags')
+    ('1f1f0-1f1fe', 2162, 1, 2, '🇰🇾', [], ':flag_ky:', [':ky:'], [], 'flags')
+    ('1f1e8-1f1eb', 2163, 1, 2, '🇨🇫', [], ':flag_cf:', [':cf:'], [], 'flags')
+    ('1f1f9-1f1e9', 2164, 1, 2, '🇹🇩', [], ':flag_td:', [':td:'], [], 'flags')
+    ('1f1e8-1f1f1', 2165, 1, 2, '🇨🇱', [], ':flag_cl:', [':chile:'], [], 'flags')
+    ('1f1e8-1f1f3', 2166, 1, 2, '🇨🇳', [], ':flag_cn:', [':cn:'], [], 'flags')
+    ('1f1e8-1f1fd', 2167, 1, 2, '🇨🇽', [], ':flag_cx:', [':cx:'], [], 'flags')
+    ('1f1e8-1f1e8', 2168, 1, 2, '🇨🇨', [], ':flag_cc:', [':cc:'], [], 'flags')
+    ('1f1e8-1f1f4', 2169, 1, 2, '🇨🇴', [], ':flag_co:', [':co:'], [], 'flags')
+    ('1f1f0-1f1f2', 2170, 1, 2, '🇰🇲', [], ':flag_km:', [':km:'], [], 'flags')
+    ('1f1e8-1f1ec', 2171, 1, 2, '🇨🇬', [], ':flag_cg:', [':cg:'], [], 'flags')
+    ('1f1e8-1f1e9', 2172, 1, 2, '🇨🇩', [], ':flag_cd:', [':congo:'], [], 'flags')
+    ('1f1e8-1f1f0', 2173, 1, 2, '🇨🇰', [], ':flag_ck:', [':ck:'], [], 'flags')
+    ('1f1e8-1f1f7', 2174, 1, 2, '🇨🇷', [], ':flag_cr:', [':cr:'], [], 'flags')
+    ('1f1e8-1f1ee', 2175, 1, 2, '🇨🇮', [], ':flag_ci:', [':ci:'], [], 'flags')
+    ('1f1ed-1f1f7', 2176, 1, 2, '🇭🇷', [], ':flag_hr:', [':hr:'], [], 'flags')
+    ('1f1e8-1f1fa', 2177, 1, 2, '🇨🇺', [], ':flag_cu:', [':cu:'], [], 'flags')
+    ('1f1e8-1f1fc', 2178, 1, 2, '🇨🇼', [], ':flag_cw:', [':cw:'], [], 'flags')
+    ('1f1e8-1f1fe', 2179, 1, 2, '🇨🇾', [], ':flag_cy:', [':cy:'], [], 'flags')
+    ('1f1e8-1f1ff', 2180, 1, 2, '🇨🇿', [], ':flag_cz:', [':cz:'], [], 'flags')
+    ('1f1e9-1f1f0', 2181, 1, 2, '🇩🇰', [], ':flag_dk:', [':dk:'], [], 'flags')
+    ('1f1e9-1f1ef', 2182, 1, 2, '🇩🇯', [], ':flag_dj:', [':dj:'], [], 'flags')
+    ('1f1e9-1f1f2', 2183, 1, 2, '🇩🇲', [], ':flag_dm:', [':dm:'], [], 'flags')
+    ('1f1e9-1f1f4', 2184, 1, 2, '🇩🇴', [], ':flag_do:', [':do:'], [], 'flags')
+    ('1f1ea-1f1e8', 2185, 1, 2, '🇪🇨', [], ':flag_ec:', [':ec:'], [], 'flags')
+    ('1f1ea-1f1ec', 2186, 1, 2, '🇪🇬', [], ':flag_eg:', [':eg:'], [], 'flags')
+    ('1f1f8-1f1fb', 2187, 1, 2, '🇸🇻', [], ':flag_sv:', [':sv:'], [], 'flags')
+    ('1f1ec-1f1f6', 2188, 1, 2, '🇬🇶', [], ':flag_gq:', [':gq:'], [], 'flags')
+    ('1f1ea-1f1f7', 2189, 1, 2, '🇪🇷', [], ':flag_er:', [':er:'], [], 'flags')
+    ('1f1ea-1f1ea', 2190, 1, 2, '🇪🇪', [], ':flag_ee:', [':ee:'], [], 'flags')
+    ('1f1ea-1f1f9', 2191, 1, 2, '🇪🇹', [], ':flag_et:', [':et:'], [], 'flags')
+    ('1f1ea-1f1fa', 2192, 1, 2, '🇪🇺', [], ':flag_eu:', [':eu:'], [], 'flags')
+    ('1f1eb-1f1f0', 2193, 1, 2, '🇫🇰', [], ':flag_fk:', [':fk:'], [], 'flags')
+    ('1f1eb-1f1f4', 2194, 1, 2, '🇫🇴', [], ':flag_fo:', [':fo:'], [], 'flags')
+    ('1f1eb-1f1ef', 2195, 1, 2, '🇫🇯', [], ':flag_fj:', [':fj:'], [], 'flags')
+    ('1f1eb-1f1ee', 2196, 1, 2, '🇫🇮', [], ':flag_fi:', [':fi:'], [], 'flags')
+    ('1f1eb-1f1f7', 2197, 1, 2, '🇫🇷', [], ':flag_fr:', [':fr:'], [], 'flags')
+    ('1f1ec-1f1eb', 2198, 1, 2, '🇬🇫', [], ':flag_gf:', [':gf:'], [], 'flags')
+    ('1f1f5-1f1eb', 2199, 1, 2, '🇵🇫', [], ':flag_pf:', [':pf:'], [], 'flags')
+    ('1f1f9-1f1eb', 2200, 1, 2, '🇹🇫', [], ':flag_tf:', [':tf:'], [], 'flags')
+    ('1f1ec-1f1e6', 2201, 1, 2, '🇬🇦', [], ':flag_ga:', [':ga:'], [], 'flags')
+    ('1f1ec-1f1f2', 2202, 1, 2, '🇬🇲', [], ':flag_gm:', [':gm:'], [], 'flags')
+    ('1f1ec-1f1ea', 2203, 1, 2, '🇬🇪', [], ':flag_ge:', [':ge:'], [], 'flags')
+    ('1f1e9-1f1ea', 2204, 1, 2, '🇩🇪', [], ':flag_de:', [':de:'], [], 'flags')
+    ('1f1ec-1f1ed', 2205, 1, 2, '🇬🇭', [], ':flag_gh:', [':gh:'], [], 'flags')
+    ('1f1ec-1f1ee', 2206, 1, 2, '🇬🇮', [], ':flag_gi:', [':gi:'], [], 'flags')
+    ('1f1ec-1f1f7', 2207, 1, 2, '🇬🇷', [], ':flag_gr:', [':gr:'], [], 'flags')
+    ('1f1ec-1f1f1', 2208, 1, 2, '🇬🇱', [], ':flag_gl:', [':gl:'], [], 'flags')
+    ('1f1ec-1f1e9', 2209, 1, 2, '🇬🇩', [], ':flag_gd:', [':gd:'], [], 'flags')
+    ('1f1ec-1f1f5', 2210, 1, 2, '🇬🇵', [], ':flag_gp:', [':gp:'], [], 'flags')
+    ('1f1ec-1f1fa', 2211, 1, 2, '🇬🇺', [], ':flag_gu:', [':gu:'], [], 'flags')
+    ('1f1ec-1f1f9', 2212, 1, 2, '🇬🇹', [], ':flag_gt:', [':gt:'], [], 'flags')
+    ('1f1ec-1f1ec', 2213, 1, 2, '🇬🇬', [], ':flag_gg:', [':gg:'], [], 'flags')
+    ('1f1ec-1f1f3', 2214, 1, 2, '🇬🇳', [], ':flag_gn:', [':gn:'], [], 'flags')
+    ('1f1ec-1f1fc', 2215, 1, 2, '🇬🇼', [], ':flag_gw:', [':gw:'], [], 'flags')
+    ('1f1ec-1f1fe', 2216, 1, 2, '🇬🇾', [], ':flag_gy:', [':gy:'], [], 'flags')
+    ('1f1ed-1f1f9', 2217, 1, 2, '🇭🇹', [], ':flag_ht:', [':ht:'], [], 'flags')
+    ('1f1ed-1f1f3', 2218, 1, 2, '🇭🇳', [], ':flag_hn:', [':hn:'], [], 'flags')
+    ('1f1ed-1f1f0', 2219, 1, 2, '🇭🇰', [], ':flag_hk:', [':hk:'], [], 'flags')
+    ('1f1ed-1f1fa', 2220, 1, 2, '🇭🇺', [], ':flag_hu:', [':hu:'], [], 'flags')
+    ('1f1ee-1f1f8', 2221, 1, 2, '🇮🇸', [], ':flag_is:', [':is:'], [], 'flags')
+    ('1f1ee-1f1f3', 2222, 1, 2, '🇮🇳', [], ':flag_in:', [':in:'], [], 'flags')
+    ('1f1ee-1f1e9', 2223, 1, 2, '🇮🇩', [], ':flag_id:', [':indonesia:'], [], 'flags')
+    ('1f1ee-1f1f7', 2224, 1, 2, '🇮🇷', [], ':flag_ir:', [':ir:'], [], 'flags')
+    ('1f1ee-1f1f6', 2225, 1, 2, '🇮🇶', [], ':flag_iq:', [':iq:'], [], 'flags')
+    ('1f1ee-1f1ea', 2226, 1, 2, '🇮🇪', [], ':flag_ie:', [':ie:'], [], 'flags')
+    ('1f1ee-1f1f2', 2227, 1, 2, '🇮🇲', [], ':flag_im:', [':im:'], [], 'flags')
+    ('1f1ee-1f1f1', 2228, 1, 2, '🇮🇱', [], ':flag_il:', [':il:'], [], 'flags')
+    ('1f1ee-1f1f9', 2229, 1, 2, '🇮🇹', [], ':flag_it:', [':it:'], [], 'flags')
+    ('1f1ef-1f1f2', 2230, 1, 2, '🇯🇲', [], ':flag_jm:', [':jm:'], [], 'flags')
+    ('1f1ef-1f1f5', 2231, 1, 2, '🇯🇵', [], ':flag_jp:', [':jp:'], [], 'flags')
+    ('1f38c', 2232, 1, 1, '🎌', [], ':crossed_flags:', [], [], 'flags')
+    ('1f1ef-1f1ea', 2233, 1, 2, '🇯🇪', [], ':flag_je:', [':je:'], [], 'flags')
+    ('1f1ef-1f1f4', 2234, 1, 2, '🇯🇴', [], ':flag_jo:', [':jo:'], [], 'flags')
+    ('1f1f0-1f1ff', 2235, 1, 2, '🇰🇿', [], ':flag_kz:', [':kz:'], [], 'flags')
+    ('1f1f0-1f1ea', 2236, 1, 2, '🇰🇪', [], ':flag_ke:', [':ke:'], [], 'flags')
+    ('1f1f0-1f1ee', 2237, 1, 2, '🇰🇮', [], ':flag_ki:', [':ki:'], [], 'flags')
+    ('1f1fd-1f1f0', 2238, 1, 2, '🇽🇰', [], ':flag_xk:', [':xk:'], [], 'flags')
+    ('1f1f0-1f1fc', 2239, 1, 2, '🇰🇼', [], ':flag_kw:', [':kw:'], [], 'flags')
+    ('1f1f0-1f1ec', 2240, 1, 2, '🇰🇬', [], ':flag_kg:', [':kg:'], [], 'flags')
+    ('1f1f1-1f1e6', 2241, 1, 2, '🇱🇦', [], ':flag_la:', [':la:'], [], 'flags')
+    ('1f1f1-1f1fb', 2242, 1, 2, '🇱🇻', [], ':flag_lv:', [':lv:'], [], 'flags')
+    ('1f1f1-1f1e7', 2243, 1, 2, '🇱🇧', [], ':flag_lb:', [':lb:'], [], 'flags')
+    ('1f1f1-1f1f8', 2244, 1, 2, '🇱🇸', [], ':flag_ls:', [':ls:'], [], 'flags')
+    ('1f1f1-1f1f7', 2245, 1, 2, '🇱🇷', [], ':flag_lr:', [':lr:'], [], 'flags')
+    ('1f1f1-1f1fe', 2246, 1, 2, '🇱🇾', [], ':flag_ly:', [':ly:'], [], 'flags')
+    ('1f1f1-1f1ee', 2247, 1, 2, '🇱🇮', [], ':flag_li:', [':li:'], [], 'flags')
+    ('1f1f1-1f1f9', 2248, 1, 2, '🇱🇹', [], ':flag_lt:', [':lt:'], [], 'flags')
+    ('1f1f1-1f1fa', 2249, 1, 2, '🇱🇺', [], ':flag_lu:', [':lu:'], [], 'flags')
+    ('1f1f2-1f1f4', 2250, 1, 2, '🇲🇴', [], ':flag_mo:', [':mo:'], [], 'flags')
+    ('1f1f2-1f1f0', 2251, 1, 2, '🇲🇰', [], ':flag_mk:', [':mk:'], [], 'flags')
+    ('1f1f2-1f1ec', 2252, 1, 2, '🇲🇬', [], ':flag_mg:', [':mg:'], [], 'flags')
+    ('1f1f2-1f1fc', 2253, 1, 2, '🇲🇼', [], ':flag_mw:', [':mw:'], [], 'flags')
+    ('1f1f2-1f1fe', 2254, 1, 2, '🇲🇾', [], ':flag_my:', [':my:'], [], 'flags')
+    ('1f1f2-1f1fb', 2255, 1, 2, '🇲🇻', [], ':flag_mv:', [':mv:'], [], 'flags')
+    ('1f1f2-1f1f1', 2256, 1, 2, '🇲🇱', [], ':flag_ml:', [':ml:'], [], 'flags')
+    ('1f1f2-1f1f9', 2257, 1, 2, '🇲🇹', [], ':flag_mt:', [':mt:'], [], 'flags')
+    ('1f1f2-1f1ed', 2258, 1, 2, '🇲🇭', [], ':flag_mh:', [':mh:'], [], 'flags')
+    ('1f1f2-1f1f6', 2259, 1, 2, '🇲🇶', [], ':flag_mq:', [':mq:'], [], 'flags')
+    ('1f1f2-1f1f7', 2260, 1, 2, '🇲🇷', [], ':flag_mr:', [':mr:'], [], 'flags')
+    ('1f1f2-1f1fa', 2261, 1, 2, '🇲🇺', [], ':flag_mu:', [':mu:'], [], 'flags')
+    ('1f1fe-1f1f9', 2262, 1, 2, '🇾🇹', [], ':flag_yt:', [':yt:'], [], 'flags')
+    ('1f1f2-1f1fd', 2263, 1, 2, '🇲🇽', [], ':flag_mx:', [':mx:'], [], 'flags')
+    ('1f1eb-1f1f2', 2264, 1, 2, '🇫🇲', [], ':flag_fm:', [':fm:'], [], 'flags')
+    ('1f1f2-1f1e9', 2265, 1, 2, '🇲🇩', [], ':flag_md:', [':md:'], [], 'flags')
+    ('1f1f2-1f1e8', 2266, 1, 2, '🇲🇨', [], ':flag_mc:', [':mc:'], [], 'flags')
+    ('1f1f2-1f1f3', 2267, 1, 2, '🇲🇳', [], ':flag_mn:', [':mn:'], [], 'flags')
+    ('1f1f2-1f1ea', 2268, 1, 2, '🇲🇪', [], ':flag_me:', [':me:'], [], 'flags')
+    ('1f1f2-1f1f8', 2269, 1, 2, '🇲🇸', [], ':flag_ms:', [':ms:'], [], 'flags')
+    ('1f1f2-1f1e6', 2270, 1, 2, '🇲🇦', [], ':flag_ma:', [':ma:'], [], 'flags')
+    ('1f1f2-1f1ff', 2271, 1, 2, '🇲🇿', [], ':flag_mz:', [':mz:'], [], 'flags')
+    ('1f1f2-1f1f2', 2272, 1, 2, '🇲🇲', [], ':flag_mm:', [':mm:'], [], 'flags')
+    ('1f1f3-1f1e6', 2273, 1, 2, '🇳🇦', [], ':flag_na:', [':na:'], [], 'flags')
+    ('1f1f3-1f1f7', 2274, 1, 2, '🇳🇷', [], ':flag_nr:', [':nr:'], [], 'flags')
+    ('1f1f3-1f1f5', 2275, 1, 2, '🇳🇵', [], ':flag_np:', [':np:'], [], 'flags')
+    ('1f1f3-1f1f1', 2276, 1, 2, '🇳🇱', [], ':flag_nl:', [':nl:'], [], 'flags')
+    ('1f1f3-1f1e8', 2277, 1, 2, '🇳🇨', [], ':flag_nc:', [':nc:'], [], 'flags')
+    ('1f1f3-1f1ff', 2278, 1, 2, '🇳🇿', [], ':flag_nz:', [':nz:'], [], 'flags')
+    ('1f1f3-1f1ee', 2279, 1, 2, '🇳🇮', [], ':flag_ni:', [':ni:'], [], 'flags')
+    ('1f1f3-1f1ea', 2280, 1, 2, '🇳🇪', [], ':flag_ne:', [':ne:'], [], 'flags')
+    ('1f1f3-1f1ec', 2281, 1, 2, '🇳🇬', [], ':flag_ng:', [':nigeria:'], [], 'flags')
+    ('1f1f3-1f1fa', 2282, 1, 2, '🇳🇺', [], ':flag_nu:', [':nu:'], [], 'flags')
+    ('1f1f3-1f1eb', 2283, 1, 2, '🇳🇫', [], ':flag_nf:', [':nf:'], [], 'flags')
+    ('1f1f0-1f1f5', 2284, 1, 2, '🇰🇵', [], ':flag_kp:', [':kp:'], [], 'flags')
+    ('1f1f2-1f1f5', 2285, 1, 2, '🇲🇵', [], ':flag_mp:', [':mp:'], [], 'flags')
+    ('1f1f3-1f1f4', 2286, 1, 2, '🇳🇴', [], ':flag_no:', [':no:'], [], 'flags')
+    ('1f1f4-1f1f2', 2287, 1, 2, '🇴🇲', [], ':flag_om:', [':om:'], [], 'flags')
+    ('1f1f5-1f1f0', 2288, 1, 2, '🇵🇰', [], ':flag_pk:', [':pk:'], [], 'flags')
+    ('1f1f5-1f1fc', 2289, 1, 2, '🇵🇼', [], ':flag_pw:', [':pw:'], [], 'flags')
+    ('1f1f5-1f1f8', 2290, 1, 2, '🇵🇸', [], ':flag_ps:', [':ps:'], [], 'flags')
+    ('1f1f5-1f1e6', 2291, 1, 2, '🇵🇦', [], ':flag_pa:', [':pa:'], [], 'flags')
+    ('1f1f5-1f1ec', 2292, 1, 2, '🇵🇬', [], ':flag_pg:', [':pg:'], [], 'flags')
+    ('1f1f5-1f1fe', 2293, 1, 2, '🇵🇾', [], ':flag_py:', [':py:'], [], 'flags')
+    ('1f1f5-1f1ea', 2294, 1, 2, '🇵🇪', [], ':flag_pe:', [':pe:'], [], 'flags')
+    ('1f1f5-1f1ed', 2295, 1, 2, '🇵🇭', [], ':flag_ph:', [':ph:'], [], 'flags')
+    ('1f1f5-1f1f3', 2296, 1, 2, '🇵🇳', [], ':flag_pn:', [':pn:'], [], 'flags')
+    ('1f1f5-1f1f1', 2297, 1, 2, '🇵🇱', [], ':flag_pl:', [':pl:'], [], 'flags')
+    ('1f1f5-1f1f9', 2298, 1, 2, '🇵🇹', [], ':flag_pt:', [':pt:'], [], 'flags')
+    ('1f1f5-1f1f7', 2299, 1, 2, '🇵🇷', [], ':flag_pr:', [':pr:'], [], 'flags')
+    ('1f1f6-1f1e6', 2300, 1, 2, '🇶🇦', [], ':flag_qa:', [':qa:'], [], 'flags')
+    ('1f1f7-1f1ea', 2301, 1, 2, '🇷🇪', [], ':flag_re:', [':re:'], [], 'flags')
+    ('1f1f7-1f1f4', 2302, 1, 2, '🇷🇴', [], ':flag_ro:', [':ro:'], [], 'flags')
+    ('1f1f7-1f1fa', 2303, 1, 2, '🇷🇺', [], ':flag_ru:', [':ru:'], [], 'flags')
+    ('1f1f7-1f1fc', 2304, 1, 2, '🇷🇼', [], ':flag_rw:', [':rw:'], [], 'flags')
+    ('1f1fc-1f1f8', 2305, 1, 2, '🇼🇸', [], ':flag_ws:', [':ws:'], [], 'flags')
+    ('1f1f8-1f1f2', 2306, 1, 2, '🇸🇲', [], ':flag_sm:', [':sm:'], [], 'flags')
+    ('1f1f8-1f1f9', 2307, 1, 2, '🇸🇹', [], ':flag_st:', [':st:'], [], 'flags')
+    ('1f1f8-1f1e6', 2308, 1, 2, '🇸🇦', [], ':flag_sa:', [':saudiarabia:', ':saudi:'], [], 'flags')
+    ('1f1f8-1f1f3', 2309, 1, 2, '🇸🇳', [], ':flag_sn:', [':sn:'], [], 'flags')
+    ('1f1f7-1f1f8', 2310, 1, 2, '🇷🇸', [], ':flag_rs:', [':rs:'], [], 'flags')
+    ('1f1f8-1f1e8', 2311, 1, 2, '🇸🇨', [], ':flag_sc:', [':sc:'], [], 'flags')
+    ('1f1f8-1f1f1', 2312, 1, 2, '🇸🇱', [], ':flag_sl:', [':sl:'], [], 'flags')
+    ('1f1f8-1f1ec', 2313, 1, 2, '🇸🇬', [], ':flag_sg:', [':sg:'], [], 'flags')
+    ('1f1f8-1f1fd', 2314, 1, 2, '🇸🇽', [], ':flag_sx:', [':sx:'], [], 'flags')
+    ('1f1f8-1f1f0', 2315, 1, 2, '🇸🇰', [], ':flag_sk:', [':sk:'], [], 'flags')
+    ('1f1f8-1f1ee', 2316, 1, 2, '🇸🇮', [], ':flag_si:', [':si:'], [], 'flags')
+    ('1f1ec-1f1f8', 2317, 1, 2, '🇬🇸', [], ':flag_gs:', [':gs:'], [], 'flags')
+    ('1f1f8-1f1e7', 2318, 1, 2, '🇸🇧', [], ':flag_sb:', [':sb:'], [], 'flags')
+    ('1f1f8-1f1f4', 2319, 1, 2, '🇸🇴', [], ':flag_so:', [':so:'], [], 'flags')
+    ('1f1ff-1f1e6', 2320, 1, 2, '🇿🇦', [], ':flag_za:', [':za:'], [], 'flags')
+    ('1f1f0-1f1f7', 2321, 1, 2, '🇰🇷', [], ':flag_kr:', [':kr:'], [], 'flags')
+    ('1f1f8-1f1f8', 2322, 1, 2, '🇸🇸', [], ':flag_ss:', [':ss:'], [], 'flags')
+    ('1f1ea-1f1f8', 2323, 1, 2, '🇪🇸', [], ':flag_es:', [':es:'], [], 'flags')
+    ('1f1f1-1f1f0', 2324, 1, 2, '🇱🇰', [], ':flag_lk:', [':lk:'], [], 'flags')
+    ('1f1e7-1f1f1', 2325, 1, 2, '🇧🇱', [], ':flag_bl:', [':bl:'], [], 'flags')
+    ('1f1f8-1f1ed', 2326, 1, 2, '🇸🇭', [], ':flag_sh:', [':sh:'], [], 'flags')
+    ('1f1f0-1f1f3', 2327, 1, 2, '🇰🇳', [], ':flag_kn:', [':kn:'], [], 'flags')
+    ('1f1f1-1f1e8', 2328, 1, 2, '🇱🇨', [], ':flag_lc:', [':lc:'], [], 'flags')
+    ('1f1f5-1f1f2', 2329, 1, 2, '🇵🇲', [], ':flag_pm:', [':pm:'], [], 'flags')
+    ('1f1fb-1f1e8', 2330, 1, 2, '🇻🇨', [], ':flag_vc:', [':vc:'], [], 'flags')
+    ('1f1f8-1f1e9', 2331, 1, 2, '🇸🇩', [], ':flag_sd:', [':sd:'], [], 'flags')
+    ('1f1f8-1f1f7', 2332, 1, 2, '🇸🇷', [], ':flag_sr:', [':sr:'], [], 'flags')
+    ('1f1f8-1f1ff', 2333, 1, 2, '🇸🇿', [], ':flag_sz:', [':sz:'], [], 'flags')
+    ('1f1f8-1f1ea', 2334, 1, 2, '🇸🇪', [], ':flag_se:', [':se:'], [], 'flags')
+    ('1f1e8-1f1ed', 2335, 1, 2, '🇨🇭', [], ':flag_ch:', [':ch:'], [], 'flags')
+    ('1f1f8-1f1fe', 2336, 1, 2, '🇸🇾', [], ':flag_sy:', [':sy:'], [], 'flags')
+    ('1f1f9-1f1fc', 2337, 1, 2, '🇹🇼', [], ':flag_tw:', [':tw:'], [], 'flags')
+    ('1f1f9-1f1ef', 2338, 1, 2, '🇹🇯', [], ':flag_tj:', [':tj:'], [], 'flags')
+    ('1f1f9-1f1ff', 2339, 1, 2, '🇹🇿', [], ':flag_tz:', [':tz:'], [], 'flags')
+    ('1f1f9-1f1ed', 2340, 1, 2, '🇹🇭', [], ':flag_th:', [':th:'], [], 'flags')
+    ('1f1f9-1f1f1', 2341, 1, 2, '🇹🇱', [], ':flag_tl:', [':tl:'], [], 'flags')
+    ('1f1f9-1f1ec', 2342, 1, 2, '🇹🇬', [], ':flag_tg:', [':tg:'], [], 'flags')
+    ('1f1f9-1f1f0', 2343, 1, 2, '🇹🇰', [], ':flag_tk:', [':tk:'], [], 'flags')
+    ('1f1f9-1f1f4', 2344, 1, 2, '🇹🇴', [], ':flag_to:', [':to:'], [], 'flags')
+    ('1f1f9-1f1f9', 2345, 1, 2, '🇹🇹', [], ':flag_tt:', [':tt:'], [], 'flags')
+    ('1f1f9-1f1f3', 2346, 1, 2, '🇹🇳', [], ':flag_tn:', [':tn:'], [], 'flags')
+    ('1f1f9-1f1f7', 2347, 1, 2, '🇹🇷', [], ':flag_tr:', [':tr:'], [], 'flags')
+    ('1f1f9-1f1f2', 2348, 1, 2, '🇹🇲', [], ':flag_tm:', [':turkmenistan:'], [], 'flags')
+    ('1f1f9-1f1e8', 2349, 1, 2, '🇹🇨', [], ':flag_tc:', [':tc:'], [], 'flags')
+    ('1f1f9-1f1fb', 2350, 1, 2, '🇹🇻', [], ':flag_tv:', [':tuvalu:'], [], 'flags')
+    ('1f1fb-1f1ee', 2351, 1, 2, '🇻🇮', [], ':flag_vi:', [':vi:'], [], 'flags')
+    ('1f1fa-1f1ec', 2352, 1, 2, '🇺🇬', [], ':flag_ug:', [':ug:'], [], 'flags')
+    ('1f1fa-1f1e6', 2353, 1, 2, '🇺🇦', [], ':flag_ua:', [':ua:'], [], 'flags')
+    ('1f1e6-1f1ea', 2354, 1, 2, '🇦🇪', [], ':flag_ae:', [':ae:'], [], 'flags')
+    ('1f1ec-1f1e7', 2355, 1, 2, '🇬🇧', [], ':flag_gb:', [':gb:'], [], 'flags')
+    ('1f1fa-1f1f8', 2356, 1, 2, '🇺🇸', [], ':flag_us:', [':us:'], [], 'flags')
+    ('1f1fa-1f1fe', 2357, 1, 2, '🇺🇾', [], ':flag_uy:', [':uy:'], [], 'flags')
+    ('1f1fa-1f1ff', 2358, 1, 2, '🇺🇿', [], ':flag_uz:', [':uz:'], [], 'flags')
+    ('1f1fb-1f1fa', 2359, 1, 2, '🇻🇺', [], ':flag_vu:', [':vu:'], [], 'flags')
+    ('1f1fb-1f1e6', 2360, 1, 2, '🇻🇦', [], ':flag_va:', [':va:'], [], 'flags')
+    ('1f1fb-1f1ea', 2361, 1, 2, '🇻🇪', [], ':flag_ve:', [':ve:'], [], 'flags')
+    ('1f1fb-1f1f3', 2362, 1, 2, '🇻🇳', [], ':flag_vn:', [':vn:'], [], 'flags')
+    ('1f1fc-1f1eb', 2363, 1, 2, '🇼🇫', [], ':flag_wf:', [':wf:'], [], 'flags')
+    ('1f1ea-1f1ed', 2364, 1, 2, '🇪🇭', [], ':flag_eh:', [':eh:'], [], 'flags')
+    ('1f1fe-1f1ea', 2365, 1, 2, '🇾🇪', [], ':flag_ye:', [':ye:'], [], 'flags')
+    ('1f1ff-1f1f2', 2366, 1, 2, '🇿🇲', [], ':flag_zm:', [':zm:'], [], 'flags')
+    ('1f1ff-1f1fc', 2367, 1, 2, '🇿🇼', [], ':flag_zw:', [':zw:'], [], 'flags')
+    ('1f1e6-1f1e8', 2368, 1, 2, '🇦🇨', [], ':flag_ac:', [':ac:'], [], 'flags')
+    ('1f1f9-1f1e6', 2369, 1, 2, '🇹🇦', [], ':flag_ta:', [':ta:'], [], 'flags')
+    ('1f1e7-1f1fb', 2370, 1, 2, '🇧🇻', [], ':flag_bv:', [':bv:'], [], 'flags')
+    ('1f1ed-1f1f2', 2371, 1, 2, '🇭🇲', [], ':flag_hm:', [':hm:'], [], 'flags')
+    ('1f1f8-1f1ef', 2372, 1, 2, '🇸🇯', [], ':flag_sj:', [':sj:'], [], 'flags')
+    ('1f1fa-1f1f2', 2373, 1, 2, '🇺🇲', [], ':flag_um:', [':um:'], [], 'flags')
+    ('1f1ea-1f1e6', 2374, 1, 2, '🇪🇦', [], ':flag_ea:', [':ea:'], [], 'flags')
+    ('1f1e8-1f1f5', 2375, 1, 2, '🇨🇵', [], ':flag_cp:', [':cp:'], [], 'flags')
+    ('1f1e9-1f1ec', 2376, 1, 2, '🇩🇬', [], ':flag_dg:', [':dg:'], [], 'flags')
+    ('1f1f2-1f1eb', 2377, 1, 2, '🇲🇫', [], ':flag_mf:', [':mf:'], [], 'flags')
+    ('1f1fa-1f1f3', 2378, 1, 2, '🇺🇳', [], ':united_nations:', [], [], 'flags')
+    ('002a', 2379, 1, 1, '*', [], ':asterisk_symbol:', [], [], 'symbols')
+    ('1f1ff', 2380, 1, 1, '🇿', [], ':regional_indicator_z:', [], [], 'regional')
+    ('1f1fe', 2381, 1, 1, '🇾', [], ':regional_indicator_y:', [], [], 'regional')
+    ('1f1fd', 2382, 1, 1, '🇽', [], ':regional_indicator_x:', [], [], 'regional')
+    ('0023', 2383, 1, 1, '#', [], ':pound_symbol:', [], [], 'symbols')
+    ('1f3fb', 2384, 1, 1, '🏻', [], ':tone1:', [], [], 'modifier')
+    ('1f3fc', 2385, 1, 1, '🏼', [], ':tone2:', [], [], 'modifier')
+    ('1f3fd', 2386, 1, 1, '🏽', [], ':tone3:', [], [], 'modifier')
+    ('1f3fe', 2387, 1, 1, '🏾', [], ':tone4:', [], [], 'modifier')
+    ('1f3ff', 2388, 1, 1, '🏿', [], ':tone5:', [], [], 'modifier')
+    ('1f1fc', 2389, 1, 1, '🇼', [], ':regional_indicator_w:', [], [], 'regional')
+    ('1f1fb', 2390, 1, 1, '🇻', [], ':regional_indicator_v:', [], [], 'regional')
+    ('1f1fa', 2391, 1, 1, '🇺', [], ':regional_indicator_u:', [], [], 'regional')
+    ('1f1f9', 2392, 1, 1, '🇹', [], ':regional_indicator_t:', [], [], 'regional')
+    ('1f1f8', 2393, 1, 1, '🇸', [], ':regional_indicator_s:', [], [], 'regional')
+    ('1f1f7', 2394, 1, 1, '🇷', [], ':regional_indicator_r:', [], [], 'regional')
+    ('1f1f6', 2395, 1, 1, '🇶', [], ':regional_indicator_q:', [], [], 'regional')
+    ('1f1f5', 2396, 1, 1, '🇵', [], ':regional_indicator_p:', [], [], 'regional')
+    ('1f1f4', 2397, 1, 1, '🇴', [], ':regional_indicator_o:', [], [], 'regional')
+    ('1f1f3', 2398, 1, 1, '🇳', [], ':regional_indicator_n:', [], [], 'regional')
+    ('1f1f2', 2399, 1, 1, '🇲', [], ':regional_indicator_m:', [], [], 'regional')
+    ('1f1f1', 2400, 1, 1, '🇱', [], ':regional_indicator_l:', [], [], 'regional')
+    ('1f1f0', 2401, 1, 1, '🇰', [], ':regional_indicator_k:', [], [], 'regional')
+    ('1f1ef', 2402, 1, 1, '🇯', [], ':regional_indicator_j:', [], [], 'regional')
+    ('1f1ee', 2403, 1, 1, '🇮', [], ':regional_indicator_i:', [], [], 'regional')
+    ('1f1ed', 2404, 1, 1, '🇭', [], ':regional_indicator_h:', [], [], 'regional')
+    ('1f1ec', 2405, 1, 1, '🇬', [], ':regional_indicator_g:', [], [], 'regional')
+    ('1f1eb', 2406, 1, 1, '🇫', [], ':regional_indicator_f:', [], [], 'regional')
+    ('1f1ea', 2407, 1, 1, '🇪', [], ':regional_indicator_e:', [], [], 'regional')
+    ('1f1e9', 2408, 1, 1, '🇩', [], ':regional_indicator_d:', [], [], 'regional')
+    ('1f1e8', 2409, 1, 1, '🇨', [], ':regional_indicator_c:', [], [], 'regional')
+    ('1f1e7', 2410, 1, 1, '🇧', [], ':regional_indicator_b:', [], [], 'regional')
+    ('1f1e6', 2411, 1, 1, '🇦', [], ':regional_indicator_a:', [], [], 'regional')
+    ('0039', 2412, 1, 1, '9', [], ':digit_nine:', [], [], 'symbols')
+    ('0038', 2413, 1, 1, '8', [], ':digit_eight:', [], [], 'symbols')
+    ('0037', 2414, 1, 1, '7', [], ':digit_seven:', [], [], 'symbols')
+    ('0036', 2415, 1, 1, '6', [], ':digit_six:', [], [], 'symbols')
+    ('0035', 2416, 1, 1, '5', [], ':digit_five:', [], [], 'symbols')
+    ('0034', 2417, 1, 1, '4', [], ':digit_four:', [], [], 'symbols')
+    ('0033', 2418, 1, 1, '3', [], ':digit_three:', [], [], 'symbols')
+    ('0032', 2419, 1, 1, '2', [], ':digit_two:', [], [], 'symbols')
+    ('0031', 2420, 1, 1, '1', [], ':digit_one:', [], [], 'symbols')
+    ('0030', 2421, 1, 1, '0', [], ':digit_zero:', [], [], 'symbols')
+    ('2640', 2422, 1, 1, '♀', [], ':female_sign:', [], [], 'people')
+    ('2642', 2423, 1, 1, '♂', [], ':male_sign:', [], [], 'people')
+    ('2695', 2424, 1, 1, '⚕', [], ':medical_symbol:', [], [], 'people')
+    ('1f468-1f469-1f466', 2425, 1, 3, '👨👩👦', [], ':family_man_woman_boy:', [], [], 'people')
+    ('1f469-2764-1f468', 2426, 1, 3, '👩❤👨', [], ':couple_with_heart_woman_man:', [], [], 'people')
+    ('1f469-2764-1f48b-1f468', 2427, 1, 4, '👩❤💋👨', [], ':kiss_woman_man:', [], [], 'people')
 ]
 
 class EmoTuples:
