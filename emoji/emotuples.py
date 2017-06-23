@@ -17,6 +17,10 @@ from collections import defaultdict
 
 import emoji
 
+INDEX_EMOJI_UNICHRS = 4
+INDEX_MONOSYLLABLES = 5
+INDEX_POLYSYLLABLES = 8
+INDEX_CATEGORY = 9
 EMO_HEADER = ('code', 'ord', 'osx', 'len', 'chr', 'monosyls', 'short', 'alts', 'polysyls', 'category')
 EMO_TUPLES = [
      ('1f600', 1, 1, 1, '😀', ['grinning', 'smirking'], ':grinning:', [], [], 'people') ,
@@ -2471,7 +2475,7 @@ def test_emo_tuples(options):
 
 
 def test_it():
-    '''test english -> emoji translation'''
+    '''test english/emoji tuple table'''
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="test english -> emoji translation")
