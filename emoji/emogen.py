@@ -12,12 +12,15 @@ Plan:
 import emoji
 import re
 from collections import defaultdict
-import emotuples as et
+import emotuples as ed
+import emotrans as et
 
 def gen_emo_tuples():
-    old_emos = et.EmoTuples.emo_tuples
+    old_emos = ed.EmoTuples.emo_tuples
 
-
+def regen_emo_tuples():
+    for t in ed.EMO_TUPLES[4:8]:
+        print(tuple([t[0], t[2], 1, t[3], et.unicode_chr_str(t[0]), t[7], t[4], t[5], [], t[6]]))
 
 if __name__ == '__main__':
-    gen_emo_tuples()
+    regen_emo_tuples()
