@@ -43,3 +43,4 @@ def gen_emo_dict(name='EMO_DICT', start=None, stop=None, incr=None):
 
 if __name__ == '__main__':
     gen_emo_dict('EMO_DICT', 6, 9)
+    print("col_to_idx:", COL_TO_IDX)
