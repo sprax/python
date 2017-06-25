@@ -56,13 +56,38 @@ REGEX_NON_ALPHA = re.compile(r'(?:\W|[0-9])+')
 def qw(ss):
     return ss.split()
 
-VOWEL_GROUPS = qw('a ae ai ay e ea ei eu ey i ie iou o oa oi ou oy u')
+VOWEL_EXP = "ae|ai|au|ay|a|ea|ei|eu|ey|e|iou|ie|i|oa|oe|oi|ou|oy|o|ue|u|y|dn't|sn't"
+VOWEL_GROUPS = VOWEL_EXP.split('|')
+VOWEL_STR = ' '.join(VOWEL_GROUPS)
 
-RE_VOWEL_GROUPS = re.compile("ae|ai|a|ay|a|ea|ei|eu|ey|e|iou|ie|i|oa|oi|ou|oy|u|dn't|sn't")
+RE_VOWEL_GROUPS = re.compile("(?i)%s" % VOWEL_EXP)
+print('VOWEL_GROUPS: (', VOWEL_STR, ')\n')
+
 def count_vowel_groups(word):
+    '''crude dipthong & vowel count standing in for syllables'''
     vgm = RE_VOWEL_GROUPS.findall(word)
-    print("count_vowel_groups:", vgm)
+    print("count_vowel_gp:", vgm)
     return len(vgm)
+
+def count_vowels_first_last(word):
+    '''naive rules to count syllables'''
+    count = 0
+    vowels = 'aeiouy'
+    word = word.lower()
+    oldc = word[0]
+    if oldc in vowels:
+        count += 1
+    for nxtc in word[1:]:
+        if nxtc in vowels and oldc not in vowels:
+            count += 1
+        oldc = nxtc
+    if word.endswith('le'):
+        count += 1
+    elif word.endswith('e'):
+        count -= 1
+    if count == 0:
+        count = 1
+    return count
 
 def main():
     '''test english -> emoji translation'''
@@ -95,13 +120,11 @@ def main():
         print("MANUAL", counts, sentence)
         tokens = word_tokens(sentence)
         vcount = count_vowel_groups(sentence)
+        fcount = count_vowels_first_last(sentence)
         print("TOKENS", (len(tokens), vcount), tokens)
         swords = word_splits(sentence)
-        print("SPLITS", (len(swords), vcount), swords)
+        print("SPLITS", (len(swords), fcount), swords)
         print()
-    print('VOWEL_GROUPS:', VOWEL_GROUPS, '\n')
-    print('|'.join(VOWEL_GROUPS))
-
 
 
 if __name__ == '__main__':
