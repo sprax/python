@@ -14,9 +14,40 @@ import random
 import re
 import string
 from collections import defaultdict
-
+from nltk.corpus import cmudict
 import emoji
 import emotuples
+
+CMU_PRONOUNCE = cmudict.dict() # get the CMU Pronouncing Dict
+
+def syl_count_cmu(pron):
+    '''number of syllables in a CMU-style pronunciation'''
+    return sum(str.isdigit(syl[-1]) for syl in pron)
+
+def syl_count_cmu_max(word):
+    '''
+    Return the CMU syllable count for word (max if there are alternates),
+    or KeyError.  The word should already be lowercased.
+    '''
+    prons = CMU_PRONOUNCE[word]
+    return max(syl_count_cmu(pron) for pron in prons)
+
+def syl_count_cmu_min(word):
+    '''
+    Return the CMU syllable count for word (min if there are alternates),
+    or KeyError.  The word should already be lowercased.
+    '''
+    prons = CMU_PRONOUNCE[word]
+    return min(syl_count_cmu(pron) for pron in prons)
+
+def syl_count_cmu_first(word):
+    '''
+    Return the CMU syllable count for word (first if there are alternates),
+    or KeyError.  The word should already be lowercased.
+    '''
+    first = CMU_PRONOUNCE[word][0]
+    return syl_count_cmu(first)
+
 
 EXAMPLES = {
     "There isn't one empyrean ouroborous; everyone knows there've always been several." : (11, 24),
@@ -66,7 +97,7 @@ print('VOWEL_GROUPS: (', VOWEL_STR, ')\n')
 def count_vowel_groups(word):
     '''crude dipthong & vowel count standing in for syllables'''
     vgm = RE_VOWEL_GROUPS.findall(word)
-    print("count_vowel_gp:", vgm)
+    # print("count_vowel_gp:", vgm)
     return len(vgm)
 
 def count_vowels_first_last(word):
@@ -89,6 +120,27 @@ def count_vowels_first_last(word):
         count = 1
     return count
 
+
+def syl_count(word):
+    '''
+    syllable count: from the first CMU pronunciation, if found,
+    or a calculated one.  The word should already be lowercased.
+    '''
+    try:
+        return syl_count_cmu_first(word)
+    except KeyError:
+        return count_vowel_groups(word)
+
+def syl_count_sum(words):
+    '''sum of syllable counts for a sequence of lowercased words or tokens'''
+    return sum(syl_count(word) for word in words)
+
+
+def syl_count_sentence(sentence):
+    '''sum of syllable counts for all tokens found in a sentence'''
+    return syl_count_sum(word_tokens(sentence))
+
+
 def main():
     '''test english -> emoji translation'''
     parser = argparse.ArgumentParser(
@@ -100,30 +152,24 @@ def main():
                         help='directory to search for input_file')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
-    parser.add_argument('-no_articles', action='store_true',
-                        help='replace articles (a, an, the) with nothing')
-    parser.add_argument('-subtraction', action='store_true',
-                        help='allow subtraction of letters or syllables')
-    parser.add_argument('-number', dest='max_lines', type=int, nargs='?', const=1, default=0,
-                        help='number of sentences to keep (default: 5), overrides -percent')
     parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
                         help='output path for filtered text (default: - <stdout>)')
-    parser.add_argument('-truncate', dest='max_words', type=int, nargs='?',
-                        const=8, default=0,
-                        help='truncate sentences after MAX words (default: INT_MAX)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
     # test_misc()
 
     for sentence, counts in EXAMPLES.items():
-        print("MANUAL", counts, sentence)
+        print("MANUAL", counts[0], sentence)
         tokens = word_tokens(sentence)
+        print("TOKENS", len(tokens), tokens)
+        swords = word_splits(sentence)
+        print("SPLITS", len(swords), swords)
+        scount = syl_count_sum(tokens)
         vcount = count_vowel_groups(sentence)
         fcount = count_vowels_first_last(sentence)
-        print("TOKENS", (len(tokens), vcount), tokens)
-        swords = word_splits(sentence)
-        print("SPLITS", (len(swords), fcount), swords)
+        print("SYLLABLES:  manual(%d)  cmupro(%d)  vowelg(%d)  nrules(%d)" % (
+            counts[1], scount, vcount, fcount))
         print()
 
 
