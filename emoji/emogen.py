@@ -35,7 +35,7 @@ def regen_emo_tuples(start=None, stop=None, incr=None):
         for short in shorts:
             if sylc.syl_count(short) == 1 and short not in monos:
                 monos.append(short)
-        print("monos:  ", monos)
+        print("monos:  ", monos, "\t  polys:  ", t[7])
         # print(list(t[0:4]).append(et.unicode_chr_str(t[0])).append(monos).append(t[5:]))
 
 DICT_COLS = ('order', 'flags', 'len', 'chr', 'monosyls', 'shortname', 'alternates', 'polysyls', 'category')
