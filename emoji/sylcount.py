@@ -19,20 +19,16 @@ import emoji
 import emotuples
 
 EXAMPLES = {
-    "There isn't one empyrean ouroborous; everyone knows there've always been several." : 24,
+    "There isn't one empyrean ouroborous; everyone knows there've always been several." : (11, 24),
     #  1   2  3  4   5  6 78   9 0 1  2   3 4* 5     6     7  8   9  0    1    2 3 4
-    '"There aren\'t really any homogeneous cultures," you\'ll say, "they\'ve always shown rifts."' : 21,
+    '"There aren\'t really any homogeneous cultures," you\'ll say, "they\'ve always shown rifts."' : (12, 21),
     #   1   2        3   5 6 7  8 9 0 1 2   3  4        5      6      7      8  9     0    1
-    '"Ain\'t all y\'all young\'uns under 17," she\'d said, "like 11- or 15-years old?!"' : 21,
+    '"Ain\'t all y\'all young\'uns under 17," she\'d said, "like 11- or 15-years old?!"' : (13, 21),
     #  1     2      3    4     5   6  7  +3     1     2      3   +3  7  +2  0    1}
-    "Didn't you know my X-15's XLR-99 engine burned 15,000 pounds (6,717 kg) of propellant in 87 seconds?" : 35,
+    "Didn't you know my X-15's XLR-99 engine burned 15,000 pounds (6,717 kg) of propellant in 87 seconds?" : (17, 35),
     # 1  2   3    4   5 6 +2    +3 +2 4  5    6     +2  +2  1     +3  +8 +3  6    7 8  9   0  +3  4 5
 }
 
-def qw(ss):
-    return ss.split()
-
-VOWEL_GROUPS = qw('a ae ai ay e ea ei eu ey i ie iou o oa oi ou oy u')
 
 ###############################################################################
 WORD_SEP_INTERIOR = r"',.-"
@@ -55,13 +51,18 @@ def word_splits(sentence):
 ###############################################################################
 REGEX_PUNCTUATION = re.compile("[{}]".format(string.punctuation))
 REGEX_NON_ALPHA = re.compile(r'(?:\W|[0-9])+')
-
 ###############################################################################
-def qw_list(ss):
-    return re.split(r'\W+', ss.rstrip())
 
-def qw_tuple(ss):
-    return tuple(qw_list(ss))
+def qw(ss):
+    return ss.split()
+
+VOWEL_GROUPS = qw('a ae ai ay e ea ei eu ey i ie iou o oa oi ou oy u')
+
+RE_VOWEL_GROUPS = re.compile("ae|ai|a|ay|a|ea|ei|eu|ey|e|iou|ie|i|oa|oi|ou|oy|u|dn't|sn't")
+def count_vowel_groups(word):
+    vgm = RE_VOWEL_GROUPS.findall(word)
+    print("count_vowel_groups:", vgm)
+    return len(vgm)
 
 def main():
     '''test english -> emoji translation'''
@@ -89,15 +90,18 @@ def main():
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
     # test_misc()
-    # print('VOWEL_GROUPS:', VOWEL_GROUPS, '\n')
 
-    for key, val in EXAMPLES.items():
-        print("MANUAL", val, key)
-        tokens = word_tokens(key)
-        print("TOKENS", len(tokens), tokens)
-        swords = word_splits(key)
-        print("SPLITS", len(swords), swords)
+    for sentence, counts in EXAMPLES.items():
+        print("MANUAL", counts, sentence)
+        tokens = word_tokens(sentence)
+        vcount = count_vowel_groups(sentence)
+        print("TOKENS", (len(tokens), vcount), tokens)
+        swords = word_splits(sentence)
+        print("SPLITS", (len(swords), vcount), swords)
         print()
+    print('VOWEL_GROUPS:', VOWEL_GROUPS, '\n')
+    print('|'.join(VOWEL_GROUPS))
+
 
 
 if __name__ == '__main__':
