@@ -18,34 +18,32 @@ from nltk.corpus import cmudict
 import emoji
 import emotuples
 
-CMU_PRONOUNCE = cmudict.dict() # get the CMU Pronouncing Dict
-
 def syl_count_cmu(pron):
     '''number of syllables in a CMU-style pronunciation'''
     return sum(str.isdigit(syl[-1]) for syl in pron)
 
-def syl_count_cmu_max(word):
+def syl_count_cmu_max(cmu_prons, word):
     '''
     Return the CMU syllable count for word (max if there are alternates),
     or KeyError.  The word should already be lowercased.
     '''
-    prons = CMU_PRONOUNCE[word]
+    prons = cmu_prons[word]
     return max(syl_count_cmu(pron) for pron in prons)
 
-def syl_count_cmu_min(word):
+def syl_count_cmu_min(cmu_prons, word):
     '''
     Return the CMU syllable count for word (min if there are alternates),
     or KeyError.  The word should already be lowercased.
     '''
-    prons = CMU_PRONOUNCE[word]
+    prons = cmu_prons[word]
     return min(syl_count_cmu(pron) for pron in prons)
 
-def syl_count_cmu_first(word):
+def syl_count_cmu_first(cmu_prons, word):
     '''
     Return the CMU syllable count for word (first if there are alternates),
     or KeyError.  The word should already be lowercased.
     '''
-    first = CMU_PRONOUNCE[word][0]
+    first = cmu_prons[word][0]
     return syl_count_cmu(first)
 
 
@@ -121,24 +119,24 @@ def count_vowels_first_last(word):
     return count
 
 
-def syl_count(word):
+def syl_count(cmu_prons, word):
     '''
     syllable count: from the first CMU pronunciation, if found,
     or a calculated one.  The word should already be lowercased.
     '''
     try:
-        return syl_count_cmu_first(word)
+        return syl_count_cmu_first(cmu_prons, word)
     except KeyError:
         return count_vowel_groups(word)
 
-def syl_count_sum(words):
+def syl_count_sum(cmu_prons, words):
     '''sum of syllable counts for a sequence of lowercased words or tokens'''
-    return sum(syl_count(word) for word in words)
+    return sum(syl_count(cmu_prons, word) for word in words)
 
 
-def syl_count_sentence(sentence):
+def syl_count_sentence(cmu_prons, sentence):
     '''sum of syllable counts for all tokens found in a sentence'''
-    return syl_count_sum(word_tokens(sentence))
+    return syl_count_sum(cmu_prons, word_tokens(sentence))
 
 
 def main():
@@ -159,13 +157,15 @@ def main():
     args = parser.parse_args()
     # test_misc()
 
+    cmu_prons = cmudict.dict() # get the CMU Pronouncing Dict
+
     for sentence, counts in EXAMPLES.items():
         print("MANUAL", counts[0], sentence)
         tokens = word_tokens(sentence)
         print("TOKENS", len(tokens), tokens)
         swords = word_splits(sentence)
         print("SPLITS", len(swords), swords)
-        scount = syl_count_sum(tokens)
+        scount = syl_count_sum(cmu_prons, tokens)
         vcount = count_vowel_groups(sentence)
         fcount = count_vowels_first_last(sentence)
         print("SYLLABLES:  manual(%d)  cmupro(%d)  vowelg(%d)  nrules(%d)" % (

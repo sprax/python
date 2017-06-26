@@ -16,6 +16,7 @@ from collections import defaultdict
 import emotuples as ed
 import emotrans as et
 import sylcount as sylc
+from nltk.corpus import cmudict
 
 def gen_emo_tuples():
     old_emos = ed.EmoTuples.emo_tuples
@@ -24,18 +25,22 @@ EX = [ ('1f602',  7, 1, 1, '😂', ['joy', 'happy'], ':joy:', [], [], 'people') 
        ('1f923',  8, 0, 1, '\U0001f923', ['rofl'], ':rofl:', [':rolling_on_the_floor_laughing:'], [], 'people') ,
        ( '263a',  9, 1, 1, '☺', ['relaxed', 'relax', 'chill'], ':relaxed:', [], [], 'people') , ]
 
-def regen_emo_tuples(start=None, stop=None, incr=None):
+def regen_emo_tuples(name='EMO_TUPLES', start=None, stop=None, incr=None):
+    cmu_prons = cmudict.dict() # get the CMU Pronouncing Dict
     for t in ed.EMO_TUPLES[start:stop:incr]:
-        monos = []
+        monos, polys = [], []
         for word in t[5]:
-            if sylc.syl_count(word) == 1:
+            if sylc.syl_count(cmu_prons, word) == 1:
                 monos.append(word)
+            else:
+                polys.append(word)
         shorts = sylc.word_splits(t[6])
-        print("shorts: ", shorts)
         for short in shorts:
-            if sylc.syl_count(short) == 1 and short not in monos:
+            if sylc.syl_count(cmu_prons, short) == 1 and short not in monos:
                 monos.append(short)
-        print("monos:  ", monos, "\t  polys:  ", t[7])
+            else:
+                polys.append(word)
+        print("shorts: {}  monos: {}  polys: {}  alts: {}".format(shorts, monos, polys, t[7]))
         # print(list(t[0:4]).append(et.unicode_chr_str(t[0])).append(monos).append(t[5:]))
 
 DICT_COLS = ('order', 'flags', 'len', 'chr', 'monosyls', 'shortname', 'alternates', 'polysyls', 'category')
@@ -66,7 +71,7 @@ def main():
                         help='output path for filtered text (default: - <stdout>)')
     parser.add_argument('-beg', type=int, nargs='?', const=0, default=6,
                         help='starting index')
-    parser.add_argument('-end', type=int, nargs='?', const=0, default=20,
+    parser.add_argument('-end', type=int, nargs='?', const=0, default=12,
                         help='ending index')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
@@ -74,7 +79,7 @@ def main():
 
     gen_emo_dict('EMO_DICT', args.beg, args.end)
     print("col_to_idx:", COL_TO_IDX)
-    regen_emo_tuples(6, 12)
+    regen_emo_tuples('EMO_TUPLES', args.beg, args.end)
 
 if __name__ == '__main__':
     main()
