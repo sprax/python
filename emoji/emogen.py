@@ -27,21 +27,27 @@ EX = [ ('1f602',  7, 1, 1, '😂', ['joy', 'happy'], ':joy:', [], [], 'people') 
 
 def regen_emo_tuples(name='EMO_TUPLES', start=None, stop=None, incr=None):
     cmu_prons = cmudict.dict() # get the CMU Pronouncing Dict
+    print(name, "= [")
+    if stop == 0:
+        stop = None
     for t in ed.EMO_TUPLES[start:stop:incr]:
-        monos, polys = [], []
+        monos, polys = set(), set()
         for word in t[5]:
             if sylc.syl_count(cmu_prons, word) == 1:
-                monos.append(word)
+                monos.add(word)
             else:
-                polys.append(word)
+                polys.add(word)
         shorts = sylc.word_splits(t[6])
         for short in shorts:
             if sylc.syl_count(cmu_prons, short) == 1 and short not in monos:
-                monos.append(short)
+                monos.add(short)
             else:
-                polys.append(word)
-        print("shorts: {}  monos: {}  polys: {}  alts: {}".format(shorts, monos, polys, t[7]))
-        # print(list(t[0:4]).append(et.unicode_chr_str(t[0])).append(monos).append(t[5:]))
+                polys.add(short)
+        # print("shorts: {}  monos: {}  polys: {}  alts: {}".format(shorts, monos, polys, t[7]))
+        lst = list(t[0:4])
+        lst.extend([et.unicode_chr_str(t[0]), list(monos), t[6], t[7], list(polys), t[9]])
+        print("    {},".format(tuple(lst)))
+    print("]")
 
 DICT_COLS = ('order', 'flags', 'len', 'chr', 'monosyls', 'shortname', 'alternates', 'polysyls', 'category')
 COL_TO_IDX = dict([(v, i) for i, v in enumerate(DICT_COLS)])
@@ -77,8 +83,8 @@ def main():
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-    gen_emo_dict('EMO_DICT', args.beg, args.end)
-    print("col_to_idx:", COL_TO_IDX)
+    # gen_emo_dict('EMO_DICT', args.beg, args.end)
+    print("col_to_idx:", sorted(COL_TO_IDX, key=COL_TO_IDX.get))
     regen_emo_tuples('EMO_TUPLES', args.beg, args.end)
 
 if __name__ == '__main__':

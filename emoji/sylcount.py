@@ -90,7 +90,7 @@ VOWEL_GROUPS = VOWEL_EXP.split('|')
 VOWEL_STR = ' '.join(VOWEL_GROUPS)
 
 RE_VOWEL_GROUPS = re.compile("(?i)%s" % VOWEL_EXP)
-print('VOWEL_GROUPS: (', VOWEL_STR, ')\n')
+# print('VOWEL_GROUPS: (', VOWEL_STR, ')\n')
 
 def count_vowel_groups(word):
     '''crude dipthong & vowel count standing in for syllables'''
