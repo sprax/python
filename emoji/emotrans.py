@@ -143,7 +143,10 @@ def test_emo_tuples(options):
     src_to_emo = defaultdict(list, presets)
     i_monos = emotuples.INDEX_MONOSYLLABLES
     i_unichr = emotuples.INDEX_EMOJI_UNICHRS
-    for tt in emotuples.EMO_TUPLES:
+    i_flags = emotuples.INDEX_FLAGS
+    usables = [tup for tup in emotuples.EMO_TUPLES if tup[i_flags] > 0]
+    print("Found {} usable emotuples.".format(len(usables)))
+    for tt in usables:
         for src in tt[i_monos]:
             # print("type src is: ", type(src), "and uni:", tt[0])
             src_to_emo[src].append(tt[i_unichr])
