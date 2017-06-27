@@ -49,6 +49,13 @@ def regen_emo_tuples(name='EMO_TUPLES', start=None, stop=None, incr=None):
         print("    {},".format(tuple(lst)))
     print("]")
 
+
+def reflag_emo_tuples(name='EMO_TUPLES', start=None, stop=None, incr=None):
+    for tup in ed.EMO_TUPLES[start:stop:incr]:
+        if not tup[ed.INDEX_MONOS]:
+            tup[ed.INDEX_FLAGS] = 0
+        print("    {},".format(tup))
+
 DICT_COLS = ('order', 'flags', 'len', 'chr', 'monosyls', 'shortname', 'alternates', 'polysyls', 'category')
 COL_TO_IDX = dict([(v, i) for i, v in enumerate(DICT_COLS)])
 
@@ -75,17 +82,26 @@ def main():
                         help='charset encoding of input text')
     parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
                         help='output path for filtered text (default: - <stdout>)')
-    parser.add_argument('-beg', type=int, nargs='?', const=0, default=6,
+    parser.add_argument('-beg', type=int, nargs='?', const=0, default=0,
                         help='starting index')
-    parser.add_argument('-end', type=int, nargs='?', const=0, default=12,
+    parser.add_argument('-end', type=int, nargs='?', const=0, default=0,
                         help='ending index')
+    parser.add_argument('-inc', type=int, nargs='?', const=0, default=1,
+                        help='index increment')
+    parser.add_argument('-flags', action='store_true',
+                        help='recompute the flag field in emo_tuples')
+    parser.add_argument('-regen', action='store_true',
+                        help='regenerate emo_tuples')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
     # gen_emo_dict('EMO_DICT', args.beg, args.end)
     print("col_to_idx:", sorted(COL_TO_IDX, key=COL_TO_IDX.get))
-    regen_emo_tuples('EMO_TUPLES', args.beg, args.end)
+    if args.regen:
+        regen_emo_tuples('EMO_TUPLES', args.beg, args.end)
+    if args.flags:
+        reflag_emo_tuples(args.beg, args.end, args.inc)
 
 if __name__ == '__main__':
     main()
