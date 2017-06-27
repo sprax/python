@@ -141,10 +141,10 @@ def test_emo_tuples(options):
     if options.subtraction:
         presets.update({'can': ['🍬 ➖ D']})
     src_to_emo = defaultdict(list, presets)
-    i_monosyllables = emotuples.INDEX_MONOSYLLABLES
+    i_monos = emotuples.INDEX_MONOSYLLABLES
     i_unichr = emotuples.INDEX_EMOJI_UNICHRS
     for tt in emotuples.EMO_TUPLES:
-        for src in tt[i_monosyllables]:
+        for src in tt[i_monos]:
             # print("type src is: ", type(src), "and uni:", tt[0])
             src_to_emo[src].append(tt[i_unichr])
             # print("src(%s) => emo(%s)" % (src, tt[1]))

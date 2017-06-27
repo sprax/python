@@ -19,7 +19,7 @@ import emoji
 
 INDEX_FLAGS = 2
 INDEX_EMOJI_UNICHRS = 4
-INDEX_MONOS = 5
+INDEX_MONOSYLLABLES = 5
 INDEX_POLYSYLLABLES = 8
 INDEX_CATEGORY = 9
 EMO_HEADER = ('code', 'order', 'flags', 'len', 'chr', 'monosyls', 'shortname', 'alternates', 'polysyls', 'category')
@@ -1278,7 +1278,7 @@ EMO_TUPLES = [
     ('1f379', 1252, 1, 1, '🍹', ['drink'], ':tropical_drink:', [], ['tropical', 'daqueri'], 'food'),
     ('1f37e', 1253, 1, 1, '🍾', ['pop'], ':champagne:', [':bottle_with_popping_cork:'], ['champagne', 'celebrate'], 'food'),
     ('1f944', 1254, 1, 1, '\U0001f944', ['spoon'], ':spoon:', [], [], 'food'),
-    ('1f374', 1255, 1, 1, '🍴', ['fork', 'and', 'knife'], ':fork_and_knife:', [], ['fork and knife', 'knife and fork'], 'food'),
+    ('1f374', 1255, 1, 1, '🍴', ['fork', 'knife'], ':fork_and_knife:', [], ['fork and knife', 'knife and fork'], 'food'),
     ('1f37d', 1256, 1, 1, '🍽', ['plate', 'fork', 'knife'], ':fork_knife_plate:', [':fork_and_knife_with_plate:'], ['fork and plate and knife', 'place setting'], 'food'),
     ('26bd', 1257, 1, 1, '⚽', [], ':soccer:', [], ['soccer'], 'activity'),
     ('1f3c0', 1258, 1, 1, '🏀', [], ':basketball:', [], ['basketball'], 'activity'),
@@ -1295,8 +1295,8 @@ EMO_TUPLES = [
     ('1f3d1', 1269, 1, 1, '🏑', ['field'], ':field_hockey:', [], ['hockey'], 'activity'),
     ('1f3cf', 1270, 1, 1, '🏏', [], ':cricket:', [':cricket_bat_ball:'], ['cricket'], 'activity'),
     ('26f3', 1271, 1, 1, '⛳', ['golf'], ':golf:', [], [], 'activity'),
-    ('1f3f9', 1272, 1, 1, '🏹', ['bow', 'and'], ':bow_and_arrow:', [':archery:'], ['arrow'], 'activity'),
-    ('1f3a3', 1273, 1, 1, '🎣', ['pole', 'fish', 'and'], ':fishing_pole_and_fish:', [], ['fishing'], 'activity'),
+    ('1f3f9', 1272, 1, 1, '🏹', ['bow'], ':bow_and_arrow:', [':archery:'], ['arrow'], 'activity'),
+    ('1f3a3', 1273, 1, 1, '🎣', ['pole', 'fish'], ':fishing_pole_and_fish:', [], ['fishing'], 'activity'),
     ('1f94a', 1274, 1, 1, '\U0001f94a', ['glove'], ':boxing_glove:', [':boxing_gloves:'], ['boxing'], 'activity'),
     ('1f94b', 1275, 1, 1, '\U0001f94b', ['arts'], ':martial_arts_uniform:', [':karate_uniform:'], ['uniform', 'martial'], 'activity'),
     ('26f8', 1276, 1, 1, '⛸', ['skate', 'ice'], ':ice_skate:', [], ['skate'], 'activity'),
@@ -1741,7 +1741,7 @@ EMO_TUPLES = [
     ('2692', 1715, 1, 1, '⚒', ['pick'], ':hammer_pick:', [':hammer_and_pick:'], ['hammer'], 'objects'),
     ('1f6e0', 1716, 1, 1, '🛠', ['tools'], ':tools:', [':hammer_and_wrench:'], [], 'objects'),
     ('26cf', 1717, 1, 1, '⛏', ['pick'], ':pick:', [], [], 'objects'),
-    ('1f529', 1718, 1, 1, '🔩', ['bolt', 'nut', 'and'], ':nut_and_bolt:', [], [], 'objects'),
+    ('1f529', 1718, 1, 1, '🔩', ['bolt', 'nut'], ':nut_and_bolt:', [], [], 'objects'),
     ('2699', 1719, 1, 1, '⚙', ['gear'], ':gear:', [], [], 'objects'),
     ('26d3', 1720, 1, 1, '⛓', ['chains'], ':chains:', [], [], 'objects'),
     ('1f52b', 1721, 1, 1, '🔫', ['gun'], ':gun:', [], [], 'objects'),
@@ -1883,7 +1883,7 @@ EMO_TUPLES = [
     ('1f49f', 1857, 1, 1, '💟', ['heart'], ':heart_decoration:', [], ['decoration'], 'symbols'),
     ('262e', 1858, 1, 1, '☮', ['peace'], ':peace:', [':peace_symbol:'], [], 'symbols'),
     ('271d', 1859, 1, 1, '✝', ['cross'], ':cross:', [':latin_cross:'], [], 'symbols'),
-    ('262a', 1860, 1, 1, '☪', ['and', 'star'], ':star_and_crescent:', [], ['crescent'], 'symbols'),
+    ('262a', 1860, 1, 1, '☪', ['star'], ':star_and_crescent:', [], ['crescent'], 'symbols'),
     ('1f549', 1861, 1, 1, '🕉', ['om'], ':om_symbol:', [], ['symbol'], 'symbols'),
     ('2638', 1862, 1, 1, '☸', ['of', 'wheel'], ':wheel_of_dharma:', [], ['dharma'], 'symbols'),
     ('2721', 1863, 1, 1, '✡', ['of', 'star'], ':star_of_david:', [], ['david'], 'symbols'),
@@ -2054,7 +2054,7 @@ EMO_TUPLES = [
     ('1f503', 2028, 1, 1, '🔃', [], ':arrows_clockwise:', [], ['arrows', 'clockwise'], 'symbols'),
     ('1f3b5', 2029, 1, 1, '🎵', ['note', 'notes'], ':musical_note:', [], ['musical'], 'symbols'),
     ('1f3b6', 2030, 1, 1, '🎶', ['notes'], ':notes:', [], ['notes'], 'symbols'),
-    ('2795', 2031, 1, 1, '➕', ['plus', 'sign', 'and'], ':heavy_plus_sign:', [], ['&', 'heavy', 'plus'], 'symbols'),
+    ('2795', 2031, 1, 1, '➕', ['plus', 'sign'], ':heavy_plus_sign:', [], ['&', 'heavy', 'plus'], 'symbols'),
     ('2796', 2032, 1, 1, '➖', ['less', 'sign'], ':heavy_minus_sign:', [], ['heavy', 'minus'], 'symbols'),
     ('2797', 2033, 1, 1, '➗', ['sign'], ':heavy_division_sign:', [], ['division', 'divide', 'heavy', 'divides', 'divided by'], 'symbols'),
     ('2716', 2034, 1, 1, '✖', ['times', 'x'], ':heavy_multiplication_x:', [], ['multiply', 'heavy', 'multiplication'], 'symbols'),
