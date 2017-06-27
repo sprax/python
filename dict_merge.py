@@ -1,5 +1,5 @@
 # http://treyhunner.com/2016/02/how-to-merge-dictionaries-in-python/
-
+'''
 The Idiomatic Way to Merge Dictionaries in Python
 FEB 23RD, 2016 10:00 AM | COMMENTS
 Have you ever wanted to combine two or more dictionaries in Python?
@@ -24,12 +24,14 @@ updates made to context should never alter defaults or user
 Note: In 5, we’re focused on updates to the dictionary, not contained objects. For concerns about mutability of nested objects, we should look into copy.deepcopy.
 
 So we want something like this:
-
+'''
 >>> user = {'name': "Trey", 'website': "http://treyhunner.com"}
 >>> defaults = {'name': "Anonymous User", 'page_name': "Profile Page"}
 >>> context = merge_dicts(defaults, user)  # magical merge function
 >>> context
 {'website': 'http://treyhunner.com', 'name': 'Trey', 'page_name': 'Profile Page'}
+
+'''
 We’ll also consider whether a solution is Pythonic. This is a very subjective and often illusory measure. Here are a few of the particular criteria we will use:
 
 The solution should be concise but not terse
@@ -45,7 +47,7 @@ We’re going to walk through a number of methods for merging dictionaries and d
 Multiple update
 
 Here’s one of the simplest ways to merge our dictionaries:
-
+'''
 context = {}
 context.update(defaults)
 context.update(user)
