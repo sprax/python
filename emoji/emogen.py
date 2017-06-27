@@ -51,12 +51,15 @@ def regen_emo_tuples(name='EMO_TUPLES', start=None, stop=None, incr=None):
 
 
 def reflag_emo_tuples(start=None, stop=None, incr=None):
+    if stop == 0:
+        stop = None
     print("reflagging ({}, {}, {})".format(start, stop, incr))
     for tup in ed.EMO_TUPLES[start:stop:incr]:
         if not tup[ed.INDEX_MONOSYLLABLES]:
             lst = list(tup)
             lst[ed.INDEX_FLAGS] = 0
             tup = tuple(lst)
+        # print("{} => {}".format(lst[4], len(lst[4])))
         print("    {},".format(tup))
 
 DICT_COLS = ('order', 'flags', 'len', 'chr', 'monosyls', 'shortname', 'alternates', 'polysyls', 'category')
