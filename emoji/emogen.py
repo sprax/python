@@ -12,6 +12,7 @@ Plan:
 import argparse
 import emoji
 import re
+import sys
 from collections import defaultdict
 import emotuples as ed
 import emotrans as et
@@ -49,7 +50,7 @@ def regen_emo_tuples(name='EMO_TUPLES', start=None, stop=None, incr=None):
         print("    {},".format(tuple(lst)))
     print("]")
 
-def reset_country_codes_to_emoflags(cc_path='country_codes.txt', start=2119, stop=2380, charset='utf-8'):
+def reset_country_codes_to_emoflags(cc_path='country_codes.txt', start=2120, stop=2377, charset='utf-8'):
     '''
     Read country code table from file at cc_path into a default dict,
     then set the name and syllable fields in a copy of emo_tuples.
@@ -58,20 +59,22 @@ def reset_country_codes_to_emoflags(cc_path='country_codes.txt', start=2119, sto
     with open(cc_path, 'r', encoding=charset) as text:
         cc_dict = {}
         for line in text:
-            codes = re.split(r'\t', line.rstrip())
-            cc_dict[codes[1]] = (codes[0], codes[2])
+            if len(line) > 8 and re.search('[a-z]', line):
+                codes = re.split(r'\t', line.rstrip())
+                # print(codes)
+                cc_dict[codes[1]] = (codes[0], codes[2])
     for tup in ed.EMO_TUPLES[start:stop]:
         try:
-            tlc = tup[ed.INDEX_ALTERNATIVES][0]
-            codes = cc_dict[tlc]
-            lst = list(tup)
-            lst[ed.INDEX_MONOSYLLABLES] = [tlc, 'flag']
-            lst[ed.INDEX_POLYSYLLABLES] = codes
-            ret = tuple(lst)
-            print("    {},".format(ret))
+            tlc = tup[ed.INDEX_ALTERNATIVES][0].strip(':').upper()
+            print(tlc, '  ', end='')
+        #     codes = cc_dict[tlc]
+        #     lst = list(tup)
+        #     lst[ed.INDEX_MONOSYLLABLES] = [tlc, 'flag']
+        #     lst[ed.INDEX_POLYSYLLABLES] = codes
+        #     ret = tuple(lst)
+        #     print("    {},".format(ret), file=sys.stdout)
         except KeyError:
-            print("No Key:", tup)
-
+            print("No Key:", tup, file=sys.stderr)
 
 def reflag_emo_tuples(start=None, stop=None, incr=None):
     if stop == 0:
@@ -109,8 +112,10 @@ def main():
                         help='file containing text to filter')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
-    parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
-                        help='output path for filtered text (default: - <stdout>)')
+    parser.add_argument('-columns', action='store_true',
+                        help='show column names')
+    parser.add_argument('-countries', action='store_true',
+                        help='country codes regenerate tuples for flag icons')
     parser.add_argument('-beg', type=int, nargs='?', const=0, default=0,
                         help='starting index')
     parser.add_argument('-end', type=int, nargs='?', const=0, default=0,
@@ -119,6 +124,8 @@ def main():
                         help='index increment')
     parser.add_argument('-flags', action='store_true',
                         help='recompute the flag field in emo_tuples')
+    parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
+                        help='output path for filtered text (default: - <stdout>)')
     parser.add_argument('-regen', action='store_true',
                         help='regenerate emo_tuples')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
@@ -126,11 +133,18 @@ def main():
     args = parser.parse_args()
 
     # gen_emo_dict('EMO_DICT', args.beg, args.end)
-    print("col_to_idx:", sorted(COL_TO_IDX, key=COL_TO_IDX.get))
-    if args.regen:
-        regen_emo_tuples('EMO_TUPLES', args.beg, args.end)
+
+    if args.columns:
+        print("columns:", sorted(COL_TO_IDX, key=COL_TO_IDX.get))
+        for col, idx in sorted(COL_TO_IDX.items(), key=lambda x: x[1]):
+            print("{}: {},  ".format(idx, col), end='')
+        print()
+    if args.countries:
+        reset_country_codes_to_emoflags()
     if args.flags:
         reflag_emo_tuples(args.beg, args.end, args.inc)
+    if args.regen:
+        regen_emo_tuples('EMO_TUPLES', args.beg, args.end)
 
 if __name__ == '__main__':
     main()
