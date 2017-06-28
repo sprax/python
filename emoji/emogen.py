@@ -49,6 +49,19 @@ def regen_emo_tuples(name='EMO_TUPLES', start=None, stop=None, incr=None):
         print("    {},".format(tuple(lst)))
     print("]")
 
+def reset_country_codes_to_emoflags(cc_path='country_codes.txt', start=2119, stop=2380, charset='utf-8'):
+    '''
+    Read country code table from file at cc_path into a default dict,
+    then set the name and syllable fields in a copy of emo_tuples.
+    '''
+    with open(cc_path, 'r', encoding=charset) as text:
+        cc_dict = defaultdict(tuple)
+        for line in text:
+            codes = re.split(r'\t', line.rstrip())
+            cc_dict[codes[1]] = (codes[2], codes[3])
+
+
+
 
 def reflag_emo_tuples(start=None, stop=None, incr=None):
     if stop == 0:
