@@ -53,14 +53,24 @@ def reset_country_codes_to_emoflags(cc_path='country_codes.txt', start=2119, sto
     '''
     Read country code table from file at cc_path into a default dict,
     then set the name and syllable fields in a copy of emo_tuples.
+    Format of CC file: Name, 2-letter, 3-letter, phone-prefix
     '''
     with open(cc_path, 'r', encoding=charset) as text:
-        cc_dict = defaultdict(tuple)
+        cc_dict = {}
         for line in text:
             codes = re.split(r'\t', line.rstrip())
-            cc_dict[codes[1]] = (codes[2], codes[3])
-
-
+            cc_dict[codes[1]] = (codes[0], codes[2])
+    for tup in ed.EMO_TUPLES[start:stop]:
+        try:
+            tlc = tup[ed.INDEX_ALTERNATIVES][0]
+            codes = cc_dict[tlc]
+            lst = list(tup)
+            lst[ed.INDEX_MONOSYLLABLES] = [tlc, 'flag']
+            lst[ed.INDEX_POLYSYLLABLES] = codes
+            ret = tuple(lst)
+            print("    {},".format(ret))
+        except KeyError:
+            print("No Key:", tup)
 
 
 def reflag_emo_tuples(start=None, stop=None, incr=None):
