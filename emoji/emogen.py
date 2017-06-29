@@ -19,6 +19,15 @@ import emotrans as et
 import sylcount as sylc
 from nltk.corpus import cmudict
 
+def SplitByUnicode():
+    jokes = "That's a nice joke 😆😆😆 😛";
+    print("Original String:", jokes);
+    regexPattern = re.compile(r"[\uD83C-\uDBFF\uDC00-\uDFFF]+")
+    # jokeb = string.getBytes("UTF-8");
+    # jokeb = new String(utf8, "UTF-8");
+    matchList = regexPattern.findall(jokes)
+    print(matchList)
+
 def gen_emo_tuples():
     old_emos = ed.EmoTuples.emo_tuples
 
@@ -26,12 +35,12 @@ EX = [ ('1f602',  7, 1, 1, '😂', ['joy', 'happy'], ':joy:', [], [], 'people') 
        ('1f923',  8, 0, 1, '\U0001f923', ['rofl'], ':rofl:', [':rolling_on_the_floor_laughing:'], [], 'people') ,
        ( '263a',  9, 1, 1, '☺', ['relaxed', 'relax', 'chill'], ':relaxed:', [], [], 'people') , ]
 
-def regen_emo_tuples(name='EMO_TUPLES', start=None, stop=None, incr=None):
+def regen_emo_tuples(name='EMO_TUPLES', start=None, stop=None, step=None):
     cmu_prons = cmudict.dict() # get the CMU Pronouncing Dict
     print(name, "= [")
     if stop == 0:
         stop = None
-    for t in ed.EMO_TUPLES[start:stop:incr]:
+    for t in ed.EMO_TUPLES[start:stop:step]:
         monos, polys = set(), set()
         for word in t[5]:
             if sylc.syl_count(cmu_prons, word) == 1:
@@ -75,12 +84,13 @@ def reset_country_codes_to_emoflags(cc_path='country_codes.txt', start=2120, sto
         #     print("    {},".format(ret), file=sys.stdout)
         except KeyError:
             print("No Key:", tup, file=sys.stderr)
+    print()
 
-def reflag_emo_tuples(start=None, stop=None, incr=None):
+def reflag_emo_tuples(start=None, stop=None, step=None):
     if stop == 0:
         stop = None
-    print("reflagging ({}, {}, {})".format(start, stop, incr))
-    for tup in ed.EMO_TUPLES[start:stop:incr]:
+    print("reflagging ({}, {}, {})".format(start, stop, step))
+    for tup in ed.EMO_TUPLES[start:stop:step]:
         if not tup[ed.INDEX_MONOSYLLABLES]:
             lst = list(tup)
             lst[ed.INDEX_FLAGS] = 0
@@ -97,9 +107,9 @@ def emo_value_col(value, column):
 def emo_dict_col(emodict, key, column):
     return emo_value_col(emodict[key], column)
 
-def gen_emo_dict(name='EMO_DICT', start=None, stop=None, incr=None):
+def gen_emo_dict(name='EMO_DICT', start=None, stop=None, step=None):
     print(name, "= {")
-    for t in ed.EMO_TUPLES[start:stop:incr]:
+    for t in ed.EMO_TUPLES[start:stop:step]:
         print("    '%s' : %s," % (t[0], t[1:4] + (et.unicode_chr_str(t[0]),) + t[5:]))
     print("}")
 
@@ -114,13 +124,13 @@ def main():
                         help='charset encoding of input text')
     parser.add_argument('-columns', action='store_true',
                         help='show column names')
-    parser.add_argument('-countries', action='store_true',
+    parser.add_argument('-country_codes', '-cc', action='store_true',
                         help='country codes regenerate tuples for flag icons')
-    parser.add_argument('-beg', type=int, nargs='?', const=0, default=0,
+    parser.add_argument('-start', '-beg', type=int, nargs='?', const=0, default=0,
                         help='starting index')
-    parser.add_argument('-end', type=int, nargs='?', const=0, default=0,
+    parser.add_argument('-stop', '-end', type=int, nargs='?', const=0, default=0,
                         help='ending index')
-    parser.add_argument('-inc', type=int, nargs='?', const=0, default=1,
+    parser.add_argument('-step', '-inc', type=int, nargs='?', const=0, default=1,
                         help='index increment')
     parser.add_argument('-flags', action='store_true',
                         help='recompute the flag field in emo_tuples')
@@ -139,7 +149,7 @@ def main():
         for col, idx in sorted(COL_TO_IDX.items(), key=lambda x: x[1]):
             print("{}: {},  ".format(idx, col), end='')
         print()
-    if args.countries:
+    if args.country_codes:
         reset_country_codes_to_emoflags()
     if args.flags:
         reflag_emo_tuples(args.beg, args.end, args.inc)
