@@ -65,6 +65,8 @@ def reset_country_codes_to_emoflags(cc_path='country_codes.txt', start=2120, sto
     then set the name and syllable fields in a copy of emo_tuples.
     Format of CC file: Name, 2-letter, 3-letter, phone-prefix
     '''
+    cmu_prons = cmudict.dict() # get the CMU Pronouncing Dict
+
     with open(cc_path, 'r', encoding=charset) as text:
         cc_dict = {}
         for line in text:
@@ -73,17 +75,26 @@ def reset_country_codes_to_emoflags(cc_path='country_codes.txt', start=2120, sto
                 # print(codes)
                 cc_dict[codes[1]] = (codes[0], codes[2])
     for tup in ed.EMO_TUPLES[start:stop]:
+        tlc = tup[ed.INDEX_ALTERNATIVES][0].strip(':').upper()
+        print(tlc, '  ', end='')
         try:
-            tlc = tup[ed.INDEX_ALTERNATIVES][0].strip(':').upper()
-            print(tlc, '  ', end='')
-        #     codes = cc_dict[tlc]
-        #     lst = list(tup)
-        #     lst[ed.INDEX_MONOSYLLABLES] = [tlc, 'flag']
-        #     lst[ed.INDEX_POLYSYLLABLES] = codes
-        #     ret = tuple(lst)
-        #     print("    {},".format(ret), file=sys.stdout)
+            codes = cc_dict[tlc]
+            lst = list(tup)
+            lst[ed.INDEX_MONOSYLLABLES] = [tlc, 'flag']
+            lst[ed.INDEX_POLYSYLLABLES] = codes
+            ret = tuple(lst)
+            print("    {},".format(ret), file=sys.stdout)
         except KeyError:
-            print("No Key:", tup, file=sys.stderr)
+            found = 0
+            for name in tup[ed.INDEX_POLYSYLLABLES]:
+                found += 1
+                if sylc.syl_count(cmu_prons, name) == 1:
+                    lst[ed.INDEX_MONOSYLLABLES].append(name)
+            if found:
+                ret = tuple(lst)
+                print("    {},".format(ret), file=sys.stdout)
+            else:
+                print("No Key, no Prev:", tup, file=sys.stderr)
     print()
 
 def reflag_emo_tuples(start=None, stop=None, step=None):

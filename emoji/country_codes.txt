@@ -13,6 +13,8 @@ Armenia	AM	ARM	51	374
 Aruba	AW	ABW	533	297
 Australia	AU	AUS	36	61
 Austria	AT	AUT	40	43
+Åland Islands	AX	AXI	00	00
+Canary Islands	IC	TCI	00	34	TCI is IATA for Tenerife
 Azerbaijan	AZ	AZE	31	994
 Bahamas	BS	BHS	44	1-242
 Bahrain	BH	BHR	48	973
@@ -41,6 +43,7 @@ Canada	CA	CAN	124	1
 Cape Verde	CV	CPV	132	238
 Cayman Islands	KY	CYM	136	1-345
 Central African Republic	CF	CAF	140	236
+Ceuta & Melilla	EA	MLN	00 00	MLN is IATA for Melilla (Spain)
 Chad	TD	TCD	148	235
 Chile	CL	CHL	152	56
 China	CN	CHN	156	86
