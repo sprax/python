@@ -28,8 +28,17 @@ def SplitByUnicode():
     matchList = regexPattern.findall(jokes)
     print(matchList)
 
-def gen_emo_tuples():
-    old_emos = ed.EmoTuples.emo_tuples
+def gen_old_tuples():
+    return ed.EmoTuples.emo_tuples
+
+def gen_emo_tuples(emo_dict, limit=5000):
+    for i, t in enumerate(sorted(jt.items(), key=lambda x: int(x[1]['order']))):
+        if i > limit:
+            break
+        key, val, chk = t[0], t[1], unicode_chr_str(key)
+        print("('%s', '%s', %d, %d, '%s', %s, '%s', [])," % (key, chk, int(val['order']), len(chk), val['shortname'], val['shortname_alternates'], val['category']))
+
+
 
 EX = [ ('1f602',  7, 1, 1, '😂', ['joy', 'happy'], ':joy:', [], [], 'people') ,
        ('1f923',  8, 0, 1, '\U0001f923', ['rofl'], ':rofl:', [':rolling_on_the_floor_laughing:'], [], 'people') ,

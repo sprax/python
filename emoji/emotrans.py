@@ -105,13 +105,6 @@ def test_misc():
     print("('%s', '%s', '%s')" % qw_tuple("surf's-up wave rip-curl"))
 
 
-def gen_emo_tuples(emo_dict, limit=5000):
-    for i, t in enumerate(sorted(jt.items(), key=lambda x: int(x[1]['order']))):
-        if i > limit:
-            break
-        key, val, chk = t[0], t[1], unicode_chr_str(key)
-        print("('%s', '%s', %d, %d, '%s', %s, '%s', [])," % (key, chk, int(val['order']), len(chk), val['shortname'], val['shortname_alternates'], val['category']))
-
 
 class EmoTuples:
     def __init__(self):
@@ -167,6 +160,8 @@ def test_it():
                         help='directory to search for input_file')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
+    parser.add_argument('-flags', action='store_true',
+                        help='use flag emojis for country abbreviations')
     parser.add_argument('-no_articles', action='store_true',
                         help='replace articles (a, an, the) with nothing')
     parser.add_argument('-subtraction', action='store_true',
