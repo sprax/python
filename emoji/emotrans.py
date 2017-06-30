@@ -17,6 +17,7 @@ from collections import defaultdict
 
 import emoji
 import emotuples
+import text_fio
 
 SENTENCES = [
     "Wind and waves may rock the boat, but only you can tip the crew.",
@@ -150,10 +151,16 @@ def test_emo_tuples(options):
             src_to_emo[src].append(tt[i_unchr])
             # print("src(%s) => emo( %s )" % (src, tt[i_unchr]))
     for sentence in SENTENCES:
-        emo_list = emojize(src_to_emo, sentence)
-        emo_tran = ' '.join(emo_list)
-        print("    %s ==>\n    %s\n" % (sentence, emo_tran))
+        emojize_sentence(src_to_emo, sentence, options.verbose)
+    for sentence in text_fio.read_text_lines("quotations.txt", options.charset):
+        emojize_sentence(src_to_emo, sentence, options.verbose)
 
+def emojize_sentence(src_to_emo, sentence, verbose):
+    emo_list = emojize(src_to_emo, sentence)
+    emo_tran = ' '.join(emo_list)
+    if verbose:
+        print("    %s ==>\n    %s\n" % (sentence, emo_tran))
+    return emo_tran
 
 def test_it():
     '''test english -> emoji translation'''

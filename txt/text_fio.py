@@ -44,6 +44,14 @@ def read_lines(file_spec, charset='utf8'):
         for line in text:
             yield line.rstrip()
 
+def read_text_lines(file_spec, charset='utf8'):
+    '''read and yield non-empty lines of a text file as a iter of str'''
+    with open(file_spec, 'r', encoding=charset) as text:
+        for line in text:
+            line = line.strip()
+            if line:
+                yield line
+
 def read_file(file_spec, charset='utf8'):
     '''read and return all contents of file as one str'''
     with open(file_spec, 'r', encoding=charset) as src:
