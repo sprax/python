@@ -139,7 +139,7 @@ def test_emo_tuples(options):
     if options.no_articles:
         presets.update({'a': [''], 'but': [''], 'may': [''], 'the': ['']})
     if options.subtraction:
-        presets.update({'can': ['🍬 ➖ D']})
+        presets.update({'can': ['🍬 ➖ D'], 'crew': ['© ➕ 🍺 ➖ 🐝']})
     src_to_emo = defaultdict(list, presets)
     i_monos = emotuples.INDEX_MONOSYLLABLES
     i_unichr = emotuples.INDEX_EMOJI_UNICHRS
