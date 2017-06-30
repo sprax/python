@@ -18,8 +18,10 @@ from collections import defaultdict
 import emoji
 import emotuples
 
-WAW = "wind and waves may rock the boat, but only you can tip the crew"
-
+SENTENCES = [
+    "Wind and waves may rock the boat, but only you can tip the crew.",
+    "It's the US vs. Canada in football, I mean soccer.",
+]
 
 def is_emoji(uchar):
   return uchar in emoji.UNICODE_EMOJI
@@ -45,7 +47,7 @@ def getsyl(map, word):
 
 def trans():
     wtsl = defaultdict(selflist)
-    sent = WAW
+    sent = SENTENCES[0]
     words = re.split(r'\W+', sent.rstrip())
     print(words)
     for word in words:
@@ -135,19 +137,23 @@ def test_emo_tuples(options):
         presets.update({'can': ['🍬 ➖ D'], 'crew': ['© ➕ 🍺 ➖ 🐝']})
     src_to_emo = defaultdict(list, presets)
     i_monos = emotuples.INDEX_MONOSYLLABLES
-    i_unichr = emotuples.INDEX_EMOJI_UNICHRS
+    i_polys = emotuples.INDEX_POLYSYLLABLES
+    i_unchr = emotuples.INDEX_EMOJI_UNICHRS
     i_flags = emotuples.INDEX_FLAGS
     usables = [tup for tup in emotuples.EMO_TUPLES if tup[i_flags] > 0]
     print("Found {} usable emotuples.".format(len(usables)))
     for tt in usables:
         for src in tt[i_monos]:
-            # print("type src is: ", type(src), "and uni:", tt[0])
-            src_to_emo[src].append(tt[i_unichr])
+            src_to_emo[src].append(tt[i_unchr])
             # print("src(%s) => emo(%s)" % (src, tt[1]))
-    txt_phrase = WAW
-    emo_list = emojize(src_to_emo, txt_phrase)
-    emo_phrase = ' '.join(emo_list)
-    print("    %s ==>\n    %s" % (txt_phrase, emo_phrase))
+        for src in tt[i_polys]:
+            src_to_emo[src].append(tt[i_unchr])
+            # print("src(%s) => emo( %s )" % (src, tt[i_unchr]))
+    for sentence in SENTENCES:
+        emo_list = emojize(src_to_emo, sentence)
+        emo_tran = ' '.join(emo_list)
+        print("    %s ==>\n    %s\n" % (sentence, emo_tran))
+
 
 def test_it():
     '''test english -> emoji translation'''

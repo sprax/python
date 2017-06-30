@@ -68,7 +68,8 @@ def regen_emo_tuples(name='EMO_TUPLES', start=None, stop=None, step=None):
         print("    {},".format(tuple(lst)))
     print("]")
 
-def reset_country_codes_to_emoflags(cc_path='country_codes.txt', start=2120, stop=2377, charset='utf-8'):
+def reset_country_codes_to_emoflags(cc_path='country_codes.txt',
+    irange=ed.FLAGS_RANGE, charset='utf-8'):
     '''
     Read country code table from file at cc_path into a default dict,
     then set the name and syllable fields in a copy of emo_tuples.
@@ -84,7 +85,7 @@ def reset_country_codes_to_emoflags(cc_path='country_codes.txt', start=2120, sto
                 # print(codes)
                 cc_dict[codes[1]] = (codes[0], codes[2])
 
-    for tup in ed.EMO_TUPLES[start:stop]:
+    for tup in ed.EMO_TUPLES[irange.start:irange.stop]:
         cc2 = tup[ed.INDEX_ALTERNATIVES][0].strip(':').upper()
         # print(cc2, '  ', end='')
         monos, polys, names = [], [], [cc2]
