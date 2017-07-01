@@ -24,11 +24,11 @@ SENTENCES = [
     "It's the US vs. Canada in football, I mean soccer.",
     "Lady Astor: “Winston, if I were your wife I’d put poison in your coffee.",
     "Winston Churchill: “Nancy, if I were your husband I’d drink it.",
-    "When the eagles are silent, the parrots begin to jabber.",
-    "If you have an important point to make, don’t try to be subtle or clever. Use a pile driver. Hit the point once. Then come back and hit it again. Then hit it a third time -- a tremendous whack.",
-    "Success consists of going from failure to failure without loss of enthusiasm.",
-    "Character may be manifested in the great moments, but it is made in the small ones.",
-    "Men occasionally stumble over the truth, but most of them pick themselves up and hurry off as if nothing has happened.",
+    # "When the eagles are silent, the parrots begin to jabber.",
+    # "If you have an important point to make, don’t try to be subtle or clever. Use a pile driver. Hit the point once. Then come back and hit it again. Then hit it a third time -- a tremendous whack.",
+    # "Success consists of going from failure to failure without loss of enthusiasm.",
+    # "Character may be manifested in the great moments, but it is made in the small ones.",
+    # "Men occasionally stumble over the truth, but most of them pick themselves up and hurry off as if nothing has happened.",
 ]
 
 def is_emoji(uchar):
@@ -36,7 +36,6 @@ def is_emoji(uchar):
 
 def extract_emojis(str):
   return ''.join(c for c in str if c in emoji.UNICODE_EMOJI)
-
 
 def test_load():
     emodict = json.loads(open('../../emodict.json').read())
@@ -73,55 +72,16 @@ def unicode_chr_str(hex_unicode):
     parts = hex_unicode.split('-')
     return ''.join(char(int(x, 16)) for x in parts)
 
-def qw(ss):
-    return ss.split()
-
-def qw_list(ss):
-    return re.split(r'\W+', ss.rstrip())
-
-def qw_tuple(ss):
-    return tuple(qw_list(ss))
-
-def test_misc():
-    trans()
-    print(u'\U0001f604'.encode('unicode-escape'))
-    print(u'\U0001f604')
-    ss = u'\U0001f604'
-    xx = chr(ss[0])
-    print("ss({}) xx({})".format(ss, xx))
-    # -*- coding: UTF-8 -*-
-    #convert to unicode
-    teststring =  "I am happy \U0001f604"
-    # #teststring = unicode(teststring, 'utf-8')
-
-    #encode it with string escape
-    teststring = teststring.encode('unicode_escape')
-    print("💗 Growing Heart")
-    print(emoji.emojize('Water! :water_wave:'))
-    print(emoji.demojize(u'🌊')) # for Python 2.x
-# print(emoji.demojize('🌊')) # for Python 3.x.
-    print(u"And \U0001F60D")
-    print("(-woman) astronaut", chr(int("0001f680", 16)))
-    print("woman_astronaut", chr(int("0x0001f680", 0)))
-
-    print("\U0001f483\U0001f3fe")
-
-    print(chr(0x001f483),chr(0x001f3fe))
-    print('💃 🏾 ')
-    print(chr(0x001f483)+chr(0x001f3fe))
-    print('💃🏾 ')
-    print(chr(int('1f483',16))+chr(int('1f3fe',16)))
-    print('%8s %8s %8s' % qw_tuple('surf wave whitecap'))
-    print("('%s', '%s', '%s')" % qw_tuple("surf's-up wave rip-curl"))
-
 
 def emojize(src_to_emo, txt_phrase):
     srcs = re.split(r'\W+', txt_phrase.rstrip())
     emo_phrase = []
     for raw in srcs:
-        src = raw if raw == 'I' else raw.lower()
-        lst = src_to_emo[src]
+        lst = src_to_emo[raw]
         num = len(lst)
+        if num < 1:
+            lst = src_to_emo[raw.lower()]
+            num = len(lst)
         if num > 1:
             dst = random.choice(lst)
         elif num == 1:
@@ -130,6 +90,13 @@ def emojize(src_to_emo, txt_phrase):
             dst = raw
         emo_phrase.append(dst)
     return emo_phrase
+
+def emojize_sentence(src_to_emo, sentence, verbose):
+    emo_list = emojize(src_to_emo, sentence)
+    emo_tran = ' '.join(emo_list)
+    if verbose:
+        print("    %s ==>\n    %s\n" % (sentence, emo_tran))
+    return emo_tran
 
 def test_emo_tuples(options):
     presets = {}
@@ -162,14 +129,6 @@ def test_emo_tuples(options):
     if options.text_file:
         for sentence in text_fio.read_text_lines(options.text_file, options.charset):
             emojize_sentence(src_to_emo, sentence, options.verbose)
-
-
-def emojize_sentence(src_to_emo, sentence, verbose):
-    emo_list = emojize(src_to_emo, sentence)
-    emo_tran = ' '.join(emo_list)
-    if verbose:
-        print("    %s ==>\n    %s\n" % (sentence, emo_tran))
-    return emo_tran
 
 def test_it():
     '''test english -> emoji translation'''

@@ -19,6 +19,16 @@ import emotrans as et
 import sylcount as sylc
 from nltk.corpus import cmudict
 
+
+def qw(ss):
+    return ss.split()
+
+def qw_list(ss):
+    return re.split(r'\W+', ss.rstrip())
+
+def qw_tuple(ss):
+    return tuple(qw_list(ss))
+
 def SplitByUnicode():
     jokes = "That's a nice joke 😆😆😆 😛";
     print("Original String:", jokes);

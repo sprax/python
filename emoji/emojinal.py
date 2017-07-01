@@ -40,6 +40,39 @@ a_list = ['?? ?? me as�, bla es se ?? ds ??????']
 
 re.findall(r'[^\w\s,]', a_list[0])
 
+def test_misc():
+    trans()
+    print(u'\U0001f604'.encode('unicode-escape'))
+    print(u'\U0001f604')
+    ss = u'\U0001f604'
+    xx = chr(ss[0])
+    print("ss({}) xx({})".format(ss, xx))
+    # -*- coding: UTF-8 -*-
+    #convert to unicode
+    teststring =  "I am happy \U0001f604"
+    # #teststring = unicode(teststring, 'utf-8')
+
+    #encode it with string escape
+    teststring = teststring.encode('unicode_escape')
+    print("💗 Growing Heart")
+    print(emoji.emojize('Water! :water_wave:'))
+    print(emoji.demojize(u'🌊')) # for Python 2.x
+# print(emoji.demojize('🌊')) # for Python 3.x.
+    print(u"And \U0001F60D")
+    print("(-woman) astronaut", chr(int("0001f680", 16)))
+    print("woman_astronaut", chr(int("0x0001f680", 0)))
+
+    print("\U0001f483\U0001f3fe")
+
+    print(chr(0x001f483),chr(0x001f3fe))
+    print('💃 🏾 ')
+    print(chr(0x001f483)+chr(0x001f3fe))
+    print('💃🏾 ')
+    print(chr(int('1f483',16))+chr(int('1f3fe',16)))
+    print('%8s %8s %8s' % qw_tuple('surf wave whitecap'))
+    print("('%s', '%s', '%s')" % qw_tuple("surf's-up wave rip-curl"))
+
+
 dec_emo = {
 	127744: ['🌀 ', 'blue-spiral', ''],
 	127745: ['🌁 ', 'foggy-mountain', ':foggy:'],
