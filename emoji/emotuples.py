@@ -1894,7 +1894,7 @@ EMO_TUPLES = [
     ('262f', 1866, 1, 1, '☯', ['yin', 'yang'], ':yin_yang:', [], [], 'symbols'),
     ('2626', 1867, 1, 1, '☦', ['cross'], ':orthodox_cross:', [], ['orthodox'], 'symbols'),
     ('1f6d0', 1868, 1, 1, '🛐', ['church'], ':place_of_worship:', [':worship_symbol:'], ['worship'], 'symbols'),
-    ('26ce', 1869, 1, 0, '⛎', [], ':ophiuchus:', [], ['ophiuchus'], 'symbols'),
+    ('26ce', 1869, 1, 1, '⛎', ['you'], ':ophiuchus:', [], ['ophiuchus'], 'symbols'),
     ('2648', 1870, 1, 1, '♈', ['ram'], ':aries:', [], ['aries'], 'symbols'),
     ('2649', 1871, 1, 0, '♉', ['bull'], ':taurus:', [], ['taurus'], 'symbols'),
     ('264a', 1872, 1, 0, '♊', [], ':gemini:', [], ['gemini'], 'symbols'),

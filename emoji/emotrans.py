@@ -21,6 +21,7 @@ import text_fio
 
 SENTENCES = [
     # "Wind and waves may rock the boat, but only you can tip the crew.",
+    "I love you",
     "It's the US vs. Canada in football, I mean soccer.",
     "Lady Astor: “Winston, if I were your wife I’d put poison in your coffee.",
     "Winston Churchill: “Nancy, if I were your husband I’d drink it.",
@@ -103,7 +104,7 @@ def test_emo_tuples(options):
     if options.no_articles:
         presets.update({'a': [''], 'but': [''], 'may': [''], 'the': ['']})
     if options.arithmetic:
-        presets.update({'can': ['🍬 ➖ D'], 'crew': ['© ➕ 🍺 ➖ 🐝']})
+        presets.update({'can': ['🍬 ➖ D'], 'crew': ['© ➕ 🍺 ➖ 🐝'], 'you': ['🆕 ➖ N']})
     if options.multiple:
         presets.update({'crew': ['👦 👲🏽 👧🏿 👨 👦🏽']})
 
