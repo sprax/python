@@ -73,9 +73,16 @@ WORD_SEP_EXTERIOR = r'!"#$%&()*+./:;<=>?@[\]^_`{|}~\x82\x83\x84\x85\x86\x87\x88\
 RE_WORD_SEP = re.compile(r"(?:\s+[{}]+\s*|\s*[{}]+\s+|[{}]*[\s{}]+|\s+)".format(
     WORD_SEP_INTERIOR, WORD_SEP_INTERIOR, WORD_SEP_INTERIOR, WORD_SEP_EXTERIOR))
 
-def word_splits(sentence):
-    splits = RE_WORD_SEP.split(sentence)
+def word_splits(sentence_body):
+    splits = RE_WORD_SEP.split(sentence_body)
     return [ss for ss in splits if len(ss) > 0]
+
+RE_SENTENCE_ENDS = re.compile(r"(\w.*)\b(?=\W*$)")
+
+def sentence_body_and_end(sentence):
+    '''return sentence parts as [beg, body, end] where beg and end may be 0-length'''
+    return RE_SENTENCE_ENDS.split(sentence)
+
 
 ###############################################################################
 REGEX_PUNCTUATION = re.compile("[{}]".format(string.punctuation))

@@ -18,10 +18,11 @@ from collections import defaultdict
 import emoji
 import emotuples
 import text_fio
+import sylcount
 
 SENTENCES = [
     # "Wind and waves may rock the boat, but only you can tip the crew.",
-    "I love you",
+    # "I love you",
     "It's the US vs. Canada in football, I mean soccer.",
     "Lady Astor: “Winston, if I were your wife I’d put poison in your coffee.",
     "Winston Churchill: “Nancy, if I were your husband I’d drink it.",
@@ -74,8 +75,11 @@ def unicode_chr_str(hex_unicode):
     return ''.join(char(int(x, 16)) for x in parts)
 
 
-def emojize(src_to_emo, txt_phrase):
-    srcs = re.split(r'\W+', txt_phrase.rstrip())
+def emojize(src_to_emo, txt_phrase, verbose):
+    # srcs = re.split('\W+', txt_phrase.strip())
+    srcs = sylcount.word_splits(txt_phrase.strip())
+    if verbose > 2:
+        print(srcs)
     emo_phrase = []
     for raw in srcs:
         lst = src_to_emo[raw]
@@ -93,8 +97,12 @@ def emojize(src_to_emo, txt_phrase):
     return emo_phrase
 
 def emojize_sentence(src_to_emo, sentence, verbose):
-    emo_list = emojize(src_to_emo, sentence)
-    emo_tran = ' '.join(emo_list)
+    beg, body, end = sylcount.sentence_body_and_end(sentence)
+    if verbose > 2:
+        print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
+    emo_list = emojize(src_to_emo, body, verbose)
+    emo_join = ' '.join(emo_list)
+    emo_tran = ''.join([beg, emo_join, end])
     if verbose:
         print("    %s ==>\n    %s\n" % (sentence, emo_tran))
     return emo_tran
