@@ -20,8 +20,15 @@ import emotuples
 import text_fio
 
 SENTENCES = [
-    "Wind and waves may rock the boat, but only you can tip the crew.",
+    # "Wind and waves may rock the boat, but only you can tip the crew.",
     "It's the US vs. Canada in football, I mean soccer.",
+    "Lady Astor: “Winston, if I were your wife I’d put poison in your coffee.",
+    "Winston Churchill: “Nancy, if I were your husband I’d drink it.",
+    "When the eagles are silent, the parrots begin to jabber.",
+    "If you have an important point to make, don’t try to be subtle or clever. Use a pile driver. Hit the point once. Then come back and hit it again. Then hit it a third time -- a tremendous whack.",
+    "Success consists of going from failure to failure without loss of enthusiasm.",
+    "Character may be manifested in the great moments, but it is made in the small ones.",
+    "Men occasionally stumble over the truth, but most of them pick themselves up and hurry off as if nothing has happened.",
 ]
 
 def is_emoji(uchar):
@@ -108,17 +115,11 @@ def test_misc():
     print("('%s', '%s', '%s')" % qw_tuple("surf's-up wave rip-curl"))
 
 
-
-class EmoTuples:
-    def __init__(self):
-        self.emo_tuples = EMO_TUPLES
-
-
-
 def emojize(src_to_emo, txt_phrase):
     srcs = re.split(r'\W+', txt_phrase.rstrip())
     emo_phrase = []
-    for src in srcs:
+    for raw in srcs:
+        src = raw if raw == 'I' else raw.lower()
         lst = src_to_emo[src]
         num = len(lst)
         if num > 1:
@@ -126,7 +127,7 @@ def emojize(src_to_emo, txt_phrase):
         elif num == 1:
             dst = lst[0]
         else:
-            dst = src
+            dst = raw
         emo_phrase.append(dst)
     return emo_phrase
 
@@ -134,8 +135,11 @@ def test_emo_tuples(options):
     presets = {}
     if options.no_articles:
         presets.update({'a': [''], 'but': [''], 'may': [''], 'the': ['']})
-    if options.subtraction:
+    if options.arithmetic:
         presets.update({'can': ['🍬 ➖ D'], 'crew': ['© ➕ 🍺 ➖ 🐝']})
+    if options.multiple:
+        presets.update({'crew': ['👦 👲🏽 👧🏿 👨 👦🏽']})
+
     src_to_emo = defaultdict(list, presets)
     i_monos = emotuples.INDEX_MONOSYLLABLES
     i_polys = emotuples.INDEX_POLYSYLLABLES
@@ -150,10 +154,15 @@ def test_emo_tuples(options):
         for src in tt[i_polys]:
             src_to_emo[src].append(tt[i_unchr])
             # print("src(%s) => emo( %s )" % (src, tt[i_unchr]))
+        if options.usable:
+            print(tt[i_unchr], end='  ')
+    print()
     for sentence in SENTENCES:
         emojize_sentence(src_to_emo, sentence, options.verbose)
-    for sentence in text_fio.read_text_lines("quotations.txt", options.charset):
-        emojize_sentence(src_to_emo, sentence, options.verbose)
+    if options.text_file:
+        for sentence in text_fio.read_text_lines(options.text_file, options.charset):
+            emojize_sentence(src_to_emo, sentence, options.verbose)
+
 
 def emojize_sentence(src_to_emo, sentence, verbose):
     emo_list = emojize(src_to_emo, sentence)
@@ -167,25 +176,27 @@ def test_it():
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="test english -> emoji translation")
-    parser.add_argument('input_file', type=str, nargs='?', default='train_1000.label',
-                        help='file containing text to filter')
-    parser.add_argument('-dir', dest='text_dir', type=str, default='/Users/sprax/text',
-                        help='directory to search for input_file')
+    parser.add_argument('-arithmetic', action='store_true',
+                        help='use addition and subtraction of letters or syllables (rebus)')
+    parser.add_argument('-directory', dest='text_dir', type=str, default='/Users/sprax/text',
+                        help='directory to search for input files')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
     parser.add_argument('-flags', action='store_true',
-                        help='use flag emojis for country abbreviations')
-    parser.add_argument('-no_articles', action='store_true',
-                        help='replace articles (a, an, the) with nothing')
-    parser.add_argument('-subtraction', action='store_true',
-                        help='allow subtraction of letters or syllables')
+                        help='use flag emojis in translations of words not representing countries')
+    parser.add_argument('-multiple', action='store_true',
+                        help='use multiple emoji for plural nouns')
+    parser.add_argument('-no_articles', '-noa', action='store_true',
+                        help='remove articles (a, an, the)')
     parser.add_argument('-number', dest='max_lines', type=int, nargs='?', const=1, default=0,
-                        help='number of sentences to keep (default: 5), overrides -percent')
+                        help='number of sentences to keep (default: 0 = all)')
     parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
                         help='output path for filtered text (default: - <stdout>)')
-    parser.add_argument('-truncate', dest='max_words', type=int, nargs='?',
-                        const=8, default=0,
-                        help='truncate sentences after MAX words (default: INT_MAX)')
+    parser.add_argument('-text_file', dest='text_file', type=str, nargs='?',
+                        const='quotations.txt', default=None,
+                        help='translate sentences from this text_file')
+    parser.add_argument('-usable', action='store_true',
+                        help='show all usable emoji under current options')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
