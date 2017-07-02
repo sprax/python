@@ -77,7 +77,17 @@ def unicode_chr_str(hex_unicode):
     parts = hex_unicode.split('-')
     return ''.join(char(int(x, 16)) for x in parts)
 
-def emojize_word(src_to_emo, word, verbose):
+EMO_SYNONYMS = {}
+
+def emo_synonyms(word):
+    try:
+        return EMO_SYNONYMS[word]
+    except KeyError:
+        return [word]
+
+def emojize_token(src_to_emo, word, verbose):
+    '''return emoji string translation of word or None
+    TODO: make protected ?'''
     lst = src_to_emo[word]
     num = len(lst)
     if num < 1:
@@ -86,12 +96,18 @@ def emojize_word(src_to_emo, word, verbose):
     if num >= 1:
         if verbose > 3:
             print("word subs: {} => {}".format(word, lst))
-        dst = random.choice(lst) + ' '
-    else:
-        if verbose > 4:
-            print("word self: {}".format(word))
-        dst = word
-    return dst
+        return random.choice(lst) + ' '
+    elif verbose > 4:
+        print("word self: {}".format(word))
+    return None
+
+def emojize_word(src_to_emo, src_word, verbose):
+    words = emo_synonyms(src_word)
+    for word in words:
+        emojis = emojize_token(src_to_emo, word, verbose)
+        if emojis:
+            return emojis
+    return src_word
 
 def emojize_match(src_to_emo, match_obj, verbose=1):
     word = match_obj.group()

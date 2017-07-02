@@ -14,7 +14,6 @@ import random
 import re
 import string
 from collections import defaultdict
-from nltk.corpus import cmudict
 import emoji
 import emotuples
 
@@ -54,8 +53,12 @@ def sentence_body_and_end(sentence):
     '''return sentence parts as [beg, body, end] where beg and end may be 0-length'''
     return RE_SENTENCE_ENDS.split(sentence)
 
+# The < is for <3, <=, <--, etc.
 WORD_EXT_BEG = r'[<]'
-WORD_EXT_END = r'[%]'
+
+# The . is for abbreviations; any sentence-ending punctuation should already be removed.
+WORD_EXT_END = r'[%.>]'  
+
 RE_WORD_EXT = re.compile(r"((?:{}?[\w]+[{}]*)[\w]+{}?|{}?\w{}?)".format(
     WORD_EXT_BEG, WORD_SEP_INTERIOR, WORD_EXT_END, WORD_EXT_BEG, WORD_EXT_END))
 
@@ -84,8 +87,6 @@ def main():
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
     # test_misc()
-
-    cmu_prons = cmudict.dict() # get the CMU Pronouncing Dict
 
     for sentence, counts in EXAMPLES.items():
         print("MANUAL", counts[0], sentence)

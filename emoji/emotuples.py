@@ -1920,7 +1920,7 @@ EMO_TUPLES = [
     ('1f23a', 1892, 1, 1, '🈺', ['u55b6'], ':u55b6:', [], [], 'symbols'),
     ('1f237', 1893, 1, 1, '🈷', ['u6708'], ':u6708:', [], [], 'symbols'),
     ('2734',  1894, 1, 1, '✴', ['eight', 'star', 'black'], ':eight_pointed_black_star:', [], ['pointed'], 'symbols'),
-    ('1f19a', 1895, 1, 0, '🆚', [], ':vs:', [], ['vs', 'versus', 'against'], 'symbols'),
+    ('1f19a', 1895, 1, 1, '🆚', [], ':vs:', [], ['vs', 'versus', 'against', 'vs.'], 'symbols'),
     ('1f4ae', 1896, 1, 1, '💮', ['white'], ':white_flower:', [], ['flower'], 'symbols'),
     ('1f250', 1897, 1, 0, '🉐', [], ':ideograph_advantage:', [], ['ideograph', 'advantage'], 'symbols'),
     ('3299',  1898, 1, 0, '㊙', [], ':secret:', [], ['secret'], 'symbols'),
