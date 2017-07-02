@@ -83,6 +83,13 @@ def sentence_body_and_end(sentence):
     '''return sentence parts as [beg, body, end] where beg and end may be 0-length'''
     return RE_SENTENCE_ENDS.split(sentence)
 
+WORD_EXT_BEG = r'[<]'
+WORD_EXT_END = r'[%]'
+RE_WORD_EXT = re.compile(r"((?:{}?[\w]+[{}]*)[\w]+{}?|{}?\w{}?)".format(
+    WORD_EXT_BEG, WORD_SEP_INTERIOR, WORD_EXT_END, WORD_EXT_BEG, WORD_EXT_END))
+
+def replace_words_extended(rep_func, text_phrase):
+    return RE_WORD_EXT.sub(rep_func, text_phrase)
 
 ###############################################################################
 REGEX_PUNCTUATION = re.compile("[{}]".format(string.punctuation))

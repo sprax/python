@@ -14,6 +14,7 @@ import json
 import random
 import re
 from collections import defaultdict
+from functools import partial
 
 import emoji
 import emotuples
@@ -26,6 +27,7 @@ SENTENCES = [
     "It's the US vs. Canada in football, I mean soccer.",
     "Lady Astor: “Winston, if I were your wife I’d put poison in your coffee.",
     "Winston Churchill: “Nancy, if I were your husband I’d drink it.",
+    "I'm 99% sure <3 ain't a 4-letter word, even on Rhys' say-so?!",
     # "When the eagles are silent, the parrots begin to jabber.",
     # "If you have an important point to make, don’t try to be subtle or clever. Use a pile driver. Hit the point once. Then come back and hit it again. Then hit it a third time -- a tremendous whack.",
     # "Success consists of going from failure to failure without loss of enthusiasm.",
@@ -74,33 +76,52 @@ def unicode_chr_str(hex_unicode):
     parts = hex_unicode.split('-')
     return ''.join(char(int(x, 16)) for x in parts)
 
+def emojize_word(src_to_emo, word, verbose):
+    lst = src_to_emo[word]
+    num = len(lst)
+    if num < 1:
+        lst = src_to_emo[word.lower()]
+        num = len(lst)
+    if num > 1:
+        dst = random.choice(lst)
+    elif num == 1:
+        dst = lst[0]
+    else:
+        dst = word
+    return dst
 
-def emojize(src_to_emo, txt_phrase, verbose):
+def emojize_match(src_to_emo, match_obj, verbose=1):
+    word = match_obj.group()
+    return emojize_word(src_to_emo, word, verbose)
+
+def emojize_sentence_subs(src_to_emo, sentence, verbose):
+    beg, body, end = sylcount.sentence_body_and_end(sentence)
+    if verbose > 2:
+        print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
+
+    emojize_match_bound = partial(emojize_match, src_to_emo)
+    subs = sylcount.replace_words_extended(emojize_match_bound, body)
+    emo_tran = ''.join([beg, subs, end])
+    if verbose:
+        print("    %s ==>\n    %s\n" % (sentence, emo_tran))
+    return emo_tran
+
+def emojize_phrase(src_to_emo, txt_phrase, verbose):
     # srcs = re.split('\W+', txt_phrase.strip())
     srcs = sylcount.word_splits(txt_phrase.strip())
     if verbose > 2:
         print(srcs)
     emo_phrase = []
     for raw in srcs:
-        lst = src_to_emo[raw]
-        num = len(lst)
-        if num < 1:
-            lst = src_to_emo[raw.lower()]
-            num = len(lst)
-        if num > 1:
-            dst = random.choice(lst)
-        elif num == 1:
-            dst = lst[0]
-        else:
-            dst = raw
+        dst = emojize_word(src_to_emo, raw, verbose)
         emo_phrase.append(dst)
     return emo_phrase
 
-def emojize_sentence(src_to_emo, sentence, verbose):
+def emojize_sentence_split_join(src_to_emo, sentence, verbose):
     beg, body, end = sylcount.sentence_body_and_end(sentence)
     if verbose > 2:
         print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
-    emo_list = emojize(src_to_emo, body, verbose)
+    emo_list = emojize_phrase(src_to_emo, body, verbose)
     emo_join = ' '.join(emo_list)
     emo_tran = ''.join([beg, emo_join, end])
     if verbose:
@@ -134,12 +155,12 @@ def test_emo_tuples(options):
             print(tt[i_unchr], end='  ')
     print()
     for sentence in SENTENCES:
-        emojize_sentence(src_to_emo, sentence, options.verbose)
+        emojize_sentence_subs(src_to_emo, sentence, options.verbose)
     if options.text_file:
         for sentence in text_fio.read_text_lines(options.text_file, options.charset):
-            emojize_sentence(src_to_emo, sentence, options.verbose)
+            emojize_sentence_subs(src_to_emo, sentence, options.verbose)
 
-def test_it():
+def test_emojize():
     '''test english -> emoji translation'''
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
@@ -172,4 +193,4 @@ def test_it():
     test_emo_tuples(args)
 
 if __name__ == '__main__':
-    test_it()
+    test_emojize()
