@@ -82,11 +82,13 @@ def emojize_word(src_to_emo, word, verbose):
     if num < 1:
         lst = src_to_emo[word.lower()]
         num = len(lst)
-    if num > 1:
-        dst = random.choice(lst)
-    elif num == 1:
-        dst = lst[0]
+    if num >= 1:
+        if verbose > 3:
+            print("word subs: {} => {}".format(word, lst))
+        dst = random.choice(lst) + ' '
     else:
+        if verbose > 4:
+            print("word self: {}".format(word))
         dst = word
     return dst
 
@@ -99,7 +101,7 @@ def emojize_sentence_subs(src_to_emo, sentence, verbose):
     if verbose > 2:
         print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
 
-    emojize_match_bound = partial(emojize_match, src_to_emo)
+    emojize_match_bound = partial(emojize_match, src_to_emo, verbose=verbose)
     subs = sylcount.replace_words_extended(emojize_match_bound, body)
     emo_tran = ''.join([beg, subs, end])
     if verbose:
@@ -128,6 +130,13 @@ def emojize_sentence_split_join(src_to_emo, sentence, verbose):
         print("    %s ==>\n    %s\n" % (sentence, emo_tran))
     return emo_tran
 
+def add_preset_multiples(preset_dict):
+    preset_dict.update({
+        'crew': ['👦 👲🏽 👧🏿 👨 👦🏽'],
+        'husband': ['💑 👈', '💏 👈', '👩❤👨 ⬅'],
+        'wife': ['👉 💑', '👉 💏', '➡ 👩❤👨'],
+    })
+
 def test_emo_tuples(options):
     presets = {}
     if options.no_articles:
@@ -135,7 +144,7 @@ def test_emo_tuples(options):
     if options.arithmetic:
         presets.update({'can': ['🍬 ➖ D'], 'crew': ['© ➕ 🍺 ➖ 🐝'], 'you': ['🆕 ➖ N']})
     if options.multiple:
-        presets.update({'crew': ['👦 👲🏽 👧🏿 👨 👦🏽']})
+        add_preset_multiples(presets)
 
     src_to_emo = defaultdict(list, presets)
     i_monos = emotuples.INDEX_MONOSYLLABLES
