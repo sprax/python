@@ -1956,7 +1956,7 @@ EMO_TUPLES = [
     ('2753', 1928, 1, 1, '❓', ['ask', '?'], ':question:', [], ['question', 'question mark', '?'], 'symbols'),
     ('2754', 1929, 1, 1, '❔', ['ask', '?'], ':grey_question:', [], ['question', 'question mark', '?'], 'symbols'),
     ('203c', 1930, 1, 1, '‼', [], ':bangbang:', [], ['bangbang', '!!'], 'symbols'),
-    ('2049', 1931, 1, 1, '⁉', [], ':interrobang:', [], ['interrobang', '!?'], 'symbols'),
+    ('2049', 1931, 1, 1, '⁉', [], ':interrobang:', [], ['interrobang', '!?', '?!'], 'symbols'),
     ('1f505', 1932, 1, 1, '🔅', ['dim'], ':low_brightness:', [], ['low brightness'], 'symbols'),
     ('1f506', 1933, 1, 1, '🔆', ['bright'], ':high_brightness:', [], ['high brightness'], 'symbols'),
     ('303d', 1934, 1, 1, '〽', ['mark', 'part'], ':part_alternation_mark:', [], ['alternation'], 'symbols'),

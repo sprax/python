@@ -25,10 +25,10 @@ import text_regex
 SENTENCES = [
     # "Wind and waves may rock the boat, but only you can tip the crew.",
     # "I love you",
-    "It's the US vs. Canada in football, I mean soccer.",
+    "So it's the US vs. Canada in football, I mean soccer!?",
     "Lady Astor: “Winston, if I were your wife I’d put poison in your coffee.",
     "Winston Churchill: “Nancy, if I were your husband I’d drink it.",
-    "I'm 99% sure <3 ain't a 4-letter word, even on Rhys' say-so?!",
+    "I'm 100% sure <3 ain't a 4-letter word, even on Rhys' say-so?!",
     # "When the eagles are silent, the parrots begin to jabber.",
     # "If you have an important point to make, don’t try to be subtle or clever. Use a pile driver. Hit the point once. Then come back and hit it again. Then hit it a third time -- a tremendous whack.",
     # "Success consists of going from failure to failure without loss of enthusiasm.",
@@ -120,6 +120,9 @@ def emojize_sentence_subs(src_to_emo, sentence, verbose):
 
     emojize_match_bound = partial(emojize_match, src_to_emo, verbose=verbose)
     subs = text_regex.replace_words_extended(emojize_match_bound, body)
+    tend = emojize_token(src_to_emo, end, verbose)
+    if tend:
+        end = tend
     emo_tran = ''.join([beg, subs, end])
     if verbose:
         print("    %s ==>\n    %s\n" % (sentence, emo_tran))
