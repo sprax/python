@@ -157,20 +157,12 @@ def add_preset_multiples(preset_dict):
         'wife': ['👉 💑', '👉 💏', '➡ 👩❤👨'],
     })
 
-def test_emo_tuples(options):
-    presets = {}
-    if options.no_articles:
-        presets.update({'a': [''], 'but': [''], 'may': [''], 'the': ['']})
-    if options.arithmetic:
-        presets.update({'can': ['🍬 ➖ D'], 'crew': ['© ➕ 🍺 ➖ 🐝'], 'you': ['🆕 ➖ N']})
-    if options.multiple:
-        add_preset_multiples(presets)
-
+def gen_src_to_emo(presets, verbose):
     src_to_emo = defaultdict(list, presets)
+    i_flags = emotuples.INDEX_FLAGS
     i_monos = emotuples.INDEX_MONOSYLLABLES
     i_polys = emotuples.INDEX_POLYSYLLABLES
     i_unchr = emotuples.INDEX_EMOJI_UNICHRS
-    i_flags = emotuples.INDEX_FLAGS
     usables = [tup for tup in emotuples.EMO_TUPLES if tup[i_flags] > 0]
     print("Found {} usable emotuples.".format(len(usables)))
     for tt in usables:
@@ -180,9 +172,22 @@ def test_emo_tuples(options):
         for src in tt[i_polys]:
             src_to_emo[src].append(tt[i_unchr])
             # print("src(%s) => emo( %s )" % (src, tt[i_unchr]))
-        if options.usable:
+        if verbose > 1:
             print(tt[i_unchr], end='  ')
     print()
+    return src_to_emo
+
+def test_emo_tuples(options):
+    presets = {}
+    if options.no_articles:
+        presets.update({'a': [''], 'but': [''], 'may': [''], 'the': ['']})
+    if options.arithmetic:
+        presets.update({'can': ['🍬 ➖ D'], 'crew': ['© ➕ 🍺 ➖ 🐝'], 'you': ['🆕 ➖ N']})
+    if options.multiple:
+        add_preset_multiples(presets)
+
+    src_to_emo = gen_src_to_emo(presets, options.verbose)
+
     for sentence in SENTENCES:
         emojize_sentence_subs(src_to_emo, sentence, options.verbose)
     if options.text_file:
