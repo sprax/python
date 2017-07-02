@@ -19,7 +19,8 @@ from functools import partial
 import emoji
 import emotuples
 import text_fio
-import sylcount
+import text_regex
+# import sylcount
 
 SENTENCES = [
     # "Wind and waves may rock the boat, but only you can tip the crew.",
@@ -97,12 +98,12 @@ def emojize_match(src_to_emo, match_obj, verbose=1):
     return emojize_word(src_to_emo, word, verbose)
 
 def emojize_sentence_subs(src_to_emo, sentence, verbose):
-    beg, body, end = sylcount.sentence_body_and_end(sentence)
+    beg, body, end = text_regex.sentence_body_and_end(sentence)
     if verbose > 2:
         print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
 
     emojize_match_bound = partial(emojize_match, src_to_emo, verbose=verbose)
-    subs = sylcount.replace_words_extended(emojize_match_bound, body)
+    subs = text_regex.replace_words_extended(emojize_match_bound, body)
     emo_tran = ''.join([beg, subs, end])
     if verbose:
         print("    %s ==>\n    %s\n" % (sentence, emo_tran))
@@ -110,7 +111,7 @@ def emojize_sentence_subs(src_to_emo, sentence, verbose):
 
 def emojize_phrase(src_to_emo, txt_phrase, verbose):
     # srcs = re.split('\W+', txt_phrase.strip())
-    srcs = sylcount.word_splits(txt_phrase.strip())
+    srcs = text_regex.word_splits(txt_phrase.strip())
     if verbose > 2:
         print(srcs)
     emo_phrase = []
@@ -120,7 +121,7 @@ def emojize_phrase(src_to_emo, txt_phrase, verbose):
     return emo_phrase
 
 def emojize_sentence_split_join(src_to_emo, sentence, verbose):
-    beg, body, end = sylcount.sentence_body_and_end(sentence)
+    beg, body, end = text_regex.sentence_body_and_end(sentence)
     if verbose > 2:
         print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
     emo_list = emojize_phrase(src_to_emo, body, verbose)

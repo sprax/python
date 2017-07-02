@@ -59,46 +59,6 @@ EXAMPLES = {
 }
 
 
-###############################################################################
-WORD_SEP_INTERIOR = r"',.-"
-RE_WORD_TOKEN = re.compile(r"((?:\w+[{}]\w*)+\w|\w+)".format(WORD_SEP_INTERIOR))
-
-def word_tokens(sentence):
-    return RE_WORD_TOKEN.findall(sentence)
-
-###############################################################################
-WORD_SEP_EXTERIOR = r'!"#$%&()*+./:;<=>?@[\]^_`{|}~\x82\x83\x84\x85\x86\x87\x88\x89' \
-                    r'\x8a\x8b\x8c\x8d\x8e\x8f\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99'
-
-RE_WORD_SEP = re.compile(r"(?:\s+[{}]+\s*|\s*[{}]+\s+|[{}]*[\s{}]+|\s+)".format(
-    WORD_SEP_INTERIOR, WORD_SEP_INTERIOR, WORD_SEP_INTERIOR, WORD_SEP_EXTERIOR))
-
-def word_splits(sentence_body):
-    splits = RE_WORD_SEP.split(sentence_body)
-    return [ss for ss in splits if len(ss) > 0]
-
-RE_SENTENCE_ENDS = re.compile(r"(\w.*)\b(?=\W*$)")
-
-def sentence_body_and_end(sentence):
-    '''return sentence parts as [beg, body, end] where beg and end may be 0-length'''
-    return RE_SENTENCE_ENDS.split(sentence)
-
-WORD_EXT_BEG = r'[<]'
-WORD_EXT_END = r'[%]'
-RE_WORD_EXT = re.compile(r"((?:{}?[\w]+[{}]*)[\w]+{}?|{}?\w{}?)".format(
-    WORD_EXT_BEG, WORD_SEP_INTERIOR, WORD_EXT_END, WORD_EXT_BEG, WORD_EXT_END))
-
-def replace_words_extended(rep_func, text_phrase):
-    return RE_WORD_EXT.sub(rep_func, text_phrase)
-
-###############################################################################
-REGEX_PUNCTUATION = re.compile("[{}]".format(string.punctuation))
-REGEX_NON_ALPHA = re.compile(r'(?:\W|[0-9])+')
-###############################################################################
-
-def qw(ss):
-    return ss.split()
-
 VOWEL_EXP = "ae|ai|au|ay|a|ea|ei|eu|ey|e|iou|ie|i|oa|oe|oi|ou|oy|o|ue|u|y|dn't|sn't"
 VOWEL_GROUPS = VOWEL_EXP.split('|')
 VOWEL_STR = ' '.join(VOWEL_GROUPS)
