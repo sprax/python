@@ -204,7 +204,7 @@ def gen_emo_to_txt(txt_to_emo, verbose):
         # print("emo_to_txt 1: {} => {}".format(txt, lst))
         for emo in lst:
             emo_to_txt[emo].append(txt)
-            if verbose > 3:
+            if verbose > 6:
                 print("emo_to_txt 3: {} => {}".format(emo, txt))
     return emo_to_txt
 
@@ -242,6 +242,8 @@ def test_emojize():
                         help='directory to search for input files')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
+    parser.add_argument('-emo_to_txt', action='store_true',
+                        help='show the emoji-to-text mapping')
     parser.add_argument('-flags', action='store_true',
                         help='use flag emojis in translations of words not representing countries')
     parser.add_argument('-multiple', action='store_true',
@@ -255,6 +257,8 @@ def test_emojize():
     parser.add_argument('-text_file', dest='text_file', type=str, nargs='?',
                         const='quotations.txt', default=None,
                         help='translate sentences from this text_file')
+    parser.add_argument('-txt_to_emo', action='store_true',
+                        help='show the text-to-emoji mapping')
     parser.add_argument('-usable', action='store_true',
                         help='show all usable emoji under current options')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,

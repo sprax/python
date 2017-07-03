@@ -60,7 +60,7 @@ def regen_emo_tuples(name='EMO_TUPLES', start=None, stop=None, step=None):
     if stop == 0:
         stop = None
     for t in ed.EMO_TUPLES[start:stop:step]:
-        monos, polys = set(), set()
+        monos, polys = [], []   # Changed from: set(), set()
         for word in t[5]:
             if sylc.syl_count(cmu_prons, word) == 1:
                 monos.add(word)
@@ -68,10 +68,10 @@ def regen_emo_tuples(name='EMO_TUPLES', start=None, stop=None, step=None):
                 polys.add(word)
         shorts = sylc.word_splits(t[6])
         for short in shorts:
-            if sylc.syl_count(cmu_prons, short) == 1 and short not in monos:
-                monos.add(short)
+            if sylc.syl_count(cmu_prons, short) == 1:
+                monos.append(short)
             else:
-                polys.add(short)
+                polys.append(short)
         # print("shorts: {}  monos: {}  polys: {}  alts: {}".format(shorts, monos, polys, t[7]))
         lst = list(t[0:4])
         lst.extend([et.unicode_chr_str(t[0]), list(monos), t[6], t[7], list(polys), t[9]])
