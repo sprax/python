@@ -158,11 +158,16 @@ def textize_sentence_subs(emo_to_txt, emo_sent, verbose):
     may be gibberish or worse.
     '''
     txt_sent = ''
+    was_emoj = False
     for uchr in emo_sent:
         try:
             txt_sent += random.choice(list(emo_to_txt[uchr]))
+            was_emoj = True
         except:
-            txt_sent += uchr
+            if was_emoj and uchr == ' ':
+                was_emoj = False
+            else:
+                txt_sent += uchr
     return txt_sent
 
 def add_preset_multiples(preset_dict):
