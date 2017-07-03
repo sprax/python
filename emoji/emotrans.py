@@ -96,35 +96,35 @@ def emojize_token(txt_to_emo, word, verbose):
     if num >= 1:
         if verbose > 3:
             print("word subs: {} => {}".format(word, lst))
-        return random.choice(lst) + ' '
+        return random.choice(lst)
     elif verbose > 4:
         print("word self: {}".format(word))
     return None
 
-def emojize_word(txt_to_emo, src_word, verbose):
+def emojize_word(txt_to_emo, src_word, space=' ', verbose=1):
     words = emo_synonyms(src_word)
     for word in words:
         emojis = emojize_token(txt_to_emo, word, verbose)
         if emojis:
-            return emojis
+            return emojis + space
     return src_word
 
-def emojize_match(txt_to_emo, match_obj, verbose=1):
+def emojize_match(txt_to_emo, match_obj, space=' ', verbose=1):
     word = match_obj.group()
-    return emojize_word(txt_to_emo, word, verbose)
+    return emojize_word(txt_to_emo, word, space, verbose)
 
 def emojize_sentence_subs(txt_to_emo, sentence, verbose):
     beg, body, end = text_regex.sentence_body_and_end(sentence)
     if verbose > 2:
         print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
 
-    emojize_match_bound = partial(emojize_match, txt_to_emo, verbose=verbose)
+    emojize_match_bound = partial(emojize_match, txt_to_emo, space=' ', verbose=verbose)
     subs = text_regex.replace_words_extended(emojize_match_bound, body)
     tend = emojize_token(txt_to_emo, end, verbose)
     if tend:
-        end = tend
+        end = ' ' + tend
     emo_tran = ''.join([beg, subs, end])
-    if verbose > 3:
+    if verbose > 5:
         print("    %s ==>\n    %s\n" % (sentence, emo_tran))
     return emo_tran
 
@@ -161,7 +161,7 @@ def textize_sentence_subs(emo_to_txt, emo_sent, verbose):
     was_emoj = False
     for uchr in emo_sent:
         try:
-            txt_sent += random.choice(list(emo_to_txt[uchr]))
+            txt_sent += random.choice(emo_to_txt[uchr])
             was_emoj = True
         except:
             if was_emoj and uchr == ' ':
@@ -199,16 +199,14 @@ def gen_txt_to_emo(presets, verbose):
 
 def gen_emo_to_txt(txt_to_emo, verbose):
     '''reverse of gen_txt_to_emo: map each emoji to a list of word-phrases'''
-    emo_to_txt = defaultdict(set)
+    emo_to_txt = defaultdict(list)
     for txt, lst in txt_to_emo.items():
         # print("emo_to_txt 1: {} => {}".format(txt, lst))
         for emo in lst:
-            emo_to_txt[emo].add(txt)
+            emo_to_txt[emo].append(txt)
             if verbose > 3:
                 print("emo_to_txt 3: {} => {}".format(emo, txt))
     return emo_to_txt
-
-
 
 def test_emo_tuples(options):
     presets = {}
