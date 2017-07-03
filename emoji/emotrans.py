@@ -151,9 +151,18 @@ def emojize_sentence_split_join(txt_to_emo, sentence, verbose):
     return emo_tran
 
 def textize_sentence_subs(emo_to_txt, emo_sent, verbose):
-    '''return text with each emoji replaced by a value from emo_to_txt
-    FIXME: not yet implemented'''
-    txt_sent = emo_sent
+    '''
+    return text with each emoji replaced by a value from emo_to_txt.
+    FIXME: emoji combinations representing a single word will not translate
+    back to the orignal word, but turn into a word combination calc, which
+    may be gibberish or worse.
+    '''
+    txt_sent = ''
+    for uchr in emo_sent:
+        try:
+            txt_sent += random.choice(list(emo_to_txt[uchr]))
+        except:
+            txt_sent += uchr
     return txt_sent
 
 def add_preset_multiples(preset_dict):
@@ -187,10 +196,11 @@ def gen_emo_to_txt(txt_to_emo, verbose):
     '''reverse of gen_txt_to_emo: map each emoji to a list of word-phrases'''
     emo_to_txt = defaultdict(set)
     for txt, lst in txt_to_emo.items():
+        # print("emo_to_txt 1: {} => {}".format(txt, lst))
         for emo in lst:
             emo_to_txt[emo].add(txt)
             if verbose > 3:
-                print("emo_to_txt: {} => {}".format(emo, txt))
+                print("emo_to_txt 3: {} => {}".format(emo, txt))
     return emo_to_txt
 
 
