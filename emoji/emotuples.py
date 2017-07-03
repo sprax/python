@@ -17,7 +17,7 @@ from collections import defaultdict
 
 import emoji
 
-INDEX_FLAGS = 3
+INDEX_DISPLAY_FLAGS = 3
 INDEX_EMOJI_UNICHRS = 4
 INDEX_MONOSYLLABLES = 5
 INDEX_ALTERNATIVES = 7  # not used much; may go away

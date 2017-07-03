@@ -159,7 +159,7 @@ def add_preset_multiples(preset_dict):
 
 def gen_src_to_emo(presets, verbose):
     src_to_emo = defaultdict(list, presets)
-    i_flags = emotuples.INDEX_FLAGS
+    i_flags = emotuples.INDEX_DISPLAY_FLAGS
     i_monos = emotuples.INDEX_MONOSYLLABLES
     i_polys = emotuples.INDEX_POLYSYLLABLES
     i_unchr = emotuples.INDEX_EMOJI_UNICHRS
@@ -176,6 +176,31 @@ def gen_src_to_emo(presets, verbose):
             print(tt[i_unchr], end='  ')
     print()
     return src_to_emo
+
+def gen_emo_to_txt(txt_to_emo, verbose):
+    emo_to_eng = defaultdict(set)
+    for txt, lst in txt_to_emo:
+        for emo in lst:
+            emo_to_eng[emo].add(txt)
+
+
+    i_flags = emotuples.INDEX_DISPLAY_FLAGS
+    i_monos = emotuples.INDEX_MONOSYLLABLES
+    i_polys = emotuples.INDEX_POLYSYLLABLES
+    i_unchr = emotuples.INDEX_EMOJI_UNICHRS
+    usables = [tup for tup in emotuples.EMO_TUPLES if tup[i_flags] > 0]
+    print("Found {} usable emotuples.".format(len(usables)))
+    for tt in usables:
+        for src in tt[i_monos]:
+            emo_to_eng[src].append(tt[i_unchr])
+            # print("src(%s) => emo(%s)" % (src, tt[1]))
+        for src in tt[i_polys]:
+            emo_to_eng[src].append(tt[i_unchr])
+            # print("src(%s) => emo( %s )" % (src, tt[i_unchr]))
+        if verbose > 1:
+            print(tt[i_unchr], end='  ')
+    print()
+    return emo_to_eng
 
 def test_emo_tuples(options):
     presets = {}
