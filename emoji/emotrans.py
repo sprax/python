@@ -85,13 +85,13 @@ def emo_synonyms(word):
     except KeyError:
         return [word]
 
-def emojize_token(src_to_emo, word, verbose):
+def emojize_token(txt_to_emo, word, verbose):
     '''return emoji string translation of word or None
     TODO: make protected ?'''
-    lst = src_to_emo[word]
+    lst = txt_to_emo[word]
     num = len(lst)
     if num < 1:
-        lst = src_to_emo[word.lower()]
+        lst = txt_to_emo[word.lower()]
         num = len(lst)
     if num >= 1:
         if verbose > 3:
@@ -101,54 +101,60 @@ def emojize_token(src_to_emo, word, verbose):
         print("word self: {}".format(word))
     return None
 
-def emojize_word(src_to_emo, src_word, verbose):
+def emojize_word(txt_to_emo, src_word, verbose):
     words = emo_synonyms(src_word)
     for word in words:
-        emojis = emojize_token(src_to_emo, word, verbose)
+        emojis = emojize_token(txt_to_emo, word, verbose)
         if emojis:
             return emojis
     return src_word
 
-def emojize_match(src_to_emo, match_obj, verbose=1):
+def emojize_match(txt_to_emo, match_obj, verbose=1):
     word = match_obj.group()
-    return emojize_word(src_to_emo, word, verbose)
+    return emojize_word(txt_to_emo, word, verbose)
 
-def emojize_sentence_subs(src_to_emo, sentence, verbose):
+def emojize_sentence_subs(txt_to_emo, sentence, verbose):
     beg, body, end = text_regex.sentence_body_and_end(sentence)
     if verbose > 2:
         print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
 
-    emojize_match_bound = partial(emojize_match, src_to_emo, verbose=verbose)
+    emojize_match_bound = partial(emojize_match, txt_to_emo, verbose=verbose)
     subs = text_regex.replace_words_extended(emojize_match_bound, body)
-    tend = emojize_token(src_to_emo, end, verbose)
+    tend = emojize_token(txt_to_emo, end, verbose)
     if tend:
         end = tend
     emo_tran = ''.join([beg, subs, end])
-    if verbose:
+    if verbose > 3:
         print("    %s ==>\n    %s\n" % (sentence, emo_tran))
     return emo_tran
 
-def emojize_phrase(src_to_emo, txt_phrase, verbose):
+def emojize_phrase(txt_to_emo, txt_phrase, verbose):
     # srcs = re.split('\W+', txt_phrase.strip())
     srcs = text_regex.word_splits(txt_phrase.strip())
     if verbose > 2:
         print(srcs)
     emo_phrase = []
     for raw in srcs:
-        dst = emojize_word(src_to_emo, raw, verbose)
+        dst = emojize_word(txt_to_emo, raw, verbose)
         emo_phrase.append(dst)
     return emo_phrase
 
-def emojize_sentence_split_join(src_to_emo, sentence, verbose):
+def emojize_sentence_split_join(txt_to_emo, sentence, verbose):
     beg, body, end = text_regex.sentence_body_and_end(sentence)
     if verbose > 2:
         print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
-    emo_list = emojize_phrase(src_to_emo, body, verbose)
+    emo_list = emojize_phrase(txt_to_emo, body, verbose)
     emo_join = ' '.join(emo_list)
     emo_tran = ''.join([beg, emo_join, end])
     if verbose:
         print("    %s ==>\n    %s\n" % (sentence, emo_tran))
     return emo_tran
+
+def textize_sentence_subs(emo_to_txt, emo_sent, verbose):
+    '''return text with each emoji replaced by a value from emo_to_txt
+    FIXME: not yet implemented'''
+    txt_sent = emo_sent
+    return txt_sent
 
 def add_preset_multiples(preset_dict):
     preset_dict.update({
@@ -157,8 +163,8 @@ def add_preset_multiples(preset_dict):
         'wife': ['👉 💑', '👉 💏', '➡ 👩❤👨'],
     })
 
-def gen_src_to_emo(presets, verbose):
-    src_to_emo = defaultdict(list, presets)
+def gen_txt_to_emo(presets, verbose):
+    txt_to_emo = defaultdict(list, presets)
     i_flags = emotuples.INDEX_DISPLAY_FLAGS
     i_monos = emotuples.INDEX_MONOSYLLABLES
     i_polys = emotuples.INDEX_POLYSYLLABLES
@@ -167,40 +173,27 @@ def gen_src_to_emo(presets, verbose):
     print("Found {} usable emotuples.".format(len(usables)))
     for tt in usables:
         for src in tt[i_monos]:
-            src_to_emo[src].append(tt[i_unchr])
+            txt_to_emo[src].append(tt[i_unchr])
             # print("src(%s) => emo(%s)" % (src, tt[1]))
         for src in tt[i_polys]:
-            src_to_emo[src].append(tt[i_unchr])
+            txt_to_emo[src].append(tt[i_unchr])
             # print("src(%s) => emo( %s )" % (src, tt[i_unchr]))
         if verbose > 1:
             print(tt[i_unchr], end='  ')
     print()
-    return src_to_emo
+    return txt_to_emo
 
 def gen_emo_to_txt(txt_to_emo, verbose):
-    emo_to_eng = defaultdict(set)
-    for txt, lst in txt_to_emo:
+    '''reverse of gen_txt_to_emo: map each emoji to a list of word-phrases'''
+    emo_to_txt = defaultdict(set)
+    for txt, lst in txt_to_emo.items():
         for emo in lst:
-            emo_to_eng[emo].add(txt)
+            emo_to_txt[emo].add(txt)
+            if verbose > 3:
+                print("emo_to_txt: {} => {}".format(emo, txt))
+    return emo_to_txt
 
 
-    i_flags = emotuples.INDEX_DISPLAY_FLAGS
-    i_monos = emotuples.INDEX_MONOSYLLABLES
-    i_polys = emotuples.INDEX_POLYSYLLABLES
-    i_unchr = emotuples.INDEX_EMOJI_UNICHRS
-    usables = [tup for tup in emotuples.EMO_TUPLES if tup[i_flags] > 0]
-    print("Found {} usable emotuples.".format(len(usables)))
-    for tt in usables:
-        for src in tt[i_monos]:
-            emo_to_eng[src].append(tt[i_unchr])
-            # print("src(%s) => emo(%s)" % (src, tt[1]))
-        for src in tt[i_polys]:
-            emo_to_eng[src].append(tt[i_unchr])
-            # print("src(%s) => emo( %s )" % (src, tt[i_unchr]))
-        if verbose > 1:
-            print(tt[i_unchr], end='  ')
-    print()
-    return emo_to_eng
 
 def test_emo_tuples(options):
     presets = {}
@@ -211,13 +204,19 @@ def test_emo_tuples(options):
     if options.multiple:
         add_preset_multiples(presets)
 
-    src_to_emo = gen_src_to_emo(presets, options.verbose)
+    txt_to_emo = gen_txt_to_emo(presets, options.verbose)
+    emo_to_txt = gen_emo_to_txt(txt_to_emo, options.verbose)
 
     for sentence in SENTENCES:
-        emojize_sentence_subs(src_to_emo, sentence, options.verbose)
+        print("src => txt (%s)" % sentence)
+        emo_sent = emojize_sentence_subs(txt_to_emo, sentence, options.verbose)
+        print("txt => emo (%s)" % emo_sent)
+        txt_sent = textize_sentence_subs(emo_to_txt, emo_sent, options.verbose)
+        print("emo => txt (%s)" % txt_sent)
+        print()
     if options.text_file:
         for sentence in text_fio.read_text_lines(options.text_file, options.charset):
-            emojize_sentence_subs(src_to_emo, sentence, options.verbose)
+            emojize_sentence_subs(txt_to_emo, sentence, options.verbose)
 
 def test_emojize():
     '''test english -> emoji translation'''
