@@ -17,7 +17,7 @@ from collections import defaultdict
 from functools import partial
 
 import emoji
-import emotuples
+import emotuples as ET
 import text_fio
 import text_regex
 # import sylcount
@@ -35,6 +35,8 @@ SENTENCES = [
     # "Character may be manifested in the great moments, but it is made in the small ones.",
     # "Men occasionally stumble over the truth, but most of them pick themselves up and hurry off as if nothing has happened.",
 ]
+
+
 
 def is_emoji(uchar):
   return uchar in emoji.UNICODE_EMOJI
@@ -84,6 +86,68 @@ def emo_synonyms(word):
         return EMO_SYNONYMS[word]
     except KeyError:
         return [word]
+
+def show_sorted_dict(dct, idx, lbl=''):
+    for key, val in sorted(dct.items(), key=lambda dit: dit[idx].lower()):
+        print("{} {} => {}".format(lbl, key, val))
+
+
+class EmoTrans:
+    def __init__(self, options):
+        self.options = options
+        self.verbose = options.verbose
+        self.usables = self.gen_usables(ET.INDEX_DISPLAY_FLAGS)
+        self.presets = self.gen_presets(options)
+        self.txt_to_emo = self.gen_txt_to_emo(self.presets)
+        self.emo_to_txt = self.gen_emo_to_txt(self.verbose)
+
+    def gen_usables(self, i_flags):
+        tmp = [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0]
+        if self.verbose:
+            print("Found %d usable emoji tuples." % len(tmp))
+        return tmp
+
+    def gen_presets(self, options):
+        presets = {}
+        if options.no_articles:
+            presets.update({'a': [''], 'but': [''], 'may': [''], 'the': ['']})
+        if options.arithmetic:
+            presets.update({'can': ['🍬 ➖ D'], 'crew': ['© ➕ 🍺 ➖ 🐝'], 'you': ['🆕 ➖ N']})
+        if options.multiple:
+            add_preset_multiples(presets)
+        return presets
+
+    def gen_txt_to_emo(self, presets):
+        txt_to_emo = defaultdict(list, presets)
+        i_flags = ET.INDEX_DISPLAY_FLAGS
+        i_monos = ET.INDEX_MONOSYLLABLES
+        i_polys = ET.INDEX_POLYSYLLABLES
+        i_unchr = ET.INDEX_EMOJI_UNICHRS
+        for tt in self.usables:
+            for src in tt[i_monos]:
+                txt_to_emo[src].append(tt[i_unchr])
+                # print("src(%s) => emo(%s)" % (src, tt[1]))
+            for src in tt[i_polys]:
+                txt_to_emo[src].append(tt[i_unchr])
+                # print("src(%s) => emo( %s )" % (src, tt[i_unchr]))
+            if self.verbose > 4:
+                print(tt[i_unchr], end='  ')
+        if self.verbose > 4:
+            print()
+        return txt_to_emo
+
+    def gen_emo_to_txt(self, verbose):
+        '''reverse of gen_txt_to_emo: map each emoji to a list of word-phrases'''
+        emo_to_txt = defaultdict(list)
+        for txt, lst in sorted(self.txt_to_emo.items()):
+            # print("emo_to_txt 1: {} => {}".format(txt, lst))
+            for emo in lst:
+                emo_to_txt[emo].append(txt)
+                if verbose > 1:
+                    print("emo_to_txt 3: {} => {}".format(emo, txt))
+        return emo_to_txt
+
+
 
 def emojize_token(txt_to_emo, word, verbose):
     '''return emoji string translation of word or None
@@ -202,54 +266,13 @@ def add_preset_multiples(preset_dict):
         'wife': ['👉 💑', '👉 💏', '➡ 👩❤👨'],
     })
 
-def gen_txt_to_emo(presets, verbose):
-    txt_to_emo = defaultdict(list, presets)
-    i_flags = emotuples.INDEX_DISPLAY_FLAGS
-    i_monos = emotuples.INDEX_MONOSYLLABLES
-    i_polys = emotuples.INDEX_POLYSYLLABLES
-    i_unchr = emotuples.INDEX_EMOJI_UNICHRS
-    usables = [tup for tup in emotuples.EMO_TUPLES if tup[i_flags] > 0]
-    print("Found {} usable emotuples.".format(len(usables)))
-    for tt in usables:
-        for src in tt[i_monos]:
-            txt_to_emo[src].append(tt[i_unchr])
-            # print("src(%s) => emo(%s)" % (src, tt[1]))
-        for src in tt[i_polys]:
-            txt_to_emo[src].append(tt[i_unchr])
-            # print("src(%s) => emo( %s )" % (src, tt[i_unchr]))
-        if verbose > 4:
-            print(tt[i_unchr], end='  ')
-    print()
-    return txt_to_emo
-
-def gen_emo_to_txt(txt_to_emo, verbose):
-    '''reverse of gen_txt_to_emo: map each emoji to a list of word-phrases'''
-    emo_to_txt = defaultdict(list)
-    for txt, lst in sorted(txt_to_emo.items(), key=lambda x: x[0], reverse=True):
-        # print("emo_to_txt 1: {} => {}".format(txt, lst))
-        for emo in lst:
-            emo_to_txt[emo].append(txt)
-            if verbose > 1:
-                print("emo_to_txt 3: {} => {}".format(emo, txt))
-    return emo_to_txt
-
-def show_sorted_dict(dct, lbl=''):
-    for key, val in sorted(dct.items(), key=lambda it: it[0].lower()):
-            print("{} {} => {}".format(lbl, key, val))
 
 def test_emo_tuples(options):
-    presets = {}
-    if options.no_articles:
-        presets.update({'a': [''], 'but': [''], 'may': [''], 'the': ['']})
-    if options.arithmetic:
-        presets.update({'can': ['🍬 ➖ D'], 'crew': ['© ➕ 🍺 ➖ 🐝'], 'you': ['🆕 ➖ N']})
-    if options.multiple:
-        add_preset_multiples(presets)
-
-    txt_to_emo = gen_txt_to_emo(presets, options.verbose)
+    emotrans = EmoTrans(options)
+    txt_to_emo = emotrans.txt_to_emo
+    emo_to_txt = emotrans.emo_to_txt
     if options.txt_to_emo:
-        show_sorted_dict(txt_to_emo)
-    emo_to_txt = gen_emo_to_txt(txt_to_emo, options.verbose)
+        show_sorted_dict(txt_to_emo, 0)
     if options.emo_to_txt:
         show_sorted_dict(emo_to_txt)
 
