@@ -161,7 +161,10 @@ def textize_sentence_subs(emo_to_txt, emo_sent, verbose):
     was_emoj = False
     for uchr in emo_sent:
         try:
-            txt_sent += random.choice(emo_to_txt[uchr])
+            lst = emo_to_txt[uchr]
+            if verbose > 2:
+                print("TSS: {} => {}".format(uchr, lst))
+            txt_sent += random.choice(lst)
             was_emoj = True
         except:
             if was_emoj and uchr == ' ':
