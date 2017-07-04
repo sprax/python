@@ -17,6 +17,7 @@ from collections import defaultdict
 import emotuples as ed
 import emotrans as et
 import sylcount as sylc
+import text_regex
 from nltk.corpus import cmudict
 
 
@@ -63,10 +64,10 @@ def regen_emo_tuples(name='EMO_TUPLES', start=None, stop=None, step=None):
         monos, polys = [], []   # Changed from: set(), set()
         for word in t[5]:
             if sylc.syl_count(cmu_prons, word) == 1:
-                monos.add(word)
+                monos.append(word)
             else:
-                polys.add(word)
-        shorts = sylc.word_splits(t[6])
+                polys.append(word)
+        shorts = text_regex.word_splits(t[6])
         for short in shorts:
             if sylc.syl_count(cmu_prons, short) == 1:
                 monos.append(short)
@@ -190,9 +191,9 @@ def main():
     if args.country_codes:
         reset_country_codes_to_emoflags()
     if args.flags:
-        reflag_emo_tuples(args.beg, args.end, args.inc)
+        reflag_emo_tuples(args.start, args.stop, args.step)
     if args.regen:
-        regen_emo_tuples('EMO_TUPLES', args.beg, args.end)
+        regen_emo_tuples('EMO_TUPLES', args.start, args.stop)
 
 if __name__ == '__main__':
     main()
