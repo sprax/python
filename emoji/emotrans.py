@@ -150,6 +150,31 @@ def emojize_sentence_split_join(txt_to_emo, sentence, verbose):
         print("    %s ==>\n    %s\n" % (sentence, emo_tran))
     return emo_tran
 
+def textize_emo_span(span, verbose):
+    '''translate a string or slice of emoji into a text string'''
+    text = ''
+    prev = False
+    for uchr in span:
+        try:
+            lst = emo_to_txt[uchr]
+            if verbose > 2:
+                print("TES: {} => {}".format(uchr, lst))
+            text += random.choice(lst)
+            prev = True
+        except:
+            if prev and uchr == ' ':
+                prev = False
+            else:
+                text += uchr
+    return text
+
+def is_emoji_chr(emo_to_txt, uchr):
+    '''FIXME: optimize?  use RE?'''
+    lst = emo_to_txt[uchr]
+    if len(lst) > 0:
+        return True
+    return False
+
 def textize_sentence_subs(emo_to_txt, emo_sent, verbose):
     '''
     return text with each emoji replaced by a value from emo_to_txt.
@@ -157,20 +182,15 @@ def textize_sentence_subs(emo_to_txt, emo_sent, verbose):
     back to the orignal word, but turn into a word combination calc, which
     may be gibberish or worse.
     '''
-    txt_sent = ''
-    was_emoj = False
+    txt_sent, span = '', ''
     for uchr in emo_sent:
-        try:
-            lst = emo_to_txt[uchr]
-            if verbose > 2:
-                print("TSS: {} => {}".format(uchr, lst))
-            txt_sent += random.choice(lst)
-            was_emoj = True
-        except:
-            if was_emoj and uchr == ' ':
-                was_emoj = False
-            else:
-                txt_sent += uchr
+        if is_emoji_chr(emo_to_txt, uchr):
+            span += uchr
+        elif span:
+            txt_sent += textize_emo_span(uchr, verbose)
+            span = ''
+        else:
+            txt_sent += uchr
     return txt_sent
 
 def add_preset_multiples(preset_dict):
