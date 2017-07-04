@@ -208,6 +208,10 @@ def gen_emo_to_txt(txt_to_emo, verbose):
                 print("emo_to_txt 3: {} => {}".format(emo, txt))
     return emo_to_txt
 
+def show_sorted_dict(dct, lbl=''):
+    for key, val in sorted(dct.items(), key=lambda it: it[0].lower()):
+            print("{} {} => {}".format(lbl, key, val))
+
 def test_emo_tuples(options):
     presets = {}
     if options.no_articles:
@@ -218,7 +222,11 @@ def test_emo_tuples(options):
         add_preset_multiples(presets)
 
     txt_to_emo = gen_txt_to_emo(presets, options.verbose)
+    if options.txt_to_emo:
+        show_sorted_dict(txt_to_emo)
     emo_to_txt = gen_emo_to_txt(txt_to_emo, options.verbose)
+    if options.emo_to_txt:
+        show_sorted_dict(emo_to_txt)
 
     for sentence in SENTENCES:
         print("src => txt (%s)" % sentence)
