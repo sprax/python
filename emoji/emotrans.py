@@ -26,9 +26,9 @@ SENTENCES = [
     # "Wind and waves may rock the boat, but only you can tip the crew.",
     # "I love you",
     "So it's the US vs. Canada in football, I mean soccer!?",
-    "Lady Astor: “Winston, if I were your wife I’d put poison in your coffee.",
-    "Winston Churchill: “Nancy, if I were your husband I’d drink it.",
-    "I'm 100% sure <3 ain't a 4-letter word, even on Rhys' say-so?!",
+    # "Lady Astor: “Winston, if I were your wife I’d put poison in your coffee.",
+    # "Winston Churchill: “Nancy, if I were your husband I’d drink it.",
+    # "I'm 100% sure <3 ain't a 4-letter word, even on Rhys' say-so?!",
     # "When the eagles are silent, the parrots begin to jabber.",
     # "If you have an important point to make, don’t try to be subtle or clever. Use a pile driver. Hit the point once. Then come back and hit it again. Then hit it a third time -- a tremendous whack.",
     # "Success consists of going from failure to failure without loss of enthusiasm.",
@@ -150,18 +150,20 @@ def emojize_sentence_split_join(txt_to_emo, sentence, verbose):
         print("    %s ==>\n    %s\n" % (sentence, emo_tran))
     return emo_tran
 
-def textize_emo_span(span, verbose):
+def textize_emo_span(emo_to_txt, span, verbose):
     '''translate a string or slice of emoji into a text string'''
+    if verbose > 2:
+        print("TES: span({})".format(span))
     text = ''
     prev = False
     for uchr in span:
         try:
             lst = emo_to_txt[uchr]
-            if verbose > 2:
+            if verbose > 1:
                 print("TES: {} => {}".format(uchr, lst))
-            text += random.choice(lst)
+            text += lst[0]  # random.choice(lst)
             prev = True
-        except:
+        except KeyError:
             if prev and uchr == ' ':
                 prev = False
             else:
@@ -187,7 +189,7 @@ def textize_sentence_subs(emo_to_txt, emo_sent, verbose):
         if is_emoji_chr(emo_to_txt, uchr):
             span += uchr
         elif span:
-            txt_sent += textize_emo_span(uchr, verbose)
+            txt_sent += textize_emo_span(emo_to_txt, span, verbose)
             span = ''
         else:
             txt_sent += uchr
@@ -215,7 +217,7 @@ def gen_txt_to_emo(presets, verbose):
         for src in tt[i_polys]:
             txt_to_emo[src].append(tt[i_unchr])
             # print("src(%s) => emo( %s )" % (src, tt[i_unchr]))
-        if verbose > 1:
+        if verbose > 4:
             print(tt[i_unchr], end='  ')
     print()
     return txt_to_emo
@@ -223,11 +225,11 @@ def gen_txt_to_emo(presets, verbose):
 def gen_emo_to_txt(txt_to_emo, verbose):
     '''reverse of gen_txt_to_emo: map each emoji to a list of word-phrases'''
     emo_to_txt = defaultdict(list)
-    for txt, lst in txt_to_emo.items():
+    for txt, lst in sorted(txt_to_emo.items(), key=lambda x: x[0], reverse=True):
         # print("emo_to_txt 1: {} => {}".format(txt, lst))
         for emo in lst:
             emo_to_txt[emo].append(txt)
-            if verbose > 6:
+            if verbose > 1:
                 print("emo_to_txt 3: {} => {}".format(emo, txt))
     return emo_to_txt
 
