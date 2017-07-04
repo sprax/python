@@ -152,7 +152,6 @@ def gen_emo_dict(name='EMO_DICT', start=None, stop=None, step=None):
         print("    '%s' : %s," % (t[0], t[1:4] + (et.unicode_chr_str(t[0]),) + t[5:]))
     print("}")
 
-
 def main():
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
