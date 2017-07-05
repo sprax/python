@@ -154,50 +154,46 @@ class EmoTrans:
                     print("emo_to_txt 3: {} => {}".format(emo, txt))
         return emo_to_txt
 
-
-
-def emojize_token(txt_to_emo, word, verbose):
-    '''return emoji string translation of word or None
-    TODO: make protected ?'''
-    lst = txt_to_emo[word]
-    num = len(lst)
-    if num < 1:
-        lst = txt_to_emo[word.lower()]
+    def emojize_token(self, word, verbose):
+        '''return emoji string translation of word or None
+        TODO: make protected ?'''
+        lst = self.txt_to_emo[word]
         num = len(lst)
-    if num >= 1:
-        if verbose > 3:
-            print("word subs: {} => {}".format(word, lst))
-        return random.choice(lst)
-    elif verbose > 4:
-        print("word self: {}".format(word))
-    return None
+        if num < 1:
+            lst = self.txt_to_emo[word.lower()]
+            num = len(lst)
+        if num >= 1:
+            if verbose > 3:
+                print("word subs: {} => {}".format(word, lst))
+            return random.choice(lst)
+        elif verbose > 4:
+            print("word self: {}".format(word))
+        return None
 
-def emojize_word(txt_to_emo, src_word, space=' ', verbose=1):
-    words = emo_synonyms(src_word)
-    for word in words:
-        emojis = emojize_token(txt_to_emo, word, verbose)
-        if emojis:
-            return emojis + space
-    return src_word
+    def emojize_word(self, src_word, space=' ', verbose=1):
+        words = emo_synonyms(src_word)
+        for word in words:
+            emojis = self.emojize_token(word, verbose)
+            if emojis:
+                return emojis + space
+        return src_word
 
-def emojize_match(txt_to_emo, match_obj, space=' ', verbose=1):
-    word = match_obj.group()
-    return emojize_word(txt_to_emo, word, space, verbose)
+    def emojize_match(self, match_obj, space=' ', verbose=1):
+        word = match_obj.group()
+        return self.emojize_word(word, space, verbose)
 
-def emojize_sentence_subs(txt_to_emo, sentence, verbose):
-    beg, body, end = text_regex.sentence_body_and_end(sentence)
-    if verbose > 2:
-        print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
+    def emojize_sentence_subs(self, sentence, verbose):
+        beg, body, end = text_regex.sentence_body_and_end(sentence)
+        if verbose > 2:
+            print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
 
-    emojize_match_bound = partial(emojize_match, txt_to_emo, space=' ', verbose=verbose)
-    subs = text_regex.replace_words_extended(emojize_match_bound, body)
-    tend = emojize_token(txt_to_emo, end, verbose)
-    if tend:
-        end = ' ' + tend
-    emo_tran = ''.join([beg, subs, end])
-    if verbose > 5:
-        print("    %s ==>\n    %s\n" % (sentence, emo_tran))
-    return emo_tran
+        emojize_match_bound = partial(self.emojize_match, space=' ', verbose=verbose)
+        subs = text_regex.replace_words_extended(emojize_match_bound, body)
+        tend = self.emojize_token(end, verbose)
+        if tend:
+            end = ' ' + tend
+        emo_tran = ''.join([beg, subs, end])
+        return emo_tran
 
 def emojize_phrase(txt_to_emo, txt_phrase, verbose):
     # srcs = re.split('\W+', txt_phrase.strip())
@@ -289,7 +285,7 @@ def test_emo_tuples(options):
 
     for sentence in SENTENCES:
         print("src => txt (%s)" % sentence)
-        emo_sent = emojize_sentence_subs(txt_to_emo, sentence, options.verbose)
+        emo_sent = emotrans.emojize_sentence_subs(sentence, options.verbose)
         print("txt => emo (%s)" % emo_sent)
         txt_sent = textize_sentence_subs(emo_to_txt, emo_sent, options.verbose)
         print("emo => txt (%s)" % txt_sent)
