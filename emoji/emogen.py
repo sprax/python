@@ -14,7 +14,7 @@ import emoji
 import re
 import sys
 from collections import defaultdict
-import emotuples as ed
+import emotuples as ET
 import emotrans as et
 import sylcount as sylc
 import text_regex
@@ -40,7 +40,7 @@ def SplitByUnicode():
     print(matchList)
 
 def gen_old_tuples():
-    return ed.EmoTuples.emo_tuples
+    return ET.EmoTuples.emo_tuples
 
 def gen_emo_tuples(emo_dict, limit=5000):
     for i, t in enumerate(sorted(jt.items(), key=lambda x: int(x[1]['order']))):
@@ -60,7 +60,26 @@ def regen_emo_tuples(name='EMO_TUPLES', start=None, stop=None, step=None):
     print(name, "= [")
     if stop == 0:
         stop = None
-    for t in ed.EMO_TUPLES[start:stop:step]:
+    for j, t in enumerate(ET.EMO_TUPLES[start:stop:step], 1):
+        polys = t[5]
+        for text in t[8]:
+            polys.append(text)
+        # print("shorts: {}  monos: {}  polys: {}  alts: {}".format(shorts, monos, polys, t[7]))
+        lst = ["'{}'".format(t[0])]
+        texts = polys
+        # print("len(tup) == {}".format(len(t)))
+        lst.extend([t[2], t[1], t[9], t[3], t[4], texts, t[5], t[6], t[7]])
+        print("    ({:<24}, ".format(lst[0]), end='')
+        print("{}, {:>4}, {:>10}, {}, '{}', {}, {}, '{}', {}),".format(
+            lst[1], lst[2], "'%s'" % lst[3], lst[4], lst[5], lst[6], lst[7], lst[8], lst[9]))
+    print("]")
+
+def regen_emo_tuples_old(name='EMO_TUPLES', start=None, stop=None, step=None):
+    cmu_prons = cmudict.dict() # get the CMU Pronouncing Dict
+    print(name, "= [")
+    if stop == 0:
+        stop = None
+    for t in ET.EMO_TUPLES[start:stop:step]:
         monos, polys = [], []   # Changed from: set(), set()
         for word in t[5]:
             if sylc.syl_count(cmu_prons, word) == 1:
@@ -94,7 +113,7 @@ def load_country_codes(cc_path='country_codes.txt'):
     return cc_dict
 
 def reset_country_codes_to_emoflags(cc_path='country_codes.txt',
-        irange=ed.FLAGS_RANGE, charset='utf-8'):
+        irange=ET.FLAGS_RANGE, charset='utf-8'):
     '''
     Using a country code dict, set the name and syllable fields
     in a copy of emo_tuples.
@@ -102,11 +121,11 @@ def reset_country_codes_to_emoflags(cc_path='country_codes.txt',
     cmu_prons = cmudict.dict() # get the CMU Pronouncing Dict
     cc_dict = load_country_codes(cc_path)
 
-    for tup in ed.EMO_TUPLES[irange.start:irange.stop]:
-        cc2 = tup[ed.INDEX_ALTERNATIVES][0].strip(':').upper()
+    for tup in ET.EMO_TUPLES[irange.start:irange.stop]:
+        cc2 = tup[ET.INDEX_ALTERNATIVES][0].strip(':').upper()
         # print(cc2, '  ', end='')
         monos, polys, names = [], [], [cc2]
-        names.extend(nm for nm in tup[ed.INDEX_POLYSYLLABLES] if len(nm) > 2)
+        names.extend(nm for nm in tup[ET.INDEX_POLYSYLLABLES] if len(nm) > 2)
         try:
             names.extend(cc_dict[cc2])
             # print(names, file=sys.stderr)
@@ -119,27 +138,27 @@ def reset_country_codes_to_emoflags(cc_path='country_codes.txt',
             else:
                 polys.append(name)
         tupal = list(tup)
-        tupal[ed.INDEX_MONOSYLLABLES] = monos
-        tupal[ed.INDEX_POLYSYLLABLES] = polys
+        tupal[ET.INDEX_MONOSYLLABLES] = monos
+        tupal[ET.INDEX_POLYSYLLABLES] = polys
         ret = tuple(tupal)
         print("    {},".format(ret), file=sys.stdout)
-        # tupal[ed.INDEX_MONOSYLLABLES] =
+        # tupal[ET.INDEX_MONOSYLLABLES] =
     print()
 
 def reflag_emo_tuples(start=None, stop=None, step=None):
     if stop == 0:
         stop = None
     print("reflagging ({}, {}, {})".format(start, stop, step))
-    for tup in ed.EMO_TUPLES[start:stop:step]:
-        if not tup[ed.INDEX_MONOSYLLABLES]:
+    for tup in ET.EMO_TUPLES[start:stop:step]:
+        if not tup[ET.INDEX_MONOSYLLABLES]:
             lst = list(tup)
-            lst[ed.INDEX_FLAGS] = 0
+            lst[ET.INDEX_FLAGS] = 0
             tup = tuple(lst)
         # print("{} => {}".format(lst[4], len(lst[4])))
         print("    {},".format(tup))
 
-DICT_COLS = ('order', 'flags', 'len', 'chr', 'monosyls', 'shortname', 'alternates', 'polysyls', 'category')
-COL_TO_IDX = dict([(v, i) for i, v in enumerate(DICT_COLS)])
+TUPLE_COLS = ('code', 'len', 'order', 'category', 'flags', 'chr', 'texts', 'monosyls', 'shortname', 'alternates')
+COL_TO_IDX = dict([(v, i) for i, v in enumerate(TUPLE_COLS)])
 
 def emo_value_col(value, column):
     return value[COL_TO_IDX(column)]
@@ -149,7 +168,7 @@ def emo_dict_col(emodict, key, column):
 
 def gen_emo_dict(name='EMO_DICT', start=None, stop=None, step=None):
     print(name, "= {")
-    for t in ed.EMO_TUPLES[start:stop:step]:
+    for t in ET.EMO_TUPLES[start:stop:step]:
         print("    '%s' : %s," % (t[0], t[1:4] + (et.unicode_chr_str(t[0]),) + t[5:]))
     print("}")
 
