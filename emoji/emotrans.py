@@ -23,9 +23,9 @@ import text_regex
 # import sylcount
 
 SENTENCES = [
-    # "Wind and waves may rock the boat, but only you can tip the crew.",
+    "Wind and waves may rock the boat, but only you can tip the crew.",
     # "I love you",
-    "So it's the US vs. Canada in football, I mean soccer!?",
+    # "So it's the US vs. Canada in football, I mean soccer!?",
     # "Lady Astor: “Winston, if I were your wife I’d put poison in your coffee.",
     # "Winston Churchill: “Nancy, if I were your husband I’d drink it.",
     # "I'm 100% sure <3 ain't a 4-letter word, even on Rhys' say-so?!",
