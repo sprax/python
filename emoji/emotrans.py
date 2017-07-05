@@ -99,7 +99,7 @@ class EmoTrans:
         self.usables = self.gen_usables(ET.INDEX_DISPLAY_FLAGS)
         self.presets = self.gen_presets(options)
         self.txt_to_emo = self.gen_txt_to_emo(self.presets)
-        self.emo_to_txt = self.gen_emo_to_txt(self.verbose)
+        self.emo_to_txt = self.gen_emo_to_txt()
 
     def gen_usables(self, i_flags):
         tmp = [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0]
@@ -118,16 +118,14 @@ class EmoTrans:
         return presets
 
     def gen_txt_to_emo(self, presets):
+        '''generate text to emoji mapping'''
         txt_to_emo = defaultdict(list, presets)
         i_flags = ET.INDEX_DISPLAY_FLAGS
-        i_monos = ET.INDEX_MONOSYLLABLES
-        i_polys = ET.INDEX_POLYSYLLABLES
+        i_monos = ET.INDEX_WORDSYLLABLES
+        i_words = ET.INDEX_FREQUENT_WORDS
         i_unchr = ET.INDEX_EMOJI_UNICHRS
         for tt in self.usables:
-            for src in tt[i_monos]:
-                txt_to_emo[src].append(tt[i_unchr])
-                # print("src(%s) => emo(%s)" % (src, tt[1]))
-            for src in tt[i_polys]:
+            for src in tt[i_words]:
                 txt_to_emo[src].append(tt[i_unchr])
                 # print("src(%s) => emo( %s )" % (src, tt[i_unchr]))
             if self.verbose > 4:
@@ -136,7 +134,16 @@ class EmoTrans:
             print()
         return txt_to_emo
 
-    def gen_emo_to_txt(self, verbose):
+    def gen_emo_to_txt(self):
+        '''generate emoji to texts mapping'''
+        emo_to_txt = defaultdict(list)
+        i_unchr = ET.INDEX_EMOJI_UNICHRS
+        i_words = ET.INDEX_FREQUENT_WORDS
+        for tt in self.usables:
+            emo_to_txt[tt[i_unchr]] = tt[i_words]
+        return emo_to_txt
+
+    def rev_txt_to_gen(self, verbose):
         '''reverse of gen_txt_to_emo: map each emoji to a list of word-phrases'''
         emo_to_txt = defaultdict(list)
         for txt, lst in sorted(self.txt_to_emo.items()):

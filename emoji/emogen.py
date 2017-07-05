@@ -138,11 +138,11 @@ def reset_country_codes_to_emoflags(cc_path='country_codes.txt',
             else:
                 polys.append(name)
         tupal = list(tup)
-        tupal[ET.INDEX_MONOSYLLABLES] = monos
+        tupal[ET.INDEX_WORDSYLLABLES] = monos
         tupal[ET.INDEX_POLYSYLLABLES] = polys
         ret = tuple(tupal)
         print("    {},".format(ret), file=sys.stdout)
-        # tupal[ET.INDEX_MONOSYLLABLES] =
+        # tupal[ET.INDEX_WORDSYLLABLES] =
     print()
 
 def reflag_emo_tuples(start=None, stop=None, step=None):
@@ -150,7 +150,7 @@ def reflag_emo_tuples(start=None, stop=None, step=None):
         stop = None
     print("reflagging ({}, {}, {})".format(start, stop, step))
     for tup in ET.EMO_TUPLES[start:stop:step]:
-        if not tup[ET.INDEX_MONOSYLLABLES]:
+        if not tup[ET.INDEX_WORDSYLLABLES]:
             lst = list(tup)
             lst[ET.INDEX_FLAGS] = 0
             tup = tuple(lst)
