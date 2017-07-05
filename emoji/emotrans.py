@@ -217,13 +217,13 @@ class EmoTrans:
             print("    %s ==>\n    %s\n" % (sentence, emo_tran))
         return emo_tran
 
-    def textize_emo_span(self, span, verbose):
+    def textize_emo_span(self, emo_span, verbose):
         '''translate a string or slice of emoji into a text string'''
         if verbose > 2:
-            print("TES: span({})".format(span))
+            print("TES: span({})".format(emo_span))
         text = ''
         prev = False
-        for uchr in span:
+        for uchr in emo_span:
             try:
                 lst = self.emo_to_txt[uchr]
                 if verbose > 1:
@@ -251,19 +251,20 @@ class EmoTrans:
         back to the orignal word, but turn into a word combination calc, which
         may be gibberish or worse.
         '''
-        txt_sent, span = '', ''
+        txt_sent, emo_span = '', ''
         for uchr in emo_sent:
             if self.is_emoji_chr(uchr):
-                span += uchr
-            elif span:
-                txt_sent += self.textize_emo_span(span, verbose)
-                span = ''
+                emo_span += uchr
+            elif emo_span:
+                txt_sent += self.textize_emo_span(emo_span, verbose)
+                emo_span = ''
                 if uchr != ' ':
                     txt_sent += uchr
             else:
                 txt_sent += uchr
-        if span:
-            txt_sent += self.textize_emo_span(span, verbose)
+        if emo_span:
+            txt_sent = txt_sent.rstrip()
+            txt_sent += self.textize_emo_span(emo_span, verbose)
         return txt_sent
 
 def add_preset_multiples(preset_dict):
