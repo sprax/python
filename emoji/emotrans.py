@@ -195,76 +195,76 @@ class EmoTrans:
         emo_tran = ''.join([beg, subs, end])
         return emo_tran
 
-def emojize_phrase(txt_to_emo, txt_phrase, verbose):
-    # srcs = re.split('\W+', txt_phrase.strip())
-    srcs = text_regex.word_splits(txt_phrase.strip())
-    if verbose > 2:
-        print(srcs)
-    emo_phrase = []
-    for raw in srcs:
-        dst = emojize_word(txt_to_emo, raw, verbose)
-        emo_phrase.append(dst)
-    return emo_phrase
+    def emojize_phrase(self, txt_phrase, verbose):
+        # srcs = re.split('\W+', txt_phrase.strip())
+        srcs = text_regex.word_splits(txt_phrase.strip())
+        if verbose > 2:
+            print(srcs)
+        emo_phrase = []
+        for raw in srcs:
+            dst = self.emojize_word(raw, verbose)
+            emo_phrase.append(dst)
+        return emo_phrase
 
-def emojize_sentence_split_join(txt_to_emo, sentence, verbose):
-    beg, body, end = text_regex.sentence_body_and_end(sentence)
-    if verbose > 2:
-        print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
-    emo_list = emojize_phrase(txt_to_emo, body, verbose)
-    emo_join = ' '.join(emo_list)
-    emo_tran = ''.join([beg, emo_join, end])
-    if verbose:
-        print("    %s ==>\n    %s\n" % (sentence, emo_tran))
-    return emo_tran
+    def emojize_sentence_split_join(self, sentence, verbose):
+        beg, body, end = text_regex.sentence_body_and_end(sentence)
+        if verbose > 2:
+            print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
+        emo_list = self.emojize_phrase(txt_to_emo, body, verbose)
+        emo_join = ' '.join(emo_list)
+        emo_tran = ''.join([beg, emo_join, end])
+        if verbose:
+            print("    %s ==>\n    %s\n" % (sentence, emo_tran))
+        return emo_tran
 
-def textize_emo_span(emo_to_txt, span, verbose):
-    '''translate a string or slice of emoji into a text string'''
-    if verbose > 2:
-        print("TES: span({})".format(span))
-    text = ''
-    prev = False
-    for uchr in span:
-        try:
-            lst = emo_to_txt[uchr]
-            if verbose > 1:
-                print("TES: {} => {}".format(uchr, lst))
-            text += lst[0]  # random.choice(lst)
-            prev = True
-        except KeyError:
-            if prev and uchr == ' ':
-                prev = False
+    def textize_emo_span(self, span, verbose):
+        '''translate a string or slice of emoji into a text string'''
+        if verbose > 2:
+            print("TES: span({})".format(span))
+        text = ''
+        prev = False
+        for uchr in span:
+            try:
+                lst = self.emo_to_txt[uchr]
+                if verbose > 1:
+                    print("TES: {} => {}".format(uchr, lst))
+                text += lst[0]  # random.choice(lst)
+                prev = True
+            except KeyError:
+                if prev and uchr == ' ':
+                    prev = False
+                else:
+                    text += uchr
+        return text
+
+    def is_emoji_chr(self, uchr):
+        '''FIXME: optimize?  use RE?'''
+        lst = self.emo_to_txt[uchr]
+        if len(lst) > 0:
+            return True
+        return False
+
+    def textize_sentence_subs(self, emo_sent, verbose):
+        '''
+        return text with each emoji replaced by a value from emo_to_txt.
+        FIXME: emoji combinations representing a single word will not translate
+        back to the orignal word, but turn into a word combination calc, which
+        may be gibberish or worse.
+        '''
+        txt_sent, span = '', ''
+        for uchr in emo_sent:
+            if self.is_emoji_chr(uchr):
+                span += uchr
+            elif span:
+                txt_sent += self.textize_emo_span(span, verbose)
+                span = ''
+                if uchr != ' ':
+                    txt_sent += uchr
             else:
-                text += uchr
-    return text
-
-def is_emoji_chr(emo_to_txt, uchr):
-    '''FIXME: optimize?  use RE?'''
-    lst = emo_to_txt[uchr]
-    if len(lst) > 0:
-        return True
-    return False
-
-def textize_sentence_subs(emo_to_txt, emo_sent, verbose):
-    '''
-    return text with each emoji replaced by a value from emo_to_txt.
-    FIXME: emoji combinations representing a single word will not translate
-    back to the orignal word, but turn into a word combination calc, which
-    may be gibberish or worse.
-    '''
-    txt_sent, span = '', ''
-    for uchr in emo_sent:
-        if is_emoji_chr(emo_to_txt, uchr):
-            span += uchr
-        elif span:
-            txt_sent += textize_emo_span(emo_to_txt, span, verbose)
-            span = ''
-            if uchr != ' ':
                 txt_sent += uchr
-        else:
-            txt_sent += uchr
-    if span:
-        txt_sent += textize_emo_span(emo_to_txt, span, verbose)
-    return txt_sent
+        if span:
+            txt_sent += self.textize_emo_span(span, verbose)
+        return txt_sent
 
 def add_preset_multiples(preset_dict):
     preset_dict.update({
@@ -287,7 +287,7 @@ def test_emo_tuples(options):
         print("src => txt (%s)" % sentence)
         emo_sent = emotrans.emojize_sentence_subs(sentence, options.verbose)
         print("txt => emo (%s)" % emo_sent)
-        txt_sent = textize_sentence_subs(emo_to_txt, emo_sent, options.verbose)
+        txt_sent = emotrans.textize_sentence_subs(emo_sent, options.verbose)
         print("emo => txt (%s)" % txt_sent)
         print()
     if options.text_file:
