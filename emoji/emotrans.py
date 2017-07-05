@@ -262,8 +262,12 @@ def textize_sentence_subs(emo_to_txt, emo_sent, verbose):
         elif span:
             txt_sent += textize_emo_span(emo_to_txt, span, verbose)
             span = ''
+            if uchr != ' ':
+                txt_sent += uchr
         else:
             txt_sent += uchr
+    if span:
+        txt_sent += textize_emo_span(emo_to_txt, span, verbose)
     return txt_sent
 
 def add_preset_multiples(preset_dict):
