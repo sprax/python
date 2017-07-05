@@ -217,10 +217,23 @@ class EmoTrans:
             print("    %s ==>\n    %s\n" % (sentence, emo_tran))
         return emo_tran
 
-    def textize_emo_span(self, emo_span, verbose):
-        '''translate a string or slice of emoji into a text string'''
-        if verbose > 2:
-            print("TES: span({})".format(emo_span))
+    def textize_emo_span_recurse(self, emo_span):
+        '''translate a string or slice of emojis into a text string'''
+        if self.verbose > 2:
+            print("TSPAN: span({})".format(emo_span))
+
+        try:
+            lst = self.emo_to_txt[emo_span]
+            if self.verbose > 1:
+                print("TES: {} => {}".format(emo_span, lst))
+            return lst[0]  # random.choice(lst)
+        except KeyError:
+            return self.textize_emo_span_recurse(emo_span[0:-1]) + self.textize_emo_span_recurse(emo_span[-1:])
+
+    def textize_emo_chars(self, emo_span, verbose):
+        '''translate a string or slice of emojis char by char into a text string'''
+        if verbose > 3:
+            print("TCHRS: span({})".format(emo_span))
         text = ''
         prev = False
         for uchr in emo_span:
@@ -256,7 +269,7 @@ class EmoTrans:
             if self.is_emoji_chr(uchr):
                 emo_span += uchr
             elif emo_span:
-                txt_sent += self.textize_emo_span(emo_span, verbose)
+                txt_sent += self.textize_emo_span_recurse(emo_span)
                 emo_span = ''
                 if uchr != ' ':
                     txt_sent += uchr
@@ -264,7 +277,7 @@ class EmoTrans:
                 txt_sent += uchr
         if emo_span:
             txt_sent = txt_sent.rstrip()
-            txt_sent += self.textize_emo_span(emo_span, verbose)
+            txt_sent += self.textize_emo_span_recurse(emo_span)
         return txt_sent
 
 def add_preset_multiples(preset_dict):
