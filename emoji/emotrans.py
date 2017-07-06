@@ -109,7 +109,7 @@ class EmoTrans:
         for tt in self.usables:
             counter.update(tt[ET.INDEX_EMOJI_UNICHRS])
         if self.verbose > 1:
-            print("counter most common:", counter.most_common(10))
+            print("counter most common:", counter.most_common(12))
         return counter
 
     def gen_usables(self, i_flags):
@@ -148,8 +148,9 @@ class EmoTrans:
     def gen_emo_to_txt(self, presets):
         '''generate emoji to texts mapping'''
         emo_to_txt = defaultdict(list)
-        for txt, emo in presets.items():
-            emo_to_txt[emo[0]] = txt
+        for txt, lst in presets.items():
+            for emo in lst:
+                emo_to_txt[emo] = txt
         i_unchr = ET.INDEX_EMOJI_UNICHRS
         i_words = ET.INDEX_FREQUENT_WORDS
         for tt in self.usables:
