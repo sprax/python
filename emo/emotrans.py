@@ -37,8 +37,6 @@ SENTENCES = [
     # "Men occasionally stumble over the truth, but most of them pick themselves up and hurry off as if nothing has happened.",
 ]
 
-
-
 # def is_emoji(uchar):
 #   return uchar in EJ.UNICODE_EMOJI
 
@@ -151,6 +149,7 @@ class EmoTrans:
         for txt, lst in presets.items():
             for emo in lst:
                 emo_to_txt[emo] = txt
+        print("PRESET emo_to_txt:", emo_to_txt)
         i_unchr = ET.INDEX_EMOJI_UNICHRS
         i_words = ET.INDEX_FREQUENT_WORDS
         for tt in self.usables:
@@ -241,8 +240,10 @@ class EmoTrans:
             if self.verbose > 1:
                 print("TES: {} => {}".format(emo_span, lst))
             return lst[0]  # random.choice(lst)
-        except KeyError:
-            return self.textize_emo_span_recurse(emo_span[0:-1]) + self.textize_emo_span_recurse(emo_span[-1:])
+        except IndexError:
+        # except KeyError:
+            # return self.textize_emo_span_recurse(emo_span[0:-1]) + self.textize_emo_span_recurse(emo_span[-1:])
+            return emo_span
 
     def textize_emo_chars(self, emo_span, verbose):
         '''translate a string or slice of emojis char by char into a text string'''
@@ -288,6 +289,8 @@ class EmoTrans:
         for uchr in emo_sent:
             if self.is_emoji_chr(uchr):
                 emo_span += uchr
+            # elif ' ' == uchr and emo_span:
+            #     emo_span += uchr
             elif emo_span:
                 txt_sent += self.textize_emo_span_recurse(emo_span)
                 emo_span = ''
