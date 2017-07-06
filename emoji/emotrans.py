@@ -13,10 +13,11 @@ import argparse
 import json
 import random
 import re
+from collections import Counter
 from collections import defaultdict
 from functools import partial
 
-import emoji
+import emoji as EJ
 import emotuples as ET
 import text_fio
 import text_regex
@@ -38,11 +39,11 @@ SENTENCES = [
 
 
 
-def is_emoji(uchar):
-  return uchar in emoji.UNICODE_EMOJI
+# def is_emoji(uchar):
+#   return uchar in EJ.UNICODE_EMOJI
 
-def extract_emojis(str):
-  return ''.join(c for c in str if c in emoji.UNICODE_EMOJI)
+# def extract_emojis(str):
+#   return ''.join(c for c in str if c in emoji.EMOJI_UNICODE)
 
 def test_load():
     emodict = json.loads(open('../../emodict.json').read())
@@ -100,6 +101,16 @@ class EmoTrans:
         self.presets = self.gen_presets(options)
         self.txt_to_emo = self.gen_txt_to_emo(self.presets)
         self.emo_to_txt = self.gen_emo_to_txt()
+        self.emo_chr_counts = self.count_emo_chrs()
+        print("module emoji:", EJ)
+
+    def count_emo_chrs(self):
+        counter = Counter()
+        for tt in self.usables:
+            counter.update(tt[ET.INDEX_EMOJI_UNICHRS])
+        if self.verbose > 1:
+            print("counter most common:", counter.most_common(10))
+        return counter
 
     def gen_usables(self, i_flags):
         tmp = [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0]
@@ -251,10 +262,16 @@ class EmoTrans:
         return text
 
     def is_emoji_chr(self, uchr):
+        '''Is uchr an emoji or any part of an emoji (modifier)?'''
+        return self.emo_chr_counts[uchr]
+
+    def is_emoji_chr_bad(self, uchr):
         '''FIXME: optimize?  use RE?'''
         lst = self.emo_to_txt[uchr]
         if len(lst) > 0:
             return True
+        # if is_emoji(uchr):
+        #     return True
         return False
 
     def textize_sentence_subs(self, emo_sent, verbose):
