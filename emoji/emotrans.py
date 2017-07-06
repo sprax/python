@@ -100,7 +100,7 @@ class EmoTrans:
         self.usables = self.gen_usables(ET.INDEX_DISPLAY_FLAGS)
         self.presets = self.gen_presets(options)
         self.txt_to_emo = self.gen_txt_to_emo(self.presets)
-        self.emo_to_txt = self.gen_emo_to_txt()
+        self.emo_to_txt = self.gen_emo_to_txt(self.presets)
         self.emo_chr_counts = self.count_emo_chrs()
         print("module emoji:", EJ)
 
@@ -145,9 +145,11 @@ class EmoTrans:
             print()
         return txt_to_emo
 
-    def gen_emo_to_txt(self):
+    def gen_emo_to_txt(self, presets):
         '''generate emoji to texts mapping'''
         emo_to_txt = defaultdict(list)
+        for txt, emo in presets.items():
+            emo_to_txt[emo[0]] = txt
         i_unchr = ET.INDEX_EMOJI_UNICHRS
         i_words = ET.INDEX_FREQUENT_WORDS
         for tt in self.usables:
