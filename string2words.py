@@ -1,5 +1,6 @@
 #!/usr/bin/python3
-'''Parse a string into words
+'''
+Parse a string into words
 Usage: python string2words.py words.txt rainrajatacozapsrakezarfabetrainzany
 '''
 
@@ -13,7 +14,7 @@ DICTIONARY = {}
 def string2words_from_end_one(string, words_already_parsed):
     '''
     Recursively divide a string into string of words, backing up greedily from the end.
-    Returns a string with spaces inserted between the words, or Node if the parse fails.
+    Returns a string with spaces inserted between the words, or None if the parse fails.
     '''
 
     if  VERBOSE > 1:
@@ -141,12 +142,11 @@ def test_string2words():
         num_parses = 0
         if ret != None:
             num_parses = 1
-        print("string2words_from_end_one got", num_parses, "(", ret, ")")
+        print("string2words_from_end_one got", num_parses, "(" + ret + ")")
         all_parses = []
         string2words_from_beg_all(string, "", all_parses)
         num_parses = len(all_parses)
-        print("string2words_from_beg_all got" + str(num_parses) + "(" + str(all_parses) + ")")
+        print("string2words_from_beg_all got", str(num_parses),  all_parses)
 
 if __name__ == '__main__':
     test_string2words()
-
