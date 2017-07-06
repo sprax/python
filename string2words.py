@@ -128,7 +128,6 @@ def test_string2words():
     else:
         strings = ["minimumergold", "garbageatone", 'atone']
 
-
     test_is_palindrome(strings[0])
 
     load_dictionary(file_name)

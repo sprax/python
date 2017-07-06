@@ -90,6 +90,8 @@ def show_sorted_dict(dct, idx, lbl=''):
     for key, val in sorted(dct.items(), key=lambda dit: dit[idx].lower()):
         print("{} {} => {}".format(lbl, key, val))
 
+MAX_MULTI_EMO_LEN = 11
+MIN_SOLIT_EMO_LEN = 1
 
 class EmoTrans:
     def __init__(self, options):
@@ -265,6 +267,47 @@ class EmoTrans:
                     text += uchr
         return text
 
+    def textize_emo_span_from_end(self, emo_span, translated=''):
+        '''
+        Recursively divide a string of emoji chars into a string of words, backing up greedily
+        from the end.  The string (or "span") of emoji chars may contain spaces
+        Returns a string with spaces inserted between the words, or None if the parse fails.
+        '''
+
+        if  self.verbose > 2:
+            print("TESFE A:  span({})  translated({})".format(emo_span, translated))
+
+        # If the this (whole or remaining) span can be parsed as a single emoji with an (English)
+        # translation, just return it, concatenated with any words already parsed.
+        try:
+            lst = self.emo_to_txt[emo_span]
+            if self.verbose > 1:
+                print("TESFE B:  {} => {}".format(emo_span, lst))
+            wrd = lst[0]  # random.choice(lst)
+            return wrd + ' ' + translated if translated else wrd
+        except IndexError:
+            # Else divide the string into two parts, and if the 2nd part is a word, keep going.
+            # Use min and max word lengths to skip checking substrings that cannot be words.
+            max_index = len(emo_span)
+            min_index = max_index - MAX_MULTI_EMO_LEN
+            if  min_index < 0:
+                min_index = 0
+            max_index -= MIN_SOLIT_EMO_LEN
+            while max_index > min_index:
+                substr = emo_span[max_index:]
+                nxt = self.emo_to_txt[substr]
+                if len(nxt) > 0:
+                    wrd = nxt[0]  # random.choice(lst)
+                    if translated:
+                        wrd += " " + translated
+                    more_words = textize_emo_span_from_end(emo_span[0:max_index], wrd)
+                    if more_words:
+                        return more_words
+                max_index -= 1
+        return None          # string did not parse
+
+
+
     def is_emoji_chr(self, uchr):
         '''Is uchr an emoji or any part of an emoji (modifier)?'''
         return self.emo_chr_counts[uchr]
@@ -292,15 +335,19 @@ class EmoTrans:
             # elif ' ' == uchr and emo_span:
             #     emo_span += uchr
             elif emo_span:
-                txt_sent += self.textize_emo_span_recurse(emo_span)
+                txt_span = self.textize_emo_span_from_end(emo_span)
+                txt_sent += txt_span if txt_span else emo_span
                 emo_span = ''
                 if uchr != ' ':
                     txt_sent += uchr
             else:
                 txt_sent += uchr
         if emo_span:
-            txt_sent = txt_sent.rstrip()
-            txt_sent += self.textize_emo_span_recurse(emo_span)
+            txt_span = self.textize_emo_span_from_end(emo_span)
+            if txt_span:
+                txt_sent = txt_sent.rstrip() + txt_span
+            else:
+                txt_sent += emo_span
         return txt_sent
 
 def add_preset_multiples(preset_dict):
