@@ -232,6 +232,20 @@ class EmoTrans:
             print("    %s ==>\n    %s\n" % (sentence, emo_tran))
         return emo_tran
 
+
+    def is_emoji_chr(self, uchr):
+        '''Is uchr an emoji or any part of an emoji (modifier)?'''
+        return self.emo_chr_counts[uchr]
+
+    def is_emoji_chr_bad(self, uchr):
+        '''FIXME: optimize?  use RE?'''
+        lst = self.emo_to_txt[uchr]
+        if len(lst) > 0:
+            return True
+        # if is_emoji(uchr):
+        #     return True
+        return False
+
     def textize_emo_span_recurse(self, emo_span):
         '''translate a string or slice of emojis into a text string'''
         if self.verbose > 2:
@@ -280,16 +294,15 @@ class EmoTrans:
         # If the this (whole or remaining) span can be parsed as a single emoji with an (English)
         # translation, just return it, concatenated with any words already parsed.
         try:
-            if emo_span[-1] == ' ':
-                lst = self.emo_to_txt[emo_span[0:-1]]
-                end = ' '
-            else:
-                lst = self.emo_to_txt[emo_span]
-                end = ''
+            # if emo_span[-1] == ' ':
+            #     lst = self.emo_to_txt[emo_span[0:-1]]
+            # else:
+            #     lst = self.emo_to_txt[emo_span]
+            lst = self.emo_to_txt[emo_span.rstrip()]
             if self.verbose > 1:
                 print("TESFE B:  {} => {}".format(emo_span, lst))
             wrd = lst[0]  # random.choice(lst)
-            return wrd + ' ' + translated if translated else wrd + end
+            return wrd + ' ' + translated if translated else wrd
         except IndexError:
             # Else divide the string into two parts, and if the 2nd part is a word, keep going.
             # Use min and max word lengths to skip checking substrings that cannot be words.
@@ -312,20 +325,6 @@ class EmoTrans:
         return None          # string did not parse
 
 
-
-    def is_emoji_chr(self, uchr):
-        '''Is uchr an emoji or any part of an emoji (modifier)?'''
-        return self.emo_chr_counts[uchr]
-
-    def is_emoji_chr_bad(self, uchr):
-        '''FIXME: optimize?  use RE?'''
-        lst = self.emo_to_txt[uchr]
-        if len(lst) > 0:
-            return True
-        # if is_emoji(uchr):
-        #     return True
-        return False
-
     def textize_sentence_subs(self, emo_sent, verbose):
         '''
         return text with each emoji replaced by a value from emo_to_txt.
@@ -346,8 +345,7 @@ class EmoTrans:
                 txt_sent += txt_span if txt_span else emo_span
                 emo_span = ''
                 emo_prev = None
-                if uchr != ' ':
-                    txt_sent += uchr
+                txt_sent += uchr
             else:
                 txt_sent += uchr
         if emo_span:
