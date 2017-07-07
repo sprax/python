@@ -81,10 +81,41 @@ def unicode_chr_str(hex_unicode):
 EMO_SYNONYMS = {}
 
 def emo_synonyms(word):
+    '''TODO: replace with real synonyms from a dedicated class'''
     try:
         return EMO_SYNONYMS[word]
     except KeyError:
         return [word]
+
+def is_plural(word):
+    '''FIXME: this is ridiculous'''
+    try:
+        return word[-1] == 's'
+    except:
+        return false
+
+def pluralize(word):
+    '''
+    Return (plural, is_changed) where plural is the plural form of the
+    given word, and is_changed is True IFF word != plural.
+    TODO: replace with real plurals from a dedicated class
+    '''
+    if word.endswith('ss'):
+        return word + 'es', True
+    last = word[-1]
+    if last != 's':
+        return word + 's', True
+    else:
+        return word, False
+
+def singularize(word):
+    '''FIXME: make it work like pluralize (but better)'''
+    try:
+        if word[-1] == 's':
+            return word[0:-1], True
+        return word, False
+    except IndexError:
+        return word, False
 
 def show_sorted_dict(dct, idx, lbl=''):
     for key, val in sorted(dct.items(), key=lambda dit: dit[idx].lower()):
@@ -190,8 +221,20 @@ class EmoTrans:
         for word in words:
             emojis = self.emojize_token(word)
             if emojis:
-                print("emojize_word: about to return ({} + {}):".format(emojis, space))
+                # print("emojize_word: about to return ({} + {}):".format(emojis, space))
                 return emojis + space
+            plural, changed = pluralize(word)
+            if changed:
+                emojis = self.emojize_token(plural)
+                if emojis:
+                    return emojis + space
+            elif is_plural(word):
+                singular, singularized = singularize(word)
+                if singularized:
+                    emojis = self.emojize_token(singular)
+                    if emojis:
+                        # print("emojize_word: about to return ({} + {}):".format(emojis, space))
+                        return emojis + space + emojis + space
         return src_word
 
     def emojize_match(self, match_obj, space=' '):
