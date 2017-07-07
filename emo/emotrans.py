@@ -150,7 +150,7 @@ class EmoTrans:
         emo_to_txt = defaultdict(list)
         for txt, lst in presets.items():
             for emo in lst:
-                emo_to_txt[emo] = txt
+                emo_to_txt[emo].append(txt)
         print("PRESET emo_to_txt:", emo_to_txt)
         i_unchr = ET.INDEX_EMOJI_UNICHRS
         i_words = ET.INDEX_FREQUENT_WORDS
@@ -280,11 +280,16 @@ class EmoTrans:
         # If the this (whole or remaining) span can be parsed as a single emoji with an (English)
         # translation, just return it, concatenated with any words already parsed.
         try:
-            lst = self.emo_to_txt[emo_span]
+            if emo_span[-1] == ' ':
+                lst = self.emo_to_txt[emo_span[0:-1]]
+                end = ' '
+            else:
+                lst = self.emo_to_txt[emo_span]
+                end = ''
             if self.verbose > 1:
                 print("TESFE B:  {} => {}".format(emo_span, lst))
             wrd = lst[0]  # random.choice(lst)
-            return wrd + ' ' + translated if translated else wrd
+            return wrd + ' ' + translated if translated else wrd + end
         except IndexError:
             # Else divide the string into two parts, and if the 2nd part is a word, keep going.
             # Use min and max word lengths to skip checking substrings that cannot be words.
@@ -328,16 +333,19 @@ class EmoTrans:
         back to the orignal word, but turn into a word combination calc, which
         may be gibberish or worse.
         '''
-        txt_sent, emo_span = '', ''
+        txt_sent, emo_span, emo_prev = '', '', None
         for uchr in emo_sent:
             if self.is_emoji_chr(uchr):
                 emo_span += uchr
-            # elif ' ' == uchr and emo_span:
-            #     emo_span += uchr
+                emo_prev = uchr
+            elif ' ' == uchr and emo_prev:
+                emo_span += uchr
+                emo_prev = None
             elif emo_span:
                 txt_span = self.textize_emo_span_from_end(emo_span)
                 txt_sent += txt_span if txt_span else emo_span
                 emo_span = ''
+                emo_prev = None
                 if uchr != ' ':
                     txt_sent += uchr
             else:
