@@ -1196,7 +1196,7 @@ EMO_TUPLES = [
     ('1f4a8'                 , 1, 1164,   'nature', 1, '💨', ['dash'], ['dash'], ':dash:', []),
     ('1f32a'                 , 1, 1165,   'nature', 1, '🌪', ['cloud', 'tornado'], ['cloud', 'tornado'], ':cloud_tornado:', [':cloud_with_tornado:']),
     ('1f32b'                 , 1, 1166,   'nature', 1, '🌫', ['fog'], ['fog'], ':fog:', []),
-    ('1f30a'                 , 1, 1167,   'nature', 1, '🌊', ['wave', 'waves', 'ocean'], ['wave', 'waves', 'ocean'], ':ocean:', []),
+    ('1f30a'                 , 1, 1167,   'nature', 1, '🌊', ['wave', 'ocean'], ['wave', 'waves', 'ocean'], ':ocean:', []),
     ('1f4a7'                 , 1, 1168,   'nature', 1, '💧', ['drop', 'droplet'], ['drop', 'droplet'], ':droplet:', []),
     ('1f4a6'                 , 1, 1169,   'nature', 1, '💦', ['sweat', 'drops'], ['sweat', 'drops'], ':sweat_drops:', []),
     ('2614'                  , 1, 1170,   'nature', 0, '☔', ['umbrella'], ['umbrella'], ':umbrella:', []),
