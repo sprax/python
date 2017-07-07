@@ -290,8 +290,8 @@ class EmoTrans:
         #     return True
         return False
 
-    def textize_emo_span_recurse(self, emo_span):
-        '''translate a string or slice of emojis into a text string'''
+    def textize_emo_span_recurse_busted(self, emo_span):
+        '''FIXME: busted.  translate a string or slice of emojis into a text string'''
         if self.verbose > 2:
             print("TSPAN: span({})".format(emo_span))
 
@@ -325,13 +325,17 @@ class EmoTrans:
                     text += uchr
         return text
 
+    def prefix_translated(self, word, text, space=' '):
+        if text:
+            word += space + text
+        return word
+
     def textize_emo_span_from_end(self, emo_span, space=' ', translated=''):
         '''
         Recursively divide a string of emoji chars into a string of words, backing up greedily
         from the end.  The string (or "span") of emoji chars may contain spaces
         Returns a string with spaces inserted between the words, or None if the parse fails.
         '''
-
         if  self.verbose > 2:
             print("TESFE A:  span({})  translated({})".format(emo_span, translated))
 
@@ -346,7 +350,7 @@ class EmoTrans:
             if self.verbose > 1:
                 print("TESFE B:  {} => {}".format(emo_span, lst))
             wrd = lst[0]  # random.choice(lst)
-            return wrd + space + translated if translated else wrd
+            return self.prefix_translated(wrd, translated)
         except IndexError:
             # Else divide the string into two parts, and if the 2nd part is a word, keep going.
             # Use min and max word lengths to skip checking substrings that cannot be words.
@@ -360,9 +364,8 @@ class EmoTrans:
                 nxt = self.emo_to_txt[substr]
                 if len(nxt) > 0:
                     wrd = nxt[0]  # random.choice(lst)
-                    if translated:
-                        wrd += " " + translated
-                    more_words = textize_emo_span_from_end(emo_span[0:max_index], space, wrd)
+                    txt = self.prefix_translated(wrd, translated)
+                    more_words = textize_emo_span_from_end(emo_span[0:max_index], space, txt)
                     if more_words:
                         return more_words
                 max_index -= 1
