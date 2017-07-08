@@ -92,7 +92,7 @@ def is_plural(word):
     '''FIXME: this is ridiculous'''
     try:
         return word[-1] == 's'
-    except:
+    except IndexError:
         return false
 
 def pluralize(word):
@@ -124,30 +124,37 @@ def show_sorted_dict(dct, idx, lbl=''):
 
 MAX_MULTI_EMO_LEN = 11
 MIN_SOLIT_EMO_LEN = 1
+SHOW_GENERATED_DICTS = 7
 
 class EmoTrans:
     def __init__(self, options):
         self.options = options
         self.verbose = options.verbose
-        self.usables = self.gen_usables(ET.INDEX_DISPLAY_FLAGS)
+        self.usables = self.gen_usables()
+        if self.verbose > SHOW_GENERATED_DICTS:
+            self.print_usable_emojis()
         self.presets = self.gen_presets(options)
         self.txt_to_emo = self.gen_txt_to_emo(self.presets)
         self.emo_to_txt = self.gen_emo_to_txt(self.presets)
         self.emo_chr_counts = self.count_emo_chrs()
+
 
     def count_emo_chrs(self):
         counter = Counter()
         for tt in self.usables:
             counter.update(tt[ET.INDEX_EMOJI_UNICHRS])
         if self.verbose > 7:
-            print("counter most common:", counter.most_common(12))
+            print("Most common emo parts (single unichars):", counter.most_common(12))
         return counter
 
-    def gen_usables(self, i_flags):
-        tmp = [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0]
-        if self.verbose > 3:
-            print("Found %d usable emoji tuples." % len(tmp))
-        return tmp
+    def gen_usables(self, i_flags = ET.INDEX_DISPLAY_FLAGS):
+        return [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0]
+
+    def print_usable_emojis(self):
+        print("Read %d usable emoji tuples:" % len(self.usables))
+        for tt in self.usables:
+            print(tt[ET.INDEX_EMOJI_UNICHRS], end='  ')
+        print()
 
     def gen_presets(self, options):
         presets = {}
@@ -161,27 +168,31 @@ class EmoTrans:
 
     def gen_txt_to_emo(self, presets):
         '''generate text to emoji mapping'''
-        txt_to_emo = defaultdict(list, presets)
+        txt_to_emo = presets
         i_flags = ET.INDEX_DISPLAY_FLAGS
         i_monos = ET.INDEX_WORDSYLLABLES
         i_words = ET.INDEX_FREQUENT_WORDS
         i_unchr = ET.INDEX_EMOJI_UNICHRS
         for tt in self.usables:
-            for src in tt[i_words]:
-                txt_to_emo[src].append(tt[i_unchr])
-                # print("src(%s) => emo( %s )" % (src, tt[i_unchr]))
-            if self.verbose > 4:
-                print(tt[i_unchr], end='  ')
-        if self.verbose > 4:
-            print()
+            for txt in tt[i_words]:
+                emo = tt[i_unchr]
+                try:
+                    txt_to_emo[txt].append(emo)
+                except KeyError:
+                    txt_to_emo[txt] = [emo]
+                # print("txt(%s) => emo( %s )" % (txt, tt[i_unchr]))
         return txt_to_emo
 
     def gen_emo_to_txt(self, presets):
         '''generate emoji to texts mapping'''
-        emo_to_txt = defaultdict(list)
+        emo_to_txt = {}
         for txt, lst in presets.items():
             for emo in lst:
-                emo_to_txt[emo].append(txt)
+                try:
+                    emo_to_txt[emo].append(txt)
+                except KeyError:
+                    emo_to_txt[emo] = [txt]
+
         # print("PRESET emo_to_txt:", emo_to_txt)
         i_unchr = ET.INDEX_EMOJI_UNICHRS
         i_words = ET.INDEX_FREQUENT_WORDS
@@ -191,7 +202,7 @@ class EmoTrans:
 
     def rev_txt_to_gen(self, verbose):
         '''reverse of gen_txt_to_emo: map each emoji to a list of word-phrases'''
-        emo_to_txt = defaultdict(list)
+        emo_to_txt = {}
         for txt, lst in sorted(self.txt_to_emo.items()):
             # print("emo_to_txt 1: {} => {}".format(txt, lst))
             for emo in lst:
@@ -203,18 +214,24 @@ class EmoTrans:
     def emojize_token(self, word):
         '''return emoji string translation of word or None
         TODO: make protected ?'''
-        lst = self.txt_to_emo[word]
-        num = len(lst)
-        if num < 1:
-            lst = self.txt_to_emo[word.lower()]
-            num = len(lst)
-        if num >= 1:
-            if self.verbose > 3:
-                print("word subs: {} => {}".format(word, lst))
-            return random.choice(lst)
-        elif self.verbose > 4:
-            print("word self: {}".format(word))
-        return None
+        try:
+            lst = self.txt_to_emo[word]
+            if self.verbose > 4:
+                print("ET: {} => {}".format(word, lst))
+        except KeyError:
+            lwrd = word.lower()
+            try:
+                lst = self.txt_to_emo[lwrd]
+                if self.verbose > 4:
+                    print("ET: {} => {}".format(lwrd, lst))
+            except KeyError:
+                if self.verbose > 3:
+                    print("ET: {} => {}".format(word, word))
+                return None
+        emo = random.choice(lst)
+        if self.verbose > 3:
+            print("ET: {} => {}".format(word, emo))
+        return emo
 
     def emojize_word(self, src_word, space=' '):
         words = emo_synonyms(src_word)
@@ -223,18 +240,20 @@ class EmoTrans:
             if emojis:
                 # print("emojize_word: about to return ({} + {}):".format(emojis, space))
                 return emojis + space
-            plural, changed = pluralize(word)
-            if changed:
-                emojis = self.emojize_token(plural)
-                if emojis:
-                    return emojis + space
+            # # FIXME: If using subtraction, lip == lips - S ~= <kiss> - S == 💋 - S
+            # plural, changed = pluralize(word)
+            # if changed:
+            #     emojis = self.emojize_token(plural)
+            #     if emojis:
+            #         return emojis + space
             elif is_plural(word):
                 singular, singularized = singularize(word)
                 if singularized:
                     emojis = self.emojize_token(singular)
                     if emojis:
-                        print("emojize_word: about to return ({}  + {} ):".format(emojis, emojis))
-                        return emojis + space + emojis + space
+                        emostr = emojis + space + emojis + space
+                        print("EW: {} => {}".format(src_word, emostr))
+                        return emostr
         return src_word
 
     def emojize_match(self, match_obj, space=' '):
@@ -243,7 +262,7 @@ class EmoTrans:
 
     def emojize_sentence_subs(self, sentence, space=' '):
         beg, body, end = text_regex.sentence_body_and_end(sentence)
-        if self.verbose > 2:
+        if self.verbose > 6:
             print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
 
         emojize_match_bound = partial(self.emojize_match, space=space)
@@ -276,7 +295,6 @@ class EmoTrans:
             print("    %s ==>\n    %s\n" % (sentence, emo_tran))
         return emo_tran
 
-
     def is_emoji_chr(self, uchr):
         '''Is uchr an emoji or any part of an emoji (modifier)?'''
         return self.emo_chr_counts[uchr]
@@ -300,8 +318,7 @@ class EmoTrans:
             if self.verbose > 1:
                 print("TES: {} => {}".format(emo_span, lst))
             return lst[0]  # random.choice(lst)
-        except IndexError:
-        # except KeyError:
+        except KeyError:
             # return self.textize_emo_span_recurse(emo_span[0:-1]) + self.textize_emo_span_recurse(emo_span[-1:])
             return emo_span
 
@@ -357,7 +374,7 @@ class EmoTrans:
                 print("TESFE B:  {} => {}".format(emo_span, lst))
             wrd = lst[0]  # random.choice(lst)
             return self.append_word(wrd, word_list)
-        except IndexError as ie:
+        except KeyError as ie:
             print("Except:", ie)
             # Else divide the string into two parts, and if the 2nd part is a word, keep going.
             # Use min and max word lengths to skip checking substrings that cannot be words.
@@ -368,7 +385,7 @@ class EmoTrans:
             max_index -= MIN_SOLIT_EMO_LEN
             while max_index > min_index:
                 substr = emo_span[max_index:]
-                nxt = self.emo_to_txt[substr]
+                nxt = self.emo_to_txt.get(substr, [])
                 if len(nxt) > 0:
                     wrd = nxt[0]  # random.choice(lst)
                     txt = self.append_word(wrd, word_list)
