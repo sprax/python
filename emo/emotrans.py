@@ -132,6 +132,11 @@ def show_sorted_dict(dct, idx, lbl=''):
 
 MAX_MULTI_EMO_LEN = 11
 MIN_SOLIT_EMO_LEN = 1
+
+# Verbosity levels:
+SHOW_LIST_VALS = 4
+SHOW_TEXT_TRANS = 5
+SHOW_TEXT_DIVISION = 6
 SHOW_GENERATED_DICTS = 7
 
 class EmoTrans:
@@ -386,8 +391,7 @@ class EmoTrans:
                 print("TESFE B: {} => {}".format(emo_span, lst))
             wrd = lst[0]  # random.choice(lst)
             return self.append_word(wrd, word_list)
-        except KeyError as ie:
-            print("TESFE C: KeyError:", ie)
+        except KeyError:
             # Else divide the string into two parts, and if the 2nd part is a word, keep going.
             # Use min and max word lengths to skip checking substrings that cannot be words.
             max_index = len(emo_span)
@@ -395,16 +399,18 @@ class EmoTrans:
             if  min_index < 0:
                 min_index = 0
             max_index -= MIN_SOLIT_EMO_LEN
-            print("index min({})  max({})".format(min_index, max_index))
+            if self.verbose > SHOW_TEXT_DIVISION:
+                print("index min({})  max({})".format(min_index, max_index))
             while max_index >= min_index:
                 substr = emo_span[max_index:]
                 nxt = self.emo_to_txt.get(substr, [])
-                print("while min({})  max({})  substr({})  nxt({})".format(min_index, max_index, substr, nxt))
+                if self.verbose > SHOW_TEXT_DIVISION:
+                    print("while min({})  max({})  substr({})  nxt({})".format(min_index, max_index, substr, nxt))
                 if len(nxt) > 0:
                     wrd = nxt[0]  # random.choice(lst)
                     txt = self.append_word(wrd, word_list)
-                    print("TESFE D: Calling textize_emo_span_from_end({}, {})".format(
-                            emo_span[0:max_index], txt))
+                    if self.verbose > SHOW_TEXT_DIVISION:
+                        print("TESFE D: Calling textize_emo_span_from_end({}, {})".format(emo_span[0:max_index], txt))
                     more_words = self.textize_emo_span_from_end(emo_span[0:max_index], txt)
                     if more_words:
                         return more_words
@@ -429,13 +435,16 @@ class EmoTrans:
                 emo_prev = None
             elif emo_span:
                 txt_list = self.textize_emo_span_from_end(emo_span)
-                print("TSS list: ({})".format(txt_list))
+                if self.verbose > SHOW_LIST_VALS:
+                    print("TSS list: ({})".format(txt_list))
                 if txt_list:
                     txt_list.reverse()
                     txt_sent += space.join(txt_list)
-                    print("TSS text: ({})".format(txt_sent))
+                    if self.verbose > SHOW_TEXT_TRANS:
+                        print("TSS text: ({})".format(txt_sent))
                 else:
-                    print("TSS add: {} += {}", txt_sent, emo_span)
+                    if self.verbose > SHOW_TEXT_TRANS:
+                        print("TSS add: {} += {}", txt_sent, emo_span)
                     txt_sent += emo_span
                 emo_span = ''
                 emo_prev = None
