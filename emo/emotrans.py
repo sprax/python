@@ -240,7 +240,7 @@ class EmoTrans:
             if emojis:
                 # print("emojize_word: about to return ({} + {}):".format(emojis, space))
                 return emojis + space
-            # # FIXME: If using subtraction, lip == lips - S ~= <kiss> - S == 💋 - S
+            # # FIXME: If using subtraction, lip == lips - S ~= <kiss> - S == 💋 - S == 💋 <-> <S>
             # plural, changed = pluralize(word)
             # if changed:
             #     emojis = self.emojize_token(plural)
@@ -342,24 +342,25 @@ class EmoTrans:
                     text += uchr
         return text
 
-    def append_word(self, word, word_list=[]):
+    def append_word(self, word, word_list=None):
         print("append_word:  word({})  list({})".format(word, word_list))
-        if word_list and word_list[-1] == word:
-            if is_singular(word):
-                plural, different = pluralize(word)
-                if different:
-                    word_list[-1] = plural
-                    return word_list
-        word_list.append(word)
-        return word_list
+        if word_list:
+            if word_list[-1] == word:
+                if is_singular(word):
+                    plural, different = pluralize(word)
+                    if different:
+                        word_list[-1] = plural
+                        return word_list
+            word_list.append(word)
+        return [word]
 
-    def textize_emo_span_from_end(self, emo_span, word_list):
+    def textize_emo_span_from_end(self, emo_span, word_list=None):
         '''
         Recursively divide a string of emoji chars into a string of words, backing up greedily
         from the end.  The string (or "span") of emoji chars may contain spaces
         Returns a string with spaces inserted between the words, or None if the parse fails.
         '''
-        if  self.verbose > 2:
+        if  self.verbose > 6:
             print("TESFE A:  span({})  word_list({})".format(emo_span, word_list))
 
         # If the this (whole or remaining) span can be parsed as a single emoji with an (English)
@@ -370,7 +371,7 @@ class EmoTrans:
             # else:
             #     lst = self.emo_to_txt[emo_span]
             lst = self.emo_to_txt[emo_span.rstrip()]
-            if self.verbose > 6:
+            if self.verbose > 4:
                 print("TESFE B:  {} => {}".format(emo_span, lst))
             wrd = lst[0]  # random.choice(lst)
             return self.append_word(wrd, word_list)
@@ -414,8 +415,8 @@ class EmoTrans:
                 emo_span += uchr
                 emo_prev = None
             elif emo_span:
-                print("TSS: Calling textize_emo_span_from_end({})".format(emo_span))
-                txt_list = self.textize_emo_span_from_end(emo_span, [])
+                print("TSS: TESFE({})".format(emo_span))
+                txt_list = self.textize_emo_span_from_end(emo_span)
                 print("TSS lst: txt_list({})".format(txt_list))
                 if txt_list:
                     txt_list.reverse()
