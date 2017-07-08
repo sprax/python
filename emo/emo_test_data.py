@@ -1,7 +1,7 @@
 
 
 SENTENCES = [
-    " _The wind and waves_. ",
+    " _Wind And Waves_. ",
     "Wind and waves may rock the boat, but only you can tip the crew.",
     "I love you",
     "So it's the US vs. Canada in football, I mean soccer!?",

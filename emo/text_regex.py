@@ -17,16 +17,19 @@ from collections import defaultdict
 import emoji
 import emotuples
 
-EXAMPLES = {
-    "There isn't one empyrean ouroborous; everyone knows there've always been several." : (11, 24),
+EXAMPLES = [
+    # (text, words, syllables)
+    ("There isn't one empyrean ouroborous; everyone knows there've always been several.", 11, 24),
     #  1   2  3  4   5  6 78   9 0 1  2   3 4* 5     6     7  8   9  0    1    2 3 4
-    '"There aren\'t really any homogeneous cultures," you\'ll say, "they\'ve always shown rifts."' : (12, 21),
+    ('"There aren\'t really any homogeneous cultures," you\'ll say, "they\'ve always shown rifts."', 12, 21),
     #   1   2        3   5 6 7  8 9 0 1 2   3  4        5      6      7      8  9     0    1
-    '"Ain\'t all y\'all young\'uns under 17," she\'d said, "like 11- or 15-years old?!"' : (13, 21),
+    ('"Ain\'t all y\'all young\'uns under 17," she\'d said, "like 11- or 15-years old?!"', 13, 21),
     #  1     2      3    4     5   6  7  +3     1     2      3   +3  7  +2  0    1}
-    "Didn't you know my X-15's XLR-99 engine burned 15,000 pounds (6,717 kg) of propellant in 87 seconds?" : (17, 35),
+    ("Didn't you know my X-15's XLR-99 engine burned 15,000 pounds (6,717 kg) of propellant in 87 seconds?", 17, 35),
     # 1  2   3    4   5 6 +2    +3 +2 4  5    6     +2  +2  1     +3  +8 +3  6    7 8  9   0  +3  4 5
-}
+    (" _This Is My Title_, right?", 5, 6),
+    #    1  2   3  4  5    6
+]
 
 
 ###############################################################################
@@ -34,7 +37,13 @@ WORD_SEP_INTERIOR = r"',.-"
 RE_WORD_TOKEN = re.compile(r"((?:\w+[{}]\w*)+\w|\w+)".format(WORD_SEP_INTERIOR))
 
 def word_tokens(sentence):
-    return RE_WORD_TOKEN.findall(sentence)
+    '''
+    Returns tokens comprised of word chars (\w) embedding one or more single
+    interior punctuation characters (',.-) ').  Because \w matches _, tokens
+    are stripped of _ (underscores) at either end.
+    '''
+    words = RE_WORD_TOKEN.findall(sentence)
+    return [word.strip('_') for word in words]
 
 ###############################################################################
 WORD_SEP_EXTERIOR = r'!"#$%&()*+./:;<=>?@[\]^_`{|}~\x82\x83\x84\x85\x86\x87\x88\x89' \
@@ -57,7 +66,7 @@ def sentence_body_and_end(sentence):
 WORD_EXT_BEG = r'[<]'
 
 # The . is for abbreviations; any sentence-ending punctuation should already be removed.
-WORD_EXT_END = r'[_%.>]'  
+WORD_EXT_END = r'[_%.>]'
 
 RE_WORD_EXT = re.compile(r"((?:{}?[\w]+[{}]*)[\w]+{}?|{}?\w{}?)".format(
     WORD_EXT_BEG, WORD_SEP_INTERIOR, WORD_EXT_END, WORD_EXT_BEG, WORD_EXT_END))
@@ -88,8 +97,9 @@ def main():
     args = parser.parse_args()
     # test_misc()
 
-    for sentence, counts in EXAMPLES.items():
-        print("MANUAL", counts[0], sentence)
+    print("NUM_TOKENS          WORD_TOKENS:")
+    for sentence, words, syllables in EXAMPLES:
+        print("MANUAL", words, sentence)
         tokens = word_tokens(sentence)
         print("TOKENS", len(tokens), tokens)
         swords = word_splits(sentence)
