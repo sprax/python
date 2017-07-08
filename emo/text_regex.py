@@ -57,7 +57,7 @@ def sentence_body_and_end(sentence):
 WORD_EXT_BEG = r'[<]'
 
 # The . is for abbreviations; any sentence-ending punctuation should already be removed.
-WORD_EXT_END = r'[%.>]'  
+WORD_EXT_END = r'[_%.>]'  
 
 RE_WORD_EXT = re.compile(r"((?:{}?[\w]+[{}]*)[\w]+{}?|{}?\w{}?)".format(
     WORD_EXT_BEG, WORD_SEP_INTERIOR, WORD_EXT_END, WORD_EXT_BEG, WORD_EXT_END))

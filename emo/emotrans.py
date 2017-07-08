@@ -21,22 +21,9 @@ import emoji as EJ
 import emotuples as ET
 import text_fio
 import text_regex
+from emo_test_data import SENTENCES
 # import sylcount
 
-SENTENCES = [
-    " The wind and waves.",
-    # "Wind and waves may rock the boat, but only you can tip the crew.",
-    # "I love you",
-    # "So it's the US vs. Canada in football, I mean soccer!?",
-    # "Lady Astor: “Winston, if I were your wife I’d put poison in your coffee.",
-    # "Winston Churchill: “Nancy, if I were your husband I’d drink it.",
-    # "I'm 100% sure <3 ain't a 4-letter word, even on Rhys' say-so?!",
-    # "When the eagles are silent, the parrots begin to jabber.",
-    # "If you have an important point to make, don’t try to be subtle or clever. Use a pile driver. Hit the point once. Then come back and hit it again. Then hit it a third time -- a tremendous whack.",
-    # "Success consists of going from failure to failure without loss of enthusiasm.",
-    # "Character may be manifested in the great moments, but it is made in the small ones.",
-    # "Men occasionally stumble over the truth, but most of them pick themselves up and hurry off as if nothing has happened.",
-]
 
 # def is_emoji(uchar):
 #   return uchar in EJ.UNICODE_EMOJI
@@ -425,7 +412,7 @@ class EmoTrans:
         back to the orignal word, but turn into a word combination calc, which
         may be gibberish or worse.
         '''
-        txt_sent, emo_span, emo_prev = '', '', None
+        txt_sent, emo_span, emo_prev, first = '', '', None, True
         for uchr in emo_sent:
             if self.is_emoji_chr(uchr):
                 emo_span += uchr
@@ -439,7 +426,12 @@ class EmoTrans:
                     print("TSS list: ({})".format(txt_list))
                 if txt_list:
                     txt_list.reverse()
-                    txt_sent += space.join(txt_list)
+                    text = space.join(txt_list)
+                    if first:
+                        txt_sent += text.capitalize()
+                        first = False
+                    else:
+                        txt_sent += text
                     if self.verbose > SHOW_TEXT_TRANS:
                         print("TSS text: ({})".format(txt_sent))
                 else:
@@ -451,12 +443,16 @@ class EmoTrans:
                 txt_sent += uchr
             else:
                 txt_sent += uchr
+                first = False
         if emo_span:
             txt_list = self.textize_emo_span_from_end(emo_span)
-            # if txt_list:
-            #     txt_sent = txt_sent.rstrip() + space.join(txt_list)
-            # else:
-            #     txt_sent += emo_span
+            if txt_list:
+                if txt_list[0].isalnum():
+                    txt_sent = txt_sent + space.join(txt_list)
+                else:
+                    txt_sent = txt_sent.rstrip() + space.join(txt_list)
+            else:
+                txt_sent += emo_span
         return txt_sent
 
 def add_preset_multiples(preset_dict):
