@@ -24,7 +24,8 @@ import text_regex
 # import sylcount
 
 SENTENCES = [
-    "Wind and waves may rock the boat, but only you can tip the crew.",
+    " The wind and waves.",
+    # "Wind and waves may rock the boat, but only you can tip the crew.",
     # "I love you",
     # "So it's the US vs. Canada in football, I mean soccer!?",
     # "Lady Astor: “Winston, if I were your wife I’d put poison in your coffee.",
@@ -133,19 +134,18 @@ class EmoTrans:
         self.txt_to_emo = self.gen_txt_to_emo(self.presets)
         self.emo_to_txt = self.gen_emo_to_txt(self.presets)
         self.emo_chr_counts = self.count_emo_chrs()
-        print("module emoji:", EJ)
 
     def count_emo_chrs(self):
         counter = Counter()
         for tt in self.usables:
             counter.update(tt[ET.INDEX_EMOJI_UNICHRS])
-        if self.verbose > 1:
+        if self.verbose > 7:
             print("counter most common:", counter.most_common(12))
         return counter
 
     def gen_usables(self, i_flags):
         tmp = [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0]
-        if self.verbose:
+        if self.verbose > 3:
             print("Found %d usable emoji tuples." % len(tmp))
         return tmp
 
@@ -182,7 +182,7 @@ class EmoTrans:
         for txt, lst in presets.items():
             for emo in lst:
                 emo_to_txt[emo].append(txt)
-        print("PRESET emo_to_txt:", emo_to_txt)
+        # print("PRESET emo_to_txt:", emo_to_txt)
         i_unchr = ET.INDEX_EMOJI_UNICHRS
         i_words = ET.INDEX_FREQUENT_WORDS
         for tt in self.usables:
@@ -233,7 +233,7 @@ class EmoTrans:
                 if singularized:
                     emojis = self.emojize_token(singular)
                     if emojis:
-                        # print("emojize_word: about to return ({} + {}):".format(emojis, space))
+                        print("emojize_word: about to return ({}  + {} ):".format(emojis, emojis))
                         return emojis + space + emojis + space
         return src_word
 
@@ -325,19 +325,25 @@ class EmoTrans:
                     text += uchr
         return text
 
-    def prefix_translated(self, word, text, space=' '):
-        if text:
-            word += space + text
-        return word
+    def append_word(self, word, word_list=[]):
+        print("append_word:  word({})  list({})".format(word, word_list))
+        if word_list and word_list[-1] == word:
+            if is_singular(word):
+                plural, different = pluralize(word)
+                if different:
+                    word_list[-1] = plural
+                    return word_list
+        word_list.append(word)
+        return word_list
 
-    def textize_emo_span_from_end(self, emo_span, space=' ', translated=''):
+    def textize_emo_span_from_end(self, emo_span, word_list):
         '''
         Recursively divide a string of emoji chars into a string of words, backing up greedily
         from the end.  The string (or "span") of emoji chars may contain spaces
         Returns a string with spaces inserted between the words, or None if the parse fails.
         '''
         if  self.verbose > 2:
-            print("TESFE A:  span({})  translated({})".format(emo_span, translated))
+            print("TESFE A:  span({})  word_list({})".format(emo_span, word_list))
 
         # If the this (whole or remaining) span can be parsed as a single emoji with an (English)
         # translation, just return it, concatenated with any words already parsed.
@@ -347,11 +353,12 @@ class EmoTrans:
             # else:
             #     lst = self.emo_to_txt[emo_span]
             lst = self.emo_to_txt[emo_span.rstrip()]
-            if self.verbose > 1:
+            if self.verbose > 6:
                 print("TESFE B:  {} => {}".format(emo_span, lst))
             wrd = lst[0]  # random.choice(lst)
-            return self.prefix_translated(wrd, translated)
-        except IndexError:
+            return self.append_word(wrd, word_list)
+        except IndexError as ie:
+            print("Except:", ie)
             # Else divide the string into two parts, and if the 2nd part is a word, keep going.
             # Use min and max word lengths to skip checking substrings that cannot be words.
             max_index = len(emo_span)
@@ -364,8 +371,10 @@ class EmoTrans:
                 nxt = self.emo_to_txt[substr]
                 if len(nxt) > 0:
                     wrd = nxt[0]  # random.choice(lst)
-                    txt = self.prefix_translated(wrd, translated)
-                    more_words = textize_emo_span_from_end(emo_span[0:max_index], space, txt)
+                    txt = self.append_word(wrd, word_list)
+                    print("TESFE C: Calling textize_emo_span_from_end({}, {})".format(
+                            emo_span[0:max_index], txt))
+                    more_words = textize_emo_span_from_end(emo_span[0:max_index], txt)
                     if more_words:
                         return more_words
                 max_index -= 1
@@ -388,19 +397,27 @@ class EmoTrans:
                 emo_span += uchr
                 emo_prev = None
             elif emo_span:
-                txt_span = self.textize_emo_span_from_end(emo_span)
-                txt_sent += txt_span if txt_span else emo_span
+                print("TSS: Calling textize_emo_span_from_end({})".format(emo_span))
+                txt_list = self.textize_emo_span_from_end(emo_span, [])
+                print("TSS lst: txt_list({})".format(txt_list))
+                if txt_list:
+                    txt_list.reverse()
+                    txt_sent += space.join(txt_list)
+                    print("TSS txt:", txt_sent)
+                else:
+                    print("TSS add: {} += {}", txt_sent, emo_span)
+                    txt_sent += emo_span
                 emo_span = ''
                 emo_prev = None
                 txt_sent += uchr
             else:
                 txt_sent += uchr
         if emo_span:
-            txt_span = self.textize_emo_span_from_end(emo_span)
-            if txt_span:
-                txt_sent = txt_sent.rstrip() + txt_span
-            else:
-                txt_sent += emo_span
+            txt_list = self.textize_emo_span_from_end(emo_span)
+            # if txt_list:
+            #     txt_sent = txt_sent.rstrip() + space.join(txt_list)
+            # else:
+            #     txt_sent += emo_span
         return txt_sent
 
 def add_preset_multiples(preset_dict):
@@ -465,6 +482,9 @@ def test_emojize():
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
     # test_misc()
+    if args.verbose > 7:
+        print("module emoji:", EJ)
+
     test_emo_tuples(args)
 
 if __name__ == '__main__':
