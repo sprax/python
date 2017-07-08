@@ -109,6 +109,14 @@ def pluralize(word):
     else:
         return word, False
 
+
+def is_singular(word):
+    '''FIXME: this is more ridiculous'''
+    try:
+        return word[-1] != 's'
+    except IndexError:
+        return false
+
 def singularize(word):
     '''FIXME: make it work like pluralize (but better)'''
     try:
@@ -216,20 +224,20 @@ class EmoTrans:
         TODO: make protected ?'''
         try:
             lst = self.txt_to_emo[word]
-            if self.verbose > 4:
+            if self.verbose > 5:
                 print("ET: {} => {}".format(word, lst))
         except KeyError:
             lwrd = word.lower()
             try:
                 lst = self.txt_to_emo[lwrd]
-                if self.verbose > 4:
+                if self.verbose > 5:
                     print("ET: {} => {}".format(lwrd, lst))
             except KeyError:
-                if self.verbose > 3:
+                if self.verbose > 4:
                     print("ET: {} => {}".format(word, word))
                 return None
         emo = random.choice(lst)
-        if self.verbose > 3:
+        if self.verbose > 4:
             print("ET: {} => {}".format(word, emo))
         return emo
 
@@ -252,7 +260,8 @@ class EmoTrans:
                     emojis = self.emojize_token(singular)
                     if emojis:
                         emostr = emojis + space + emojis + space
-                        print("EW: {} => {}".format(src_word, emostr))
+                        if self.verbose > 3:
+                            print("EW: {} => {}".format(src_word, emostr))
                         return emostr
         return src_word
 
@@ -343,7 +352,8 @@ class EmoTrans:
         return text
 
     def append_word(self, word, word_list=None):
-        print("append_word:  word({})  list({})".format(word, word_list))
+        if self.verbose > 7:
+            print("append_word:  word({})  list({})".format(word, word_list))
         if word_list:
             if word_list[-1] == word:
                 if is_singular(word):
@@ -365,18 +375,19 @@ class EmoTrans:
 
         # If the this (whole or remaining) span can be parsed as a single emoji with an (English)
         # translation, just return it, concatenated with any words already parsed.
+        emo_span = emo_span.rstrip()
         try:
             # if emo_span[-1] == space:
             #     lst = self.emo_to_txt[emo_span[0:-1]]
             # else:
             #     lst = self.emo_to_txt[emo_span]
-            lst = self.emo_to_txt[emo_span.rstrip()]
-            if self.verbose > 4:
-                print("TESFE B:  {} => {}".format(emo_span, lst))
+            lst = self.emo_to_txt[emo_span]
+            if self.verbose > 5:
+                print("TESFE B: {} => {}".format(emo_span, lst))
             wrd = lst[0]  # random.choice(lst)
             return self.append_word(wrd, word_list)
         except KeyError as ie:
-            print("Except:", ie)
+            print("TESFE C: KeyError:", ie)
             # Else divide the string into two parts, and if the 2nd part is a word, keep going.
             # Use min and max word lengths to skip checking substrings that cannot be words.
             max_index = len(emo_span)
@@ -384,15 +395,17 @@ class EmoTrans:
             if  min_index < 0:
                 min_index = 0
             max_index -= MIN_SOLIT_EMO_LEN
-            while max_index > min_index:
+            print("index min({})  max({})".format(min_index, max_index))
+            while max_index >= min_index:
                 substr = emo_span[max_index:]
                 nxt = self.emo_to_txt.get(substr, [])
+                print("while min({})  max({})  substr({})  nxt({})".format(min_index, max_index, substr, nxt))
                 if len(nxt) > 0:
                     wrd = nxt[0]  # random.choice(lst)
                     txt = self.append_word(wrd, word_list)
-                    print("TESFE C: Calling textize_emo_span_from_end({}, {})".format(
+                    print("TESFE D: Calling textize_emo_span_from_end({}, {})".format(
                             emo_span[0:max_index], txt))
-                    more_words = textize_emo_span_from_end(emo_span[0:max_index], txt)
+                    more_words = self.textize_emo_span_from_end(emo_span[0:max_index], txt)
                     if more_words:
                         return more_words
                 max_index -= 1
@@ -415,13 +428,12 @@ class EmoTrans:
                 emo_span += uchr
                 emo_prev = None
             elif emo_span:
-                print("TSS: TESFE({})".format(emo_span))
                 txt_list = self.textize_emo_span_from_end(emo_span)
-                print("TSS lst: txt_list({})".format(txt_list))
+                print("TSS list: ({})".format(txt_list))
                 if txt_list:
                     txt_list.reverse()
                     txt_sent += space.join(txt_list)
-                    print("TSS txt:", txt_sent)
+                    print("TSS text: ({})".format(txt_sent))
                 else:
                     print("TSS add: {} += {}", txt_sent, emo_span)
                     txt_sent += emo_span
