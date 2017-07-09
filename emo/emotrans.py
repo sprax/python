@@ -121,6 +121,7 @@ MAX_MULTI_EMO_LEN = 11
 MIN_SOLIT_EMO_LEN = 1
 
 # Verbosity levels:
+SHOW_TOKEN_TRANS = 3
 SHOW_LIST_VALUES = 4
 SHOW_TEXT_BUILDERS = 5
 SHOW_TEXT_DIVISION = 6
@@ -245,7 +246,7 @@ class EmoTrans:
         for word in synonyms:
             emojis = self.emojize_token(word)
             if emojis:
-                if self.verbose > 3:
+                if self.verbose > SHOW_TOKEN_TRANS:
                     print("EW  TOKEN: {} => {}".format(word, emojis))
                 return emojis + space
             if is_plural(word):
@@ -254,7 +255,7 @@ class EmoTrans:
                     emojis = self.emojize_token(singular)
                     if emojis:
                         emostr = emojis + space + emojis + space
-                        if self.verbose > 3:
+                        if self.verbose > SHOW_TOKEN_TRANS:
                             print("EW PLURAL: {} => {}".format(word, emostr))
                         return emostr
             if is_singular(word):
@@ -337,7 +338,7 @@ class EmoTrans:
 
     def textize_emo_chars(self, emo_span, space=' ', verbose=1):
         '''translate a string or slice of emojis char by char into a text string'''
-        if verbose > 3:
+        if verbose > 4:
             print("TCHRS: span({})".format(emo_span))
         text = ''
         prev = False
@@ -366,6 +367,9 @@ class EmoTrans:
                         word_list[-1] = plural
                         return word_list
             word_list.append(word)
+            if self.verbose > 7:
+                print("append_word:  ({})  => ({})".format(word, word_list))
+            return word_list
         return [word]
 
     def textize_emo_span_from_end(self, emo_span, word_list=None):
@@ -398,8 +402,6 @@ class EmoTrans:
             if  min_index < 0:
                 min_index = 0
             max_index -= MIN_SOLIT_EMO_LEN
-            if self.verbose > SHOW_TEXT_DIVISION:
-                print("index min({})  max({})".format(min_index, max_index))
             while max_index >= min_index:
                 substr = emo_span[max_index:]
                 nxt = self.emo_to_txt.get(substr, [])
@@ -434,16 +436,18 @@ class EmoTrans:
                 emo_prev = None
             elif emo_span:
                 txt_list = self.textize_emo_span_from_end(emo_span)
-                if self.verbose > SHOW_LIST_VALUES:
-                    print("TSS list: ({})".format(txt_list))
                 if txt_list:
                     txt_list.reverse()
-                    text = space.join(txt_list)
+                    if self.verbose > SHOW_LIST_VALUES:
+                        print("TSS list: ({})".format(txt_list))
+                    txt_join = space.join(txt_list)
+                    if self.verbose > SHOW_TOKEN_TRANS:
+                        print("TSS REBUS: {} => {}".format(emo_span, txt_join))
                     if first:
-                        txt_sent += text.capitalize()
+                        txt_sent += txt_join.capitalize()
                         first = False
                     else:
-                        txt_sent += text
+                        txt_sent += txt_join
                     if self.verbose > SHOW_TEXT_BUILDERS:
                         print("TSS text: ({})".format(txt_sent))
                 else:
@@ -459,10 +463,16 @@ class EmoTrans:
         if emo_span:
             txt_list = self.textize_emo_span_from_end(emo_span)
             if txt_list:
+                txt_list.reverse()
+                txt_join = space.join(txt_list)
+                if self.verbose > SHOW_LIST_VALUES:
+                    print("TSS list: {}".format(txt_list))
+                if self.verbose > SHOW_TOKEN_TRANS:
+                    print("TSS REBUS: {} => {}".format(emo_span, txt_join))
                 if txt_list[0].isalnum():
-                    txt_sent = txt_sent + space.join(txt_list)
+                    txt_sent = txt_sent + txt_join
                 else:
-                    txt_sent = txt_sent.rstrip() + space.join(txt_list)
+                    txt_sent = txt_sent.rstrip() + txt_join
             else:
                 txt_sent += emo_span
         return txt_sent
