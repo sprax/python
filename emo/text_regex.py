@@ -27,13 +27,13 @@ EXAMPLES = [
     #  1     2      3    4     5   6  7  +3     1     2      3   +3  7  +2  0    1}
     ("Didn't you know my X-15's XLR-99 engine burned 15,000 pounds (6,717 kg) of propellant in 87 seconds?", 17, 35),
     # 1  2   3    4   5 6 +2    +3 +2 4  5    6     +2  +2  1     +3  +8 +3  6    7 8  9   0  +3  4 5
-    (" _This Is My Title_, right?", 5, 6),
+    (" _This Is _My_ Title_, right?", 5, 6),
     #    1  2   3  4  5    6
 ]
 
 
 ###############################################################################
-WORD_SEP_INTERIOR = r"',.-"
+WORD_SEP_INTERIOR = r"-',."
 RE_WORD_TOKEN = re.compile(r"((?:\w+[{}]\w*)+\w|\w+)".format(WORD_SEP_INTERIOR))
 
 def word_tokens(sentence):
@@ -43,6 +43,19 @@ def word_tokens(sentence):
     are stripped of _ (underscores) at either end.
     '''
     words = RE_WORD_TOKEN.findall(sentence)
+    return [word.strip('_') for word in words]
+
+###############################################################################
+RE_NOT_NON_WORD_TOKEN = re.compile(r"((?:[^\W_]+[{}][^\W_]*)+[^\W_]|[^\W_]+)".format(WORD_SEP_INTERIOR))
+
+def notnonword_tokens(sentence):
+    '''
+    Returns tokens comprised of not non-word chars (\W and _) surrounding one or more
+    individual interior punctuation characters (-',.) ').  Because \w matches _,
+    \W does not match _, so we must add it to the characters that cannot begin, end, or
+    be contained inside a word.
+    '''
+    words = RE_NOT_NON_WORD_TOKEN.findall(sentence)
     return [word.strip('_') for word in words]
 
 ###############################################################################
@@ -104,6 +117,8 @@ def main():
         print("TOKENS", len(tokens), tokens)
         swords = word_splits(sentence)
         print("SPLITS", len(swords), swords)
+        nuwrds = notnonword_tokens(sentence)
+        print("NOTUNS", len(nuwrds), nuwrds)
         print()
 
 if __name__ == '__main__':
