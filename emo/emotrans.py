@@ -201,14 +201,14 @@ class EmoTrans:
             emo_to_txt[tt[i_unchr]] = tt[i_words]
         return emo_to_txt
 
-    def rev_txt_to_gen(self, verbose):
+    def rev_txt_to_gen(self):
         '''reverse of gen_txt_to_emo: map each emoji to a list of word-phrases'''
         emo_to_txt = {}
         for txt, lst in sorted(self.txt_to_emo.items()):
             # print("emo_to_txt 1: {} => {}".format(txt, lst))
             for emo in lst:
                 emo_to_txt[emo].append(txt)
-                if verbose > 1:
+                if self.verbose > 1:
                     print("emo_to_txt 3: {} => {}".format(emo, txt))
         return emo_to_txt
 
@@ -229,7 +229,7 @@ class EmoTrans:
                 if self.verbose > 4:
                     print("ET: {} => {}".format(word, word))
                 return None
-        emo = random.choice(lst)
+        emo = random.choice(lst) if self.options.random else lst[0]
         if self.verbose > 4:
             print("ET: {} => {}".format(word, emo))
         return emo
@@ -300,7 +300,7 @@ class EmoTrans:
 
     def emojize_sentence_split_join(self, sentence, space=' '):
         beg, body, end = text_regex.sentence_body_and_end(sentence)
-        if verbose > 2:
+        if self.verbose > 2:
             print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
         emo_list = self.emojize_phrase(txt_to_emo, body, space)
         emo_join = space.join(emo_list)
@@ -326,28 +326,29 @@ class EmoTrans:
         '''FIXME: busted.  translate a string or slice of emojis into a text string'''
         if self.verbose > 2:
             print("TSPAN: span({})".format(emo_span))
-
         try:
             lst = self.emo_to_txt[emo_span]
             if self.verbose > 1:
                 print("TES: {} => {}".format(emo_span, lst))
-            return lst[0]  # random.choice(lst)
+            txt = random.choice(lst) if self.options.random else lst[0]
+            return txt
         except KeyError:
             # return self.textize_emo_span_recurse(emo_span[0:-1]) + self.textize_emo_span_recurse(emo_span[-1:])
             return emo_span
 
-    def textize_emo_chars(self, emo_span, space=' ', verbose=1):
+    def textize_emo_chars(self, emo_span, space=' '):
         '''translate a string or slice of emojis char by char into a text string'''
-        if verbose > 4:
+        if self.verbose > 4:
             print("TCHRS: span({})".format(emo_span))
         text = ''
         prev = False
         for uchr in emo_span:
             try:
                 lst = self.emo_to_txt[uchr]
-                if verbose > 1:
+                if self.verbose > 1:
                     print("TES: {} => {}".format(uchr, lst))
-                text += lst[0]  # random.choice(lst)
+                txt = random.choice(lst) if self.options.random else lst[0]
+                text += txt
                 prev = True
             except KeyError:
                 if prev and uchr == space:
@@ -381,7 +382,7 @@ class EmoTrans:
                 if self.verbose > 7:
                     print("append_to_prev_list:  ({})  => ({})".format(word, prev_words))
                 return prev_words
-        word = random.choice(word_calcs)
+        word = random.choice(word_calcs) if self.options.random else word_calcs[0]
         return [word]
 
     def textize_emo_span_from_end(self, emo_span, prev_words=None):
@@ -540,6 +541,8 @@ def test_emojize():
                         help='number of sentences to keep (default: 0 = all)')
     parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
                         help='output path for filtered text (default: - <stdout>)')
+    parser.add_argument('-random', action='store_true',
+                        help='Choose random emojis or words from translation lists (instead of always the first)')
     parser.add_argument('-text_file', dest='text_file', type=str, nargs='?',
                         const='quotations.txt', default=None,
                         help='translate sentences from this text_file')
