@@ -356,39 +356,42 @@ class EmoTrans:
                     text += uchr
         return text
 
-    def append_word(self, word, word_list=None):
+    def append_to_prev_list(self, word_calcs, prev_words=None):
+
         if self.verbose > 7:
-            print("append_word:  word({})  list({})".format(word, word_list))
-        if word_list:
-            # unreduplicate
-            if word_list[-1] == word:
-                if is_singular(word):
-                    plural, different = pluralize(word)
-                    if different:
-                        word_list[-1] = plural
-                        return word_list
-            # resingularize
-            if word_list[-1] == '-' and len(word_list) > 1 and word_list[-2] == 'S':
-                if is_plural(word):
-                    sing, diff = singularize(word)
-                    if diff:
-                        word_list.pop()
-                        word_list[-1] = sing
-                        return word_list
-            word_list.append(word)
-            if self.verbose > 7:
-                print("append_word:  ({})  => ({})".format(word, word_list))
-            return word_list
+            print("append_to_prev_list:  word_calcs({})  list({})".format(word_calcs, prev_words))
+        if prev_words:
+            for word in word_calcs:
+                # unreduplicate
+                if prev_words[-1] == word:
+                    if is_singular(word):
+                        plural, different = pluralize(word)
+                        if different:
+                            prev_words[-1] = plural
+                            return prev_words
+                # resingularize
+                if prev_words[-1] == '-' and len(prev_words) > 1 and prev_words[-2] == 'S':
+                    if is_plural(word):
+                        sing, diff = singularize(word)
+                        if diff:
+                            prev_words.pop()
+                            prev_words[-1] = sing
+                            return prev_words
+                prev_words.append(word)
+                if self.verbose > 7:
+                    print("append_to_prev_list:  ({})  => ({})".format(word, prev_words))
+                return prev_words
+        word = random.choice(word_calcs)
         return [word]
 
-    def textize_emo_span_from_end(self, emo_span, word_list=None):
+    def textize_emo_span_from_end(self, emo_span, prev_words=None):
         '''
         Recursively divide a string of emoji chars into a string of words, backing up greedily
         from the end.  The string (or "span") of emoji chars may contain spaces
         Returns a string with spaces inserted between the words, or None if the parse fails.
         '''
         if  self.verbose > 6:
-            print("TESFE A:  span({})  word_list({})".format(emo_span, word_list))
+            print("TESFE A:  span({})  prev_words({})".format(emo_span, prev_words))
 
         # If the this (whole or remaining) span can be parsed as a single emoji with an (English)
         # translation, just return it, concatenated with any words already parsed.
@@ -398,11 +401,10 @@ class EmoTrans:
             #     lst = self.emo_to_txt[emo_span[0:-1]]
             # else:
             #     lst = self.emo_to_txt[emo_span]
-            lst = self.emo_to_txt[emo_span]
+            word_calcs = self.emo_to_txt[emo_span]
             if self.verbose > 5:
-                print("TESFE B: {} => {}".format(emo_span, lst))
-            wrd = lst[0]  # random.choice(lst)
-            return self.append_word(wrd, word_list)
+                print("TESFE B: {} => {}".format(emo_span, word_calcs))
+            return self.append_to_prev_list(word_calcs, prev_words)
         except KeyError:
             # Else divide the string into two parts, and if the 2nd part is a word, keep going.
             # Use min and max word lengths to skip checking substrings that cannot be words.
@@ -413,12 +415,11 @@ class EmoTrans:
             max_index -= MIN_SOLIT_EMO_LEN
             while max_index >= min_index:
                 substr = emo_span[max_index:]
-                nxt = self.emo_to_txt.get(substr, [])
+                word_calcs = self.emo_to_txt.get(substr, [])
                 if self.verbose > SHOW_TEXT_DIVISION:
-                    print("while min({})  max({})  substr({})  nxt({})".format(min_index, max_index, substr, nxt))
-                if len(nxt) > 0:
-                    wrd = nxt[0]  # random.choice(lst)
-                    txt = self.append_word(wrd, word_list)
+                    print("while min({})  max({})  substr({})  calcs({})".format(min_index, max_index, substr, word_calcs))
+                if len(word_calcs) > 0:
+                    txt = self.append_to_prev_list(word_calcs, prev_words)
                     if self.verbose > SHOW_TEXT_DIVISION:
                         print("TESFE D: Calling textize_emo_span_from_end({}, {})".format(emo_span[0:max_index], txt))
                     more_words = self.textize_emo_span_from_end(emo_span[0:max_index], txt)
