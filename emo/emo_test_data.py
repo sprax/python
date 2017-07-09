@@ -14,5 +14,5 @@ SENTENCES = [
     "Men occasionally stumble over the truth, but most of them pick themselves up and hurry off as if nothing has happened.",
     "Don't give me no lip, you one-eye'd jack-ass!",
     "No ears or lip for you!",
-    " _Wind And Waves_. ",
+    " _Wind And Waves and Wind And Waves_. ",
 ]

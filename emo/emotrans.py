@@ -19,6 +19,7 @@ from functools import partial
 
 import emoji as EJ
 import emotuples as ET
+import inflection
 import text_fio
 import text_regex
 from emo_test_data import SENTENCES
@@ -75,43 +76,34 @@ def emo_synonyms(word):
     except KeyError:
         return [word]
 
-def is_plural(word):
-    '''FIXME: this is ridiculous'''
-    try:
-        return word[-1] == 's'
-    except IndexError:
-        return false
-
 def pluralize(word):
     '''
-    Return (plural, is_changed) where plural is the plural form of the
-    given word, and is_changed is True IFF word != plural.
-    TODO: replace with real plurals from a dedicated class
+    Return (plural, is_different) where plural is the plural form of the
+    given word, and is_different is True IFF word != plural.
     '''
-    if word.endswith('ss'):
-        return word + 'es', True
-    last = word[-1]
-    if last != 's':
-        return word + 's', True
-    else:
-        return word, False
-
-
-def is_singular(word):
-    '''FIXME: this is more ridiculous'''
-    try:
-        return word[-1] != 's'
-    except IndexError:
-        return false
+    plural = inflection.pluralize(word)
+    return (plural, plural != word)
 
 def singularize(word):
-    '''FIXME: make it work like pluralize (but better)'''
-    try:
-        if word[-1] == 's':
-            return word[0:-1], True
-        return word, False
-    except IndexError:
-        return word, False
+    '''
+    Return (single, is_different) where single is the singular form of the
+    given word, and is_different is True IFF word != single.
+    '''
+    single = inflection.singularize(word)
+    return (single, single != word)
+
+def is_singular(word):
+    '''
+    Deprecated for now, until replaced by a LUT implementation,
+    especially if used to answer the question, "Might the pluralized
+    form of this word be different?"
+    '''
+    return word != inflection.pluralize(word)
+
+def is_plural(word):
+    '''Deprecated unless replaced by a LUT; @see is_singular.'''
+    return word != inflection.singularize(word)
+
 
 def show_sorted_dict(dct, idx, lbl=''):
     for key, val in sorted(dct.items(), key=lambda dit: dit[idx].lower()):
