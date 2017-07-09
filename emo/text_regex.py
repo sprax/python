@@ -27,12 +27,13 @@ EXAMPLES = [
     #  1     2      3    4     5   6  7  +3     1     2      3   +3  7  +2  0    1}
     ("Didn't you know my X-15's XLR-99 engine burned 15,000 pounds (6,717 kg) of propellant in 87 seconds?", 17, 35),
     # 1  2   3    4   5 6 +2    +3 +2 4  5    6     +2  +2  1     +3  +8 +3  6    7 8  9   0  +3  4 5
-    (" _This Is _My_ Title_, right?", 5, 6),
-    #    1  2   3  4  5    6
+    (" _This Is _My_ Title_, you one-eyed jack-ass!!", 7, 11),
+    #    1  2   3  4  5  6     7  8   9    0   1
 ]
 
 
 ###############################################################################
+# WORD_SEP_INTERIOR = r"',."
 WORD_SEP_INTERIOR = r"-',."
 RE_WORD_TOKEN = re.compile(r"((?:\w+[{}]\w*)+\w|\w+)".format(WORD_SEP_INTERIOR))
 

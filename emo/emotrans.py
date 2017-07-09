@@ -159,7 +159,7 @@ class EmoTrans:
     def gen_presets(self, options):
         presets = {}
         if options.no_articles:
-            presets.update({'a': [''], 'but': [''], 'may': [''], 'the': ['']})
+            presets.update({'a': [''], 'an': [''], 'but': [''], 'the': ['']})
         if options.arithmetic:
             presets.update({'can': ['🍬 ➖ D'], 'crew': ['© ➕ 🍺 ➖ 🐝'], 'you': ['🆕 ➖ N']})
         if options.multiple:
@@ -233,29 +233,33 @@ class EmoTrans:
             print("ET: {} => {}".format(word, emo))
         return emo
 
+    def minus_s_emo(self, src_word, plural):
+        return ' ➖ 🇸 '
+
     def emojize_word(self, src_word, space=' '):
-        words = emo_synonyms(src_word)
-        for word in words:
+        synonyms = emo_synonyms(src_word)
+        for word in synonyms:
             emojis = self.emojize_token(word)
             if emojis:
-                # print("emojize_word: about to return ({} + {}):".format(emojis, space))
+                if self.verbose > 3:
+                    print("EW  TOKEN: {} => {}".format(word, emostr))
                 return emojis + space
-            # FIXME: If using subtraction, lip == lips - S ~= <kiss> - S == 💋 - S == 💋 <-> <S>
-            elif is_singular(word):
-                plural, changed = pluralize(word)
-                if changed:
-                    emojis = self.emojize_token(plural)
-                    if emojis:
-                        return emojis + space
-            elif is_plural(word):
+            if is_plural(word):
                 singular, singularized = singularize(word)
                 if singularized:
                     emojis = self.emojize_token(singular)
                     if emojis:
                         emostr = emojis + space + emojis + space
                         if self.verbose > 3:
-                            print("EW: {} => {}".format(src_word, emostr))
+                            print("EW PLURAL: {} => {}".format(word, emostr))
                         return emostr
+            if is_singular(word):
+                # FIXME: If using subtraction, lip == lips - S ~= <kiss> - S == 💋 - S == 💋 <-> <S>
+                plural, pluralized = pluralize(word)
+                if pluralized:
+                    emojis = self.emojize_token(plural)
+                    if emojis:
+                        return emojis + self.minus_s_emo(src_word, plural)
         return src_word
 
     def emojize_match(self, match_obj, space=' '):
@@ -458,9 +462,11 @@ class EmoTrans:
 
 def add_preset_multiples(preset_dict):
     preset_dict.update({
-        'crew': ['👦 👲🏽 👧🏿 👨 👦🏽'],
-        'husband': ['💑 👈', '💏 👈', '👩❤👨 ⬅'],
-        'wife': ['👉 💑', '👉 💏', '➡ 👩❤👨'],
+        "crew"   : ['👦 👲🏽 👧🏿 👨 👦🏽'],
+        "husband": ['💑 👈', '💏 👈', '👩❤👨 ⬅'],
+        "eye'd"    : ["👁 '🇩"],
+        "I'd"    : ["👁 '🇩"],
+        'wife'   : ['👉 💑', '👉 💏', '➡ 👩❤👨'],
     })
 
 
