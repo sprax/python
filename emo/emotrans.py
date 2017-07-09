@@ -80,6 +80,9 @@ def pluralize(word):
     '''
     Return (plural, is_different) where plural is the plural form of the
     given word, and is_different is True IFF word != plural.
+    TODO: Check that word is a noun (or an adjective or at any rate can
+    be sensibly used as a noun) before calling inflection.pluralize.
+    If not, return (word, false)
     '''
     plural = inflection.pluralize(word)
     return (plural, plural != word)
@@ -88,6 +91,9 @@ def singularize(word):
     '''
     Return (single, is_different) where single is the singular form of the
     given word, and is_different is True IFF word != single.
+    TODO: Check that word is a noun (or an adjective or at any rate can
+    be sensibly used as a noun) before calling inflection.pluralize.
+    If not, return (word, false)
     '''
     single = inflection.singularize(word)
     return (single, single != word)
