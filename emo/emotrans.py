@@ -121,17 +121,17 @@ MAX_MULTI_EMO_LEN = 11
 MIN_SOLIT_EMO_LEN = 1
 
 # Verbosity levels:
-SHOW_LIST_VALS = 4
-SHOW_TEXT_TRANS = 5
+SHOW_LIST_VALUES = 4
+SHOW_TEXT_BUILDERS = 5
 SHOW_TEXT_DIVISION = 6
-SHOW_GENERATED_DICTS = 7
+SHOW_USABLE_EMOJIS = 7
 
 class EmoTrans:
     def __init__(self, options):
         self.options = options
         self.verbose = options.verbose
         self.usables = self.gen_usables()
-        if self.verbose > SHOW_GENERATED_DICTS:
+        if self.verbose > SHOW_USABLE_EMOJIS:
             self.print_usable_emojis()
         self.presets = self.gen_presets(options)
         self.txt_to_emo = self.gen_txt_to_emo(self.presets)
@@ -240,12 +240,13 @@ class EmoTrans:
             if emojis:
                 # print("emojize_word: about to return ({} + {}):".format(emojis, space))
                 return emojis + space
-            # # FIXME: If using subtraction, lip == lips - S ~= <kiss> - S == 💋 - S == 💋 <-> <S>
-            # plural, changed = pluralize(word)
-            # if changed:
-            #     emojis = self.emojize_token(plural)
-            #     if emojis:
-            #         return emojis + space
+            # FIXME: If using subtraction, lip == lips - S ~= <kiss> - S == 💋 - S == 💋 <-> <S>
+            elif is_singular(word):
+                plural, changed = pluralize(word)
+                if changed:
+                    emojis = self.emojize_token(plural)
+                    if emojis:
+                        return emojis + space
             elif is_plural(word):
                 singular, singularized = singularize(word)
                 if singularized:
@@ -422,7 +423,7 @@ class EmoTrans:
                 emo_prev = None
             elif emo_span:
                 txt_list = self.textize_emo_span_from_end(emo_span)
-                if self.verbose > SHOW_LIST_VALS:
+                if self.verbose > SHOW_LIST_VALUES:
                     print("TSS list: ({})".format(txt_list))
                 if txt_list:
                     txt_list.reverse()
@@ -432,10 +433,10 @@ class EmoTrans:
                         first = False
                     else:
                         txt_sent += text
-                    if self.verbose > SHOW_TEXT_TRANS:
+                    if self.verbose > SHOW_TEXT_BUILDERS:
                         print("TSS text: ({})".format(txt_sent))
                 else:
-                    if self.verbose > SHOW_TEXT_TRANS:
+                    if self.verbose > SHOW_TEXT_BUILDERS:
                         print("TSS add: {} += {}", txt_sent, emo_span)
                     txt_sent += emo_span
                 emo_span = ''
