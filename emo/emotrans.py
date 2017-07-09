@@ -360,11 +360,20 @@ class EmoTrans:
         if self.verbose > 7:
             print("append_word:  word({})  list({})".format(word, word_list))
         if word_list:
+            # unreduplicate
             if word_list[-1] == word:
                 if is_singular(word):
                     plural, different = pluralize(word)
                     if different:
                         word_list[-1] = plural
+                        return word_list
+            # resingularize
+            if word_list[-1] == '-' and len(word_list) > 1 and word_list[-2] == 'S':
+                if is_plural(word):
+                    sing, diff = singularize(word)
+                    if diff:
+                        word_list.pop()
+                        word_list[-1] = sing
                         return word_list
             word_list.append(word)
             if self.verbose > 7:
@@ -497,11 +506,11 @@ def test_emo_tuples(options):
         show_sorted_dict(emo_to_txt)
 
     for sentence in SENTENCES:
-        print("src => txt (%s)" % sentence)
+        print("======> src => txt (%s)" % sentence)
         emo_sent = emotrans.emojize_sentence_subs(sentence)
-        print("txt => emo (%s)" % emo_sent)
+        print("======> txt => emo (%s)" % emo_sent)
         txt_sent = emotrans.textize_sentence_subs(emo_sent)
-        print("emo => txt (%s)" % txt_sent)
+        print("======> emo => txt (%s)" % txt_sent)
         print()
     if options.text_file:
         for sentence in text_fio.read_text_lines(options.text_file, options.charset):
