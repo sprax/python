@@ -233,6 +233,10 @@ class EmoTrans:
             print("ET: {} => {}".format(word, emo))
         return emo
 
+    def emo_or_txt_token(self, token):
+        emo = self.emojize_token(token)
+        return emo if emo else token
+
     def minus_s_emo(self, src_word, plural):
         return ' ➖ 🇸 '
 
@@ -242,7 +246,7 @@ class EmoTrans:
             emojis = self.emojize_token(word)
             if emojis:
                 if self.verbose > 3:
-                    print("EW  TOKEN: {} => {}".format(word, emostr))
+                    print("EW  TOKEN: {} => {}".format(word, emojis))
                 return emojis + space
             if is_plural(word):
                 singular, singularized = singularize(word)
@@ -260,6 +264,9 @@ class EmoTrans:
                     emojis = self.emojize_token(plural)
                     if emojis:
                         return emojis + self.minus_s_emo(src_word, plural)
+        hyphenated = src_word.split('-')
+        if len(hyphenated) > 1:
+            return ' ➖ '.join([self.emo_or_txt_token(token) for token in hyphenated])
         return src_word
 
     def emojize_match(self, match_obj, space=' '):
