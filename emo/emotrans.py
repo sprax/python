@@ -82,6 +82,7 @@ def pluralize(word):
     TODO: Check that word is a noun (or an adjective or at any rate can
     be sensibly used as a noun) before calling inflection.pluralize.
     If not, return (word, false)
+    FIXME BUGS: inflection is often wrong, e.g. (safe <-> saves)
     '''
     plural = inflection.pluralize(word)
     return (plural, plural != word)
@@ -93,12 +94,16 @@ def singularize(word):
     TODO: Check that word is a noun (or an adjective or at any rate can
     be sensibly used as a noun) before calling inflection.pluralize.
     If not, return (word, false)
-    FIXME: inflection BUG: *aves -> *afe.
+    FIXME BUGS: inflection returns many wrong answers by pattern:
+        *aves -> *afe
+    uses incomplete special case matching (octopus),
+    and does not recognize many other pairs such as:
+        (locus, loci)
+    NB: pattern3.en is not yet functional (2017.07.10)
     '''
-    if len(word) > 4 and word.lower()[-4:] == 'aves':
-        single = word.rstrip('sS')
-    else:
-        single = inflection.singularize(word)
+    if word.lower()[-4:] == 'aves':
+        return (word.rstrip('sS'), True)
+    single = inflection.singularize(word)
     return (single, single != word)
 
 def is_singular(word):
