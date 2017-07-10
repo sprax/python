@@ -133,8 +133,8 @@ class EmoTrans:
         if self.verbose > SHOW_USABLE_EMOJIS:
             self.print_usable_emojis()
         self.presets = self.gen_presets(options)
-        self.txt_to_emo = self.gen_txt_to_emo(self.presets)
-        self.emo_to_txt = self.gen_emo_to_txt(self.presets)
+        self.txt_emo = self.gen_txt_to_emo(self.presets)
+        self.emo_txt = self.gen_emo_to_txt(self.presets)
         self.emo_chr_counts = self.count_emo_chrs()
 
 
@@ -167,7 +167,7 @@ class EmoTrans:
 
     def gen_txt_to_emo(self, presets):
         '''generate text to emoji mapping'''
-        txt_to_emo = presets
+        txt_emo = presets
         i_flags = ET.INDEX_DISPLAY_FLAGS
         i_monos = ET.INDEX_WORDSYLLABLES
         i_words = ET.INDEX_FREQUENT_WORDS
@@ -176,51 +176,51 @@ class EmoTrans:
             for txt in tt[i_words]:
                 emo = tt[i_unchr]
                 try:
-                    txt_to_emo[txt].append(emo)
+                    txt_emo[txt].append(emo)
                 except KeyError:
-                    txt_to_emo[txt] = [emo]
+                    txt_emo[txt] = [emo]
                 # print("txt(%s) => emo( %s )" % (txt, tt[i_unchr]))
-        return txt_to_emo
+        return txt_emo
 
     def gen_emo_to_txt(self, presets):
         '''generate emoji to texts mapping'''
-        emo_to_txt = {}
+        emo_txt = {}
         for txt, lst in presets.items():
             for emo in lst:
                 try:
-                    emo_to_txt[emo].append(txt)
+                    emo_txt[emo].append(txt)
                 except KeyError:
-                    emo_to_txt[emo] = [txt]
+                    emo_txt[emo] = [txt]
 
-        # print("PRESET emo_to_txt:", emo_to_txt)
+        # print("PRESET emo_txt:", emo_txt)
         i_unchr = ET.INDEX_EMOJI_UNICHRS
         i_words = ET.INDEX_FREQUENT_WORDS
         for tt in self.usables:
-            emo_to_txt[tt[i_unchr]] = tt[i_words]
-        return emo_to_txt
+            emo_txt[tt[i_unchr]] = tt[i_words]
+        return emo_txt
 
     def rev_txt_to_gen(self):
         '''reverse of gen_txt_to_emo: map each emoji to a list of word-phrases'''
-        emo_to_txt = {}
-        for txt, lst in sorted(self.txt_to_emo.items()):
-            # print("emo_to_txt 1: {} => {}".format(txt, lst))
+        emo_txt = {}
+        for txt, lst in sorted(self.txt_emo.items()):
+            # print("emo_txt 1: {} => {}".format(txt, lst))
             for emo in lst:
-                emo_to_txt[emo].append(txt)
+                emo_txt[emo].append(txt)
                 if self.verbose > 1:
-                    print("emo_to_txt 3: {} => {}".format(emo, txt))
-        return emo_to_txt
+                    print("emo_txt 3: {} => {}".format(emo, txt))
+        return emo_txt
 
     def emojize_token(self, word):
         '''return emoji string translation of word or None
         TODO: make protected ?'''
         try:
-            lst = self.txt_to_emo[word]
+            lst = self.txt_emo[word]
             if self.verbose > 5:
                 print("ET: {} => {}".format(word, lst))
         except KeyError:
             lwrd = word.lower()
             try:
-                lst = self.txt_to_emo[lwrd]
+                lst = self.txt_emo[lwrd]
                 if self.verbose > 5:
                     print("ET: {} => {}".format(lwrd, lst))
             except KeyError:
@@ -324,7 +324,7 @@ class EmoTrans:
         beg, body, end = text_regex.sentence_body_and_end(sentence)
         if self.verbose > 2:
             print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
-        emo_list = self.emojize_phrase(txt_to_emo, body, space)
+        emo_list = self.emojize_phrase(txt_emo, body, space)
         emo_join = space.join(emo_list)
         emo_tran = ''.join([beg, emo_join, end])
         if self.verbose > 5:
@@ -337,7 +337,7 @@ class EmoTrans:
 
     def is_emoji_chr_bad(self, uchr):
         '''FIXME: optimize?  use RE?'''
-        lst = self.emo_to_txt[uchr]
+        lst = self.emo_txt[uchr]
         if len(lst) > 0:
             return True
         # if is_emoji(uchr):
@@ -349,7 +349,7 @@ class EmoTrans:
         if self.verbose > 2:
             print("TSPAN: span({})".format(emo_span))
         try:
-            lst = self.emo_to_txt[emo_span]
+            lst = self.emo_txt[emo_span]
             if self.verbose > 1:
                 print("TES: {} => {}".format(emo_span, lst))
             txt = random.choice(lst) if self.options.random else lst[0]
@@ -366,7 +366,7 @@ class EmoTrans:
         prev = False
         for uchr in emo_span:
             try:
-                lst = self.emo_to_txt[uchr]
+                lst = self.emo_txt[uchr]
                 if self.verbose > 1:
                     print("TES: {} => {}".format(uchr, lst))
                 txt = random.choice(lst) if self.options.random else lst[0]
@@ -424,10 +424,10 @@ class EmoTrans:
         emo_span = emo_span.rstrip()
         try:
             # if emo_span[-1] == space:
-            #     lst = self.emo_to_txt[emo_span[0:-1]]
+            #     lst = self.emo_txt[emo_span[0:-1]]
             # else:
-            #     lst = self.emo_to_txt[emo_span]
-            word_calcs = self.emo_to_txt[emo_span]
+            #     lst = self.emo_txt[emo_span]
+            word_calcs = self.emo_txt[emo_span]
             if self.verbose > 5:
                 print("TESFE B: {} => {}".format(emo_span, word_calcs))
             return self.append_to_prev_list(word_calcs, prev_words)
@@ -441,7 +441,7 @@ class EmoTrans:
             max_index -= MIN_SOLIT_EMO_LEN
             while max_index >= min_index:
                 substr = emo_span[max_index:]
-                word_calcs = self.emo_to_txt.get(substr, [])
+                word_calcs = self.emo_txt.get(substr, [])
                 if self.verbose > SHOW_TEXT_DIVISION:
                     print("while min({})  max({})  substr({})  calcs({})".format(min_index, max_index, substr, word_calcs))
                 if len(word_calcs) > 0:
@@ -457,7 +457,7 @@ class EmoTrans:
 
     def textize_sentence_subs(self, emo_sent, space=' ', verbose=1):
         '''
-        return text with each emoji replaced by a value from emo_to_txt.
+        return text with each emoji replaced by a value from emo_txt.
         FIXME: emoji combinations representing a single word will not translate
         back to the orignal word, but turn into a word combination calc, which
         may be gibberish or worse.
@@ -525,12 +525,12 @@ def add_preset_multiples(preset_dict):
 
 def test_emo_tuples(options):
     emotrans = EmoTrans(options)
-    txt_to_emo = emotrans.txt_to_emo
-    emo_to_txt = emotrans.emo_to_txt
-    if options.txt_to_emo:
-        show_sorted_dict(txt_to_emo, 0)
-    if options.emo_to_txt:
-        show_sorted_dict(emo_to_txt)
+    txt_emo = emotrans.txt_emo
+    emo_txt = emotrans.emo_txt
+    if options.txt_emo:
+        show_sorted_dict(txt_emo, 0)
+    if options.emo_txt:
+        show_sorted_dict(emo_txt)
 
     for sentence in SENTENCES:
         print("======> src => txt (%s)" % sentence)
@@ -541,7 +541,7 @@ def test_emo_tuples(options):
         print()
     if options.text_file:
         for sentence in text_fio.read_text_lines(options.text_file, options.charset):
-            emojize_sentence_subs(txt_to_emo, sentence, options.verbose)
+            emojize_sentence_subs(txt_emo, sentence, options.verbose)
 
 def test_emojize():
     '''test english -> emoji translation'''
@@ -550,30 +550,27 @@ def test_emojize():
         description="test english -> emoji translation")
     parser.add_argument('-arithmetic', action='store_true',
                         help='use addition and subtraction of letters or syllables (rebus)')
-    parser.add_argument('-directory', dest='text_dir', type=str, default='/Users/sprax/text',
-                        help='directory to search for input files')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
-    parser.add_argument('-emo_to_txt', action='store_true',
+    parser.add_argument('-emo_txt', action='store_true',
                         help='show the emoji-to-text mapping')
     parser.add_argument('-flags', action='store_true',
                         help='use flag emojis in translations of words not representing countries')
     parser.add_argument('-multiple', action='store_true',
-                        help='use multiple emoji for plural nouns')
+                        help='use multiple emoji for some words (presets)')
     parser.add_argument('-no_articles', '-noa', action='store_true',
                         help='remove articles (a, an, the)')
-    parser.add_argument('-number', dest='max_lines', type=int, nargs='?', const=1, default=0,
-                        help='number of sentences to keep (default: 0 = all)')
     parser.add_argument('-pluralize', '-singularize', action='store_false',
                         help='Disable pluralization and singularization (which are on by default)')
-    parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
-                        help='output path for filtered text (default: - <stdout>)')
+    # parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
+    #                     help='output path for filtered text (default: - <stdout>)')
     parser.add_argument('-random', action='store_true',
-                        help='Choose random emojis or words from translation lists (instead of always the first)')
+                        help='Choose random emojis or words from translation lists '
+                                '(instead of always choosing the first)')
     parser.add_argument('-text_file', dest='text_file', type=str, nargs='?',
                         const='quotations.txt', default=None,
                         help='translate sentences from this text_file')
-    parser.add_argument('-txt_to_emo', action='store_true',
+    parser.add_argument('-txt_emo', action='store_true',
                         help='show the text-to-emoji mapping')
     parser.add_argument('-usable', action='store_true',
                         help='show all usable emoji under current options')
