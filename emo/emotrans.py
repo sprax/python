@@ -296,7 +296,11 @@ class EmoTrans:
         if self.verbose > 6:
             print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
         emojize_match_bound = partial(self.emojize_match, space=space)
-        subs = text_regex.replace_words_extended(emojize_match_bound, body)
+
+        # TODO: Determine which is better:
+        # subs = text_regex.replace_words_extended(emojize_match_bound, body)
+        subs = text_regex.replace_non_non_words(emojize_match_bound, body)
+
         tend = self.emojize_token(end)
         if tend:
             end = space + tend

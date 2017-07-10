@@ -56,8 +56,12 @@ def notnonword_tokens(sentence):
     \W does not match _, so we must add it to the characters that cannot begin, end, or
     be contained inside a word.
     '''
-    words = RE_NOT_NON_WORD_TOKEN.findall(sentence)
-    return [word.strip('_') for word in words]
+    return RE_NOT_NON_WORD_TOKEN.findall(sentence)
+    # return [word.strip('_') for word in words]
+
+
+def replace_non_non_words(rep_func, text_phrase):
+    return RE_NOT_NON_WORD_TOKEN.sub(rep_func, text_phrase)
 
 ###############################################################################
 WORD_SEP_EXTERIOR = r'!"#$%&()*+./:;<=>?@[\]^_`{|}~\x82\x83\x84\x85\x86\x87\x88\x89' \
