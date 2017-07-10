@@ -233,13 +233,22 @@ class EmoTrans:
         return emo
 
     def emo_or_txt_token(self, token):
+        '''Return translation of token or, failing that, the token itself.'''
         emo = self.emojize_token(token)
         return emo if emo else token
 
     def minus_s_emo(self, src_word, plural):
+        '''
+        Return string of emoji characters representing "minus S",
+        as in singularizing a plural noun.
+        '''
         return ' ➖ 🇸 '
 
     def emojize_word(self, src_word, space=' '):
+        '''
+        Return a translation of src_word into a string of emoji characters,
+        or, failing that, return the original src_word.
+        '''
         synonyms = emo_synonyms(src_word)
         for word in synonyms:
             emojis = self.emojize_token(word)
@@ -270,14 +279,16 @@ class EmoTrans:
         return src_word
 
     def emojize_match(self, match_obj, space=' '):
+        '''Translate word tokens from a regex match.'''
         word = match_obj.group()
         return self.emojize_word(word, space)
 
     def emojize_sentence_subs(self, sentence, space=' '):
+        '''Translate sentence word by word to emojis, where
+        possible, using regex substitution.'''
         beg, body, end = text_regex.sentence_body_and_end(sentence)
         if self.verbose > 6:
             print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
-
         emojize_match_bound = partial(self.emojize_match, space=space)
         subs = text_regex.replace_words_extended(emojize_match_bound, body)
         tend = self.emojize_token(end)
@@ -287,7 +298,11 @@ class EmoTrans:
         return emo_tran
 
     def emojize_phrase(self, txt_phrase, space=' '):
-        # srcs = re.split('\W+', txt_phrase.strip())
+        '''
+        Split phrase in to tokens (destructive), translate words,
+        then join them back together.  Characters lost in the split
+        are genearlly not restorable.  So round trips are not faithful.
+        '''
         srcs = text_regex.word_splits(txt_phrase.strip())
         if self.verbose > 2:
             print(srcs)
@@ -298,6 +313,13 @@ class EmoTrans:
         return emo_phrase
 
     def emojize_sentence_split_join(self, sentence, space=' '):
+        '''
+        Split sentence into beginning, middle, and end, translate
+        these parts separately, then join them back together.
+        Phrase translation by emojize_phrase is lossy and not
+        reversible.  Characters lost in the split are genearlly
+        not restorable.  So round trips are not faithful.
+        '''
         beg, body, end = text_regex.sentence_body_and_end(sentence)
         if self.verbose > 2:
             print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
@@ -357,7 +379,10 @@ class EmoTrans:
         return text
 
     def append_to_prev_list(self, word_calcs, prev_words=None):
-
+        '''
+        Select word from the word_calcs list and append it to
+        the list of previously translated words.
+        '''
         if self.verbose > 7:
             print("append_to_prev_list:  word_calcs({})  list({})".format(word_calcs, prev_words))
         if prev_words:
@@ -552,9 +577,9 @@ def test_emojize():
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
-    # test_misc()
-    if args.verbose > 7:
-        print("module emoji:", EJ)
+
+    # if args.verbose > 7:
+    #     print("module emoji:", EJ)
 
     test_emo_tuples(args)
 
