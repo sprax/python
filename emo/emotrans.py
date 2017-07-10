@@ -93,8 +93,12 @@ def singularize(word):
     TODO: Check that word is a noun (or an adjective or at any rate can
     be sensibly used as a noun) before calling inflection.pluralize.
     If not, return (word, false)
+    FIXME: inflection BUG: *aves -> *afe.
     '''
-    single = inflection.singularize(word)
+    if len(word) > 4 and word.lower()[-4:] == 'aves':
+        single = word.rstrip('sS')
+    else:
+        single = inflection.singularize(word)
     return (single, single != word)
 
 def is_singular(word):
