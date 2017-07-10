@@ -17,7 +17,6 @@ from collections import Counter
 from collections import defaultdict
 from functools import partial
 
-import emoji as EJ
 import emotuples as ET
 import inflection
 import text_fio
@@ -237,11 +236,13 @@ class EmoTrans:
         emo = self.emojize_token(token)
         return emo if emo else token
 
-    def minus_s_emo(self, src_word, plural):
+    def minus_s_emo(self):
         '''
         Return string of emoji characters representing "minus S",
         as in singularizing a plural noun.
         '''
+        assert('➖' in self.emo_txt)
+        assert('🇸' in self.emo_txt)
         return ' ➖ 🇸 '
 
     def emojize_word(self, src_word, space=' '):
@@ -270,7 +271,7 @@ class EmoTrans:
                 if pluralized:
                     emojis = self.emojize_token(plural)
                     if emojis:
-                        emostr = emojis + self.minus_s_emo(src_word, plural)
+                        emostr = emojis + self.minus_s_emo()
                         if self.verbose > SHOW_TOKEN_TRANS:
                             print("EW SINGLE: {} => {}".format(word, emostr))
                         return emostr
@@ -455,7 +456,7 @@ class EmoTrans:
         return None          # string did not parse
 
 
-    def textize_sentence_subs(self, emo_sent, space=' ', verbose=1):
+    def textize_sentence_subs(self, emo_sent, space=' '):
         '''
         return text with each emoji replaced by a value from emo_txt.
         FIXME: emoji combinations representing a single word will not translate
@@ -514,6 +515,7 @@ class EmoTrans:
         return txt_sent
 
 def add_preset_multiples(preset_dict):
+    '''Add preset word to multiple emoji mapping'''
     preset_dict.update({
         "crew"   : ['👦 👲🏽 👧🏿 👨 👦🏽'],
         "husband": ['💑 👈', '💏 👈', '👩❤👨 ⬅'],
@@ -524,6 +526,7 @@ def add_preset_multiples(preset_dict):
 
 
 def test_emo_tuples(options):
+    '''Test translation from Enlish to emojis and back.'''
     emotrans = EmoTrans(options)
     txt_emo = emotrans.txt_emo
     emo_txt = emotrans.emo_txt
@@ -541,7 +544,7 @@ def test_emo_tuples(options):
         print()
     if options.text_file:
         for sentence in text_fio.read_text_lines(options.text_file, options.charset):
-            emojize_sentence_subs(txt_emo, sentence, options.verbose)
+            emotrans.emojize_sentence_subs(sentence)
 
 def test_emojize():
     '''test english -> emoji translation'''
