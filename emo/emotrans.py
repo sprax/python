@@ -256,23 +256,24 @@ class EmoTrans:
                 if self.verbose > SHOW_TOKEN_TRANS:
                     print("EW  TOKEN: {} => {}".format(word, emojis))
                 return emojis + space
-            singular, singularized = singularize(word)
-            if singularized:
-                emojis = self.emojize_token(singular)
-                if emojis:
-                    emostr = emojis + space + emojis + space
-                    if self.verbose > SHOW_TOKEN_TRANS:
-                        print("EW PLURAL: {} => {}".format(word, emostr))
-                    return emostr
-            # FIXME: When using subtraction, lip == lips - S ~= <kiss> - S == 💋 - S == 💋 <-> <S>
-            plural, pluralized = pluralize(word)
-            if pluralized:
-                emojis = self.emojize_token(plural)
-                if emojis:
-                    emostr = emojis + self.minus_s_emo(src_word, plural)
-                    if self.verbose > SHOW_TOKEN_TRANS:
-                        print("EW SINGLE: {} => {}".format(word, emostr))
-                    return emostr
+            if self.options.pluralize:
+                singular, singularized = singularize(word)
+                if singularized:
+                    emojis = self.emojize_token(singular)
+                    if emojis:
+                        emostr = emojis + space + emojis + space
+                        if self.verbose > SHOW_TOKEN_TRANS:
+                            print("EW PLURAL: {} => {}".format(word, emostr))
+                        return emostr
+                # FIXME: When using subtraction, lip == lips - S ~= <kiss> - S == 💋 - S == 💋 <-> <S>
+                plural, pluralized = pluralize(word)
+                if pluralized:
+                    emojis = self.emojize_token(plural)
+                    if emojis:
+                        emostr = emojis + self.minus_s_emo(src_word, plural)
+                        if self.verbose > SHOW_TOKEN_TRANS:
+                            print("EW SINGLE: {} => {}".format(word, emostr))
+                        return emostr
         hyphenated = src_word.split('-')
         if len(hyphenated) > 1:
             return ' ➖ '.join([self.emo_or_txt_token(token) for token in hyphenated])
@@ -563,6 +564,8 @@ def test_emojize():
                         help='remove articles (a, an, the)')
     parser.add_argument('-number', dest='max_lines', type=int, nargs='?', const=1, default=0,
                         help='number of sentences to keep (default: 0 = all)')
+    parser.add_argument('-pluralize', '-singularize', action='store_false',
+                        help='Disable pluralization and singularization (which are on by default)')
     parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
                         help='output path for filtered text (default: - <stdout>)')
     parser.add_argument('-random', action='store_true',
