@@ -85,6 +85,8 @@ def pluralize(word):
     If not, return (word, false)
     FIXME BUGS: inflection is often wrong, e.g. (safe <-> saves)
     '''
+    if word.lower()[-3:] == 'afe':
+        return (word + 's', True)
     plural = inflection.pluralize(word)
     return (plural, plural != word)
 

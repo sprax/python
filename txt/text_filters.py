@@ -8,6 +8,7 @@
 
 import argparse
 import heapq
+import inflection
 import os.path
 import re
 import math
@@ -167,7 +168,7 @@ def map_file(function, in_path, out_path, charset='utf8'):
     with open(in_path, 'r', encoding=charset) as text:
         with open(out_path, 'w') as out_file:
             for line in text:
-                output = function(line)
+                output = function(line.rstrip())
                 print(output if output else ' ', file=out_file)
 
 
@@ -210,6 +211,22 @@ def translate_file(in_path, out_path, opt):
 
 ###############################################################################
 
+def pluralize(word):
+    '''
+    Return (plural, is_different) where plural is the plural form of the
+    given word, and is_different is True IFF word != plural.
+    TODO: Check that word is a noun (or an adjective or at any rate can
+    be sensibly used as a noun) before calling inflection.pluralize.
+    If not, return (word, false)
+    FIXME BUGS: inflection is often wrong, e.g. (safe <-> saves)
+    '''
+    if word.lower()[-3:] == 'afe':
+        return (word + 's', True)
+    plural = inflection.pluralize(word)
+    return (plural, plural != word)
+
+###############################################################################
+
 def abs_path(dir_spec, file_spec):
     '''Returns an absolute path based on a dir_spec and a (relative) file_spec'''
     if os.path.isabs(file_spec):
@@ -243,7 +260,7 @@ def filter_text_file():
     args = parser.parse_args()
 
     if args.map_file:
-        map_file(str.strip, args.in_path, args.out_path)
+        map_file(pluralize, args.in_path, args.out_path)
         exit(0)
 
     if args.verbose > 7:
