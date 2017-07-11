@@ -4,6 +4,8 @@
 import argparse
 import errno
 import os.path
+import pickle
+import random
 import re
 import sys
 from utf_print import utf_print
@@ -51,6 +53,21 @@ def read_text_lines(file_spec, charset='utf8'):
             line = line.strip()
             if line:
                 yield line
+
+def pickle_file(in_path, out_path, data_struct, data_adder, charset='utf8'):
+    lines_in = 0
+    lines = read_text_lines(in_path, charset)
+    for line in lines:
+        data_adder(data_struct, line)
+        lines_in += 1
+    with open(out_path, 'wb') as out_file:
+        pickle.dump(data_struct, out_file)
+    return (lines_in, len(data_struct))
+
+def pickle_word_list(in_path, out_path, word_set=None, adder=set.add, charset='utf8'):
+    if word_set == None:
+        word_set = set()
+    return pickle_file(in_path, out_path, word_set, adder, charset)
 
 def read_file(file_spec, charset='utf8'):
     '''read and return all contents of file as one str'''
@@ -174,10 +191,12 @@ def main():
                         help='maximum frequency cut-off (default: 0.9)')
     parser.add_argument('-min_freq', type=float, nargs='?', const=1, default=0.1,
                         help='minimum frequency cut-off (default: 0.1)')
-    parser.add_argument('-number', dest='sum_count', type=int, nargs='?', const=1, default=0,
-                        help='number of sentences to keep (default: 5), overrides -percent')
+    parser.add_argument('-number', type=int, nargs='?', const=10, default=0,
+                        help='number of sentences to keep (default: 0), overrides -percent')
     parser.add_argument('-out_file', type=str, nargs='?', const='-',
                         help='output file for summarized text (default: None)')
+    parser.add_argument('-pickle_set_of_text_lines', '-pst', action='store_true',
+                        help='pickle a set of words from a text file')
     parser.add_argument('-percent', dest='sum_percent', type=float, nargs='?',
                         const=16.6667, default=10.0,
                         help='percentage of sentences to keep (default: 10.0%%)')
@@ -192,15 +211,28 @@ def main():
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-    if args.error_text:
-        print_stdout_stderr(args.error_text)
-        exit(1)
-
     if args.verbose > 3:
         print("outfile: <{}>".format(args.out_file))
         print("args:", args)
         print(__doc__)
         exit(0)
+
+    if args.pickle_set_of_text_lines:
+        lines_in, words_out = pickle_word_list(args.text_file, args.out_file)
+        print("Pickled %d words from %d lines in %s into %s:" % (words_out, lines_in, args.text_file, args.out_file))
+        with open(args.out_file, 'rb') as pick:
+            word_set = pickle.load(pick)
+        if words_out <= args.number:
+            print("word_set entire:", word_set)
+        else:
+            print("word_set sample:", random.sample(word_set, args.number))
+        exit(0)
+
+    if args.error_text:
+        print_stdout_stderr(args.error_text)
+        exit(1)
+
+
 
     # summary_file = getattr(args, 'out_file', None)
     unit_test(args.text_file, args)

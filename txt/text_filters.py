@@ -211,7 +211,7 @@ def filter_text_file():
         description="test text_filters")
     parser.add_argument('input_file', type=str, nargs='?', default='train_1000.label',
                         help='file containing text to filter')
-    parser.add_argument('-dir', dest='text_dir', type=str, default='/Users/sprax/text',
+    parser.add_argument('-dir', dest='text_dir', type=str, default='/Users/sprax/Text',
                         help='directory to search for input_file')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
