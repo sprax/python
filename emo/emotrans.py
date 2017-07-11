@@ -239,20 +239,20 @@ class EmoTrans:
         TODO: make protected ?'''
         try:
             lst = self.txt_emo[word]
-            if self.verbose > 5:
+            if self.verbose > SHOW_LIST_VALUES:
                 print("ET: {} => {}".format(word, lst))
         except KeyError:
             lwrd = word.lower()
             try:
                 lst = self.txt_emo[lwrd]
-                if self.verbose > 5:
+                if self.verbose > SHOW_LIST_VALUES:
                     print("ET: {} => {}".format(lwrd, lst))
             except KeyError:
-                if self.verbose > 4:
+                if self.verbose > SHOW_TOKEN_TRANS:
                     print("ET: {} => {}".format(word, word))
                 return None
         emo = random.choice(lst) if self.options.random else lst[0]
-        if self.verbose > 4:
+        if self.verbose > SHOW_TOKEN_TRANS:
             print("ET: {} => {}".format(word, emo))
         return emo
 
@@ -315,7 +315,7 @@ class EmoTrans:
         '''Translate sentence word by word to emojis, where
         possible, using regex substitution.'''
         beg, body, end = text_regex.sentence_body_and_end(sentence)
-        if self.verbose > 6:
+        if self.verbose > SHOW_TEXT_DIVISION:
             print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
         emojize_match_bound = partial(self.emojize_match, space=space)
 
@@ -353,7 +353,7 @@ class EmoTrans:
         not restorable.  So round trips are not faithful.
         '''
         beg, body, end = text_regex.sentence_body_and_end(sentence)
-        if self.verbose > 2:
+        if self.verbose > SHOW_TEXT_DIVISION:
             print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
         emo_list = self.emojize_phrase(txt_emo, body, space)
         emo_join = space.join(emo_list)
@@ -391,7 +391,7 @@ class EmoTrans:
 
     def textize_emo_chars(self, emo_span, space=' '):
         '''translate a string or slice of emojis char by char into a text string'''
-        if self.verbose > 4:
+        if self.verbose > SHOW_TEXT_BUILDERS:
             print("TCHRS: span({})".format(emo_span))
         text = ''
         prev = False
@@ -447,7 +447,7 @@ class EmoTrans:
         from the end.  The string (or "span") of emoji chars may contain spaces
         Returns a string with spaces inserted between the words, or None if the parse fails.
         '''
-        if  self.verbose > 6:
+        if  self.verbose > SHOW_TEXT_DIVISION:
             print("TESFE A:  span({})  prev_words({})".format(emo_span, prev_words))
 
         # If the this (whole or remaining) span can be parsed as a single emoji with an (English)
