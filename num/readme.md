@@ -1,1 +1,1 @@
-Readme per directory?
+rec math, mainly sequences.
