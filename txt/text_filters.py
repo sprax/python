@@ -164,18 +164,18 @@ def resolve_count(sub_count, percent, total_count):
 
 def map_file(function, in_path, out_path, charset='utf8'):
     '''Apply function to every line in the input file'''
-    with open(in_path, 'r', encoding=charset) as in_text:
+    with open(in_path, 'r', encoding=charset) as text:
         with open(out_path, 'w') as out_file:
-            for line in_text:
+            for line in text:
                 output = function(line)
                 print(output if output else ' ', file=out_file)
 
 
 def translate_para_file(para_filter, in_path, out_path, charset='utf8'):
     '''Generator yielding filtered paragraphs from a text file'''
-    with open(in_path, 'r', encoding=charset) as in_text:
+    with open(in_path, 'r', encoding=charset) as text:
         with open(out_path, 'w') as out_file:
-            for para in text_ops.paragraph_iter(in_text):
+            for para in text_ops.paragraph_iter(text):
                 output = para_filter.filter_line(para)
                 print(output if output else ' ', file=out_file)
 
@@ -184,9 +184,9 @@ def translate_lines_in_file(line_translators, in_path, out_path, charset='utf8')
     Translate input line by line to output file.
     Usage: translate_lines_in_file(line_translators, in_path, out_path, charset='utf8')
     '''
-    with open(in_path, 'r', encoding=charset) as in_text:
+    with open(in_path, 'r', encoding=charset) as text:
         with (sys.stdout if out_path == '-' else open(out_path, 'w')) as out_file:
-            for line in in_text:
+            for line in text:
                 for translator in line_translators:
                     line = translator.translate(line)
                 if line:
@@ -221,17 +221,19 @@ def filter_text_file():
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="test text_filters")
-    parser.add_argument('input_file', type=str, nargs='?', default='train_1000.label',
+    parser.add_argument('in_path', type=str, nargs='?', default='train_1000.label',
                         help='file containing text to filter')
     parser.add_argument('-dir', dest='text_dir', type=str, default='/Users/sprax/Text',
-                        help='directory to search for input_file')
+                        help='directory to search for in_path')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
     parser.add_argument('-list_numbers', action='store_true',
                         help='output list number for each filtered sentence')
+    parser.add_argument('-map_file', action='store_true',
+                        help='test map_file')
     parser.add_argument('-number', dest='max_lines', type=int, nargs='?', const=1, default=0,
                         help='number of sentences to keep (default: 5), overrides -percent')
-    parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
+    parser.add_argument('-out_path', type=str, nargs='?', default='lab.txt',
                         help='output path for filtered text (default: - <stdout>)')
     parser.add_argument('-truncate', dest='max_words', type=int, nargs='?',
                         const=8, default=0,
@@ -240,16 +242,20 @@ def filter_text_file():
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-    if args.verbose > 3:
-        print("output_file: <{}>".format(args.output_file))
+    if args.map_file:
+        map_file(str.strip, args.in_path, args.out_path)
+        exit(0)
+
+    if args.verbose > 7:
+        print("out_path: <{}>".format(args.out_path))
         print("args:", args)
         print(__doc__)
         exit(0)
 
-    in_path = abs_path(args.text_dir, args.input_file)
-    out_path = args.output_file
+    in_path = abs_path(args.text_dir, args.in_path)
+    out_path = args.out_path
     if out_path != '-':
-        out_path = abs_path(args.text_dir, args.output_file)
+        out_path = abs_path(args.text_dir, args.out_path)
 
     translate_file(in_path, out_path, args)
 
