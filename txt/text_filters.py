@@ -162,6 +162,15 @@ def resolve_count(sub_count, percent, total_count):
     return sub_count, percent
 
 
+def map_file(function, in_path, out_path, charset='utf8'):
+    '''Apply function to every line in the input file'''
+    with open(in_path, 'r', encoding=charset) as in_text:
+        with open(out_path, 'w') as out_file:
+            for line in_text:
+                output = function(line)
+                print(output if output else ' ', file=out_file)
+
+
 def translate_para_file(para_filter, in_path, out_path, charset='utf8'):
     '''Generator yielding filtered paragraphs from a text file'''
     with open(in_path, 'r', encoding=charset) as in_text:
@@ -171,7 +180,10 @@ def translate_para_file(para_filter, in_path, out_path, charset='utf8'):
                 print(output if output else ' ', file=out_file)
 
 def translate_lines_in_file(line_translators, in_path, out_path, charset='utf8'):
-    '''Translate input line by line to output file'''
+    '''
+    Translate input line by line to output file.
+    Usage: translate_lines_in_file(line_translators, in_path, out_path, charset='utf8')
+    '''
     with open(in_path, 'r', encoding=charset) as in_text:
         with (sys.stdout if out_path == '-' else open(out_path, 'w')) as out_file:
             for line in in_text:
