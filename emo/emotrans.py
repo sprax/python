@@ -11,6 +11,7 @@ Plan:
 
 import argparse
 import json
+import pickle
 import random
 import re
 from collections import Counter
@@ -108,16 +109,20 @@ def singularize(word):
 
 def is_singular(word):
     '''
-    Deprecated for now, until replaced by a LUT implementation,
-    especially if used to answer the question, "Might the pluralized
-    form of this word be different?"
+    Deprecated for now,
+    especially if used to answer the question,
+    "Might the pluralized form of this word be different?"
+    FIXME: Get better data for a LUT implementation,
     '''
     return word != inflection.pluralize(word)
 
 def is_plural(word):
-    '''Deprecated unless replaced by a LUT; @see is_singular.'''
+    '''Deprecated until replaced by a LUT; @see is_singular.'''
     return word != inflection.singularize(word)
 
+def read_pickle(path):
+    with open(path, 'rb') as pkl:
+        return pickle.load(pkl)
 
 def show_sorted_dict(dct, idx, lbl=''):
     for key, val in sorted(dct.items(), key=lambda dit: dit[idx].lower()):
@@ -144,7 +149,8 @@ class EmoTrans:
         self.txt_emo = self.gen_txt_to_emo(self.presets)
         self.emo_txt = self.gen_emo_to_txt(self.presets)
         self.emo_chr_counts = self.count_emo_chrs()
-
+        self.singular_nouns = read_pickle('en_nouns_singular.pkl')
+        # TODO: self.plural_nouns = . . .
 
     def count_emo_chrs(self):
         counter = Counter()
@@ -218,6 +224,16 @@ class EmoTrans:
                     print("emo_txt 3: {} => {}".format(emo, txt))
         return emo_txt
 
+    def is_singular_noun(self, word):
+        '''
+        Somewhat deprecated for now,
+        especially if used to answer the question,
+        "Might the pluralized form of this word be different?"
+        FIXME: Get data for a better LUT implementation,
+        '''
+        return word in self.singular_nouns
+
+
     def emojize_token(self, word):
         '''return emoji string translation of word or None
         TODO: make protected ?'''
@@ -276,14 +292,15 @@ class EmoTrans:
                             print("EW PLURAL: {} => {}".format(word, emostr))
                         return emostr
                 # FIXME: When using subtraction, lip == lips - S ~= <kiss> - S == 💋 - S == 💋 <-> <S>
-                plural, pluralized = pluralize(word)
-                if pluralized:
-                    emojis = self.emojize_token(plural)
-                    if emojis:
-                        emostr = emojis + self.minus_s_emo()
-                        if self.verbose > SHOW_TOKEN_TRANS:
-                            print("EW SINGLE: {} => {}".format(word, emostr))
-                        return emostr
+                if self.is_singular_noun(word):
+                    plural, pluralized = pluralize(word)
+                    if pluralized:
+                        emojis = self.emojize_token(plural)
+                        if emojis:
+                            emostr = emojis + self.minus_s_emo()
+                            if self.verbose > SHOW_TOKEN_TRANS:
+                                print("EW SINGLE: {} => {}".format(word, emostr))
+                            return emostr
         hyphenated = src_word.split('-')
         if len(hyphenated) > 1:
             return ' ➖ '.join([self.emo_or_txt_token(token) for token in hyphenated])
