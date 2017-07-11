@@ -71,56 +71,53 @@ EMO_SYNONYMS = {}
 
 def emo_synonyms(word):
     '''TODO: replace with real synonyms from a dedicated class'''
+    lwrd = word.lower()
     try:
-        return EMO_SYNONYMS[word]
+        return EMO_SYNONYMS[lwrd]
     except KeyError:
-        return [word]
+        return [lwrd]
 
 def pluralize(word):
     '''
-    Return (plural, is_different) where plural is the plural form of the
-    given word, and is_different is True IFF word != plural.
+    Return the plural form of the given word.
     TODO: Check that word is a noun (or an adjective or at any rate can
-    be sensibly used as a noun) before calling inflection.pluralize.
+    be sensibly used as a noun) before calling inflection.pluralize?
     If not, return (word, false)
     FIXME BUGS: inflection is often wrong, e.g. (safe <-> saves)
     '''
     if word.lower()[-3:] == 'afe':
-        return (word + 's', True)
-    plural = inflection.pluralize(word)
-    return (plural, plural != word)
+        return word + 's'
+    return inflection.pluralize(word)
 
 def singularize(word):
     '''
-    Return (single, is_different) where single is the singular form of the
-    given word, and is_different is True IFF word != single.
+    Return the singular form of the given word.
     TODO: Check that word is a noun (or an adjective or at any rate can
-    be sensibly used as a noun) before calling inflection.pluralize.
-    If not, return (word, false)
+    be sensibly used as a noun) before calling inflection.singularize?
     FIXME BUGS: inflection returns many wrong answers by pattern:
         *aves -> *afe
-    uses incomplete special case matching (octopus),
+    It uses incomplete special case matching (octopus),
     and does not recognize many other pairs such as:
         (locus, loci)
     NB: pattern3.en is not yet functional (2017.07.10)
     '''
     if word.lower()[-4:] == 'aves':
-        return (word.rstrip('sS'), True)
-    single = inflection.singularize(word)
-    return (single, single != word)
+        return word.rstrip('sS')
+    return inflection.singularize(word)
+
 
 def is_singular(word):
     '''
     Deprecated for now,
-    especially if used to answer the question,
+    even if used only to answer the question,
     "Might the pluralized form of this word be different?"
     FIXME: Get better data for a LUT implementation,
     '''
-    return word != inflection.pluralize(word)
+    return word != pluralize(word)
 
 def is_plural(word):
     '''Deprecated until replaced by a LUT; @see is_singular.'''
-    return word != inflection.singularize(word)
+    return word != singularize(word)
 
 def read_pickle(path):
     with open(path, 'rb') as pkl:
@@ -152,7 +149,7 @@ class EmoTrans:
         self.emo_txt = self.gen_emo_to_txt(self.presets)
         self.emo_chr_counts = self.count_emo_chrs()
         self.singular_nouns = read_pickle('en_nouns_singular.pkl')
-        # TODO: self.plural_nouns = . . .
+        self.plural_nouns = read_pickle('en_nouns_plural.pkl')
 
     def count_emo_chrs(self):
         counter = Counter()
@@ -226,6 +223,16 @@ class EmoTrans:
                     print("emo_txt 3: {} => {}".format(emo, txt))
         return emo_txt
 
+
+    def is_plural_noun(self, word):
+        '''
+        Somewhat deprecated for now,
+        especially if used to answer the question,
+        "Might the singularized form of this word be different?"
+        FIXME: Get data for a better LUT implementation,
+        '''
+        return word in self.plural_nouns
+
     def is_singular_noun(self, word):
         '''
         Somewhat deprecated for now,
@@ -236,26 +243,25 @@ class EmoTrans:
         return word in self.singular_nouns
 
 
-    def emojize_token(self, word):
-        '''return emoji string translation of word or None
-        TODO: make protected ?'''
+    def emojize_token(self, token):
+        '''
+        Return emoji string translation of token or None.
+        The token will not be transformed in any way.  If
+        it is meant to match an all lower-case key, the token
+        must already be itself all lower-case.
+        TODO: make protected ?
+        '''
         try:
-            lst = self.txt_emo[word]
+            lst = self.txt_emo[token]
             if self.verbose > SHOW_LIST_VALUES:
-                print("ET: {} => {}".format(word, lst))
+                print("ET: {} => {}".format(token, lst))
         except KeyError:
-            lwrd = word.lower()
-            try:
-                lst = self.txt_emo[lwrd]
-                if self.verbose > SHOW_LIST_VALUES:
-                    print("ET: {} => {}".format(lwrd, lst))
-            except KeyError:
-                if self.verbose > SHOW_TOKEN_TRANS:
-                    print("ET: {} => {}".format(word, word))
-                return None
+            if self.verbose > SHOW_TOKEN_TRANS:
+                print("ET: {} => {}".format(token, token))
+            return None
         emo = random.choice(lst) if self.options.random else lst[0]
         if self.verbose > SHOW_TOKEN_TRANS:
-            print("ET: {} => {}".format(word, emo))
+            print("ET: {} => {}".format(token, emo))
         return emo
 
     def emo_or_txt_token(self, token):
@@ -285,18 +291,21 @@ class EmoTrans:
                     print("EW  TOKEN: {} => {}".format(word, emojis))
                 return emojis + space
             if self.options.pluralize:
-                singular, singularized = singularize(word)
-                if singularized:
-                    emojis = self.emojize_token(singular)
-                    if emojis:
-                        emostr = emojis + space + emojis + space
-                        if self.verbose > SHOW_TOKEN_TRANS:
-                            print("EW PLURAL: {} => {}".format(word, emostr))
-                        return emostr
-                # FIXME: When using subtraction, lip == lips - S ~= <kiss> - S == 💋 - S == 💋 <-> <S>
+                if self.is_plural_noun(word):
+                    singular = singularize(word)
+                    if singular != word:
+                        emojis = self.emojize_token(singular)
+                        if emojis:
+                            emostr = emojis + space + emojis + space
+                            if self.verbose > SHOW_TOKEN_TRANS:
+                                print("EW PLURAL: {} => {}".format(word, emostr))
+                            return emostr
+                # At least when subtraction is allowed, lip == lips - S ~= <kiss> - S == 💋 - S == 💋 <-> <S>
+                # NB: Not elif, because some nouns can be either singular and plural, e.g. fish, sheep, dice,
+                # briefs,data, agenda, heuristics,
                 if self.is_singular_noun(word):
-                    plural, pluralized = pluralize(word)
-                    if pluralized:
+                    plural = pluralize(word)
+                    if plural != word:
                         emojis = self.emojize_token(plural)
                         if emojis:
                             emostr = emojis + self.minus_s_emo()
@@ -424,17 +433,17 @@ class EmoTrans:
                 # unreduplicate
                 if prev_words[-1] == word:
                     if is_singular(word):
-                        plural, different = pluralize(word)
-                        if different:
+                        plural = pluralize(word)
+                        if plural != word:
                             prev_words[-1] = plural
                             return prev_words
                 # resingularize
                 if prev_words[-1] == '-' and len(prev_words) > 1 and prev_words[-2] == 'S':
-                    if is_plural(word):
-                        sing, diff = singularize(word)
-                        if diff:
+                    if self.is_plural_noun(word):
+                        singular = singularize(word)
+                        if singular != word:
                             prev_words.pop()
-                            prev_words[-1] = sing
+                            prev_words[-1] = singular
                             return prev_words
                 prev_words.append(word)
                 if self.verbose > 7:
