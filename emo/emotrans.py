@@ -70,7 +70,13 @@ def unicode_chr_str(hex_unicode):
 EMO_SYNONYMS = {}
 
 def emo_synonyms(word):
-    '''TODO: replace with real synonyms from a dedicated class'''
+    '''
+    TODO: replace with real synonyms from a dedicated class
+    FIXME: if word is not already all lower case, put both
+    the orignal word and its lowered form in the list of
+    synonyms, so as to match proper names.  (Custom emojis,
+    syllabified names.)
+    '''
     lwrd = word.lower()
     try:
         return EMO_SYNONYMS[lwrd]
