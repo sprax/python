@@ -115,11 +115,11 @@ def syl_count_sentence(cmu_prons, sentence):
 
 TOMATO = [['T', 'AH0', 'M', 'EY1', 'T', 'OW2'], ['T', 'AH0', 'M', 'AA1', 'T', 'OW2']]
 
-SylPron = collections.namedtuple('SylPron', 'syl_count phon_seq')
+PhoneSeq = collections.namedtuple('PhoneSeq', 'syl_count phon_seq')
 
-def syl_rep_cmu(cmu_prons, lwrd, verbose):
+def phone_sex_cmu(cmu_prons, lwrd, verbose):
     '''Create comparable sequences of phonemes from a CMU pronunciation entry'''
-    sequences = []
+    phone_sex = []
     try:
         prons = cmu_prons[lwrd]
         for pron in prons:
@@ -132,11 +132,11 @@ def syl_rep_cmu(cmu_prons, lwrd, verbose):
                     sylcount += 1
                 else:
                     sequence.append(phon)
-            sequences.append(SylPron(sylcount, sequence))
+            phone_sex.append(PhoneSeq(sylcount, sequence))
     except KeyError:
         if verbose:
-            print("syl_rep_cmu NonKEY: ", lwrd)
-    return sequences
+            print("phone_sex_cmu NonKEY: ", lwrd)
+    return phone_sex
 
 
 def main():
