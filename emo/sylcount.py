@@ -14,6 +14,7 @@ import random
 import re
 import string
 from collections import defaultdict
+from collections import namedtuple
 from nltk.corpus import cmudict
 import emoji
 import emotuples
@@ -112,6 +113,31 @@ def syl_count_sentence(cmu_prons, sentence):
     '''sum of syllable counts for all tokens found in a sentence'''
     return syl_count_sum(cmu_prons, word_tokens(sentence))
 
+    TOMATO = [['T', 'AH0', 'M', 'EY1', 'T', 'OW2'], ['T', 'AH0', 'M', 'AA1', 'T', 'OW2']]
+
+    SylPron = collections.namedtuple('SylPron', 'syl_count phon_seq')
+
+    def syl_rep_cmu(cmu_prons, lwrd, verbose):
+        '''Create comparable sequences of phonemes from a CMU pronunciation entry'''
+        sequences = []
+        try:
+            prons = cmu_prons(lwrd)
+            for pron in prons:
+                sequence = []
+                sylcount = 0
+                for phon in pron:
+                    last = phon[-1]
+                    if '0' <= last and last <= '9':
+                        sequence.append(phon[0:-1])
+                        sylcount += 1
+                    else:
+                        sequence.append(phon)
+                sequences.append(SylPron(sylcount, sequence))
+        except KeyError:
+            if verbose:
+                print("syl_rep_cmu NonKEY: ", lwrd)
+        return sequences
+
 
 def main():
     '''test english -> emoji translation'''
@@ -129,7 +155,6 @@ def main():
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
-    # test_misc()
 
     cmu_prons = cmudict.dict() # get the CMU Pronouncing Dict
 
@@ -145,6 +170,7 @@ def main():
         print("SYLLABLES:  manual(%d)  cmupro(%d)  vowelg(%d)  nrules(%d)" % (
             counts[1], scount, vcount, fcount))
         print()
+
 
 
 if __name__ == '__main__':
