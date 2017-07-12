@@ -13,8 +13,9 @@ SENTENCES = [
     # "Character may be manifested in the great moments, but it is made in the small ones.",
     # "Men occasionally stumble over the truth, but most of them pick themselves up and hurry off as if nothing has happened.",
     # "Don't give me no lip, you one-eye'd jack-ass!",
-    "No ears or lip for you!",
-    " _Wind And Waves and the Winds And my Wave_. ",
-    "I sailed off on the boat I blew up.",
-    "Ice ale da faun the bowtie blue up.",
+    # "No ears or lip for you!",
+    # " _Wind And Waves and the Winds And my Wave_. ",
+    # "You sailed off on the boat I blew up.",
+    # "Ice ale da faun the bowtie blue up.",
+    "You sail off on the boat I blow up.",
 ]

@@ -1615,7 +1615,7 @@ EMO_TUPLES = [
     ('1f6f0'                 , 1, 1583,   'travel', 1, '🛰', ['orbital', 'satellite'], ['orbital', 'satellite'], ':satellite_orbital:', []),
     ('1f4ba'                 , 1, 1584,   'travel', 1, '💺', ['seat', 'airplane seat'], ['seat'], ':seat:', []),
     ('1f6f6'                 , 1, 1585,   'travel', 0, '🛶', ['canoe'], ['canoe'], ':canoe:', [':kayak:']),
-    ('26f5'                  , 1, 1586,   'travel', 1, '⛵', ['boat', 'sailboat'], ['boat', 'sailboat'], ':sailboat:', []),
+    ('26f5'                  , 1, 1586,   'travel', 1, '⛵', ['sail', 'sailboat', 'boat'], ['boat', 'sailboat'], ':sailboat:', []),
     ('1f6e5'                 , 1, 1587,   'travel', 1, '🛥', ['boat', 'motorboat'], ['boat', 'motorboat'], ':motorboat:', []),
     ('1f6a4'                 , 1, 1588,   'travel', 1, '🚤', ['speedboat'], ['speedboat'], ':speedboat:', []),
     ('1f6f3'                 , 1, 1589,   'travel', 1, '🛳', ['ship', 'cruise'], ['ship', 'cruise'], ':cruise_ship:', [':passenger_ship:']),

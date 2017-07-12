@@ -177,7 +177,7 @@ class EmoTrans:
     def gen_presets(self, options):
         presets = {}
         if options.no_articles:
-            presets.update({'a': [''], 'an': [''], 'but': [''], 'the': ['']})
+            presets.update({'a': [' '], 'an': [' '], 'but': [' '], 'the': [' ']})
         if options.arithmetic:
             presets.update({'can': ['🍬 ➖ D'], 'crew': ['© ➕ 🍺 ➖ 🐝'], 'you': ['🆕 ➖ N']})
         if options.multiple:
