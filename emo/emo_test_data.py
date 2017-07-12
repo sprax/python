@@ -15,4 +15,6 @@ SENTENCES = [
     # "Don't give me no lip, you one-eye'd jack-ass!",
     "No ears or lip for you!",
     " _Wind And Waves and the Winds And my Wave_. ",
+    "I sailed off on the boat I blew up.",
+    "Ice ale da faun the bowtie blue up.",
 ]
