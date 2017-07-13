@@ -17,7 +17,8 @@ from collections import defaultdict
 from collections import namedtuple
 from nltk.corpus import cmudict
 import emoji
-import emotuples
+import emotuples as ET
+import text_regex as tregex
 
 def syl_count_cmu(pron):
     '''number of syllables in a CMU-style pronunciation'''
@@ -111,11 +112,11 @@ def syl_count_sum(cmu_prons, words):
 
 def syl_count_sentence(cmu_prons, sentence):
     '''sum of syllable counts for all tokens found in a sentence'''
-    return syl_count_sum(cmu_prons, word_tokens(sentence))
+    return syl_count_sum(cmu_prons, tregex.word_tokens(sentence))
 
 TOMATO = [['T', 'AH0', 'M', 'EY1', 'T', 'OW2'], ['T', 'AH0', 'M', 'AA1', 'T', 'OW2']]
 
-PhoneSeq = collections.namedtuple('PhoneSeq', 'syl_count phon_seq')
+PhoneSeq = namedtuple('PhoneSeq', 'syl_count phon_seq')
 
 def phone_sex_cmu(cmu_prons, lwrd, verbose):
     '''Create comparable sequences of phonemes from a CMU pronunciation entry'''
@@ -138,6 +139,14 @@ def phone_sex_cmu(cmu_prons, lwrd, verbose):
             print("phone_sex_cmu NonKEY: ", lwrd)
     return phone_sex
 
+def gen_word_phone_sex(prons, emots):
+    word_phone_sex = {}
+    for tup in emots:
+        if tup.flags > 0:
+            for word in tup.words:
+                if word not in word_phone_sex:
+                    word_phone_sex[word] = phone_sex_cmu(prons)
+    return word_phone_sex
 
 def main():
     '''test english -> emoji translation'''
@@ -160,9 +169,9 @@ def main():
 
     for sentence, counts in EXAMPLES.items():
         print("MANUAL", counts[0], sentence)
-        tokens = word_tokens(sentence)
+        tokens = tregex.word_tokens(sentence)
         print("TOKENS", len(tokens), tokens)
-        swords = word_splits(sentence)
+        swords = tregex.word_splits(sentence)
         print("SPLITS", len(swords), swords)
         scount = syl_count_sum(cmu_prons, tokens)
         vcount = count_vowel_groups(sentence)

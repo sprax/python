@@ -14,6 +14,7 @@ import json
 import random
 import re
 from collections import defaultdict
+from collections import namedtuple
 
 import emoji
 
@@ -2459,11 +2460,23 @@ EMO_TUPLES = [
     ('1f469-2764-1f48b-1f468', 4, 2427,   'people', 1, '👩❤💋👨', ['kiss', 'woman'], ['kiss', 'woman'], ':kiss_woman_man:', []),
 ]
 
+NemoTuple = namedtuple('NemoTuple', 'code size ord cat flags chrs words short')
+
+def gen_named_emo_tuples(emotups):
+    nemos = []
+    for tup in emotups:
+        nemos.append(NemoTuple(tup[INDEX_HEX_CHR_CODES], tup[INDEX_UNICHR_LENGTH],
+            tup[INDEX_DISPLAY_ORDER], tup[INDEX_EMOJI_CATEGORY],
+            tup[INDEX_DISPLAY_FLAGS], tup[INDEX_EMOJI_UNICHRS],
+            tup[INDEX_FREQUENT_WORDS], tup[INDEX_SHORT_NAME]))
+    return nemos
 
 class EmoTuples:
     def __init__(self):
         self.emo_tuples = EMO_TUPLES
         self.emo_header = EMO_HEADER
+        self.nemo_tuples = gen_named_emo_tuples(EMO_TUPLES)
+
 
     def print_all(self):
         print(self.emo_header)
