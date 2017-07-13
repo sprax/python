@@ -139,13 +139,13 @@ def phone_sex_cmu(cmu_prons, lwrd, verbose):
             print("phone_sex_cmu NonKEY: ", lwrd)
     return phone_sex
 
-def gen_word_phone_sex(prons, emots):
+def gen_word_phone_sex(prons, emots, verbose=1):
     word_phone_sex = {}
     for tup in emots:
         if tup.flags > 0:
             for word in tup.words:
                 if word not in word_phone_sex:
-                    word_phone_sex[word] = phone_sex_cmu(prons)
+                    word_phone_sex[word] = phone_sex_cmu(prons, word, verbose)
     return word_phone_sex
 
 def main():
@@ -179,6 +179,11 @@ def main():
         print("SYLLABLES:  manual(%d)  cmupro(%d)  vowelg(%d)  nrules(%d)" % (
             counts[1], scount, vcount, fcount))
         print()
+
+    emotuples = ET.EmoTuples()
+    nemos = gen_word_phone_sex(cmu_prons, emotuples.nemo_tuples)
+    for nemo in nemos:
+        print(nemo)
 
 
 
