@@ -342,7 +342,10 @@ class EmoTrans:
         tagged = nltk.pos_tag(tokens)
         partos = [tag[1] for tag in tagged]
         # print(tagged)
-        print("++++> txt => pos (%s)" % ' '.join(partos))
+        print("++++> txt => pos (", end='')
+        for tup in tagged:
+            print("%*s" % (len(tup[0]), tup[1]), end=' ')
+        print(")")
 
 
         emojize_match_bound = partial(self.emojize_match, space=space)
