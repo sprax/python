@@ -340,7 +340,10 @@ class EmoTrans:
 
         tokens = nltk.word_tokenize(sentence)
         tagged = nltk.pos_tag(tokens)
-        print(tagged)
+        partos = [tag[1] for tag in tagged]
+        # print(tagged)
+        print("++++> txt => pos (%s)" % ' '.join(partos))
+
 
         emojize_match_bound = partial(self.emojize_match, space=space)
 
@@ -569,6 +572,14 @@ class EmoTrans:
                 txt_sent += emo_span
         return txt_sent
 
+    def emo_trans_sentence(self, sentence):
+        print("====> src => txt (%s)" % sentence)
+        emo_sent = self.emojize_sentence_subs(sentence)
+        print("====> txt => emo (%s)" % emo_sent)
+        txt_sent = self.textize_sentence_subs(emo_sent)
+        print("====> emo => txt (%s)" % txt_sent)
+
+
 def add_preset_multiples(preset_dict):
     '''Add preset word to multiple emoji mapping'''
     preset_dict.update({
@@ -591,17 +602,14 @@ def test_emo_tuples(options):
         show_sorted_dict(emo_txt)
 
     for sentence in SENTENCES:
-        print("====> src => txt (%s)" % sentence)
-        emo_sent = emotrans.emojize_sentence_subs(sentence)
-        print("====> txt => emo (%s)" % emo_sent)
-        txt_sent = emotrans.textize_sentence_subs(emo_sent)
-        print("====> emo => txt (%s)" % txt_sent)
+        emotrans.emo_trans_sentence(sentence)
         print()
+
     if options.text_file:
         for sentence in text_fio.read_text_lines(options.text_file, options.charset):
-            emotrans.emojize_sentence_subs(sentence)
+            emotrans.emo_trans_sentence(sentence)
 
-def test_emojize():
+def main():
     '''test english -> emoji translation'''
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
@@ -643,5 +651,5 @@ def test_emojize():
 
 if __name__ == '__main__':
     start_time = time.time()
-    test_emojize()
+    main()
     print("----- %.4f seconds elapsed -----" % (time.time() - start_time))
