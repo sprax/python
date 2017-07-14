@@ -340,11 +340,15 @@ class EmoTrans:
 
         tokens = nltk.word_tokenize(sentence)
         tagged = nltk.pos_tag(tokens)
-        partos = [tag[1] for tag in tagged]
+        maxlen = [max(len(tag[0]), len(tag[1])) for tag in tagged]
         # print(tagged)
+        print("++++> txt => tok (", end='')
+        for mxl, tup in zip(maxlen, tagged):
+            print("%*s" % (mxl, tup[0]), end=' ')
+        print(")")
         print("++++> txt => pos (", end='')
-        for tup in tagged:
-            print("%*s" % (len(tup[0]), tup[1]), end=' ')
+        for mxl, tup in zip(maxlen, tagged):
+            print("%*s" % (mxl, tup[1]), end=' ')
         print(")")
 
 

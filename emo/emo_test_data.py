@@ -1,7 +1,7 @@
 
 
 SENTENCES = [
-    "Wind and waves may rock the boat, but only you can tip the crew.",
+    # "Wind and waves may rock the boat, but only you can tip the crew.",
     # "I love you",
     # "So it's the US vs. Canada in football, I mean soccer!?",
     # "Lady Astor: “Winston, if I were your wife I’d put poison in your coffee.",
@@ -18,5 +18,5 @@ SENTENCES = [
     # "You sailed off on the boat I blew up.",
     # "Ice ale da faun the bowtie blue up.",
     "You sail off on the boat I blow up.",
-    "Gosh dang if me if I ain't what's-its-name from your and Bill's worst nighmare?",
+    "Gosh dang it for me if I ain't what's-its-name from Tie's nightmare bowling party?",
 ]
