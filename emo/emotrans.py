@@ -17,6 +17,8 @@ import re
 from collections import Counter
 from collections import defaultdict
 from functools import partial
+import time
+
 
 import nltk
 import emotuples as ET
@@ -589,11 +591,11 @@ def test_emo_tuples(options):
         show_sorted_dict(emo_txt)
 
     for sentence in SENTENCES:
-        print("======> src => txt (%s)" % sentence)
+        print("====> src => txt (%s)" % sentence)
         emo_sent = emotrans.emojize_sentence_subs(sentence)
-        print("======> txt => emo (%s)" % emo_sent)
+        print("====> txt => emo (%s)" % emo_sent)
         txt_sent = emotrans.textize_sentence_subs(emo_sent)
-        print("======> emo => txt (%s)" % txt_sent)
+        print("====> emo => txt (%s)" % txt_sent)
         print()
     if options.text_file:
         for sentence in text_fio.read_text_lines(options.text_file, options.charset):
@@ -640,4 +642,6 @@ def test_emojize():
     test_emo_tuples(args)
 
 if __name__ == '__main__':
+    start_time = time.time()
     test_emojize()
+    print("----- %.4f seconds elapsed -----" % (time.time() - start_time))
