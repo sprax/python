@@ -18,4 +18,5 @@ SENTENCES = [
     # "You sailed off on the boat I blew up.",
     # "Ice ale da faun the bowtie blue up.",
     "You sail off on the boat I blow up.",
+    "Gosh dang if me if I ain't what's-its-name from your and Bill's worst nighmare?",
 ]

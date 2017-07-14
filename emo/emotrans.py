@@ -18,6 +18,7 @@ from collections import Counter
 from collections import defaultdict
 from functools import partial
 
+import nltk
 import emotuples as ET
 import inflection
 import text_fio
@@ -334,6 +335,11 @@ class EmoTrans:
         beg, body, end = text_regex.sentence_body_and_end(sentence)
         if self.verbose > SHOW_TEXT_DIVISION:
             print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
+
+        tokens = nltk.word_tokenize(sentence)
+        tagged = nltk.pos_tag(tokens)
+        print(tagged)
+
         emojize_match_bound = partial(self.emojize_match, space=space)
 
         # TODO: Determine which is better:
