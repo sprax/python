@@ -80,11 +80,19 @@ def emo_synonyms(word):
     synonyms, so as to match proper names.  (Custom emojis,
     syllabified names.)
     '''
-    lwrd = word.lower()
+    syns = [word]
     try:
-        return EMO_SYNONYMS[lwrd]
+        syns.extend(EMO_SYNONYMS[word])
     except KeyError:
-        return [lwrd]
+        pass
+    if not word.islower():
+        lwrd = word.lower()
+        syns.append(lwrd)
+        try:
+            syns.extend(EMO_SYNONYMS[lwrd])
+        except KeyError:
+            pass
+    return syns
 
 def pluralize(word):
     '''
@@ -293,6 +301,8 @@ class EmoTrans:
         or, failing that, return the original src_word.
         '''
         synonyms = emo_synonyms(src_word)
+        if self.verbose > SHOW_LIST_VALUES:
+            print("EW SYNOMS:", synonyms)
         for word in synonyms:
             emojis = self.emojize_token(word)
             if emojis:

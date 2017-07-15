@@ -326,7 +326,7 @@ EMO_TUPLES = [
     ('1f443-1f3fe'           , 2,  293,   'people', 1, '👃🏾', ['nose', 'knows'], ['nose'], ':nose_tone4:', []),
     ('1f443-1f3ff'           , 2,  294,   'people', 1, '👃🏿', ['nose', 'knows'], ['nose'], ':nose_tone5:', []),
     ('1f463'                 , 1,  295,   'people', 1, '👣', ['feet', 'footprints'], ['feet', 'footprints'], ':footprints:', []),
-    ('1f441'                 , 1,  296,   'people', 1, '👁', ['I', 'eye', 'aye'], ['eye', 'I'], ':eye:', []),
+    ('1f441'                 , 1,  296,   'people', 1, '👁', ['I', 'eye', 'aye', 'i'], ['eye', 'I'], ':eye:', []),
     ('1f440'                 , 1,  297,   'people', 1, '👀', ['looked', 'eyes', 'search', 'look', 'looking', 'eyes', 'see', 'seeing', 'eyes on it'], ['looked', 'eyes', 'search', 'look', 'looking', 'eyes', 'see', 'seeing'], ':eyes:', []),
     ('1f5e3'                 , 1,  298,   'people', 1, '🗣', ['head', 'talk', 'speak', 'talking head', 'speaking', 'talking'], ['head', 'talk', 'speak', 'talking head', 'speaking', 'talking'], ':speaking_head:', [':speaking_head_in_silhouette:']),
     ('1f464'                 , 1,  299,   'people', 1, '👤', ['head', 'bust', 'bust', 'silhouette'], ['head', 'bust', 'bust', 'silhouette'], ':bust_in_silhouette:', []),

@@ -14,9 +14,9 @@ SENTENCES = [
     # "Men occasionally stumble over the truth, but most of them pick themselves up and hurry off as if nothing has happened.",
     # "Don't give me no lip, you one-eye'd jack-ass!",
     # "No ears or lip for you!",
-    # " _Wind And Waves and the Winds And my Wave_. ",
+    " _Wind And Waves and the Winds And my Wave_. ",
     # "You sailed off on the boat I blew up.",
     # "Ice ale da faun the bowtie blue up.",
-    "You sail off on the boat I blow up.",
-    "Gosh dang it for me if I ain't what's-its-name from Tie's nightmare bowling party?",
+    # "You sail off on the boat I blow up.",
+    # "Gosh dang it for me if I ain't what's-its-name from Tie's nightmare bowling party?",
 ]
