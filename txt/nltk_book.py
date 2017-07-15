@@ -11,6 +11,8 @@ import random
 import string
 from collections import Counter
 import nltk
+from nltk.book import text1 as MobyDick
+# import nltk.book
 from xdv import xdv
 
 NLTK_VERBOSITY = 1
@@ -195,7 +197,7 @@ def generate_cfd_max_uniq(cfdist, word, length=15):
                 break
     return join_tokenized(words)
 
-#Some fun ones using this function on bigrams from Moby Dick:
+# Some fun ones using this function on bigrams from Moby Dick:
 # The voyages now show white whale shakes down certain mathematical symmetry
 # The Narwhale has ever new made what prodigious black foam that interval
 #     passed round upon inquiry remains white steeds
@@ -264,7 +266,7 @@ def generate_cfd_prob_uniq(cfdist, word, length=15):
             break
     return join_tokenized(result)
 
-def test_nltk_book(tokens=nltk.book.text1):
+def test_nltk_book(tokens=MobyDick):
     '''test module methods'''
     trigs = trigrams_from_tokens(tokens, 2, 10)
     print(trigs.most_common(10))

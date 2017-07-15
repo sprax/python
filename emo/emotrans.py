@@ -42,7 +42,7 @@ from collections import Counter
 from collections import defaultdict
 from functools import partial
 import time
-
+import editdistance
 
 import nltk
 import emotuples as ET
@@ -52,7 +52,7 @@ import text_regex
 from emo_test_data import SENTENCES
 # import sylcount
 
-DEFAULT_SENTENCE = "Wind and waves may rock the boat, but only you can tip the crew."
+DEFAULT_SENTENCE = '"Wind and waves may rock the boat," she said, "but only you can tip the crew!!"'
 
 # def is_emoji(uchar):
 #   return uchar in EJ.UNICODE_EMOJI
@@ -168,6 +168,16 @@ def read_pickle(path):
 def show_sorted_dict(dct, idx, lbl=''):
     for key, val in sorted(dct.items(), key=lambda dit: dit[idx].lower()):
         print("{} {} => {}".format(lbl, key, val))
+
+def add_preset_multiples(preset_dict):
+    '''Add preset word to multiple emoji mapping'''
+    preset_dict.update({
+        "crew"   : ['👦 👲🏽 👧🏿 👨 👦🏽'],
+        "husband": ['💑 👈', '💏 👈', '👩❤👨 ⬅'],
+        "eye'd"    : ["👁 '🇩"],
+        "I'd"    : ["👁 '🇩"],
+        'wife'   : ['👉 💑', '👉 💏', '➡ 👩❤👨'],
+    })
 
 def print_tagged(tagged):
     maxlen = [max(len(tag[0]), len(tag[1])) for tag in tagged]
@@ -660,17 +670,8 @@ class EmoTrans:
         txt_sent = self.textize_sentence(emo_sent)
         print("====> emo => txt (%s)" % txt_sent)
 
-
-def add_preset_multiples(preset_dict):
-    '''Add preset word to multiple emoji mapping'''
-    preset_dict.update({
-        "crew"   : ['👦 👲🏽 👧🏿 👨 👦🏽'],
-        "husband": ['💑 👈', '💏 👈', '👩❤👨 ⬅'],
-        "eye'd"    : ["👁 '🇩"],
-        "I'd"    : ["👁 '🇩"],
-        'wife'   : ['👉 💑', '👉 💏', '➡ 👩❤👨'],
-    })
-
+        dist = editdistance.eval(sentence, txt_sent)
+        print("edit distance: {:>5}".format(dist))
 
 def translate_sentences(options):
     '''Test translation from Enlish to emojis and back.'''
