@@ -31,10 +31,10 @@ EXAMPLES = [
     #    1  2   3  4  5  6     7  8   9    0   1
 ]
 
-
-###############################################################################
 # WORD_SEP_INTERIOR = r"',."
 WORD_SEP_INTERIOR = r"-',."
+
+###############################################################################
 RE_WORD_TOKEN = re.compile(r"((?:\w+[{}]\w*)+\w|\w+)".format(WORD_SEP_INTERIOR))
 
 def word_tokens(sentence):

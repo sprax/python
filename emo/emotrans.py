@@ -52,7 +52,8 @@ import text_regex
 from emo_test_data import SENTENCES
 # import sylcount
 
-DEFAULT_SENTENCE = '"Wind and waves may rock the boat," she said, "but only you can tip the crew!!"'
+DEFAULT_SENTENCE = '"Rocks and waves may rock the boat," she said, "but only you can tip the crew!!"'
+DEFAULT_SENTENCE = '"Rocks, paper, and scissors can rock, cut, or paper your hand," she said, "but you can\'t know when?!"'
 
 # def is_emoji(uchar):
 #   return uchar in EJ.UNICODE_EMOJI
