@@ -11,6 +11,20 @@ Plan:
             words => emojis
         words -> syllables
             sysllables -> emojis
+        words -> phonemes (possibly multiple phonemic decompositions)
+            phonemes combined across word boundaries into phrases for whole sentences (or just the untranslated parts)
+            match sublists of phonemes from sentences and emoji-to-word translations
+            recombine into sentences and/or objects that contain sentences and skeletons tracking original word boundaries
+
+    score and rank each (partial) translation
+    show top ranked (partial) translation(s)
+
+    Alternatively:
+        Score each partial translation when formed
+        Stop after a threshold is reached
+        Show top ranked translation(s)
+
+
 
 
         Syllabic:
