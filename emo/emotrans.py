@@ -4,8 +4,18 @@
 # # # coding: iso-8859-15
 '''
 Plan:
-    Words|phrases -> words >= [phonetic syllables reprs]
-    Emojis >= [phontic syllable reprs]
+        General sentence translation:
+    while not completely translated:
+        phrases => emojis
+        phrases -> words
+            words => emojis
+        words -> syllables
+            sysllables -> emojis
+
+
+        Syllabic:
+    Words|phrases -> words => [phonetic syllables reprs]
+    Emojis => [phontic syllable reprs]
     Text => <syllabic repr> => <emoji>
 '''
 
@@ -143,6 +153,19 @@ def read_pickle(path):
 def show_sorted_dict(dct, idx, lbl=''):
     for key, val in sorted(dct.items(), key=lambda dit: dit[idx].lower()):
         print("{} {} => {}".format(lbl, key, val))
+
+def print_tagged(tagged):
+    maxlen = [max(len(tag[0]), len(tag[1])) for tag in tagged]
+    # print(tagged)
+    print("++++> txt => tok (", end='')
+    for mxl, tup in zip(maxlen, tagged):
+        print("%*s" % (mxl, tup[0]), end=' ')
+    print(")")
+    print("++++> tok => pos (", end='')
+    for mxl, tup in zip(maxlen, tagged):
+        print("%*s" % (mxl, tup[1]), end=' ')
+    print(")")
+
 
 MAX_MULTI_EMO_LEN = 11
 MIN_SOLIT_EMO_LEN = 1
@@ -350,17 +373,7 @@ class EmoTrans:
 
         tokens = nltk.word_tokenize(sentence)
         tagged = nltk.pos_tag(tokens)
-        maxlen = [max(len(tag[0]), len(tag[1])) for tag in tagged]
-        # print(tagged)
-        print("++++> txt => tok (", end='')
-        for mxl, tup in zip(maxlen, tagged):
-            print("%*s" % (mxl, tup[0]), end=' ')
-        print(")")
-        print("++++> txt => pos (", end='')
-        for mxl, tup in zip(maxlen, tagged):
-            print("%*s" % (mxl, tup[1]), end=' ')
-        print(")")
-
+        print_tagged(tagged)
 
         emojize_match_bound = partial(self.emojize_match, space=space)
 
