@@ -397,9 +397,10 @@ class EmoTrans:
         print_tagged(tagged)
 
         subs = mid_translator(body)
-
+        #print("ESBME: mid(%s) ==> subs(%s): " % (body, subs))
         tend = self.emojize_token(end)
         if tend:
+            #print("ESBME: end(%s) ==> tend(%s): " % (end, tend)
             end = space + tend
         emo_tran = ''.join([beg, subs, end])
         return emo_tran
@@ -433,6 +434,17 @@ class EmoTrans:
             emo_phrase.append(dst)
         return emo_phrase
 
+
+    def emojize_text_split_join(self, text, space=' '):
+        '''
+        Deprecated somewhat: Phrase translation by emojize_phrase is lossy and not
+        reversible.  Characters lost in the split are genearlly
+        not restorable.  So round trips are not faithful.
+        '''
+        emo_list = self.emojize_phrase(text, space)
+        emo_join = space.join(emo_list)
+        return emo_join
+
     def emojize_sentence_split_join(self, sentence, space=' '):
         '''
         Split sentence into beginning, middle, and end, translate
@@ -441,15 +453,7 @@ class EmoTrans:
         reversible.  Characters lost in the split are genearlly
         not restorable.  So round trips are not faithful.
         '''
-        beg, body, end = text_regex.sentence_body_and_end(sentence)
-        if self.verbose > SHOW_TEXT_DIVISION:
-            print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
-        emo_list = self.emojize_phrase(txt_emo, body, space)
-        emo_join = space.join(emo_list)
-        emo_tran = ''.join([beg, emo_join, end])
-        if self.verbose > 5:
-            print("    %s ==>\n    %s\n" % (sentence, emo_tran))
-        return emo_tran
+        return self.emojize_sentence_beg_mid_end(sentence, self.emojize_text_split_join, space)
 
     def is_emoji_chr(self, uchr):
         '''Is uchr an emoji or any part of an emoji (modifier)?'''
@@ -633,19 +637,23 @@ class EmoTrans:
                 txt_sent += emo_span
         return txt_sent
 
-    def emojize_sentence_subs(self, sentence):
-        return self.emojize_sentence_beg_mid_end(sentence, self.emojize_text_subs)
+    def emojize_sentence_subs(self, sentence, space=' '):
+        '''translate text sentence to emojis using regex substitution'''
+        return self.emojize_sentence_beg_mid_end(sentence, self.emojize_text_subs, space)
 
     def emojize_sentence(self, sentence):
+        '''translate text sentence to emojis according to options'''
         if self.options.split_join:
             return self.emojize_sentence_split_join(sentence)
         else:
             return self.emojize_sentence_subs(sentence)
 
     def textize_sentence(self, sentence):
+        '''translate emoji sentence to text according to options'''
         return self.textize_sentence_subs(sentence)
 
     def translate_sentence_to_emo_and_back(self, sentence):
+        '''translate text sentence to emoji and back, showing stages according to options'''
         print("====> src => txt (%s)" % sentence)
         emo_sent = self.emojize_sentence(sentence)
         print("====> txt => emo (%s)" % emo_sent)
