@@ -52,6 +52,7 @@ import text_regex
 from emo_test_data import SENTENCES
 # import sylcount
 
+DEFAULT_SENTENCE = "Wind and waves may rock the boat, but only you can tip the crew."
 
 # def is_emoji(uchar):
 #   return uchar in EJ.UNICODE_EMOJI
@@ -180,6 +181,8 @@ def print_tagged(tagged):
         print("%*s" % (mxl, tup[1]), end=' ')
     print(")")
 
+TOKENIZER_NOT_NON_WORD = 1
+TOKENIZER_WORD_EXTENDED = 2
 
 MAX_MULTI_EMO_LEN = 11
 MIN_SOLIT_EMO_LEN = 1
@@ -378,9 +381,13 @@ class EmoTrans:
         word = match_obj.group()
         return self.emojize_word(word, space)
 
-    def emojize_sentence_subs(self, sentence, space=' '):
-        '''Translate sentence word by word to emojis, where
-        possible, using regex substitution.'''
+
+    def emojize_sentence_beg_mid_end(self, sentence, mid_translator, space=' '):
+        ''' Segment sentence into beg, mid, and end, translate each, then recombine, where:
+            beg = chars before any words
+            end = chars after all words
+            mid = everthing between beg and end.
+        '''
         beg, body, end = text_regex.sentence_body_and_end(sentence)
         if self.verbose > SHOW_TEXT_DIVISION:
             print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
@@ -389,17 +396,27 @@ class EmoTrans:
         tagged = nltk.pos_tag(tokens)
         print_tagged(tagged)
 
-        emojize_match_bound = partial(self.emojize_match, space=space)
-
-        # TODO: Determine which is better:
-        # subs = text_regex.replace_words_extended(emojize_match_bound, body)
-        subs = text_regex.replace_non_non_words(emojize_match_bound, body)
+        subs = mid_translator(body)
 
         tend = self.emojize_token(end)
         if tend:
             end = space + tend
         emo_tran = ''.join([beg, subs, end])
         return emo_tran
+
+    def emojize_text_subs(self, text, space=' '):
+        '''
+        Translate text word by word to emojis, where possible, using regex substitution.
+        Intenting text to be the body of a sentence: the part between any leading or trailing punctuation.
+        '''
+        emojize_match_bound = partial(self.emojize_match, space=space)
+
+        # TODO: Determine the best tokenizer(s).
+        if self.options.tokenizer == TOKENIZER_WORD_EXTENDED:
+            subs = text_regex.replace_words_extended(emojize_match_bound, text)
+        else:
+            subs = text_regex.replace_non_non_words(emojize_match_bound, text)
+        return subs
 
     def emojize_phrase(self, txt_phrase, space=' '):
         '''
@@ -616,11 +633,23 @@ class EmoTrans:
                 txt_sent += emo_span
         return txt_sent
 
-    def emo_trans_sentence(self, sentence):
+    def emojize_sentence_subs(self, sentence):
+        return self.emojize_sentence_beg_mid_end(sentence, self.emojize_text_subs)
+
+    def emojize_sentence(self, sentence):
+        if self.options.split_join:
+            return self.emojize_sentence_split_join(sentence)
+        else:
+            return self.emojize_sentence_subs(sentence)
+
+    def textize_sentence(self, sentence):
+        return self.textize_sentence_subs(sentence)
+
+    def translate_sentence_to_emo_and_back(self, sentence):
         print("====> src => txt (%s)" % sentence)
-        emo_sent = self.emojize_sentence_subs(sentence)
+        emo_sent = self.emojize_sentence(sentence)
         print("====> txt => emo (%s)" % emo_sent)
-        txt_sent = self.textize_sentence_subs(emo_sent)
+        txt_sent = self.textize_sentence(emo_sent)
         print("====> emo => txt (%s)" % txt_sent)
 
 
@@ -635,7 +664,7 @@ def add_preset_multiples(preset_dict):
     })
 
 
-def test_emo_tuples(options):
+def translate_sentences(options):
     '''Test translation from Enlish to emojis and back.'''
     emotrans = EmoTrans(options)
     txt_emo = emotrans.txt_emo
@@ -644,14 +673,17 @@ def test_emo_tuples(options):
         show_sorted_dict(txt_emo, 0)
     if options.emo_txt:
         show_sorted_dict(emo_txt)
+    if options.sentence:
+        emotrans.translate_sentence_to_emo_and_back(options.sentence)
+        exit(0)
 
     for sentence in SENTENCES:
-        emotrans.emo_trans_sentence(sentence)
+        emotrans.translate_sentence_to_emo_and_back(sentence)
         print()
 
     if options.text_file:
         for sentence in text_fio.read_text_lines(options.text_file, options.charset):
-            emotrans.emo_trans_sentence(sentence)
+            emotrans.translate_sentence_to_emo_and_back(sentence)
 
 def main():
     '''test english -> emoji translation'''
@@ -662,6 +694,8 @@ def main():
                         help='use addition and subtraction of letters or syllables (rebus)')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
+    parser.add_argument('-input', dest='sentence', type=str, nargs='?', default=None,
+                        const=DEFAULT_SENTENCE, help='input a sentence to translate (or use default)')
     parser.add_argument('-emo_txt', action='store_true',
                         help='show the emoji-to-text mapping')
     parser.add_argument('-flags', action='store_true',
@@ -677,9 +711,15 @@ def main():
     parser.add_argument('-random', action='store_true',
                         help='Choose random emojis or words from translation lists '
                                 '(instead of always choosing the first)')
+    parser.add_argument('-split_join', '-sj', action='store_true',
+                        help='translate using split and join (irreversible because destructive), '
+                                'not substitution (conservative)')
     parser.add_argument('-text_file', dest='text_file', type=str, nargs='?',
                         const='quotations.txt', default=None,
                         help='translate sentences from this text_file')
+    parser.add_argument('-tokenizer', type=int, nargs='?',
+                        const=TOKENIZER_WORD_EXTENDED, default=TOKENIZER_NOT_NON_WORD,
+                        help='specify tokenizer as: 1=NOT_NON_WORD, 2=WORD_EXTENDED')
     parser.add_argument('-txt_emo', action='store_true',
                         help='show the text-to-emoji mapping')
     parser.add_argument('-usable', action='store_true',
@@ -691,7 +731,7 @@ def main():
     # if args.verbose > 7:
     #     print("module emoji:", EJ)
 
-    test_emo_tuples(args)
+    translate_sentences(args)
 
 if __name__ == '__main__':
     start_time = time.time()
