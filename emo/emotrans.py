@@ -1,4 +1,4 @@
-emo_list#!/usr/bin/env python3
+textize_emo_list_from_endemo_list#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 # # # coding: iso-8859-15
@@ -546,7 +546,53 @@ class EmoTrans:
         word = random.choice(word_calcs) if self.options.random else word_calcs[0]
         return [word]
 
-    def textize_emo_span_from_end(self, emo_span, emo_list=None, list_idx=None, prev_words=None):
+
+    def textize_emo_span_from_end_old(self, emo_span, prev_words=None):
+        '''
+        Recursively divide a string of emoji chars into a string of words, backing up greedily
+        from the end.  The string (or "span") of emoji chars may contain spaces
+        Returns a string with spaces inserted between the words, or None if the parse fails.
+        '''
+        if  self.verbose > SHOW_TEXT_DIVISION:
+            print("TESFE A:  span({})  prev_words({})".format(emo_span, prev_words))
+
+        # If the this (whole or remaining) span can be parsed as a single emoji with an (English)
+        # translation, just return it, concatenated with any words already parsed.
+        emo_span = emo_span.rstrip()
+        try:
+            # if emo_span[-1] == space:
+            #     lst = self.emo_txt[emo_span[0:-1]]
+            # else:
+            #     lst = self.emo_txt[emo_span]
+            word_calcs = self.emo_txt[emo_span]
+            if self.verbose > 5:
+                print("TESFE B: {} => {}".format(emo_span, word_calcs))
+            return self.append_to_prev_list(word_calcs, prev_words)
+        except KeyError:
+            # Else divide the string into two parts, and if the 2nd part is a word, keep going.
+            # Use min and max word lengths to skip checking substrings that cannot be words.
+            max_index = len(emo_span)
+            min_index = max_index - MAX_MULTI_EMO_LEN
+            if  min_index < 0:
+                min_index = 0
+            max_index -= MIN_SOLIT_EMO_LEN
+            while max_index >= min_index:
+                substr = emo_span[max_index:]
+                word_calcs = self.emo_txt.get(substr, [])
+                if self.verbose > SHOW_TEXT_DIVISION:
+                    print("while min({})  max({})  substr({})  calcs({})".format(min_index, max_index, substr, word_calcs))
+                if len(word_calcs) > 0:
+                    txt = self.append_to_prev_list(word_calcs, prev_words)
+                    if self.verbose > SHOW_TEXT_DIVISION:
+                        print("TESFE D: Calling textize_emo_span_from_end_old({}, {})".format(emo_span[0:max_index], txt))
+                    more_words = self.textize_emo_span_from_end_old(emo_span[0:max_index], txt)
+                    if more_words:
+                        return more_words
+                max_index -= 1
+        return None          # string did not parse
+
+
+    def textize_emo_list_from_end(self, emo_span, emo_list=None, list_idx=None, prev_words=None):
         '''
         Recursively divide a string of emoji chars into a string of words, backing up greedily
         from the end.  Consuming the string in reverse simplies the parsing of modifiers: they
@@ -582,13 +628,20 @@ class EmoTrans:
                 if len(word_calcs) > 0:
                     txt_list = self.append_to_prev_list(emo_list, list_idx, word_calcs, prev_words)
                     if self.verbose > SHOW_TEXT_DIVISION:
-                        print("TESFE D: Calling textize_emo_span_from_end({}, {}, {})".format(emo_list, list_idx, txt_list))
-                    more_words = self.textize_emo_span_from_end(emo_span, emo_list, list_idx, txt_list)
+                        print("TESFE D: Calling textize_emo_list_from_end({}, {}, {})".format(emo_list, list_idx, txt_list))
+                    more_words = self.textize_emo_list_from_end(emo_span, emo_list, list_idx, txt_list)
                     if more_words:
                         return more_words
                 list_idx -= 1
         return None          # string did not parse
 
+    def textize_emo_span(emo_span, space=' '):
+        try:
+            txt = emo_txt[emo_span]:
+            return txt or something
+        except KeyError:
+            emo_list = emo_span.split(space)
+            txt_list = self.textize_emo_list_from_end(emo_list, list_idx)
 
     def textize_sentence_subs(self, emo_sent, space=' '):
         '''
@@ -606,7 +659,7 @@ class EmoTrans:
                 emo_span += uchr
                 emo_prev = None
             elif emo_span:
-                txt_list = self.textize_emo_span_from_end(emo_span)
+                txt_list = self.textize_emo_span(emo_span)
                 if txt_list:
                     txt_list.reverse()
                     if self.verbose > SHOW_LIST_VALUES:
@@ -632,7 +685,7 @@ class EmoTrans:
                 txt_sent += uchr
                 first = False
         if emo_span:
-            txt_list = self.textize_emo_span_from_end(emo_span)
+            txt_list = self.textize_emo_span(emo_span)
             if txt_list:
                 txt_list.reverse()
                 txt_join = space.join(txt_list)
