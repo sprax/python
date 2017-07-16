@@ -101,11 +101,11 @@ EMO_SYNONYMS = {}
 
 def emo_synonyms(word):
     '''
-    TODO: replace with real synonyms from a dedicated class
-    FIXME: if word is not already all lower case, put both
-    the orignal word and its lowered form in the list of
-    synonyms, so as to match proper names.  (Custom emojis,
-    syllabified names.)
+    TODO: replace with real synonyms from a dedicated class.
+    If word is not already all lower case, put both the orignal
+    (partially capitalized) word and its all-lower-cased form in
+    the list of synonyms, so as to match proper names.
+    (Custom emojis, syllabified names.)
     '''
     syns = [word]
     try:
@@ -470,17 +470,12 @@ class EmoTrans:
         return self.emojize_sentence_beg_mid_end(sentence, self.emojize_text_split_join, space)
 
     def is_emoji_chr(self, uchr):
-        '''Is uchr an emoji or any part of an emoji (modifier)?'''
+        '''Is uchr an emoji or any part of an emoji (as in a modifier)?'''
         return self.emo_chr_counts[uchr]
 
-    def is_emoji_chr_bad(self, uchr):
-        '''FIXME: optimize?  use RE?'''
-        lst = self.emo_txt[uchr]
-        if len(lst) > 0:
-            return True
-        # if is_emoji(uchr):
-        #     return True
-        return False
+    def is_emoji_key(self, uchr):
+        '''Is uchr a key in the emoji to text translation table?'''
+        return uchr in self.emo_txt
 
     def textize_emo_span_recurse_busted(self, emo_span):
         '''FIXME: busted.  translate a string or slice of emojis into a text string'''
@@ -620,7 +615,8 @@ class EmoTrans:
             # Special case: reduplication
             if old_emos == emo_str:
                 calc = txt_list[-1]
-                # FIXME: Test should not be is this calc singular, but is there any calc for the emo that is singular.
+                # FIXME TODO NEXT: Test should not be is this calc singular,
+                # but is there any calc for the emo that is singular.
                 if self.is_singular_noun(calc):
                     txt_list[-1] = pluralize(calc)
                 else:
@@ -681,9 +677,9 @@ class EmoTrans:
     def textize_sentence_subs(self, emo_sent, space=' '):
         '''
         return text with each emoji replaced by a value from emo_txt.
-        FIXME: emoji combinations representing a single word will not translate
-        back to the orignal word, but turn into a word combination calc, which
-        may be gibberish or worse.
+        FIXME: emoji combinations representing a single word will not always
+        translate back to the orignal word, but turn into a word combination
+        calc, which may be gibberish or worse.
         '''
         txt_sent, emo_span, emo_prev, first = '', '', None, True
         for uchr in emo_sent:
