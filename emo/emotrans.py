@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+emo_list#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 # # # coding: iso-8859-15
@@ -53,7 +53,8 @@ from emo_test_data import SENTENCES
 # import sylcount
 
 DEFAULT_SENTENCE = '"Rocks and waves may rock the boat," she said, "but only you can tip the crew!!"'
-DEFAULT_SENTENCE = '"Rocks, paper, and scissors can rock, cut, or paper your hand," she said, "but you can\'t know when?!"'
+DEFAULT_SENTENCE = '"Rocks, paper, and scissors can rock, cover, or cut your hand," she said, "but you can\'t know when!!"'
+DEFAULT_SENTENCE = '"Rocks and paper!!"'
 
 # def is_emoji(uchar):
 #   return uchar in EJ.UNICODE_EMOJI
@@ -195,7 +196,7 @@ def print_tagged(tagged):
 TOKENIZER_NOT_NON_WORD = 1
 TOKENIZER_WORD_EXTENDED = 2
 
-MAX_MULTI_EMO_LEN = 11
+MAX_MULTI_EMO_LEN = 8
 MIN_SOLIT_EMO_LEN = 1
 
 # Verbosity levels:
@@ -545,18 +546,22 @@ class EmoTrans:
         word = random.choice(word_calcs) if self.options.random else word_calcs[0]
         return [word]
 
-    def textize_emo_span_from_end(self, emo_span, prev_words=None):
+    def textize_emo_span_from_end(self, emo_span, emo_list=None, list_idx=None, prev_words=None):
         '''
         Recursively divide a string of emoji chars into a string of words, backing up greedily
-        from the end.  The string (or "span") of emoji chars may contain spaces
+        from the end.  Consuming the string in reverse simplies the parsing of modifiers: they
+        can be ignored until a root character is reached.
+        The string (or "span") of emoji chars may contain spaces
         Returns a string with spaces inserted between the words, or None if the parse fails.
         '''
         if  self.verbose > SHOW_TEXT_DIVISION:
-            print("TESFE A:  span({})  prev_words({})".format(emo_span, prev_words))
+            print("TESFE A:  span({})  list{}  idx:{}  words{}".format(emo_span, emo_list, list_idx, prev_words))
 
         # If the this (whole or remaining) span can be parsed as a single emoji with an (English)
         # translation, just return it, concatenated with any words already parsed.
-        emo_span = emo_span.rstrip()
+        if  emo_list == None:
+            emo_list = emo_span.split()
+            list_idx = len(emo_list) - 1
         try:
             # if emo_span[-1] == space:
             #     lst = self.emo_txt[emo_span[0:-1]]
@@ -565,28 +570,23 @@ class EmoTrans:
             word_calcs = self.emo_txt[emo_span]
             if self.verbose > 5:
                 print("TESFE B: {} => {}".format(emo_span, word_calcs))
-            return self.append_to_prev_list(word_calcs, prev_words)
+            return self.append_to_prev_list(emo_list, list_idx, word_calcs, prev_words)
         except KeyError:
             # Else divide the string into two parts, and if the 2nd part is a word, keep going.
             # Use min and max word lengths to skip checking substrings that cannot be words.
-            max_index = len(emo_span)
-            min_index = max_index - MAX_MULTI_EMO_LEN
-            if  min_index < 0:
-                min_index = 0
-            max_index -= MIN_SOLIT_EMO_LEN
-            while max_index >= min_index:
-                substr = emo_span[max_index:]
-                word_calcs = self.emo_txt.get(substr, [])
+            while list_idx >= 0:
+                emo_str = emo_list[list_idx]
+                word_calcs = self.emo_txt.get(emo_str, [])
                 if self.verbose > SHOW_TEXT_DIVISION:
-                    print("while min({})  max({})  substr({})  calcs({})".format(min_index, max_index, substr, word_calcs))
+                    print("while idx({})  emo_str({})  calcs({})".format(list_idx, emo_str, word_calcs))
                 if len(word_calcs) > 0:
-                    txt = self.append_to_prev_list(word_calcs, prev_words)
+                    txt_list = self.append_to_prev_list(emo_list, list_idx, word_calcs, prev_words)
                     if self.verbose > SHOW_TEXT_DIVISION:
-                        print("TESFE D: Calling textize_emo_span_from_end({}, {})".format(emo_span[0:max_index], txt))
-                    more_words = self.textize_emo_span_from_end(emo_span[0:max_index], txt)
+                        print("TESFE D: Calling textize_emo_span_from_end({}, {}, {})".format(emo_list, list_idx, txt_list))
+                    more_words = self.textize_emo_span_from_end(emo_span, emo_list, list_idx, txt_list)
                     if more_words:
                         return more_words
-                max_index -= 1
+                list_idx -= 1
         return None          # string did not parse
 
 

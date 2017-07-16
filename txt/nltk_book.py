@@ -177,7 +177,8 @@ def join_tokenized(tokens):
 
 def generate_cfd_max(cfdist, word, length=15):
     '''Generate sequence of up to length words,
-    maximizing bigram frequency, duplicate words OK.'''
+    maximizing bigram frequency as measured by CFD=Conditional Frequency Distribution.
+    Duplicate words are allowed.'''
     words = [word]
     for _ in range(length):
         word = cfdist[word].max()

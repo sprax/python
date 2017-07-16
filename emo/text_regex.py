@@ -67,13 +67,29 @@ def replace_non_non_words(rep_func, text_phrase):
 WORD_SEP_EXTERIOR = r'!"#$%&()*+./:;<=>?@[\]^_`{|}~\x82\x83\x84\x85\x86\x87\x88\x89' \
                     r'\x8a\x8b\x8c\x8d\x8e\x8f\x90\x91\x92\x93\x94\x95\x96\x97\x98\x99'
 
-RE_WORD_SEP = re.compile(r"(?:\s+[{}]+\s*|\s*[{}]+\s+|[{}]*[\s{}]+|\s+)".format(
-    WORD_SEP_INTERIOR, WORD_SEP_INTERIOR, WORD_SEP_INTERIOR, WORD_SEP_EXTERIOR))
+RE_WORD_SEP_PATTERN = r"\s+[{}]+\s*|\s*[{}]+\s+|[{}]*[\s{}]+|\s+".format(
+    WORD_SEP_INTERIOR, WORD_SEP_INTERIOR, WORD_SEP_INTERIOR, WORD_SEP_EXTERIOR)
 
-def word_splits(sentence_body):
-    splits = RE_WORD_SEP.split(sentence_body)
+RE_WORD_SPLITTER = re.compile(r"(?:{})".format(RE_WORD_SEP_PATTERN))
+
+RE_WORD_SEPARATOR = re.compile(r"({})".format(RE_WORD_SEP_PATTERN))
+
+def words_split_out(sentence_body):
+    splits = RE_WORD_SPLITTER.split(sentence_body)
     return [ss for ss in splits if len(ss) > 0]
 
+def words_and_separaters(sentence_body):
+    separated = RE_WORD_SEP_PATTERN.findall(sentence_body)
+    return [ss for ss in separated if len(ss) > 0]
+
+def gen_words_and_separaters(sentence_body):
+    separated = RE_WORD_SEP_PATTERN.finditer(sentence_body)
+    for ss in separated:
+        if len(ss) > 0:
+            yield ss
+
+
+###############################################################################
 RE_SENTENCE_ENDS = re.compile(r"(\w.*)\b(?=\W*$)")
 
 def sentence_body_and_end(sentence):
@@ -120,7 +136,7 @@ def main():
         print("MANUAL", words, sentence)
         tokens = word_tokens(sentence)
         print("TOKENS", len(tokens), tokens)
-        swords = word_splits(sentence)
+        swords = words_split_out(sentence)
         print("SPLITS", len(swords), swords)
         nuwrds = notnonword_tokens(sentence)
         print("NOTUNS", len(nuwrds), nuwrds)
