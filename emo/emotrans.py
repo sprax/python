@@ -83,7 +83,7 @@ def trans():
     words = re.split(r'\W+', sent.rstrip())
     print(words)
     for word in words:
-        print("{} => {}".format(word, getsyl(wtsl, word)))
+        print("{} --> {}".format(word, getsyl(wtsl, word)))
 
 def char(i):
     try:
@@ -169,7 +169,7 @@ def read_pickle(path):
 
 def show_sorted_dict(dct, idx, lbl=''):
     for key, val in sorted(dct.items(), key=lambda dit: dit[idx].lower()):
-        print("{} {} => {}".format(lbl, key, val))
+        print("{}  {} => {}".format(lbl, key, val))
 
 def add_preset_multiples(preset_dict):
     '''Add preset word to multiple emoji mapping'''
@@ -203,8 +203,9 @@ MIN_SOLIT_EMO_LEN = 1
 SHOW_TOKEN_TRANS = 3
 SHOW_LIST_VALUES = 4
 SHOW_TEXT_BUILDERS = 5
-SHOW_TEXT_DIVISION = 6
-SHOW_USABLE_EMOJIS = 7
+SHOW_NOUN_SINGPLUR = 6
+SHOW_TEXT_DIVISION = 7
+SHOW_USABLE_EMOJIS = 8
 
 class EmoTrans:
     def __init__(self, options):
@@ -261,7 +262,7 @@ class EmoTrans:
                     txt_emo[txt].append(emo)
                 except KeyError:
                     txt_emo[txt] = [emo]
-                # print("txt(%s) => emo( %s )" % (txt, tt[i_unchr]))
+                # print("txt(%s) --> emo( %s )" % (txt, tt[i_unchr]))
         return txt_emo
 
     def gen_emo_to_txt(self, presets):
@@ -285,11 +286,11 @@ class EmoTrans:
         '''reverse of gen_txt_to_emo: map each emoji to a list of word-phrases'''
         emo_txt = {}
         for txt, lst in sorted(self.txt_emo.items()):
-            # print("emo_txt 1: {} => {}".format(txt, lst))
+            # print("emo_txt 1: {} -:> {}".format(txt, lst))
             for emo in lst:
                 emo_txt[emo].append(txt)
                 if self.verbose > 1:
-                    print("emo_txt 3: {} => {}".format(emo, txt))
+                    print("emo_txt 3: {} --> {}".format(emo, txt))
         return emo_txt
 
 
@@ -319,18 +320,19 @@ class EmoTrans:
         it is meant to match an all lower-case key, the token
         must already be itself all lower-case.
         TODO: make protected ?
+        TODO: return token instead of None ?
         '''
         try:
             lst = self.txt_emo[token]
             if self.verbose > SHOW_LIST_VALUES:
-                print("ET: {} => {}".format(token, lst))
+                print("ET: {} -:> {}".format(token, lst))
         except KeyError:
             if self.verbose > SHOW_TOKEN_TRANS:
-                print("ET: {} => {}".format(token, token))
+                print("ET: {} -:> {}".format(token, None))
             return None
         emo = random.choice(lst) if self.options.random else lst[0]
         if self.verbose > SHOW_TOKEN_TRANS:
-            print("ET: {} => {}".format(token, emo))
+            print("ET: {} :-> {}".format(token, emo))
         return emo
 
     def emo_or_txt_token(self, token):
@@ -354,12 +356,12 @@ class EmoTrans:
         '''
         synonyms = emo_synonyms(src_word)
         if self.verbose > SHOW_LIST_VALUES:
-            print("EW SYNOMS:", synonyms)
+            print("EW SYNONYMS: {} -:> {}".format(src_word, synonyms))
         for word in synonyms:
             emojis = self.emojize_token(word)
             if emojis:
                 if self.verbose > SHOW_TOKEN_TRANS:
-                    print("EW  TOKEN: {} => {}".format(word, emojis))
+                    print("EW  TOKEN: {} -:> {}".format(word, emojis))
                 return emojis + space
             if self.options.pluralize:
                 if self.is_plural_noun(word):
@@ -368,8 +370,8 @@ class EmoTrans:
                         emojis = self.emojize_token(singular)
                         if emojis:
                             emostr = emojis + space + emojis + space
-                            if self.verbose > SHOW_TOKEN_TRANS:
-                                print("EW PLURAL: {} => {}".format(word, emostr))
+                            if self.verbose > SHOW_NOUN_SINGPLUR:
+                                print("EW PLURAL: {} --> {}".format(word, emostr))
                             return emostr
                 # At least when subtraction is allowed, lip == lips - S ~= <kiss> - S == 💋 - S == 💋 <-> <S>
                 # NB: Not elif, because some nouns can be either singular and plural, e.g. fish, sheep, dice,
@@ -380,8 +382,8 @@ class EmoTrans:
                         emojis = self.emojize_token(plural)
                         if emojis:
                             emostr = emojis + self.minus_s_emo()
-                            if self.verbose > SHOW_TOKEN_TRANS:
-                                print("EW SINGLE: {} => {}".format(word, emostr))
+                            if self.verbose > SHOW_NOUN_SINGPLUR:
+                                print("EW SINGLE: {} --> {}".format(word, emostr))
                             return emostr
         hyphenated = src_word.split('-')
         if len(hyphenated) > 1:
@@ -409,10 +411,10 @@ class EmoTrans:
         print_tagged(tagged)
 
         subs = mid_translator(body)
-        #print("ESBME: mid(%s) ==> subs(%s): " % (body, subs))
+        #print("ESBME: mid(%s) --> subs(%s): " % (body, subs))
         tend = self.emojize_token(end)
         if tend:
-            #print("ESBME: end(%s) ==> tend(%s): " % (end, tend)
+            #print("ESBME: end(%s) --> tend(%s): " % (end, tend)
             end = space + tend
         emo_tran = ''.join([beg, subs, end])
         return emo_tran
@@ -487,7 +489,7 @@ class EmoTrans:
         try:
             lst = self.emo_txt[emo_span]
             if self.verbose > 1:
-                print("TES: {} => {}".format(emo_span, lst))
+                print("TES: {} -:> {}".format(emo_span, lst))
             txt = random.choice(lst) if self.options.random else lst[0]
             return txt
         except KeyError:
@@ -504,7 +506,7 @@ class EmoTrans:
             try:
                 lst = self.emo_txt[uchr]
                 if self.verbose > 1:
-                    print("TES: {} => {}".format(uchr, lst))
+                    print("TES: {} -:> {}".format(uchr, lst))
                 txt = random.choice(lst) if self.options.random else lst[0]
                 text += txt
                 prev = True
@@ -541,7 +543,7 @@ class EmoTrans:
                             return prev_words
                 prev_words.append(word)
                 if self.verbose > 7:
-                    print("append_to_prev_list:  ({})  => ({})".format(word, prev_words))
+                    print("append_to_prev_list:  ({})  -:> ({})".format(word, prev_words))
                 return prev_words
         word = random.choice(word_calcs) if self.options.random else word_calcs[0]
         return [word]
@@ -576,8 +578,8 @@ class EmoTrans:
             #     lst = self.emo_txt[emo_span]
             word_calcs = self.emo_txt[emo_span]
             if self.verbose > 5:
-                print("TESFE B: {} => {}".format(emo_span, word_calcs))
-            return self.append_to_prev_list(word_calcs, prev_words)
+                print("TESFE B: {} -:> {}".format(emo_span, word_calcs))
+            return self.append_to_prev_list(word_calcs, prev_words).reverse()
         except KeyError:
             # Else divide the string into two parts, and if the 2nd part is a word, keep going.
             # Use min and max word lengths to skip checking substrings that cannot be words.
@@ -602,7 +604,7 @@ class EmoTrans:
         return emo_span          # string did not parse
 
 
-    def textize_emo_list(self, emo_list):
+    def textize_emo_list(self, emo_list, space=' '):
         '''
         Try to translate each emoji or string of several emojis into a list of strings,
         each one representing words or phrases.  If no translation is found for an item
@@ -614,20 +616,50 @@ class EmoTrans:
 
         txt_list = []           # output
         old_emos = None         # to detect reduplication
-        for emo_str in emo_list:
+        for idx, emo_str in enumerate(emo_list):
+            # Special case: reduplication
             if old_emos == emo_str:
                 calc = txt_list[-1]
                 # FIXME: Test should not be is this calc singular, but is there any calc for the emo that is singular.
                 if self.is_singular_noun(calc):
                     txt_list[-1] = pluralize(calc)
-                    continue
-            old_emos = emo_str
+                else:
+                    txt_list.append(calc)
+                continue
+            # Special case: singularization using "<minus><S>" (➖ 🇸)
+            elif idx > 1 and emo_str == '🇸' and old_emos == '➖':
+                all_calcs = self.emo_txt.get(emo_list[idx - 2])
+                old_emos = emo_str
+                if all_calcs:   # could be None if we didn't forward translate the txt to emo
+                    sing_calcs = []
+                    for calc in all_calcs:
+                        all_words = calc.split()
+                        last_word = all_words[-1]
+                        if self.is_plural_noun(last_word):
+                            sing_calcs.append(all_words)
+                    if sing_calcs:
+                        sing_words = random.choice(sing_calcs) if self.options.random else sing_calcs[0]
+                        sing_last = singularize(sing_words[-1])
+                        if len(sing_words) > 1:
+                            sing_words[-1] = sing_last
+                            sing_calc = space.join(sing_words)
+                        else:
+                            sing_calc = sing_last
+                        if self.verbose > SHOW_NOUN_SINGPLUR:
+                            print("TEL SING:  list{}  prev{} ::> sing{}  old({})  now({}) -> ({})".format(
+                                    emo_list, all_calcs, sing_calcs, old_emos, emo_str, sing_calc))
+                        txt_list[-2] = sing_calc
+                        txt_list.pop()  # truncate list by popping off the calc for <-> ('➖')
+                        continue
+
+            else:
+                old_emos = emo_str
             try:
                 # Is the whole emo_str a key?
                 word_calcs = self.emo_txt[emo_str]
                 calc = random.choice(word_calcs) if self.options.random else word_calcs[0]
                 if self.verbose > SHOW_LIST_VALUES:
-                    print("TEL emo_txt: {} => {} -> ({})".format(emo_str, word_calcs, calc))
+                    print("TEL emo_txt: {} -:> {} --> ({})".format(emo_str, word_calcs, calc))
                 txt_list.append(calc)
             except KeyError:
                 # Else divide the string recursively into parts, and try to tranlate each part.
@@ -664,12 +696,11 @@ class EmoTrans:
             elif emo_span:
                 txt_list = self.textize_emo_span(emo_span)
                 if txt_list:
-                    txt_list.reverse()
                     if self.verbose > SHOW_LIST_VALUES:
                         print("TSS list: {}".format(txt_list))
                     txt_join = space.join(txt_list)
                     if self.verbose > SHOW_TOKEN_TRANS:
-                        print("TSS REBUS: {} => {}".format(emo_span, txt_join))
+                        print("TSS REBUS: {} --> {}".format(emo_span, txt_join))
                     if first:
                         txt_sent += txt_join.capitalize()
                         first = False
@@ -690,12 +721,11 @@ class EmoTrans:
         if emo_span:
             txt_list = self.textize_emo_span(emo_span)
             if txt_list:
-                txt_list.reverse()
                 txt_join = space.join(txt_list)
                 if self.verbose > SHOW_LIST_VALUES:
                     print("TSS list: {}".format(txt_list))
                 if self.verbose > SHOW_TOKEN_TRANS:
-                    print("TSS REBUS: {} => {}".format(emo_span, txt_join))
+                    print("TSS REBUS: {} --> {}".format(emo_span, txt_join))
                 if txt_list[0].isalnum():
                     txt_sent = txt_sent + txt_join
                 else:
@@ -728,7 +758,7 @@ class EmoTrans:
         print("====> emo => txt (%s)" % txt_sent)
 
         dist = editdistance.eval(sentence, txt_sent)
-        print("edit distance: {:>5}".format(dist))
+        print("Edit distance: {:>4}".format(dist))
 
 def translate_sentences(options):
     '''Test translation from Enlish to emojis and back.'''
