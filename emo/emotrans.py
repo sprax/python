@@ -617,6 +617,7 @@ class EmoTrans:
         for emo_str in emo_list:
             if old_emos == emo_str:
                 calc = txt_list[-1]
+                # FIXME: Test should not be is this calc singular, but is there any calc for the emo that is singular.
                 if self.is_singular_noun(calc):
                     txt_list[-1] = pluralize(calc)
                     continue
