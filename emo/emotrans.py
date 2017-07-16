@@ -1,4 +1,4 @@
-textize_emo_list_from_endemo_list#!/usr/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 # # # coding: iso-8859-15
@@ -547,18 +547,28 @@ class EmoTrans:
         return [word]
 
 
-    def textize_emo_span_from_end_old(self, emo_span, prev_words=None):
+    def textize_emo_span_from_end(self, emo_span, prev_words=None):
         '''
-        Recursively divide a string of emoji chars into a string of words, backing up greedily
-        from the end.  The string (or "span") of emoji chars may contain spaces
-        Returns a string with spaces inserted between the words, or None if the parse fails.
+        Try to translate a string of emoji chars into a string of English text
+        by recursively dividing the string of emoji chars (or "emo_span") into
+        a sequence of whole emojis, backing up greedily from the end, and
+        translating each one individually.  The string  (or "span") as a whole
+        should have already been tried as one key, and it  should not contain
+        any spaces.  Going backward from the end simplifies the parsing of
+        complex emojis, because appended modifiers can be passed over as found.
+        Still, some modifiers are whole emojis in their own right.
+        This inherent ambiguity may lead to poor translations.
+        Returns a single string containing one word or a phrase of words
+        separated by single spaces.  If no emoji to text translation is found,
+        the original span is returned as-is.
         '''
         if  self.verbose > SHOW_TEXT_DIVISION:
             print("TESFE A:  span({})  prev_words({})".format(emo_span, prev_words))
+        # emo_span = emo_span.rstrip() -- should no longer need (or want) to strip.
 
-        # If the this (whole or remaining) span can be parsed as a single emoji with an (English)
-        # translation, just return it, concatenated with any words already parsed.
-        emo_span = emo_span.rstrip()
+        # If the this (whole or remaining) span can be parsed as a single emoji
+        # with an (English) translation, just return it, concatenated with any
+        # words already parsed.
         try:
             # if emo_span[-1] == space:
             #     lst = self.emo_txt[emo_span[0:-1]]
@@ -584,64 +594,56 @@ class EmoTrans:
                 if len(word_calcs) > 0:
                     txt = self.append_to_prev_list(word_calcs, prev_words)
                     if self.verbose > SHOW_TEXT_DIVISION:
-                        print("TESFE D: Calling textize_emo_span_from_end_old({}, {})".format(emo_span[0:max_index], txt))
-                    more_words = self.textize_emo_span_from_end_old(emo_span[0:max_index], txt)
+                        print("TESFE D: Calling textize_emo_span_from_end({}, {})".format(emo_span[0:max_index], txt))
+                    more_words = self.textize_emo_span_from_end(emo_span[0:max_index], txt)
                     if more_words:
                         return more_words
                 max_index -= 1
-        return None          # string did not parse
+        return emo_span          # string did not parse
 
 
-    def textize_emo_list_from_end(self, emo_span, emo_list=None, list_idx=None, prev_words=None):
+    def textize_emo_list(self, emo_list):
         '''
-        Recursively divide a string of emoji chars into a string of words, backing up greedily
-        from the end.  Consuming the string in reverse simplies the parsing of modifiers: they
-        can be ignored until a root character is reached.
-        The string (or "span") of emoji chars may contain spaces
-        Returns a string with spaces inserted between the words, or None if the parse fails.
+        Try to translate each emoji or string of several emojis into a list of strings,
+        each one representing words or phrases.  If no translation is found for an item
+        in the input list, that item is places as-is in the output list.
+        The output list will have the same number of items (length) as the input list.
         '''
-        if  self.verbose > SHOW_TEXT_DIVISION:
-            print("TESFE A:  span({})  list{}  idx:{}  words{}".format(emo_span, emo_list, list_idx, prev_words))
+        if  self.verbose > SHOW_LIST_VALUES:
+            print("TEL A input{}".format(emo_list))
 
-        # If the this (whole or remaining) span can be parsed as a single emoji with an (English)
-        # translation, just return it, concatenated with any words already parsed.
-        if  emo_list == None:
-            emo_list = emo_span.split()
-            list_idx = len(emo_list) - 1
-        try:
-            # if emo_span[-1] == space:
-            #     lst = self.emo_txt[emo_span[0:-1]]
-            # else:
-            #     lst = self.emo_txt[emo_span]
-            word_calcs = self.emo_txt[emo_span]
-            if self.verbose > 5:
-                print("TESFE B: {} => {}".format(emo_span, word_calcs))
-            return self.append_to_prev_list(emo_list, list_idx, word_calcs, prev_words)
-        except KeyError:
-            # Else divide the string into two parts, and if the 2nd part is a word, keep going.
-            # Use min and max word lengths to skip checking substrings that cannot be words.
-            while list_idx >= 0:
-                emo_str = emo_list[list_idx]
-                word_calcs = self.emo_txt.get(emo_str, [])
+        txt_list = []           # output
+        old_emos = None         # to detect reduplication
+        for emo_str in emo_list:
+            if old_emos == emo_str:
+                calc = txt_list[-1]
+                if self.is_singular_noun(calc):
+                    txt_list[-1] = pluralize(calc)
+                    continue
+            old_emos = emo_str
+            try:
+                # Is the whole emo_str a key?
+                word_calcs = self.emo_txt[emo_str]
+                calc = random.choice(word_calcs) if self.options.random else word_calcs[0]
+                if self.verbose > SHOW_LIST_VALUES:
+                    print("TEL emo_txt: {} => {} -> ({})".format(emo_str, word_calcs, calc))
+                txt_list.append(calc)
+            except KeyError:
+                # Else divide the string recursively into parts, and try to tranlate each part.
                 if self.verbose > SHOW_TEXT_DIVISION:
-                    print("while idx({})  emo_str({})  calcs({})".format(list_idx, emo_str, word_calcs))
-                if len(word_calcs) > 0:
-                    txt_list = self.append_to_prev_list(emo_list, list_idx, word_calcs, prev_words)
-                    if self.verbose > SHOW_TEXT_DIVISION:
-                        print("TESFE D: Calling textize_emo_list_from_end({}, {}, {})".format(emo_list, list_idx, txt_list))
-                    more_words = self.textize_emo_list_from_end(emo_span, emo_list, list_idx, txt_list)
-                    if more_words:
-                        return more_words
-                list_idx -= 1
-        return None          # string did not parse
+                    print("TEL : Calling TESFE(%s)" % emo_str)
+                calc = self.textize_emo_span_from_end(emo_str)
+                txt_list.append(calc)
+        return txt_list
 
-    def textize_emo_span(emo_span, space=' '):
+    def textize_emo_span(self, emo_span, space=' '):
+        emo_span.rstrip()
         try:
-            txt = emo_txt[emo_span]:
-            return txt or something
+            # Is the whole span a key?
+            return self.emo_txt[emo_span]
         except KeyError:
-            emo_list = emo_span.split(space)
-            txt_list = self.textize_emo_list_from_end(emo_list, list_idx)
+            emo_list = emo_span.split()         # NB: call plain split(), not split(space)
+            return self.textize_emo_list(emo_list)
 
     def textize_sentence_subs(self, emo_sent, space=' '):
         '''
@@ -663,7 +665,7 @@ class EmoTrans:
                 if txt_list:
                     txt_list.reverse()
                     if self.verbose > SHOW_LIST_VALUES:
-                        print("TSS list: ({})".format(txt_list))
+                        print("TSS list: {}".format(txt_list))
                     txt_join = space.join(txt_list)
                     if self.verbose > SHOW_TOKEN_TRANS:
                         print("TSS REBUS: {} => {}".format(emo_span, txt_join))
