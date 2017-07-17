@@ -214,6 +214,10 @@ SHOW_TEXT_DIVISION = 7
 SHOW_USABLE_EMOJIS = 8
 
 class EmoTrans:
+    '''
+    Translate text to emojis, emojis to text.
+    TODO: break up into 2 or 3 classes.
+    '''
     def __init__(self, options):
         self.options = options
         self.verbose = options.verbose
@@ -228,6 +232,7 @@ class EmoTrans:
         self.plural_nouns = read_pickle('en_nouns_plural.pkl')
 
     def count_emo_chrs(self):
+        '''count chars used in emoji codes'''
         counter = Counter()
         for tup in self.usables:
             counter.update(tup[ET.INDEX_EMOJI_UNICHRS])
