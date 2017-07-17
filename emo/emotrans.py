@@ -96,6 +96,7 @@ def char(i):
         return struct.pack('i', i).decode('utf-32')
 
 def unicode_chr_str(hex_unicode):
+    '''print hexadecimal-encoded emoji code/key as unichars'''
     if '-' not in hex_unicode:
         return char(int(hex_unicode, 16))
     parts = hex_unicode.split('-')
@@ -241,6 +242,10 @@ class EmoTrans:
         return counter
 
     def gen_usables(self, i_flags=ET.INDEX_DISPLAY_FLAGS, i_short=ET.INDEX_SHORT_NAME):
+        '''
+        Generate list of emo tuples to use on this platform
+        TODO: generalize.
+        '''
         if self.options.all_skin_tones:
             return [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0]
         else:
@@ -248,12 +253,14 @@ class EmoTrans:
                 not RE_TONED_EMO_NAME.match(tup[i_short])]
 
     def print_usable_emojis(self):
+        '''Print the usable emojis'''
         print("Read %d usable emoji tuples:" % len(self.usables))
         for tup in self.usables:
             print(tup[ET.INDEX_EMOJI_UNICHRS], end='  ')
         print()
 
     def _gen_presets(self):
+        '''populate preset text to emoji mappings'''
         presets = {}
         if self.options.no_articles:
             presets.update({'a': [' '], 'an': [' '], 'but': [' '], 'the': [' ']})
