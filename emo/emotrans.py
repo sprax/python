@@ -193,6 +193,8 @@ def print_tagged(tagged):
         print("%*s" % (mxl, tup[1]), end=' ')
     print(")")
 
+RE_TONED_EMO_NAME = re.compile(r"\w+tone\d:$")
+
 TOKENIZER_NOT_NON_WORD = 1
 TOKENIZER_WORD_EXTENDED = 2
 
@@ -229,8 +231,8 @@ class EmoTrans:
             print("Most common emo parts (single unichars):", counter.most_common(12))
         return counter
 
-    def gen_usables(self, i_flags = ET.INDEX_DISPLAY_FLAGS):
-        return [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0]
+    def gen_usables(self, i_flags = ET.INDEX_DISPLAY_FLAGS, i_short = ET.INDEX_SHORT_NAME):
+        return [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0 and not RE_TONED_EMO_NAME.match(tup[i_sort])]
 
     def print_usable_emojis(self):
         print("Read %d usable emoji tuples:" % len(self.usables))
