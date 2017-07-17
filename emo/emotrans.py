@@ -12,9 +12,11 @@ Plan:
         words -> syllables
             sysllables -> emojis
         words -> phonemes (possibly multiple phonemic decompositions)
-            phonemes combined across word boundaries into phrases for whole sentences (or just the untranslated parts)
+            phonemes combined across word boundaries into phrases for whole sentences
+                (or just the untranslated parts)
             match sublists of phonemes from sentences and emoji-to-word translations
-            recombine into sentences and/or objects that contain sentences and skeletons tracking original word boundaries
+            recombine into sentences and/or objects that contain sentences and skeletons
+                tracking original word boundaries
 
     score and rank each (partial) translation
     show top ranked (partial) translation(s)
@@ -23,8 +25,6 @@ Plan:
         Score each partial translation when formed
         Stop after a threshold is reached
         Show top ranked translation(s)
-
-
 
 
         Syllabic:
@@ -63,18 +63,21 @@ DEFAULT_SENTENCE = '"Rocks and paper!!"'
 #   return ''.join(c for c in str if c in emoji.EMOJI_UNICODE)
 
 def test_load():
+    '''load emodict.json'''
     emodict = json.loads(open('../../emodict.json').read())
-    for i, t in enumerate(sorted(emodict.items(), key=lambda x: int(x[1]['order']), reverse=True)):
+    for i, tup in enumerate(sorted(emodict.items(), key=lambda x: int(x[1]['order']), reverse=True)):
         if i > 5:
             break
-        ck = unicode_chr_str(t[0])
-        print(ck, "\t", len(ck), "\t", t[1]['order'], "\t", t[0], "\t", t[1]['shortname'])
+        ck = unicode_chr_str(tup[0])
+        print(ck, "\t", len(ck), "\t", tup[1]['order'], "\t", tup[0], "\t", tup[1]['shortname'])
 
 def selflist(word):
+    '''return argument as sole element in list'''
     return [word]
 
-def getsyl(map, word):
-    syls = map.get(word)
+def getsyl(table, word):
+    '''syllables'''
+    syls = table.get(word)
     return sysl if syls else word
 
 def trans():
@@ -86,6 +89,7 @@ def trans():
         print("{} --> {}".format(word, getsyl(wtsl, word)))
 
 def char(i):
+    '''return arg converted to chr'''
     try:
         return chr(i)
     except ValueError:
@@ -184,11 +188,11 @@ def add_preset_multiples(preset_dict):
 def print_tagged(tagged):
     maxlen = [max(len(tag[0]), len(tag[1])) for tag in tagged]
     # print(tagged)
-    print("++++> txt => tok (", end='')
+    print("+++++> txt => tok (", end='')
     for mxl, tup in zip(maxlen, tagged):
         print("%*s" % (mxl, tup[0]), end=' ')
     print(")")
-    print("++++> tok => pos (", end='')
+    print("+++++> tok => pos (", end='')
     for mxl, tup in zip(maxlen, tagged):
         print("%*s" % (mxl, tup[1]), end=' ')
     print(")")
@@ -216,7 +220,7 @@ class EmoTrans:
         self.usables = self.gen_usables()
         if self.verbose > SHOW_USABLE_EMOJIS:
             self.print_usable_emojis()
-        self.presets = self.gen_presets(options)
+        self.presets = self._gen_presets()
         self.txt_emo = self.gen_txt_to_emo(self.presets)
         self.emo_txt = self.gen_emo_to_txt(self.presets)
         self.emo_chr_counts = self.count_emo_chrs()
@@ -225,46 +229,48 @@ class EmoTrans:
 
     def count_emo_chrs(self):
         counter = Counter()
-        for tt in self.usables:
-            counter.update(tt[ET.INDEX_EMOJI_UNICHRS])
+        for tup in self.usables:
+            counter.update(tup[ET.INDEX_EMOJI_UNICHRS])
         if self.verbose > 7:
             print("Most common emo parts (single unichars):", counter.most_common(12))
         return counter
 
-    def gen_usables(self, i_flags = ET.INDEX_DISPLAY_FLAGS, i_short = ET.INDEX_SHORT_NAME):
-        return [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0 and not RE_TONED_EMO_NAME.match(tup[i_sort])]
+    def gen_usables(self, i_flags=ET.INDEX_DISPLAY_FLAGS, i_short=ET.INDEX_SHORT_NAME):
+        if self.options.all_skin_tones:
+            return [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0]
+        else:
+            return [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0 and
+                not RE_TONED_EMO_NAME.match(tup[i_short])]
 
     def print_usable_emojis(self):
         print("Read %d usable emoji tuples:" % len(self.usables))
-        for tt in self.usables:
-            print(tt[ET.INDEX_EMOJI_UNICHRS], end='  ')
+        for tup in self.usables:
+            print(tup[ET.INDEX_EMOJI_UNICHRS], end='  ')
         print()
 
-    def gen_presets(self, options):
+    def _gen_presets(self):
         presets = {}
-        if options.no_articles:
+        if self.options.no_articles:
             presets.update({'a': [' '], 'an': [' '], 'but': [' '], 'the': [' ']})
-        if options.arithmetic:
+        if self.options.arithmetic:
             presets.update({'can': ['🍬 ➖ D'], 'crew': ['© ➕ 🍺 ➖ 🐝'], 'you': ['🆕 ➖ N']})
-        if options.multiple:
+        if self.options.multiple:
             add_preset_multiples(presets)
         return presets
 
     def gen_txt_to_emo(self, presets):
         '''generate text to emoji mapping'''
         txt_emo = presets
-        i_flags = ET.INDEX_DISPLAY_FLAGS
-        i_monos = ET.INDEX_WORDSYLLABLES
         i_words = ET.INDEX_FREQUENT_WORDS
         i_unchr = ET.INDEX_EMOJI_UNICHRS
-        for tt in self.usables:
-            for txt in tt[i_words]:
-                emo = tt[i_unchr]
+        for tup in self.usables:
+            for txt in tup[i_words]:
+                emo = tup[i_unchr]
                 try:
                     txt_emo[txt].append(emo)
                 except KeyError:
                     txt_emo[txt] = [emo]
-                # print("txt(%s) --> emo( %s )" % (txt, tt[i_unchr]))
+                # print("txt(%s) --> emo( %s )" % (txt, tup[i_unchr]))
         return txt_emo
 
     def gen_emo_to_txt(self, presets):
@@ -280,8 +286,8 @@ class EmoTrans:
         # print("PRESET emo_txt:", emo_txt)
         i_unchr = ET.INDEX_EMOJI_UNICHRS
         i_words = ET.INDEX_FREQUENT_WORDS
-        for tt in self.usables:
-            emo_txt[tt[i_unchr]] = tt[i_words]
+        for tup in self.usables:
+            emo_txt[tup[i_unchr]] = tup[i_words]
         return emo_txt
 
     def rev_txt_to_gen(self):
@@ -441,7 +447,7 @@ class EmoTrans:
         then join them back together.  Characters lost in the split
         are genearlly not restorable.  So round trips are not faithful.
         '''
-        srcs = text_regex.word_splits(txt_phrase.strip())
+        srcs = text_regex.words_split_out(txt_phrase.strip())
         if self.verbose > 2:
             print(srcs)
         emo_phrase = []
@@ -601,12 +607,13 @@ class EmoTrans:
         return emo_span          # string did not parse
 
 
-    def textize_emo_list(self, emo_list, space=' '):
+    def _textize_emo_list(self, emo_list, space=' '):
         '''
         Try to translate each emoji or string of several emojis into a list of strings,
         each one representing words or phrases.  If no translation is found for an item
         in the input list, that item is places as-is in the output list.
         The output list will have the same number of items (length) as the input list.
+        TODO: Helper methods.
         '''
         if  self.verbose > SHOW_LIST_VALUES:
             print("TEL A input{}".format(emo_list))
@@ -649,7 +656,6 @@ class EmoTrans:
                         txt_list[-2] = sing_calc
                         txt_list.pop()  # truncate list by popping off the calc for <-> ('➖')
                         continue
-
             else:
                 old_emos = emo_str
             try:
@@ -667,14 +673,15 @@ class EmoTrans:
                 txt_list.append(calc)
         return txt_list
 
-    def textize_emo_span(self, emo_span, space=' '):
+    def textize_emo_span(self, emo_span):
+        '''translate string of emojis to text'''
         emo_span.rstrip()
         try:
             # Is the whole span a key?
             return self.emo_txt[emo_span]
         except KeyError:
             emo_list = emo_span.split()         # NB: call plain split(), not split(space)
-            return self.textize_emo_list(emo_list)
+            return self._textize_emo_list(emo_list)
 
     def textize_sentence_subs(self, emo_sent, space=' '):
         '''
@@ -747,13 +754,13 @@ class EmoTrans:
         '''translate emoji sentence to text according to options'''
         return self.textize_sentence_subs(sentence)
 
-    def translate_sentence_to_emo_and_back(self, sentence):
+    def trans_to_emo_and_back(self, sentence):
         '''translate text sentence to emoji and back, showing stages according to options'''
-        print("====> src => txt (%s)" % sentence)
+        print("=====> src => txt (%s)" % sentence)
         emo_sent = self.emojize_sentence(sentence)
-        print("====> txt => emo (%s)" % emo_sent)
+        print("=====> txt => emo (%s)" % emo_sent)
         txt_sent = self.textize_sentence(emo_sent)
-        print("====> emo => txt (%s)" % txt_sent)
+        print("=====> emo => txt (%s)" % txt_sent)
 
         dist = editdistance.eval(sentence, txt_sent)
         print("Edit distance: {:>4}".format(dist))
@@ -766,18 +773,18 @@ def translate_sentences(options):
     if options.txt_emo:
         show_sorted_dict(txt_emo, 0)
     if options.emo_txt:
-        show_sorted_dict(emo_txt)
+        show_sorted_dict(emo_txt, 0)
     if options.sentence:
-        emotrans.translate_sentence_to_emo_and_back(options.sentence)
+        emotrans.trans_to_emo_and_back(options.sentence)
         exit(0)
 
     for sentence in SENTENCES:
-        emotrans.translate_sentence_to_emo_and_back(sentence)
+        emotrans.trans_to_emo_and_back(sentence)
         print()
 
     if options.text_file:
         for sentence in text_fio.read_text_lines(options.text_file, options.charset):
-            emotrans.translate_sentence_to_emo_and_back(sentence)
+            emotrans.trans_to_emo_and_back(sentence)
 
 def main():
     '''test english -> emoji translation'''
@@ -786,6 +793,8 @@ def main():
         description="test english -> emoji translation")
     parser.add_argument('-arithmetic', action='store_true',
                         help='use addition and subtraction of letters or syllables (rebus)')
+    parser.add_argument('-all_skin_tones', action='store_true',
+                        help='use all skin tones for hads, faces, etc.')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
     parser.add_argument('-input', dest='sentence', type=str, nargs='?', default=None,
@@ -828,6 +837,6 @@ def main():
     translate_sentences(args)
 
 if __name__ == '__main__':
-    start_time = time.time()
+    START_TIME = time.time()
     main()
-    print("----- %.4f seconds elapsed -----" % (time.time() - start_time))
+    print("----- %.4f seconds elapsed -----" % (time.time() - START_TIME))
