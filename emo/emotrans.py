@@ -853,7 +853,7 @@ def main():
         et = ET.EmoTuples()
         for nut in et.nemo_tuples:
             for phrase in nut.words:
-                words.update(phrase.split())
+                words.update(text_regex.gen_normal_word_tokens(phrase, 2))
         text_regex.print_sorted(words, args.print_end)
         # words = extract_words_from_file(args.input_file, gen_normal_word_tokens))
         exit(0)
