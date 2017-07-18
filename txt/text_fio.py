@@ -219,7 +219,8 @@ def main():
 
     if args.pickle_set_of_text_lines:
         lines_in, words_out = pickle_word_list(args.text_file, args.out_file)
-        print("Pickled %d words from %d lines in %s into %s:" % (words_out, lines_in, args.text_file, args.out_file))
+        print("Pickled %d words from %d lines in %s into %s:" % (
+                words_out, lines_in, args.text_file, args.out_file))
         with open(args.out_file, 'rb') as pick:
             word_set = pickle.load(pick)
         if words_out <= args.number:

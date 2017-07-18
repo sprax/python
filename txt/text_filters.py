@@ -169,7 +169,8 @@ def map_file(function, in_path, out_path, charset='utf8'):
         with open(out_path, 'w') as out_file:
             for line in text:
                 output = function(line.rstrip())
-                print(output if output else ' ', file=out_file)
+                if output:
+                    print(output, file=out_file)
 
 
 def translate_para_file(para_filter, in_path, out_path, charset='utf8'):
@@ -213,17 +214,41 @@ def translate_file(in_path, out_path, opt):
 
 def pluralize(word):
     '''
-    Return (plural, is_different) where plural is the plural form of the
-    given word, and is_different is True IFF word != plural.
+    Return the plural form of the given word.
     TODO: Check that word is a noun (or an adjective or at any rate can
-    be sensibly used as a noun) before calling inflection.pluralize.
+    be sensibly used as a noun) before calling inflection.pluralize?
     If not, return (word, false)
     FIXME BUGS: inflection is often wrong, e.g. (safe <-> saves)
     '''
     if word.lower()[-3:] == 'afe':
-        return (word + 's', True)
-    plural = inflection.pluralize(word)
-    return (plural, plural != word)
+        return word + 's'
+    return inflection.pluralize(word)
+
+def singularize(word):
+    '''
+    Return the singular form of the given word.
+    TODO: Check that word is a noun (or an adjective or at any rate can
+    be sensibly used as a noun) before calling inflection.singularize?
+    FIXME BUGS: inflection returns many wrong answers by pattern:
+        *aves -> *afe
+    It uses incomplete special case matching (octopus),
+    and does not recognize many other pairs such as:
+        (locus, loci)
+    NB: pattern3.en is not yet functional (2017.07.10)
+    '''
+    if word.lower()[-4:] == 'aves':
+        return word.rstrip('sS')
+    return inflection.singularize(word)
+
+def plural_if_diff(word):
+    plur = pluralize(word)
+    sing = singularize(word)
+    return plur if plur != sing else None
+
+def singular_if_diff(word):
+    plur = pluralize(word)
+    sing = singularize(word)
+    return sing if plur != sing else None
 
 ###############################################################################
 
@@ -260,7 +285,8 @@ def filter_text_file():
     args = parser.parse_args()
 
     if args.map_file:
-        map_file(pluralize, args.in_path, args.out_path)
+        # map_file(singular_if_diff, args.in_path, args.out_path)
+        map_file(singularize, args.in_path, args.out_path)
         exit(0)
 
     if args.verbose > 7:
