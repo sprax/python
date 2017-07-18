@@ -44,7 +44,7 @@ from functools import partial
 import time
 import editdistance
 
-import nltk
+# import nltk
 import emotuples as ET
 import inflection
 import text_fio
@@ -809,6 +809,10 @@ def main():
                         help='use all skin tones for hads, faces, etc.')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
+    parser.add_argument('-end', dest='print_end', type=str, nargs='?', const=' ', default='\n',
+                        help='end= argument to give print')
+    parser.add_argument('-extract_words', action='store_true',
+                        help='extract words from emotuples')
     parser.add_argument('-input', dest='sentence', type=str, nargs='?', default=None,
                         const=DEFAULT_SENTENCE, help='input a sentence to translate (or use default)')
     parser.add_argument('-emo_txt', action='store_true',
@@ -842,6 +846,17 @@ def main():
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
+
+    if args.extract_words:
+        print("Collecting words from emotuples.nemo_tuples...")
+        words = set()
+        et = ET.EmoTuples()
+        for nut in et.nemo_tuples:
+            for phrase in nut.words:
+                words.update(phrase.split())
+        text_regex.print_sorted(words, args.print_end)
+        # words = extract_words_from_file(args.input_file, gen_normal_word_tokens))
+        exit(0)
 
     # if args.verbose > 7:
     #     print("module emoji:", EJ)

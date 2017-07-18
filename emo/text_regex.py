@@ -31,12 +31,40 @@ EXAMPLES = [
     #    1  2   3  4  5  6     7  8   9    0   1
 ]
 
-
+###############################################################################
 RE_LOWER_LETTER_WORD = re.compile(r"\b([a-z]+)\b")
 
 def lower_word_tokens(text):
-    '''extract only all-lower-cased alphabetic words'''
+    '''extract only lowercase alphabetic words'''
     return RE_LOWER_LETTER_WORD.findall(text)
+
+###############################################################################
+RE_ANY_LETTER_WORD = re.compile(r"([A-Za-z]+)")
+
+def letter_word_tokens(text, min_len=3):
+    '''extract lower-cased alphabetic words'''
+    words = []
+    for match in RE_ANY_LETTER_WORD.finditer(text):
+        token = match.group()
+        if len(token) < min_len:
+            continue
+        words.append(token.lower())
+    return words
+
+
+# WORD_SEP_INTERIOR = r"',."
+WORD_SEP_INTERIOR = r"-',."
+
+###############################################################################
+RE_NORMAL_WORD = re.compile(r"\b([A-Z]?[a-z]+)\b")
+
+def gen_normal_word_tokens(text, min_len=3):
+    '''extract normal alphabetic words'''
+    for match in RE_NORMAL_WORD.finditer(text):
+        token = match.group()
+        if len(token) >= min_len:
+            yield token
+
 
 # WORD_SEP_INTERIOR = r"',."
 WORD_SEP_INTERIOR = r"-',."
@@ -136,8 +164,9 @@ def extract_lower_words_from_file(path, extractor):
             words.update([tok for tok in tokens if len(tok) > 1 and tok.islower()])
     return words
 
-def print_sorted(iterable):
-    print(sorted(list(iterable)))
+def print_sorted(iterable, end=' '):
+    for item in sorted(list(iterable)):
+        print(item, end=end)
 
 def main():
     '''test regex patterns for text: separate words'''
@@ -146,18 +175,26 @@ def main():
         description="test english -> emoji translation")
     parser.add_argument('input_file', type=str, nargs='?', default='train_1000.label',
                         help='file containing text to filter')
-    parser.add_argument('-dir', dest='text_dir', type=str, default='/Users/sprax/text',
-                        help='directory to search for input_file')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
-    parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
-                        help='output path for filtered text (default: - <stdout>)')
+    parser.add_argument('-dir', dest='text_dir', type=str, default='/Users/sprax/text',
+                        help='directory to search for input_file')
     parser.add_argument('-extract_words', action='store_true',
                         help='extract all lowercase words from a file')
+    parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
+                        help='output path for filtered text (default: - <stdout>)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
     # test_misc()
+
+
+    if args.extract_words:
+        # print_sorted(extract_lower_words_from_file(args.input_file, notnonword_tokens))
+        # print_sorted(extract_words_from_file(args.input_file, letter_word_tokens))
+        # print_sorted(extract_words_from_file(args.input_file, lower_word_tokens))
+        print_sorted(extract_words_from_file(args.input_file, gen_normal_word_tokens))
+        exit(0)
 
     print("NUM_TOKENS          WORD_TOKENS:")
     for sentence, words, syllables in EXAMPLES:
@@ -170,9 +207,6 @@ def main():
         print("NOTUNS", len(nuwrds), nuwrds)
         print()
 
-    if args.extract_words:
-        # print_sorted(extract_lower_words_from_file(args.input_file, notnonword_tokens))
-        print_sorted(extract_words_from_file(args.input_file, lower_word_tokens))
 
 if __name__ == '__main__':
     main()
