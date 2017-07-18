@@ -1,4 +1,4 @@
-path#!/usr/bin/env python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 # # # coding: iso-8859-15
@@ -31,22 +31,32 @@ EXAMPLES = [
     #    1  2   3  4  5  6     7  8   9    0   1
 ]
 
+DICTIONARY = {}
 
-def load_dictionary(path):
+def load_dictionary(path, verbose=0):
     '''load dictionary from text file, one word per line'''
-    word_dict, word_count = {}, 0
+    word_count = 0
     with open(path) as text:  # opened in text-mode; all EOLs are converted to '\n'
         for line in text:
-            line = line.rstrip()
-            size = len(line)
-            word_count += 1
-            word_dict[line] = size
-    print("Read ", word_count, " words from dictionary file: ", path)
-    return word_dict
+            line = line.strip()
+            if line:
+                word_count += 1
+                DICTIONARY[line] = len(line)
+    if verbose > 1:
+        print("Loaded", word_count, "words from dictionary file: ", path)
+    return DICTIONARY, word_count
 
 def is_word(string):
     '''true iff dictionary word'''
     return DICTIONARY.get(string)
+
+def gen_words_only(tokens, verbose=0):
+    if not DICTIONARY:
+        load_dictionary('../words.txt', verbose)
+    for token in tokens:
+        if is_word(token):
+            yield token
+
 
 ###############################################################################
 RE_LOWER_LETTER_WORD = re.compile(r"\b([a-z]+)\b")
@@ -202,6 +212,8 @@ def main():
                         help='output path for filtered text (default: - <stdout>)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
+    parser.add_argument('-words_only', action='store_true',
+                        help='extract only dictionary words')
     args = parser.parse_args()
     # test_misc()
 
@@ -210,7 +222,11 @@ def main():
         # print_sorted(extract_lower_words_from_file(args.input_file, notnonword_tokens))
         # print_sorted(extract_words_from_file(args.input_file, letter_word_tokens))
         # print_sorted(extract_words_from_file(args.input_file, lower_word_tokens))
-        print_sorted(extract_words_from_file(args.input_file, gen_normal_word_tokens))
+        words = extract_words_from_file(args.input_file, gen_normal_word_tokens)
+        if args.words_only:
+            words = gen_words_only(words, args.verbose)
+        print_sorted(words)
+        print()
         exit(0)
 
     print("NUM_TOKENS          WORD_TOKENS:")
