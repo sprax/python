@@ -31,6 +31,13 @@ EXAMPLES = [
     #    1  2   3  4  5  6     7  8   9    0   1
 ]
 
+
+RE_LOWER_LETTER_WORD = re.compile(r"\b([a-z]+)\b")
+
+def lower_word_tokens(text):
+    '''extract only all-lower-cased alphabetic words'''
+    return RE_LOWER_LETTER_WORD.findall(text)
+
 # WORD_SEP_INTERIOR = r"',."
 WORD_SEP_INTERIOR = r"-',."
 
@@ -113,6 +120,25 @@ REGEX_PUNCTUATION = re.compile("[{}]".format(string.punctuation))
 REGEX_NON_ALPHA = re.compile(r'(?:\W|[0-9])+')
 ###############################################################################
 
+def extract_words_from_file(path, extractor):
+    words = set()
+    with open(path, "r") as text:
+        for line in text:
+            tokens = extractor(line)
+            words.update(tokens)
+    return words
+
+def extract_lower_words_from_file(path, extractor):
+    words = set()
+    with open(path, "r") as text:
+        for line in text:
+            tokens = extractor(line)
+            words.update([tok for tok in tokens if len(tok) > 1 and tok.islower()])
+    return words
+
+def print_sorted(iterable):
+    print(sorted(list(iterable)))
+
 def main():
     '''test regex patterns for text: separate words'''
     parser = argparse.ArgumentParser(
@@ -126,6 +152,8 @@ def main():
                         help='charset encoding of input text')
     parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
                         help='output path for filtered text (default: - <stdout>)')
+    parser.add_argument('-extract_words', action='store_true',
+                        help='extract all lowercase words from a file')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
@@ -141,6 +169,10 @@ def main():
         nuwrds = notnonword_tokens(sentence)
         print("NOTUNS", len(nuwrds), nuwrds)
         print()
+
+    if args.extract_words:
+        # print_sorted(extract_lower_words_from_file(args.input_file, notnonword_tokens))
+        print_sorted(extract_words_from_file(args.input_file, lower_word_tokens))
 
 if __name__ == '__main__':
     main()
