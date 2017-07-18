@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+path#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 # # # coding: iso-8859-15
@@ -30,6 +30,23 @@ EXAMPLES = [
     (" _This Is _My_ Title_, you one-eyed jack-ass!!", 7, 11),
     #    1  2   3  4  5  6     7  8   9    0   1
 ]
+
+
+def load_dictionary(path):
+    '''load dictionary from text file, one word per line'''
+    word_dict, word_count = {}, 0
+    with open(path) as text:  # opened in text-mode; all EOLs are converted to '\n'
+        for line in text:
+            line = line.rstrip()
+            size = len(line)
+            word_count += 1
+            word_dict[line] = size
+    print("Read ", word_count, " words from dictionary file: ", path)
+    return word_dict
+
+def is_word(string):
+    '''true iff dictionary word'''
+    return DICTIONARY.get(string)
 
 ###############################################################################
 RE_LOWER_LETTER_WORD = re.compile(r"\b([a-z]+)\b")
