@@ -86,20 +86,18 @@ def paragraph_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR):
     ## Makes no assumptions about the encoding used in the file
     paragraph = ''
     for line in fileobj:
-        # print("    PI: line(%s) para(%s)" % (line.rstrip(), paragraph))
+        #print("    PI: line(%s) para(%s)" % (line.rstrip(), paragraph))
         if re.match(rgx_para_separator, line) and paragraph:
             yield paragraph
-            line.rstrip()
-            paragraph = line
-        else:
-            line = line.rstrip()
-            if line:
-                if not paragraph:
-                    paragraph = line
-                elif paragraph.endswith('-'):
-                    paragraph += line
-                else:
-                    paragraph += ' ' + line
+            paragraph = ''
+        line = line.rstrip()
+        if line:
+            if not paragraph:
+                paragraph = line
+            elif paragraph.endswith('-'):
+                paragraph += line
+            else:
+                paragraph += ' ' + line
     if paragraph:
         yield paragraph
 
