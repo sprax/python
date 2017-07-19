@@ -261,6 +261,14 @@ def abs_path(dir_spec, file_spec):
 REP_WEBSTER = r'\n([A-Z-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s)([^.]+)?'
 REC_WEBSTER = re.compile(REP_WEBSTER)
 
+# def printa(aa):
+#     for a in aa:
+#         print(a)
+#
+# mm = re.findall(r'\n([A-Z-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)', ddt, re.DOTALL)
+# printa(mm)
+
+
 def filter_text_file():
     '''Filter lines or sentences in a text file.'''
     parser = argparse.ArgumentParser(
