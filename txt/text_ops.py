@@ -301,8 +301,8 @@ def main():
     args = parser.parse_args()
 
     if args.webster:
-        for paragraph in para_iter_file(args.text_file, args.charset, REC_UPPER_WORD):
-            print(paragraph, '\n')
+        for idx, paragraph in enumerate(para_iter_file(args.text_file, args.charset, REC_UPPER_WORD)):
+            print("PARA {:2}  ({})\n".format(idx, paragraph))
         exit(0)
 
     if args.function == 0:
