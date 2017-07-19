@@ -20,6 +20,7 @@ from utf_print import utf_print
 
 INF_NUM_WORDS = 2**30
 
+RE_PARA_SEPARATOR = re.compile(r'\s*\n\s*')
 
 ################################################################################
 
@@ -75,29 +76,36 @@ def resolve_count(sub_count, percent, total_count):
 
 ################################################################################
 
-def paragraph_iter(fileobj, rgx_para_separator=r'\s*\n\s*'):
-    '''yields paragraphs from text file and regex separator, which by default matches
+def paragraph_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR):
+    '''
+    yields paragraphs from text file and regex separator, which by default matches
     either one or more blank lines (two line feeds among whitespace),
-    or one line-feed followed by a tab, possibly in the middle of other whitespace.'''
+    or one line-feed followed by a tab, possibly in the middle of other whitespace.
+    TODO: input file may need to end with a sentinel.
+    '''
     ## Makes no assumptions about the encoding used in the file
     paragraph = ''
     for line in fileobj:
+        # print("    PI: line(%s) para(%s)" % (line.rstrip(), paragraph))
         if re.match(rgx_para_separator, line) and paragraph:
             yield paragraph
-            paragraph = ''
+            line.rstrip()
+            paragraph = line
         else:
             line = line.rstrip()
             if line:
-                if line.endswith('-'):
+                if not paragraph:
+                    paragraph = line
+                elif paragraph.endswith('-'):
                     paragraph += line
                 else:
-                    paragraph += line + ' '
+                    paragraph += ' ' + line
     if paragraph:
         yield paragraph
 
 def paragraph_multiline_iter(fileobj, rgx_para_separator=r'\s*\n\s*\n\s*|\s*\n\t\s*'):
     '''yields paragraphs from text file and regex separator, which by default matches
-    either one or more blank lines (two line feeds among whitespace),
+    one or more blank lines (two line feeds among whitespace),
     or one line-feed followed by a tab, possibly in the middle of other whitespace.'''
     ## Makes no assumptions about the encoding used in the file
     paragraph = ''
@@ -115,20 +123,20 @@ def paragraph_multiline_iter(fileobj, rgx_para_separator=r'\s*\n\s*\n\s*|\s*\n\t
     if paragraph:
         yield paragraph
 
-def print_paragraphs(path, charset='utf8'):
+def print_paragraphs(path, charset='utf8', rgx_para_separator=RE_PARA_SEPARATOR):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs:")
     with open(path, 'r', encoding=charset) as text:
-        for idx, para in enumerate(paragraph_iter(text)):
+        for idx, para in enumerate(paragraph_iter(text, rgx_para_separator)):
             print("    Paragraph {}:".format(idx))
             utf_print(para)
             print()
 
-def print_paragraphs_split_join_str(path, max_words, charset='utf8'):
+def print_paragraphs_split_join_str(path, max_words, charset='utf8', rgx_para_separator=RE_PARA_SEPARATOR):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs:")
     with open(path, 'r', encoding=charset) as text:
-        for idx, para in enumerate(paragraph_iter(text)):
+        for idx, para in enumerate(paragraph_iter(text, rgx_para_separator)):
             words = para.split()[:max_words]
             print("    Paragraph {}:".format(idx))
             utf_print(' '.join(words))
@@ -222,11 +230,11 @@ def print_paragraphs_trunc(path, max_words, charset='utf8'):
             utf_print(' '.join(words))
             print()
 
-def paragraph_reader(path, charset="utf8"):
+def paragraph_reader(path, charset="utf8", rgx_para_separator=RE_PARA_SEPARATOR):
     '''opens text file and returns paragraph iterator'''
     try:
         text_stream = open(path, 'r', encoding=charset)
-        return paragraph_iter(text_stream), text_stream
+        return paragraph_iter(text_stream, rgx_para_separator), text_stream
     except FileNotFoundError as ex:
         print("Warning:", ex)
         return None, None
@@ -257,10 +265,11 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
         else:
             utf_print(sentence, outfile=out_file)
 
-def para_iter_file(path, charset='utf8'):
+def para_iter_file(path, charset='utf8', rgx_para_separator=RE_PARA_SEPARATOR):
     '''Generator yielding filtered paragraphs from a text file'''
+    print("para_iter_file: pattern: %s" % rgx_para_separator.pattern)
     with open(path, 'r', encoding=charset) as text:
-        for para in paragraph_iter(text):
+        for para in paragraph_iter(text, rgx_para_separator):
             yield para
 
 def filter_file(para_filter, path, charset='utf8'):
@@ -269,23 +278,34 @@ def filter_file(para_filter, path, charset='utf8'):
         for para in paragraph_iter(text):
             yield para_filter.filter_paragraph(para)
 
+REP_WEBSTER = r'\n([A-Z-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s)([^.]+)?'
+REC_WEBSTER = re.compile(REP_WEBSTER)
+
+REP_UPPER_WORD = r'^\s*([A-Z-]+)\b\s*'
+REC_UPPER_WORD = re.compile(REP_UPPER_WORD)
+
 def main():
     '''Driver to iterate over the paragraphs in a text file.'''
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('text_file', type=str, nargs='?', default='corpus.txt',
                         help='text file containing quoted dialogue')
+    parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
+                        help='charset encoding of input text')
     parser.add_argument('-function', type=int, nargs='?', const=1, default=0,
                         help='paragraph printing function: 0=all (default: 0)')
     parser.add_argument('-max_words', type=int, nargs='?', const=1, default=5,
                         help='maximum words per paragraph: print only the first M words,\
                         or all if M < 1 (default: 0)')
+    parser.add_argument('-webster', action='store_true',
+                        help='parse a dictionary in the format of Websters Unabridged.')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-    if args.verbose > 2:
-        print("args:", args)
-        print(__doc__)
+    if args.webster:
+        for paragraph in para_iter_file(args.text_file, args.charset, REC_UPPER_WORD):
+            print(paragraph, '\n')
+        exit(0)
 
     if args.function == 0:
         print_paragraphs(args.text_file)
