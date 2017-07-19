@@ -258,6 +258,9 @@ def abs_path(dir_spec, file_spec):
         return file_spec
     return os.path.join(dir_spec, file_spec)
 
+REP_WEBSTER = r'\n([A-Z-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s)([^.]+)?'
+REC_WEBSTER = re.compile(REP_WEBSTER)
+
 def filter_text_file():
     '''Filter lines or sentences in a text file.'''
     parser = argparse.ArgumentParser(
