@@ -20,7 +20,7 @@ from utf_print import utf_print
 
 INF_NUM_WORDS = 2**30
 
-RE_PARA_SEPARATOR = re.compile(r'\s*\n\s*')
+RE_PARA_SEPARATOR = re.compile(r'\s*\n')
 
 ################################################################################
 
@@ -76,28 +76,34 @@ def resolve_count(sub_count, percent, total_count):
 
 ################################################################################
 
-def paragraph_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR):
+def paragraph_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0):
     '''
     yields paragraphs from text file and regex separator, which by default matches
-    either one or more blank lines (two line feeds among whitespace),
-    or one line-feed followed by a tab, possibly in the middle of other whitespace.
-    TODO: input file may need to end with a sentinel.
+    one blank line (only space before a newline, or r"\s*\n").  All but the first
+    paragraph will begin with the separator, unless it contains only whitespace,
+    which is stripped from the end of every line.
+    TODO: Consider adding span-matching for square brackets, that is, never
+    breaking a paragraph on text between an open bracket [ and a matching, i.e.
+    balance end bracket ].  Likewise { no break between curly braces }.  
     '''
     ## Makes no assumptions about the encoding used in the file
-    paragraph = ''
+    paragraph, blanks = '', 0
     for line in fileobj:
         #print("    PI: line(%s) para(%s)" % (line.rstrip(), paragraph))
-        if re.match(rgx_para_separator, line) and paragraph:
+        if re.match(rgx_para_separator, line) and paragraph and blanks >= sep_lines:
             yield paragraph
-            paragraph = ''
+            paragraph, blanks = '', 0
         line = line.rstrip()
         if line:
+            blanks = 0
             if not paragraph:
                 paragraph = line
             elif paragraph.endswith('-'):
                 paragraph += line
             else:
                 paragraph += ' ' + line
+        else:
+            blanks += 1
     if paragraph:
         yield paragraph
 
@@ -263,11 +269,11 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
         else:
             utf_print(sentence, outfile=out_file)
 
-def para_iter_file(path, charset='utf8', rgx_para_separator=RE_PARA_SEPARATOR):
+def para_iter_file(path, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0, charset='utf8'):
     '''Generator yielding filtered paragraphs from a text file'''
     print("para_iter_file: pattern: %s" % rgx_para_separator.pattern)
     with open(path, 'r', encoding=charset) as text:
-        for para in paragraph_iter(text, rgx_para_separator):
+        for para in paragraph_iter(text, rgx_para_separator, sep_lines):
             yield para
 
 def filter_file(para_filter, path, charset='utf8'):
@@ -282,6 +288,15 @@ REC_WEBSTER = re.compile(REP_WEBSTER)
 REP_UPPER_WORD = r'^\s*([A-Z-]+)\b\s*'
 REC_UPPER_WORD = re.compile(REP_UPPER_WORD)
 
+def parse_webster_file(path, max_entries, charset):
+    for idx, paragraph in enumerate(para_iter_file(path, REC_UPPER_WORD, sep_lines=1, charset=charset)):
+        if 0 < max_entries and max_entries <= idx:
+            break
+        print("PARA {:2}  ({})\n".format(idx, paragraph))
+
+CONST_MAX_WORDS = 5
+DEFAULT_NUMBER = 10
+
 def main():
     '''Driver to iterate over the paragraphs in a text file.'''
     parser = argparse.ArgumentParser(description=__doc__)
@@ -291,9 +306,13 @@ def main():
                         help='charset encoding of input text')
     parser.add_argument('-function', type=int, nargs='?', const=1, default=0,
                         help='paragraph printing function: 0=all (default: 0)')
-    parser.add_argument('-max_words', type=int, nargs='?', const=1, default=5,
+    parser.add_argument('-max_words', type=int, nargs='?', const=CONST_MAX_WORDS, default=0,
                         help='maximum words per paragraph: print only the first M words,\
                         or all if M < 1 (default: 0)')
+    parser.add_argument('-number', type=int, nargs='?', const=CONST_MAX_WORDS,
+                        default=DEFAULT_NUMBER,
+                        help='max number of entries to parse (defaults: %d/%d)' % (
+                            CONST_MAX_WORDS, DEFAULT_NUMBER))
     parser.add_argument('-webster', action='store_true',
                         help='parse a dictionary in the format of Websters Unabridged.')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
@@ -301,8 +320,7 @@ def main():
     args = parser.parse_args()
 
     if args.webster:
-        for idx, paragraph in enumerate(para_iter_file(args.text_file, args.charset, REC_UPPER_WORD)):
-            print("PARA {:2}  ({})\n".format(idx, paragraph))
+        parse_webster_file(args.text_file, args.number, args.charset)
         exit(0)
 
     if args.function == 0:
