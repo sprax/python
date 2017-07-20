@@ -282,7 +282,8 @@ def filter_file(para_filter, path, charset='utf8'):
         for para in paragraph_iter(text):
             yield para_filter.filter_paragraph(para)
 
-REP_WEBSTER = r'\n([A-Z-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s)([^.]+)?'
+# REP_WEBSTER1 = r'\n([A-Z-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s)([^.]+)?'
+REP_WEBSTER = r'([A-Z\'-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)'
 REC_WEBSTER = re.compile(REP_WEBSTER)
 
 REP_UPPER_WORD = r'^\s*([A-Z-]+)\b\s*'
@@ -295,7 +296,11 @@ def parse_webster_file(path, max_entries, charset, verbose=1):
         if verbose > 0:
             print("PARA {:2}  ({})\n".format(idx, paragraph))
             match = REC_WEBSTER.match(paragraph)
-            print(match)
+            print(match, "\n")
+
+# aaa = 'A A (named a in the English, and most commonly ä in other languages). Defn: The first letter of the English and of many other alphabets. The capital A of the alphabets of Middle and Western Europe, as also the small letter (a), besides the forms in Italic, black letter, etc., are all descended from the old Latin A, which was borrowed from the Greek Alpha, of the same form; and this was made from the first letter (Aleph, and itself from the Egyptian origin. '
+# mm = re.match(r'([A-Z-]+)\s+([^\s,]+)[^,]*,?\s+((?:[a-z]\.\s*)+)?(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)', aaa); mm
+
 
 CONST_MAX_WORDS = 5
 DEFAULT_NUMBER = 10
