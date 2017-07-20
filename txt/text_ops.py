@@ -84,7 +84,7 @@ def paragraph_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0):
     which is stripped from the end of every line.
     TODO: Consider adding span-matching for square brackets, that is, never
     breaking a paragraph on text between an open bracket [ and a matching, i.e.
-    balance end bracket ].  Likewise { no break between curly braces }.  
+    balance end bracket ].  Likewise { no break between curly braces }.
     '''
     ## Makes no assumptions about the encoding used in the file
     paragraph, blanks = '', 0
@@ -288,11 +288,14 @@ REC_WEBSTER = re.compile(REP_WEBSTER)
 REP_UPPER_WORD = r'^\s*([A-Z-]+)\b\s*'
 REC_UPPER_WORD = re.compile(REP_UPPER_WORD)
 
-def parse_webster_file(path, max_entries, charset):
+def parse_webster_file(path, max_entries, charset, verbose=1):
     for idx, paragraph in enumerate(para_iter_file(path, REC_UPPER_WORD, sep_lines=1, charset=charset)):
         if 0 < max_entries and max_entries <= idx:
             break
-        print("PARA {:2}  ({})\n".format(idx, paragraph))
+        if verbose > 0:
+            print("PARA {:2}  ({})\n".format(idx, paragraph))
+            match = REC_WEBSTER.match(paragraph)
+            print(match)
 
 CONST_MAX_WORDS = 5
 DEFAULT_NUMBER = 10
