@@ -282,9 +282,25 @@ def filter_file(para_filter, path, charset='utf8'):
         for para in paragraph_iter(text):
             yield para_filter.filter_paragraph(para)
 
+def print_groups(match):
+    if match:
+        for grp in match.groups():
+            print("  {}".format(grp))
+
 # REP_WEBSTER1 = r'\n([A-Z-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s)([^.]+)?'
-REP_WEBSTER = r'([A-Z\'-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)'
+# REP_WEBSTER = r'([A-Z\'-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)'
+
+REP_SPC = r'\s\.,'
+REP_WEBSTER = r'([A-Z-]+)\s+([^\s\(\[,]+)\s*(\([^(]+\))?(\[[^\]]+\])?([^,]*,?)\s+((?:[a-z]\.\s*)+)?(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)'
 REC_WEBSTER = re.compile(REP_WEBSTER)
+
+REM_WEBSTER = re.compile(r"""([A-Z-]+)\s+          # WORD and whitespace
+                             ([^\s\(\[,]+)         # pron
+                             \s*(\([^(]+\))?       # parenthesized ?
+                             (\[[^\]]+\])?         # bracketed ?
+                             ([^,]*,?)\s+          # junk
+                             ((?:[a-z]\.\s*)+)?    # parts of speech
+                            """, re.VERBOSE)
 
 REP_UPPER_WORD = r'^\s*([A-Z-]+)\b\s*'
 REC_UPPER_WORD = re.compile(REP_UPPER_WORD)
@@ -295,12 +311,16 @@ def parse_webster_file(path, max_entries, charset, verbose=1):
             break
         if verbose > 0:
             print("PARA {:2}  ({})\n".format(idx, paragraph))
-            match = REC_WEBSTER.match(paragraph)
-            print(match, "\n")
+            match = REM_WEBSTER.match(paragraph)
+            print_groups(match)
 
 # aaa = 'A A (named a in the English, and most commonly ä in other languages). Defn: The first letter of the English and of many other alphabets. The capital A of the alphabets of Middle and Western Europe, as also the small letter (a), besides the forms in Italic, black letter, etc., are all descended from the old Latin A, which was borrowed from the Greek Alpha, of the same form; and this was made from the first letter (Aleph, and itself from the Egyptian origin. '
 # mm = re.match(r'([A-Z-]+)\s+([^\s,]+)[^,]*,?\s+((?:[a-z]\.\s*)+)?(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)', aaa); mm
 
+# TODO: REC_DICT_ENTRY := (WORD) (PRON) (Anything up to one of:) ([Etym: .*]|Defn .*|Lang...|Ref...|POS)
+# where definition text gets parsed into an array of glosses)
+# and POS := (n.|v. i.|v. t.|etc.|)
+# and Usage stuff also goes into a list of variants.
 
 CONST_MAX_WORDS = 5
 DEFAULT_NUMBER = 10
