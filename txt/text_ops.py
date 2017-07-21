@@ -364,9 +364,11 @@ def parse_webster_entry(entry):
     match = REM_WEBSTER.match(entry)
     return parse_webster_match(match)
 
+REC_FIRST_WORD_TOKEN = re.compile(r'^\W*(\w+)')
+
 def first_token(text, default=None):
     try:
-        return re.match(r'\W*([\w]+)', text).groups()[0]
+        return REC_FIRST_WORD_TOKEN.match(text).groups()[0]
     except:
         return default
 
