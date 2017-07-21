@@ -313,53 +313,77 @@ REM_WEBSTER = re.compile(r"""
     (.*)?$                          # etc.
 """, re.VERBOSE)
 
-Webster = namedtuple('Webster', 'word pron paren bracket csep part etym def1 use1 def2 more')
+Webster = namedtuple('Webster', 'word pron parenth bracket sep_spc part etymology defn1 usage1 defn2 etc')
 
 class WebsterEntry:
     def __init__(self, webster, options=None):
         self.tupl = webster
         self.word = webster.word.lower()
         self.pron = webster.pron
-        print("Hey looky here, I'm in WebsterEntry.__init__: (%s)  (%s)" % (self.word, self.pron))
+        self.pren = webster.parenth
+        self.brck = webster.bracket
+        self.csep = webster.sep_spc
+        self.part = webster.part
+        self.etym = webster.etymology
+        self.def1 = webster.defn1
+        self.use1 = webster.usage1
+        self.def2 = webster.defn2
+        self.more = webster.etc
 
     def __str__(self):
         return('''
     tupl: {}
     word: {}
     pron: {}
-    '''.format(self.tupl, self.word, self.pron))
-
+    part: {}
+    def1: {}
+    use1: {}
+    def2: {}
+    more: {}
+    '''.format(self.tupl, self.word, self.pron, self.part, self.def1, self.use1, self.def2, self.more))
 
 
 def parse_webster_match(match):
     if match:
         # print_groups(match)
-        webster = Webster(*match.groups())
-        print("word:", webster.word)
-        print("pron:", webster.pron)
-        print("part:", webster.part)
-        print("etym:", webster.etym)
-        print("def1:", webster.def1)
-        print("use1:", webster.use1)
-        print("def2:", webster.def2)
-        print("more:", webster.more, "\n")
-        entry = WebsterEntry(webster)
-        print("Hey looky here, I'm a WebsterEntry.__str__: (%s)\n" % entry.__str__())
-
-        return webster
-    print("        >>>>NO MATCH<<<<")
+        return Webster(*match.groups())
     return None
+
+def print_webster(webster):
+    print("    Webster tuple:")
+    print("\tword:", webster.word)
+    print("\tpron:", webster.pron)
+    print("\tpart:", webster.part)
+    print("\tetym:", webster.etymology)
+    print("\tdef1:", webster.defn1)
+    print("\tuse1:", webster.usage1)
+    print("\tdef2:", webster.defn2)
+    print("\tmore:", webster.etc)
 
 def parse_webster_entry(entry):
     match = REM_WEBSTER.match(entry)
-    wuple = parse_webster_match(match)
+    return parse_webster_match(match)
+
+def first_token(text, default=None):
+    try:
+        return re.match(r'\W*([\w]+)', text).groups()[0]
+    except:
+        return default
 
 def parse_webster_file(path, beg, end, charset, verbose=1):
     for idx, paragraph in enumerate(para_iter_file(path, REC_UPPER_WORD, sep_lines=1, charset=charset)):
         if idx >= beg:
-            if verbose > 0:
-                print("PARA {:2}  ({})\n".format(idx, paragraph))
-            parse_webster_entry(paragraph)
+            webster = parse_webster_entry(paragraph)
+            if verbose > 0 or not webster:
+                print("\nPARAGRAPH {:5}\n({})".format(idx, paragraph))
+            if webster:
+                print_webster(webster)
+                entry = WebsterEntry(webster)   # TODO: just testing constructor for now
+                # print("WebsterEntry.__str__: (%s)\n" % entry.__str__())
+                # print("WebsterEntry.__dict__: (%s)\n" % entry.__dict__)
+            else:
+                print("      >>>>NO MATCH<<<<  ON ", first_token(paragraph))
+
         if end > 0 and idx >= end:
             break
 
