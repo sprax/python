@@ -383,8 +383,7 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
                 # print("WebsterEntry.__str__: (%s)\n" % entry.__str__())
                 # print("WebsterEntry.__dict__: (%s)\n" % entry.__dict__)
             elif verbose > 0:
-                print(" {}  >>>>NO MATCH<<<<".format(first_token(paragraph)))
-
+                print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(paragraph), idx))
         if end > 0 and idx >= end:
             break
 
