@@ -16,6 +16,8 @@ import argparse
 import math
 import re
 import sys
+from collections import namedtuple
+
 from utf_print import utf_print
 
 INF_NUM_WORDS = 2**30
@@ -271,7 +273,7 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
 
 def para_iter_file(path, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0, charset='utf8'):
     '''Generator yielding filtered paragraphs from a text file'''
-    print("para_iter_file: pattern: %s" % rgx_para_separator.pattern)
+    # print("para_iter_file: pattern: %s" % rgx_para_separator.pattern)
     with open(path, 'r', encoding=charset) as text:
         for para in paragraph_iter(text, rgx_para_separator, sep_lines):
             yield para
@@ -287,32 +289,60 @@ def print_groups(match):
         for grp in match.groups():
             print("  {}".format(grp))
 
-# REP_WEBSTER1 = r'\n([A-Z-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s)([^.]+)?'
-# REP_WEBSTER = r'([A-Z\'-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)'
-
-REP_SPC = r'\s\.,'
-REP_WEBSTER = r'([A-Z-]+)\s+([^\s\(\[,]+)\s*(\([^(]+\))?(\[[^\]]+\])?([^,]*,?)\s+((?:[a-z]\.\s*)+)?(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)'
-REC_WEBSTER = re.compile(REP_WEBSTER)
-
-REM_WEBSTER = re.compile(r"""([A-Z-]+)\s+          # WORD and whitespace
-                             ([^\s\(\[,]+)         # pron
-                             \s*(\([^(]+\))?       # parenthesized ?
-                             (\[[^\]]+\])?         # bracketed ?
-                             ([^,]*,?)\s+          # junk
-                             ((?:[a-z]\.\s*)+)?    # parts of speech
-                            """, re.VERBOSE)
-
 REP_UPPER_WORD = r'^\s*([A-Z-]+)\b\s*'
 REC_UPPER_WORD = re.compile(REP_UPPER_WORD)
 
-def parse_webster_file(path, max_entries, charset, verbose=1):
+# REP_WEBSTER1 = r'\n([A-Z-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s)([^.]+)?'
+# REP_WEBSTER = r'([A-Z\'-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)'
+
+REP_SPC = r'[\s.,]+'
+REP_WEBSTER = r'([A-Z-]+)\s+([^\s\(\[,]+)\s*(\([^(]+\))?(\[[^\]]+\])?([^,]*,?)\s+((?:[a-z]\.\s*)+)?(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)'
+REC_WEBSTER = re.compile(REP_WEBSTER)
+
+REM_WEBSTER = re.compile(r"""
+    ([A-Z-]+)\s+                    # WORD and whitespace
+    ([^\s\(\[,]+)\s*                # pron
+    (\([^(]+\))?                    # parenthesized ?
+    (\[[^\]]+\])?                   # bracketed ?
+    ([^,]*,?)?\s*                   # space, punctuation(period, comma)
+    ((?:[a-z]\.\s*)+)?              # parts of speech
+    (?:Etym:\s+\[([^\]]+)\])?\s*    # etymology
+    (?:Defn:|1.\s+([^.]+))?\.?\s+   # definition 1
+    (".*"[^\d]+)?\s*                # example 1
+    (\d.\s[^\d]+)?                  # definition 2, ...
+    (.*)?$                          # etc.
+""", re.VERBOSE)
+
+Webster = namedtuple('Webster', 'word pron paren bracket csep part etym def1 use1 def2 more')
+
+def parse_webster_match(match):
+    if match:
+        # print_groups(match)
+        webster = Webster(*match.groups())
+        print("word:", webster.word)
+        print("pron:", webster.pron)
+        print("part:", webster.part)
+        print("etym:", webster.etym)
+        print("def1:", webster.def1)
+        print("use1:", webster.use1)
+        print("def2:", webster.def2)
+        print("more:", webster.more, "\n")
+        return webster
+    return None
+
+
+def parse_webster_entry(entry):
+    match = REM_WEBSTER.match(entry)
+    wuple = parse_webster_match(match)
+
+def parse_webster_file(path, beg, end, charset, verbose=1):
     for idx, paragraph in enumerate(para_iter_file(path, REC_UPPER_WORD, sep_lines=1, charset=charset)):
-        if 0 < max_entries and max_entries <= idx:
+        if idx >= beg:
+            if verbose > 0:
+                print("PARA {:2}  ({})\n".format(idx, paragraph))
+            parse_webster_entry(paragraph)
+        if end > 0 and idx >= end:
             break
-        if verbose > 0:
-            print("PARA {:2}  ({})\n".format(idx, paragraph))
-            match = REM_WEBSTER.match(paragraph)
-            print_groups(match)
 
 # aaa = 'A A (named a in the English, and most commonly ä in other languages). Defn: The first letter of the English and of many other alphabets. The capital A of the alphabets of Middle and Western Europe, as also the small letter (a), besides the forms in Italic, black letter, etc., are all descended from the old Latin A, which was borrowed from the Greek Alpha, of the same form; and this was made from the first letter (Aleph, and itself from the Egyptian origin. '
 # mm = re.match(r'([A-Z-]+)\s+([^\s,]+)[^,]*,?\s+((?:[a-z]\.\s*)+)?(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)', aaa); mm
@@ -324,6 +354,10 @@ def parse_webster_file(path, max_entries, charset, verbose=1):
 
 CONST_MAX_WORDS = 5
 DEFAULT_NUMBER = 10
+CONST_START_INDEX = 1
+CONST_STOP_INDEX = 10
+DEFAULT_START_INDEX = 0
+DEFAULT_STOP_INDEX  = 0
 
 def main():
     '''Driver to iterate over the paragraphs in a text file.'''
@@ -334,21 +368,27 @@ def main():
                         help='charset encoding of input text')
     parser.add_argument('-function', type=int, nargs='?', const=1, default=0,
                         help='paragraph printing function: 0=all (default: 0)')
-    parser.add_argument('-max_words', type=int, nargs='?', const=CONST_MAX_WORDS, default=0,
-                        help='maximum words per paragraph: print only the first M words,\
-                        or all if M < 1 (default: 0)')
     parser.add_argument('-number', type=int, nargs='?', const=CONST_MAX_WORDS,
                         default=DEFAULT_NUMBER,
                         help='max number of entries to parse (defaults: %d/%d)' % (
                             CONST_MAX_WORDS, DEFAULT_NUMBER))
+    parser.add_argument('-start_index', '-beg', type=int, nargs='?',
+                        const=CONST_START_INDEX, default=DEFAULT_START_INDEX,
+                        help='start_index (defaults: %d/%d)' % (CONST_START_INDEX, DEFAULT_START_INDEX))
+    parser.add_argument('-stop_index', '-end', type=int, nargs='?',
+                        const=CONST_STOP_INDEX, default=DEFAULT_STOP_INDEX,
+                        help='stop_index (defaults: %d/%d)' % (CONST_STOP_INDEX, DEFAULT_STOP_INDEX))
     parser.add_argument('-webster', action='store_true',
                         help='parse a dictionary in the format of Websters Unabridged.')
+    parser.add_argument('-words', dest='max_words', type=int, nargs='?', const=CONST_MAX_WORDS, default=0,
+                        help='maximum words per paragraph: print only the first M words,\
+                        or all if M < 1 (default: 0)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
     if args.webster:
-        parse_webster_file(args.text_file, args.number, args.charset)
+        parse_webster_file(args.text_file, args.start_index, args.stop_index, args.charset)
         exit(0)
 
     if args.function == 0:
