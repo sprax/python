@@ -374,15 +374,16 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
     for idx, paragraph in enumerate(para_iter_file(path, REC_UPPER_WORD, sep_lines=1, charset=charset)):
         if idx >= beg:
             webster = parse_webster_entry(paragraph)
-            if verbose > 0 or not webster:
+            if verbose > 3 or verbose > 1 and not webster:
                 print("\nPARAGRAPH {:5}\n({})".format(idx, paragraph))
             if webster:
-                print_webster(webster)
+                if verbose > 2:
+                    print_webster(webster)
                 entry = WebsterEntry(webster)   # TODO: just testing constructor for now
                 # print("WebsterEntry.__str__: (%s)\n" % entry.__str__())
                 # print("WebsterEntry.__dict__: (%s)\n" % entry.__dict__)
-            else:
-                print("      >>>>NO MATCH<<<<  ON ", first_token(paragraph))
+            elif verbose > 0:
+                print(" {}  >>>>NO MATCH<<<<".format(first_token(paragraph)))
 
         if end > 0 and idx >= end:
             break
@@ -429,9 +430,10 @@ def main():
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
+    verbose = args.verbose
 
     if args.webster:
-        parse_webster_file(args.text_file, args.start_index, args.stop_index, args.charset)
+        parse_webster_file(args.text_file, args.start_index, args.stop_index, args.charset, verbose)
         exit(0)
 
     if args.function == 0:
