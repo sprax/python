@@ -315,6 +315,12 @@ REM_WEBSTER = re.compile(r"""
 
 Webster = namedtuple('Webster', 'word pron paren bracket csep part etym def1 use1 def2 more')
 
+class WebsterEntry:
+    def __init__(self, webster, options=None):
+        self.word = webster.word.lower()
+        self.pron = webster.pron
+        print("Hey looky here, I'm a Webster: (%s)  (%s)\n" % (self.word, self.pron))
+
 def parse_webster_match(match):
     if match:
         # print_groups(match)
@@ -327,9 +333,10 @@ def parse_webster_match(match):
         print("use1:", webster.use1)
         print("def2:", webster.def2)
         print("more:", webster.more, "\n")
+        entry = WebsterEntry(webster)
         return webster
+    print("        >>>>NO MATCH<<<<")
     return None
-
 
 def parse_webster_entry(entry):
     match = REM_WEBSTER.match(entry)
