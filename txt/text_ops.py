@@ -317,9 +317,19 @@ Webster = namedtuple('Webster', 'word pron paren bracket csep part etym def1 use
 
 class WebsterEntry:
     def __init__(self, webster, options=None):
+        self.tupl = webster
         self.word = webster.word.lower()
         self.pron = webster.pron
-        print("Hey looky here, I'm a Webster: (%s)  (%s)\n" % (self.word, self.pron))
+        print("Hey looky here, I'm in WebsterEntry.__init__: (%s)  (%s)" % (self.word, self.pron))
+
+    def __str__(self):
+        return('''
+    tupl: {}
+    word: {}
+    pron: {}
+    '''.format(self.tupl, self.word, self.pron))
+
+
 
 def parse_webster_match(match):
     if match:
@@ -334,6 +344,8 @@ def parse_webster_match(match):
         print("def2:", webster.def2)
         print("more:", webster.more, "\n")
         entry = WebsterEntry(webster)
+        print("Hey looky here, I'm a WebsterEntry.__str__: (%s)\n" % entry.__str__())
+
         return webster
     print("        >>>>NO MATCH<<<<")
     return None
