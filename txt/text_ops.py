@@ -310,20 +310,21 @@ REP_WEBSTER = r'([A-Z-]+)\s+([^\s\(\[,]+)\s*(\([^(]+\))?(\[[^\]]+\])?([^,]*,?)\s
 REC_WEBSTER = re.compile(REP_WEBSTER)
 
 REM_WEBSTER = re.compile(r"""
-    ([A-Z-]+)\s+                    # WORD and whitespace
-    ([^\s\(\[,]+)\s*                # pron
-    (\([^(]+\))?                    # parenthesized ?
-    (\[[^\]]+\])?                   # bracketed ?
-    ([^,]*,?)?\s*                   # space, punctuation(period, comma)
-    ((?:[a-z]\.\s*)+)?              # parts of speech
-    (?:Etym:\s+\[([^\]]+)\])?\s*    # etymology
-    (?:Defn:|1.\s+([^.]+))?\.?\s+   # definition 1
-    (".*"[^\d]+)?\s*                # example 1
-    (\d.\s[^\d]+)?                  # definition 2, ...
-    (.*)?$                          # etc.
+    (?P<wrd1>[A-Z-]+)\s*                    # WORD 1 and whitespace
+    (?:;\s+(?P<wrd2>[A-Z-]+))?\s+            # WORD 2 (alternative spelling) and whitespace
+    (?P<pron>[^\s\(\[,]+)\s*                # pron
+    (?P<parn>\([^(]+\))?                    # parenthesized ?
+    (?P<brck>\[[^\]]+\])?                   # bracketed ?
+    (?P<sep1>[^,]*,?)?\s*                   # space, punctuation(period, comma)
+    (?P<part>(?:[a-z]\.\s*)+)?              # parts of speech
+    (?:Etym:\s+\[(?P<etym>[^\]]+)\])?\s*    # etymology
+    (?:Defn:|1.\s+(?P<def1>[^.]+))?\.?\s+   # definition 1
+    (?P<use1>".*"[^\d]+)?\s*                # example 1
+    (?P<def2>\d.\s[^\d]+)?                  # definition 2, ...
+    (?P<rest>.*)?$                          # etc.
 """, re.VERBOSE)
 
-Webster = namedtuple('Webster', 'word pron parenth bracket sep_spc part etymology defn1 usage1 defn2 etc')
+Webster = namedtuple('Webster', 'word wrd2 pron parenth bracket sep_spc part etymology defn1 usage1 defn2 etc')
 
 class WebsterEntry:
     def __init__(self, webster, options=None):
