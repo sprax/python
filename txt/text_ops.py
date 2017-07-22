@@ -310,10 +310,10 @@ REP_WEBSTER = r'([A-Z-]+)\s+([^\s\(\[,]+)\s*(\([^(]+\))?(\[[^\]]+\])?([^,]*,?)\s
 REC_WEBSTER = re.compile(REP_WEBSTER)
 
 REM_WEBSTER = re.compile(r"""
-    (?P<wrd1>[A-Z-]+)\s*                    # WORD 1 and whitespace
-    (?:;\s+(?P<wrd2>[A-Z-]+))?\s+           # WORD 2 (alternative spelling) and whitespace
-    (?:,\s+(?P<prn1>[^\s\(\[,]+))?\s*      # pronunciation 1
-    (?P<prn2>[^\s\(\[,]+)\s*                # pronunciation 2
+    (?P<wrd1>[A-Z'-]+)                       # WORD 1 and whitespace
+    (?:;\s+(?P<wrd2>[A-Z'-]+))*\s+           # WORD 2 (variant spelling) and whitespace
+    (?P<prn1>[^\s\(\[,]+)\s*                # pronunciation 2
+    (?:,\s*(?P<prn2>[^\s\(\[,]+))*\s*       # pronunciation 1
     (?P<parn>\([^(]+\))?                    # parenthesized ?
     (?P<brck>\[[^\]]+\])?                   # bracketed ?
     (?P<sep1>[^,]*,?)?\s*                   # space, punctuation(period, comma)
@@ -328,19 +328,20 @@ REM_WEBSTER = re.compile(r"""
 Webster = namedtuple('Webster', 'word wrd2 pron parenth bracket sep_spc part etymology defn1 usage1 defn2 etc')
 
 class WebsterEntry:
-    def __init__(self, webster, options=None):
-        self.tupl = webster
-        self.word = webster.word.lower()
-        self.pron = webster.pron
-        self.pren = webster.parenth
-        self.brck = webster.bracket
-        self.csep = webster.sep_spc
-        self.part = webster.part
-        self.etym = webster.etymology
-        self.def1 = webster.defn1
-        self.use1 = webster.usage1
-        self.def2 = webster.defn2
-        self.more = webster.etc
+    def __init__(self, entry_dict, options=None):
+        '''TODO: bifurcate on wrd2 if present'''
+        self.dict = entry_dict
+        self.word = entry_dict['wrd1'].lower()
+        self.pron = entry_dict['prn1']
+        self.pren = entry_dict['parn']
+        self.brck = entry_dict['brck']
+        self.csep = entry_dict['sep1']
+        self.part = entry_dict['part']
+        self.etym = entry_dict['etym']
+        self.def1 = entry_dict['def1']
+        self.use1 = entry_dict['use1']
+        self.def2 = entry_dict['def2']
+        self.more = entry_dict['rest']
 
     def __str__(self):
         return('''
@@ -392,21 +393,21 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
                 if entry_dict['def1']:
                     metrics['defined'] += 1
                 if verbose > 2:
-                    print_webster(entry_dict)
+                    print(entry_dict)
                 entry = WebsterEntry(entry_dict)   # TODO: just testing constructor for now
                 # print("WebsterEntry.__str__: (%s)\n" % entry.__str__())
                 # print("WebsterEntry.__dict__: (%s)\n" % entry.__dict__)
             else:
                 metrics['unparsed'] += 1
                 if verbose > 0:
-                    print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(paragraph), idx))
+                    print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry), idx))
         if end > 0 and idx >= end:
             break
     print_metrics(metrics)
 
-def print_metrics(dict):
+def print_metrics(metrics):
     print("def/parsed/unparsed/tried: %d/%d:%d/%d" % (
-        dict['defined'], dict['parsed'], dict['unparsed'], dict['tried']))
+        metrics['defined'], metrics['parsed'], metrics['unparsed'], metrics['tried']))
 
 # aaa = 'A A (named a in the English, and most commonly ä in other languages). Defn: The first letter of the English and of many other alphabets. The capital A of the alphabets of Middle and Western Europe, as also the small letter (a), besides the forms in Italic, black letter, etc., are all descended from the old Latin A, which was borrowed from the Greek Alpha, of the same form; and this was made from the first letter (Aleph, and itself from the Egyptian origin. '
 # mm = re.match(r'([A-Z-]+)\s+([^\s,]+)[^,]*,?\s+((?:[a-z]\.\s*)+)?(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)', aaa); mm
