@@ -311,8 +311,9 @@ REC_WEBSTER = re.compile(REP_WEBSTER)
 
 REM_WEBSTER = re.compile(r"""
     (?P<wrd1>[A-Z-]+)\s*                    # WORD 1 and whitespace
-    (?:;\s+(?P<wrd2>[A-Z-]+))?\s+            # WORD 2 (alternative spelling) and whitespace
-    (?P<pron>[^\s\(\[,]+)\s*                # pron
+    (?:;\s+(?P<wrd2>[A-Z-]+))?\s+           # WORD 2 (alternative spelling) and whitespace
+    (?:,\s+(?P<prn1>[^\s\(\[,]+))?\s*      # pronunciation 1
+    (?P<prn2>[^\s\(\[,]+)\s*                # pronunciation 2
     (?P<parn>\([^(]+\))?                    # parenthesized ?
     (?P<brck>\[[^\]]+\])?                   # bracketed ?
     (?P<sep1>[^,]*,?)?\s*                   # space, punctuation(period, comma)
@@ -353,13 +354,6 @@ class WebsterEntry:
     more: {}
     '''.format(self.tupl, self.word, self.pron, self.part, self.def1, self.use1, self.def2, self.more))
 
-
-def parse_webster_match(match):
-    if match:
-        # print_groups(match)
-        return Webster(*match.groups())
-    return None
-
 def print_webster(webster):
     print("    Webster tuple:")
     print("\tword:", webster.word)
@@ -371,26 +365,35 @@ def print_webster(webster):
     print("\tdef2:", webster.defn2)
     print("\tmore:", webster.etc)
 
+
+def match_webster_entry(entry):
+    '''return regex match on dictionary entry text; trying only one pattern for now'''
+    return REM_WEBSTER.match(entry)
+
 def parse_webster_entry(entry):
-    match = REM_WEBSTER.match(entry)
-    return parse_webster_match(match)
+    '''Return a dict representing a parsed dictionary entry.
+    For now we just return the dict from a match's named groups.'''
+    match = match_webster_entry(entry)
+    if match:
+        return match.groupdict()
+    return None
 
 
 def parse_webster_file(path, beg, end, charset, verbose=1):
     metrics = defaultdict(int)
-    for idx, paragraph in enumerate(para_iter_file(path, REC_UPPER_WORD, sep_lines=1, charset=charset)):
+    for idx, entry in enumerate(para_iter_file(path, REC_UPPER_WORD, sep_lines=1, charset=charset)):
         if idx >= beg:
             metrics['tried'] += 1
-            webster = parse_webster_entry(paragraph)
-            if verbose > 3 or verbose > 1 and not webster:
-                print("\nPARAGRAPH {:5}\n({})".format(idx, paragraph))
-            if webster:
+            entry_dict = parse_webster_entry(entry)
+            if verbose > 3 or verbose > 1 and not entry_dict:
+                print("\nPARAGRAPH {:5}\n({})".format(idx, entry))
+            if entry_dict:
                 metrics['parsed'] += 1
-                if webster.defn1:
+                if entry_dict['def1']:
                     metrics['defined'] += 1
                 if verbose > 2:
-                    print_webster(webster)
-                entry = WebsterEntry(webster)   # TODO: just testing constructor for now
+                    print_webster(entry_dict)
+                entry = WebsterEntry(entry_dict)   # TODO: just testing constructor for now
                 # print("WebsterEntry.__str__: (%s)\n" % entry.__str__())
                 # print("WebsterEntry.__dict__: (%s)\n" % entry.__dict__)
             else:
@@ -402,7 +405,7 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
     print_metrics(metrics)
 
 def print_metrics(dict):
-    print("def/parsed/unparsed/tried: %d/%d/%d/%d" % (
+    print("def/parsed/unparsed/tried: %d/%d:%d/%d" % (
         dict['defined'], dict['parsed'], dict['unparsed'], dict['tried']))
 
 # aaa = 'A A (named a in the English, and most commonly ä in other languages). Defn: The first letter of the English and of many other alphabets. The capital A of the alphabets of Middle and Western Europe, as also the small letter (a), besides the forms in Italic, black letter, etc., are all descended from the old Latin A, which was borrowed from the Greek Alpha, of the same form; and this was made from the first letter (Aleph, and itself from the Egyptian origin. '
