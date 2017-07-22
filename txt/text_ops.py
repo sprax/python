@@ -16,7 +16,7 @@ import argparse
 import math
 import re
 import sys
-from collections import namedtuple
+from collections import defaultdict, namedtuple
 
 from utf_print import utf_print
 
@@ -284,6 +284,16 @@ def filter_file(para_filter, path, charset='utf8'):
         for para in paragraph_iter(text):
             yield para_filter.filter_paragraph(para)
 
+
+REC_FIRST_WORD_TOKEN = re.compile(r'^\W*(\w+)')
+
+def first_token(text, default=None):
+    try:
+        return REC_FIRST_WORD_TOKEN.match(text).groups()[0]
+    except:
+        return default
+
+
 def print_groups(match):
     if match:
         for grp in match.groups():
@@ -364,30 +374,35 @@ def parse_webster_entry(entry):
     match = REM_WEBSTER.match(entry)
     return parse_webster_match(match)
 
-REC_FIRST_WORD_TOKEN = re.compile(r'^\W*(\w+)')
-
-def first_token(text, default=None):
-    try:
-        return REC_FIRST_WORD_TOKEN.match(text).groups()[0]
-    except:
-        return default
 
 def parse_webster_file(path, beg, end, charset, verbose=1):
+    metrics = defaultdict(int)
     for idx, paragraph in enumerate(para_iter_file(path, REC_UPPER_WORD, sep_lines=1, charset=charset)):
         if idx >= beg:
+            metrics['tried'] += 1
             webster = parse_webster_entry(paragraph)
             if verbose > 3 or verbose > 1 and not webster:
                 print("\nPARAGRAPH {:5}\n({})".format(idx, paragraph))
             if webster:
+                metrics['parsed'] += 1
+                if webster.defn1:
+                    metrics['defined'] += 1
                 if verbose > 2:
                     print_webster(webster)
                 entry = WebsterEntry(webster)   # TODO: just testing constructor for now
                 # print("WebsterEntry.__str__: (%s)\n" % entry.__str__())
                 # print("WebsterEntry.__dict__: (%s)\n" % entry.__dict__)
-            elif verbose > 0:
-                print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(paragraph), idx))
+            else:
+                metrics['unparsed'] += 1
+                if verbose > 0:
+                    print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(paragraph), idx))
         if end > 0 and idx >= end:
             break
+    print_metrics(metrics)
+
+def print_metrics(dict):
+    print("def/parsed/unparsed/tried: %d/%d/%d/%d" % (
+        dict['defined'], dict['parsed'], dict['unparsed'], dict['tried']))
 
 # aaa = 'A A (named a in the English, and most commonly ä in other languages). Defn: The first letter of the English and of many other alphabets. The capital A of the alphabets of Middle and Western Europe, as also the small letter (a), besides the forms in Italic, black letter, etc., are all descended from the old Latin A, which was borrowed from the Greek Alpha, of the same form; and this was made from the first letter (Aleph, and itself from the Egyptian origin. '
 # mm = re.match(r'([A-Z-]+)\s+([^\s,]+)[^,]*,?\s+((?:[a-z]\.\s*)+)?(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)', aaa); mm
