@@ -314,10 +314,12 @@ REM_WEBSTER = re.compile(r"""
     (?:;\s+(?P<wrd2>[A-Z'-]+))?\s+          # WORD 2+ (variant spellings) and whitespace
     (?P<prn1>[^\s\(\[,]+)\s*                # pronunciation 1
     (?:,\s*(?P<prn2>\w[^\s\(\[,.]+))?\s*    # pronunciation 2+
-    (?P<parn>\([^)]+\))?                    # parenthesized ?
+    (?P<pt1a>(?:[a-z]\.\s*)+)?              # part of speech for first definition (order varies)
+    (?P<parn>\([^\)]+\))?                   # parenthesized 1a ?
     (?P<brck>\[[^\]]+\])?                   # bracketed ?
     (?P<sep1>[^,]*,?)?\s*                   # space, punctuation(period, comma)
-    (?P<part>(?:[a-z]\.\s*)+)?              # parts of speech
+    (?P<pt1b>(?:[a-z]\.\s*)+)?              # part of speech for first definition (may be right before defn.)
+    (?P<par2>\([^\)]+\))?\s*                # parenthesized 1b ?
     (?:(?P<dft1>Defn:|1\.)\s+(?P<def1>[^.]+))?\.?\s+   # definition 1 tag
     (?:;)?\s*                               # optional separator
     (?:Etym:\s+\[(?P<etym>[^\]]+)\])?\s*    # etymology
@@ -341,7 +343,8 @@ class WebsterEntry:
         self.pren = entry_dict['parn']
         self.brck = entry_dict['brck']
         self.csep = entry_dict['sep1']
-        self.part = entry_dict['part']
+        part1 = entry_dict['pt1a']
+        self.part = part1 if part1 else entry_dict['pt1b']
         self.etym = entry_dict['etym']
         self.dft1 = entry_dict['dft1']
         self.def1 = entry_dict['def1']
