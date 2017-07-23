@@ -310,66 +310,69 @@ REP_WEBSTER = r'([A-Z-]+)\s+([^\s\(\[,]+)\s*(\([^(]+\))?(\[[^\]]+\])?([^,]*,?)\s
 REC_WEBSTER = re.compile(REP_WEBSTER)
 
 REM_WEBSTER = re.compile(r"""
-    (?P<wrd1>[A-Z'-]+)                      # WORD 1 and whitespace
-    (?:;\s+(?P<wrd2>[A-Z'-]+))?\s+          # WORD 2+ (variant spellings) and whitespace
-    (?P<prn1>[^\s\(\[,]+)\s*                # pronunciation 1
-    (?:,\s*(?P<prn2>\w[^\s\(\[,.]+))?\s*    # pronunciation 2+
-    (?P<pt1a>(?:[a-z]\.\s*)+)?              # part of speech for first definition (order varies)
-    (?P<parn>\([^\)]+\))?                   # parenthesized 1a ?
-    (?P<brck>\[[^\]]+\])?                   # bracketed ?
-    (?P<sep1>[^,]*,?)?\s*                   # space, punctuation(period, comma)
-    (?P<pt1b>(?:[a-z]\.\s*)+)?              # part of speech for first definition (may be right before defn.)
-    (?P<par2>\([^\)]+\))?\s*                # parenthesized 1b ?
-    (?:(?P<dft1>Defn:|1\.)\s+(?P<def1>[^.]+))?\.?\s+   # definition 1 tag
+    (?P<word_1>[A-Z'-]+)                      # WORD 1 and whitespace
+    (?:;\s+(?P<word_2>[A-Z'-]+))?\s+          # WORD 2+ (variant spellings) and whitespace
+    (?P<pron_1>[^\s\(\[,]+)\s*                # pronunciation 1
+    (?:,\s*(?P<pron_2>\w[^\s\(\[,.]+))?\s*    # pronunciation 2+
+    (?P<part1a>(?:[a-z]\.\s*)+)?              # part of speech for first definition (order varies)
+    (?P<pren1a>\([^\)]+\))?                   # parenthesized 1a ?
+    (?P<brack1>\[[^\]]+\])?                   # bracketed ?
+    (?P<sepsp1>[^,]*,?)?\s*                   # space, punctuation(period, comma)
+    (?P<part1b>(?:[a-z]\.\s*)+)?              # part of speech for first definition (may be right before defn.)
+    (?P<pren1b>\([^\)]+\))?\s*                # parenthesized 1b ?
+    (?:(?P<dftag1>Defn:|1\.)\s+(?P<defn_1>[^.]+))?\.?\s+   # definition 1 tag
     (?:;)?\s*                               # optional separator
-    (?:Etym:\s+\[(?P<etym>[^\]]+)\])?\s*    # etymology
-    (?P<use1>".*"[^\d]+)?\s*                # example 1
-    (?P<def2>\d.\s[^\d]+)?                  # definition 2, ...
-    (?P<rest>.*)?$                          # etc.
+    (?:Etym:\s+\[(?P<etym_1>[^\]]+)\])?\s*    # etymology
+    (?P<usage1>".*"[^\d]+)?\s*                # example 1
+    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
+    (?P<cetera>.*)?$                          # etc.
 """, re.VERBOSE)
 
-Webster = namedtuple('Webster', 'word wrd2 pron parenth bracket sep_spc part etymology defn1 usage1 defn2 etc')
+Webster = namedtuple('Webster', 'word_1 word_2 pron_1 parenth bracket sep_spc part_1 etymology defn1 usage1 defn2 etc')
 
 class WebsterEntry:
     '''Represents a parsed dictionary entry a la Webster's Unabridged'''
     def __init__(self, entry_dict, options=None):
-        '''TODO: bifurcate on wrd2 if present'''
+        '''TODO: bifurcate on word_2 if present'''
         self.dict = entry_dict
-        self.word = entry_dict['wrd1'].lower()
-        wrd2 = entry_dict['wrd2']
-        self.wrd2 = wrd2.lower() if wrd2 else None
-        self.pron = entry_dict['prn1']
-        self.prn2 = entry_dict['prn2']
-        self.pren = entry_dict['parn']
-        self.brck = entry_dict['brck']
-        self.csep = entry_dict['sep1']
-        part1 = entry_dict['pt1a']
-        self.part = part1 if part1 else entry_dict['pt1b']
-        self.etym = entry_dict['etym']
-        self.dft1 = entry_dict['dft1']
-        self.def1 = entry_dict['def1']
-        self.use1 = entry_dict['use1']
-        self.def2 = entry_dict['def2']
-        self.more = entry_dict['rest']
+        self.word_1 = entry_dict['word_1'].lower()
+        word_2 = entry_dict['word_2']
+        self.word_2 = word_2.lower() if word_2 else None
+        self.pron_1 = entry_dict['pron_1']
+        self.pron_2 = entry_dict['pron_2']
+
+        parenthesis_1 = entry_dict['pren1a']
+        self.pren_1 = parenthesis_1 if parenthesis_1 else entry_dict['pren1b']
+
+        self.brack1 = entry_dict['brack1']
+        self.csep = entry_dict['sepsp1']
+        part1 = entry_dict['part1a']
+        self.part_1 = part1 if part1 else entry_dict['part1b']
+        self.etym_1 = entry_dict['etym_1']
+        self.dftag1 = entry_dict['dftag1']
+        self.defn_1 = entry_dict['defn_1']
+        self.usage1 = entry_dict['usage1']
+        self.defn_2 = entry_dict['defn_2']
+        self.cetera = entry_dict['cetera']
 
     def __str__(self):
         return('''
-    word: {:<24}    wrd2: {}
-    pron: {:<24}    prn2: {}
-    part: ({})
-    dft1: ({})
-    def1: ({})
-    use1: {}
-    def2: {}
-    more: {}
-    '''.format(self.word, self.wrd2, self.pron, self.prn2, self.part,
-               self.dft1, self.def1, self.use1, self.def2, self.more))
+    word_1: {:<24}    word_2: {}
+    pron_1: {:<24}    pron_2: {}
+    part_1: ({})
+    dftag1: ({})
+    defn_1: ({})
+    usage1: {}
+    defn_2: {}
+    cetera: {}
+    '''.format(self.word_1, self.word_2, self.pron_1, self.pron_2, self.part_1,
+               self.dftag1, self.defn_1, self.usage1, self.defn_2, self.cetera))
 
 def print_webster(webster):
     print("    Webster tuple:")
-    print("\tword:", webster.word)
-    print("\tpron:", webster.pron)
-    print("\tpart:", webster.part)
+    print("\tword:", webster.word_1)
+    print("\tpron:", webster.pron_1)
+    print("\tpart:", webster.part_1)
     print("\tetym:", webster.etymology)
     print("\tdef1:", webster.defn1)
     print("\tuse1:", webster.usage1)
@@ -400,7 +403,7 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
                 print("\nPARAGRAPH {:5}\n({})".format(idx, entry))
             if entry_dict:
                 metrics['parsed'] += 1
-                if entry_dict['def1']:
+                if entry_dict['defn_1']:
                     metrics['defined'] += 1
                 entry = WebsterEntry(entry_dict)
                 if verbose > 2:
