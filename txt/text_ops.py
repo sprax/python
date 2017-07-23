@@ -320,7 +320,7 @@ REM_WEBSTER = re.compile(r"""
     (?P<sepsp1>[^,]*,?)?\s*                   # space, punctuation(period, comma)
     (?P<part1b>(?:[a-z]\.\s*)+)?              # part of speech for first definition (may be right before defn.)
     (?P<pren1b>\([^\)]+\))?\s*                # parenthesized 1b ?
-    (?:(?P<dftag1>Defn:|1\.)\s+(?P<defn_1>[^.]+))?\.?\s+   # definition 1 tag
+    (?:(?P<dftag1>Defn:|1\.)\s+(?P<defn_1>[^.]+))?\.\s*   # definition 1 tag
     (?:;)?\s*                               # optional separator
     (?:Etym:\s+\[(?P<etym_1>[^\]]+)\])?\s*    # etymology
     (?P<usage1>".*"[^\d]+)?\s*                # example 1
@@ -362,9 +362,9 @@ class WebsterEntry:
     part_1: ({})
     dftag1: ({})
     defn_1: ({})
-    usage1: {}
-    defn_2: {}
-    cetera: {}
+    usage1: ({})
+    defn_2: ({})
+    cetera: ({})
     '''.format(self.word_1, self.word_2, self.pron_1, self.pron_2, self.part_1,
                self.dftag1, self.defn_1, self.usage1, self.defn_2, self.cetera))
 
