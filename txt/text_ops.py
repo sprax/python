@@ -313,13 +313,14 @@ REM_WEBSTER = re.compile(r"""
     (?P<wrd1>[A-Z'-]+)                      # WORD 1 and whitespace
     (?:;\s+(?P<wrd2>[A-Z'-]+))?\s+          # WORD 2+ (variant spellings) and whitespace
     (?P<prn1>[^\s\(\[,]+)\s*                # pronunciation 1
-    (?:,\s*(?P<prn2>[^\s\(\[,]+))?\s*       # pronunciation 2+
+    (?:,\s*(?P<prn2>\w[^\s\(\[,.]+))?\s*       # pronunciation 2+
     (?P<parn>\([^(]+\))?                    # parenthesized ?
     (?P<brck>\[[^\]]+\])?                   # bracketed ?
     (?P<sep1>[^,]*,?)?\s*                   # space, punctuation(period, comma)
     (?P<part>(?:[a-z]\.\s*)+)?              # parts of speech
+    (?:Defn:\s+(?P<def1>[^.]+))?\.?\s+   # definition 1
+    (?:;)?\s*
     (?:Etym:\s+\[(?P<etym>[^\]]+)\])?\s*    # etymology
-    (?:Defn:|1.\s+(?P<def1>[^.]+))?\.?\s+   # definition 1
     (?P<use1>".*"[^\d]+)?\s*                # example 1
     (?P<def2>\d.\s[^\d]+)?                  # definition 2, ...
     (?P<rest>.*)?$                          # etc.
@@ -351,8 +352,8 @@ class WebsterEntry:
         return('''
     word: {:<24}    wrd2: {}
     pron: {:<24}    prn2: {}
-    part: {}
-    def1: {}
+    part: ({})
+    def1: ({})
     use1: {}
     def2: {}
     more: {}
