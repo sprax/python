@@ -328,6 +328,7 @@ REM_WEBSTER = re.compile(r"""
 Webster = namedtuple('Webster', 'word wrd2 pron parenth bracket sep_spc part etymology defn1 usage1 defn2 etc')
 
 class WebsterEntry:
+    '''Represents a parsed dictionary entry a la Webster's Unabridged'''
     def __init__(self, entry_dict, options=None):
         '''TODO: bifurcate on wrd2 if present'''
         self.dict = entry_dict
