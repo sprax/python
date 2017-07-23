@@ -311,9 +311,9 @@ REC_WEBSTER = re.compile(REP_WEBSTER)
 
 REM_WEBSTER = re.compile(r"""
     (?P<wrd1>[A-Z'-]+)                      # WORD 1 and whitespace
-    (?:;\s+(?P<wrd2>[A-Z'-]+))*\s+          # WORD 2+ (variant spellings) and whitespace
+    (?:;\s+(?P<wrd2>[A-Z'-]+))?\s+          # WORD 2+ (variant spellings) and whitespace
     (?P<prn1>[^\s\(\[,]+)\s*                # pronunciation 1
-    (?:,\s*(?P<prn2>[^\s\(\[,]+))*\s*       # pronunciation 2+
+    (?:,\s*(?P<prn2>[^\s\(\[,]+))?\s*       # pronunciation 2+
     (?P<parn>\([^(]+\))?                    # parenthesized ?
     (?P<brck>\[[^\]]+\])?                   # bracketed ?
     (?P<sep1>[^,]*,?)?\s*                   # space, punctuation(period, comma)
@@ -333,7 +333,10 @@ class WebsterEntry:
         '''TODO: bifurcate on wrd2 if present'''
         self.dict = entry_dict
         self.word = entry_dict['wrd1'].lower()
+        wrd2 = entry_dict['wrd2']
+        self.wrd2 = wrd2.lower() if wrd2 else None
         self.pron = entry_dict['prn1']
+        self.prn2 = entry_dict['prn2']
         self.pren = entry_dict['parn']
         self.brck = entry_dict['brck']
         self.csep = entry_dict['sep1']
@@ -346,15 +349,14 @@ class WebsterEntry:
 
     def __str__(self):
         return('''
-    tupl: {}
-    word: {}
-    pron: {}
+    word: {:<24}    wrd2: {}
+    pron: {:<24}    prn2: {}
     part: {}
     def1: {}
     use1: {}
     def2: {}
     more: {}
-    '''.format(self.tupl, self.word, self.pron, self.part, self.def1, self.use1, self.def2, self.more))
+    '''.format(self.word, self.wrd2, self.pron, self.prn2, self.part, self.def1, self.use1, self.def2, self.more))
 
 def print_webster(webster):
     print("    Webster tuple:")
@@ -393,9 +395,9 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
                 metrics['parsed'] += 1
                 if entry_dict['def1']:
                     metrics['defined'] += 1
+                entry = WebsterEntry(entry_dict)
                 if verbose > 2:
-                    print(entry_dict)
-                entry = WebsterEntry(entry_dict)   # TODO: just testing constructor for now
+                    print("entry:\n", entry)
                 # print("WebsterEntry.__str__: (%s)\n" % entry.__str__())
                 # print("WebsterEntry.__dict__: (%s)\n" % entry.__dict__)
             else:
