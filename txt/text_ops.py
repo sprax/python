@@ -309,11 +309,14 @@ REP_SPC = r'[\s.,]+'
 REP_WEBSTER = r'([A-Z-]+)\s+([^\s\(\[,]+)\s*(\([^(]+\))?(\[[^\]]+\])?([^,]*,?)\s+((?:[a-z]\.\s*)+)?(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)'
 REC_WEBSTER = re.compile(REP_WEBSTER)
 
+# FIXME TODO: Two passes?
+# First pass regex to detect how many variants (word_1, word_2, etc.), second pass
+# regex to depend on result of first pass.
 REM_WEBSTER = re.compile(r"""
     (?P<word_1>[A-Z'-]+)                      # WORD 1 and whitespace
-    (?:;\s+(?P<word_2>[A-Z'-]+))?\s+          # WORD 2+ (variant spellings) and whitespace
-    (?P<pron_1>[^\s\(\[,]+)\s*                # pronunciation 1
-    (?:,\s*(?P<pron_2>\w[^\s\(\[,.]+))?\s*    # pronunciation 2+
+    (?:;\s+(?P<word_2>[A-Z'-]+))?\s+          # WORD 2 (variant spellings) and whitespace
+    (?P<pron_1>[A-Z][^\s\(\[,]+)\s*           # Pronunciation 1
+    (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 2
     (?P<part1a>(?:[a-z]\.\s*)+)?              # part of speech for first definition (order varies)
     (?P<pren1a>\([^\)]+\))?                   # parenthesized 1a ?
     (?P<brack1>\[[^\]]+\])?                   # bracketed ?
@@ -337,8 +340,40 @@ REM_PART = re.compile(r"""
     (?P<cetera>.*)?$                          # etc.
 """, re.VERBOSE)
 
+def try_partial_match(entry):
+    partial = REM_PART.match(entry)
+    if not partial:
+        print("======================================= Partial match failed, too!")
+        return 1
+    mag = partial.groupdict()
+    try:
+        print('''
+        word_1: {:<24}    word_2: {}
+        pron_1: {:<24}    pron_2: {}
+        part_1: ({})
+        cetera: ({})
+        '''.format(mag["word_1"], mag["word_2"], mag["pron_1"], mag["pron_2"],
+                   mag["part1a"], mag["cetera"]
+        ))
+    except KeyError as kex:
+        print("_______________________________________ Partial match failed at: ", kex)
+        return 2
+    return 0
+
 Webster = namedtuple('Webster', 'word_1 word_2 pron_1 parenth bracket sep_spc part_1 etymology defn1 usage1 defn2 etc')
 
+def print_webster(webster):
+    print("    Webster tuple:")
+    print("\tword:", webster.word_1)
+    print("\tpron:", webster.pron_1)
+    print("\tpart:", webster.part_1)
+    print("\tetym:", webster.etymology)
+    print("\tdef1:", webster.defn1)
+    print("\tuse1:", webster.usage1)
+    print("\tdef2:", webster.defn2)
+    print("\tmore:", webster.etc)
+
+###############################################################################
 class WebsterEntry:
     '''Represents a parsed dictionary entry a la Webster's Unabridged'''
     def __init__(self, entry_dict, options=None):
@@ -377,18 +412,6 @@ class WebsterEntry:
     '''.format(self.word_1, self.word_2, self.pron_1, self.pron_2, self.part_1,
                self.dftag1, self.defn_1, self.usage1, self.defn_2, self.cetera))
 
-def print_webster(webster):
-    print("    Webster tuple:")
-    print("\tword:", webster.word_1)
-    print("\tpron:", webster.pron_1)
-    print("\tpart:", webster.part_1)
-    print("\tetym:", webster.etymology)
-    print("\tdef1:", webster.defn1)
-    print("\tuse1:", webster.usage1)
-    print("\tdef2:", webster.defn2)
-    print("\tmore:", webster.etc)
-
-
 def match_webster_entry(entry):
     '''return regex match on dictionary entry text; trying only one pattern for now'''
     return REM_WEBSTER.match(entry)
@@ -423,15 +446,21 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
                 metrics['unparsed'] += 1
                 if verbose > 0:
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry), idx))
-                    bad_match = REM_PART.match(entry)
-                    print(bad_match.groups())
+                    if verbose > 1:
+                        try_partial_match(entry)
         if end > 0 and idx >= end:
             break
     print_metrics(metrics)
 
+
 def print_metrics(metrics):
-    print("def/parsed/unparsed/tried: %d/%d:%d/%d" % (
-        metrics['defined'], metrics['parsed'], metrics['unparsed'], metrics['tried']))
+    print("defined/parsed/tried: %d/%d/%d => %.f%% & %.f%% success; %d undefined & %d unparsed." % (
+        metrics['defined'], metrics['parsed'], metrics['tried'],
+        100 * metrics['defined'] / metrics['parsed'],
+        100 * metrics['parsed'] / metrics['tried'],
+        metrics['tried'] - metrics['defined'],
+        metrics['unparsed'],
+    ))
 
 # aaa = 'A A (named a in the English, and most commonly ä in other languages). Defn: The first letter of the English and of many other alphabets. The capital A of the alphabets of Middle and Western Europe, as also the small letter (a), besides the forms in Italic, black letter, etc., are all descended from the old Latin A, which was borrowed from the Greek Alpha, of the same form; and this was made from the first letter (Aleph, and itself from the Egyptian origin. '
 # mm = re.match(r'([A-Z-]+)\s+([^\s,]+)[^,]*,?\s+((?:[a-z]\.\s*)+)?(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)', aaa); mm
