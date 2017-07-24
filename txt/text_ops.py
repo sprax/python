@@ -320,11 +320,20 @@ REM_WEBSTER = re.compile(r"""
     (?P<sepsp1>[^,]*,?)?\s*                   # space, punctuation(period, comma)
     (?P<part1b>(?:[a-z]\.\s*)+)?              # part of speech for first definition (may be right before defn.)
     (?P<pren1b>\([^\)]+\))?\s*                # parenthesized 1b ?
+    (?:Etym:\s+\[(?P<etym_1>[^\]]+)\])?\s*    # etymology
     (?:(?P<dftag1>Defn:|1\.)\s+(?P<defn_1>[^.]+))?\.\s*   # definition 1 tag
     (?:;)?\s*                               # optional separator
-    (?:Etym:\s+\[(?P<etym_1>[^\]]+)\])?\s*    # etymology
     (?P<usage1>".*"[^\d]+)?\s*                # example 1
     (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
+    (?P<cetera>.*)?$                          # etc.
+""", re.VERBOSE)
+
+REM_PART = re.compile(r"""
+    (?P<word_1>[A-Z'-]+)                      # WORD 1 and whitespace
+    (?:;\s+(?P<word_2>[A-Z'-]+))?\s+          # WORD 2+ (variant spellings) and whitespace
+    (?P<pron_1>[^\s\(\[,]+)\s*                # pronunciation 1
+    (?:,\s*(?P<pron_2>\w[^\s\(\[,.]+))?\s*    # pronunciation 2+
+    (?P<part1a>(?:[a-z]\.\s*)+)?              # part of speech for first definition (order varies)
     (?P<cetera>.*)?$                          # etc.
 """, re.VERBOSE)
 
@@ -414,6 +423,8 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
                 metrics['unparsed'] += 1
                 if verbose > 0:
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry), idx))
+                bad_match = REM_PART.match(entry)
+                print(bad_match.groups())
         if end > 0 and idx >= end:
             break
     print_metrics(metrics)
