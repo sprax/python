@@ -328,12 +328,13 @@ REM_WEBSTER = re.compile(r"""
     (?:,\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?  # part of speech for first definition (order varies)
     (?P<pren1b>\([^\)]+\))?                   # parenthesized 1b ?
     (?P<brack1>\[[^\]]+\])?                   # bracketed ?
-    (?P<sepsp1>[^,]*,?)?\s*                   # space, punctuation(period, comma)
+    (?P<sepsp1>[\s.,]*)?                      # space, punctuation(period, comma)
     (?P<part1b>(?:[a-z]\.\s*)+)?              # part of speech for first definition (may be right before defn.)
     (?P<pren1c>\([^\)]+\))?\s*                # parenthesized 1c ?
-    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\])?\s*    # etymology
-    (?:(?P<dftag1>Defn:|1\.)\s+(?P<defn_1>[^.]+))?\.\s*   # definition 1 tag
-    (?:;)?\s*                               # optional separator
+    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s+)?    # etymology
+    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s+)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:(?P<dftag1>Defn:|1\.)\s+(?P<defn_1>[^.]+\.))?\s*   # definition 1 tag
+    (?:;)?\s*                                 # optional separator
     (?P<usage1>".*"[^\d]+)?\s*                # example 1
     (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
     (?P<cetera>.*)?$                          # etc.
@@ -350,36 +351,42 @@ REM_PART = re.compile(r"""
     (?:,\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?  # part of speech for first definition (order varies)
     (?P<pren1b>\([^\)]+\))?                   # parenthesized 1b ?
     (?P<brack1>\[[^\]]+\])?                   # bracketed ?
-    (?P<sepsp1>[^,]*,?)?\s*                   # space, punctuation(period, comma)
+    (?P<sepsp1>[\s.,]*)?                      # space, punctuation(period, comma)
     (?P<part1b>(?:[a-z]\.\s*)+)?              # part of speech for first definition (may be right before defn.)
     (?P<pren1c>\([^\)]+\))?\s*                # parenthesized 1c ?
-    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\])?\s*    # etymology
+    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s+)?    # etymology
+    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s+)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:(?P<dftag1>Defn:|1\.)\s+(?P<defn_1>[^.]+\.))?\s*   # definition 1 tag
     (?P<cetera>.*)?$                          # etc.
 """.format(REP_PART), re.VERBOSE)
 
 def try_partial_match(entry):
     partial = REM_PART.match(entry)
-    print("Try partial match:")
+    print("++++++++++++++++ Try partial match:")
     if not partial:
         print("======================================= Partial match failed, too!")
         return 1
-    mag = defaultdict(str, partial.groupdict())
+    matgadd = defaultdict(str, partial.groupdict())
     try:
-        print("word_1: (", mag["word_1"], ") \t",
-              "word_2: (", mag["word_2"], ") \t",
-              "word_3: (", mag["word_3"], ") \n\t",
-              "pron_1: (", mag["pron_1"], ") \t",
-              "pron_2: (", mag["pron_2"], ") \t",
-              "pron_3: (", mag["pron_3"], ") \n\t",
-              "pren1a: (", mag["pren1a"], ") \n\t",
-              "part1a: (", mag["part1a"], ") \n\t",
-              "pren1b: (", mag["pren1b"], ") \n\t",
-              "brack1: (", mag["brack1"], ") \n\t",
-              "sepsp1: (", mag["sepsp1"], ") \n\t",
-              "part1b: (", mag["part1b"], ") \n\t",
-              "pren1c: (", mag["pren1c"], ") \n\t",
-              "etym_1: (", mag["etym_1"], ") \n\t",
-              "cetera: (", mag["cetera"], ") \n\t",
+        print("\t",
+              "word_1: (", matgadd["word_1"], ") \t",
+              "word_2: (", matgadd["word_2"], ") \t",
+              "word_3: (", matgadd["word_3"], ") \n\t",
+              "pron_1: (", matgadd["pron_1"], ") \t",
+              "pron_2: (", matgadd["pron_2"], ") \t",
+              "pron_3: (", matgadd["pron_3"], ") \n\t",
+              "pren1a: (", matgadd["pren1a"], ") \n\t",
+              "part1a: (", matgadd["part1a"], ") \n\t",
+              "pren1b: (", matgadd["pren1b"], ") \n\t",
+              "brack1: (", matgadd["brack1"], ") \n\t",
+              "sepsp1: (", matgadd["sepsp1"], ") \n\t",
+              "part1b: (", matgadd["part1b"], ") \n\t",
+              "pren1c: (", matgadd["pren1c"], ") \n\t",
+              "etym_1: (", matgadd["etym_1"], ") \n\t",
+              "dtype1: (", matgadd["dtype1"], ") \t",
+              "dftag1: (", matgadd["dftag1"], ") \n\t",
+              "defn_1: (", matgadd["defn_1"], ") \n\t",
+              "cetera: (", matgadd["cetera"], ") \n\t",
               sep='')
     except KeyError as kex:
         print("_______________________________________ Partial match failed at: ", kex)
@@ -431,8 +438,8 @@ class WebsterEntry:
 
     def __str__(self):
         return('''
-    word_1: {:<24}    word_2: {:<24}    word_3: {}
-    pron_1: {:<24}    pron_2: {:<24}    pron_3: {}
+    word_1: {:<24}    word_2: {}    word_3: {}
+    pron_1: {:<24}    pron_2: {}    pron_3: {}
     part_1: ({})
     dftag1: ({})
     defn_1: ({})
@@ -486,7 +493,7 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
 def print_metrics(metrics):
     print("defined/parsed/tried: %d/%d/%d => %.1f%% & %.1f%% success; %d undefined & %d unparsed." % (
         metrics['defined'], metrics['parsed'], metrics['tried'],
-        100 * metrics['defined'] / (1 + metrics['parsed']),
+        100 * metrics['defined'] / (metrics['parsed']),
         100 * metrics['parsed'] / metrics['tried'],
         metrics['tried'] - metrics['defined'],
         metrics['unparsed'],
