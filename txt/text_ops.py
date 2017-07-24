@@ -365,23 +365,22 @@ def try_partial_match(entry):
         return 1
     mag = defaultdict(str, partial.groupdict())
     try:
-        print('''
-        word_1: ({}) \t word_2: ({}) \t word_3: ({})
-        pron_1: ({}) \t pron_2: ({}) \t pron_3: ({})
-        part_1: ({})
-        pren1b: ({})
-        brack1: ({})
-        etym_1: ({})
-        cetera: ({})
-        '''.format(mag["word_1"], mag["word_2"], mag["word_3"],
-                   mag["pron_1"], mag["pron_2"], mag["pron_3"],
-                   mag["part1a"],
-                mag["pren1b"], mag["brack1"],
-                   mag["sepsp1"],
-                   mag["part1b"], mag["pren1c"],
-                   mag["etym_1"],
-                   mag["cetera"]
-        ))
+        print("word_1: (", mag["word_1"], ") \t",
+              "word_2: (", mag["word_2"], ") \t",
+              "word_3: (", mag["word_3"], ") \n\t",
+              "pron_1: (", mag["pron_1"], ") \t",
+              "pron_2: (", mag["pron_2"], ") \t",
+              "pron_3: (", mag["pron_3"], ") \n\t",
+              "pren1a: (", mag["pren1a"], ") \n\t",
+              "part1a: (", mag["part1a"], ") \n\t",
+              "pren1b: (", mag["pren1b"], ") \n\t",
+              "brack1: (", mag["brack1"], ") \n\t",
+              "sepsp1: (", mag["sepsp1"], ") \n\t",
+              "part1b: (", mag["part1b"], ") \n\t",
+              "pren1c: (", mag["pren1c"], ") \n\t",
+              "etym_1: (", mag["etym_1"], ") \n\t",
+              "cetera: (", mag["cetera"], ") \n\t",
+              sep='')
     except KeyError as kex:
         print("_______________________________________ Partial match failed at: ", kex)
         return 2
