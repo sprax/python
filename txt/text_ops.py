@@ -423,8 +423,8 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
                 metrics['unparsed'] += 1
                 if verbose > 0:
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry), idx))
-                bad_match = REM_PART.match(entry)
-                print(bad_match.groups())
+                    bad_match = REM_PART.match(entry)
+                    print(bad_match.groups())
         if end > 0 and idx >= end:
             break
     print_metrics(metrics)
