@@ -319,9 +319,11 @@ REP_PART = r'a|adv|conj|i|imp|interj|n|p|prep|v'
 # regex to depend on result of first pass.
 REM_WEBSTER = re.compile(r"""
     (?P<word_1>[A-Z'-]+)                      # WORD 1 and whitespace
-    (?:;\s+(?P<word_2>[A-Z'-]+))?\s+          # WORD 2 (variant spellings) and whitespace
+    (?:;\s+(?P<word_2>[A-Z'-]+))?\s*          # WORD 2 (variant spellings) and whitespace
+    (?:;\s+(?P<word_3>[A-Z'-]+))?\s+          # WORD 3 (variant spellings) and whitespace
     (?P<pron_1>[A-Z][^\s\(\[,]+)\s*           # Pronunciation 1 (prons begin with uppercase letter)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 2 (for word variant 2)
+    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 3 (for word variant 2)
     (?P<pren1a>\([^\)]+\))?                   # parenthesized 1a ?
     (?:,\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?  # part of speech for first definition (order varies)
     (?P<pren1b>\([^\)]+\))?                   # parenthesized 1b ?
@@ -339,10 +341,19 @@ REM_WEBSTER = re.compile(r"""
 
 REM_PART = re.compile(r"""
     (?P<word_1>[A-Z'-]+)                      # WORD 1 and whitespace
-    (?:;\s+(?P<word_2>[A-Z'-]+))?\s+          # WORD 2+ (variant spellings) and whitespace
+    (?:;\s+(?P<word_2>[A-Z'-]+))?\s*          # WORD 2 (variant spellings) and whitespace
+    (?:;\s+(?P<word_3>[A-Z'-]+))?\s+          # WORD 3 (variant spellings) and whitespace
     (?P<pron_1>[A-Z][^\s\(\[,]+)\s*           # Pronunciation 1 (prons begin with uppercase letter)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 2 (for word variant 2)
-    (?:,\s+(?P<part1a>(?:(?:{})\.\s*)+))?      # part of speech for first definition (order varies)
+    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 3 (for word variant 2)
+    (?P<pren1a>\([^\)]+\))?                   # parenthesized 1a ?
+    (?:,\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?  # part of speech for first definition (order varies)
+    (?P<pren1b>\([^\)]+\))?                   # parenthesized 1b ?
+    (?P<brack1>\[[^\]]+\])?                   # bracketed ?
+    (?P<sepsp1>[^,]*,?)?\s*                   # space, punctuation(period, comma)
+    (?P<part1b>(?:[a-z]\.\s*)+)?              # part of speech for first definition (may be right before defn.)
+    (?P<pren1c>\([^\)]+\))?\s*                # parenthesized 1c ?
+    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\])?\s*    # etymology
     (?P<cetera>.*)?$                          # etc.
 """.format(REP_PART), re.VERBOSE)
 
@@ -352,15 +363,24 @@ def try_partial_match(entry):
     if not partial:
         print("======================================= Partial match failed, too!")
         return 1
-    mag = partial.groupdict()
+    mag = defaultdict(str, partial.groupdict())
     try:
         print('''
-        word_1: ({}) \t word_2: ({})
-        pron_1: ({}) \t pron_2: ({})
+        word_1: ({}) \t word_2: ({}) \t word_3: ({})
+        pron_1: ({}) \t pron_2: ({}) \t pron_3: ({})
         part_1: ({})
+        pren1b: ({})
+        brack1: ({})
+        etym_1: ({})
         cetera: ({})
-        '''.format(mag["word_1"], mag["word_2"], mag["pron_1"], mag["pron_2"],
-                   mag["part1a"], mag["cetera"]
+        '''.format(mag["word_1"], mag["word_2"], mag["word_3"],
+                   mag["pron_1"], mag["pron_2"], mag["pron_3"],
+                   mag["part1a"],
+                mag["pren1b"], mag["brack1"],
+                   mag["sepsp1"],
+                   mag["part1b"], mag["pren1c"],
+                   mag["etym_1"],
+                   mag["cetera"]
         ))
     except KeyError as kex:
         print("_______________________________________ Partial match failed at: ", kex)
@@ -389,8 +409,11 @@ class WebsterEntry:
         self.word_1 = entry_dict['word_1'].lower()
         word_2 = entry_dict['word_2']
         self.word_2 = word_2.lower() if word_2 else None
+        word_3 = entry_dict['word_3']
+        self.word_3 = word_3.lower() if word_3 else None
         self.pron_1 = entry_dict['pron_1']
         self.pron_2 = entry_dict['pron_2']
+        self.pron_3 = entry_dict['pron_3']
 
         self.pren1a = entry_dict['pren1a']
         self.pren1b = entry_dict['pren1b']
@@ -409,16 +432,16 @@ class WebsterEntry:
 
     def __str__(self):
         return('''
-    word_1: {:<24}    word_2: {}
-    pron_1: {:<24}    pron_2: {}
+    word_1: {:<24}    word_2: {:<24}    word_3: {}
+    pron_1: {:<24}    pron_2: {:<24}    pron_3: {}
     part_1: ({})
     dftag1: ({})
     defn_1: ({})
     usage1: ({})
     defn_2: ({})
     cetera: ({})
-    '''.format(self.word_1, self.word_2, self.pron_1, self.pron_2, self.part_1,
-               self.dftag1, self.defn_1, self.usage1, self.defn_2, self.cetera))
+    '''.format(self.word_1, self.word_2, self.word_3, self.pron_1, self.pron_2, self.pron_3,
+               self.part_1, self.dftag1, self.defn_1, self.usage1, self.defn_2, self.cetera))
 
 def match_webster_entry(entry):
     '''return regex match on dictionary entry text; trying only one pattern for now'''
@@ -464,7 +487,7 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
 def print_metrics(metrics):
     print("defined/parsed/tried: %d/%d/%d => %.1f%% & %.1f%% success; %d undefined & %d unparsed." % (
         metrics['defined'], metrics['parsed'], metrics['tried'],
-        100 * metrics['defined'] / metrics['parsed'],
+        100 * metrics['defined'] / (1 + metrics['parsed']),
         100 * metrics['parsed'] / metrics['tried'],
         metrics['tried'] - metrics['defined'],
         metrics['unparsed'],
