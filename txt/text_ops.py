@@ -331,7 +331,7 @@ def filter_file(para_filter, path, charset='utf8'):
             yield para_filter.filter_paragraph(para)
 
 
-REC_FIRST_WORD_TOKEN = re.compile(r'^\W*(\w+)')
+REC_FIRST_WORD_TOKEN = re.compile(r'^(-?\w+|\W*\w+-?)')
 
 def first_token(text, default=None):
     try:
