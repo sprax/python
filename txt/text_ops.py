@@ -318,10 +318,10 @@ REP_PART = r'a|adv|conj|i|imp|interj|n|p|prep|v'
 # First pass regex to detect how many variants (word_1, word_2, etc.), second pass
 # regex to depend on result of first pass.
 REM_WEBSTER = re.compile(r"""
-    (?P<word_1>[A-Z'-]+)                      # WORD 1 and whitespace
+    (?P<word_1>[A-Z][ A-Z'-]*[A-Z]|[A-Z][A-Z'-]*)                      # WORD 1 and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?\s*          # WORD 2 (variant spellings) and whitespace
     (?:;\s+(?P<word_3>[A-Z'-]+))?\s+          # WORD 3 (variant spellings) and whitespace
-    (?P<pron_1>[A-Z][^\s\(\[,]+)\s*           # Pronunciation 1 (prons begin with uppercase letter)
+    (?P<pron_1>[A-Z][^\(\[.,]+)\s*            # Pronunciation 1 (prons begin with uppercase letter)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 2 (for word variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 3 (for word variant 2)
     (?P<pren1a>\([^\)]+\))?                   # parenthesized 1a ?
@@ -333,7 +333,8 @@ REM_WEBSTER = re.compile(r"""
     (?P<pren1c>\([^\)]+\))?\s*                # parenthesized 1c ?
     (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s+)?    # etymology
     (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s+)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
-    (?:(?P<dftag1>Defn:|1\.)\s+(?P<defn_1>[^.]+\.))?\s*   # definition 1 tag
+    (?:(?P<dftag1>Defn:|1\.)\s+(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
+    (?P<defn1a>[A-Z][^.]+\.)?\s*   # definition 1 tag
     (?:;)?\s*                                 # optional separator
     (?P<usage1>".*"[^\d]+)?\s*                # example 1
     (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
@@ -341,7 +342,7 @@ REM_WEBSTER = re.compile(r"""
 """.format(REP_PART), re.VERBOSE)
 
 REM_PART = re.compile(r"""
-    (?P<word_1>[A-Z'-]+)                      # WORD 1 and whitespace
+    (?P<word_1>[A-Z][ A-Z'-]*[A-Z]|[A-Z][A-Z'-]*)                      # WORD 1 and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?\s*          # WORD 2 (variant spellings) and whitespace
     (?:;\s+(?P<word_3>[A-Z'-]+))?\s+          # WORD 3 (variant spellings) and whitespace
     (?P<pron_1>[A-Z][^\s\(\[,]+)\s*           # Pronunciation 1 (prons begin with uppercase letter)
