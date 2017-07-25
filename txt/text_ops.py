@@ -89,15 +89,15 @@ def paragraph_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0):
     balance end bracket ].  Likewise { no break between curly braces }.
     '''
     ## Makes no assumptions about the encoding used in the file
-    paragraph, blanks = '', 0
+    paragraph, blank_lines = '', 0
     for line in fileobj:
         #print("    PI: line(%s) para(%s)" % (line.rstrip(), paragraph))
-        if re.match(rgx_para_separator, line) and paragraph and blanks >= sep_lines:
+        if re.match(rgx_para_separator, line) and paragraph and blank_lines >= sep_lines:
             yield paragraph
-            paragraph, blanks = '', 0
+            paragraph, blank_lines = '', 0
         line = line.rstrip()
         if line:
-            blanks = 0
+            blank_lines = 0
             if not paragraph:
                 paragraph = line
             elif paragraph.endswith('-'):
@@ -105,7 +105,42 @@ def paragraph_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0):
             else:
                 paragraph += ' ' + line
         else:
-            blanks += 1
+            blank_lines += 1
+    if paragraph:
+        yield paragraph
+
+
+def lex_entry_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0):
+    '''
+    yields paragraphs representing lexion entries from a text file and regex separator,
+    which by default matches a blank line followed by an all uppercase word.
+    All but the first
+    paragraph will begin with the separator, unless it contains only whitespace,
+    which is stripped from the end of every line.
+    TODO: Consider adding span-matching for square brackets, that is, never
+    breaking a paragraph on text between an open bracket [ and a matching, i.e.
+    balance end bracket ].  Likewise { no break between curly braces }.
+    '''
+    ## Makes no assumptions about the encoding used in the file
+    paragraph, blank_lines, entry_lines = '', 0, 0
+    for line in fileobj:
+        #print("    PI: line(%s) para(%s)" % (line.rstrip(), paragraph))
+        if re.match(rgx_para_separator, line) and paragraph and blank_lines >= sep_lines:
+            yield paragraph
+            paragraph, blank_lines, entry_lines = '', 0, 0
+        line = line.rstrip()
+        if line:
+            blank_lines = 0
+            entry_lines += 1
+            if not paragraph:
+                paragraph = line
+            elif paragraph.endswith('-') and entry_lines > 3:
+                # print("LINE {} ENDS WITH -\n{}\n".format(entry_lines, paragraph))
+                paragraph += line               # hyphen, not suffix marker
+            else:
+                paragraph += ' ' + line
+        else:
+            blank_lines += 1
     if paragraph:
         yield paragraph
 
@@ -278,6 +313,17 @@ def para_iter_file(path, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0, char
         for para in paragraph_iter(text, rgx_para_separator, sep_lines):
             yield para
 
+###############################################################################
+REP_UPPER_WORD = r'^\s*([A-Z-]+)\b\s*'
+REC_UPPER_WORD = re.compile(REP_UPPER_WORD)
+
+def para_iter_lex_file(path, rgx_para_separator=REC_UPPER_WORD, sep_lines=0, charset='utf8'):
+    '''Generator yielding filtered paragraphs from a lexicon file'''
+    # print("para_iter_lex_file: pattern: %s" % rgx_para_separator.pattern)
+    with open(path, 'r', encoding=charset) as text:
+        for para in lex_entry_iter(text, rgx_para_separator, sep_lines):
+            yield para
+
 def filter_file(para_filter, path, charset='utf8'):
     '''Generator yielding filtered paragraphs from a text file'''
     with open(path, 'r', encoding=charset) as text:
@@ -299,9 +345,6 @@ def print_groups(match):
         for grp in match.groups():
             print("  {}".format(grp))
 
-REP_UPPER_WORD = r'^\s*([A-Z-]+)\b\s*'
-REC_UPPER_WORD = re.compile(REP_UPPER_WORD)
-
 # REP_WEBSTER1 = r'\n([A-Z-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s)([^.]+)?'
 # REP_WEBSTER = r'([A-Z\'-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)'
 
@@ -314,14 +357,16 @@ EXAMPLE = "BACE Bace, n., a., & v."
 
 REP_PART = r'a|adv|conj|i|imp|interj|n|p|prep|v'
 
-# FIXME TODO: Two passes?
-# First pass regex to detect how many variants (word_1, word_2, etc.), second pass
-# regex to depend on result of first pass.
+# FIXME TODO: Two passes:
+# First pass regex to detect the number of words:
+#   a) how many variants (word_1, word_2, etc., e.g. IMAM; IMAN; IMAUM)
+#   b) how many words in each variant (e.g. BANK BILL, ICELAND MOSS)
+# Second pass regex depends on what's found in the first pass.
 REM_WEBSTER = re.compile(r"""
     (?P<word_1>[A-Z][ A-Z'-]*[A-Z]|[A-Z][A-Z'-]*)                      # WORD 1 and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?\s*          # WORD 2 (variant spellings) and whitespace
     (?:;\s+(?P<word_3>[A-Z'-]+))?\s+          # WORD 3 (variant spellings) and whitespace
-    (?P<pron_1>[A-Z][^\(\[.,]+)\s*            # Pronunciation 1 (prons begin with uppercase letter)
+    (?P<pron_1>[A-Z][^\s\(\[.,]+|[A-Z]\w+ (?!Defn)\w+)\s*            # Pronunciation 1 (prons begin with uppercase letter)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 2 (for word variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 3 (for word variant 2)
     (?P<pren1a>\([^\)]+\))?                   # parenthesized 1a ?
@@ -345,7 +390,7 @@ REM_PART = re.compile(r"""
     (?P<word_1>[A-Z][ A-Z'-]*[A-Z]|[A-Z][A-Z'-]*)                      # WORD 1 and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?\s*          # WORD 2 (variant spellings) and whitespace
     (?:;\s+(?P<word_3>[A-Z'-]+))?\s+          # WORD 3 (variant spellings) and whitespace
-    (?P<pron_1>[A-Z][^\s\(\[,]+)\s*           # Pronunciation 1 (prons begin with uppercase letter)
+    (?P<pron_1>[A-Z][^\s\(\[.,]+|[A-Z]\w+ (?!Defn)\w+)\s*            # Pronunciation 1 (prons begin with uppercase letter)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 2 (for word variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 3 (for word variant 2)
     (?P<pren1a>\([^\)]+\))?                   # parenthesized 1a ?
@@ -357,7 +402,11 @@ REM_PART = re.compile(r"""
     (?P<pren1c>\([^\)]+\))?\s*                # parenthesized 1c ?
     (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s+)?    # etymology
     (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s+)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
-    (?:(?P<dftag1>Defn:|1\.)\s+(?P<defn_1>[^.]+\.))?\s*   # definition 1 tag
+    (?:(?P<dftag1>Defn:|1\.)\s+(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
+    (?P<defn1a>[A-Z][^.]+\.)?\s*   # definition 1 tag
+    (?:;)?\s*                                 # optional separator
+    (?P<usage1>".*"[^\d]+)?\s*                # example 1
+    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
     (?P<cetera>.*)?$                          # etc.
 """.format(REP_PART), re.VERBOSE)
 
@@ -421,18 +470,17 @@ class WebsterEntry:
         self.pron_1 = entry_dict['pron_1']
         self.pron_2 = entry_dict['pron_2']
         self.pron_3 = entry_dict['pron_3']
-
         self.pren1a = entry_dict['pren1a']
         self.pren1b = entry_dict['pren1b']
         self.pren1c = entry_dict['pren1c']
-
         self.brack1 = entry_dict['brack1']
-        self.csep = entry_dict['sepsp1']
+        self.sepsp1 = entry_dict['sepsp1']
         part1 = entry_dict['part1a']
         self.part_1 = part1 if part1 else entry_dict['part1b']
         self.etym_1 = entry_dict['etym_1']
         self.dftag1 = entry_dict['dftag1']
         self.defn_1 = entry_dict['defn_1']
+        self.defn1a = entry_dict['defn1a']
         self.usage1 = entry_dict['usage1']
         self.defn_2 = entry_dict['defn_2']
         self.cetera = entry_dict['cetera']
@@ -442,13 +490,18 @@ class WebsterEntry:
     word_1: {:<24}    word_2: {}    word_3: {}
     pron_1: {:<24}    pron_2: {}    pron_3: {}
     part_1: ({})
+    etym_1: ({})
     dftag1: ({})
     defn_1: ({})
+    defn1a: ({})
     usage1: ({})
     defn_2: ({})
     cetera: ({})
     '''.format(self.word_1, self.word_2, self.word_3, self.pron_1, self.pron_2, self.pron_3,
-               self.part_1, self.dftag1, self.defn_1, self.usage1, self.defn_2, self.cetera))
+               self.part_1, self.etym_1, self.dftag1, self.defn_1, self.defn1a, self.usage1,
+               self.defn_2,
+               self.cetera
+    ))
 
 def match_webster_entry(entry):
     '''return regex match on dictionary entry text; trying only one pattern for now'''
@@ -465,27 +518,29 @@ def parse_webster_entry(entry):
 
 def parse_webster_file(path, beg, end, charset, verbose=1):
     metrics = defaultdict(int)
-    for idx, entry in enumerate(para_iter_file(path, REC_UPPER_WORD, sep_lines=1, charset=charset)):
+    for idx, entry_text in enumerate(para_iter_lex_file(path, REC_UPPER_WORD, sep_lines=1, charset=charset)):
         if idx >= beg:
             metrics['tried'] += 1
-            entry_dict = parse_webster_entry(entry)
-            if verbose > 3 or verbose > 1 and not entry_dict:
-                print("\nPARAGRAPH {:5}\n({})".format(idx, entry))
+            is_undefined = True
+            entry_dict = parse_webster_entry(entry_text)
             if entry_dict:
                 metrics['parsed'] += 1
                 if entry_dict['defn_1']:
                     metrics['defined'] += 1
-                entry = WebsterEntry(entry_dict)
-                if verbose > 2:
-                    print("entry:\n", entry)
-                # print("WebsterEntry.__str__: (%s)\n" % entry.__str__())
-                # print("WebsterEntry.__dict__: (%s)\n" % entry.__dict__)
+                    is_undefined = False
+                entry_base = WebsterEntry(entry_dict)
+                if verbose > 5 or verbose > 2 and is_undefined:
+                    print("\nPARAGRAPH {:5}\n({})".format(idx, entry_text))
+                if verbose > 3:
+                    print("WebsterEntry:\n", entry_base)
             else:
                 metrics['unparsed'] += 1
+                if verbose > 1:
+                    print("\nPARAGRAPH {:5}\n({})".format(idx, entry_text))
                 if verbose > 0:
-                    print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry), idx))
-                    if verbose > 1:
-                        try_partial_match(entry)
+                    print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
+            if verbose > 2 and (is_undefined or not entry_dict):
+                try_partial_match(entry_text)
         if end > 0 and idx >= end:
             break
     print_metrics(metrics)
