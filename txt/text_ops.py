@@ -363,9 +363,9 @@ REP_PART = r'a|adv|conj|i|imp|interj|n|p|prep|v'
 #   b) how many words in each variant (e.g. BANK BILL, ICELAND MOSS)
 # Second pass regex depends on what's found in the first pass.
 REM_WEBSTER = re.compile(r"""
-    (?P<word_1>[A-Z][ A-Z'-]*[A-Z]|[A-Z][A-Z'-]*)                      # WORD 1 and whitespace
+    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?|[A-Z]+['-]?)                      # WORD 1 and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?\s*          # WORD 2 (variant spellings) and whitespace
-    (?:;\s+(?P<word_3>[A-Z'-]+))?\s+          # WORD 3 (variant spellings) and whitespace
+    (?:;\s+(?P<word_3>[A-Z'-]+))?\s*          # WORD 3 (variant spellings) and whitespace
     (?P<pron_1>[A-Z][^\s\(\[.,]+|[A-Z]\w+ (?!Defn)\w+)\s*            # Pronunciation 1 (prons begin with uppercase letter)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 2 (for word variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 3 (for word variant 2)
@@ -378,7 +378,7 @@ REM_WEBSTER = re.compile(r"""
     (?P<pren1c>\([^\)]+\))?\s*                # parenthesized 1c ?
     (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s+)?    # etymology
     (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s+)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
-    (?:(?P<dftag1>Defn:|1\.)\s+(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
+    (?:(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*   # definition 1 tag
     (?:;)?\s*                                 # optional separator
     (?P<usage1>".*"[^\d]+)?\s*                # example 1
@@ -532,7 +532,7 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
                 if verbose > 5 or verbose > 2 and is_undefined:
                     print("\nPARAGRAPH {:5}\n({})".format(idx, entry_text))
                 if verbose > 3:
-                    print("WebsterEntry:\n", entry_base)
+                    print("WebsterEntry:", entry_base)
             else:
                 metrics['unparsed'] += 1
                 if verbose > 1:
