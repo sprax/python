@@ -384,14 +384,14 @@ REP_PART = r'a|adv|conj|i|imp|interj|n|p|prep|v'
 #   b) how many words in each variant (e.g. BANK BILL, ICELAND MOSS)
 # Second pass regex depends on what's found in the first pass.
 REM_WEBSTER = re.compile(r"""
-    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
+    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?\s*                                # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\s*                                # WORD 3 (variant spelling)
     (?P<pron_1>(?:[A-Z]+['"*-]?\ ?)+[A-Z]+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+)\s* # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s*       # Pronunciation 2 (for variant 2)
-    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?\.\s*     # Pronunciation 3 (for variant 2)
+    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]\s*     # Pronunciation 3 (for variant 2)
     (?P<pren1a>\([^\)]+\))?                         # parenthesized 1a
-    (?:,\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?        # part of speech for first definition (order varies)
+    (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?        # part of speech for first definition (order varies)
     (?P<pren1b>\([^\)]+\))?                         # parenthesized 1b
     (?P<brack1>\[[^\]]+\])?                         # bracketed
     (?P<sepsp1>[\s.,]*)?                      # space, punctuation(period, comma)
@@ -408,16 +408,16 @@ REM_WEBSTER = re.compile(r"""
 """.format(REP_PART), re.VERBOSE)
 
 REM_PART = re.compile(r"""
-    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
-    (?:;\s+(?P<word_2>[A-Z'-]+))?\s*          # WORD 2 (variant spellings) and whitespace
-    (?:;\s+(?P<word_3>[A-Z'-]+))?\s*          # WORD 3 (variant spellings) and whitespace
+    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
+    (?:;\s+(?P<word_2>[A-Z'-]+))?\s*                                # WORD 2 (variant spelling)
+    (?:;\s+(?P<word_3>[A-Z'-]+))?\s*                                # WORD 3 (variant spelling)
     (?P<pron_1>(?:[A-Z]+['"*-]?\ ?)+[A-Z]+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+)\s* # Pron 1 (Capitalized)
-    (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 2 (for word variant 2)
-    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?\.\s* # Pronunciation 3 (for word variant 2)
-    (?P<pren1a>\([^\)]+\))?                   # parenthesized 1a ?
-    (?:,\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?  # part of speech for first definition (order varies)
-    (?P<pren1b>\([^\)]+\))?                   # parenthesized 1b ?
-    (?P<brack1>\[[^\]]+\])?                   # bracketed ?
+    (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s*       # Pronunciation 2 (for variant 2)
+    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]\s*     # Pronunciation 3 (for variant 2)
+    (?P<pren1a>\([^\)]+\))?                         # parenthesized 1a
+    (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?        # part of speech for first definition (order varies)
+    (?P<pren1b>\([^\)]+\))?                         # parenthesized 1b
+    (?P<brack1>\[[^\]]+\])?                         # bracketed
     (?P<sepsp1>[\s.,]*)?                      # space, punctuation(period, comma)
     (?P<part1b>(?:[a-z]\.\s*)+)?              # part of speech for first definition (may be right before defn.)
     (?P<pren1c>\([^\)]+\))?\s*                # parenthesized 1c ?
@@ -575,7 +575,7 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
 
 def print_metrics(metrics):
     '''pretty print metrics dict'''
-    print("defined/parsed/tried: %d/%d/%d => %.1f%% & %.1f%% success; %d undefined & %d unparsed." % (
+    print("defined/parsed/tried: %d/%d/%d => %.1f%% & %.1f%% success.  Failure: %d undefined & %d unparsed." % (
         metrics['defined'], metrics['parsed'], metrics['tried'],
         100 * metrics['defined'] / (metrics['parsed']),
         100 * metrics['parsed'] / metrics['tried'],
