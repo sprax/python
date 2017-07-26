@@ -363,12 +363,36 @@ REP_PART = r'a|adv|conj|i|imp|interj|n|p|prep|v'
 #   b) how many words in each variant (e.g. BANK BILL, ICELAND MOSS)
 # Second pass regex depends on what's found in the first pass.
 REM_WEBSTER = re.compile(r"""
-    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?|[A-Z]+['-]?)                      # WORD 1 and whitespace
+    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
+    (?:;\s+(?P<word_2>[A-Z'-]+))?\s*                                # WORD 2 (variant spelling)
+    (?:;\s+(?P<word_3>[A-Z'-]+))?\s*                                # WORD 3 (variant spelling)
+    (?P<pron_1>(?:[A-Z]+['"*-]?\ ?)+[A-Z]+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+)\s* # Pron 1 (Capitalized)
+    (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s*       # Pronunciation 2 (for variant 2)
+    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?\.\s*     # Pronunciation 3 (for variant 2)
+    (?P<pren1a>\([^\)]+\))?                         # parenthesized 1a
+    (?:,\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?        # part of speech for first definition (order varies)
+    (?P<pren1b>\([^\)]+\))?                         # parenthesized 1b
+    (?P<brack1>\[[^\]]+\])?                         # bracketed 
+    (?P<sepsp1>[\s.,]*)?                      # space, punctuation(period, comma)
+    (?P<part1b>(?:[a-z]\.\s*)+)?              # part of speech for first definition (may be right before defn.)
+    (?P<pren1c>\([^\)]+\))?\s*                # parenthesized 1c ?
+    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s+)?    # etymology
+    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s+)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
+    (?P<defn1a>[A-Z][^.]+\.)?\s*   # definition 1 tag
+    (?:;)?\s*                                 # optional separator
+    (?P<usage1>".*"[^\d]+)?\s*                # example 1
+    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
+    (?P<cetera>.*)?$                          # etc.
+""".format(REP_PART), re.VERBOSE)
+
+REM_PART = re.compile(r"""
+    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?\s*          # WORD 2 (variant spellings) and whitespace
     (?:;\s+(?P<word_3>[A-Z'-]+))?\s*          # WORD 3 (variant spellings) and whitespace
-    (?P<pron_1>[A-Z][^\s\(\[.,]+|[A-Z]\w+ (?!Defn)\w+)\s*            # Pronunciation 1 (prons begin with uppercase letter)
+    (?P<pron_1>(?:[A-Z]+['"*-]?\ ?)+[A-Z]+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+)\s* # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 2 (for word variant 2)
-    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 3 (for word variant 2)
+    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?\.\s* # Pronunciation 3 (for word variant 2)
     (?P<pren1a>\([^\)]+\))?                   # parenthesized 1a ?
     (?:,\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?  # part of speech for first definition (order varies)
     (?P<pren1b>\([^\)]+\))?                   # parenthesized 1b ?
@@ -386,29 +410,8 @@ REM_WEBSTER = re.compile(r"""
     (?P<cetera>.*)?$                          # etc.
 """.format(REP_PART), re.VERBOSE)
 
-REM_PART = re.compile(r"""
-    (?P<word_1>[A-Z][ A-Z'-]*[A-Z]|[A-Z][A-Z'-]*)                      # WORD 1 and whitespace
-    (?:;\s+(?P<word_2>[A-Z'-]+))?\s*          # WORD 2 (variant spellings) and whitespace
-    (?:;\s+(?P<word_3>[A-Z'-]+))?\s+          # WORD 3 (variant spellings) and whitespace
-    (?P<pron_1>[A-Z][^\s\(\[.,]+|[A-Z]\w+ (?!Defn)\w+)\s*            # Pronunciation 1 (prons begin with uppercase letter)
-    (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 2 (for word variant 2)
-    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?\s* # Pronunciation 3 (for word variant 2)
-    (?P<pren1a>\([^\)]+\))?                   # parenthesized 1a ?
-    (?:,\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?  # part of speech for first definition (order varies)
-    (?P<pren1b>\([^\)]+\))?                   # parenthesized 1b ?
-    (?P<brack1>\[[^\]]+\])?                   # bracketed ?
-    (?P<sepsp1>[\s.,]*)?                      # space, punctuation(period, comma)
-    (?P<part1b>(?:[a-z]\.\s*)+)?              # part of speech for first definition (may be right before defn.)
-    (?P<pren1c>\([^\)]+\))?\s*                # parenthesized 1c ?
-    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s+)?    # etymology
-    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s+)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
-    (?:(?P<dftag1>Defn:|1\.)\s+(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
-    (?P<defn1a>[A-Z][^.]+\.)?\s*   # definition 1 tag
-    (?:;)?\s*                                 # optional separator
-    (?P<usage1>".*"[^\d]+)?\s*                # example 1
-    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
-    (?P<cetera>.*)?$                          # etc.
-""".format(REP_PART), re.VERBOSE)
+'''
+'''
 
 def try_partial_match(entry):
     partial = REM_PART.match(entry)
@@ -436,6 +439,7 @@ def try_partial_match(entry):
               "dtype1: (", matgadd["dtype1"], ") \t",
               "dftag1: (", matgadd["dftag1"], ") \n\t",
               "defn_1: (", matgadd["defn_1"], ") \n\t",
+              "defn1a: (", matgadd["defn1a"], ") \n\t",
               "cetera: (", matgadd["cetera"], ") \n\t",
               sep='')
     except KeyError as kex:
@@ -531,13 +535,13 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
                 entry_base = WebsterEntry(entry_dict)
                 if verbose > 5 or verbose > 2 and is_undefined:
                     print("\nPARAGRAPH {:5}\n({})".format(idx, entry_text))
-                if verbose > 3:
+                if verbose > 4:
                     print("WebsterEntry:", entry_base)
             else:
                 metrics['unparsed'] += 1
-                if verbose > 1:
+                if verbose > 2:
                     print("\nPARAGRAPH {:5}\n({})".format(idx, entry_text))
-                if verbose > 0:
+                if verbose > 1:
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
             if verbose > 2 and (is_undefined or not entry_dict):
                 try_partial_match(entry_text)
