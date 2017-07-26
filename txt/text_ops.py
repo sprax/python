@@ -387,7 +387,7 @@ REM_WEBSTER = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?\s*                                # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\s*                                # WORD 3 (variant spelling)
-    (?P<pron_1>(?:[A-Z]+['"*-]?\ ?)+[A-Z]+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+)\s* # Pron 1 (Capitalized)
+    (?P<pron_1>[A-Z](?:\w+['"*-]?\ ?)+\w+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+)\s* # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s*       # Pronunciation 2 (for variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]\s*     # Pronunciation 3 (for variant 2)
     (?P<pren1a>\([^\)]+\))?                         # parenthesized 1a
@@ -411,7 +411,7 @@ REM_PART = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?\s*                                # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\s*                                # WORD 3 (variant spelling)
-    (?P<pron_1>(?:[A-Z]+['"*-]?\ ?)+[A-Z]+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+)\s* # Pron 1 (Capitalized)
+    (?P<pron_1>[A-Z](?:\w+['"*-]?\ ?)+\w+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+)\s* # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s*       # Pronunciation 2 (for variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]\s*     # Pronunciation 3 (for variant 2)
     (?P<pren1a>\([^\)]+\))?                         # parenthesized 1a
@@ -431,7 +431,9 @@ REM_PART = re.compile(r"""
     (?P<cetera>.*)?$                          # etc.
 """.format(REP_PART), re.VERBOSE)
 
+
 '''
+
 '''
 
 def try_partial_match(entry):
