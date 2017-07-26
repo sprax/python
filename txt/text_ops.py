@@ -79,7 +79,7 @@ def resolve_count(sub_count, percent, total_count):
 ################################################################################
 
 def paragraph_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0):
-    '''
+    r'''
     yields paragraphs from text file and regex separator, which by default matches
     one blank line (only space before a newline, or r"\s*\n").  All but the first
     paragraph will begin with the separator, unless it contains only whitespace,
@@ -173,7 +173,9 @@ def print_paragraphs(path, charset='utf8', rgx_para_separator=RE_PARA_SEPARATOR)
             utf_print(para)
             print()
 
-def print_paragraphs_split_join_str(path, max_words, charset='utf8', rgx_para_separator=RE_PARA_SEPARATOR):
+def print_paragraphs_split_join_str(path, max_words, charset='utf8',
+        rgx_para_separator=RE_PARA_SEPARATOR
+    ):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs:")
     with open(path, 'r', encoding=charset) as text:
@@ -345,12 +347,15 @@ def print_groups(match):
         for grp in match.groups():
             print("  {}".format(grp))
 
-# REP_WEBSTER1 = r'\n([A-Z-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s)([^.]+)?'
-# REP_WEBSTER = r'([A-Z\'-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)'
-
-REP_SPC = r'[\s.,]+'
-REP_WEBSTER = r'([A-Z-]+)\s+([^\s\(\[,]+)\s*(\([^(]+\))?(\[[^\]]+\])?([^,]*,?)\s+((?:[a-z]\.\s*)+)?(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)'
-REC_WEBSTER = re.compile(REP_WEBSTER)
+# REP_WEBSTER1 = r'\n([A-Z-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)'\
+#                 '(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s)([^.]+)?'
+# REP_WEBSTER = r"([A-Z'-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)"\
+#                "(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)"
+# 
+# REP_SPC = r'[\s.,]+'
+# REP_WEBSTER = r'([A-Z-]+)\s+([^\s\(\[,]+)\s*(\([^(]+\))?(\[[^\]]+\])?([^,]*,?)\s+'\
+#                '((?:[a-z]\.\s*)+)?(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)'
+# REC_WEBSTER = re.compile(REP_WEBSTER)
 
 
 EXAMPLE = "BACE Bace, n., a., & v."
@@ -372,7 +377,7 @@ REM_WEBSTER = re.compile(r"""
     (?P<pren1a>\([^\)]+\))?                         # parenthesized 1a
     (?:,\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?        # part of speech for first definition (order varies)
     (?P<pren1b>\([^\)]+\))?                         # parenthesized 1b
-    (?P<brack1>\[[^\]]+\])?                         # bracketed 
+    (?P<brack1>\[[^\]]+\])?                         # bracketed
     (?P<sepsp1>[\s.,]*)?                      # space, punctuation(period, comma)
     (?P<part1b>(?:[a-z]\.\s*)+)?              # part of speech for first definition (may be right before defn.)
     (?P<pren1c>\([^\)]+\))?\s*                # parenthesized 1c ?
