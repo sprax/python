@@ -174,8 +174,7 @@ def print_paragraphs(path, charset='utf8', rgx_para_separator=RE_PARA_SEPARATOR)
             print()
 
 def print_paragraphs_split_join_str(path, max_words, charset='utf8',
-        rgx_para_separator=RE_PARA_SEPARATOR
-    ):
+                                    rgx_para_separator=RE_PARA_SEPARATOR):
     '''Prints sequence numbers and paragraphs.'''
     print("print_paragraphs:")
     with open(path, 'r', encoding=charset) as text:
@@ -214,7 +213,7 @@ def print_paragraphs_nth_regex(path, max_words=INF_NUM_WORDS, out_file=sys.stdou
             print(file=out_file)
 
 def print_paragraph_regex_count(para, max_words=INF_NUM_WORDS, out_file=sys.stdout,
-        elliptical='...'):
+                                elliptical='...'):
     '''split paragraph into words using regex and print up to max_words words.'''
     if para:
         index = index_regex_count(para, max_words)
@@ -296,7 +295,7 @@ def print_paragraphs_leaky(path):
 def print_sentences(sentences, list_numbers, max_words, out_file):
     '''prints an array of sentences, with optional numbering'''
     if list_numbers:
-        if 0 < max_words and max_words < 15:
+        if max_words > 0 and max_words < 15:
             idx_format = '{} '
         else:
             idx_format = '\n    {}\n'
@@ -333,16 +332,33 @@ def filter_file(para_filter, path, charset='utf8'):
             yield para_filter.filter_paragraph(para)
 
 
+Webster = namedtuple('Webster',
+                     'word_1 word_2 pron_1 parenth bracket sep_spc part_1 etymology defn1 usage1 defn2 etc')
+
+def print_webster(webster):
+    '''print a Webster namedtuple'''
+    print("    Webster tuple:")
+    print("\tword:", webster.word_1)
+    print("\tpron:", webster.pron_1)
+    print("\tpart:", webster.part_1)
+    print("\tetym:", webster.etymology)
+    print("\tdef1:", webster.defn1)
+    print("\tuse1:", webster.usage1)
+    print("\tdef2:", webster.defn2)
+    print("\tmore:", webster.etc)
+
+
 REC_FIRST_WORD_TOKEN = re.compile(r'^(-?\w+|\W*\w+-?)')
 
 def first_token(text, default=None):
+    '''return the first word-like token parsed from a string'''
     try:
         return REC_FIRST_WORD_TOKEN.match(text).groups()[0]
-    except:
+    except AttributeError:
         return default
 
-
 def print_groups(match):
+    '''print groups from a regex match'''
     if match:
         for grp in match.groups():
             print("  {}".format(grp))
@@ -351,7 +367,7 @@ def print_groups(match):
 #                 '(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s)([^.]+)?'
 # REP_WEBSTER = r"([A-Z'-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)"\
 #                "(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)"
-# 
+#
 # REP_SPC = r'[\s.,]+'
 # REP_WEBSTER = r'([A-Z-]+)\s+([^\s\(\[,]+)\s*(\([^(]+\))?(\[[^\]]+\])?([^,]*,?)\s+'\
 #                '((?:[a-z]\.\s*)+)?(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)'
@@ -419,6 +435,7 @@ REM_PART = re.compile(r"""
 '''
 
 def try_partial_match(entry):
+    '''test new variant of regex'''
     partial = REM_PART.match(entry)
     print("++++++++++++++++ Try partial match:")
     if not partial:
@@ -452,23 +469,10 @@ def try_partial_match(entry):
         return 2
     return 0
 
-Webster = namedtuple('Webster', 'word_1 word_2 pron_1 parenth bracket sep_spc part_1 etymology defn1 usage1 defn2 etc')
-
-def print_webster(webster):
-    print("    Webster tuple:")
-    print("\tword:", webster.word_1)
-    print("\tpron:", webster.pron_1)
-    print("\tpart:", webster.part_1)
-    print("\tetym:", webster.etymology)
-    print("\tdef1:", webster.defn1)
-    print("\tuse1:", webster.usage1)
-    print("\tdef2:", webster.defn2)
-    print("\tmore:", webster.etc)
-
 ###############################################################################
 class WebsterEntry:
     '''Represents a parsed dictionary entry a la Webster's Unabridged'''
-    def __init__(self, entry_dict, options=None):
+    def __init__(self, entry_dict):
         '''TODO: bifurcate on word_2 if present'''
         self.dict = entry_dict
         self.word_1 = entry_dict['word_1'].lower()
@@ -510,7 +514,20 @@ class WebsterEntry:
                self.part_1, self.etym_1, self.dftag1, self.defn_1, self.defn1a, self.usage1,
                self.defn_2,
                self.cetera
-    ))
+              ))
+
+    def variants(self):
+        '''return list of variant spellings'''
+        variants = [self.word_1]
+        if self.word_2:
+            variants.append(self.word_2)
+            if self.word_3:
+                variants.append(self.word_3)
+        return variants
+
+    def parts_of_speech(self):
+        '''return all identified parts of speech abbreviations'''
+        return self.part_1
 
 def match_webster_entry(entry):
     '''return regex match on dictionary entry text; trying only one pattern for now'''
@@ -526,6 +543,7 @@ def parse_webster_entry(entry):
 
 
 def parse_webster_file(path, beg, end, charset, verbose=1):
+    '''parse Webster-like dictionary text file with diagnostics.'''
     metrics = defaultdict(int)
     for idx, entry_text in enumerate(para_iter_lex_file(path, REC_UPPER_WORD, sep_lines=1, charset=charset)):
         if idx >= beg:
@@ -556,6 +574,7 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
 
 
 def print_metrics(metrics):
+    '''pretty print metrics dict'''
     print("defined/parsed/tried: %d/%d/%d => %.1f%% & %.1f%% success; %d undefined & %d unparsed." % (
         metrics['defined'], metrics['parsed'], metrics['tried'],
         100 * metrics['defined'] / (metrics['parsed']),
@@ -564,20 +583,12 @@ def print_metrics(metrics):
         metrics['unparsed'],
     ))
 
-# aaa = 'A A (named a in the English, and most commonly ä in other languages). Defn: The first letter of the English and of many other alphabets. The capital A of the alphabets of Middle and Western Europe, as also the small letter (a), besides the forms in Italic, black letter, etc., are all descended from the old Latin A, which was borrowed from the Greek Alpha, of the same form; and this was made from the first letter (Aleph, and itself from the Egyptian origin. '
-# mm = re.match(r'([A-Z-]+)\s+([^\s,]+)[^,]*,?\s+((?:[a-z]\.\s*)+)?(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)', aaa); mm
-
-# TODO: REC_DICT_ENTRY := (WORD) (PRON) (Anything up to one of:) ([Etym: .*]|Defn .*|Lang...|Ref...|POS)
-# where definition text gets parsed into an array of glosses)
-# and POS := (n.|v. i.|v. t.|etc.|)
-# and Usage stuff also goes into a list of variants.
-
 CONST_MAX_WORDS = 5
 DEFAULT_NUMBER = 10
 CONST_START_INDEX = 1
 CONST_STOP_INDEX = 10
 DEFAULT_START_INDEX = 0
-DEFAULT_STOP_INDEX  = 0
+DEFAULT_STOP_INDEX = 0
 
 def main():
     '''Driver to iterate over the paragraphs in a text file.'''
