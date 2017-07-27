@@ -376,7 +376,7 @@ def print_groups(match):
 
 EXAMPLE = "BACE Bace, n., a., & v."
 
-REP_PART = r'a|adv|conj|i|imp|interj|n|p|prep|v'
+REP_PART = r'a|adv|conj|i|imp|interj|n|p|prep|t|v'
 
 # FIXME TODO: Two passes:
 # First pass regex to detect the number of words:
@@ -394,8 +394,8 @@ REM_WEBSTER = re.compile(r"""
     (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?        # part of speech for first definition (order varies)
     (?P<pren1b>\([^\)]+\))?                         # parenthesized 1b
     (?P<brack1>\[[^\]]+\])?                         # bracketed
-    (?P<sepsp1>[\s.,]*)?                      # space, punctuation(period, comma)
-    (?P<part1b>(?:[a-z]\.\s*)+)?              # part of speech for first definition (may be right before defn.)
+    (?P<sepsp1>[\s.,]*)                       # space, punctuation(period, comma)
+    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
     (?P<pren1c>\([^\)]+\))?\s*                # parenthesized 1c ?
     (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s+)?    # etymology
     (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s+)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
@@ -405,7 +405,7 @@ REM_WEBSTER = re.compile(r"""
     (?P<usage1>".*"[^\d]+)?\s*                # example 1
     (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
     (?P<cetera>.*)?$                          # etc.
-""".format(REP_PART), re.VERBOSE)
+""".format(REP_PART, REP_PART), re.VERBOSE)
 
 REM_PART = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
@@ -418,21 +418,25 @@ REM_PART = re.compile(r"""
     (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?        # part of speech for first definition (order varies)
     (?P<pren1b>\([^\)]+\))?                         # parenthesized 1b
     (?P<brack1>\[[^\]]+\])?                         # bracketed
-    (?P<sepsp1>[\s.,]*)?                      # space, punctuation(period, comma)
-    (?P<part1b>(?:[a-z]\.\s*)+)?              # part of speech for first definition (may be right before defn.)
-    (?P<pren1c>\([^\)]+\))?\s*                # parenthesized 1c ?
-    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s+)?    # etymology
-    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s+)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
-    (?:(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
-    (?P<defn1a>[A-Z][^.]+\.)?\s*   # definition 1 tag
-    (?:;)?\s*                                 # optional separator
-    (?P<usage1>".*"[^\d]+)?\s*                # example 1
-    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
+    (?P<sepsp1>[\s.,]*?)                      # space, punctuation(period, comma)
+    (?P<dftag1>Defn:|1\.)\s+\.?\s*
+    (?P<defn_1>[^.]+\.)?\s*   # Defn 1 tag and first sentence of definition.
     (?P<cetera>.*)?$                          # etc.
-""".format(REP_PART), re.VERBOSE)
+""".format(REP_PART, REP_PART), re.VERBOSE)
 
 
 '''
+
+
+    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
+    (?P<pren1c>\([^\)]+\))?\s*                # parenthesized 1c ?
+    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s+)?    # etymology
+    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s+)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:\s(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
+    (?P<defn1a>(?=Defn.\s+)[A-Z][^.]+\.)?\s*   # definition 1 tag
+    (?:;)?\s*                                 # optional separator
+    (?P<usage1>".*"[^\d]+)?\s*                # example 1
+    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
 
 '''
 
