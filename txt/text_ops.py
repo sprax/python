@@ -635,13 +635,15 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
             break
     print_metrics(metrics)
 
+def percent(count, total):
+    return 100.0 * count / total if total > 0 else float('nan')
 
 def print_metrics(metrics):
     '''pretty print metrics dict'''
     print("defined/parsed/tried: %d/%d/%d => %.1f%% & %.1f%% success.  Failure: %d undefined & %d unparsed." % (
         metrics['defined'], metrics['parsed'], metrics['tried'],
-        100 * metrics['defined'] / (metrics['parsed']),
-        100 * metrics['parsed'] / metrics['tried'],
+        percent(metrics['defined'], metrics['parsed']),
+        percent(metrics['parsed'], metrics['tried']),
         metrics['tried'] - metrics['defined'],
         metrics['unparsed'],
     ))
