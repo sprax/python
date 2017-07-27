@@ -419,8 +419,7 @@ REM_PART = re.compile(r"""
     (?P<pren1b>\([^\)]+\))?                         # parenthesized 1b
     (?P<brack1>\[[^\]]+\])?                         # bracketed
     (?P<sepsp1>[\s.,]*?)                      # space, punctuation(period, comma)
-    (?P<dftag1>Defn:|1\.)\s+\.?\s*
-    (?P<defn_1>[^.]+\.)?\s*   # Defn 1 tag and first sentence of definition.
+    (?:\s+(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<cetera>.*)?$                          # etc.
 """.format(REP_PART, REP_PART), re.VERBOSE)
 
