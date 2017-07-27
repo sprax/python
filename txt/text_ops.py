@@ -383,66 +383,87 @@ REP_PART = r'a|adv|conj|i|imp|interj|n|p|prep|t|v'
 #   a) how many variants (word_1, word_2, etc., e.g. IMAM; IMAN; IMAUM)
 #   b) how many words in each variant (e.g. BANK BILL, ICELAND MOSS)
 # Second pass regex depends on what's found in the first pass.
-REM_WEBSTER = re.compile(r"""
+REC_WEBSTER = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
-    (?:;\s+(?P<word_2>[A-Z'-]+))?\s*                                # WORD 2 (variant spelling)
-    (?:;\s+(?P<word_3>[A-Z'-]+))?\s*                                # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z](?:\w+['"*-]?\ ?)+\w+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+)\s* # Pron 1 (Capitalized)
-    (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s*       # Pronunciation 2 (for variant 2)
-    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]\s*     # Pronunciation 3 (for variant 2)
-    (?P<pren1a>\([^\)]+\))?                         # parenthesized 1a
-    (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?        # part of speech for first definition (order varies)
-    (?P<pren1b>\([^\)]+\))?                         # parenthesized 1b
-    (?P<brack1>\[[^\]]+\])?                         # bracketed
-    (?P<sepsp1>[\s.,]*)                       # space, punctuation(period, comma)
+    (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
+    (?:;\s+(?P<word_3>[A-Z'-]+))?\s+                # WORD 3 (variant spelling)
+    (?P<pron_1>[A-Z](?:\w+['"*-]?\ ?)+\w+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
+    (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
+    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]\s*   # Pronunciation 3 (for variant 2)
+    (?:\((?P<pren1a>[^\)]+)\)\s*)?                  # parenthesized 1a
+    (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?         # part of speech for first definition (order varies)
+    (?:\((?P<pren1b>[^\)]+)\)\s*)?                  # parenthesized 1b
+    (?:\[(?P<brack1>[^\]]+)\]\s*)?                  # bracketed
+    (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
-    (?P<pren1c>\([^\)]+\))?\s*                # parenthesized 1c ?
-    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s+)?    # etymology
-    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s+)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:\((?P<pren1c>[^\)]+)\)\s*)?            # parenthesized 1c
+    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s*)?    # etymology
+    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s*)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
+    (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
+    (?:;)?\s*                                 # optional separator
+    (?P<usage1>".*"[^\d]+)?\s*                # example 1
+    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
+    (?P<cetera>.*)?$                          # etc.
+""".format(REP_PART, REP_PART), re.VERBOSE)
+
+REC_PARTIAL = re.compile(r"""
+    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
+    (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
+    (?:;\s+(?P<word_3>[A-Z'-]+))?\s+                # WORD 3 (variant spelling)
+    (?P<pron_1>[A-Z](?:\w+['"*-]?\ ?)+\w+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
+    (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
+    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]\s*   # Pronunciation 3 (for variant 2)
+    (?:\((?P<pren1a>[^\)]+)\)\s*)?                  # parenthesized 1a
+    (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?         # part of speech for first definition (order varies)
+    (?:\((?P<pren1b>[^\)]+)\)\s*)?                  # parenthesized 1b
+    (?:\[(?P<brack1>[^\]]+)\]\s*)?                  # bracketed
+    (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
+    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
+    (?:\((?P<pren1c>[^\)]+)\)\s*)?            # parenthesized 1c
+    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s*)?    # etymology
+    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s*)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
+    (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
+    (?:;)?\s*                                 # optional separator
+    (?P<usage1>".*"[^\d]+)?\s*                # example 1
+    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
+    (?P<cetera>.*)?$                          # etc.
+""".format(REP_PART, REP_PART), re.VERBOSE)
+
+
+'''
+  Webster:
     (?:(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
-    (?P<defn1a>[A-Z][^.]+\.)?\s*   # definition 1 tag
-    (?:;)?\s*                                 # optional separator
-    (?P<usage1>".*"[^\d]+)?\s*                # example 1
-    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
-    (?P<cetera>.*)?$                          # etc.
-""".format(REP_PART, REP_PART), re.VERBOSE)
 
-REM_PART = re.compile(r"""
+  Partial (backup, to be deleted)
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
-    (?:;\s+(?P<word_2>[A-Z'-]+))?\s*                                # WORD 2 (variant spelling)
-    (?:;\s+(?P<word_3>[A-Z'-]+))?\s*                                # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z](?:\w+['"*-]?\ ?)+\w+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+)\s* # Pron 1 (Capitalized)
-    (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?\s*       # Pronunciation 2 (for variant 2)
-    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]\s*     # Pronunciation 3 (for variant 2)
+    (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
+    (?:;\s+(?P<word_3>[A-Z'-]+))?\s+                # WORD 3 (variant spelling)
+    (?P<pron_1>[A-Z](?:\w+['"*-]?\ ?)+\w+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
+    (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
+    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]\s*   # Pronunciation 3 (for variant 2)
     (?P<pren1a>\([^\)]+\))?                         # parenthesized 1a
-    (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?        # part of speech for first definition (order varies)
+    (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?         # part of speech for first definition (order varies)
     (?P<pren1b>\([^\)]+\))?                         # parenthesized 1b
     (?P<brack1>\[[^\]]+\])?                         # bracketed
-    (?P<sepsp1>[\s.,]*?)                      # space, punctuation(period, comma)
+    (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
+    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
+    (?P<pren1c>\([^\)]+\))?                   # parenthesized 1c ?
+    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s+)?    # etymology
+    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s+)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s+(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
-    (?P<defn1a>(?=Defn.\s+)[A-Z][^.]+\.)?\s*   # definition 1 tag
+    (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
     (?:;)?\s*                                 # optional separator
     (?P<usage1>".*"[^\d]+)?\s*                # example 1
     (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
     (?P<cetera>.*)?$                          # etc.
-""".format(REP_PART, REP_PART), re.VERBOSE)
-
-
 '''
 
-
-    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
-    (?P<pren1c>\([^\)]+\))?\s*                # parenthesized 1c ?
-    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s+)?    # etymology
-    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s+)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
-    (?:\s(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
-
-'''
-
-def try_partial_match(entry):
+def try_partial_match(entry, reason):
     '''test new variant of regex'''
-    partial = REM_PART.match(entry)
-    print("++++++++++++++++ Try partial match:")
+    print("\n+++++++++++++++ Try partial match because:  %s:" % reason)
+    partial = REC_PARTIAL.match(entry)
     if not partial:
         print("======================================= Partial match failed, too!")
         return 1
@@ -508,6 +529,7 @@ class WebsterEntry:
     word_1: {:<24}    word_2: {}    word_3: {}
     pron_1: {:<24}    pron_2: {}    pron_3: {}
     part_1: ({})
+    brack1: ({})
     etym_1: ({})
     dftag1: ({})
     defn_1: ({})
@@ -516,7 +538,7 @@ class WebsterEntry:
     defn_2: ({})
     cetera: ({})
     '''.format(self.word_1, self.word_2, self.word_3, self.pron_1, self.pron_2, self.pron_3,
-               self.part_1, self.etym_1, self.dftag1, self.defn_1, self.defn1a, self.usage1,
+               self.part_1, self.brack1, self.etym_1, self.dftag1, self.defn_1, self.defn1a, self.usage1,
                self.defn_2,
                self.cetera
               ))
@@ -536,7 +558,7 @@ class WebsterEntry:
 
 def match_webster_entry(entry):
     '''return regex match on dictionary entry text; trying only one pattern for now'''
-    return REM_WEBSTER.match(entry)
+    return REC_WEBSTER.match(entry)
 
 def parse_webster_entry(entry):
     '''Return a dict representing a parsed dictionary entry.
@@ -546,10 +568,41 @@ def parse_webster_entry(entry):
         return match.groupdict()
     return None
 
+def common_and_max_len(str_a, str_b):
+    '''return index of first difference between two strings, or in other words,
+    the length of their common leading substrings, and the maximum of their
+    lengths.  May be applied to other subscriptables besides strings.'''
+    maxlen = max(len(str_a), len(str_b))
+    for idx in range(maxlen):
+        try:
+            if str_a[idx] != str_b[idx]:
+                return idx, maxlen
+        except IndexError:
+            break
+    return idx + 1, maxlen
+
+def index_diff(sub_a, sub_b):
+    '''
+    Return index of first difference between two strings or other
+    subscriptable objects, or in other words, the length of their common prefixes.
+    '''
+    for idx, tup in enumerate(zip(sub_a, sub_b)):
+        if tup[0] != tup[1]:
+            return idx
+    return idx + 1
 
 def parse_webster_file(path, beg, end, charset, verbose=1):
     '''parse Webster-like dictionary text file with diagnostics.'''
     metrics = defaultdict(int)
+    if verbose > 1:
+        partial = REC_PARTIAL.pattern
+        webster = REC_WEBSTER.pattern
+        comlen, totlen = common_and_max_len(partial, webster)
+        if comlen < totlen:
+            print("Partial pattern matches Webster pattern:  %d/%d" % (comlen, totlen))
+            print("Partial____%s____\nWebster____%s____" % (partial[comlen-24:comlen+12], webster[comlen-24:comlen+12]))
+        else:
+            print("Partial == Webster pattern:", totlen)
     for idx, entry_text in enumerate(para_iter_lex_file(path, REC_UPPER_WORD, sep_lines=1, charset=charset)):
         if idx >= beg:
             metrics['tried'] += 1
@@ -571,8 +624,13 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
                     print("\nPARAGRAPH {:5}\n({})".format(idx, entry_text))
                 if verbose > 1:
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
-            if verbose > 2 and (is_undefined or not entry_dict):
-                try_partial_match(entry_text)
+            if verbose > 2:
+                if not entry_dict:
+                    try_partial_match(entry_text, "Main Match Failed")
+                elif is_undefined:
+                    try_partial_match(entry_text, "Definition Not Found")
+                elif verbose > 6:
+                    try_partial_match(entry_text, "verbose > 6")
         if end > 0 and idx >= end:
             break
     print_metrics(metrics)
