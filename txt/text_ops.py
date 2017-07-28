@@ -436,7 +436,7 @@ REC_PARTIAL = re.compile(r"""
 """.format(REP_PART, REP_PART), re.VERBOSE)
 
 
-'''
+r'''
   Webster:
     (?:(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
 
@@ -492,7 +492,7 @@ def try_partial_match(entry, reason, verbose):
                 "defn_1: (", matgadd["defn_1"], ") \n\t",
                 "defn1a: (", matgadd["defn1a"], ") \n\t",
                 "cetera: (", matgadd["cetera"], ") \n\t",
-            )
+                )
         return 1 if matgadd['defn_1'] else 0
     if verbose > 1:
         print("======================================= Partial match failed, too!")
@@ -592,7 +592,7 @@ def index_diff(sub_a, sub_b):
     for idx, tup in enumerate(zip(sub_a, sub_b)):
         if tup[0] != tup[1]:
             return idx
-    return idx + 1
+    return idx + 1 if idx else 0
 
 def parse_webster_file(path, opts, verbose=1):
     '''parse Webster-like dictionary text file with diagnostics.'''
@@ -644,6 +644,7 @@ def parse_webster_file(path, opts, verbose=1):
     print_metrics(metrics)
 
 def percent(count, total):
+    '''count/total as a percentage, or NAN if total <= 0'''
     return 100.0 * count / total if total > 0 else float('nan')
 
 def print_metrics(metrics):
