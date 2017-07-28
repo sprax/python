@@ -133,13 +133,15 @@ def lex_entry_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0):
             blank_lines = 0
             entry_lines += 1
             if not paragraph:
-                paragraph = line
-            elif paragraph.endswith('-') and entry_lines > 3:
+                paragraph = line + "\t"
+            elif paragraph.endswith('-'):
                 # print("LINE {} ENDS WITH -\n{}\n".format(entry_lines, paragraph))
                 paragraph += line               # hyphen, not suffix marker
             else:
                 paragraph += ' ' + line
         else:
+            if entry_lines == 2:
+                paragraph += "\t"
             blank_lines += 1
     if paragraph:
         yield paragraph
@@ -380,49 +382,50 @@ EXAMPLE = "BACE Bace, n., a., & v."
 
 REP_PART = r'a|adv|conj|i|imp|interj|n|p|prep|t|v'
 
+
 # FIXME TODO: Two passes:
 # First pass regex to detect the number of words:
 #   a) how many variants (word_1, word_2, etc., e.g. IMAM; IMAN; IMAUM)
 #   b) how many words in each variant (e.g. BANK BILL, ICELAND MOSS)
 # Second pass regex depends on what's found in the first pass.
 REC_WEBSTER = re.compile(r"""
-    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
+    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
-    (?:;\s+(?P<word_3>[A-Z'-]+))?\s+                # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z](?:\w+['"*-]?\ ?)+\w+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
+    (?:;\s+(?P<word_3>[A-Z'-]+))?\t\                # WORD 3 (variant spelling)
+    (?P<pron_1>[A-Z](?:\w*['"*-]?\ ?)+\w+['"*-]?|[A-Z]\w*[^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
-    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]      # Pronunciation 3 (for variant 2)
+    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]+   # Pronunciation 3 (for variant 2)
     (?:\s*\((?P<pren1a>[^\)]+)\)\s*)?               # parenthesized 1a
     (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?         # part of speech for first definition (order varies)
     (?:\s*;\s+pl\.\s+(?P<plural>[\w-]+))?           # plural form or suffix, usually for irregulars
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
-    (?:\.?\s*\[(?P<brack1>[^\]]+)\]\s*)?               # bracketed
-    (?P<sepsp1>[\s.,]*?)                        # non-greedy space, punctuation(period, comma)
-    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?     # part of speech for first definition (order varies)
-    (?:\s*\((?P<pren1c>[^\)]+)\)\s*)?           # parenthesized 1c
-    (?:\s*Etym:\s*\[(?P<etym_1>[^\]]+)\]\s*)?   # etymology
-    (?:\s*\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s*)?  # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
-    (?:\s*(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
-    (?P<defn1a>[A-Z][^.]+\.)?\s*                # definition 1 sentence 2
-    (?:;)?\s*                                   # optional separator
-    (?P<usage1>".*"[^\d]+)?\s*                  # example 1
-    (?P<defn_2>\d.\s[^\d]+)?                    # definition 2, ...
-    (?P<cetera>.*)?$                            # etc.
+    (?:\.?\s*\[(?P<brack1>[^\]]+)\]\s*)?            # bracketed
+    (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
+    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
+    (?:\((?P<pren1c>[^\)]+)\)\s*)?            # parenthesized 1c
+    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s*)?    # etymology
+    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s*)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
+    (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
+    (?:;)?\s*                                 # optional separator
+    (?P<usage1>".*"[^\d]+)?\s*                # example 1
+    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
+    (?P<cetera>.*)?$                          # etc.
 """.format(REP_PART, REP_PART), re.VERBOSE)
 
 REC_PARTIAL = re.compile(r"""
-    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
+    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
-    (?:;\s+(?P<word_3>[A-Z'-]+))?\s+                # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z](?:\w+['"*-]?\ ?)+\w+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
+    (?:;\s+(?P<word_3>[A-Z'-]+))?\t\                # WORD 3 (variant spelling)
+    (?P<pron_1>[A-Z](?:\w*['"*-]?\ ?)+\w+['"*-]?|[A-Z]\w*[^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
-    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]      # Pronunciation 3 (for variant 2)
+    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]+   # Pronunciation 3 (for variant 2)
     (?:\s*\((?P<pren1a>[^\)]+)\)\s*)?               # parenthesized 1a
     (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?         # part of speech for first definition (order varies)
     (?:\s*;\s+pl\.\s+(?P<plural>[\w-]+))?           # plural form or suffix, usually for irregulars
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
-    (?:\.?\s*\[(?P<brack1>[^\]]+)\]\s*)?               # bracketed
-    (?P<sepsp1>[\s.,]*?)                     # non-greedy space, punctuation(period, comma)
+    (?:\.?\s*\[(?P<brack1>[^\]]+)\]\s*)?            # bracketed
+    (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
     (?:\((?P<pren1c>[^\)]+)\)\s*)?            # parenthesized 1c
     (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s*)?    # etymology
@@ -436,12 +439,13 @@ REC_PARTIAL = re.compile(r"""
 """.format(REP_PART, REP_PART), re.VERBOSE)
 
 
-r'''
+'''
   Webster:
     (?:(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
 
+
   Partial (backup, to be deleted)
-    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
+    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\s+                # WORD 3 (variant spelling)
     (?P<pron_1>[A-Z](?:\w+['"*-]?\ ?)+\w+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
@@ -603,7 +607,8 @@ def parse_webster_file(path, opts, verbose=1):
         comlen, totlen = common_and_max_len(partial, webster)
         if comlen < totlen:
             print("Partial pattern matches Webster pattern:  %d/%d" % (comlen, totlen))
-            print("Partial____%s____\nWebster____%s____" % (partial[comlen-24:comlen+20], webster[comlen-24:comlen+20]))
+            print("Partial____%s____\nWebster____%s____" % (partial[comlen-24:comlen+20],
+                                                            webster[comlen-24:comlen+20]))
         else:
             print("Partial == Webster pattern:", totlen)
     for idx, entry_text in enumerate(para_iter_lex_file(path, REC_UPPER_WORD, sep_lines=1, charset=opts.charset)):
@@ -649,14 +654,14 @@ def percent(count, total):
 
 def print_metrics(metrics):
     '''pretty print metrics dict'''
-    print("defined/partdef/parsed/tried: %d/%d/%d/%d => %.1f%% v. %.1f%% & %.1f%% success.  Failure: %d undefined & %d unparsed." % (
+    print("defined/partdef/parsed/tried: %d/%d/%d/%d => %.1f%% v. %.1f%% & %.1f%% success.  " % (
         metrics['defined'], metrics['partdef'], metrics['parsed'], metrics['tried'],
         percent(metrics['defined'], metrics['parsed']),
         percent(metrics['partdef'], metrics['parsed']),
-        percent(metrics['parsed'], metrics['tried']),
+        percent(metrics['parsed'], metrics['tried'])), end='')
+    print("Failure: %d undefined & %d unparsed." % (
         metrics['tried'] - metrics['defined'],
-        metrics['unparsed'],
-    ))
+        metrics['unparsed']))
 
 CONST_MAX_WORDS = 5
 DEFAULT_NUMBER = 10
