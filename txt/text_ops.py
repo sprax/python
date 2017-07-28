@@ -414,11 +414,12 @@ REC_PARTIAL = re.compile(r"""
     (?P<pron_1>[A-Z](?:\w+['"*-]?\ ?)+\w+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]\s*   # Pronunciation 3 (for variant 2)
-    (?:\((?P<pren1a>[^\)]+)\)\s*)?                  # parenthesized 1a
-    (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?         # part of speech for first definition (order varies)
-    (?:\((?P<pren1b>[^\)]+)\)\s*)?                  # parenthesized 1b
-    (?:\[(?P<brack1>[^\]]+)\]\s*)?                  # bracketed
-    (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
+    (?:\((?P<pren1a>[^\)]+)\)\s*)?              # parenthesized 1a
+    (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?     # part of speech for first definition (order varies)
+    (?:\s*;\s+pl\.\s+(?P<plural>[\w-]+))?       # plural form or suffix, usually for irregulars
+    (?:\s+\((?P<pren1b>[^\)]+)\)\s*)?           # parenthesized 1b
+    (?:\.?\s+\[(?P<brack1>[^\]]+)\]\s*)?        # bracketed
+    (?P<sepsp1>[\s.,;]*?)                     # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
     (?:\((?P<pren1c>[^\)]+)\)\s*)?            # parenthesized 1c
     (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s*)?    # etymology
@@ -462,7 +463,7 @@ REC_PARTIAL = re.compile(r"""
 
 def try_partial_match(entry, reason):
     '''test new variant of regex'''
-    print("\n+++++++++++++++ Try partial match because:  %s:" % reason)
+    print("\n++++++++++++++ Try partial match because:  %s:" % reason)
     partial = REC_PARTIAL.match(entry)
     if not partial:
         print("======================================= Partial match failed, too!")
@@ -477,7 +478,8 @@ def try_partial_match(entry, reason):
               "pron_2: (", matgadd["pron_2"], ") \t",
               "pron_3: (", matgadd["pron_3"], ") \n\t",
               "pren1a: (", matgadd["pren1a"], ") \n\t",
-              "part1a: (", matgadd["part1a"], ") \n\t",
+              "part1a: (", matgadd["part1a"], ") \t",
+              "plural: (", matgadd["plural"], ") \n\t",
               "pren1b: (", matgadd["pren1b"], ") \n\t",
               "brack1: (", matgadd["brack1"], ") \n\t",
               "sepsp1: (", matgadd["sepsp1"], ") \n\t",
