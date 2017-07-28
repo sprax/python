@@ -347,6 +347,8 @@ def print_webster(webster):
     print("\tdef2:", webster.defn2)
     print("\tmore:", webster.etc)
 
+def put(*args, sep=''):
+    print(*args, sep=sep)
 
 REC_FIRST_WORD_TOKEN = re.compile(r'^(-?\w+|\W*\w+-?)')
 
@@ -467,35 +469,31 @@ def try_partial_match(entry, reason):
     partial = REC_PARTIAL.match(entry)
     if not partial:
         print("======================================= Partial match failed, too!")
-        return 1
+        return 0
     matgadd = defaultdict(str, partial.groupdict())
-    try:
-        print("\t",
-              "word_1: (", matgadd["word_1"], ") \t",
-              "word_2: (", matgadd["word_2"], ") \t",
-              "word_3: (", matgadd["word_3"], ") \n\t",
-              "pron_1: (", matgadd["pron_1"], ") \t",
-              "pron_2: (", matgadd["pron_2"], ") \t",
-              "pron_3: (", matgadd["pron_3"], ") \n\t",
-              "pren1a: (", matgadd["pren1a"], ") \n\t",
-              "part1a: (", matgadd["part1a"], ") \t",
-              "plural: (", matgadd["plural"], ") \n\t",
-              "pren1b: (", matgadd["pren1b"], ") \n\t",
-              "brack1: (", matgadd["brack1"], ") \n\t",
-              "sepsp1: (", matgadd["sepsp1"], ") \n\t",
-              "part1b: (", matgadd["part1b"], ") \n\t",
-              "pren1c: (", matgadd["pren1c"], ") \n\t",
-              "etym_1: (", matgadd["etym_1"], ") \n\t",
-              "dtype1: (", matgadd["dtype1"], ") \t",
-              "dftag1: (", matgadd["dftag1"], ") \n\t",
-              "defn_1: (", matgadd["defn_1"], ") \n\t",
-              "defn1a: (", matgadd["defn1a"], ") \n\t",
-              "cetera: (", matgadd["cetera"], ") \n\t",
-              sep='')
-    except KeyError as kex:
-        print("_______________________________________ Partial match failed at: ", kex)
-        return 2
-    return 0
+    put("\t",
+        "word_1: (", matgadd["word_1"], ") \t",
+        "word_2: (", matgadd["word_2"], ") \t",
+        "word_3: (", matgadd["word_3"], ") \n\t",
+        "pron_1: (", matgadd["pron_1"], ") \t",
+        "pron_2: (", matgadd["pron_2"], ") \t",
+        "pron_3: (", matgadd["pron_3"], ") \n\t",
+        "pren1a: (", matgadd["pren1a"], ") \n\t",
+        "part1a: (", matgadd["part1a"], ") \t",
+        "plural: (", matgadd["plural"], ") \n\t",
+        "pren1b: (", matgadd["pren1b"], ") \n\t",
+        "brack1: (", matgadd["brack1"], ") \n\t",
+        "sepsp1: (", matgadd["sepsp1"], ") \n\t",
+        "part1b: (", matgadd["part1b"], ") \n\t",
+        "pren1c: (", matgadd["pren1c"], ") \n\t",
+        "etym_1: (", matgadd["etym_1"], ") \n\t",
+        "dtype1: (", matgadd["dtype1"], ") \t",
+        "dftag1: (", matgadd["dftag1"], ") \n\t",
+        "defn_1: (", matgadd["defn_1"], ") \n\t",
+        "defn1a: (", matgadd["defn1a"], ") \n\t",
+        "cetera: (", matgadd["cetera"], ") \n\t",
+    )
+    return 1 if matgadd['defn_1'] else 0
 
 ###############################################################################
 class WebsterEntry:
@@ -628,11 +626,15 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
             if verbose > 2:
                 if not entry_dict:
-                    try_partial_match(entry_text, "Main Match Failed")
+                    reason = "Main Match Failed"
                 elif is_undefined:
-                    try_partial_match(entry_text, "Definition Not Found")
+                    reason = "Definition Not Found"
                 elif verbose > 6:
-                    try_partial_match(entry_text, "verbose > 6")
+                    reason = "verbose > 6"
+                else:
+                    reason = None
+                if reason:
+                    metrics['partdef'] += try_partial_match(entry_text, reason)
         if end > 0 and idx >= end:
             break
     print_metrics(metrics)
