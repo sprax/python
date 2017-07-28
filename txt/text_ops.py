@@ -416,11 +416,11 @@ REC_PARTIAL = re.compile(r"""
     (?P<pron_1>[A-Z](?:\w+['"*-]?\ ?)+\w+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]\s*   # Pronunciation 3 (for variant 2)
-    (?:\((?P<pren1a>[^\)]+)\)\s*)?              # parenthesized 1a
-    (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?     # part of speech for first definition (order varies)
-    (?:\s*;\s+pl\.\s+(?P<plural>[\w-]+))?       # plural form or suffix, usually for irregulars
-    (?:\s+\((?P<pren1b>[^\)]+)\)\s*)?           # parenthesized 1b
-    (?:\.?\s+\[(?P<brack1>[^\]]+)\]\s*)?        # bracketed
+    (?:\((?P<pren1a>[^\)]+)\)\s*)?                  # parenthesized 1a
+    (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?         # part of speech for first definition (order varies)
+    (?:\s*;\s+pl\.\s+(?P<plural>[\w-]+))?           # plural form or suffix, usually for irregulars
+    (?:\s+\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
+    (?:\.?\s+\[(?P<brack1>[^\]]+)\]\s*)?            # bracketed
     (?P<sepsp1>[\s.,;]*?)                     # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
     (?:\((?P<pren1c>[^\)]+)\)\s*)?            # parenthesized 1c
@@ -463,37 +463,39 @@ REC_PARTIAL = re.compile(r"""
     (?P<cetera>.*)?$                          # etc.
 '''
 
-def try_partial_match(entry, reason):
+def try_partial_match(entry, reason, verbose):
     '''test new variant of regex'''
-    print("\n++++++++++++++ Try partial match because:  %s:" % reason)
     partial = REC_PARTIAL.match(entry)
-    if not partial:
+    if partial:
+        matgadd = defaultdict(str, partial.groupdict())
+        if verbose > 2:
+            print("\n++++++++++++++ Try partial match because:  %s:" % reason)
+            put("\t",
+                "word_1: (", matgadd["word_1"], ") \t",
+                "word_2: (", matgadd["word_2"], ") \t",
+                "word_3: (", matgadd["word_3"], ") \n\t",
+                "pron_1: (", matgadd["pron_1"], ") \t",
+                "pron_2: (", matgadd["pron_2"], ") \t",
+                "pron_3: (", matgadd["pron_3"], ") \n\t",
+                "pren1a: (", matgadd["pren1a"], ") \n\t",
+                "part1a: (", matgadd["part1a"], ") \t",
+                "plural: (", matgadd["plural"], ") \n\t",
+                "pren1b: (", matgadd["pren1b"], ") \n\t",
+                "brack1: (", matgadd["brack1"], ") \n\t",
+                "sepsp1: (", matgadd["sepsp1"], ") \n\t",
+                "part1b: (", matgadd["part1b"], ") \n\t",
+                "pren1c: (", matgadd["pren1c"], ") \n\t",
+                "etym_1: (", matgadd["etym_1"], ") \n\t",
+                "dtype1: (", matgadd["dtype1"], ") \t",
+                "dftag1: (", matgadd["dftag1"], ") \n\t",
+                "defn_1: (", matgadd["defn_1"], ") \n\t",
+                "defn1a: (", matgadd["defn1a"], ") \n\t",
+                "cetera: (", matgadd["cetera"], ") \n\t",
+            )
+        return 1 if matgadd['defn_1'] else 0
+    if verbose > 1:
         print("======================================= Partial match failed, too!")
-        return 0
-    matgadd = defaultdict(str, partial.groupdict())
-    put("\t",
-        "word_1: (", matgadd["word_1"], ") \t",
-        "word_2: (", matgadd["word_2"], ") \t",
-        "word_3: (", matgadd["word_3"], ") \n\t",
-        "pron_1: (", matgadd["pron_1"], ") \t",
-        "pron_2: (", matgadd["pron_2"], ") \t",
-        "pron_3: (", matgadd["pron_3"], ") \n\t",
-        "pren1a: (", matgadd["pren1a"], ") \n\t",
-        "part1a: (", matgadd["part1a"], ") \t",
-        "plural: (", matgadd["plural"], ") \n\t",
-        "pren1b: (", matgadd["pren1b"], ") \n\t",
-        "brack1: (", matgadd["brack1"], ") \n\t",
-        "sepsp1: (", matgadd["sepsp1"], ") \n\t",
-        "part1b: (", matgadd["part1b"], ") \n\t",
-        "pren1c: (", matgadd["pren1c"], ") \n\t",
-        "etym_1: (", matgadd["etym_1"], ") \n\t",
-        "dtype1: (", matgadd["dtype1"], ") \t",
-        "dftag1: (", matgadd["dftag1"], ") \n\t",
-        "defn_1: (", matgadd["defn_1"], ") \n\t",
-        "defn1a: (", matgadd["defn1a"], ") \n\t",
-        "cetera: (", matgadd["cetera"], ") \n\t",
-    )
-    return 1 if matgadd['defn_1'] else 0
+    return 0
 
 ###############################################################################
 class WebsterEntry:
@@ -591,7 +593,7 @@ def index_diff(sub_a, sub_b):
             return idx
     return idx + 1
 
-def parse_webster_file(path, beg, end, charset, verbose=1):
+def parse_webster_file(path, opts, verbose=1):
     '''parse Webster-like dictionary text file with diagnostics.'''
     metrics = defaultdict(int)
     if verbose > 1:
@@ -603,8 +605,8 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
             print("Partial____%s____\nWebster____%s____" % (partial[comlen-24:comlen+12], webster[comlen-24:comlen+12]))
         else:
             print("Partial == Webster pattern:", totlen)
-    for idx, entry_text in enumerate(para_iter_lex_file(path, REC_UPPER_WORD, sep_lines=1, charset=charset)):
-        if idx >= beg:
+    for idx, entry_text in enumerate(para_iter_lex_file(path, REC_UPPER_WORD, sep_lines=1, charset=opts.charset)):
+        if idx >= opts.start_index:
             metrics['tried'] += 1
             is_undefined = True
             entry_dict = parse_webster_entry(entry_text)
@@ -624,18 +626,19 @@ def parse_webster_file(path, beg, end, charset, verbose=1):
                     print("\nPARAGRAPH {:5}\n({})".format(idx, entry_text))
                 if verbose > 1:
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
-            if verbose > 2:
-                if not entry_dict:
-                    reason = "Main Match Failed"
-                elif is_undefined:
-                    reason = "Definition Not Found"
-                elif verbose > 6:
-                    reason = "verbose > 6"
-                else:
-                    reason = None
-                if reason:
-                    metrics['partdef'] += try_partial_match(entry_text, reason)
-        if end > 0 and idx >= end:
+            if not entry_dict:
+                reason = "Main Match Failed"
+            elif is_undefined:
+                reason = "Definition Not Found"
+            elif verbose > 6:
+                reason = "verbose > 6"
+            elif opts.both:
+                reason = "Parse Both Ways To Compare"
+            else:
+                reason = None
+            if reason:
+                metrics['partdef'] += try_partial_match(entry_text, reason, verbose)
+        if opts.stop_index > 0 and idx >= opts.stop_index:
             break
     print_metrics(metrics)
 
@@ -644,9 +647,10 @@ def percent(count, total):
 
 def print_metrics(metrics):
     '''pretty print metrics dict'''
-    print("defined/parsed/tried: %d/%d/%d => %.1f%% & %.1f%% success.  Failure: %d undefined & %d unparsed." % (
-        metrics['defined'], metrics['parsed'], metrics['tried'],
+    print("defined/partdef/parsed/tried: %d/%d/%d/%d => %.1f%% v. %.1f%% & %.1f%% success.  Failure: %d undefined & %d unparsed." % (
+        metrics['defined'], metrics['partdef'], metrics['parsed'], metrics['tried'],
         percent(metrics['defined'], metrics['parsed']),
+        percent(metrics['partdef'], metrics['parsed']),
         percent(metrics['parsed'], metrics['tried']),
         metrics['tried'] - metrics['defined'],
         metrics['unparsed'],
@@ -664,6 +668,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('text_file', type=str, nargs='?', default='corpus.txt',
                         help='text file containing quoted dialogue')
+    parser.add_argument('-both', action='store_true',
+                        help='Try both match-parsers.')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
     parser.add_argument('-function', type=int, nargs='?', const=1, default=0,
@@ -689,7 +695,7 @@ def main():
     verbose = args.verbose
 
     if args.webster:
-        parse_webster_file(args.text_file, args.start_index, args.stop_index, args.charset, verbose)
+        parse_webster_file(args.text_file, args, verbose)
         exit(0)
 
     if args.function == 0:
