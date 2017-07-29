@@ -278,18 +278,17 @@ REC_PARTIAL = re.compile(r"""
     (?P<cetera>.*)?$                          # etc.
 '''
 
+###############################################################################
 def try_partial_match(entry, reason, verbose):
     '''test a variant of the webster regex'''
     if verbose > 2:
         print("\n++++++++++++++ Try partial match because:  %s:" % reason)
     match = REC_PARTIAL.match(entry)
     if match:
-        return match.groupdict()
+        return match
     if verbose > 1:
-        print("======================================= Even a partial match failed!")
+        print("======================================= Even partial match failed!")
     return None
-
-
 
 def show_partial_match(partial, verbose):
     matgadd = defaultdict(str, partial.groupdict())
@@ -415,6 +414,7 @@ def index_diff(sub_a, sub_b):
             return idx
     return idx + 1 if idx else 0
 
+
 def parse_webster_file(path, opts, verbose=1):
     '''parse Webster-like dictionary text file with diagnostics.'''
     metrics = defaultdict(int)
@@ -425,8 +425,8 @@ def parse_webster_file(path, opts, verbose=1):
     if verbose > 1:
         if is_partial_different:
             print("Partial pattern matches Webster pattern up to:  %d/%d" % (comlen, totlen))
-            print("Webster____%s____" % webster[comlen-24:comlen+20])
-            print("Partial____%s____" % partial[comlen-24:comlen+20])
+            print("Webster____%s____" % webster[comlen-24:comlen+24])
+            print("Partial____%s____" % partial[comlen-24:comlen+24])
         else:
             print("Partial == Webster pattern:", totlen)
     for idx, entry_text in enumerate(para_ns_iter_lex_file(path, REC_UPPER_WORD, sep_lines=1, charset=opts.charset)):
@@ -465,7 +465,9 @@ def parse_webster_file(path, opts, verbose=1):
                     partial = try_partial_match(entry_text, reason, verbose)
                     if partial:
                         metrics['parted'] += 1
-                        show_partial_match(partial, verbose):
+                        part_dict = show_partial_match(partial, verbose)
+                        if part_dict['defn_1']:
+                            metrics['partdef'] += 1
                     else:
                         metrics['unparted'] += 1
         if opts.stop_index > 0 and idx >= opts.stop_index:
@@ -478,15 +480,17 @@ def percent(count, total):
 
 def print_metrics(metrics):
     '''pretty print metrics dict'''
-    print("defined/partdef/parsed/tried: %d/%d/%d/%d => %.1f%% v. %.1f%% & %.1f%% success.  " % (
-        metrics['defined'], metrics['partdef'], metrics['parsed'], metrics['tried'],
+    print("For %d tried, defined/parsed: Full: %d/%d, Part: %d/%d ==> %.1f%% v. %.1f%% & Max Parsed %.1f%%.  " % (
+        metrics['tried'],
+        metrics['defined'], metrics['parsed'],
+        metrics['partdef'], metrics['parted'],
         percent(metrics['defined'], metrics['parsed']),
-        percent(metrics['partdef'], metrics['parsed']),
-        percent(metrics['parsed'], metrics['tried'])), end='')
-    print("Failures: undefined Web %d, undefined Part %d, unparsed %d " % (
-        metrics['tried'] - metrics['defined'],
-        metrics['tried'] - metrics['partdef'],
-        metrics['unparsed']))
+        percent(metrics['partdef'], metrics['parted']),
+        percent(max(metrics['parsed'], metrics['parted']), metrics['tried'])),
+        end='')
+    print("Failures:   Full %d & %d   Part %d & %d" % (
+        metrics['tried'] - metrics['defined'], metrics['unparsed'],
+        metrics['tried'] - metrics['partdef'], metrics['unparted']))
 
 CONST_MAX_WORDS = 5
 DEFAULT_NUMBER = 10
