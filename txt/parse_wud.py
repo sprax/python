@@ -198,24 +198,25 @@ REC_WEBSTER = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z](?:\w*['"*-]?\ ?)+\w+['"*-]?|[A-Z]\w*[^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
+    (?P<pron_1>[A-Z](?:\w*[``'"*-]?\ ?)+\w+[``'"*-]?|[A-Z]\w*[^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
-    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]+   # Pronunciation 3 (for variant 2)
+    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]*     # Pronunciation 3 (for variant 2)
     (?:\s*\((?P<pren1a>[^\)]+)\)\s*)?               # parenthesized 1a
     (?:,?\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?       # part of speech for first definition (order varies)
-    (?:\s*;\s+pl\.\s+(?P<plural>[\w-]+))?           # plural form or suffix, usually for irregulars
+    (?:\s*;\s+pl\.\s+(?P<plural>[\w\ -]+)\.)?       # plural form or suffix, usually for irregulars
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\]\s*)?            # bracketed
-    (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
-    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
-    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s*)?    # etymology
-    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s*)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
-    (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
-    (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
-    (?:;)?\s*                                 # optional separator
-    (?P<usage1>".*"[^\d]+)?\s*                # example 1
-    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
-    (?P<cetera>.*)?$                          # etc.
+    (?P<sepsp1>[\s.,]*?)                        # non-greedy space, punctuation(period, comma)
+    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?     # part of speech for first definition (order varies)
+    (?:Etym:\s+\[(?P<etym_1>[^\]]+)\])?         # etymology
+    (?:\ *\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s*)?  # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    \n\n
+    (?:(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
+    (?P<defn1a>[A-Z][^.]+\.)?\s*            # definition 1 sentence 2
+    (?:;)?\s*                               # optional separator
+    (?P<usage1>".*"[^\d]+)?\s*              # example 1
+    (?P<defn_2>\d.\s[^\d]+)?                # definition 2, ...
+    (?P<cetera>.*?)?$                        # etc.
 """.format(REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
 
 
@@ -313,12 +314,14 @@ def show_partial_match(partial, verbose):
             "brack1: (", matgadd["brack1"], ") \n\t",
             "sepsp1: (", matgadd["sepsp1"], ") \n\t",
             "part1b: (", matgadd["part1b"], ") \n\t",
-            "pren1c: (", matgadd["pren1c"], ") \n\t",
+            # "pren1c: (", matgadd["pren1c"], ") \n\t",
             "etym_1: (", matgadd["etym_1"], ") \n\t",
             "dtype1: (", matgadd["dtype1"], ") \t",
             "dftag1: (", matgadd["dftag1"], ") \n\t",
             "defn_1: (", matgadd["defn_1"], ") \n\t",
+            "usage1: (", matgadd["usage1"], ") \n\t",
             "defn1a: (", matgadd["defn1a"], ") \n\t",
+            "defn_2: (", matgadd["defn_2"], ") \n\t",
             "cetera: (", matgadd["cetera"], ") \n\t",
             )
     return matgadd
