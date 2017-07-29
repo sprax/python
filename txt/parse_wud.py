@@ -197,7 +197,7 @@ REP_PART = r'a|adv|conj|i|imp|interj|n|p|prep|t|v'
 REC_WEBSTER = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
-    (?:;\s+(?P<word_3>[A-Z'-]+))?\t\                # WORD 3 (variant spelling)
+    (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
     (?P<pron_1>[A-Z](?:\w*['"*-]?\ ?)+\w+['"*-]?|[A-Z]\w*[^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]+   # Pronunciation 3 (for variant 2)
@@ -210,13 +210,14 @@ REC_WEBSTER = re.compile(r"""
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
     (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s*)?    # etymology
     (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s*)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
-    (?:(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
+    (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
     (?:;)?\s*                                 # optional separator
     (?P<usage1>".*"[^\d]+)?\s*                # example 1
     (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
     (?P<cetera>.*)?$                          # etc.
-""".format(REP_PART, REP_PART), re.VERBOSE)
+""".format(REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
+
 
 REC_PARTIAL = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
@@ -236,6 +237,9 @@ REC_PARTIAL = re.compile(r"""
     (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s*)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
+    (?:;)?\s*                                 # optional separator
+    (?P<usage1>".*"[^\d]+)?\s*                # example 1
+    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
     (?P<cetera>.*)?$                          # etc.
 """.format(REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
 
@@ -450,7 +454,7 @@ def parse_webster_file(path, opts, verbose=1):
                     print("\nPARAGRAPH {:5}\n({})".format(idx, entry_text))
                 if verbose > 1:
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
-            if is_partial_different:
+            if is_partial_different or opts.both:
                 if not entry_dict:
                     reason = "Main Match Failed"
                 elif is_undefined:
