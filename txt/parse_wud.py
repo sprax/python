@@ -90,7 +90,7 @@ def lex_entry_ns_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0
     for line in fileobj:
         #print("    PI: line(%s) para(%s)" % (line.rstrip(), paragraph))
         if re.match(rgx_para_separator, line) and paragraph and blank_lines >= sep_lines:
-            yield paragraph
+            yield paragraph.rstrip()
             paragraph, blank_lines, entry_lines = '', 0, 0
         if is_blank_line(line):
             if paragraph:
@@ -106,7 +106,7 @@ def lex_entry_ns_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0
                 paragraph = line
                 entry_lines = 1
     if paragraph:
-        yield paragraph
+        yield paragraph.rstrip()
 
 def paragraph_multiline_iter(fileobj, rgx_para_separator=r'\s*\n\s*\n\s*|\s*\n\t\s*'):
     '''yields paragraphs from text file and regex separator, which by default matches
@@ -418,6 +418,10 @@ def index_diff(sub_a, sub_b):
             return idx
     return idx + 1 if idx else 0
 
+def show_paragraph(entry_text, idx, verbose):
+    if verbose > 2:
+        print("\n======================== Entry %5d ================================" % idx)
+        print(entry_text)
 
 def parse_webster_file(path, opts, verbose=1):
     '''parse Webster-like dictionary text file with diagnostics.'''
@@ -444,14 +448,13 @@ def parse_webster_file(path, opts, verbose=1):
                     metrics['defined'] += 1
                     is_undefined = False
                 entry_base = WebsterEntry(entry_dict)
-                if verbose > 5 or verbose > 2 and is_undefined:
-                    print("\nPARAGRAPH {:5}\n({})".format(idx, entry_text))
+                if verbose > 5 or is_undefined:
+                    show_paragraph(entry_text, idx, verbose)
                 if verbose > 4:
                     print("WebsterEntry:", entry_base)
             else:
                 metrics['unparsed'] += 1
-                if verbose > 2:
-                    print("\nPARAGRAPH {:5}\n({})".format(idx, entry_text))
+                show_paragraph(entry_text, idx, verbose)
                 if verbose > 1:
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
             if is_partial_different or opts.both:
