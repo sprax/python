@@ -83,6 +83,7 @@ def lex_entry_ns_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0
     all-uppercase word.  The all-caps word is included in the paragraph, as are any
     newlines upto the next paragraph separator.  In general, lines are not stripped
     of whitespace.
+    TODO: stop counting blank_lines and entry_lines.
     '''
     ## Makes no assumptions about the encoding used in the file
     paragraph, blank_lines, entry_lines = '', 0, 0
@@ -92,14 +93,18 @@ def lex_entry_ns_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0
             yield paragraph
             paragraph, blank_lines, entry_lines = '', 0, 0
         if is_blank_line(line):
+            if paragraph:
+                paragraph += "\n"
+                entry_lines += 1
             blank_lines += 1
         else:
             blank_lines = 0
-            entry_lines += 1
-            if not paragraph:
-                paragraph = line
-            else:
+            if paragraph:
                 paragraph += line
+                entry_lines += 1
+            else:
+                paragraph = line
+                entry_lines = 1
     if paragraph:
         yield paragraph
 
@@ -214,14 +219,9 @@ REC_WEBSTER = re.compile(r"""
 """.format(REP_PART, REP_PART), re.VERBOSE)
 
 REC_PARTIAL = re.compile(r"""
-    (?P<cetera>.*)?$                          # etc.
-""".format(REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
-
-
-'''
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
-    (?:;\s+(?P<word_3>[A-Z'-]+))?\t\                # WORD 3 (variant spelling)
+    (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
     (?P<pron_1>[A-Z](?:\w*['"*-]?\ ?)+\w+['"*-]?|[A-Z]\w*[^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]+   # Pronunciation 3 (for variant 2)
@@ -236,6 +236,12 @@ REC_PARTIAL = re.compile(r"""
     (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s*)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
+    (?P<cetera>.*)?$                          # etc.
+""".format(REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
+
+
+'''
+
     (?:;)?\s*                                 # optional separator
     (?P<usage1>".*"[^\d]+)?\s*                # example 1
     (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
