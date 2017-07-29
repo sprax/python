@@ -223,28 +223,30 @@ REC_PARTIAL = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z](?:\w*['"*-]?\ ?)+\w+['"*-]?|[A-Z]\w*[^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
+    (?P<pron_1>[A-Z](?:\w*[``'"*-]?\ ?)+\w+[``'"*-]?|[A-Z]\w*[^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
-    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]+   # Pronunciation 3 (for variant 2)
+    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]*     # Pronunciation 3 (for variant 2)
     (?:\s*\((?P<pren1a>[^\)]+)\)\s*)?               # parenthesized 1a
     (?:,?\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?       # part of speech for first definition (order varies)
-    (?:\s*;\s+pl\.\s+(?P<plural>[\w-]+))?           # plural form or suffix, usually for irregulars
+    (?:\s*;\s+pl\.\s+(?P<plural>[\w\ -]+)\.)?       # plural form or suffix, usually for irregulars
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\]\s*)?            # bracketed
-    (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
-    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
-    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s*)?    # etymology
-    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s*)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
-    (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
-    (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
-    (?:;)?\s*                                 # optional separator
-    (?P<usage1>".*"[^\d]+)?\s*                # example 1
-    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
-    (?P<cetera>.*)?$                          # etc.
+    (?P<sepsp1>[\s.,]*?)                        # non-greedy space, punctuation(period, comma)
+    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?     # part of speech for first definition (order varies)
+    (?:Etym:\s+\[(?P<etym_1>[^\]]+)\])?         # etymology
+    (?:\ *\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s*)?  # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    \n\n
+    (?:(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
+    (?P<defn1a>[A-Z][^.]+\.)?\s*            # definition 1 sentence 2
+    (?:;)?\s*                               # optional separator
+    (?P<usage1>".*"[^\d]+)?\s*              # example 1
+    (?P<defn_2>\d.\s[^\d]+)?                # definition 2, ...
+    (?P<cetera>.*?)?$                        # etc.
 """.format(REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
 
 
 '''
+
 
     (?:;)?\s*                                 # optional separator
     (?P<usage1>".*"[^\d]+)?\s*                # example 1
@@ -418,7 +420,7 @@ def index_diff(sub_a, sub_b):
             return idx
     return idx + 1 if idx else 0
 
-def show_paragraph(entry_text, idx, verbose):
+def show_entry(entry_text, idx, verbose):
     if verbose > 2:
         print("\n======================== Entry %5d ================================" % idx)
         print(entry_text)
@@ -449,15 +451,15 @@ def parse_webster_file(path, opts, verbose=1):
                     is_undefined = False
                 entry_base = WebsterEntry(entry_dict)
                 if verbose > 5 or is_undefined:
-                    show_paragraph(entry_text, idx, verbose)
+                    show_entry(entry_text, idx, verbose)
                 if verbose > 4:
                     print("WebsterEntry:", entry_base)
             else:
                 metrics['unparsed'] += 1
-                show_paragraph(entry_text, idx, verbose)
+                show_entry(entry_text, idx, verbose)
                 if verbose > 1:
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
-            if is_partial_different or opts.both:
+            if is_undefined or is_partial_different or opts.both:
                 if not entry_dict:
                     reason = "Main Match Failed"
                 elif is_undefined:
