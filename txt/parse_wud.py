@@ -279,38 +279,45 @@ REC_PARTIAL = re.compile(r"""
 '''
 
 def try_partial_match(entry, reason, verbose):
-    '''test new variant of regex'''
-    partial = REC_PARTIAL.match(entry)
-    if partial:
-        matgadd = defaultdict(str, partial.groupdict())
-        if verbose > 2:
-            print("\n++++++++++++++ Try partial match because:  %s:" % reason)
-            put("\t",
-                "word_1: (", matgadd["word_1"], ") \t",
-                "word_2: (", matgadd["word_2"], ") \t",
-                "word_3: (", matgadd["word_3"], ") \n\t",
-                "pron_1: (", matgadd["pron_1"], ") \t",
-                "pron_2: (", matgadd["pron_2"], ") \t",
-                "pron_3: (", matgadd["pron_3"], ") \n\t",
-                "pren1a: (", matgadd["pren1a"], ") \n\t",
-                "part1a: (", matgadd["part1a"], ") \t",
-                "plural: (", matgadd["plural"], ") \n\t",
-                "pren1b: (", matgadd["pren1b"], ") \n\t",
-                "brack1: (", matgadd["brack1"], ") \n\t",
-                "sepsp1: (", matgadd["sepsp1"], ") \n\t",
-                "part1b: (", matgadd["part1b"], ") \n\t",
-                "pren1c: (", matgadd["pren1c"], ") \n\t",
-                "etym_1: (", matgadd["etym_1"], ") \n\t",
-                "dtype1: (", matgadd["dtype1"], ") \t",
-                "dftag1: (", matgadd["dftag1"], ") \n\t",
-                "defn_1: (", matgadd["defn_1"], ") \n\t",
-                "defn1a: (", matgadd["defn1a"], ") \n\t",
-                "cetera: (", matgadd["cetera"], ") \n\t",
-                )
-        return 1 if matgadd['defn_1'] else 0
+    '''test a variant of the webster regex'''
+    if verbose > 2:
+        print("\n++++++++++++++ Try partial match because:  %s:" % reason)
+    match = REC_PARTIAL.match(entry)
+    if match:
+        return match.groupdict()
     if verbose > 1:
-        print("======================================= Partial match failed, too!")
-    return 0
+        print("======================================= Even a partial match failed!")
+    return None
+
+
+
+def show_partial_match(partial, verbose):
+    matgadd = defaultdict(str, partial.groupdict())
+    if verbose > 2:
+        put("\t",
+            "word_1: (", matgadd["word_1"], ") \t",
+            "word_2: (", matgadd["word_2"], ") \t",
+            "word_3: (", matgadd["word_3"], ") \n\t",
+            "pron_1: (", matgadd["pron_1"], ") \t",
+            "pron_2: (", matgadd["pron_2"], ") \t",
+            "pron_3: (", matgadd["pron_3"], ") \n\t",
+            "pren1a: (", matgadd["pren1a"], ") \n\t",
+            "part1a: (", matgadd["part1a"], ") \t",
+            "plural: (", matgadd["plural"], ") \n\t",
+            "pren1b: (", matgadd["pren1b"], ") \n\t",
+            "brack1: (", matgadd["brack1"], ") \n\t",
+            "sepsp1: (", matgadd["sepsp1"], ") \n\t",
+            "part1b: (", matgadd["part1b"], ") \n\t",
+            "pren1c: (", matgadd["pren1c"], ") \n\t",
+            "etym_1: (", matgadd["etym_1"], ") \n\t",
+            "dtype1: (", matgadd["dtype1"], ") \t",
+            "dftag1: (", matgadd["dftag1"], ") \n\t",
+            "defn_1: (", matgadd["defn_1"], ") \n\t",
+            "defn1a: (", matgadd["defn1a"], ") \n\t",
+            "cetera: (", matgadd["cetera"], ") \n\t",
+            )
+    return matgadd
+
 
 ###############################################################################
 class WebsterEntry:
@@ -455,7 +462,12 @@ def parse_webster_file(path, opts, verbose=1):
                 else:
                     reason = None
                 if reason:
-                    metrics['partdef'] += try_partial_match(entry_text, reason, verbose)
+                    partial = try_partial_match(entry_text, reason, verbose)
+                    if partial:
+                        metrics['parted'] += 1
+                        show_partial_match(partial, verbose):
+                    else:
+                        metrics['unparted'] += 1
         if opts.stop_index > 0 and idx >= opts.stop_index:
             break
     print_metrics(metrics)
