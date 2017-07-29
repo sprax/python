@@ -63,6 +63,18 @@ def is_blank_line(line):
             return False
     return True
 
+REC_BLANK_LINE = re.compile(r'^\s*$')
+
+def is_blank_line_re(line):
+    return REC_BLANK_LINE.match(line)
+
+REC_WORDY = re.compile(r'\w+')
+
+def is_wordy_re(line):
+    return REC_WORDY.search(line)
+
+
+
 ################################################################################
 def lex_entry_ns_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0):
     '''
@@ -80,19 +92,14 @@ def lex_entry_ns_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0
             yield paragraph
             paragraph, blank_lines, entry_lines = '', 0, 0
         if is_blank_line(line):
-            if entry_lines == 2:
-                paragraph += "\t"
             blank_lines += 1
         else:
             blank_lines = 0
             entry_lines += 1
             if not paragraph:
-                paragraph = line + "\t"
-            elif paragraph.endswith('-'):
-                # print("LINE {} ENDS WITH -\n{}\n".format(entry_lines, paragraph))
-                paragraph += line               # hyphen, not suffix marker
+                paragraph = line
             else:
-                paragraph += ' ' + line
+                paragraph += line
     if paragraph:
         yield paragraph
 
@@ -207,6 +214,11 @@ REC_WEBSTER = re.compile(r"""
 """.format(REP_PART, REP_PART), re.VERBOSE)
 
 REC_PARTIAL = re.compile(r"""
+    (?P<cetera>.*)?$                          # etc.
+""".format(REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
+
+
+'''
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\t\                # WORD 3 (variant spelling)
@@ -227,12 +239,6 @@ REC_PARTIAL = re.compile(r"""
     (?:;)?\s*                                 # optional separator
     (?P<usage1>".*"[^\d]+)?\s*                # example 1
     (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
-    (?P<cetera>.*)?$                          # etc.
-""".format(REP_PART, REP_PART), re.VERBOSE)
-
-
-'''
-
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
     (?:\((?P<pren1c>[^\)]+)\)\s*)?            # parenthesized 1c
     (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s*)?    # etymology
