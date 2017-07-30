@@ -56,6 +56,7 @@ def paragraph_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0):
         yield paragraph
 
 def is_blank_line(line):
+    '''detect blank line by character comparison: SP, TAB, LF, CR'''
     for char in line:
         if char != ' ' and char != '\t' and char != '\n' and char != '\r':
             return False
@@ -64,11 +65,13 @@ def is_blank_line(line):
 REC_BLANK_LINE = re.compile(r'^\s*$')
 
 def is_blank_line_re(line):
+    '''detect blank line by regex r"^\s*$" match '''
     return REC_BLANK_LINE.match(line)
 
 REC_WORDY = re.compile(r'\w+')
 
 def is_wordy_re(line):
+    '''true IFF line contains regex word characters (\w+)'''
     return REC_WORDY.search(line)
 
 
@@ -154,6 +157,7 @@ def para_ns_iter_lex_file(path, rgx_para_separator=REC_UPPER_WORD, sep_lines=0, 
             yield para
 
 def put(*args, sep=''):
+    '''print args with the empty string as the default separator.'''
     print(*args, sep=sep)
 
 REC_FIRST_WORD_TOKEN = re.compile(r'^(-?\w+|\W*\w+-?)')
@@ -293,6 +297,7 @@ def try_partial_match(entry, reason, verbose):
     return None
 
 def show_partial_match(partial, verbose):
+    '''Show partial regex match using a defaultdict seeded by the match's groupdict'''
     matgadd = defaultdict(str, partial.groupdict())
     if verbose > 2:
         put("\t",
@@ -400,6 +405,7 @@ def common_and_max_len(str_a, str_b):
     the length of their common leading substrings, and the maximum of their
     lengths.  May be applied to other subscriptables besides strings.'''
     maxlen = max(len(str_a), len(str_b))
+    idx = 0
     for idx in range(maxlen):
         try:
             if str_a[idx] != str_b[idx]:
@@ -413,6 +419,7 @@ def index_diff(sub_a, sub_b):
     Return index of first difference between two strings or other
     subscriptable objects, or in other words, the length of their common prefixes.
     '''
+    idx = 0
     for idx, tup in enumerate(zip(sub_a, sub_b)):
         if tup[0] != tup[1]:
             return idx
