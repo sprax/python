@@ -13,13 +13,10 @@
 
 # from string import punctuation
 import argparse
-import math
 import re
-import sys
+# import sys
 import time
-from collections import defaultdict, namedtuple
-
-from utf_print import utf_print
+from collections import defaultdict
 
 INF_NUM_WORDS = 2**30
 
