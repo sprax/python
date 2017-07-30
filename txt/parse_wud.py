@@ -77,7 +77,7 @@ def is_wordy_re(line):
 
 
 ################################################################################
-def lex_entry_ns_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0):
+def lex_entry_ns_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=1):
     '''
     Yields paragraphs (including newlines) representing lexion entries from a text
     file and regex separator, which by default matches a blank line followed by an
@@ -138,7 +138,7 @@ def paragraph_reader(path, charset="utf8", rgx_para_separator=RE_PARA_SEPARATOR)
         print("Warning:", ex)
         return None, None
 
-def para_iter_file(path, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0, charset='utf8'):
+def para_iter_file(path, rgx_para_separator=RE_PARA_SEPARATOR, charset='utf8', sep_lines=0):
     '''Generator yielding filtered paragraphs from a text file'''
     # print("para_iter_file: pattern: %s" % rgx_para_separator.pattern)
     with open(path, 'r', encoding=charset) as text:
@@ -149,7 +149,7 @@ def para_iter_file(path, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0, char
 REP_UPPER_WORD = r'^\s*([A-Z-]+)\b\s*'
 REC_UPPER_WORD = re.compile(REP_UPPER_WORD)
 
-def para_ns_iter_lex_file(path, rgx_para_separator=REC_UPPER_WORD, sep_lines=0, charset='utf8'):
+def para_ns_iter_lex_file(path, rgx_para_separator=REC_UPPER_WORD, charset='utf8', sep_lines=1):
     '''Generator yielding filtered paragraphs (including newlines) from a lexicon file'''
     # print("para_ns_iter_lex_file: pattern: %s" % rgx_para_separator.pattern)
     with open(path, 'r', encoding=charset) as text:
@@ -234,7 +234,7 @@ REC_PARTIAL = re.compile(r"""
     (?:\.?\s*\[(?P<brack1>[^\]]+)\]\s*)?            # bracketed
     (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
-    (?:Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\n1.)))?       # etymology
+    (?:Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\n1.))\]?)?       # etymology
     (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\ *)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
@@ -283,18 +283,6 @@ REC_PARTIAL = re.compile(r"""
     (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
     (?P<cetera>.*)?$                          # etc.
 '''
-
-###############################################################################
-def try_partial_match(entry, reason, verbose):
-    '''test a variant of the webster regex'''
-    if verbose > 2:
-        print("\n++++++++++++++ Try partial match because:  %s:" % reason)
-    match = REC_PARTIAL.match(entry)
-    if match:
-        return match
-    if verbose > 1:
-        print("======================================= Even partial match failed!")
-    return None
 
 def show_partial_match(partial, verbose):
     '''Show partial regex match using a defaultdict seeded by the match's groupdict'''
@@ -430,6 +418,33 @@ def show_entry(entry_text, idx, verbose):
         print("\n======================== Entry %5d ================================" % idx)
         print(entry_text)
 
+###############################################################################
+V_ENUM = 0
+V_SHOW_ERROR = V_ENUM; V_ENUM += 1
+V_SHOW_STATS = V_ENUM; V_ENUM += 1
+V_SHOW_TOKEN_NO_PARSE = V_ENUM; V_ENUM += 1
+V_SHOW_ENTRY_NO_PARSE = V_ENUM; V_ENUM += 1
+V_SHOW_TOKEN_IF_UNDEF = V_ENUM; V_ENUM += 1
+V_SHOW_PARTIAL_FAILED = V_ENUM; V_ENUM += 1
+V_SHOW_IF_TRY_PARTIAL = V_ENUM; V_ENUM += 1
+V_SHOW_PARTS_IF_UNDEF = V_ENUM; V_ENUM += 1
+V_SHOW_ENTRY_IF_UNDEF = V_ENUM; V_ENUM += 1
+V_SHOW_WEBST_IF_UNDEF = V_ENUM; V_ENUM += 1
+V_SHOW_WEBST_IF_EXIST = V_ENUM; V_ENUM += 1
+V_SHOW_PARTS_IF_UNDEF = V_ENUM; V_ENUM += 1
+V_SHOW_ALL = V_ENUM; V_ENUM += 1
+
+def try_partial_match(entry, reason, verbose):
+    '''test a variant of the webster regex'''
+    if verbose > V_SHOW_IF_TRY_PARTIAL:
+        print("\n++++++++++++++ Try partial match because:  %s:" % reason)
+    match = REC_PARTIAL.match(entry)
+    if match:
+        return match
+    if verbose > V_SHOW_PARTIAL_FAILED:
+        print("======================================= Even partial match failed!")
+    return None
+
 def parse_webster_file(path, opts, verbose=1):
     '''parse Webster-like dictionary text file with diagnostics.'''
     metrics = defaultdict(int)
@@ -437,14 +452,14 @@ def parse_webster_file(path, opts, verbose=1):
     webster = REC_WEBSTER.pattern
     comlen, totlen = common_and_max_len(partial, webster)
     is_partial_different = comlen < totlen
-    if verbose > 1:
+    if verbose > V_SHOW_STATS:
         if is_partial_different:
             print("Partial pattern matches Webster pattern up to:  %d/%d" % (comlen, totlen))
             print("Webster____%s____" % webster[comlen-24:comlen+24])
             print("Partial____%s____" % partial[comlen-24:comlen+24])
         else:
             print("Partial == Webster pattern:", totlen)
-    for idx, entry_text in enumerate(para_ns_iter_lex_file(path, REC_UPPER_WORD, sep_lines=1, charset=opts.charset)):
+    for idx, entry_text in enumerate(para_ns_iter_lex_file(path, REC_UPPER_WORD, charset=opts.charset)):
         if idx >= opts.start_index:
             metrics['tried'] += 1
             is_undefined = True
@@ -457,7 +472,7 @@ def parse_webster_file(path, opts, verbose=1):
                 entry_base = WebsterEntry(entry_dict)
                 if verbose > 5 or is_undefined:
                     show_entry(entry_text, idx, verbose)
-                if verbose > 4:
+                if verbose > 4 or verbose > 2 and is_undefined:
                     print("WebsterEntry:", entry_base)
             else:
                 metrics['unparsed'] += 1
@@ -546,10 +561,10 @@ def main():
     args = parser.parse_args()
     verbose = args.verbose
 
-    return parse_webster_file(args.text_file, args, verbose)
+    start = time.time()
+    tried = parse_webster_file(args.text_file, args, verbose)
+    print("------- %.4f seconds elapsed for %d entries -------" % ((time.time() - start), tried))
 
 
 if __name__ == '__main__':
-    START_TIME = time.time()
-    TRIED = main()
-    print("------- %.4f seconds elapsed for %d entries -------" % ((time.time() - START_TIME), TRIED))
+    main()
