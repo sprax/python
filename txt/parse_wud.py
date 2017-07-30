@@ -18,7 +18,7 @@ import re
 import time
 from collections import defaultdict
 
-INF_NUM_WORDS = 2**30
+from utf_print import utf_print
 
 RE_PARA_SEPARATOR = re.compile(r'\s*\n')
 
@@ -158,7 +158,7 @@ def para_ns_iter_lex_file(path, rgx_para_separator=REC_UPPER_WORD, charset='utf8
 
 def put(*args, sep=''):
     '''print args with the empty string as the default separator.'''
-    print(*args, sep=sep)
+    utf_print(*args, sep=sep)
 
 REC_FIRST_WORD_TOKEN = re.compile(r'^(-?\w+|\W*\w+-?)')
 
@@ -416,7 +416,7 @@ def index_diff(sub_a, sub_b):
 def show_entry(entry_text, idx, verbose):
     if verbose > 2:
         print("\n======================== Entry %5d ================================" % idx)
-        print(entry_text)
+        utf_print(entry_text)
 
 ###############################################################################
 V_ENUM = 0
@@ -473,7 +473,7 @@ def parse_webster_file(path, opts, verbose=1):
                 if verbose > 5 or is_undefined:
                     show_entry(entry_text, idx, verbose)
                 if verbose > 4 or verbose > 2 and is_undefined:
-                    print("WebsterEntry:", entry_base)
+                    utf_print("WebsterEntry:", entry_base)
             else:
                 metrics['unparsed'] += 1
                 show_entry(entry_text, idx, verbose)
