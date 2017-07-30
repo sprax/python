@@ -448,6 +448,7 @@ def try_partial_match(entry, reason, verbose):
 def parse_webster_file(path, opts, verbose=1):
     '''parse Webster-like dictionary text file with diagnostics.'''
     metrics = defaultdict(int)
+    metrics['beg_time'] = time.time()
     partial = REC_PARTIAL.pattern
     webster = REC_WEBSTER.pattern
     comlen, totlen = common_and_max_len(partial, webster)
@@ -465,7 +466,7 @@ def parse_webster_file(path, opts, verbose=1):
             is_undefined = True
             entry_dict = parse_webster_entry(entry_text)
             if entry_dict:
-                metrics['parsed'] += 1
+                metrics['matched'] += 1
                 if entry_dict['defn_1']:
                     metrics['defined'] += 1
                     is_undefined = False
@@ -475,7 +476,7 @@ def parse_webster_file(path, opts, verbose=1):
                 if verbose > 4 or verbose > 2 and is_undefined:
                     utf_print("WebsterEntry:", entry_base)
             else:
-                metrics['unparsed'] += 1
+                metrics['unmatched'] += 1
                 show_entry(entry_text, idx, verbose)
                 if verbose > 1:
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
@@ -501,8 +502,8 @@ def parse_webster_file(path, opts, verbose=1):
                         metrics['unparted'] += 1
         if opts.stop_index > 0 and idx >= opts.stop_index:
             break
-    print_metrics(metrics)
-    return metrics['tried']
+    metrics['end_time'] = time.time()
+    return metrics
 
 
 def percent(count, total):
@@ -511,16 +512,17 @@ def percent(count, total):
 
 def print_metrics(metrics):
     '''pretty print metrics dict'''
-    print("For %d tried, defined/parsed: Full: %d/%d, Part: %d/%d ==> %.1f%% v. %.1f%% & Max Parsed %.1f%%.  " % (
+    print("Tried %d in %.4f seconds, defined/matched: Full: %d/%d (%.1f%%), Part: %d/%d (%.1f%%) & Matched %.1f%%.  " % (
         metrics['tried'],
-        metrics['defined'], metrics['parsed'],
+        metrics['end_time'] - metrics['beg_time'],
+        metrics['defined'], metrics['matched'],
+        percent(metrics['defined'], metrics['matched']),
         metrics['partdef'], metrics['parted'],
-        percent(metrics['defined'], metrics['parsed']),
         percent(metrics['partdef'], metrics['parted']),
-        percent(max(metrics['parsed'], metrics['parted']), metrics['tried'])),
+        percent(max(metrics['matched'], metrics['parted']), metrics['tried'])),
         end='')
-    print("Failures:   Full %d & %d   Part %d & %d" % (
-        metrics['tried'] - metrics['defined'], metrics['unparsed'],
+    print("Failures: Full %d & %d  Part %d & %d" % (
+        metrics['tried'] - metrics['defined'], metrics['unmatched'],
         metrics['tried'] - metrics['partdef'], metrics['unparted']))
 
 CONST_MAX_WORDS = 5
@@ -561,9 +563,8 @@ def main():
     args = parser.parse_args()
     verbose = args.verbose
 
-    start = time.time()
-    tried = parse_webster_file(args.text_file, args, verbose)
-    print("------- %.4f seconds elapsed for %d entries -------" % ((time.time() - start), tried))
+    metrics = parse_webster_file(args.text_file, args, verbose)
+    print_metrics(metrics)
 
 
 if __name__ == '__main__':
