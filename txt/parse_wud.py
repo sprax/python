@@ -207,7 +207,7 @@ REC_WEBSTER = re.compile(r"""
     (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|[A-Z]\b)? # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]*   # Pronunciation 3 (for variant 2)
-    (?:\s*\((?P<pren1a>[^\)]+)\)\s*)?               # parenthesized 1a
+    (?:\s*\((?P<pren1a>[^\)]+)\)\s*\.?)?               # parenthesized 1a
     (?:,?\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?       # part of speech for first definition (order varies)
     (?:\s*;\s+pl\.\s+(?P<plural>\w+[\w\ -]*\w+)\.)? # plural form or suffix, usually for irregulars
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
