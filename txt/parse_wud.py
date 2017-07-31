@@ -224,10 +224,10 @@ REC_PARTIAL = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?)? # Pron 1 (Capitalized)
+    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|[A-Z]\b)? # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]*   # Pronunciation 3 (for variant 2)
-    (?:\s*\((?P<pren1a>[^\)]+)\)\s*)?               # parenthesized 1a
+    (?:\s*\((?P<pren1a>[^\)]+)\)\s*\.?)?               # parenthesized 1a
     (?:,?\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?       # part of speech for first definition (order varies)
     (?:\s*;\s+pl\.\s+(?P<plural>\w+[\w\ -]*\w+)\.)? # plural form or suffix, usually for irregulars
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
@@ -415,10 +415,9 @@ def index_diff(sub_a, sub_b):
             return idx
     return idx + 1 if idx else 0
 
-def show_entry(entry_text, idx, verbose):
-    if verbose > V_SHOW_ENTRY_NO_PARSE:
-        print("\n======================== Entry %5d ================================" % idx)
-        utf_print(entry_text)
+def show_entry(entry_text, idx):
+    print("\n======================== Entry %5d ================================" % idx)
+    utf_print(entry_text)
 
 ###############################################################################
 V_ENUM = 0
@@ -481,7 +480,8 @@ def parse_webster_file(path, opts, verbose=1):
                     utf_print("WebsterEntry:", entry_base)
             else:
                 metrics['unmatched'] += 1
-                show_entry(entry_text, idx, verbose)
+                if verbose > V_SHOW_ENTRY_NO_PARSE:
+                    show_entry(entry_text, idx)
                 if verbose > V_SHOW_TOKEN_NO_PARSE:
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
             metrics[str(idx) + "_full"] = time.time() - beg_full
