@@ -200,12 +200,12 @@ REC_WEBSTER = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|\w*[^\s\(\[.,]+|[\w\s]+?(?!Defn)\w+)? # Pron 1 (Capitalized)
+    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?)? # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
-    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]+   # Pronunciation 3 (for variant 2)
+    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]*   # Pronunciation 3 (for variant 2)
     (?:\s*\((?P<pren1a>[^\)]+)\)\s*)?               # parenthesized 1a
     (?:,?\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?       # part of speech for first definition (order varies)
-    (?:\s*;\s+pl\.\s+(?P<plural>[\w-]+))?           # plural form or suffix, usually for irregulars
+    (?:\s*;\s+pl\.\s+(?P<plural>\w+[\w\ -]*\w+)\.)? # plural form or suffix, usually for irregulars
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\]\s*)?            # bracketed
     (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
@@ -229,7 +229,7 @@ REC_PARTIAL = re.compile(r"""
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]*   # Pronunciation 3 (for variant 2)
     (?:\s*\((?P<pren1a>[^\)]+)\)\s*)?               # parenthesized 1a
     (?:,?\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?       # part of speech for first definition (order varies)
-    (?:\s*;\s+pl\.\s+(?P<plural>\w+[\w\ -]*\w+)\.)?           # plural form or suffix, usually for irregulars
+    (?:\s*;\s+pl\.\s+(?P<plural>\w+[\w\ -]*\w+)\.)? # plural form or suffix, usually for irregulars
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\]\s*)?            # bracketed
     (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
@@ -246,6 +246,8 @@ REC_PARTIAL = re.compile(r"""
 
 
 '''
+
+SLOW:    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|\w*[^\s\(\[.,]+|[\w\s]+?(?!Defn)\w+)? # Pron 1 (Capitalized)
 
 
     (?:;)?\s*                                 # optional separator
@@ -347,7 +349,7 @@ class WebsterEntry:
     def __str__(self):
         return('''
     word_1: {:<24}    word_2: {}    word_3: {}
-    pron_1: {:<24}    pron_2: {}    pron_3: {}
+    pron_1: {}    pron_2: {}    pron_3: {}
     part_1: ({})
     brack1: ({})
     etym_1: ({})
