@@ -74,6 +74,10 @@ def is_wordy_re(line):
     '''true IFF line contains regex word characters (\w+)'''
     return REC_WORDY.search(line)
 
+def is_not_lower(line):
+    '''true IFF line contains regex word characters (\w+)'''
+    return REC_WORDY.search(line)
+
 
 
 ################################################################################
@@ -146,10 +150,10 @@ def para_iter_file(path, rgx_para_separator=RE_PARA_SEPARATOR, charset='utf8', s
             yield para
 
 ###############################################################################
-REP_UPPER_WORD = r'^\s*([A-Z-]+)\b\s*'
-REC_UPPER_WORD = re.compile(REP_UPPER_WORD)
+REP_UPPER_WORD_ONLY = r'^[A-Z-]+\s*$'
+REC_UPPER_WORD_ONLY = re.compile(REP_UPPER_WORD_ONLY)
 
-def para_ns_iter_lex_file(path, rgx_para_separator=REC_UPPER_WORD, charset='utf8', sep_lines=1):
+def para_ns_iter_lex_file(path, rgx_para_separator=REC_UPPER_WORD_ONLY, charset='utf8', sep_lines=1):
     '''Generator yielding filtered paragraphs (including newlines) from a lexicon file'''
     # print("para_ns_iter_lex_file: pattern: %s" % rgx_para_separator.pattern)
     with open(path, 'r', encoding=charset) as text:
@@ -200,7 +204,7 @@ REC_WEBSTER = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?)? # Pron 1 (Capitalized)
+    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|[A-Z]\b)? # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]*   # Pronunciation 3 (for variant 2)
     (?:\s*\((?P<pren1a>[^\)]+)\)\s*)?               # parenthesized 1a
@@ -462,7 +466,7 @@ def parse_webster_file(path, opts, verbose=1):
         else:
             print("Partial == Webster pattern:", totlen)
     max_entry_time, max_time_index = 0, -1
-    for idx, entry_text in enumerate(para_ns_iter_lex_file(path, REC_UPPER_WORD, charset=opts.charset)):
+    for idx, entry_text in enumerate(para_ns_iter_lex_file(path, charset=opts.charset)):
         if idx >= opts.start_index:
             metrics['tried'] += 1
             beg_full = time.time()
