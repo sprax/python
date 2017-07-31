@@ -460,9 +460,11 @@ def parse_webster_file(path, opts, verbose=1):
             print("Partial____%s____" % partial[comlen-24:comlen+24])
         else:
             print("Partial == Webster pattern:", totlen)
+    max_entry_time, max_time_index = 0, -1
     for idx, entry_text in enumerate(para_ns_iter_lex_file(path, REC_UPPER_WORD, charset=opts.charset)):
         if idx >= opts.start_index:
             metrics['tried'] += 1
+            beg_full = time.time()
             is_undefined = True
             entry_dict = parse_webster_entry(entry_text)
             if entry_dict:
@@ -480,6 +482,7 @@ def parse_webster_file(path, opts, verbose=1):
                 show_entry(entry_text, idx, verbose)
                 if verbose > 1:
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
+            metrics[str(idx) + "_full"] = time.time() - beg_full
             if is_undefined or is_partial_different or opts.both:
                 if not entry_dict:
                     reason = "Main Match Failed"
@@ -492,6 +495,7 @@ def parse_webster_file(path, opts, verbose=1):
                 else:
                     reason = None
                 if reason:
+                    beg_part = time.time()
                     partial = try_partial_match(entry_text, reason, verbose)
                     if partial:
                         metrics['parted'] += 1
@@ -500,8 +504,16 @@ def parse_webster_file(path, opts, verbose=1):
                             metrics['partdef'] += 1
                     else:
                         metrics['unparted'] += 1
+                    metrics[str(idx) + '_part'] = time.time() - beg_part
+            entry_time = time.time() - beg_full
+            metrics[idx] = entry_time
+            if max_entry_time < entry_time:
+                max_entry_time = entry_time
+                max_time_index = idx
         if opts.stop_index > 0 and idx >= opts.stop_index:
             break
+    metrics['max_entry_time'] = max_entry_time
+    metrics['max_time_index'] = max_time_index
     metrics['end_time'] = time.time()
     return metrics
 
@@ -510,7 +522,7 @@ def percent(count, total):
     '''count/total as a percentage, or NAN if total <= 0'''
     return 100.0 * count / total if total > 0 else float('nan')
 
-def print_metrics(metrics):
+def print_metrics(metrics, verbose):
     '''pretty print metrics dict'''
     print("Tried %d in %.4f seconds, defined/matched: Full: %d/%d (%.1f%%), Part: %d/%d (%.1f%%) & Matched %.1f%%.  " % (
         metrics['tried'],
@@ -524,6 +536,13 @@ def print_metrics(metrics):
     print("Failures: Full %d & %d  Part %d & %d" % (
         metrics['tried'] - metrics['defined'], metrics['unmatched'],
         metrics['tried'] - metrics['partdef'], metrics['unparted']))
+    if verbose > V_SHOW_STATS:
+        max_index = metrics['max_time_index']
+        print("Max entry parse time %.3f seconds for entry %d  (full: %.4f, part: %.4f)" % (
+              metrics['max_entry_time'], metrics['max_time_index'],
+              metrics[str(max_index) + '_full'], metrics[str(max_index) + '_part']))
+
+
 
 CONST_MAX_WORDS = 5
 DEFAULT_NUMBER = 10
@@ -564,7 +583,7 @@ def main():
     verbose = args.verbose
 
     metrics = parse_webster_file(args.text_file, args, verbose)
-    print_metrics(metrics)
+    print_metrics(metrics, verbose)
 
 
 if __name__ == '__main__':
