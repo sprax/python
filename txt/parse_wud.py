@@ -527,14 +527,14 @@ def percent(count, total):
 def print_metrics(metrics, verbose):
     '''pretty print metrics dict'''
     print("Tried %d in %.4f seconds, defined/matched: Full: %d/%d (%.1f%%), Part: %d/%d (%.1f%%) & Matched %.1f%%.  " % (
-        metrics['tried'],
-        metrics['end_time'] - metrics['beg_time'],
-        metrics['defined'], metrics['matched'],
-        percent(metrics['defined'], metrics['matched']),
-        metrics['partdef'], metrics['parted'],
-        percent(metrics['partdef'], metrics['parted']),
-        percent(max(metrics['matched'], metrics['parted']), metrics['tried'])),
-        end='')
+          metrics['tried'],
+          metrics['end_time'] - metrics['beg_time'],
+          metrics['defined'], metrics['matched'],
+          percent(metrics['defined'], metrics['matched']),
+          metrics['partdef'], metrics['parted'],
+          percent(metrics['partdef'], metrics['parted']),
+          percent(max(metrics['matched'], metrics['parted']), metrics['tried'])),
+          end='')
     print("Failures: Full %d & %d  Part %d & %d" % (
         metrics['tried'] - metrics['defined'], metrics['unmatched'],
         metrics['tried'] - metrics['partdef'], metrics['unparted']))
