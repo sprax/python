@@ -210,7 +210,7 @@ REC_WEBSTER = re.compile(r"""
     (?:\.?\s*\[(?P<brack1>[^\]]+)\]\s*)?            # bracketed
     (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
-    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s*)?    # etymology
+    (?:Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\n1.))\]?)?       # etymology
     (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s*)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
@@ -416,7 +416,7 @@ def index_diff(sub_a, sub_b):
     return idx + 1 if idx else 0
 
 def show_entry(entry_text, idx, verbose):
-    if verbose > 2:
+    if verbose > V_SHOW_ENTRY_NO_PARSE:
         print("\n======================== Entry %5d ================================" % idx)
         utf_print(entry_text)
 
@@ -475,14 +475,14 @@ def parse_webster_file(path, opts, verbose=1):
                     metrics['defined'] += 1
                     is_undefined = False
                 entry_base = WebsterEntry(entry_dict)
-                if verbose > 5 or is_undefined:
-                    show_entry(entry_text, idx, verbose)
-                if verbose > 4 or verbose > 2 and is_undefined:
+                if verbose > V_SHOW_ALL or verbose > V_SHOW_ENTRY_IF_UNDEF and is_undefined:
+                    show_entry(entry_text, idx)
+                if verbose > V_SHOW_WEBST_IF_EXIST or verbose > V_SHOW_WEBST_IF_UNDEF and is_undefined:
                     utf_print("WebsterEntry:", entry_base)
             else:
                 metrics['unmatched'] += 1
                 show_entry(entry_text, idx, verbose)
-                if verbose > 1:
+                if verbose > V_SHOW_TOKEN_NO_PARSE:
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
             metrics[str(idx) + "_full"] = time.time() - beg_full
             if is_undefined or is_partial_different or opts.both:
@@ -490,8 +490,8 @@ def parse_webster_file(path, opts, verbose=1):
                     reason = "Main Match Failed"
                 elif is_undefined:
                     reason = "Definition Not Found"
-                elif verbose > 6:
-                    reason = "verbose > 6"
+                elif verbose > V_SHOW_ALL:
+                    reason = "verbose > %d" % V_SHOW_ALL
                 elif opts.both:
                     reason = "Parse Both Ways To Compare"
                 else:
