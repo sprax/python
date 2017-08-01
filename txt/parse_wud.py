@@ -293,7 +293,7 @@ SLOW:    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|\w*[^\s\(\[.,]+|[\w\
 def show_partial_match(partial, verbose):
     '''Show partial regex match using a defaultdict seeded by the match's groupdict'''
     matgadd = defaultdict(str, partial.groupdict())
-    if verbose > 2:
+    if verbose > V_SHOW_PARTS_IF_UNDEF_P and not matgadd['defn_1'] or verbose > V_SHOW_PARTS_IF_UNDEF_W:
         put("\t",
             "word_1: (", matgadd["word_1"], ") \t",
             "word_2: (", matgadd["word_2"], ") \t",
@@ -427,34 +427,30 @@ def show_entry(entry_text, idx):
 
 V_SHOW_ERROR = 1
 V_SHOW_STATS = 2
-V_SHOW_TOKEN_NO_MATCH_P = 4
-V_SHOW_TOKEN_NO_MATCH_W = 32
-V_SHOW_ENTRY_NO_MATCH_P = 8
-V_SHOW_ENTRY_NO_MATCH_W = 8
+V_SHOW_TOKEN_NO_MATCH_P = 3
+V_SHOW_TOKEN_NO_MATCH_W = 4
+V_SHOW_ENTRY_NO_MATCH_P = 5
+V_SHOW_ENTRY_NO_MATCH_W = 6
+V_SHOW_PARTS_IF_UNDEF_P = 7
+V_SHOW_PARTS_IF_UNDEF_W = 8
 
+V_SHOW_ENTRY_IF_UNDEF_P = 10
+V_SHOW_REASON_FOR_PARTS = 11
+V_SHOW_ENTRY_IF_UNDEF_W = 12
 
-V_SHOW_PARTS_IF_UNDEF_P = 32
-V_SHOW_PARTS_IF_UNDEF_W = 32
-V_SHOW_ENTRY_IF_UNDEF_P = 8
-V_SHOW_REASON_FOR_PARTS = 64
-V_SHOW_ENTRY_IF_UNDEF_W = 8
+V_SHOW_PARTS_ALWAYS = 14
+V_SHOW_WEBST_ALWAYS = 15
+V_SHOW_ENTRY_ALWAYS = 16
 
-
-V_SHOW_PARTS_IF_UNDEF = 128
-V_SHOW_ENTRY_IF_UNDEF = 256
-V_SHOW_WEBST_IF_UNDEF = 512
-V_SHOW_WEBST_IF_EXIST = 1024
-V_SHOW_PARTS_IF_UNDEF = 2048
-V_SHOW_ALL = 4095
 
 def try_partial_match(entry, reason, verbose):
     '''test a variant of the webster regex'''
-    if verbose > V_SHOW_IF_TRY_PARTIAL:
+    if verbose > V_SHOW_REASON_FOR_PARTS:
         print("\n++++++++++++++ Try partial match because:  %s:" % reason)
     match = REC_PARTIAL.match(entry)
     if match:
         return match
-    if verbose > V_SHOW_PARTIAL_FAILED:
+    if verbose > V_SHOW_TOKEN_NO_MATCH_P:
         print("======================================= Even partial match failed!")
     return None
 
@@ -466,7 +462,7 @@ def parse_webster_file(path, opts, verbose=1):
     webster = REC_WEBSTER.pattern
     comlen, totlen = common_and_max_len(partial, webster)
     is_partial_different = comlen < totlen
-    if verbose > V_SHOW_STATS:
+    if verbose > V_SHOW_TOKEN_NO_MATCH_P:
         if is_partial_different:
             print("Partial pattern matches Webster pattern up to:  %d/%d" % (comlen, totlen))
             print("Webster____%s____" % webster[comlen-24:comlen+24])
@@ -486,9 +482,9 @@ def parse_webster_file(path, opts, verbose=1):
                     metrics['defined'] += 1
                     is_undefined = False
                 entry_base = WebsterEntry(entry_dict)
-                if verbose > V_SHOW_ALL or verbose > V_SHOW_ENTRY_IF_UNDEF and is_undefined:
+                if verbose > V_SHOW_PARTS_IF_UNDEF_W and is_undefined or verbose > V_SHOW_ENTRY_ALWAYS:
                     show_entry(entry_text, idx)
-                if verbose > V_SHOW_WEBST_IF_EXIST or verbose > V_SHOW_WEBST_IF_UNDEF and is_undefined:
+                if verbose > V_SHOW_ENTRY_IF_UNDEF_W and is_undefined or verbose > V_SHOW_WEBST_ALWAYS:
                     utf_print("WebsterEntry:", entry_base)
             else:
                 metrics['unmatched'] += 1
@@ -502,20 +498,20 @@ def parse_webster_file(path, opts, verbose=1):
                     reason = "Main Match Failed"
                 elif is_undefined:
                     reason = "Definition Not Found"
-                elif verbose > V_SHOW_ALL:
-                    reason = "verbose > %d" % V_SHOW_ALL
+                elif verbose > V_SHOW_PARTS_ALWAYS:
+                    reason = "verbose > %d" % V_SHOW_PARTS_ALWAYS
                 elif opts.both:
-                    reason = "Parse Both Ways To Compare"
+                    reason = "Parse Both Ways & Compare"
                 else:
                     reason = None
                 if reason:
                     beg_part = time.time()
                     partial = try_partial_match(entry_text, reason, verbose)
                     if partial:
-                        metrics['parted'] += 1
                         part_dict = show_partial_match(partial, verbose)
                         if part_dict['defn_1']:
                             metrics['partdef'] += 1
+                        metrics['parted'] += 1
                     else:
                         metrics['unparted'] += 1
                     metrics[str(idx) + '_part'] = time.time() - beg_part
