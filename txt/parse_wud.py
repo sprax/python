@@ -237,9 +237,9 @@ REC_PARTIAL = re.compile(r"""
     (?:\s*;\s+pl\.\s+(?P<plural>\w+[\w\ -]*\w+)\.)? # plural form or suffix, usually for irregulars
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\]\s*)?            # bracketed
-    (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
+    (?P<sepsp1>[\s.,]*?)?                     # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
-    (?:Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\n1.))\]?)?       # etymology
+    (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+)?(?:\]|\n\n|\s+Defn:|\s+1.))?       # etymology
     (?:\ *\((?P<dtype1>[A-Z][\w\s&]+\.?)\)\ *)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
