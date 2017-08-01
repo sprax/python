@@ -239,7 +239,7 @@ REC_PARTIAL = re.compile(r"""
     (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
     (?:Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\n1.))\]?)?       # etymology
-    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\ *)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:\ *\((?P<dtype1>[A-Z][\w\s&]+\.)\)\ *)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
     (?:;)?\s*                                 # optional separator
@@ -432,10 +432,10 @@ V_SHOW_TOKEN_NO_MATCH_W = 4
 V_SHOW_ENTRY_NO_MATCH_P = 5
 V_SHOW_ENTRY_NO_MATCH_W = 6
 V_SHOW_PARTS_IF_UNDEF_P = 7
-V_SHOW_PARTS_IF_UNDEF_W = 8
+V_SHOW_REASON_FOR_PARTS = 8
+V_SHOW_PARTS_IF_UNDEF_W = 9
 
-V_SHOW_ENTRY_IF_UNDEF_P = 10
-V_SHOW_REASON_FOR_PARTS = 11
+V_SHOW_ENTRY_IF_UNDEF_P = 11
 V_SHOW_ENTRY_IF_UNDEF_W = 12
 
 V_SHOW_PARTS_ALWAYS = 14
