@@ -500,11 +500,11 @@ def parse_webster_file(path, opts, verbose=1):
                 if not entry_dict:
                     reason = "Main Match Failed"
                 elif is_undefined:
-                    reason = "Definition Not Found"
+                    reason = "Main Defn1 Not Found"
                 elif verbose > V_SHOW_PARTS_ALWAYS:
-                    reason = "verbose > %d" % V_SHOW_PARTS_ALWAYS
+                    reason = "Verbose > %d" % V_SHOW_PARTS_ALWAYS
                 elif opts.both:
-                    reason = "Parse Both Ways & Compare"
+                    reason = "To Parse Both Ways & Compare"
                 else:
                     reason = None
                 if reason:
