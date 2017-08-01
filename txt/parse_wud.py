@@ -444,15 +444,17 @@ V_SHOW_WEBST_ALWAYS = 15
 V_SHOW_ENTRY_ALWAYS = 16
 
 
-def try_partial_match(entry, reason, verbose):
+def try_partial_match(entry_text, entry_index, reason, verbose):
     '''test a variant of the webster regex'''
     if verbose > V_SHOW_REASON_FOR_PARTS:
-        print("\n++++++++++++++ Try partial match because:  %s:" % reason)
-    match = REC_PARTIAL.match(entry)
+        entry_word = first_token(entry_text)
+        print("++++++++++++++ Try partial match on %d: %s because:  %s." % (
+            entry_index, entry_word, reason))
+    match = REC_PARTIAL.match(entry_text)
     if match:
         return match
     if verbose > V_SHOW_TOKEN_NO_MATCH_P:
-        print("======================================= Even partial match failed!")
+        print("======================================= %d Even partial match failed!" % entry_index)
     return None
 
 def parse_webster_file(path, opts, verbose=1):
@@ -489,9 +491,9 @@ def parse_webster_file(path, opts, verbose=1):
                     utf_print("WebsterEntry:", entry_base)
             else:
                 metrics['unmatched'] += 1
-                if verbose > V_SHOW_ENTRY_NO_PARSE:
+                if verbose > V_SHOW_ENTRY_NO_MATCH_W:
                     show_entry(entry_text, idx)
-                if verbose > V_SHOW_TOKEN_NO_PARSE:
+                if verbose > V_SHOW_TOKEN_NO_MATCH_W:
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
             metrics[str(idx) + "_full"] = time.time() - beg_full
             if is_undefined or is_partial_different or opts.both:
@@ -507,7 +509,7 @@ def parse_webster_file(path, opts, verbose=1):
                     reason = None
                 if reason:
                     beg_part = time.time()
-                    partial = try_partial_match(entry_text, reason, verbose)
+                    partial = try_partial_match(entry_text, idx, reason, verbose)
                     if partial:
                         part_dict = show_partial_match(partial, verbose)
                         if part_dict['defn_1']:
