@@ -204,7 +204,7 @@ REC_WEBSTER = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|[A-Z]\b)? # Pron 1 (Capitalized)
+    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|[A-Z]-?)? # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]*   # Pronunciation 3 (for variant 2)
     (?:\s*\((?P<pren1a>[^\)]+)\)\s*\.?)?               # parenthesized 1a
@@ -215,7 +215,7 @@ REC_WEBSTER = re.compile(r"""
     (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
     (?:Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\n1.))\]?)?       # etymology
-    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s*)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:\ *\((?P<dtype1>[A-Z][\w\s&]+\.)\)\ *)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
     (?:;)?\s*                                 # optional separator
@@ -223,6 +223,7 @@ REC_WEBSTER = re.compile(r"""
     (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
     (?P<cetera>.*)?$                          # etc.
 """.format(REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
+
 
 REC_PARTIAL = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
@@ -239,7 +240,7 @@ REC_PARTIAL = re.compile(r"""
     (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
     (?:Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\n1.))\]?)?       # etymology
-    (?:\ *\((?P<dtype1>[A-Z][\w\s&]+\.)\)\ *)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:\ *\((?P<dtype1>[A-Z][\w\s&]+\.?)\)\ *)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
     (?:;)?\s*                                 # optional separator
