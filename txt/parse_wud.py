@@ -228,7 +228,7 @@ REC_PARTIAL = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|[A-Z]\b)? # Pron 1 (Capitalized)
+    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|[A-Z]-?)? # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]*   # Pronunciation 3 (for variant 2)
     (?:\s*\((?P<pren1a>[^\)]+)\)\s*\.?)?               # parenthesized 1a
@@ -424,20 +424,28 @@ def show_entry(entry_text, idx):
     utf_print(entry_text)
 
 ###############################################################################
-V_ENUM = 0
-V_SHOW_ERROR = V_ENUM; V_ENUM += 1
-V_SHOW_STATS = V_ENUM; V_ENUM += 1
-V_SHOW_TOKEN_NO_PARSE = V_ENUM; V_ENUM += 1
-V_SHOW_ENTRY_NO_PARSE = V_ENUM; V_ENUM += 1
-V_SHOW_TOKEN_IF_UNDEF = V_ENUM; V_ENUM += 1
-V_SHOW_PARTIAL_FAILED = V_ENUM; V_ENUM += 1
-V_SHOW_IF_TRY_PARTIAL = V_ENUM; V_ENUM += 1
-V_SHOW_PARTS_IF_UNDEF = V_ENUM; V_ENUM += 1
-V_SHOW_ENTRY_IF_UNDEF = V_ENUM; V_ENUM += 1
-V_SHOW_WEBST_IF_UNDEF = V_ENUM; V_ENUM += 1
-V_SHOW_WEBST_IF_EXIST = V_ENUM; V_ENUM += 1
-V_SHOW_PARTS_IF_UNDEF = V_ENUM; V_ENUM += 1
-V_SHOW_ALL = V_ENUM; V_ENUM += 1
+
+V_SHOW_ERROR = 1
+V_SHOW_STATS = 2
+V_SHOW_TOKEN_NO_MATCH_P = 4
+V_SHOW_TOKEN_NO_MATCH_W = 32
+V_SHOW_ENTRY_NO_MATCH_P = 8
+V_SHOW_ENTRY_NO_MATCH_W = 8
+
+
+V_SHOW_PARTS_IF_UNDEF_P = 32
+V_SHOW_PARTS_IF_UNDEF_W = 32
+V_SHOW_ENTRY_IF_UNDEF_P = 8
+V_SHOW_REASON_FOR_PARTS = 64
+V_SHOW_ENTRY_IF_UNDEF_W = 8
+
+
+V_SHOW_PARTS_IF_UNDEF = 128
+V_SHOW_ENTRY_IF_UNDEF = 256
+V_SHOW_WEBST_IF_UNDEF = 512
+V_SHOW_WEBST_IF_EXIST = 1024
+V_SHOW_PARTS_IF_UNDEF = 2048
+V_SHOW_ALL = 4095
 
 def try_partial_match(entry, reason, verbose):
     '''test a variant of the webster regex'''
@@ -542,7 +550,7 @@ def print_metrics(metrics, verbose):
     print("Failures: Full %d & %d  Part %d & %d" % (
         metrics['tried'] - metrics['defined'], metrics['unmatched'],
         metrics['tried'] - metrics['partdef'], metrics['unparted']))
-    if verbose > V_SHOW_STATS:
+    if verbose >= V_SHOW_STATS:
         max_index = metrics['max_time_index']
         print("Max entry parse time %.3f seconds for entry %d  (full: %.4f, part: %.4f)" % (
               metrics['max_entry_time'], metrics['max_time_index'],
