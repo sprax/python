@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 # Note: do not use Latin-1 encoding, because it would force string
-# literals to use byte encoding, which results in unicode characters > 255
-# being ignored in regular expression strings.
-# That is, do NOT put the following on the first or second line: -*- coding: latin-1 -*-
-#
-#
-# Sprax Lines       2016.09.01      Written with Python 3.5
-'''Common operations for textual corpora, including:
-   * File readers that yield one paragraph at a time.
-   * Frequency-based word filtering.
+# Sprax Lines       2017.07.01      Written with Python 3.5
+'''Parase Webster's Unabridge Dictionary.
+   * Output will eventually be JSON and Pickle files
+   * Semantic graph would be nice, too.
 '''
 
 # from string import punctuation
@@ -291,8 +286,10 @@ SLOW:    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|\w*[^\s\(\[.,]+|[\w\
     (?P<cetera>.*)?$                          # etc.
 '''
 
-def show_partial_match(matgadd, verbose):
+def show_partial_match(matgadd, verbose=1):
     '''Show partial regex match using a defaultdict seeded by the match's groupdict'''
+    if verbose > 1:
+        print("Partial match for word: %s" % matgadd["word_1"])
     put("\t",
         "word_1: (", matgadd["word_1"], ") \t",
         "word_2: (", matgadd["word_2"], ") \t",
@@ -418,6 +415,7 @@ def index_diff(sub_a, sub_b):
     return idx + 1 if idx else 0
 
 def show_entry(entry_text, idx):
+    '''Print the (possibly cleaned-up) text entry extracted from the input file.'''
     print("\n======================== Entry %5d ================================" % idx)
     utf_print(entry_text)
 
@@ -459,9 +457,9 @@ def try_partial_match(metrics, entry_text, entry_index, reason, verbose):
         if matgadd['defn_1']:
             metrics['partdef'] += 1
             if verbose > V_SHOW_PARTS_IF_UNDEF_W and reason == M_DEFN_1_NOT_FOUND:
-                show_partial_match(matgadd, verbose)
+                show_partial_match(matgadd)
         elif verbose > V_SHOW_PARTS_IF_UNDEF_P:
-            show_partial_match(matgadd, verbose)
+            show_partial_match(matgadd)
     else:
         metrics['unparted'] += 1
         if verbose > V_SHOW_TOKEN_NO_MATCH_P:
