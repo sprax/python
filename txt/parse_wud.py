@@ -203,14 +203,15 @@ REC_WEBSTER = re.compile(r"""
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]*   # Pronunciation 3 (for variant 2)
     (?:\s*\((?P<pren1a>[^\)]+)\)\s*\.?)?            # parenthesized 1a
-    (?:,?\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?       # part of speech for first definition (order varies)
+    (?:,?\s*(?P<part1a>(?:(?:{})\s*\.[\ &,]*)+))?   # part of speech for first definition (order varies)
     (?:\s*;\s+pl\.\s+(?P<plural>\w+[\w\ -]*\w+)\.)? # plural form or suffix, usually for irregulars
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\]\s*)?            # bracketed
-    (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
-    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
+    (?P<sepsp1>[\s.,]*?)                        # non-greedy space, punctuation(period, comma)
+    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?     # part of speech for first definition (order varies)
     (?:Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\n1.))\]?)?       # etymology
-    (?:\ *\((?P<dtype1>[A-Z][\w\s&]+\.)\)\ *)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:\s+(?P<obstag>\[Obs\.\]))?                # obsolete tag
+    (?:\ *\((?P<dtype1>[A-Z][\w\s&]+\.)\)\ *)?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
     (?:;)?\s*                                 # optional separator
