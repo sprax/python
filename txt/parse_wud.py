@@ -187,7 +187,7 @@ def print_groups(match):
 
 EXAMPLE = "BACE Bace, n., a., & v."
 
-REP_PART = r'a|adv|conj|i|imp|interj|n|p|prep|t|v'
+REP_PART = r'a|adv|conj|i|imp|interj|n|p|pl|prep|t|v'
 
 
 # FIXME TODO: Two passes:
@@ -230,7 +230,7 @@ REC_PARTIAL = re.compile(r"""
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]*   # Pronunciation 3 (for variant 2)
     (?:\s*\((?P<pren1a>[^\)]+)\)\s*\.?)?            # parenthesized 1a
     (?:,?\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?       # part of speech for first definition (order varies)
-    (?:[\ ,;]*(?P<plural>(?:(?:[A-Z]\.\s+)?pl\.\s+\w+[\w\ -]*\w+\s*[;,.]+\ *)+))? # plural form or suffix
+    (?:[\ ,;]*(?P<plural>(?:(?:[A-Z]\.\s+)?pl\.\s+\w+[\w\ -]*\w+\s*[;,.(#)]+\ *)+))? # plural form or suffix
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\]\s*)?            # bracketed
     (?P<sepsp1>[\s.,]*?)?                     # non-greedy space, punctuation(period, comma)
