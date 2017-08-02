@@ -420,9 +420,11 @@ def index_diff(sub_a, sub_b):
             return idx
     return idx + 1 if idx else 0
 
-def show_entry(entry_text, idx):
-    print("\n======================== Entry %5d ================================" % idx)
-    utf_print(entry_text)
+def show_entry(entry_text, idx, verbose):
+    if verbose > V_SHOW_COUNT_IF_UNDEF_W:
+        print("\n======================== Entry %5d ================================" % idx)
+    if verbose > V_SHOW_ENTRY_NO_MATCH_W:
+        utf_print(entry_text)
 
 ###############################################################################
 
@@ -433,10 +435,11 @@ V_SHOW_TOKEN_NO_MATCH_W = 4
 V_SHOW_ENTRY_NO_MATCH_P = 5
 V_SHOW_ENTRY_NO_MATCH_W = 6
 V_SHOW_PARTS_IF_UNDEF_P = 7
-V_SHOW_REASON_FOR_PARTS = 8
-V_SHOW_PARTS_IF_UNDEF_W = 9
+V_SHOW_PARTS_IF_UNDEF_W = 8
+V_SHOW_COUNT_IF_UNDEF_W = 9
+V_SHOW_ENTRY_IF_UNDEF_P = 10
 
-V_SHOW_ENTRY_IF_UNDEF_P = 11
+V_SHOW_REASON_FOR_PARTS = 11
 V_SHOW_ENTRY_IF_UNDEF_W = 12
 
 V_SHOW_PARTS_ALWAYS = 14
@@ -448,8 +451,8 @@ def try_partial_match(entry_text, entry_index, reason, verbose):
     '''test a variant of the webster regex'''
     if verbose > V_SHOW_REASON_FOR_PARTS:
         entry_word = first_token(entry_text)
-        print("++++++++++++++ Try partial match on %d: %s because:  %s." % (
-            entry_index, entry_word, reason))
+        print("+++++++++++++++ Try partial match on %d: because:  %s:  %s" % (
+            entry_index, reason, entry_word))
     match = REC_PARTIAL.match(entry_text)
     if match:
         return match
@@ -486,17 +489,17 @@ def parse_webster_file(path, opts, verbose=1):
                     is_undefined = False
                 entry_base = WebsterEntry(entry_dict)
                 if verbose > V_SHOW_PARTS_IF_UNDEF_W and is_undefined or verbose > V_SHOW_ENTRY_ALWAYS:
-                    show_entry(entry_text, idx)
+                    show_entry(entry_text, idx, verbose)
                 if verbose > V_SHOW_ENTRY_IF_UNDEF_W and is_undefined or verbose > V_SHOW_WEBST_ALWAYS:
                     utf_print("WebsterEntry:", entry_base)
             else:
                 metrics['unmatched'] += 1
                 if verbose > V_SHOW_ENTRY_NO_MATCH_W:
-                    show_entry(entry_text, idx)
+                    show_entry(entry_text, idx, verbose)
                 if verbose > V_SHOW_TOKEN_NO_MATCH_W:
                     print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
             metrics[str(idx) + "_full"] = time.time() - beg_full
-            if is_undefined or is_partial_different or opts.both:
+            if opts.both or is_undefined and is_partial_different:
                 if not entry_dict:
                     reason = "Main Match Failed"
                 elif is_undefined:
