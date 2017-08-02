@@ -202,7 +202,7 @@ REC_WEBSTER = re.compile(r"""
     (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|[A-Z]-?)? # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]*   # Pronunciation 3 (for variant 2)
-    (?:\s*\((?P<pren1a>[^\)]+)\)\s*\.?)?               # parenthesized 1a
+    (?:\s*\((?P<pren1a>[^\)]+)\)\s*\.?)?            # parenthesized 1a
     (?:,?\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?       # part of speech for first definition (order varies)
     (?:\s*;\s+pl\.\s+(?P<plural>\w+[\w\ -]*\w+)\.)? # plural form or suffix, usually for irregulars
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
@@ -227,9 +227,9 @@ REC_PARTIAL = re.compile(r"""
     (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|[A-Z]-?)? # Pron 1 (Capitalized)
     (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
     (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]*   # Pronunciation 3 (for variant 2)
-    (?:\s*\((?P<pren1a>[^\)]+)\)\s*\.?)?               # parenthesized 1a
+    (?:\s*\((?P<pren1a>[^\)]+)\)\s*\.?)?            # parenthesized 1a
     (?:,?\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?       # part of speech for first definition (order varies)
-    (?:\s*;\s+pl\.\s+(?P<plural>\w+[\w\ -]*\w+)\.)? # plural form or suffix, usually for irregulars
+    (?:[\ ,;]*(?P<plural>(?:(?:[A-Z]\.\s+)?pl\.\s+\w+[\w\ -]*\w+\s*[;,.]+\ *)+))? # plural form or suffix
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\]\s*)?            # bracketed
     (?P<sepsp1>[\s.,]*?)?                     # non-greedy space, punctuation(period, comma)
@@ -244,8 +244,14 @@ REC_PARTIAL = re.compile(r"""
     (?P<cetera>.*)?$                          # etc.
 """.format(REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
 
-
+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#
 '''
+
+
+
+
+PLURAL:
+    (?:\s*;?\s*(?P<plural>((?:[A-Z]\.\s+)?pl\.\s+\w+[\w\ -]*\w+)\s*[;,.]\s*)+)? # plural form or suffix, usually for irregulars
 
 SLOW:    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|\w*[^\s\(\[.,]+|[\w\s]+?(?!Defn)\w+)? # Pron 1 (Capitalized)
 
@@ -297,9 +303,9 @@ def show_partial_match(matgadd, verbose=1):
         "pron_1: (", matgadd["pron_1"], ") \t",
         "pron_2: (", matgadd["pron_2"], ") \t",
         "pron_3: (", matgadd["pron_3"], ") \n\t",
+        "plural: (", matgadd["plural"], ") \n\t",
         "pren1a: (", matgadd["pren1a"], ") \n\t",
         "part1a: (", matgadd["part1a"], ") \t",
-        "plural: (", matgadd["plural"], ") \n\t",
         "pren1b: (", matgadd["pren1b"], ") \n\t",
         "brack1: (", matgadd["brack1"], ") \n\t",
         "sepsp1: (", matgadd["sepsp1"], ") \n\t",
@@ -416,8 +422,9 @@ def index_diff(sub_a, sub_b):
 
 def show_entry(entry_text, idx):
     '''Print the (possibly cleaned-up) text entry extracted from the input file.'''
-    print("\n======================== Entry %5d ================================" % idx)
+    print("\n=====================beg Entry %5d ================================" % idx)
     utf_print(entry_text)
+    print(  "---------------------end Entry %5d --------------------------------\n" % idx)
 
 ###############################################################################
 
@@ -429,10 +436,10 @@ V_SHOW_ENTRY_NO_MATCH_P = 5
 V_SHOW_ENTRY_NO_MATCH_W = 6
 V_SHOW_COUNT_IF_UNDEF_W = 7
 V_SHOW_PARTS_IF_UNDEF_P = 8
-V_SHOW_PARTS_IF_UNDEF_W = 9
-V_SHOW_ENTRY_IF_UNDEF_P = 10
+V_SHOW_ENTRY_IF_UNDEF_P = 9
+V_SHOW_REASON_FOR_PARTS = 10
+V_SHOW_PARTS_IF_UNDEF_W = 11
 
-V_SHOW_REASON_FOR_PARTS = 11
 V_SHOW_ENTRY_IF_UNDEF_W = 12
 
 V_SHOW_PARTS_ALWAYS = 14
@@ -445,7 +452,7 @@ def try_partial_match(metrics, entry_text, entry_index, reason, verbose):
     '''test a variant of the webster regex'''
     if verbose > V_SHOW_REASON_FOR_PARTS:
         entry_word = first_token(entry_text)
-        print("+++++++++++++++ Try partial match on %d: because:  %s:  %s" % (
+        print("+++++++++++++++ Try partial match on %d because %s:  %s" % (
             entry_index, reason, entry_word))
 
     beg_part = time.time()
@@ -456,9 +463,12 @@ def try_partial_match(metrics, entry_text, entry_index, reason, verbose):
         matgadd = defaultdict(str, match.groupdict())
         if matgadd['defn_1']:
             metrics['partdef'] += 1
+
             if verbose > V_SHOW_PARTS_IF_UNDEF_W and reason == M_DEFN_1_NOT_FOUND:
                 show_partial_match(matgadd)
         elif verbose > V_SHOW_PARTS_IF_UNDEF_P:
+            if verbose > V_SHOW_ENTRY_IF_UNDEF_P:
+                show_entry(entry_text, entry_index)
             show_partial_match(matgadd)
     else:
         metrics['unparted'] += 1
