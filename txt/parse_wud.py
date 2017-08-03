@@ -246,7 +246,10 @@ REC_PARTIAL = re.compile(r"""
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?           # bracketed
     (?P<sepsp1>[\s.,]*?)?                       # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?     # part of speech for first definition (order varies)
-    (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+?)(?:\]\.?|\n\n|\s+Defn:|\n+1.))?     # etymology
+    (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+?)(?:\]\.?|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))?     # etymology
+
+
+
     (?:\s+\[(?P<obstag>Obs|R)\.\])?                 # obsolete tag
     (?:[\ \n]\((?P<dtype1>[A-Z][\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
