@@ -430,9 +430,9 @@ def index_diff(sub_a, sub_b):
 
 def show_entry(entry_text, idx):
     '''Print the (possibly cleaned-up) text entry extracted from the input file.'''
-    print("======================== beg Entry %5d ================================" % idx)
+    print("========================== beg Entry %d ================================" % idx)
     utf_print(entry_text)
-    print("------------------------ end Entry %5d --------------------------------\n" % idx)
+    print("-------------------------- end Entry %d --------------------------------" % idx)
 
 ###############################################################################
 
