@@ -202,6 +202,11 @@ REP_PART = r'a|adv|conj|i|imp|interj|n|p|pl|pre[pt]|t|v'
 #   a) how many variants (word_1, word_2, etc., e.g. IMAM; IMAN; IMAUM)
 #   b) how many words in each variant (e.g. BANK BILL, ICELAND MOSS)
 # Second pass regex depends on what's found in the first pass.
+
+
+
+
+
 REC_WEBSTER = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
@@ -227,7 +232,6 @@ REC_WEBSTER = re.compile(r"""
     (?P<cetera>.*)?$                          # etc.
 """.format(REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
 
-
 REC_PARTIAL = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
@@ -243,6 +247,7 @@ REC_PARTIAL = re.compile(r"""
     (?P<sepsp1>[\s.,]*?)?                     # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
     (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+?)(?:\]|\n\n|\s+Defn:|\s+1.))?       # etymology
+    (?:\s+\[(?P<obstag>Obs|R)\.\])?                # obsolete tag
     (?:[\ \n]\((?P<dtype1>[A-Z][\w\s&.]+\.?)\))?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
