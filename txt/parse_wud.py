@@ -17,6 +17,7 @@ from utf_print import utf_print
 
 RE_PARA_SEPARATOR = re.compile(r'\s*\n')
 
+
 ################################################################################
 
 def paragraph_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=0):
@@ -76,7 +77,18 @@ def is_not_lower(line):
 
 
 ################################################################################
-def lex_entry_ns_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=1):
+
+REP_UPPER_WORD_ONLY = r'^[A-Z-]+\s*$'
+REC_UPPER_WORD_ONLY = re.compile(REP_UPPER_WORD_ONLY)
+
+REP_UPPER_ENTRY_KEY = r'''
+^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
+(?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
+(?:;\s+(?P<word_3>[A-Z'-]+))?\n
+'''
+REC_UPPER_ENTRY_KEY = re.compile(REP_UPPER_ENTRY_KEY)
+
+def lex_entry_ns_iter(fileobj, rec_para_separator=REC_UPPER_ENTRY_KEY, sep_lines=1):
     '''
     Yields paragraphs (including newlines) representing lexion entries from a text
     file and regex separator, which by default matches a blank line followed by an
@@ -89,7 +101,8 @@ def lex_entry_ns_iter(fileobj, rgx_para_separator=RE_PARA_SEPARATOR, sep_lines=1
     paragraph, blank_lines, entry_lines = '', 0, 0
     for line in fileobj:
         #print("    PI: line(%s) para(%s)" % (line.rstrip(), paragraph))
-        if re.match(rgx_para_separator, line) and paragraph and blank_lines >= sep_lines:
+        match = rec_para_separator.match(line)
+        if match and paragraph and blank_lines >= sep_lines:
             yield paragraph.rstrip()
             paragraph, blank_lines, entry_lines = '', 0, 0
         if is_blank_line(line):
@@ -145,10 +158,8 @@ def para_iter_file(path, rgx_para_separator=RE_PARA_SEPARATOR, charset='utf8', s
             yield para
 
 ###############################################################################
-REP_UPPER_WORD_ONLY = r'^[A-Z-]+\s*$'
-REC_UPPER_WORD_ONLY = re.compile(REP_UPPER_WORD_ONLY)
 
-def para_ns_iter_lex_file(path, rgx_para_separator=REC_UPPER_WORD_ONLY, charset='utf8', sep_lines=1):
+def para_ns_iter_lex_file(path, rgx_para_separator=REC_UPPER_ENTRY_KEY, charset='utf8', sep_lines=1):
     '''Generator yielding filtered paragraphs (including newlines) from a lexicon file'''
     # print("para_ns_iter_lex_file: pattern: %s" % rgx_para_separator.pattern)
     with open(path, 'r', encoding=charset) as text:
