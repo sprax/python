@@ -81,11 +81,7 @@ def is_not_lower(line):
 REP_UPPER_WORD_ONLY = r'^[A-Z-]+\s*$'
 REC_UPPER_WORD_ONLY = re.compile(REP_UPPER_WORD_ONLY)
 
-REP_UPPER_ENTRY_KEY = r'''
-^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
-(?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
-(?:;\s+(?P<word_3>[A-Z'-]+))?\n
-'''
+REP_UPPER_ENTRY_KEY = r"^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+)(?:;\s+(?P<word_2>[A-Z'-]+))?(?:;\s+(?P<word_3>[A-Z'-]+))?$"
 REC_UPPER_ENTRY_KEY = re.compile(REP_UPPER_ENTRY_KEY)
 
 def lex_entry_ns_iter(fileobj, rec_para_separator=REC_UPPER_ENTRY_KEY, sep_lines=1):
