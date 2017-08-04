@@ -234,12 +234,12 @@ REC_PARTIAL = re.compile(r"""
     (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
     (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?)? # Pron 1 (Capitalized)
     (?:(?:,|\ or)\s*(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
-    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]*   # Pronunciation 3 (for variant 2)
+    (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\(,\ )?                                      # TODO: What is this?
-    (?:\s*\((?P<pren1a>[^\)]+)\)\s*\.?)?            # parenthesized 1a
-    (?:,?\s*(?P<part1a>(?:(?:{})\ *\.?\ *(?:&|[,;]+|or\ )?)+)\.,?)?   # part of speech for first definition (order varies)
-    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\ -]*\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
-    (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?           # parenthesized 1b
+    (?:\ *\((?P<pren1a>[^\)]+)\)\s*\.?)?            # parenthesized 1a
+    (?:,?\ *(?P<part1a>(?:(?:{})\ *\.?\ *(?:&|[,;]+|or\ )?)+)\.,?)?   # part of speech for first definition (order varies)
+    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
+    (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?           # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?           # bracketed 1
     (?P<sepsp1>[\s.,]*?)?                       # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?     # part of speech for first definition (order varies)
@@ -247,6 +247,8 @@ REC_PARTIAL = re.compile(r"""
 
     (?:\s*Note:\s+\[(?P<note_1>[^\]]+(?=\]\.?|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
     (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+(?=\]\.?|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
+    (?:\s*Etym:\s+\[(?P<etym_2>[^\]]+(?=\]\.?|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
+    (?:\s*Note:\s+\[(?P<note_2>[^\]]+(?=\]\.?|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
 
     (?:\.?\s*\[(?P<brack3>[^\]]+)\])?           # bracketed 3
     (?:\s+\[(?P<obstag>Obs|R)\.\])?                 # obsolete tag
