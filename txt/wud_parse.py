@@ -236,12 +236,9 @@ REC_PARTIAL = re.compile(r"""
     (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
     (?:(?:,|\ or)\s*(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
-
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?           # parenthesized 1a
 
-
-    (?:,?\ *(?P<part1a>{}\.(?:(?:[,;]|\ &|\ or)\ {}\.)*))?   # part of speech for first definition (order varies)
-
+    (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*))?   # part of speech for first definition (order varies)
 
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?           # parenthesized 1b
@@ -257,7 +254,6 @@ REC_PARTIAL = re.compile(r"""
     (?:[\ \n]\((?P<dtype1>[A-Z][\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\)|Lit\.,?)\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*                # definition 1 sentence 2
-    (?:;)?\s*                                   # optional separator
     (?P<usage1>".*"[^\d]+)?\s*                  # example 1
     (?P<defn_2>\d.\s[^\d]+)?                    # definition 2, ...
     (?P<cetera>.*)?$                            # etc.
@@ -288,7 +284,7 @@ SLOW:    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|\w*[^\s\(\[.,]+|[\w\
     (?:(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
 
 
-  Partial (backup, to be deleted)
+  Partial (backup, to be deleted) xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\s+                # WORD 3 (variant spelling)
@@ -328,7 +324,6 @@ def show_partial_match(matgadd, entry_index, verbose=1):
         "plural: (", matgadd["plural"], ") \n\t",
         "pren1b: (", matgadd["pren1b"], ") \n\t",
         "brack1: (", matgadd["brack1"], ") \n\t",
-        "sepsp1: (", matgadd["sepsp1"], ") \n\t",
         "part1b: (", matgadd["part1b"], ") \n\t",
         "etym_1: (", matgadd["etym_1"], ") \n\t",
         "brack2: (", matgadd["brack2"], ") \n\t",
