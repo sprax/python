@@ -195,7 +195,7 @@ def print_groups(match):
 
 EXAMPLE = "BACE Bace, n., a., & v."
 
-REP_PART = r'(?:a|adv|conj|i|imp|interj|n|p|pl|pre[pt]|pron|sing|t|v)'
+REP_PART = r'(?:a|adv|conj|i|imp|interj|n|p|pl|pre[pt]|pron|sing|superl|t|v)'
 
 
 # FIXME TODO: Two passes:
