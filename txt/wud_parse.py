@@ -233,10 +233,9 @@ REC_PARTIAL = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?)? # Pron 1 (Capitalized)
+    (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
     (?:(?:,|\ or)\s*(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
-    (?:\(,\ )?                                      # TODO: What is this?
     (?:\ *\((?P<pren1a>[^\)]+)\)\s*\.?)?            # parenthesized 1a
     (?:,?\ *(?P<part1a>(?:(?:{})\ *\.?\ *(?:&|[,;]+|or\ )?)+)(?:\.,?|\ (?=\[)|\n\n))?   # part of speech for first definition (order varies)
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
