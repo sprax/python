@@ -450,10 +450,11 @@ V_SHOW_ENTRY_NO_MATCH_W = 6
 V_SHOW_COUNT_IF_UNDEF_W = 7
 V_SHOW_PARTS_IF_UNDEF_P = 8
 V_SHOW_ENTRY_IF_UNDEF_P = 9
-V_SHOW_REASON_FOR_PARTS = 10
-V_SHOW_PARTS_IF_UNDEF_W = 11
+V_SHOW_PARTS_IF_UNDEF_W = 10
+V_SHOW_WEBST_IF_UNDEF_P = 11
 
 V_SHOW_ENTRY_IF_UNDEF_W = 12
+V_SHOW_REASON_FOR_PARTS = 13
 
 V_SHOW_PARTS_ALWAYS = 14
 V_SHOW_WEBST_ALWAYS = 15
@@ -471,12 +472,13 @@ def try_partial_match(metrics, entry_text, entry_index, reason, verbose):
     beg_part = time.time()
     match = REC_PARTIAL.match(entry_text)
     metrics[str(entry_index) + '_part'] = time.time() - beg_part
+    is_defined = False
     if match:
         metrics['parted'] += 1
         matgadd = defaultdict(str, match.groupdict())
         if matgadd['defn_1']:
             metrics['partdef'] += 1
-
+            is_defined = True
             if verbose > V_SHOW_PARTS_IF_UNDEF_W and reason == M_DEFN_1_NOT_FOUND:
                 show_partial_match(matgadd)
         elif verbose > V_SHOW_PARTS_IF_UNDEF_P:
@@ -487,6 +489,7 @@ def try_partial_match(metrics, entry_text, entry_index, reason, verbose):
         metrics['unparted'] += 1
         if verbose > V_SHOW_TOKEN_NO_MATCH_P:
             print("======================================= %d Even partial match failed!" % entry_index)
+    return is_defined
 
 
 def show_diff_full_part(verbose):
@@ -521,17 +524,22 @@ def parse_webster_file(path, opts, verbose=1):
             match_dict = parse_webster_entry(entry_text)
             metrics[str(idx) + "_full"] = time.time() - beg_full
 
+            fulldef = False
             if match_dict:
                 metrics['matched'] += 1
                 entry_base = WebsterEntry(match_dict)
                 if match_dict['defn_1']:
                     metrics['defined'] += 1
+                    fulldef = True
                     if verbose > V_SHOW_ENTRY_ALWAYS:
                         show_entry(entry_text, idx)
                         if verbose > V_SHOW_WEBST_ALWAYS:
                             utf_print("WebsterEntry:", entry_base)
                     if opts.both and is_partial_different:
-                        try_partial_match(metrics, entry_text, idx, "Compare Full & Part", verbose)
+                        partdef = try_partial_match(metrics, entry_text, idx, "Compare Full & Part", verbose)
+                        if fulldef and not partdef and \
+                            verbose > V_SHOW_WEBST_IF_UNDEF_P and verbose <= V_SHOW_WEBST_ALWAYS:
+                            utf_print("WebsterEntry cuz partial found no defn_1:\n", entry_base)
                 else:
                     if verbose > V_SHOW_ENTRY_IF_UNDEF_W:
                         show_entry(entry_text, idx)
