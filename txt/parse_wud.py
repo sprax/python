@@ -61,17 +61,17 @@ def is_blank_line(line):
 REC_BLANK_LINE = re.compile(r'^\s*$')
 
 def is_blank_line_re(line):
-    '''detect blank line by regex r"^\s*$" match '''
+    r'''detect blank line by regex r"^\s*$" match '''
     return REC_BLANK_LINE.match(line)
 
 REC_WORDY = re.compile(r'\w+')
 
 def is_wordy_re(line):
-    '''true IFF line contains regex word characters (\w+)'''
+    r'''true IFF line contains regex word characters (\w+)'''
     return REC_WORDY.search(line)
 
 def is_not_lower(line):
-    '''true IFF line contains regex word characters (\w+)'''
+    r'''true IFF line contains regex word characters (\w+)'''
     return REC_WORDY.search(line)
 
 
@@ -262,15 +262,13 @@ REC_PARTIAL = re.compile(r"""
 """.format(REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
 
 #+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#
-'''
-
-
-
-
+r'''
 PLURAL:
-    (?:\s*;?\s*(?P<plural>((?:[A-Z]\.\s+)?pl\.\s+\w+[\w\ -]*\w+)\s*[;,.]\s*)+)? # plural form or suffix, usually for irregulars
+    (?:\s*;?\s*(?P<plural>((?:[A-Z]\.\s+)?pl\.\s+\w+[\w\ -]*\w+)\s*[;,.]\s*)+)?
+    # plural form or suffix, usually for irregulars
 
-SLOW:    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|\w*[^\s\(\[.,]+|[\w\s]+?(?!Defn)\w+)? # Pron 1 (Capitalized)
+SLOW:    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|\w*[^\s\(\[.,]+|[\w\s]+?(?!Defn)\w+)?
+    # Pron 1 (Capitalized)
 
 
     (?:;)?\s*                                 # optional separator
@@ -338,7 +336,7 @@ def show_partial_match(matgadd, verbose=1):
         "defn1a: (", matgadd["defn1a"], ") \n\t",
         "defn_2: (", matgadd["defn_2"], ") \n\t",
         "cetera: (", matgadd["cetera"], ") \n\t",
-        )
+       )
 
 
 ###############################################################################
@@ -562,23 +560,23 @@ def percent(count, total):
 
 def print_metrics(metrics, verbose):
     '''pretty print metrics dict'''
-    print("Tried %d in %.4f seconds, defined/matched: Full: %d/%d (%.1f%%), Part: %d/%d (%.1f%%) & Matched %.1f%%.  " % (
-          metrics['tried'],
-          metrics['end_time'] - metrics['beg_time'],
-          metrics['defined'], metrics['matched'],
-          percent(metrics['defined'], metrics['matched']),
-          metrics['partdef'], metrics['parted'],
-          percent(metrics['partdef'], metrics['parted']),
-          percent(max(metrics['matched'], metrics['parted']), metrics['tried'])),
+    print("Tried %d in %.4f seconds, defined/matched: Full: %d/%d (%.1f%%), Part: %d/%d (%.1f%%)" % (
+        metrics['tried'],
+        metrics['end_time'] - metrics['beg_time'],
+        metrics['defined'], metrics['matched'],
+        percent(metrics['defined'], metrics['matched']),
+        metrics['partdef'], metrics['parted'],
+        percent(metrics['partdef'], metrics['parted'])),
           end='')
+    print(" Matched %.1f%%.  " % percent(max(metrics['matched'], metrics['parted']), metrics['tried']))
     print("Failures: Full %d & %d  Part %d & %d" % (
         metrics['tried'] - metrics['defined'], metrics['unmatched'],
         metrics['tried'] - metrics['partdef'], metrics['unparted']))
     if verbose >= V_SHOW_STATS:
         max_index = metrics['max_time_index']
         print("Max entry parse time %.3f seconds for entry %d  (full: %.4f, part: %.4f)" % (
-              metrics['max_entry_time'], metrics['max_time_index'],
-              metrics[str(max_index) + '_full'], metrics[str(max_index) + '_part']))
+            metrics['max_entry_time'], metrics['max_time_index'],
+            metrics[str(max_index) + '_full'], metrics[str(max_index) + '_part']))
 
 
 
