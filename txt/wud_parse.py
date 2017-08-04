@@ -505,7 +505,11 @@ def show_diff_full_part(verbose):
     return is_partial_different
 
 def parse_webster_file(path, opts, verbose=1):
-    '''parse Webster-like dictionary text file with diagnostics.'''
+    '''
+    Parse Webster-like dictionary text file with diagnostics.
+    TODO: Implement try_webster_match.
+    TODO: If -both and verbose > 7 or so, show details when either one finds no defn_1.
+    '''
     metrics = defaultdict(int)
     metrics['beg_time'] = time.time()
     is_partial_different = show_diff_full_part(verbose)
