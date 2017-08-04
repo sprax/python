@@ -238,7 +238,7 @@ REC_PARTIAL = re.compile(r"""
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\(,\ )?                                      # TODO: What is this?
     (?:\ *\((?P<pren1a>[^\)]+)\)\s*\.?)?            # parenthesized 1a
-    (?:,?\ *(?P<part1a>(?:(?:{})\ *\.?\ *(?:&|[,;]+|or\ )?)+)\.,?)?   # part of speech for first definition (order varies)
+    (?:,?\ *(?P<part1a>(?:(?:{})\ *\.?\ *(?:&|[,;]+|or\ )?)+)(?:\.,?|\ (?=\[)|\n\n))?   # part of speech for first definition (order varies)
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?           # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?           # bracketed 1
@@ -254,7 +254,7 @@ REC_PARTIAL = re.compile(r"""
     (?:\.?\s*\[(?P<brack3>[^\]]+)\])?           # bracketed 3
     (?:\s+\[(?P<obstag>Obs|R)\.\])?                 # obsolete tag
     (?:[\ \n]\((?P<dtype1>[A-Z][\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
-    (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
+    (?:\s*(?P<dftag1>Defn:|1\.|\(a\)|Lit\.,?)\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
     (?:;)?\s*                                 # optional separator
     (?P<usage1>".*"[^\d]+)?\s*                # example 1
@@ -576,7 +576,7 @@ def print_metrics(metrics, verbose):
         metrics['tried'] - metrics['partdef'], metrics['unparted']))
     if verbose >= V_SHOW_STATS:
         max_index = metrics['max_time_index']
-        print("Max entry parse time %.3f seconds for entry %d  (full: %.4f, part: %.4f)" % (
+        print("Max entry parse time %.5f seconds for entry %d  (full: %.6f, part: %.6f)" % (
             metrics['max_entry_time'], metrics['max_time_index'],
             metrics[str(max_index) + '_full'], metrics[str(max_index) + '_part']))
 
