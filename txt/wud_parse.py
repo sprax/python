@@ -208,9 +208,9 @@ REC_WEBSTER = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?)? # Pron 1 (Capitalized)
+    (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
     (?:(?:,|\ or)\s*(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
-    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\s.,]*   # Pronunciation 3 (for variant 2)
+    (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\s*\((?P<pren1a>[^\)]+)\)\s*\.?)?            # parenthesized 1a
     (?:,?\s*(?P<part1a>(?:(?:{})\s*\.?[\ &,]*)+)\.)?   # part of speech for first definition (order varies)
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?\w+[\w\ -]*\w+\s*[;,.(#)]+\ *)+))? # plural form or suffix
@@ -539,8 +539,9 @@ def parse_webster_file(path, opts, verbose=1):
                         partdef = try_partial_match(metrics, entry_text, idx, "Compare Full & Part", verbose)
                         if fulldef and not partdef and \
                             verbose > V_SHOW_WEBST_IF_UNDEF_P and verbose <= V_SHOW_WEBST_ALWAYS:
-                            print("<<<<<<<<<<<<<<<<<<<<<<<<<<  Webster  %d  %s " % (idx, match_dict['word_1']))
-                            utf_print("WebsterEntry cuz partial found no defn_1:\n", entry_base)
+                            print("<<<<<<<<<<<<<<<<<<<<<<<<<<  Webster  %d  %s  because No Partial Defn" % (
+                                  idx, match_dict['word_1']))
+                            utf_print(entry_base)
                 else:
                     if verbose > V_SHOW_ENTRY_IF_UNDEF_W:
                         show_entry(entry_text, idx)
