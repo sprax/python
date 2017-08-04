@@ -233,9 +233,10 @@ REC_PARTIAL = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\s+(?P<word_2>[A-Z'-]+))?               # WORD 2 (variant spelling)
     (?:;\s+(?P<word_3>[A-Z'-]+))?\n             # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?)? # Pron 1 (Capitalized)
+    (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
     (?:(?:,|\ or)\s*(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
-    (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?      # Pronunciation 3 (for variant 2)
+    (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
+
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?           # parenthesized 1a
 
 
@@ -362,6 +363,7 @@ class WebsterEntry:
         self.sepsp1 = match_dict['sepsp1']
         part1 = match_dict['part1a']
         self.part_1 = part1 if part1 else match_dict['part1b']
+        self.plural = match_dict['plural']
         self.etym_1 = match_dict['etym_1']
         self.dftag1 = match_dict['dftag1']
         self.defn_1 = match_dict['defn_1']
@@ -371,23 +373,26 @@ class WebsterEntry:
         self.cetera = match_dict['cetera']
 
     def __str__(self):
-        return('''
-    word_1: {:<24}    word_2: {}    word_3: {}
-    pron_1: {}    pron_2: {}    pron_3: {}
-    part_1: ({})
-    brack1: ({})
-    etym_1: ({})
-    dftag1: ({})
-    defn_1: ({})
-    defn1a: ({})
-    usage1: ({})
-    defn_2: ({})
-    cetera: ({})
-    '''.format(self.word_1, self.word_2, self.word_3, self.pron_1, self.pron_2, self.pron_3,
-               self.part_1, self.brack1, self.etym_1, self.dftag1, self.defn_1, self.defn1a, self.usage1,
-               self.defn_2,
-               self.cetera
-              ))
+        stray = [
+            "\tword_1: %s\t" % self.word_1,
+            "word_2: %s\t" % self.word_2,
+            "word_3: %s\n\t" % self.word_3,
+            "pron_1: %s\t" % self.pron_1,
+            "pron_2: %s\t" % self.pron_2,
+            "pron_3: %s\n\t" % self.pron_3,
+            "part_1: %s\n\t" % self.part_1,
+            "plural: %s\n\t" % self.plural,
+            "brack1: %s\n\t" % self.brack1,
+            "etym_1: %s\n\t" % self.etym_1,
+            "dftag1: %s\n\t" % self.dftag1,
+            "defn_1: %s\n\t" % self.defn_1,
+            "defn1a: %s\n\t" % self.defn1a,
+            "usage1: %s\n\t" % self.usage1,
+            "defn_2: %s\n\t" % self.defn_2,
+            "cetera: %s\n\t" % self.cetera,
+        ]
+        strep = ''.join(stray)
+        return strep
 
     def variants(self):
         '''return list of variant spellings'''
