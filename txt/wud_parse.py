@@ -237,22 +237,20 @@ REC_PARTIAL = re.compile(r"""
     (?:(?:,|\ or)\s*(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?           # parenthesized 1a
-
     (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*))?   # part of speech for first definition (order varies)
-
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?           # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?           # bracketed 1
     (?:\s*(?P<part1b>(?:{}\s*\.\s*)+))?     # part of speech for first definition (order varies)
     (?:\.?\s*\[(?P<brack2>[^\]]+)\])?           # bracketed 2
-    (?:\s*Note:\s+\[(?P<note_1>[^\]]+(?=\]\.?|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
-    (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+(?=\]\.?|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
-    (?:\s*Etym:\s+\[(?P<etym_2>[^\]]+(?=\]\.?|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
-    (?:\s*Note:\s+\[(?P<note_2>[^\]]+(?=\]\.?|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
-    (?:\.?\s*\[(?P<brack3>[^\]]+)\])?           # bracketed 3
-    (?:\s+\[(?P<obstag>Obs|R)\.\])?                 # obsolete tag
-    (?:[\ \n]\((?P<dtype1>[A-Z][\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
-    (?:\s*(?P<dftag1>Defn:|1\.|\(a\)|Lit\.,?)\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
+    (?:\s*Note:\s+\[(?P<note_1>[^\]]+(?=\]|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
+    (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+(?=\]|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
+    (?:\s*Etym:\s+\[(?P<etym_2>[^\]]+(?=\]|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
+    (?:\s*Note:\s+\[(?P<note_2>[^\]]+(?=\]|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
+    (?:\.?\s*\[(?P<brack3>[^\]]+)\])?               # bracketed 3
+    (?:\.?\s+\[(?P<obstag>Obs|R)\.\])?              # obsolete tag
+    (?:\.?[\ \n]\((?P<dtype1>[A-Z][\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:\.?\s*(?P<dftag1>Defn:|1\.|\(a\)|Lit\.,?)\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*                # definition 1 sentence 2
     (?P<usage1>".*"[^\d]+)?\s*                  # example 1
     (?P<defn_2>\d.\s[^\d]+)?                    # definition 2, ...
