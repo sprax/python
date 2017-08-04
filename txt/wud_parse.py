@@ -305,10 +305,10 @@ SLOW:    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|\w*[^\s\(\[.,]+|[\w\
     (?P<cetera>.*)?$                          # etc.
 '''
 
-def show_partial_match(matgadd, verbose=1):
+def show_partial_match(matgadd, entry_index, verbose=1):
     '''Show partial regex match using a defaultdict seeded by the match's groupdict'''
     if verbose > 1:
-        print("Partial match for word: %s" % matgadd["word_1"])
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>  Partial  %d  %s" % (entry_index, matgadd["word_1"]))
     put("\t",
         "word_1: (", matgadd["word_1"], ") \t",
         "word_2: (", matgadd["word_2"], ") \t",
@@ -480,11 +480,11 @@ def try_partial_match(metrics, entry_text, entry_index, reason, verbose):
             metrics['partdef'] += 1
             is_defined = True
             if verbose > V_SHOW_PARTS_IF_UNDEF_W and reason == M_DEFN_1_NOT_FOUND:
-                show_partial_match(matgadd)
+                show_partial_match(matgadd, entry_index, verbose)
         elif verbose > V_SHOW_PARTS_IF_UNDEF_P:
             if verbose > V_SHOW_ENTRY_IF_UNDEF_P:
                 show_entry(entry_text, entry_index)
-            show_partial_match(matgadd)
+            show_partial_match(matgadd, entry_index, verbose)
     else:
         metrics['unparted'] += 1
         if verbose > V_SHOW_TOKEN_NO_MATCH_P:
@@ -539,6 +539,7 @@ def parse_webster_file(path, opts, verbose=1):
                         partdef = try_partial_match(metrics, entry_text, idx, "Compare Full & Part", verbose)
                         if fulldef and not partdef and \
                             verbose > V_SHOW_WEBST_IF_UNDEF_P and verbose <= V_SHOW_WEBST_ALWAYS:
+                            print("<<<<<<<<<<<<<<<<<<<<<<<<<<  Webster  %d  %s " % (idx, match_dict['word_1']))
                             utf_print("WebsterEntry cuz partial found no defn_1:\n", entry_base)
                 else:
                     if verbose > V_SHOW_ENTRY_IF_UNDEF_W:
