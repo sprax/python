@@ -276,7 +276,6 @@ SLOW:    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|\w*[^\s\(\[.,]+|[\w\
     (?P<usage1>".*"[^\d]+)?\s*                # example 1
     (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
-    (?:\((?P<pren1c>[^\)]+)\)\s*)?            # parenthesized 1c
     (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s*)?    # etymology
 
 
@@ -297,7 +296,6 @@ SLOW:    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|\w*[^\s\(\[.,]+|[\w\
     (?P<brack1>\[[^\]]+\])?                         # bracketed
     (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
-    (?P<pren1c>\([^\)]+\))?                   # parenthesized 1c ?
     (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s+)?    # etymology
     (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s+)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s+(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
@@ -326,7 +324,6 @@ def show_partial_match(matgadd, verbose=1):
         "brack1: (", matgadd["brack1"], ") \n\t",
         "sepsp1: (", matgadd["sepsp1"], ") \n\t",
         "part1b: (", matgadd["part1b"], ") \n\t",
-        # "pren1c: (", matgadd["pren1c"], ") \n\t",
         "etym_1: (", matgadd["etym_1"], ") \n\t",
         "brack2: (", matgadd["brack2"], ") \n\t",
         "obstag: (", matgadd["obstag"], ") \n\t",
@@ -356,7 +353,6 @@ class WebsterEntry:
         self.pron_3 = match_dict['pron_3']
         self.pren1a = match_dict['pren1a']
         self.pren1b = match_dict['pren1b']
-        # self.pren1c = match_dict['pren1c']    # TODO  remove
         self.brack1 = match_dict['brack1']
         self.sepsp1 = match_dict['sepsp1']
         part1 = match_dict['part1a']
@@ -494,10 +490,8 @@ def try_partial_match(metrics, entry_text, entry_index, reason, verbose):
             print("======================================= %d Even partial match failed!" % entry_index)
 
 
-def parse_webster_file(path, opts, verbose=1):
-    '''parse Webster-like dictionary text file with diagnostics.'''
-    metrics = defaultdict(int)
-    metrics['beg_time'] = time.time()
+def show_diff_full_part(verbose):
+    '''compute and show difference between full and partial regex patterns'''
     partial = REC_PARTIAL.pattern
     webster = REC_WEBSTER.pattern
     comlen, totlen = common_and_max_len(partial, webster)
@@ -509,6 +503,13 @@ def parse_webster_file(path, opts, verbose=1):
             print("Partial____%s____" % partial[comlen-24:comlen+24])
         else:
             print("Partial == Webster pattern:", totlen)
+    return is_partial_different
+
+def parse_webster_file(path, opts, verbose=1):
+    '''parse Webster-like dictionary text file with diagnostics.'''
+    metrics = defaultdict(int)
+    metrics['beg_time'] = time.time()
+    is_partial_different = show_diff_full_part(verbose)
     max_entry_time, max_time_index = 0, -1
     for idx, entry_text in enumerate(para_ns_iter_lex_file(path, charset=opts.charset)):
         if idx >= opts.start_index:
