@@ -584,11 +584,11 @@ def parse_dictionary_file(path, opts, verbose=1):
             beg_entry = time.time()
             part_dict = webs_dict = None
             if opts.webster:
-                webs_dict = make_dict_entry(metrics, 'webs', idx, match_webster_entry, entry_text)
+                webs_dict = make_dict_entry(metrics, '_webs', idx, match_webster_entry, entry_text)
             if opts.partial or opts.failover and not webs_dict.get('defn_1'):
-                part_dict = make_dict_entry(metrics, 'part', idx, match_partial_entry, entry_text)
+                part_dict = make_dict_entry(metrics, '_part', idx, match_partial_entry, entry_text)
                 if opts.failover and not opts.webster and not part_dict.get('defn_1'):
-                    webs_dict = make_dict_entry(metrics, 'webs', idx, match_webster_entry, entry_text)
+                    webs_dict = make_dict_entry(metrics, '_webs', idx, match_webster_entry, entry_text)
             entry_time = time.time() - beg_entry
             metrics[idx] = entry_time
             if (max_entry_time < entry_time):
@@ -636,7 +636,7 @@ def percent(count, total):
     '''count/total as a percentage, or NAN if total <= 0'''
     return 100.0 * count / total if total > 0 else float('nan')
 
-def print_metrics(metrics, verbose):
+def print_metrics(metrics, suffix_a, suffix_b, verbose):
     '''pretty print metrics dict'''
     print("Tried %d in %.4f seconds, defined/matched: Full: %d/%d (%.1f%%), Part: %d/%d (%.1f%%)" % (
         metrics['tried'],
@@ -653,8 +653,8 @@ def print_metrics(metrics, verbose):
     if verbose >= V_SHOW_STATS:
         max_index = metrics['max_time_index']
         print("Max entry parse time %.5f seconds for entry %d  (full: %.6f, part: %.6f)" % (
-            metrics['max_entry_time'], metrics['max_time_index'],
-            metrics[str(max_index) + '_webs'], metrics[str(max_index) + '_part']))
+            metrics['max_entry_time'], max_index,
+            metrics[str(max_index) + suffix_a], metrics[str(max_index) + suffix_b]))
 
 
 
@@ -706,7 +706,7 @@ def main():
         pprint.pprint(args)
 
     metrics = parse_dictionary_file(args.text_file, args, verbose)
-    print_metrics(metrics, verbose)
+    print_metrics(metrics, '_webs', '_part', verbose)
 
 
 if __name__ == '__main__':
