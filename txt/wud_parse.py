@@ -578,22 +578,9 @@ def show_webster(webs_entry, index, reason):
 
 def parse_dictionary_file(path, opts, verbose=1):
     '''
-    Parse Webster-like dictionary text file with diagnostics.
+    Parse Webster-like dictionary text file two-ways with failover and metrics.
+    TODO: Better diagnostics.
     ALGO:
-        #### Compact but harder to follow (DON'T DO IT):
-        if condA:
-            A = makeA
-        if condB or failover and condA and A.empty:
-            B = makeB
-            if B.empty and failover and not condA:
-                A = makeA
-            elif not condA:
-                A = emptyA
-        else:
-            if not condA:
-                A = emptyA
-            B = emptyB
-
         #### Laziest that makes sure both A and B are initialized.  Easy to grok.
         if condA:
             A = makeA
