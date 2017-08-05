@@ -518,43 +518,12 @@ V_SHOW_ENTRY_ALWAYS = 16
 M_DEFN_1_NOT_FOUND = "Main Defn1 Not Found"
 
 def show_entry_on_verbose(webs_dict, part_dict, entry_text, entry_index, opts):
-
     if (opts.verbose > V_SHOW_ENTRY_ALWAYS or
         opts.verbose > V_SHOW_ENTRY_IF_UNDEF_W and opts.webster and webs_dict.undef or
         opts.verbose > V_SHOW_ENTRY_IF_UNDEF_P and opts.partial and part_dict.undef or
         opts.verbose > V_SHOW_ENTRY_NO_MATCH_W and opts.webster and webs_dict.empty or
         opts.verbose > V_SHOW_ENTRY_NO_MATCH_P and opts.partial and part_dict.empty):
         show_entry(entry_text, entry_index)
-
-def try_partial_match(metrics, entry_text, entry_index, reason, verbose):
-    '''test a variant of the webster regex'''
-    if verbose > V_SHOW_REASON_FOR_PARTS:
-        entry_word = first_token(entry_text)
-        print("+++++++++++++++ Try partial match on %d because %s:  %s" % (
-            entry_index, reason, entry_word))
-
-    beg_part = time.time()
-    match = REC_PARTIAL.match(entry_text)
-    metrics[str(entry_index) + '_part'] = time.time() - beg_part
-    is_defined = False
-    if match:
-        metrics['parted'] += 1
-        matgadd = defaultdict(str, match.groupdict())
-        if matgadd['defn_1']:
-            metrics['partdef'] += 1
-            is_defined = True
-            if verbose > V_SHOW_PARTS_IF_UNDEF_W and reason == M_DEFN_1_NOT_FOUND or verbose > V_SHOW_PARTS_ALWAYS:
-                show_partial_match(matgadd, entry_index, verbose)
-        elif verbose > V_SHOW_PARTS_IF_UNDEF_P:
-            if verbose > V_SHOW_ENTRY_IF_UNDEF_P:
-                show_entry(entry_text, entry_index)
-            show_partial_match(matgadd, entry_index, verbose)
-    else:
-        metrics['unparted'] += 1
-        if verbose > V_SHOW_TOKEN_NO_MATCH_P:
-            print("======================================= %d Even partial match failed!" % entry_index)
-    return is_defined
-
 
 def show_diff_webs_part(verbose):
     '''compute and show difference between full and partial regex patterns'''
@@ -571,11 +540,11 @@ def show_diff_webs_part(verbose):
             print("Partial == Webster pattern:", totlen)
     return is_partial_different
 
-
 def show_webster(webs_entry, index, reason):
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<  Webster  %d  %s  (%s)" % (index, webs_entry.variants(), reason))
     utf_print(webs_entry)
 
+###############################################################################
 def parse_dictionary_file(path, opts, verbose=1):
     '''
     Parse Webster-like dictionary text file two-ways with failover and metrics.
