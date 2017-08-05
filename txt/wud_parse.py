@@ -427,6 +427,9 @@ class WebsterEntry:
         strep = ''.join(stray)
         return strep
 
+    def words(self):
+        return '; '.join([self.dict.get('word_1')])
+
     def variants(self):
         '''return list of variant spellings'''
         variants = [self.word_1]
@@ -575,6 +578,9 @@ def show_diff_webs_part(verbose):
     return is_partial_different
 
 
+def show_webster(webs_entry, index, reason):
+    print("<<<<<<<<<<<<<<<<<<<<<<<<<<  Webster  %d  %s  (%s)" % (index, webs_entry.variants(), reason))
+    utf_print(webs_entry)
 
 def parse_dictionary_file(path, opts, verbose=1):
     '''
@@ -606,7 +612,7 @@ def parse_dictionary_file(path, opts, verbose=1):
             else:
                 A = emptyA
         else:
-            B = emptyB
+            A, B = emptyA, emptyB
     '''
     metrics = defaultdict(int)
     metrics['beg_time'] = time.time()
@@ -627,6 +633,7 @@ def parse_dictionary_file(path, opts, verbose=1):
                 else:
                     webs_dict = DictEntry('_webs', {})
             else:
+                webs_dict = DictEntry('_webs', {})
                 part_dict = DictEntry('_part', {})
 
             entry_time = time.time() - beg_entry
@@ -637,22 +644,22 @@ def parse_dictionary_file(path, opts, verbose=1):
 
             show_entry_on_verbose(webs_dict, part_dict, entry_text, idx, verbose)
 
-            if webs_dict:
-                if webs_dict.empty:
-                    if verbose > V_SHOW_TOKEN_NO_MATCH_W:
-                        print(" {:<20} >>>> NO WEBSTER MATCH<<<< {:>6}".format(first_token(entry_text), idx))
-                else:
-                    webs_entry = WebsterEntry(webs_dict)
-                    if (verbose > V_SHOW_WEBST_ALWAYS or
-                        opts.failover and verbose > V_SHOW_WEBST_IF_UNDEF_P and part_dict and part_dict.undef):
-                        print("<<<<<<<<<<<<<<<<<<<<<<<<<<  Webster  %d  %s  because No Partial Defn" % (
-                            idx, webs_dict.get('word_1')))
-                        utf_print(webs_entry)
+            if webs_dict.empty:
+                if verbose > V_SHOW_TOKEN_NO_MATCH_W:
+                    print(" {:<20} >>>> NO WEBSTER MATCH <<<< {:>6}".format(first_token(entry_text), idx))
+            else:
+                webs_entry = WebsterEntry(webs_dict)
+                if (verbose > V_SHOW_WEBST_IF_UNDEF_P and opts.failover and part_dict.undef):
+                    show_webster(webs_entry, idx, "Partial Not Defined")
+                elif (verbose > V_SHOW_WEBST_ALWAYS):
+                    show_webster(webs_entry, idx, "Always Show Webster")
+
+
 
             if part_dict:
                 if part_dict.empty:
                     if verbose > V_SHOW_TOKEN_NO_MATCH_P:
-                        print(" {:<20} >>>>NO PARTIAL MATCH<<<< {:>6}".format(first_token(entry_text), idx))
+                        print(" {:<20} >>>> NO PARTIAL MATCH <<<< {:>6}".format(first_token(entry_text), idx))
                 else:
                     part_entry =  WebsterEntry(part_dict)
                     if (verbose > V_SHOW_PARTS_ALWAYS or
