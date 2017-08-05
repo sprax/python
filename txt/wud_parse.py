@@ -620,7 +620,7 @@ def parse_dictionary_file(path, opts, verbose=1):
     max_entry_time, max_time_index = 0, -1
     for idx, entry_text in enumerate(para_ns_iter_lex_file(path, charset=opts.charset)):
         if idx >= opts.start_index:
-            metrics['tried'] += 1
+            metrics['read'] += 1
 
             beg_entry = time.time()
             part_dict = webs_dict = None
@@ -645,7 +645,7 @@ def parse_dictionary_file(path, opts, verbose=1):
             show_entry_on_verbose(webs_dict, part_dict, entry_text, idx, verbose)
 
             if webs_dict.empty:
-                if verbose > V_SHOW_TOKEN_NO_MATCH_W:
+                if opts.webster and verbose > V_SHOW_TOKEN_NO_MATCH_W:
                     print(" {:<20} >>>> NO WEBSTER MATCH <<<< {:>6}".format(first_token(entry_text), idx))
             else:
                 webs_entry = WebsterEntry(webs_dict)
@@ -654,27 +654,30 @@ def parse_dictionary_file(path, opts, verbose=1):
                 elif (verbose > V_SHOW_WEBST_ALWAYS):
                     show_webster(webs_entry, idx, "Always Show Webster")
 
-
-
-            if part_dict:
-                if part_dict.empty:
-                    if verbose > V_SHOW_TOKEN_NO_MATCH_P:
-                        print(" {:<20} >>>> NO PARTIAL MATCH <<<< {:>6}".format(first_token(entry_text), idx))
-                else:
-                    part_entry =  WebsterEntry(part_dict)
-                    if (verbose > V_SHOW_PARTS_ALWAYS or
-                        opts.failover and verbose > V_SHOW_PARTS_IF_UNDEF_W and webs_dict and webs_dict.undef):
-                        show_partial_match(part_dict.table, idx, verbose)
-
-
+            if part_dict.empty:
+                if opts.partial and verbose > V_SHOW_TOKEN_NO_MATCH_P:
+                    print(" {:<20} >>>> NO PARTIAL MATCH <<<< {:>6}".format(first_token(entry_text), idx))
+            else:
+                part_entry =  WebsterEntry(part_dict)
+                if (verbose > V_SHOW_PARTS_ALWAYS or
+                    opts.failover and verbose > V_SHOW_PARTS_IF_UNDEF_W and webs_dict and webs_dict.undef):
+                    show_partial_match(part_dict.table, idx, verbose)
 
         if opts.stop_index > 0 and idx >= opts.stop_index:
             break
+
     metrics['max_entry_time'] = max_entry_time
     metrics['max_time_index'] = max_time_index
     metrics['end_time'] = time.time()
     return metrics
 
+###############################################################################
+def tried_matched_undef_defnd(metrics, suffix):
+    match = metrics['matched' + suffix]
+    tried = metrics['unmatched' + suffix] + match
+    undef = metrics['undef' + suffix]
+    defnd = match - undef
+    return tried, match, undef, defnd
 
 def percent(count, total):
     '''count/total as a percentage, or NAN if total <= 0'''
@@ -682,24 +685,23 @@ def percent(count, total):
 
 def print_metrics(metrics, suffix_a, suffix_b, verbose):
     '''pretty print metrics dict'''
-    print("Tried %d in %.4f seconds, defined/matched: Full: %d/%d (%.1f%%), Part: %d/%d (%.1f%%)" % (
-        metrics['tried'],
-        metrics['end_time'] - metrics['beg_time'],
-        metrics['defined'], metrics['matched'],
-        percent(metrics['defined'], metrics['matched']),
-        metrics['partdef'], metrics['parted'],
-        percent(metrics['partdef'], metrics['parted'])),
-          end='')
-    print(" Matched %.1f%%.  " % percent(max(metrics['matched'], metrics['parted']), metrics['tried']))
-    print("Failures: Full %d & %d  Part %d & %d" % (
-        metrics['tried'] - metrics['defined'], metrics['unmatched'],
-        metrics['tried'] - metrics['partdef'], metrics['unparted']))
+    time_ab = metrics['end_time'] - metrics['beg_time']
+    tried_a, match_a, undef_a, defnd_a = tried_matched_undef_defnd(metrics, suffix_a)
+    tried_b, match_b, undef_b, defnd_b = tried_matched_undef_defnd(metrics, suffix_b)
+    max_mat = max(match_a, match_b)
+    print("Matched %d/%d in %.4f seconds, defined/matched:  Webs: %d/%d (%.1f%%),  Part: %d/%d (%.1f%%)" % (
+        max_mat, metrics['read'], time_ab,
+        defnd_a, match_a, percent(defnd_a, tried_a),
+        defnd_b, match_b, percent(defnd_b, tried_b)))
+    print("Unmatched & Undefined:    Webs %d & %d,    Part %d & %d" % (
+        tried_a - match_a, undef_a,
+        tried_b - match_b, undef_b))
     if verbose >= V_SHOW_STATS:
         max_index = metrics['max_time_index']
-        print("Max entry parse time %.5f seconds for entry %d  (full: %.6f, part: %.6f)" % (
+        print("Max entry parse time %.5f seconds for entry %d  (full: %.6f,  part: %.6f)" % (
             metrics['max_entry_time'], max_index,
             metrics[str(max_index) + suffix_a], metrics[str(max_index) + suffix_b]))
-
+    return max_mat / time_ab if time_ab else 0.0
 
 
 CONST_MAX_WORDS = 5
