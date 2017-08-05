@@ -8,6 +8,7 @@
 
 # from string import punctuation
 import argparse
+import pprint
 import re
 # import sys
 import time
@@ -212,12 +213,12 @@ REC_WEBSTER = re.compile(r"""
     (?:(?:,|\ or)\s*(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\s*\((?P<pren1a>[^\)]+)\)\s*\.?)?            # parenthesized 1a
-    (?:,?\s*(?P<part1a>(?:{}\s*\.?[\ &,]*)+)\.)?   # part of speech for first definition (order varies)
+    (?:,?\s*(?P<part1a>(?:{}\s*\.?[\ &,]*)+)\.)?    # part of speech for first definition (order varies)
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?\w+[\w\ -]*\w+\s*[;,.(#)]+\ *)+))? # plural form or suffix
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
-    (?:\.?\s*\[(?P<brack1>[^\]]+)\])?            # bracketed
-    (?P<sepsp1>[\s.,]*?)?                     # non-greedy space, punctuation(period, comma)
-    (?:\s*(?P<part1b>(?:{}\s*\.\s*)+))?   # part of speech for first definition (order varies)
+    (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed
+    (?P<sepsp1>[\s.,]*?)?                           # non-greedy space, punctuation(period, comma)
+    (?:\s*(?P<part1b>(?:{}\s*\.\s*)+))?             # part of speech for first definition (order varies)
     (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+?)(?:\]\.?|\n\n|\s+Defn:|\s+1\.))?       # etymology
     (?:\s+\[(?P<obstag>Obs|R)\.\])?                 # obsolete tag
     (?:[\ \n]\((?P<dtype1>[A-Z][\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
@@ -231,24 +232,22 @@ REC_WEBSTER = re.compile(r"""
 
 REC_PARTIAL = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
-    (?:;\s+(?P<word_2>[A-Z'-]+))?               # WORD 2 (variant spelling)
-    (?:;\s+(?P<word_3>[A-Z'-]+))?\n             # WORD 3 (variant spelling)
+    (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
+    (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
     (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
     (?:(?:,|\ or)\s*(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
-    (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?           # parenthesized 1a
+    (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
     (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*))?   # part of speech for first definition (order varies)
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
-    (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?           # parenthesized 1b
-    (?:\.?\s*\[(?P<brack1>[^\]]+)\])?           # bracketed 1
-    (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?     # part of speech for first definition (order varies)
-    (?:\.?\s*\[(?P<brack2>[^\]]+)\])?           # bracketed 2
-
+    (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
+    (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed 1
+    (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?          # part of speech for first definition (order varies)
+    (?:\.?\s*\[(?P<brack2>[^\]]+)\])?               # bracketed 2
     (?:\.?\s*Note:\s+\[(?P<note_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
     (?:\.?\s*Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?     # Etymology
     (?:\.?\s*Etym:\s+\[?(?P<etym_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Etymology
     (?:\.?\s*Note:\s+\[(?P<note_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
-
     (?:\.?\s*\[(?P<brack3>[^\]]+)\])?               # bracketed 3
     (?:\.?\s+\[(?P<obstag>Obs|R)\.\])?              # obsolete tag
     (?:\.?[\ \n]\((?P<dtype1>\w[\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
@@ -307,10 +306,9 @@ SLOW:    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|\w*[^\s\(\[.,]+|[\w\
     (?P<cetera>.*)?$                          # etc.
 '''
 
-def show_partial_match(matgadd, entry_index, verbose=1):
+def show_partial_match(matgadd, entry_index, reason):
     '''Show partial regex match using a defaultdict seeded by the match's groupdict'''
-    if verbose > 1:
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>  Partial  %d  %s" % (entry_index, matgadd["word_1"]))
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>  Partial  %d  %s  (%s)" % (entry_index, matgadd["word_1"], reason))
     put("\t",
         "word_1: (", matgadd["word_1"], ") \t",
         "word_2: (", matgadd["word_2"], ") \t",
@@ -337,38 +335,69 @@ def show_partial_match(matgadd, entry_index, verbose=1):
         "defn_2: (", matgadd["defn_2"], ") \n\t",
         "cetera: (", matgadd["cetera"], ") \n\t",
        )
-    if verbose > 15:
-        print("MATGADD:\n", matgadd)
+
+###############################################################################
+class DictEntry:
+    def __init__(self, suffix, entry_dict):
+        '''Creates a DictEntry from a raw dict, such as from match.groupdict()'''
+        self.label = suffix
+        self.table = entry_dict
+        self.undef = entry_dict.get('defn_1') == None
+        self.empty = not entry_dict
+
+    def get(self, key):
+        '''Return key's value or KeyError if not present'''
+        return self.table[key]
+
+    def getlow(self, key):
+        '''Return value lowered or KeyError'''
+        text = self.get(key)
+        return text.lower() if text else None
+
+def make_dict_entry(metrics, suffix, index, matcher, entry_text):
+    '''Create a DectEntry object from a dictionary text entry and update metrics.
+    If the entry_text fails to parse, an object with an empty data store is returned.'''
+    beg = time.time()
+    mat = matcher(entry_text)
+    end = time.time()
+    metrics[str(index) + suffix] = end - beg
+    if mat:
+        metrics['matched' + suffix] += 1
+        dict_entry = DictEntry(suffix, mat.groupdict())
+        if dict_entry.undef:
+            metrics['undef' + suffix] += 1
+    else:
+        metrics['unmatched' + suffix] += 1
+        dict_entry = DictEntry(suffix, {})
+    return dict_entry
 
 
 ###############################################################################
 class WebsterEntry:
     '''Represents a parsed dictionary entry a la Webster's Unabridged'''
-    def __init__(self, match_dict):
+    def __init__(self, webs_dict):
         '''TODO: bifurcate on word_2 if present'''
-        self.dict = match_dict
-        self.word_1 = match_dict['word_1'].lower()
-        word_2 = match_dict['word_2']
-        self.word_2 = word_2.lower() if word_2 else None
-        word_3 = match_dict['word_3']
-        self.word_3 = word_3.lower() if word_3 else None
-        self.pron_1 = match_dict['pron_1']
-        self.pron_2 = match_dict['pron_2']
-        self.pron_3 = match_dict['pron_3']
-        self.pren1a = match_dict['pren1a']
-        self.pren1b = match_dict['pren1b']
-        self.brack1 = match_dict['brack1']
-        self.sepsp1 = match_dict['sepsp1']
-        part1 = match_dict['part1a']
-        self.part_1 = part1 if part1 else match_dict['part1b']
-        self.plural = match_dict['plural']
-        self.etym_1 = match_dict['etym_1']
-        self.dftag1 = match_dict['dftag1']
-        self.defn_1 = match_dict['defn_1']
-        self.defn1a = match_dict['defn1a']
-        self.usage1 = match_dict['usage1']
-        self.defn_2 = match_dict['defn_2']
-        self.cetera = match_dict['cetera']
+        self.dict = webs_dict
+        self.word_1 = webs_dict.getlow('word_1')
+        self.word_2 = webs_dict.getlow('word_2')
+        self.word_3 = webs_dict.getlow('word_3')
+        self.pron_1 = webs_dict.get('pron_1')
+        self.pron_2 = webs_dict.get('pron_2')
+        self.pron_3 = webs_dict.get('pron_3')
+        self.pren1a = webs_dict.get('pren1a')
+        self.pren1b = webs_dict.get('pren1b')
+        self.brack1 = webs_dict.get('brack1')
+        # self.sepsp1 = webs_dict.get('sepsp1')
+        part1 = webs_dict.get('part1a')
+        self.part_1 = part1 if part1 else webs_dict.get('part1b')
+        self.plural = webs_dict.get('plural')
+        self.etym_1 = webs_dict.get('etym_1')
+        self.dftag1 = webs_dict.get('dftag1')
+        self.defn_1 = webs_dict.get('defn_1')
+        self.defn1a = webs_dict.get('defn1a')
+        self.usage1 = webs_dict.get('usage1')
+        self.defn_2 = webs_dict.get('defn_2')
+        self.cetera = webs_dict.get('cetera')
 
     def __str__(self):
         stray = [
@@ -391,6 +420,9 @@ class WebsterEntry:
         ]
         strep = ''.join(stray)
         return strep
+
+    def words(self):
+        return '; '.join([self.dict.get('word_1')])
 
     def variants(self):
         '''return list of variant spellings'''
@@ -416,6 +448,20 @@ def parse_webster_entry(entry):
     if match:
         return match.groupdict()
     return None
+
+
+def match_partial_entry(entry):
+    '''return regex match on dictionary entry text; trying only one pattern for now'''
+    return REC_PARTIAL.match(entry)
+
+def parse_partial_entry(entry):
+    '''Return a dict representing a partially matched dictionary entry.
+    For now we just return the dict from a match's named groups.'''
+    match = match_partial_entry(entry)
+    if match:
+        return match.groupdict()
+    return None
+
 
 def common_and_max_len(str_a, str_b):
     '''return index of first difference between two strings, or in other words,
@@ -471,37 +517,15 @@ V_SHOW_ENTRY_ALWAYS = 16
 
 M_DEFN_1_NOT_FOUND = "Main Defn1 Not Found"
 
-def try_partial_match(metrics, entry_text, entry_index, reason, verbose):
-    '''test a variant of the webster regex'''
-    if verbose > V_SHOW_REASON_FOR_PARTS:
-        entry_word = first_token(entry_text)
-        print("+++++++++++++++ Try partial match on %d because %s:  %s" % (
-            entry_index, reason, entry_word))
+def show_entry_on_verbose(webs_dict, part_dict, entry_text, entry_index, opts):
+    if (opts.verbose > V_SHOW_ENTRY_ALWAYS or
+        opts.verbose > V_SHOW_ENTRY_IF_UNDEF_W and opts.webster and webs_dict.undef or
+        opts.verbose > V_SHOW_ENTRY_IF_UNDEF_P and opts.partial and part_dict.undef or
+        opts.verbose > V_SHOW_ENTRY_NO_MATCH_W and opts.webster and webs_dict.empty or
+        opts.verbose > V_SHOW_ENTRY_NO_MATCH_P and opts.partial and part_dict.empty):
+        show_entry(entry_text, entry_index)
 
-    beg_part = time.time()
-    match = REC_PARTIAL.match(entry_text)
-    metrics[str(entry_index) + '_part'] = time.time() - beg_part
-    is_defined = False
-    if match:
-        metrics['parted'] += 1
-        matgadd = defaultdict(str, match.groupdict())
-        if matgadd['defn_1']:
-            metrics['partdef'] += 1
-            is_defined = True
-            if verbose > V_SHOW_PARTS_IF_UNDEF_W and reason == M_DEFN_1_NOT_FOUND or verbose > V_SHOW_PARTS_ALWAYS:
-                show_partial_match(matgadd, entry_index, verbose)
-        elif verbose > V_SHOW_PARTS_IF_UNDEF_P:
-            if verbose > V_SHOW_ENTRY_IF_UNDEF_P:
-                show_entry(entry_text, entry_index)
-            show_partial_match(matgadd, entry_index, verbose)
-    else:
-        metrics['unparted'] += 1
-        if verbose > V_SHOW_TOKEN_NO_MATCH_P:
-            print("======================================= %d Even partial match failed!" % entry_index)
-    return is_defined
-
-
-def show_diff_full_part(verbose):
+def show_diff_webs_part(verbose):
     '''compute and show difference between full and partial regex patterns'''
     partial = REC_PARTIAL.pattern
     webster = REC_WEBSTER.pattern
@@ -516,92 +540,126 @@ def show_diff_full_part(verbose):
             print("Partial == Webster pattern:", totlen)
     return is_partial_different
 
-def parse_webster_file(path, opts, verbose=1):
+def show_webster(webs_entry, index, reason):
+    print("<<<<<<<<<<<<<<<<<<<<<<<<<<  Webster  %d  %s  (%s)" % (index, webs_entry.variants(), reason))
+    utf_print(webs_entry)
+
+###############################################################################
+def parse_dictionary_file(path, opts, verbose=1):
     '''
-    Parse Webster-like dictionary text file with diagnostics.
-    TODO: Implement try_webster_match.
-    TODO: If -both and verbose > 7 or so, show details when either one finds no defn_1.
+    Parse Webster-like dictionary text file two-ways with failover and metrics.
+    TODO: Better diagnostics.
+    ALGO:
+        #### Laziest that makes sure both A and B are initialized.  Easy to grok.
+        if condA:
+            A = makeA
+            if condB or failover and A.empty:   # case of both condA and condB
+                B = makeB
+            else:
+                B = emptyB
+        elif condB:
+            B = makeB
+            if failover and B.empty:
+                A = makeA
+            else:
+                A = emptyA
+        else:
+            A, B = emptyA, emptyB
     '''
     metrics = defaultdict(int)
     metrics['beg_time'] = time.time()
-    is_partial_different = show_diff_full_part(verbose)
+    is_partial_different = show_diff_webs_part(verbose)
     max_entry_time, max_time_index = 0, -1
     for idx, entry_text in enumerate(para_ns_iter_lex_file(path, charset=opts.charset)):
         if idx >= opts.start_index:
-            metrics['tried'] += 1
-            beg_full = time.time()
-            match_dict = parse_webster_entry(entry_text)
-            metrics[str(idx) + "_full"] = time.time() - beg_full
+            metrics['read'] += 1
 
-            fulldef = False
-            if match_dict:
-                metrics['matched'] += 1
-                entry_base = WebsterEntry(match_dict)
-                if match_dict['defn_1']:
-                    metrics['defined'] += 1
-                    fulldef = True
-                    if verbose > V_SHOW_ENTRY_ALWAYS:
-                        show_entry(entry_text, idx)
-                        if verbose > V_SHOW_WEBST_ALWAYS:
-                            utf_print("WebsterEntry:", entry_base)
-                    if opts.both and is_partial_different:
-                        partdef = try_partial_match(metrics, entry_text, idx, "Compare Full & Part", verbose)
-                        if fulldef and not partdef and \
-                            verbose > V_SHOW_WEBST_IF_UNDEF_P and verbose <= V_SHOW_WEBST_ALWAYS:
-                            print("<<<<<<<<<<<<<<<<<<<<<<<<<<  Webster  %d  %s  because No Partial Defn" % (
-                                  idx, match_dict['word_1']))
-                            utf_print(entry_base)
+            beg_entry = time.time()
+
+            if opts.webster:
+                webs_dict = make_dict_entry(metrics, '_webs', idx, match_webster_entry, entry_text)
+                if opts.partial or opts.failover and webs_dict.undef:
+                    part_dict = make_dict_entry(metrics, '_part', idx, match_partial_entry, entry_text)
                 else:
-                    if verbose > V_SHOW_ENTRY_IF_UNDEF_W:
-                        show_entry(entry_text, idx)
-                    if is_partial_different:
-                        try_partial_match(metrics, entry_text, idx, M_DEFN_1_NOT_FOUND, verbose)
+                    part_dict = DictEntry('_part', {})
+            elif opts.partial:
+                part_dict = make_dict_entry(metrics, '_part', idx, match_partial_entry, entry_text)
+                if part_dict.undef and opts.failover:
+                    webs_dict = make_dict_entry(metrics, '_webs', idx, match_webster_entry, entry_text)
+                else:
+                    webs_dict = DictEntry('_webs', {})
             else:
-                metrics['unmatched'] += 1
-                if verbose > V_SHOW_TOKEN_NO_MATCH_W:
-                    print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
-                    if verbose > V_SHOW_ENTRY_NO_MATCH_W:
-                        show_entry(entry_text, idx)
-                if is_partial_different:
-                    try_partial_match(metrics, entry_text, idx, "Main Match Failed", verbose)
+                webs_dict = DictEntry('_webs', {})
+                part_dict = DictEntry('_part', {})
 
-            entry_time = time.time() - beg_full
+            entry_time = time.time() - beg_entry
             metrics[idx] = entry_time
-            if max_entry_time < entry_time:
+            if (max_entry_time < entry_time):
                 max_entry_time = entry_time
                 max_time_index = idx
+
+            show_entry_on_verbose(webs_dict, part_dict, entry_text, idx, opts)
+
+            if webs_dict.empty:
+                if opts.webster and verbose > V_SHOW_TOKEN_NO_MATCH_W:
+                    print(" {:<20} >>>> NO WEBSTER MATCH <<<< {:>6}".format(first_token(entry_text), idx))
+                    print(webs_dict.table)
+            else:
+                webs_entry = WebsterEntry(webs_dict)
+                if (verbose > V_SHOW_WEBST_IF_UNDEF_P and opts.failover and part_dict.undef):
+                    show_webster(webs_entry, idx, "Partial Not Defined")
+                elif (verbose > V_SHOW_WEBST_ALWAYS):
+                    show_webster(webs_entry, idx, "Always Show Webster")
+
+            if part_dict.empty:
+                if opts.partial and verbose > V_SHOW_TOKEN_NO_MATCH_P:
+                    print(" {:<20} >>>> NO PARTIAL MATCH <<<< {:>6}".format(first_token(entry_text), idx))
+            else:
+                part_entry =  WebsterEntry(part_dict)
+                if verbose > V_SHOW_PARTS_IF_UNDEF_W and opts.failover and webs_dict.undef:
+                    show_partial_match(part_dict.table, idx, "Webster Not Defined")
+                elif verbose > V_SHOW_PARTS_ALWAYS:
+                    show_partial_match(part_dict.table, idx, "Always Show Partial")
+
         if opts.stop_index > 0 and idx >= opts.stop_index:
             break
+
     metrics['max_entry_time'] = max_entry_time
     metrics['max_time_index'] = max_time_index
     metrics['end_time'] = time.time()
     return metrics
 
+###############################################################################
+def tried_matched_undef_defnd(metrics, suffix):
+    match = metrics['matched' + suffix]
+    tried = metrics['unmatched' + suffix] + match
+    undef = metrics['undef' + suffix]
+    defnd = match - undef
+    return tried, match, undef, defnd
 
 def percent(count, total):
     '''count/total as a percentage, or NAN if total <= 0'''
     return 100.0 * count / total if total > 0 else float('nan')
 
-def print_metrics(metrics, verbose):
+def print_metrics(metrics, suffix_a, suffix_b, verbose):
     '''pretty print metrics dict'''
-    print("Tried %d in %.4f seconds, defined/matched: Full: %d/%d (%.1f%%), Part: %d/%d (%.1f%%)" % (
-        metrics['tried'],
-        metrics['end_time'] - metrics['beg_time'],
-        metrics['defined'], metrics['matched'],
-        percent(metrics['defined'], metrics['matched']),
-        metrics['partdef'], metrics['parted'],
-        percent(metrics['partdef'], metrics['parted'])),
-          end='')
-    print(" Matched %.1f%%.  " % percent(max(metrics['matched'], metrics['parted']), metrics['tried']))
-    print("Failures: Full %d & %d  Part %d & %d" % (
-        metrics['tried'] - metrics['defined'], metrics['unmatched'],
-        metrics['tried'] - metrics['partdef'], metrics['unparted']))
+    time_ab = metrics['end_time'] - metrics['beg_time']
+    tried_a, match_a, undef_a, defnd_a = tried_matched_undef_defnd(metrics, suffix_a)
+    tried_b, match_b, undef_b, defnd_b = tried_matched_undef_defnd(metrics, suffix_b)
+    max_mat = max(match_a, match_b)
+    print("Matched %d/%d in %.4f seconds, defined/matched:  Webs: %d/%d (%.1f%%),  Part: %d/%d (%.1f%%)" % (
+        max_mat, metrics['read'], time_ab,
+        defnd_a, match_a, percent(defnd_a, tried_a),
+        defnd_b, match_b, percent(defnd_b, tried_b)))
+    print("Unmatched & Undefined:    Webs %d & %d,    Part %d & %d" % (
+        tried_a - match_a, undef_a,
+        tried_b - match_b, undef_b))
     if verbose >= V_SHOW_STATS:
         max_index = metrics['max_time_index']
-        print("Max entry parse time %.5f seconds for entry %d  (full: %.6f, part: %.6f)" % (
-            metrics['max_entry_time'], metrics['max_time_index'],
-            metrics[str(max_index) + '_full'], metrics[str(max_index) + '_part']))
-
+        print("Max entry parse time %.5f seconds for entry %d  (full: %.6f,  part: %.6f)" % (
+            metrics['max_entry_time'], max_index,
+            metrics[str(max_index) + suffix_a], metrics[str(max_index) + suffix_b]))
+    return max_mat / time_ab if time_ab else 0.0
 
 
 CONST_MAX_WORDS = 5
@@ -612,21 +670,23 @@ DEFAULT_START_INDEX = 0
 DEFAULT_STOP_INDEX = 0
 
 def main():
-    '''Driver to iterate over the paragraphs in a text file.'''
+    '''Driver to iterate over the paragraphs in a dictionary text file.'''
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('text_file', type=str, nargs='?', default='corpus.txt',
                         help='text file containing quoted dialogue')
+    parser.add_argument('-args', action='store_true',
+                        help='Show args namespace.')
     parser.add_argument('-both', action='store_true',
                         help='Try both match-parsers: WUD and Partial.')
-    parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
-                        help='charset encoding of input text')
-    parser.add_argument('-function', type=int, nargs='?', const=1, default=0,
-                        help='paragraph printing function: 0=all (default: 0)')
+    parser.add_argument('-charset', dest='charset', type=str, default='utf-8',
+                        help='Set charset encoding of input text to CHARSET (default utf-8, not iso-8859-1)')
+    parser.add_argument('-failover-off', dest='failover', action='store_false',
+                        help='Disable failover (trying the other parser if one fails, on by default)')
     parser.add_argument('-number', type=int, nargs='?', const=CONST_MAX_WORDS,
                         default=DEFAULT_NUMBER,
                         help='max number of entries to parse (defaults: %d/%d)' % (
                             CONST_MAX_WORDS, DEFAULT_NUMBER))
-    parser.add_argument('-partial-on', action='store_true',
+    parser.add_argument('-partial', action='store_true',
                         help='Do parse dictionary entries using the Partial matcher (more flexible than WUD).')
     parser.add_argument('-start_index', '-beg', type=int, nargs='?',
                         const=CONST_START_INDEX, default=DEFAULT_START_INDEX,
@@ -634,7 +694,7 @@ def main():
     parser.add_argument('-stop_index', '-end', type=int, nargs='?',
                         const=CONST_STOP_INDEX, default=DEFAULT_STOP_INDEX,
                         help='stop_index (defaults: %d/%d)' % (CONST_STOP_INDEX, DEFAULT_STOP_INDEX))
-    parser.add_argument('-webster-off', action='store_false',
+    parser.add_argument('-webster', action='store_false',
                         help="Don't parse using default format tuned to Webster's Unabridged.")
     parser.add_argument('-words', dest='max_words', type=int, nargs='?', const=CONST_MAX_WORDS, default=0,
                         help='maximum words per paragraph: print only the first M words,\
@@ -644,8 +704,15 @@ def main():
     args = parser.parse_args()
     verbose = args.verbose
 
-    metrics = parse_webster_file(args.text_file, args, verbose)
-    print_metrics(metrics, verbose)
+    if args.both:
+        args.webster = args.partial = True
+    elif args.webster and args.partial:
+        args.both = True
+    if args.args:
+        pprint.pprint(args)
+
+    metrics = parse_dictionary_file(args.text_file, args, verbose)
+    print_metrics(metrics, '_webs', '_part', verbose)
 
 
 if __name__ == '__main__':
