@@ -585,37 +585,29 @@ def parse_webster_file(path, opts, verbose=1):
                 verbose > V_SHOW_ENTRY_IF_UNDEF_P and part_dict and part_dict.undef):
                 show_entry(entry_text, idx)
 
-            fulldef = False
             if webs_dict:
-                metrics['matched'] += 1
-                entry_base = WebsterEntry(webs_dict)
-                if webs_dict['defn_1']:
-                    metrics['defined'] += 1
-                    fulldef = True
-                    if verbose > V_SHOW_ENTRY_ALWAYS:
-                        show_entry(entry_text, idx)
-                        if verbose > V_SHOW_WEBST_ALWAYS:
-                            utf_print("WebsterEntry:", entry_base)
-                    if opts.both and is_partial_different:
-                        partdef = try_partial_match(metrics, entry_text, idx, "Compare Full & Part", verbose)
-                        if fulldef and not partdef and \
-                            verbose > V_SHOW_WEBST_IF_UNDEF_P and verbose <= V_SHOW_WEBST_ALWAYS:
-                            print("<<<<<<<<<<<<<<<<<<<<<<<<<<  Webster  %d  %s  because No Partial Defn" % (
-                                  idx, webs_dict['word_1']))
-                            utf_print(entry_base)
+                if webs_dict.empty:
+                    if verbose > V_SHOW_TOKEN_NO_MATCH_W:
+                        print(" {:<20} >>>> NO WEBSTER MATCH<<<< {:>6}".format(first_token(entry_text), idx))
                 else:
-                    if verbose > V_SHOW_ENTRY_IF_UNDEF_W:
-                        show_entry(entry_text, idx)
-                    if is_partial_different:
-                        try_partial_match(metrics, entry_text, idx, M_DEFN_1_NOT_FOUND, verbose)
-            else:
-                metrics['unmatched'] += 1
-                if verbose > V_SHOW_TOKEN_NO_MATCH_W:
-                    print(" {:<20} >>>>NO MATCH<<<< {:>6}".format(first_token(entry_text), idx))
-                    if verbose > V_SHOW_ENTRY_NO_MATCH_W:
-                        show_entry(entry_text, idx)
-                if is_partial_different:
-                    try_partial_match(metrics, entry_text, idx, "Main Match Failed", verbose)
+                    webs_entry = WebsterEntry(webs_dict)
+                    if (verbose > V_SHOW_WEBST_ALWAYS or
+                        opts.failover and verbose > V_SHOW_WEBST_IF_UNDEF_P and part_dict and part_dict.undef):
+                        print("<<<<<<<<<<<<<<<<<<<<<<<<<<  Webster  %d  %s  because No Partial Defn" % (
+                            idx, webs_dict['word_1']))
+                        utf_print(webs_entry)
+
+            if part_dict:
+                if part_dict.empty:
+                    if verbose > V_SHOW_TOKEN_NO_MATCH_P:
+                        print(" {:<20} >>>>NO PARTIAL MATCH<<<< {:>6}".format(first_token(entry_text), idx))
+                else:
+                    part_entry =  WebsterEntry(part_dict)
+                    if (verbose > V_SHOW_PARTS_ALWAYS or
+                        opts.failover and verbose > V_SHOW_PARTS_IF_UNDEF_W and webs_dict and webs_dict.undef):
+                        show_partial_match(part_dict.table, idx, verbose)
+
+
 
             entry_time = time.time() - beg_webs
             metrics[idx] = entry_time
@@ -672,7 +664,7 @@ def main():
                         help='Try both match-parsers: WUD and Partial.')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
-    parser.add_argument('-failover', action='store_true',
+    parser.add_argument('-failover', action='store_false',
                         help='Try the other parser if one fails.')
     parser.add_argument('-number', type=int, nargs='?', const=CONST_MAX_WORDS,
                         default=DEFAULT_NUMBER,
