@@ -617,7 +617,7 @@ def main():
     parser.add_argument('text_file', type=str, nargs='?', default='corpus.txt',
                         help='text file containing quoted dialogue')
     parser.add_argument('-both', action='store_true',
-                        help='Try both match-parsers.')
+                        help='Try both match-parsers: WUD and Partial.')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
     parser.add_argument('-function', type=int, nargs='?', const=1, default=0,
@@ -626,14 +626,16 @@ def main():
                         default=DEFAULT_NUMBER,
                         help='max number of entries to parse (defaults: %d/%d)' % (
                             CONST_MAX_WORDS, DEFAULT_NUMBER))
+    parser.add_argument('-partial-on', action='store_true',
+                        help='Do parse dictionary entries using the Partial matcher (more flexible than WUD).')
     parser.add_argument('-start_index', '-beg', type=int, nargs='?',
                         const=CONST_START_INDEX, default=DEFAULT_START_INDEX,
                         help='start_index (defaults: %d/%d)' % (CONST_START_INDEX, DEFAULT_START_INDEX))
     parser.add_argument('-stop_index', '-end', type=int, nargs='?',
                         const=CONST_STOP_INDEX, default=DEFAULT_STOP_INDEX,
                         help='stop_index (defaults: %d/%d)' % (CONST_STOP_INDEX, DEFAULT_STOP_INDEX))
-    parser.add_argument('-webster', action='store_true',
-                        help='parse a dictionary in the format of Websters Unabridged.')
+    parser.add_argument('-webster-off', action='store_false',
+                        help="Don't parse using default format tuned to Webster's Unabridged.")
     parser.add_argument('-words', dest='max_words', type=int, nargs='?', const=CONST_MAX_WORDS, default=0,
                         help='maximum words per paragraph: print only the first M words,\
                         or all if M < 1 (default: 0)')
