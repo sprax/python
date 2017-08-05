@@ -345,14 +345,25 @@ def show_partial_match(matgadd, entry_index, verbose=1):
 ###############################################################################
 class DictEntry:
     def __init__(self, suffix, entry_dict):
+        '''Creates a DictEntry from a raw dict, such as from match.groupdict()'''
         self.label = suffix
         self.table = entry_dict
         self.undef = entry_dict.get('defn_1') == None
         self.empty = not entry_dict
 
+    def get(self, key):
+        '''Return key's value or KeyError if not present'''
+        return self.table[key]
+
+    def getlow(self, key):
+        '''Return value lowered or KeyError'''
+        text = self.get(key)
+        return text.lower() if text else None
+
 def make_dict_entry(metrics, suffix, index, matcher, entry_text):
+    '''Create a DectEntry object from a dictionary text entry and update metrics.'''
     beg = time.time()
-    mat = matcher(text)
+    mat = matcher(entry_text)
     end = time.time()
     metrics[str(index) + suffix] = end - beg
     if mat:
@@ -372,28 +383,26 @@ class WebsterEntry:
     def __init__(self, webs_dict):
         '''TODO: bifurcate on word_2 if present'''
         self.dict = webs_dict
-        self.word_1 = webs_dict['word_1'].lower()
-        word_2 = webs_dict['word_2']
-        self.word_2 = word_2.lower() if word_2 else None
-        word_3 = webs_dict['word_3']
-        self.word_3 = word_3.lower() if word_3 else None
-        self.pron_1 = webs_dict['pron_1']
-        self.pron_2 = webs_dict['pron_2']
-        self.pron_3 = webs_dict['pron_3']
-        self.pren1a = webs_dict['pren1a']
-        self.pren1b = webs_dict['pren1b']
-        self.brack1 = webs_dict['brack1']
-        self.sepsp1 = webs_dict['sepsp1']
-        part1 = webs_dict['part1a']
-        self.part_1 = part1 if part1 else webs_dict['part1b']
-        self.plural = webs_dict['plural']
-        self.etym_1 = webs_dict['etym_1']
-        self.dftag1 = webs_dict['dftag1']
-        self.defn_1 = webs_dict['defn_1']
-        self.defn1a = webs_dict['defn1a']
-        self.usage1 = webs_dict['usage1']
-        self.defn_2 = webs_dict['defn_2']
-        self.cetera = webs_dict['cetera']
+        self.word_1 = webs_dict.getlow('word_1')
+        self.word_2 = webs_dict.getlow('word_2')
+        self.word_3 = webs_dict.getlow('word_3')
+        self.pron_1 = webs_dict.get('pron_1')
+        self.pron_2 = webs_dict.get('pron_2')
+        self.pron_3 = webs_dict.get('pron_3')
+        self.pren1a = webs_dict.get('pren1a')
+        self.pren1b = webs_dict.get('pren1b')
+        self.brack1 = webs_dict.get('brack1')
+        # self.sepsp1 = webs_dict.get('sepsp1')
+        part1 = webs_dict.get('part1a')
+        self.part_1 = part1 if part1 else webs_dict.get('part1b')
+        self.plural = webs_dict.get('plural')
+        self.etym_1 = webs_dict.get('etym_1')
+        self.dftag1 = webs_dict.get('dftag1')
+        self.defn_1 = webs_dict.get('defn_1')
+        self.defn1a = webs_dict.get('defn1a')
+        self.usage1 = webs_dict.get('usage1')
+        self.defn_2 = webs_dict.get('defn_2')
+        self.cetera = webs_dict.get('cetera')
 
     def __str__(self):
         stray = [
@@ -558,7 +567,7 @@ def show_diff_webs_part(verbose):
 
 
 
-def parse_webster_file(path, opts, verbose=1):
+def parse_dictionary_file(path, opts, verbose=1):
     '''
     Parse Webster-like dictionary text file with diagnostics.
     TODO: Implement try_webster_match.
@@ -572,6 +581,7 @@ def parse_webster_file(path, opts, verbose=1):
         if idx >= opts.start_index:
             metrics['tried'] += 1
 
+            beg_entry = time.time()
             part_dict = webs_dict = None
             if opts.webster:
                 webs_dict = make_dict_entry(metrics, 'webs', idx, match_webster_entry, entry_text)
@@ -579,6 +589,11 @@ def parse_webster_file(path, opts, verbose=1):
                 part_dict = make_dict_entry(metrics, 'part', idx, match_partial_entry, entry_text)
                 if opts.failover and not opts.webster and not part_dict.get('defn_1'):
                     webs_dict = make_dict_entry(metrics, 'webs', idx, match_webster_entry, entry_text)
+            entry_time = time.time() - beg_entry
+            metrics[idx] = entry_time
+            if (max_entry_time < entry_time):
+                max_entry_time = entry_time
+                max_time_index = idx
 
             if (verbose > V_SHOW_ENTRY_ALWAYS or
                 verbose > V_SHOW_ENTRY_IF_UNDEF_W and webs_dict and webs_dict.undef or
@@ -594,7 +609,7 @@ def parse_webster_file(path, opts, verbose=1):
                     if (verbose > V_SHOW_WEBST_ALWAYS or
                         opts.failover and verbose > V_SHOW_WEBST_IF_UNDEF_P and part_dict and part_dict.undef):
                         print("<<<<<<<<<<<<<<<<<<<<<<<<<<  Webster  %d  %s  because No Partial Defn" % (
-                            idx, webs_dict['word_1']))
+                            idx, webs_dict.get('word_1')))
                         utf_print(webs_entry)
 
             if part_dict:
@@ -609,11 +624,6 @@ def parse_webster_file(path, opts, verbose=1):
 
 
 
-            entry_time = time.time() - beg_webs
-            metrics[idx] = entry_time
-            if max_entry_time < entry_time:
-                max_entry_time = entry_time
-                max_time_index = idx
         if opts.stop_index > 0 and idx >= opts.stop_index:
             break
     metrics['max_entry_time'] = max_entry_time
@@ -692,11 +702,10 @@ def main():
         args.webster = args.partial = True
     elif args.webster and args.partial:
         args.both = True
+    if verbose > 7:
+        pprint.pprint(args)
 
-    pprint.pprint(args)
-    exit(0)
-
-    metrics = parse_webster_file(args.text_file, args, verbose)
+    metrics = parse_dictionary_file(args.text_file, args, verbose)
     print_metrics(metrics, verbose)
 
 
