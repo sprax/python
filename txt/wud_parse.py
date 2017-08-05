@@ -218,7 +218,7 @@ REC_WEBSTER = re.compile(r"""
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?            # bracketed
     (?P<sepsp1>[\s.,]*?)?                     # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:{}\s*\.\s*)+))?   # part of speech for first definition (order varies)
-    (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+?)(?:\]\.?|\n\n|\s+Defn:|\s+1.))?       # etymology
+    (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+?)(?:\]\.?|\n\n|\s+Defn:|\s+1\.))?       # etymology
     (?:\s+\[(?P<obstag>Obs|R)\.\])?                 # obsolete tag
     (?:[\ \n]\((?P<dtype1>[A-Z][\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
@@ -241,12 +241,10 @@ REC_PARTIAL = re.compile(r"""
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?           # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?           # bracketed 1
-    (?:\s*(?P<part1b>(?:{}\s*\.\s*)+))?     # part of speech for first definition (order varies)
+    (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?     # part of speech for first definition (order varies)
     (?:\.?\s*\[(?P<brack2>[^\]]+)\])?           # bracketed 2
-    (?:\s*Note:\s+\[(?P<note_1>[^\]]+(?=\]|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
-    (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+(?=\]|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
-    (?:\s*Etym:\s+\[(?P<etym_2>[^\]]+(?=\]|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
-    (?:\s*Note:\s+\[(?P<note_2>[^\]]+(?=\]|\n\n|\s+Defn:|\n+1\.|\n+\(a\)))\]?)?     # etymology
+    (?:\.?\s*Note:\s+\[(?P<note_1>[^\]]+?)(?:\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))?       # Note
+    (?:\.?\s*Etym:\s+\[(?P<etym_1>[^\]]+?)(?:\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))?       # Etymology
     (?:\.?\s*\[(?P<brack3>[^\]]+)\])?               # bracketed 3
     (?:\.?\s+\[(?P<obstag>Obs|R)\.\])?              # obsolete tag
     (?:\.?[\ \n]\((?P<dtype1>[A-Z][\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
@@ -318,7 +316,6 @@ def show_partial_match(matgadd, entry_index, verbose=1):
         "pron_3: (", matgadd["pron_3"], ") \n\t",
         "pren1a: (", matgadd["pren1a"], ") \n\t",
         "part1a: (", matgadd["part1a"], ") \t",
-
         "plural: (", matgadd["plural"], ") \n\t",
         "pren1b: (", matgadd["pren1b"], ") \n\t",
         "brack1: (", matgadd["brack1"], ") \n\t",
@@ -326,7 +323,7 @@ def show_partial_match(matgadd, entry_index, verbose=1):
         "etym_1: (", matgadd["etym_1"], ") \n\t",
         "brack2: (", matgadd["brack2"], ") \n\t",
         "obstag: (", matgadd["obstag"], ") \n\t",
-        "dtype1: (", matgadd["dtype1"], ") \t",
+        "dtype1: (", matgadd["dtype1"], ") \n\t",
         "dftag1: (", matgadd["dftag1"], ") \n\t",
         "defn_1: (", matgadd["defn_1"], ") \n\t",
         "usage1: (", matgadd["usage1"], ") \n\t",
