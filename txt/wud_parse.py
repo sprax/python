@@ -361,7 +361,8 @@ class DictEntry:
         return text.lower() if text else None
 
 def make_dict_entry(metrics, suffix, index, matcher, entry_text):
-    '''Create a DectEntry object from a dictionary text entry and update metrics.'''
+    '''Create a DectEntry object from a dictionary text entry and update metrics.
+    If the entry_text fails to parse, an object with an empty data store is returned.'''
     beg = time.time()
     mat = matcher(entry_text)
     end = time.time()
@@ -595,7 +596,7 @@ def parse_dictionary_file(path, opts, verbose=1):
         else:
             A, B = emptyA, emptyB
 
-        #### Compact but harder to follow:
+        #### Used now: Compact but harder to follow:
         if condA:
             A = makeA
         if condB or failover and condA and A.empty:
@@ -619,10 +620,15 @@ def parse_dictionary_file(path, opts, verbose=1):
             part_dict = webs_dict = None
             if opts.webster:
                 webs_dict = make_dict_entry(metrics, '_webs', idx, match_webster_entry, entry_text)
-            if opts.partial or opts.failover and opts.webster and not webs_dict.get('defn_1'):
+            if opts.partial or opts.failover and opts.webster and webs_dict.undef:
                 part_dict = make_dict_entry(metrics, '_part', idx, match_partial_entry, entry_text)
-                if opts.failover and not opts.webster and not part_dict.get('defn_1'):
+                if part_dict.undef and opts.failover and not opts.webster:
                     webs_dict = make_dict_entry(metrics, '_webs', idx, match_webster_entry, entry_text)
+                else:
+                    webs_dict = DictEntry('_webs', {})
+            else:
+                part_dict = DictEntry('_part', {})
+
             entry_time = time.time() - beg_entry
             metrics[idx] = entry_time
             if (max_entry_time < entry_time):
