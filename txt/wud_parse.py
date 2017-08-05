@@ -520,6 +520,14 @@ V_SHOW_ENTRY_ALWAYS = 16
 
 M_DEFN_1_NOT_FOUND = "Main Defn1 Not Found"
 
+def show_entry_on_verbose(webs_dict, part_dict, entry_text, entry_index, verbose):
+    if (verbose > V_SHOW_ENTRY_ALWAYS or
+        verbose > V_SHOW_ENTRY_IF_UNDEF_W and webs_dict and webs_dict.undef or
+        verbose > V_SHOW_ENTRY_IF_UNDEF_P and part_dict and part_dict.undef or
+        verbose > V_SHOW_ENTRY_NO_MATCH_W and webs_dict and webs_dict.empty or
+        verbose > V_SHOW_ENTRY_NO_MATCH_P and part_dict and part_dict.empty):
+        show_entry(entry_text, entry_index)
+
 def try_partial_match(metrics, entry_text, entry_index, reason, verbose):
     '''test a variant of the webster regex'''
     if verbose > V_SHOW_REASON_FOR_PARTS:
@@ -570,8 +578,34 @@ def show_diff_webs_part(verbose):
 def parse_dictionary_file(path, opts, verbose=1):
     '''
     Parse Webster-like dictionary text file with diagnostics.
-    TODO: Implement try_webster_match.
-    TODO: If -both and verbose > 7 or so, show details when either one finds no defn_1.
+    ALGO:
+        #### Laziest that makes sure both A and B are initialized.  Easy to grok.
+        if condA:
+            A = makeA
+            if condB or failover and A.empty:   # case of both condA and condB
+                B = makeB
+            else:
+                B = emptyB
+        elif condB:
+            B = makeB
+            if failover and B.empty:
+                A = makeA
+            else:
+                A = emptyA
+        else:
+            A, B = emptyA, emptyB
+
+        #### Compact but harder to follow:
+        if condA:
+            A = makeA
+        if condB or failover and condA and A.empty:
+            B = makeB
+            if B.empty and failover and not condA:
+                A = makeA
+            else:
+                A = emptyA
+        else:
+            B = emptyB
     '''
     metrics = defaultdict(int)
     metrics['beg_time'] = time.time()
@@ -585,7 +619,7 @@ def parse_dictionary_file(path, opts, verbose=1):
             part_dict = webs_dict = None
             if opts.webster:
                 webs_dict = make_dict_entry(metrics, '_webs', idx, match_webster_entry, entry_text)
-            if opts.partial or opts.failover and not webs_dict.get('defn_1'):
+            if opts.partial or opts.failover and opts.webster and not webs_dict.get('defn_1'):
                 part_dict = make_dict_entry(metrics, '_part', idx, match_partial_entry, entry_text)
                 if opts.failover and not opts.webster and not part_dict.get('defn_1'):
                     webs_dict = make_dict_entry(metrics, '_webs', idx, match_webster_entry, entry_text)
@@ -595,10 +629,7 @@ def parse_dictionary_file(path, opts, verbose=1):
                 max_entry_time = entry_time
                 max_time_index = idx
 
-            if (verbose > V_SHOW_ENTRY_ALWAYS or
-                verbose > V_SHOW_ENTRY_IF_UNDEF_W and webs_dict and webs_dict.undef or
-                verbose > V_SHOW_ENTRY_IF_UNDEF_P and part_dict and part_dict.undef):
-                show_entry(entry_text, idx)
+            show_entry_on_verbose(webs_dict, part_dict, entry_text, idx, verbose)
 
             if webs_dict:
                 if webs_dict.empty:
