@@ -243,11 +243,15 @@ REC_PARTIAL = re.compile(r"""
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?           # bracketed 1
     (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?     # part of speech for first definition (order varies)
     (?:\.?\s*\[(?P<brack2>[^\]]+)\])?           # bracketed 2
-    (?:\.?\s*Note:\s+\[(?P<note_1>[^\]]+?)(?:\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))?       # Note
-    (?:\.?\s*Etym:\s+\[(?P<etym_1>[^\]]+?)(?:\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))?       # Etymology
+
+    (?:\.?\s*Note:\s+\[(?P<note_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
+    (?:\.?\s*Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?     # Etymology
+    (?:\.?\s*Etym:\s+\[?(?P<etym_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Etymology
+    (?:\.?\s*Note:\s+\[(?P<note_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
+
     (?:\.?\s*\[(?P<brack3>[^\]]+)\])?               # bracketed 3
     (?:\.?\s+\[(?P<obstag>Obs|R)\.\])?              # obsolete tag
-    (?:\.?[\ \n]\((?P<dtype1>[A-Z][\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:\.?[\ \n]\((?P<dtype1>\w[\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\.?\s*(?P<dftag1>Defn:|1\.|\(a\)|Lit\.,?)\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*                # definition 1 sentence 2
     (?P<usage1>".*"[^\d]+)?\s*                  # example 1
@@ -256,7 +260,7 @@ REC_PARTIAL = re.compile(r"""
 """.format(REP_PART, REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
 
 #+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#
-r'''
+'''
     (?:,?\ *(?P<part1a>(?:(?:{})\ *\.?(?:\ &|[\ ,;]+|\ or\ )?)+)(?:\.,?|\ (?=\[)|\n\n))?   # part of speech for first definition (order varies)
 
     (?P<sepsp1>[\s.,]*?)?                       # non-greedy space, punctuation(period, comma)
@@ -321,6 +325,8 @@ def show_partial_match(matgadd, entry_index, verbose=1):
         "brack1: (", matgadd["brack1"], ") \n\t",
         "part1b: (", matgadd["part1b"], ") \n\t",
         "etym_1: (", matgadd["etym_1"], ") \n\t",
+        "etym_2: (", matgadd["etym_2"], ") \n\t",
+        "note_2: (", matgadd["note_2"], ") \n\t",
         "brack2: (", matgadd["brack2"], ") \n\t",
         "obstag: (", matgadd["obstag"], ") \n\t",
         "dtype1: (", matgadd["dtype1"], ") \n\t",
@@ -331,6 +337,8 @@ def show_partial_match(matgadd, entry_index, verbose=1):
         "defn_2: (", matgadd["defn_2"], ") \n\t",
         "cetera: (", matgadd["cetera"], ") \n\t",
        )
+    if verbose > 15:
+        print("MATGADD:\n", matgadd)
 
 
 ###############################################################################
