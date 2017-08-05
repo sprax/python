@@ -343,6 +343,30 @@ def show_partial_match(matgadd, entry_index, verbose=1):
 
 
 ###############################################################################
+class DictEntry:
+    def __init__(self, suffix, entry_dict):
+        self.label = suffix
+        self.table = entry_dict
+        self.undef = entry_dict.get('defn_1') == None
+        self.empty = not entry_dict
+
+def make_dict_entry(metrics, suffix, index, matcher, entry_text):
+    beg = time.time()
+    mat = matcher(text)
+    end = time.time()
+    metrics[str(index) + suffix] = end - beg
+    if mat:
+        metrics['matched' + suffix] += 1
+        dict_entry = DictEntry(suffix, mat.groupdict())
+        if dict_entry.undef:
+            metrics['undef' + suffix] += 1
+    else:
+        metrics['unmatched' + suffix] += 1
+        dict_entry = DictEntry(suffix, {})
+    return dict_entry
+
+
+###############################################################################
 class WebsterEntry:
     '''Represents a parsed dictionary entry a la Webster's Unabridged'''
     def __init__(self, webs_dict):
@@ -532,27 +556,6 @@ def show_diff_webs_part(verbose):
             print("Partial == Webster pattern:", totlen)
     return is_partial_different
 
-def timed_regex_match(matcher, text):
-    beg = time.time()
-    mat = matcher(text)
-    end = time.time()
-    return mat, end - beg
-
-def match_entry(metrics, label, index, matcher, entry_text):
-    beg = time.time()
-    mat = matcher(text)
-    end = time.time()
-    metrics[str(index) + label] = end - beg
-    if mat:
-        metrics[label + 'matched'] += 1
-        entry_d = mat.groupdict()
-        if entry_d['defn_1']:
-            metrics[label + 'defined'] += 1
-        return entry_d
-    else:
-        metrics[label + 'unmatched'] += 1
-        return {}
-
 
 
 def parse_webster_file(path, opts, verbose=1):
@@ -569,27 +572,18 @@ def parse_webster_file(path, opts, verbose=1):
         if idx >= opts.start_index:
             metrics['tried'] += 1
 
-
-
-if X
-	x
-if Y or failed(x) and failover
-	y
-	if failed(y) and failover
-		x
-
-
+            part_dict = webs_dict = None
             if opts.webster:
-                webs_dict = match_entry(metrics, 'webs', idx, parse_webster_entry, entry_text)
-            if opts.partial or opts.failover and not webs_dict['defn_1']:
-                part_dict, seconds = timed_regex_match(parse_partial_entry, entry_text)
-                metrics[str(idx) + "_part"] = seconds
-                if part_dict['defn_1']:
-                    backslashreplace
-                else:
-                    webs_dict, seconds = timed_regex_match(parse_webster_entry, entry_text)
-                    metrics[str(idx) + "_webs"] = seconds
+                webs_dict = make_dict_entry(metrics, 'webs', idx, match_webster_entry, entry_text)
+            if opts.partial or opts.failover and not webs_dict.get('defn_1'):
+                part_dict = make_dict_entry(metrics, 'part', idx, match_partial_entry, entry_text)
+                if opts.failover and not opts.webster and not part_dict.get('defn_1'):
+                    webs_dict = make_dict_entry(metrics, 'webs', idx, match_webster_entry, entry_text)
 
+            if (verbose > V_SHOW_ENTRY_ALWAYS or
+                verbose > V_SHOW_ENTRY_IF_UNDEF_W and webs_dict and webs_dict.undef or
+                verbose > V_SHOW_ENTRY_IF_UNDEF_P and part_dict and part_dict.undef):
+                show_entry(entry_text, idx)
 
             fulldef = False
             if webs_dict:
@@ -678,8 +672,8 @@ def main():
                         help='Try both match-parsers: WUD and Partial.')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
-    parser.add_argument('-function', type=int, nargs='?', const=1, default=0,
-                        help='paragraph printing function: 0=all (default: 0)')
+    parser.add_argument('-failover', action='store_true',
+                        help='Try the other parser if one fails.')
     parser.add_argument('-number', type=int, nargs='?', const=CONST_MAX_WORDS,
                         default=DEFAULT_NUMBER,
                         help='max number of entries to parse (defaults: %d/%d)' % (
