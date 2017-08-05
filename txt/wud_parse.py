@@ -664,8 +664,8 @@ def main():
                         help='Try both match-parsers: WUD and Partial.')
     parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
                         help='charset encoding of input text')
-    parser.add_argument('-failover', action='store_false',
-                        help='Try the other parser if one fails.')
+    parser.add_argument('-failover-off', dest='failover', action='store_false',
+                        help='Disable failover (trying the other parser if one fails, on by default)')
     parser.add_argument('-number', type=int, nargs='?', const=CONST_MAX_WORDS,
                         default=DEFAULT_NUMBER,
                         help='max number of entries to parse (defaults: %d/%d)' % (
@@ -690,6 +690,8 @@ def main():
 
     if args.both:
         args.webster = args.partial = True
+    elif args.webster and args.partial:
+        args.both = True
 
     pprint.pprint(args)
     exit(0)
