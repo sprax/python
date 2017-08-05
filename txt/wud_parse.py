@@ -367,7 +367,6 @@ def make_dict_entry(metrics, suffix, index, matcher, entry_text):
         if dict_entry.undef:
             metrics['undef' + suffix] += 1
     else:
-        print("                        &&&&&&&&&&&&&&&&&&&&&&&&&&&   ", entry_text[0:100])
         metrics['unmatched' + suffix] += 1
         dict_entry = DictEntry(suffix, {})
     return dict_entry
@@ -518,12 +517,13 @@ V_SHOW_ENTRY_ALWAYS = 16
 
 M_DEFN_1_NOT_FOUND = "Main Defn1 Not Found"
 
-def show_entry_on_verbose(webs_dict, part_dict, entry_text, entry_index, verbose):
-    if (verbose > V_SHOW_ENTRY_ALWAYS or
-        verbose > V_SHOW_ENTRY_IF_UNDEF_W and webs_dict and webs_dict.undef or
-        verbose > V_SHOW_ENTRY_IF_UNDEF_P and part_dict and part_dict.undef or
-        verbose > V_SHOW_ENTRY_NO_MATCH_W and webs_dict and webs_dict.empty or
-        verbose > V_SHOW_ENTRY_NO_MATCH_P and part_dict and part_dict.empty):
+def show_entry_on_verbose(webs_dict, part_dict, entry_text, entry_index, opts):
+
+    if (opts.verbose > V_SHOW_ENTRY_ALWAYS or
+        opts.verbose > V_SHOW_ENTRY_IF_UNDEF_W and opts.webster and webs_dict.undef or
+        opts.verbose > V_SHOW_ENTRY_IF_UNDEF_P and opts.partial and part_dict.undef or
+        opts.verbose > V_SHOW_ENTRY_NO_MATCH_W and opts.webster and webs_dict.empty or
+        opts.verbose > V_SHOW_ENTRY_NO_MATCH_P and opts.partial and part_dict.empty):
         show_entry(entry_text, entry_index)
 
 def try_partial_match(metrics, entry_text, entry_index, reason, verbose):
@@ -580,6 +580,20 @@ def parse_dictionary_file(path, opts, verbose=1):
     '''
     Parse Webster-like dictionary text file with diagnostics.
     ALGO:
+        #### Compact but harder to follow (DON'T DO IT):
+        if condA:
+            A = makeA
+        if condB or failover and condA and A.empty:
+            B = makeB
+            if B.empty and failover and not condA:
+                A = makeA
+            elif not condA:
+                A = emptyA
+        else:
+            if not condA:
+                A = emptyA
+            B = emptyB
+
         #### Laziest that makes sure both A and B are initialized.  Easy to grok.
         if condA:
             A = makeA
@@ -595,20 +609,6 @@ def parse_dictionary_file(path, opts, verbose=1):
                 A = emptyA
         else:
             A, B = emptyA, emptyB
-
-        #### Used now: Compact but harder to follow:
-        if condA:
-            A = makeA
-        if condB or failover and condA and A.empty:
-            B = makeB
-            if B.empty and failover and not condA:
-                A = makeA
-            elif not condA:
-                A = emptyA
-        else:
-            if not condA:
-                A = emptyA
-            B = emptyB
     '''
     metrics = defaultdict(int)
     metrics['beg_time'] = time.time()
@@ -619,19 +619,21 @@ def parse_dictionary_file(path, opts, verbose=1):
             metrics['read'] += 1
 
             beg_entry = time.time()
-            part_dict = webs_dict = None
+
             if opts.webster:
                 webs_dict = make_dict_entry(metrics, '_webs', idx, match_webster_entry, entry_text)
-            if opts.partial or opts.failover and opts.webster and webs_dict.undef:
+                if opts.partial or opts.failover and webs_dict.undef:
+                    part_dict = make_dict_entry(metrics, '_part', idx, match_partial_entry, entry_text)
+                else:
+                    part_dict = DictEntry('_part', {})
+            elif opts.partial:
                 part_dict = make_dict_entry(metrics, '_part', idx, match_partial_entry, entry_text)
-                if part_dict.undef and opts.failover and not opts.webster:
+                if part_dict.undef and opts.failover:
                     webs_dict = make_dict_entry(metrics, '_webs', idx, match_webster_entry, entry_text)
-                elif not opts.webster:
-                    print("MAKE EMPTY WEBSTER: ", webs_dict.table)
+                else:
                     webs_dict = DictEntry('_webs', {})
             else:
-                if not opts.webster:
-                    webs_dict = DictEntry('_webs', {})
+                webs_dict = DictEntry('_webs', {})
                 part_dict = DictEntry('_part', {})
 
             entry_time = time.time() - beg_entry
@@ -640,7 +642,7 @@ def parse_dictionary_file(path, opts, verbose=1):
                 max_entry_time = entry_time
                 max_time_index = idx
 
-            show_entry_on_verbose(webs_dict, part_dict, entry_text, idx, verbose)
+            show_entry_on_verbose(webs_dict, part_dict, entry_text, idx, opts)
 
             if webs_dict.empty:
                 if opts.webster and verbose > V_SHOW_TOKEN_NO_MATCH_W:
@@ -716,10 +718,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('text_file', type=str, nargs='?', default='corpus.txt',
                         help='text file containing quoted dialogue')
+    parser.add_argument('-args', action='store_true',
+                        help='Show args namespace.')
     parser.add_argument('-both', action='store_true',
                         help='Try both match-parsers: WUD and Partial.')
-    parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
-                        help='charset encoding of input text')
+    parser.add_argument('-charset', dest='charset', type=str, default='utf-8',
+                        help='Set charset encoding of input text to CHARSET (default utf-8, not iso-8859-1)')
     parser.add_argument('-failover-off', dest='failover', action='store_false',
                         help='Disable failover (trying the other parser if one fails, on by default)')
     parser.add_argument('-number', type=int, nargs='?', const=CONST_MAX_WORDS,
@@ -748,7 +752,7 @@ def main():
         args.webster = args.partial = True
     elif args.webster and args.partial:
         args.both = True
-    if verbose > 2:
+    if args.args:
         pprint.pprint(args)
 
     metrics = parse_dictionary_file(args.text_file, args, verbose)
