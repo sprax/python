@@ -213,12 +213,12 @@ REC_WEBSTER = re.compile(r"""
     (?:(?:,|\ or)\s*(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\s*\((?P<pren1a>[^\)]+)\)\s*\.?)?            # parenthesized 1a
-    (?:,?\s*(?P<part1a>(?:{}\s*\.?[\ &,]*)+)\.)?   # part of speech for first definition (order varies)
+    (?:,?\s*(?P<part1a>(?:{}\s*\.?[\ &,]*)+)\.)?    # part of speech for first definition (order varies)
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?\w+[\w\ -]*\w+\s*[;,.(#)]+\ *)+))? # plural form or suffix
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
-    (?:\.?\s*\[(?P<brack1>[^\]]+)\])?            # bracketed
-    (?P<sepsp1>[\s.,]*?)?                     # non-greedy space, punctuation(period, comma)
-    (?:\s*(?P<part1b>(?:{}\s*\.\s*)+))?   # part of speech for first definition (order varies)
+    (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed
+    (?P<sepsp1>[\s.,]*?)?                           # non-greedy space, punctuation(period, comma)
+    (?:\s*(?P<part1b>(?:{}\s*\.\s*)+))?             # part of speech for first definition (order varies)
     (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+?)(?:\]\.?|\n\n|\s+Defn:|\s+1\.))?       # etymology
     (?:\s+\[(?P<obstag>Obs|R)\.\])?                 # obsolete tag
     (?:[\ \n]\((?P<dtype1>[A-Z][\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
@@ -232,24 +232,22 @@ REC_WEBSTER = re.compile(r"""
 
 REC_PARTIAL = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
-    (?:;\s+(?P<word_2>[A-Z'-]+))?               # WORD 2 (variant spelling)
-    (?:;\s+(?P<word_3>[A-Z'-]+))?\n             # WORD 3 (variant spelling)
+    (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
+    (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
     (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
     (?:(?:,|\ or)\s*(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
-    (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?           # parenthesized 1a
+    (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
     (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*))?   # part of speech for first definition (order varies)
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
-    (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?           # parenthesized 1b
-    (?:\.?\s*\[(?P<brack1>[^\]]+)\])?           # bracketed 1
-    (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?     # part of speech for first definition (order varies)
-    (?:\.?\s*\[(?P<brack2>[^\]]+)\])?           # bracketed 2
-
+    (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
+    (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed 1
+    (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?          # part of speech for first definition (order varies)
+    (?:\.?\s*\[(?P<brack2>[^\]]+)\])?               # bracketed 2
     (?:\.?\s*Note:\s+\[(?P<note_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
     (?:\.?\s*Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?     # Etymology
     (?:\.?\s*Etym:\s+\[?(?P<etym_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Etymology
     (?:\.?\s*Note:\s+\[(?P<note_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
-
     (?:\.?\s*\[(?P<brack3>[^\]]+)\])?               # bracketed 3
     (?:\.?\s+\[(?P<obstag>Obs|R)\.\])?              # obsolete tag
     (?:\.?[\ \n]\((?P<dtype1>\w[\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
@@ -308,10 +306,9 @@ SLOW:    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|\w*[^\s\(\[.,]+|[\w\
     (?P<cetera>.*)?$                          # etc.
 '''
 
-def show_partial_match(matgadd, entry_index, verbose=1):
+def show_partial_match(matgadd, entry_index, reason):
     '''Show partial regex match using a defaultdict seeded by the match's groupdict'''
-    if verbose > 1:
-        print(">>>>>>>>>>>>>>>>>>>>>>>>>>  Partial  %d  %s" % (entry_index, matgadd["word_1"]))
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>  Partial  %d  %s  (%s)" % (entry_index, matgadd["word_1"], reason))
     put("\t",
         "word_1: (", matgadd["word_1"], ") \t",
         "word_2: (", matgadd["word_2"], ") \t",
@@ -338,9 +335,6 @@ def show_partial_match(matgadd, entry_index, verbose=1):
         "defn_2: (", matgadd["defn_2"], ") \n\t",
         "cetera: (", matgadd["cetera"], ") \n\t",
        )
-    if verbose > 15:
-        print("MATGADD:\n", matgadd)
-
 
 ###############################################################################
 class DictEntry:
@@ -373,6 +367,7 @@ def make_dict_entry(metrics, suffix, index, matcher, entry_text):
         if dict_entry.undef:
             metrics['undef' + suffix] += 1
     else:
+        print("                        &&&&&&&&&&&&&&&&&&&&&&&&&&&   ", entry_text[0:100])
         metrics['unmatched' + suffix] += 1
         dict_entry = DictEntry(suffix, {})
     return dict_entry
@@ -467,7 +462,6 @@ def parse_partial_entry(entry):
     if match:
         return match.groupdict()
     return None
-
 
 
 def common_and_max_len(str_a, str_b):
@@ -609,10 +603,12 @@ def parse_dictionary_file(path, opts, verbose=1):
             B = makeB
             if B.empty and failover and not condA:
                 A = makeA
-            else:
+            elif not condA:
                 A = emptyA
         else:
-            A, B = emptyA, emptyB
+            if not condA:
+                A = emptyA
+            B = emptyB
     '''
     metrics = defaultdict(int)
     metrics['beg_time'] = time.time()
@@ -630,10 +626,12 @@ def parse_dictionary_file(path, opts, verbose=1):
                 part_dict = make_dict_entry(metrics, '_part', idx, match_partial_entry, entry_text)
                 if part_dict.undef and opts.failover and not opts.webster:
                     webs_dict = make_dict_entry(metrics, '_webs', idx, match_webster_entry, entry_text)
-                else:
+                elif not opts.webster:
+                    print("MAKE EMPTY WEBSTER: ", webs_dict.table)
                     webs_dict = DictEntry('_webs', {})
             else:
-                webs_dict = DictEntry('_webs', {})
+                if not opts.webster:
+                    webs_dict = DictEntry('_webs', {})
                 part_dict = DictEntry('_part', {})
 
             entry_time = time.time() - beg_entry
@@ -647,6 +645,7 @@ def parse_dictionary_file(path, opts, verbose=1):
             if webs_dict.empty:
                 if opts.webster and verbose > V_SHOW_TOKEN_NO_MATCH_W:
                     print(" {:<20} >>>> NO WEBSTER MATCH <<<< {:>6}".format(first_token(entry_text), idx))
+                    print(webs_dict.table)
             else:
                 webs_entry = WebsterEntry(webs_dict)
                 if (verbose > V_SHOW_WEBST_IF_UNDEF_P and opts.failover and part_dict.undef):
@@ -659,9 +658,10 @@ def parse_dictionary_file(path, opts, verbose=1):
                     print(" {:<20} >>>> NO PARTIAL MATCH <<<< {:>6}".format(first_token(entry_text), idx))
             else:
                 part_entry =  WebsterEntry(part_dict)
-                if (verbose > V_SHOW_PARTS_ALWAYS or
-                    opts.failover and verbose > V_SHOW_PARTS_IF_UNDEF_W and webs_dict and webs_dict.undef):
-                    show_partial_match(part_dict.table, idx, verbose)
+                if verbose > V_SHOW_PARTS_IF_UNDEF_W and opts.failover and webs_dict.undef:
+                    show_partial_match(part_dict.table, idx, "Webster Not Defined")
+                elif verbose > V_SHOW_PARTS_ALWAYS:
+                    show_partial_match(part_dict.table, idx, "Always Show Partial")
 
         if opts.stop_index > 0 and idx >= opts.stop_index:
             break
@@ -748,7 +748,7 @@ def main():
         args.webster = args.partial = True
     elif args.webster and args.partial:
         args.both = True
-    if verbose > 7:
+    if verbose > 2:
         pprint.pprint(args)
 
     metrics = parse_dictionary_file(args.text_file, args, verbose)
