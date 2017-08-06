@@ -4,6 +4,7 @@
 '''Parase Webster's Unabridge Dictionary.
    * Output will eventually be JSON and Pickle files
    * Semantic graph would be nice, too.
+    TODO: Separate files: matchers, DictEntry(?), WebsterEntry, driver
 '''
 
 # from string import punctuation
@@ -219,7 +220,14 @@ REC_WEBSTER = re.compile(r"""
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed
     (?P<sepsp1>[\s.,]*?)?                           # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:{}\s*\.\s*)+))?             # part of speech for first definition (order varies)
-    (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+?)(?:\]\.?|\n\n|\s+Defn:|\s+1\.))?       # etymology
+
+    (?:\.?\s*Note:\s+\[(?P<note_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
+    (?:\.?\s*Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?     # Etymology
+    (?:\.?\s*Etym:\s+\[?(?P<etym_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Etymology
+    (?:\.?\s*Note:\s+\[(?P<note_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
+
+
+
     (?:\s+\[(?P<obstag>Obs|R)\.\])?                 # obsolete tag
     (?:[\ \n]\((?P<dtype1>[A-Z][\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
@@ -268,20 +276,10 @@ PLURAL:
     (?:\s*;?\s*(?P<plural>((?:[A-Z]\.\s+)?pl\.\s+\w+[\w\ -]*\w+)\s*[;,.]\s*)+)?
     # plural form or suffix, usually for irregulars
 
-SLOW:    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|\w*[^\s\(\[.,]+|[\w\s]+?(?!Defn)\w+)?
-    # Pron 1 (Capitalized)
-
-
-    (?:;)?\s*                                 # optional separator
-    (?P<usage1>".*"[^\d]+)?\s*                # example 1
-    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
-    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
-    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s*)?    # etymology
-
-
   Webster:
-    (?:(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
+    (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+?)(?:\]\.?|\n\n|\s+Defn:|\s+1\.))?       # etymology
 
+    (?:(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
 
   Partial (backup, to be deleted) xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
@@ -511,7 +509,7 @@ V_SHOW_TEXT_MAT_FAIL_W = 6
 V_SHOW_TEXT_MAT_FAIL_P = 7
 
 # TODO: Start using this:
-V_SHOW_BOTH_IF_UNDEF_B = 9
+V_SHOW_BOTH_IF_UNDEF_B = 9      # Show webs and part if both are undefined.
 
 V_SHOW_WEBS_IF_UNDEF_W = 10
 V_SHOW_TEXT_IF_UNDEF_W = 11
