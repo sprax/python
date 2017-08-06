@@ -218,7 +218,6 @@ REC_WEBSTER = re.compile(r"""
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?\w+[\w\ -]*\w+\s*[;,.(#)]+\ *)+))? # plural form or suffix
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed
-    (?P<sepsp1>[\s.,]*?)?                           # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:{}\s*\.\s*)+))?             # part of speech for first definition (order varies)
     (?:\.?\s*Note:\s+\[(?P<note_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
     (?:\.?\s*Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?     # Etymology
@@ -266,6 +265,12 @@ REC_PARTIAL = re.compile(r"""
 
 #+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#
 '''
+Webster:
+  # (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed
+    (?P<sepsp1>[\s.,]*?)?                           # non-greedy space, punctuation(period, comma)
+  # (?:\s*(?P<part1b>(?:{}\s*\.\s*)+))?             # part of speech for first definition (order varies)
+
+
     (?:,?\ *(?P<part1a>(?:(?:{})\ *\.?(?:\ &|[\ ,;]+|\ or\ )?)+)(?:\.,?|\ (?=\[)|\n\n))?   # part of speech for first definition (order varies)
 
     (?P<sepsp1>[\s.,]*?)?                       # non-greedy space, punctuation(period, comma)
