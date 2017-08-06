@@ -622,6 +622,8 @@ def parse_dictionary_file(path, opts, verbose=1):
 
             show_entry_on_verbose(webs_dict, part_dict, entry_text, idx, opts)
 
+            # TODO: unfold fields, starting with etym_1 and defn_1
+
             if verbose > V_SHOW_TOKEN_IF_MATCH_FAILED_W:
                 if webs_dict.empty:
                     if opts.webster:
