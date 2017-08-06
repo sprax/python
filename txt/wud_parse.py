@@ -507,28 +507,32 @@ V_SHOW_ERROR = 1
 V_SHOW_STATS = 2
 V_SHOW_TOKEN_IF_MATCH_FAILED_W = 3
 V_SHOW_TOKEN_IF_MATCH_FAILED_P = 4
-V_SHOW_ENTRY_MAT_FAIL_W = 6
-V_SHOW_ENTRY_MAT_FAIL_P = 7
+V_SHOW_TEXT_MAT_FAIL_W = 6
+V_SHOW_TEXT_MAT_FAIL_P = 7
 
-V_SHOW_WEBST_IF_UNDEF_W = 10
-V_SHOW_PARTS_IF_UNDEF_P = 11
-V_SHOW_WEBST_IF_UNDEF_P = 12
-V_SHOW_PARTS_IF_UNDEF_W = 13
-V_SHOW_ENTRY_IF_UNDEF_W = 14
-V_SHOW_ENTRY_IF_UNDEF_P = 15
+# TODO: Start using this:
+V_SHOW_BOTH_IF_UNDEF_B = 9
 
-V_SHOW_WEBST_ALWAYS = 20
-V_SHOW_PARTS_ALWAYS = 21
-V_SHOW_ENTRY_ALWAYS = 22
+V_SHOW_WEBS_IF_UNDEF_W = 10
+V_SHOW_TEXT_IF_UNDEF_W = 11
+V_SHOW_PART_IF_UNDEF_W = 12
+
+V_SHOW_PART_IF_UNDEF_P = 13
+V_SHOW_TEXT_IF_UNDEF_P = 14
+V_SHOW_WEBS_IF_UNDEF_P = 14
+
+V_SHOW_WEBS_ALWAYS = 20
+V_SHOW_PART_ALWAYS = 21
+V_SHOW_TEXT_ALWAYS = 22
 
 M_DEFN_1_NOT_FOUND = "Main Defn1 Not Found"
 
 def show_entry_on_verbose(webs_dict, part_dict, entry_text, entry_index, opts):
-    if (opts.verbose > V_SHOW_ENTRY_ALWAYS or
-        opts.verbose > V_SHOW_ENTRY_IF_UNDEF_W and opts.webster and webs_dict.undef or
-        opts.verbose > V_SHOW_ENTRY_IF_UNDEF_P and opts.partial and part_dict.undef or
-        opts.verbose > V_SHOW_ENTRY_MAT_FAIL_W and opts.webster and webs_dict.empty or
-        opts.verbose > V_SHOW_ENTRY_MAT_FAIL_P and opts.partial and part_dict.empty):
+    if (opts.verbose > V_SHOW_TEXT_IF_UNDEF_W and webs_dict.undef and (opts.webster or opts.failover and part_dict.undef) or
+        opts.verbose > V_SHOW_TEXT_IF_UNDEF_P and part_dict.undef and (opts.partial or opts.failover and webs_dict.undef) or
+        opts.verbose > V_SHOW_TEXT_MAT_FAIL_W and webs_dict.empty and (opts.webster or opts.failover and part_dict.undef) or
+        opts.verbose > V_SHOW_TEXT_MAT_FAIL_P and part_dict.empty and (opts.partial or opts.failover and webs_dict.undef) or
+        opts.verbose > V_SHOW_TEXT_ALWAYS):
         show_entry(entry_text, entry_index)
 
 def show_diff_webs_part(verbose):
@@ -554,8 +558,8 @@ def dict_entry_status(entry, tried):
         return "is UNDEFINED" if entry.undef else "is defined"
 
 def webster_partial_status(webs_dict, part_dict, opts):
-    webs_stat = " (Webster " + dict_entry_status(webs_dict, opts.webster or opts.failover)
-    part_stat = "; Partial " + dict_entry_status(part_dict, opts.partial or opts.failover) + ")"
+    webs_stat = " (Webster " + dict_entry_status(webs_dict, opts.webster or opts.failover and part_dict.undef)
+    part_stat = "; Partial " + dict_entry_status(part_dict, opts.partial or opts.failover and webs_dict.undef) + ")"
     return webs_stat + part_stat
 
 def show_webster(webs_entry, index, status):
@@ -624,9 +628,9 @@ def parse_dictionary_file(path, opts, verbose=1):
                         print(" {:<20} >>>> WEBSTER MATCH FAILED <<<< {:>6}".format(first_token(entry_text), idx))
                 else:
                     webs_entry = WebsterEntry(webs_dict)
-                    if (verbose > V_SHOW_WEBST_IF_UNDEF_W and webs_dict.undef or
-                        verbose > V_SHOW_WEBST_IF_UNDEF_P and part_dict.undef or
-                        verbose > V_SHOW_WEBST_ALWAYS):
+                    if (verbose > V_SHOW_WEBS_IF_UNDEF_W and webs_dict.undef or
+                        verbose > V_SHOW_WEBS_IF_UNDEF_P and part_dict.undef or
+                        verbose > V_SHOW_WEBS_ALWAYS):
                         show_webster(webs_entry, idx, webster_partial_status(webs_dict, part_dict, opts))
 
             if verbose > V_SHOW_TOKEN_IF_MATCH_FAILED_P:
@@ -635,9 +639,9 @@ def parse_dictionary_file(path, opts, verbose=1):
                         print(" {:<20} >>>> PARTIAL MATCH FAILED <<<< {:>6}".format(first_token(entry_text), idx))
                 else:
                     part_entry =  WebsterEntry(part_dict)
-                    if (verbose > V_SHOW_PARTS_IF_UNDEF_P and part_dict.undef or
-                        verbose > V_SHOW_PARTS_IF_UNDEF_W and webs_dict.undef or
-                        verbose > V_SHOW_PARTS_ALWAYS):
+                    if (verbose > V_SHOW_PART_IF_UNDEF_P and part_dict.undef or
+                        verbose > V_SHOW_PART_IF_UNDEF_W and webs_dict.undef or
+                        verbose > V_SHOW_PART_ALWAYS):
                         show_partial_match(part_dict.table, idx, webster_partial_status(webs_dict, part_dict, opts))
 
         if opts.stop_index > 0 and idx >= opts.stop_index:
