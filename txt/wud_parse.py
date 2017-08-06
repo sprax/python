@@ -4,6 +4,7 @@
 '''Parase Webster's Unabridge Dictionary.
    * Output will eventually be JSON and Pickle files
    * Semantic graph would be nice, too.
+    TODO: Eliminate suffix by making separate metrics dicts.
     TODO: Separate files: matchers, DictEntry(?), WebsterEntry, driver
 '''
 
