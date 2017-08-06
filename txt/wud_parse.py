@@ -220,16 +220,14 @@ REC_WEBSTER = re.compile(r"""
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed
     (?P<sepsp1>[\s.,]*?)?                           # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:{}\s*\.\s*)+))?             # part of speech for first definition (order varies)
-
     (?:\.?\s*Note:\s+\[(?P<note_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
     (?:\.?\s*Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?     # Etymology
     (?:\.?\s*Etym:\s+\[?(?P<etym_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Etymology
     (?:\.?\s*Note:\s+\[(?P<note_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
+    (?:\s+\[(?P<obstag>Obs|R)\.\])?                 # Obsolete tag
 
+    (?:\.?[\ \n]\((?P<dtype1>\w[\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
 
-
-    (?:\s+\[(?P<obstag>Obs|R)\.\])?                 # obsolete tag
-    (?:[\ \n]\((?P<dtype1>[A-Z][\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*                # definition 1 sentence 2
     (?:;)?\s*                                   # optional separator
@@ -257,7 +255,7 @@ REC_PARTIAL = re.compile(r"""
     (?:\.?\s*Etym:\s+\[?(?P<etym_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Etymology
     (?:\.?\s*Note:\s+\[(?P<note_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
     (?:\.?\s*\[(?P<brack3>[^\]]+)\])?               # bracketed 3
-    (?:\.?\s+\[(?P<obstag>Obs|R)\.\])?              # obsolete tag
+    (?:\.?\s+\[(?P<obstag>Obs|R)\.\])?              # Obsolete tag
     (?:\.?[\ \n]\((?P<dtype1>\w[\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\.?\s*(?P<dftag1>Defn:|1\.|\(a\)|Lit\.,?)\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*                # definition 1 sentence 2
