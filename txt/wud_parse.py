@@ -199,6 +199,7 @@ EXAMPLE = "BACE Bace, n., a., & v."
 
 REP_PART = r'(?:a|adv|conj|i|imp|interj|n|p|pl|pre[pt]|pron|sing|superl|t|v)'
 
+# TODO: Add "fem." (female) like "pl." for plural
 
 # FIXME TODO: Two passes:
 # First pass regex to detect the number of words:
