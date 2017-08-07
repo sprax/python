@@ -236,19 +236,25 @@ REC_WEBSTER = re.compile(r"""
     (?P<cetera>.*)?$                            # etc.
 """.format(REP_PART, REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
 
+# Do these break more than they fix?
 # Negative lookahead: (?:\.?\s*Etym:\s+\[(?P<etym_1>(?!\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)).+)\]?)?
 # Negative lookahead: r"(?:\.?\s*Etym:\s+\[(?P<etym_1>(?!\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)).+)\]?)?"
-# Breaks more than it fixes: (?:\ *(?P<pron1a>Also\ [A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?))? # Pron 1 (Capitalized)
+# ADD?: (?:\ *(?P<pron1a>Also\ [A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?))? # Pron 1 (Capitalized)
+# NEW
+# OLD: (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
 
 REC_PARTIAL = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\ +(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\ +(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
+
+    (?P<pron_1>(?:(?!\sEtym:|\sDefn:)[A-Z*][\w'"`* ]+-?)+(?:\(\#\))?(?:\(,\ )?)?
+
     (?:(?:,|\ or)\ *(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
     (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*))?   # part of speech for first definition (order varies)
+    (?:,?\ *(?P<pron1a>(?:(?!\n\n|\sEtym:|\sDefn:)[A-Z*][\w'"`*, ]+-?)+(?:\(\#\))?(?:\(,\ )?))?
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed 1
