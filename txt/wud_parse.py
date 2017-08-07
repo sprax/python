@@ -664,8 +664,8 @@ def print_metrics(metrics, suffix_a, suffix_b, verbose):
     tried_a, match_a, undef_a, defnd_a = tried_matched_undef_defnd(metrics, suffix_a)
     tried_b, match_b, undef_b, defnd_b = tried_matched_undef_defnd(metrics, suffix_b)
     max_mat = max(match_a, match_b)
-    print("Matched %d/%d in %.4f seconds, defined/matched:  Webs: %d/%d (%.1f%%),  Part: %d/%d (%.1f%%)" % (
-        max_mat, metrics['read'], time_ab,
+    print("Matched %d:%d in %.4f seconds, defined/matched:  Webs: %d/%d (%.1f%%),  Part: %d/%d (%.1f%%)" % (
+        max_mat, metrics['read'] - max_mat, time_ab,
         defnd_a, match_a, percent(defnd_a, tried_a),
         defnd_b, match_b, percent(defnd_b, tried_b)))
     print("Unmatched & Undefined:    Webs %d & %d,    Part %d & %d" % (
