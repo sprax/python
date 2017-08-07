@@ -254,10 +254,10 @@ REC_PARTIAL = re.compile(r"""
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
     (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*))?   # part of speech for first definition (order varies)
-    (?:,?\ *(?P<pron1a>(?:(?!\n\n|\sEtym:|\sDefn:)[A-Z*][\w'"`*, ]+-?)+(?:\(\#\))?(?:\(,\ )?))?
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed 1
+    (?:\.,?\ *(?P<pron1a>(?:(?!\n\n|\sEtym:|\sDefn:)[A-Z*][\w'"`*, -]+)+(?:\(\#\))?(?:\(,\ )?))?
     (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?          # part of speech for first definition (order varies)
     (?:\.?\s*\[(?P<brack2>[^\]]+)\])?               # bracketed 2
     (?:\.?\s*Note:\s+\[(?P<note_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
@@ -319,6 +319,7 @@ def show_partial_match(matgadd, entry_index, reason):
         "plural: (", matgadd["plural"], ") \n\t",
         "pren1b: (", matgadd["pren1b"], ") \n\t",
         "brack1: (", matgadd["brack1"], ") \n\t",
+        "pron1a: (", matgadd["pron1a"], ") \n\t",
         "part1b: (", matgadd["part1b"], ") \n\t",
         "etym_1: (", matgadd["etym_1"], ") \n\t",
         "etym_2: (", matgadd["etym_2"], ") \n\t",
