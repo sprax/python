@@ -210,30 +210,31 @@ REP_PART = r'(?:a|adv|conj|i|imp|interj|n|p|pl|pre[pt]|pron|sing|superl|t|v)'
 
 REC_WEBSTER = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
-    (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
-    (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
+    (?:;\ +(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
+    (?:;\ +(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
     (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
-    (?:(?:,|\ or)\s*(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
+    (?:(?:,|\ or)\ *(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
-    (?:\s*\((?P<pren1a>[^\)]+)\)\s*\.?)?            # parenthesized 1a
-    (?:,?\s*(?P<part1a>(?:{}\s*\.?[\ &,]*)+)\.)?    # part of speech for first definition (order varies)
-    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?\w+[\w\ -]*\w+\s*[;,.(#)]+\ *)+))? # plural form or suffix
-    (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
-    (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed
-    (?:\s*(?P<part1b>(?:{}\s*\.\s*)+))?             # part of speech for first definition (order varies)
+    (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
+    (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*))?   # part of speech for first definition (order varies)
+    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
+    (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
+    (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed 1
+    (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?          # part of speech for first definition (order varies)
+    (?:\.?\s*\[(?P<brack2>[^\]]+)\])?               # bracketed 2
     (?:\.?\s*Note:\s+\[(?P<note_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
     (?:\.?\s*Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?     # Etymology
     (?:\.?\s*Etym:\s+\[?(?P<etym_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Etymology
     (?:\.?\s*Note:\s+\[(?P<note_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
-    (?:\s+\[(?P<obstag>Obs|R)\.\])?                 # Obsolete tag
-    (?:\.?[\ \n]\((?P<dtype1>\w[\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool., min.)
-    (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
+    (?:\.?\s*\[(?P<brack3>[^\]]+)\])?               # bracketed 3
+    (?:\.?\s+\[(?P<obstag>Obs|R)\.\])?              # Obsolete tag
+    (?:\.?[\ \n]\((?P<dtype1>\w[\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:\.?\s*(?P<dftag1>Defn:|1\.|\(a\)|Lit\.,?)\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*                # definition 1 sentence 2
-    (?:;)?\s*                                   # optional separator
     (?P<usage1>".*"[^\d]+)?\s*                  # example 1
     (?P<defn_2>\d.\s[^\d]+)?                    # definition 2, ...
     (?P<cetera>.*)?$                            # etc.
-""".format(REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
+""".format(REP_PART, REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
 
 # Negative lookahead: (?:\.?\s*Etym:\s+\[(?P<etym_1>(?!\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)).+)\]?)?
 # Negative lookahead: r"(?:\.?\s*Etym:\s+\[(?P<etym_1>(?!\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)).+)\]?)?"
@@ -244,7 +245,6 @@ REC_PARTIAL = re.compile(r"""
     (?:;\ +(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\ +(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
     (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
-
     (?:(?:,|\ or)\ *(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
