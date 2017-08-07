@@ -4,6 +4,8 @@
 '''Parase Webster's Unabridge Dictionary.
    * Output will eventually be JSON and Pickle files
    * Semantic graph would be nice, too.
+    TODO: Eliminate suffix by making separate metrics dicts.
+    TODO: Separate files: matchers, DictEntry(?), WebsterEntry, driver
 '''
 
 # from string import punctuation
@@ -198,6 +200,7 @@ EXAMPLE = "BACE Bace, n., a., & v."
 
 REP_PART = r'(?:a|adv|conj|i|imp|interj|n|p|pl|pre[pt]|pron|sing|superl|t|v)'
 
+# TODO: Add "fem." (female) like "pl." for plural
 
 # FIXME TODO: Two passes:
 # First pass regex to detect the number of words:
@@ -217,11 +220,13 @@ REC_WEBSTER = re.compile(r"""
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?\w+[\w\ -]*\w+\s*[;,.(#)]+\ *)+))? # plural form or suffix
     (?:\s*\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed
-    (?P<sepsp1>[\s.,]*?)?                           # non-greedy space, punctuation(period, comma)
     (?:\s*(?P<part1b>(?:{}\s*\.\s*)+))?             # part of speech for first definition (order varies)
-    (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+?)(?:\]\.?|\n\n|\s+Defn:|\s+1\.))?       # etymology
-    (?:\s+\[(?P<obstag>Obs|R)\.\])?                 # obsolete tag
-    (?:[\ \n]\((?P<dtype1>[A-Z][\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
+    (?:\.?\s*Note:\s+\[(?P<note_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
+    (?:\.?\s*Etym:\s+\[(?P<etym_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?     # Etymology
+    (?:\.?\s*Etym:\s+\[?(?P<etym_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Etymology
+    (?:\.?\s*Note:\s+\[(?P<note_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
+    (?:\s+\[(?P<obstag>Obs|R)\.\])?                 # Obsolete tag
+    (?:\.?[\ \n]\((?P<dtype1>\w[\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool., min.)
     (?:\s*(?P<dftag1>Defn:|1\.|\(a\))\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*                # definition 1 sentence 2
     (?:;)?\s*                                   # optional separator
@@ -230,12 +235,17 @@ REC_WEBSTER = re.compile(r"""
     (?P<cetera>.*)?$                            # etc.
 """.format(REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
 
+# Negative lookahead: (?:\.?\s*Etym:\s+\[(?P<etym_1>(?!\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)).+)\]?)?
+# Negative lookahead: r"(?:\.?\s*Etym:\s+\[(?P<etym_1>(?!\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)).+)\]?)?"
+# Breaks more than it fixes: (?:\ *(?P<pron1a>Also\ [A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?))? # Pron 1 (Capitalized)
+
 REC_PARTIAL = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
-    (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
-    (?:;\s+(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
+    (?:;\ +(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
+    (?:;\ +(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
     (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
-    (?:(?:,|\ or)\s*(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
+
+    (?:(?:,|\ or)\ *(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
     (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*))?   # part of speech for first definition (order varies)
@@ -249,7 +259,7 @@ REC_PARTIAL = re.compile(r"""
     (?:\.?\s*Etym:\s+\[?(?P<etym_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Etymology
     (?:\.?\s*Note:\s+\[(?P<note_2>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
     (?:\.?\s*\[(?P<brack3>[^\]]+)\])?               # bracketed 3
-    (?:\.?\s+\[(?P<obstag>Obs|R)\.\])?              # obsolete tag
+    (?:\.?\s+\[(?P<obstag>Obs|R)\.\])?              # Obsolete tag
     (?:\.?[\ \n]\((?P<dtype1>\w[\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
     (?:\.?\s*(?P<dftag1>Defn:|1\.|\(a\)|Lit\.,?)\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*                # definition 1 sentence 2
@@ -260,6 +270,19 @@ REC_PARTIAL = re.compile(r"""
 
 #+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#
 '''
+Partial:
+    # Add pron1a right after part1a:
+    (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*))?   # part of speech for first definition (order varies)
+    (?:\ *(?P<pron1a>Also\ [A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?))? # Pron 1 (Capitalized)
+
+
+
+Webster:
+  # (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed
+    (?P<sepsp1>[\s.,]*?)?                           # non-greedy space, punctuation(period, comma)
+  # (?:\s*(?P<part1b>(?:{}\s*\.\s*)+))?             # part of speech for first definition (order varies)
+
+
     (?:,?\ *(?P<part1a>(?:(?:{})\ *\.?(?:\ &|[\ ,;]+|\ or\ )?)+)(?:\.,?|\ (?=\[)|\n\n))?   # part of speech for first definition (order varies)
 
     (?P<sepsp1>[\s.,]*?)?                       # non-greedy space, punctuation(period, comma)
@@ -268,42 +291,11 @@ PLURAL:
     (?:\s*;?\s*(?P<plural>((?:[A-Z]\.\s+)?pl\.\s+\w+[\w\ -]*\w+)\s*[;,.]\s*)+)?
     # plural form or suffix, usually for irregulars
 
-SLOW:    (?P<pron_1>[A-Z](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?|\w*[^\s\(\[.,]+|[\w\s]+?(?!Defn)\w+)?
-    # Pron 1 (Capitalized)
-
-
-    (?:;)?\s*                                 # optional separator
-    (?P<usage1>".*"[^\d]+)?\s*                # example 1
-    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
-    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
-    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s*)?    # etymology
-
-
   Webster:
+    (?:\s*Etym:\s+\[(?P<etym_1>[^\]]+?)(?:\]\.?|\n\n|\s+Defn:|\s+1\.))?       # etymology
+
     (?:(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s+   # Defn 1 tag and first sentence of definition.
 
-
-  Partial (backup, to be deleted) xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-    ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?|[A-Z]+['-]?|-[A-Z]+) # Primary WORD and whitespace
-    (?:;\s+(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
-    (?:;\s+(?P<word_3>[A-Z'-]+))?\s+                # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z](?:\w+['"*-]?\ ?)+\w+['"*-]?|[A-Z][^\s\(\[.,]+|[A-Z]\w+\s(?!Defn)\w+|-\w+) # Pron 1 (Capitalized)
-    (?:,\s*(?P<pron_2>[A-Z][^\s\(\[,.]+))?          # Pronunciation 2 (for variant 2)
-    (?:,\s*(?P<pron_3>[A-Z][^\s\(\[,.]+))?[.,]\s*   # Pronunciation 3 (for variant 2)
-    (?P<pren1a>\([^\)]+\))?                         # parenthesized 1a
-    (?:\s*(?P<part1a>(?:(?:{})\s*\.\s*)+))?         # part of speech for first definition (order varies)
-    (?P<pren1b>\([^\)]+\))?                         # parenthesized 1b
-    (?P<brack1>\[[^\]]+\])?                         # bracketed
-    (?P<sepsp1>[\s.,]*?)                      # non-greedy space, punctuation(period, comma)
-    (?:\s*(?P<part1b>(?:(?:{})\s*\.\s*)+))?   # part of speech for first definition (order varies)
-    (?:Etym:\s*\[(?P<etym_1>[^\]]+)\]\s+)?    # etymology
-    (?:\((?P<dtype1>[A-Z][\w\s&]+\.)\)\s+)?   # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
-    (?:\s+(?P<dftag1>Defn:|1\.)\s+\.?\s*(?P<defn_1>[^.]+\.))?\s*   # Defn 1 tag and first sentence of definition.
-    (?P<defn1a>[A-Z][^.]+\.)?\s*              # definition 1 sentence 2
-    (?:;)?\s*                                 # optional separator
-    (?P<usage1>".*"[^\d]+)?\s*                # example 1
-    (?P<defn_2>\d.\s[^\d]+)?                  # definition 2, ...
-    (?P<cetera>.*)?$                          # etc.
 '''
 
 def show_partial_match(matgadd, entry_index, reason):
@@ -507,28 +499,32 @@ V_SHOW_ERROR = 1
 V_SHOW_STATS = 2
 V_SHOW_TOKEN_IF_MATCH_FAILED_W = 3
 V_SHOW_TOKEN_IF_MATCH_FAILED_P = 4
-V_SHOW_ENTRY_MAT_FAIL_W = 6
-V_SHOW_ENTRY_MAT_FAIL_P = 7
+V_SHOW_TEXT_MAT_FAIL_W = 6
+V_SHOW_TEXT_MAT_FAIL_P = 7
 
-V_SHOW_WEBST_IF_UNDEF_W = 10
-V_SHOW_PARTS_IF_UNDEF_P = 11
-V_SHOW_WEBST_IF_UNDEF_P = 12
-V_SHOW_PARTS_IF_UNDEF_W = 13
-V_SHOW_ENTRY_IF_UNDEF_W = 14
-V_SHOW_ENTRY_IF_UNDEF_P = 15
+# TODO: Start using this:
+V_SHOW_BOTH_IF_UNDEF_B = 9      # Show webs and part if both are undefined.
 
-V_SHOW_WEBST_ALWAYS = 20
-V_SHOW_PARTS_ALWAYS = 21
-V_SHOW_ENTRY_ALWAYS = 22
+V_SHOW_WEBS_IF_UNDEF_W = 10
+V_SHOW_TEXT_IF_UNDEF_W = 11
+V_SHOW_PART_IF_UNDEF_W = 12
+
+V_SHOW_PART_IF_UNDEF_P = 13
+V_SHOW_TEXT_IF_UNDEF_P = 14
+V_SHOW_WEBS_IF_UNDEF_P = 14
+
+V_SHOW_WEBS_ALWAYS = 20
+V_SHOW_PART_ALWAYS = 21
+V_SHOW_TEXT_ALWAYS = 22
 
 M_DEFN_1_NOT_FOUND = "Main Defn1 Not Found"
 
 def show_entry_on_verbose(webs_dict, part_dict, entry_text, entry_index, opts):
-    if (opts.verbose > V_SHOW_ENTRY_ALWAYS or
-        opts.verbose > V_SHOW_ENTRY_IF_UNDEF_W and opts.webster and webs_dict.undef or
-        opts.verbose > V_SHOW_ENTRY_IF_UNDEF_P and opts.partial and part_dict.undef or
-        opts.verbose > V_SHOW_ENTRY_MAT_FAIL_W and opts.webster and webs_dict.empty or
-        opts.verbose > V_SHOW_ENTRY_MAT_FAIL_P and opts.partial and part_dict.empty):
+    if (opts.verbose > V_SHOW_TEXT_IF_UNDEF_W and webs_dict.undef and (opts.webster or opts.failover and part_dict.undef) or
+        opts.verbose > V_SHOW_TEXT_IF_UNDEF_P and part_dict.undef and (opts.partial or opts.failover and webs_dict.undef) or
+        opts.verbose > V_SHOW_TEXT_MAT_FAIL_W and webs_dict.empty and (opts.webster or opts.failover and part_dict.undef) or
+        opts.verbose > V_SHOW_TEXT_MAT_FAIL_P and part_dict.empty and (opts.partial or opts.failover and webs_dict.undef) or
+        opts.verbose > V_SHOW_TEXT_ALWAYS):
         show_entry(entry_text, entry_index)
 
 def show_diff_webs_part(verbose):
@@ -554,8 +550,8 @@ def dict_entry_status(entry, tried):
         return "is UNDEFINED" if entry.undef else "is defined"
 
 def webster_partial_status(webs_dict, part_dict, opts):
-    webs_stat = " (Webster " + dict_entry_status(webs_dict, opts.webster or opts.failover)
-    part_stat = "; Partial " + dict_entry_status(part_dict, opts.partial or opts.failover) + ")"
+    webs_stat = " (Webster " + dict_entry_status(webs_dict, opts.webster or opts.failover and part_dict.undef)
+    part_stat = "; Partial " + dict_entry_status(part_dict, opts.partial or opts.failover and webs_dict.undef) + ")"
     return webs_stat + part_stat
 
 def show_webster(webs_entry, index, status):
@@ -618,15 +614,17 @@ def parse_dictionary_file(path, opts, verbose=1):
 
             show_entry_on_verbose(webs_dict, part_dict, entry_text, idx, opts)
 
+            # TODO: unfold fields, starting with etym_1 and defn_1
+
             if verbose > V_SHOW_TOKEN_IF_MATCH_FAILED_W:
                 if webs_dict.empty:
                     if opts.webster:
                         print(" {:<20} >>>> WEBSTER MATCH FAILED <<<< {:>6}".format(first_token(entry_text), idx))
                 else:
                     webs_entry = WebsterEntry(webs_dict)
-                    if (verbose > V_SHOW_WEBST_IF_UNDEF_W and webs_dict.undef or
-                        verbose > V_SHOW_WEBST_IF_UNDEF_P and part_dict.undef or
-                        verbose > V_SHOW_WEBST_ALWAYS):
+                    if (verbose > V_SHOW_WEBS_IF_UNDEF_W and webs_dict.undef or
+                        verbose > V_SHOW_WEBS_IF_UNDEF_P and part_dict.undef or
+                        verbose > V_SHOW_WEBS_ALWAYS):
                         show_webster(webs_entry, idx, webster_partial_status(webs_dict, part_dict, opts))
 
             if verbose > V_SHOW_TOKEN_IF_MATCH_FAILED_P:
@@ -635,9 +633,9 @@ def parse_dictionary_file(path, opts, verbose=1):
                         print(" {:<20} >>>> PARTIAL MATCH FAILED <<<< {:>6}".format(first_token(entry_text), idx))
                 else:
                     part_entry =  WebsterEntry(part_dict)
-                    if (verbose > V_SHOW_PARTS_IF_UNDEF_P and part_dict.undef or
-                        verbose > V_SHOW_PARTS_IF_UNDEF_W and webs_dict.undef or
-                        verbose > V_SHOW_PARTS_ALWAYS):
+                    if (verbose > V_SHOW_PART_IF_UNDEF_P and part_dict.undef or
+                        verbose > V_SHOW_PART_IF_UNDEF_W and webs_dict.undef or
+                        verbose > V_SHOW_PART_ALWAYS):
                         show_partial_match(part_dict.table, idx, webster_partial_status(webs_dict, part_dict, opts))
 
         if opts.stop_index > 0 and idx >= opts.stop_index:
