@@ -202,7 +202,8 @@ REP_PART = r'(?:a|adv|conj|i|imp|interj|n|p|pl|pre[pt]|pron|sing|superl|t|v)'
 
 # TODO: Add "fem." (female) like "pl." for plural
 
-# FIXME TODO: Two passes:
+# FIXME TODO: 1) First try combining Pron and Part as part of same line/group; Try in parallel, Webs & Part
+# FIXME TODO: 2) If (1) fails, go to two passes:
 # First pass regex to detect the number of words:
 #   a) how many variants (word_1, word_2, etc., e.g. IMAM; IMAN; IMAUM)
 #   b) how many words in each variant (e.g. BANK BILL, ICELAND MOSS)
@@ -212,11 +213,11 @@ REC_WEBSTER = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\ +(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\ +(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
-    (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
+    (?P<pron_1>[A-Z*-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
     (?:(?:,|\ or)\ *(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
-    (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*))?   # part of speech for first definition (order varies)
+    (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*),?)?   # part of speech for first definition (order varies)
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed 1
@@ -236,15 +237,21 @@ REC_WEBSTER = re.compile(r"""
     (?P<cetera>.*)?$                            # etc.
 """.format(REP_PART, REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
 
+# Do these break more than they fix?
 # Negative lookahead: (?:\.?\s*Etym:\s+\[(?P<etym_1>(?!\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)).+)\]?)?
 # Negative lookahead: r"(?:\.?\s*Etym:\s+\[(?P<etym_1>(?!\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)).+)\]?)?"
-# Breaks more than it fixes: (?:\ *(?P<pron1a>Also\ [A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?))? # Pron 1 (Capitalized)
+# ADD?: (?:\ *(?P<pron1a>Also\ [A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?))? # Pron 1 (Capitalized)
+# NEW
+# OLD: (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
+##    (?P<pron_1>(?:(?!\sEtym:|\sDefn:)[A-Z*][\w'"`* ]+-?)+(?:\(\#\))?(?:\(,\ )?)?
 
 REC_PARTIAL = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\ +(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\ +(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
+
     (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
+
     (?:(?:,|\ or)\ *(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
@@ -270,6 +277,8 @@ REC_PARTIAL = re.compile(r"""
 
 #+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#
 '''
+    (?:\.?,?\ *(?P<pron1a>(?:(?!\n\n|\sEtym:|\sDefn:)[A-Z*][\w'"`*, -]+)+(?:\(\#\))?(?:\(,\ )?))?
+
 Partial:
     # Add pron1a right after part1a:
     (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*))?   # part of speech for first definition (order varies)
@@ -298,21 +307,24 @@ PLURAL:
 
 '''
 
-def show_partial_match(matgadd, entry_index, reason):
+def show_partial_match(part_entry, entry_index, reason):
     '''Show partial regex match as seeded by the match's groupdict'''
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>  Partial  %d  %s  %s" % (entry_index, matgadd["word_1"], reason))
+    part_dict = part_entry.dict
+    matgadd = part_dict.table
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>  Partial  %d  %s  %s" % (entry_index, part_entry.token_string(), reason))
     put("\t",
-        "word_1: (", matgadd["word_1"], ") \t",
-        "word_2: (", matgadd["word_2"], ") \t",
+        "word_1: (", matgadd["word_1"], ") \t\t",
+        "word_2: (", matgadd["word_2"], ") \t\t",
         "word_3: (", matgadd["word_3"], ") \n\t",
-        "pron_1: (", matgadd["pron_1"], ") \t",
-        "pron_2: (", matgadd["pron_2"], ") \t",
-        "pron_3: (", matgadd["pron_3"], ") \n\t",
+        "pron_1: (", matgadd["pron_1"], ") \t\n",
+        "pron_2: (", matgadd["pron_2"], ") \t\t",
+        "pron_3: (", matgadd["pron_3"], ") \t\t",
         "pren1a: (", matgadd["pren1a"], ") \n\t",
-        "part1a: (", matgadd["part1a"], ") \t",
+        "part1a: (", matgadd["part1a"], ") \n\t",
         "plural: (", matgadd["plural"], ") \n\t",
         "pren1b: (", matgadd["pren1b"], ") \n\t",
         "brack1: (", matgadd["brack1"], ") \n\t",
+        "pron1a: (", matgadd["pron1a"], ") \n\t",
         "part1b: (", matgadd["part1b"], ") \n\t",
         "etym_1: (", matgadd["etym_1"], ") \n\t",
         "etym_2: (", matgadd["etym_2"], ") \n\t",
@@ -393,11 +405,11 @@ class WebsterEntry:
 
     def __str__(self):
         stray = [
-            "\tword_1: %s\t" % self.word_1,
-            "word_2: %s\t" % self.word_2,
+            "\tword_1: %s\t\t" % self.word_1,
+            "word_2: %s\t\t" % self.word_2,
             "word_3: %s\n\t" % self.word_3,
-            "pron_1: %s\t" % self.pron_1,
-            "pron_2: %s\t" % self.pron_2,
+            "pron_1: %s\t\t" % self.pron_1,
+            "pron_2: %s\t\t" % self.pron_2,
             "pron_3: %s\n\t" % self.pron_3,
             "part_1: %s\n\t" % self.part_1,
             "plural: %s\n\t" % self.plural,
@@ -636,7 +648,7 @@ def parse_dictionary_file(path, opts, verbose=1):
                     if (verbose > V_SHOW_PART_IF_UNDEF_P and part_dict.undef or
                         verbose > V_SHOW_PART_IF_UNDEF_W and webs_dict.undef or
                         verbose > V_SHOW_PART_ALWAYS):
-                        show_partial_match(part_dict.table, idx, webster_partial_status(webs_dict, part_dict, opts))
+                        show_partial_match(part_entry, idx, webster_partial_status(webs_dict, part_dict, opts))
 
         if opts.stop_index > 0 and idx >= opts.stop_index:
             break
@@ -664,8 +676,8 @@ def print_metrics(metrics, suffix_a, suffix_b, verbose):
     tried_a, match_a, undef_a, defnd_a = tried_matched_undef_defnd(metrics, suffix_a)
     tried_b, match_b, undef_b, defnd_b = tried_matched_undef_defnd(metrics, suffix_b)
     max_mat = max(match_a, match_b)
-    print("Matched %d/%d in %.4f seconds, defined/matched:  Webs: %d/%d (%.1f%%),  Part: %d/%d (%.1f%%)" % (
-        max_mat, metrics['read'], time_ab,
+    print("Matched %d:%d in %.4f seconds, defined/matched:  Webs: %d/%d (%.1f%%),  Part: %d/%d (%.1f%%)" % (
+        max_mat, metrics['read'] - max_mat, time_ab,
         defnd_a, match_a, percent(defnd_a, tried_a),
         defnd_b, match_b, percent(defnd_b, tried_b)))
     print("Unmatched & Undefined:    Webs %d & %d,    Part %d & %d" % (

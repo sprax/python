@@ -44,7 +44,7 @@ from functools import partial
 import time
 import editdistance
 
-# import nltk
+import nltk
 import emotuples as ET
 import inflection
 import text_fio
@@ -229,8 +229,8 @@ class EmoTrans:
         self.txt_emo = self.gen_txt_to_emo(self.presets)
         self.emo_txt = self.gen_emo_to_txt(self.presets)
         self.emo_chr_counts = self.count_emo_chrs()
-        self.singular_nouns = read_pickle('en_nouns_singular.pkl')
-        self.plural_nouns = read_pickle('en_nouns_plural.pkl')
+        self.singular_nouns = read_pickle('en_singular_nouns.pkl')
+        self.plural_nouns = read_pickle('en_plural_nouns.pkl')
 
     def count_emo_chrs(self):
         '''count chars used in emoji codes'''
