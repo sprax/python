@@ -203,7 +203,8 @@ REP_PART = r'(?:a|adv|conj|i|imp|interj|n|p|pl|pre[pt]|pron|sing|superl|t|v)'
 # TODO: Add "fem." (female) like "pl." for plural
 
 # FIXME TODO: 1) First try combining Pron and Part as part of same line/group; Try in parallel, Webs & Part
-# FIXME TODO: 2) If (1) fails, go to two passes:
+# FIXME TODO: 2) If (1) fails, go to two passes:   Observations are accumulating: (1) fails too often.
+# For example, not requiring pron_3 to be capitalized lost half a percent, ceteris paribus.
 # First pass regex to detect the number of words:
 #   a) how many variants (word_1, word_2, etc., e.g. IMAM; IMAN; IMAUM)
 #   b) how many words in each variant (e.g. BANK BILL, ICELAND MOSS)
@@ -218,7 +219,7 @@ REC_WEBSTER = re.compile(r"""
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
     (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*),?)?   # part of speech for first definition (order varies)
-    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?\(?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\s\(\),-]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
+    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?\(?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\s\(\),`-]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed 1
     (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?          # part of speech for first definition (order varies)
