@@ -218,7 +218,7 @@ REC_WEBSTER = re.compile(r"""
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
     (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*),?)?   # part of speech for first definition (order varies)
-    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
+    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?\(?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\s-]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed 1
     (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?          # part of speech for first definition (order varies)
@@ -308,9 +308,9 @@ PLURAL:
 '''
 
 def show_partial_match(part_entry, entry_index, reason):
-    '''Show partial regex match as seeded by the match's groupdict'''
+    '''Show partial regex match as items in a dict seeded by the match's groupdict'''
     part_dict = part_entry.dict
-    matgadd = part_dict.table
+    matgadd = defaultdict(str, part_dict.table)
     print(">>>>>>>>>>>>>>>>>>>>>>>>>>  Partial  %d  %s  %s" % (entry_index, part_entry.token_string(), reason))
     put("\t",
         "word_1: (", matgadd["word_1"], ") \t\t",
