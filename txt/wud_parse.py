@@ -203,6 +203,8 @@ REP_PART = r'(?:a|adv|conj|i|imp|i|interj|n|p|pl|pr|pre[pst]|pron|sing|superl|t|
 # TODO: Add "fem." (female) like "pl." for plural
 # TODO: Add "sing." (singular) like "pl." for plural; needed for Apaches, etc.
 
+# TODO: next up:  fix plural (still primitive, no lookahead)
+
 # FIXME TODO: 1) First try combining Pron and Part as part of same line/group; Try in parallel, Webs & Part
 # FIXME TODO: 2) If (1) fails, go to two passes:   Observations are accumulating: (1) fails too often.
 # For example, not requiring pron_3 to be capitalized lost half a percent, ceteris paribus.
@@ -231,12 +233,11 @@ REC_WEBSTER = re.compile(r"""
     (?:(?:,|\ or)\ *(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
-
     (?:,?\ *(?P<part1a>{}\.(?:(?:,|,?\ &|\ or)?\ {}\.)*(?:(?!\n\n|\sEtym:|\sDefn:)[\w\ ]+)?))?  # PoS for 1st defn.
-
     (?:[\ ,;]*(?P<sing_1>(?:[A-Z]\.\s+)?sing\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:[\ ,;]*(?P<compar>(?:(?:compar|superl)\.\s*(?:\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+)))? # plural form/suffix
+
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s+\[(?P<brack1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # bracketed 1
     (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?          # part of speech for first definition (order varies)
@@ -263,11 +264,7 @@ REC_PARTIAL = re.compile(r"""
     (?:(?:,|\ or)\ *(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
-
     (?:,?\ *(?P<part1a>{}\.(?:(?:,|,?\ &|\ or)?\ {}\.)*(?:(?!\n\n|\sEtym:|\sDefn:)[\w\ ]+)+)?)?   # part of speech for first definition (order varies) FIXME remove comma
-
-
-
     (?:[\ ,;]*(?P<sing_1>(?:[A-Z]\.\s+)?sing\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
 
