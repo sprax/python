@@ -211,6 +211,8 @@ REP_PART = r'(?:a|adv|conj|i|imp|interj|n|p|pl|pre[pst]|pron|sing|superl|t|v|3d 
 #   b) how many words in each variant (e.g. BANK BILL, ICELAND MOSS)
 # Second pass regex depends on what's found in the first pass.
 
+#   (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?\(?pl\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w\s\(\),`-]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
+
 REC_WEBSTER = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\ +(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
@@ -222,11 +224,12 @@ REC_WEBSTER = re.compile(r"""
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
     (?:,?\ *(?P<part1a>{}\.(?:(?:,?|,?\ &|\ or)\ {}\.)*),?)?   # part of speech for first definition (order varies) FIXME remove comma
-    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?\(?pl\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w\s\(\),`-]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
+
+    (?:[\ ,;]*(?P<sing_1>(?:[A-Z]\.\s+)?sing\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
+    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
+
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
-
     (?:\.?\s+\[(?P<brack1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # bracketed 1
-
     (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?          # part of speech for first definition (order varies)
     (?:\.?\s*\[(?P<brack2>[^\]]+)\])?               # bracketed 2
     (?:\.?\s*Note:\s+\[(?P<note_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
@@ -262,11 +265,12 @@ REC_PARTIAL = re.compile(r"""
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
     (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*))?   # part of speech for first definition (order varies)
+
+    (?:[\ ,;]*(?P<sing_1>(?:[A-Z]\.\s+)?sing\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
+
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
-
     (?:\.?\s+\[(?P<brack1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
-
     (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?          # part of speech for first definition (order varies)
     (?:\.?\s*\[(?P<brack2>[^\]]+)\])?               # bracketed 2
     (?:\.?\s*Note:\s+\[(?P<note_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
@@ -332,6 +336,7 @@ def show_partial_match(part_entry, entry_index, reason):
         "pron_3: (", matgadd["pron_3"], ") \n\t",
         "pren1a: (", matgadd["pren1a"], ") \n\t",
         "part1a: (", matgadd["part1a"], ") \n\t",
+        "sing_1: (", matgadd["sing_1"], ") \t\t",
         "plural: (", matgadd["plural"], ") \n\t",
         "pren1b: (", matgadd["pren1b"], ") \n\t",
         "brack1: (", matgadd["brack1"], ") \n\t",
@@ -405,6 +410,7 @@ class WebsterEntry:
         # self.sepsp1 = webs_dict.get('sepsp1')
         part1 = webs_dict.get('part1a')
         self.part_1 = part1 if part1 else webs_dict.get('part1b')
+        self.sing_1 = webs_dict.get('sing_1')
         self.plural = webs_dict.get('plural')
         self.etym_1 = webs_dict.get('etym_1')
         self.dftag1 = webs_dict.get('dftag1')
@@ -423,6 +429,7 @@ class WebsterEntry:
             "pron_2: %s\t\t" % self.pron_2,
             "pron_3: %s\n\t" % self.pron_3,
             "part_1: %s\n\t" % self.part_1,
+            "sing_1: %s\n\t" % self.sing_1,
             "plural: %s\n\t" % self.plural,
             "brack1: %s\n\t" % self.brack1,
             "etym_1: %s\n\t" % self.etym_1,
