@@ -198,7 +198,7 @@ def print_groups(match):
 
 EXAMPLE = "BACE Bace, n., a., & v."
 
-REP_PART = r'(?:a|adv|conj|i|imp|interj|n|p|pl|pre[pst]|pron|sing|superl|t|v|3d sing)'
+REP_PART = r'(?:a|adv|conj|i|imp|i|interj|n|p|pl|pr|pre[pst]|pron|sing|superl|t|v|3d\ sing)'
 
 # TODO: Add "fem." (female) like "pl." for plural
 # TODO: Add "sing." (singular) like "pl." for plural; needed for Apaches, etc.
@@ -219,15 +219,20 @@ REC_WEBSTER = re.compile(r"""
     (?:;\ +(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
 
     (?:,?\ *(?P<pron_1>(?:(?!\n\n|\sEtym:|\sDefn:)[\w(#)'"`* -])+))?
-
     (?:(?:,|\ or)\ *(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
-    (?:,?\ *(?P<part1a>{}\.(?:(?:,?|,?\ &|\ or)\ {}\.)*),?)?   # part of speech for first definition (order varies) FIXME remove comma
+
+
+
+    (?:,?\ *(?P<part1a>{}\.(?:(?:,|,?\ &|\ or)?\ {}\.)*(?:(?!\n\n|\sEtym:|\sDefn:)[\w\ ]+)+)?)?   # part of speech for first definition (order varies) FIXME remove comma
+
+
+
 
     (?:[\ ,;]*(?P<sing_1>(?:[A-Z]\.\s+)?sing\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
-
+    (?:[\ ,;]*(?P<compar>(?:(?:compar|superl)\.\s*(?:\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+)))? # plural form/suffix
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s+\[(?P<brack1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # bracketed 1
     (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?          # part of speech for first definition (order varies)
@@ -239,7 +244,7 @@ REC_WEBSTER = re.compile(r"""
     (?:\.?\s*\[(?P<brack3>[^\]]+)\])?               # bracketed 3
     (?:\.?\s+\[(?P<obstag>Obs|R)\.\])?              # Obsolete tag
     (?:\.?[\ \n]\((?P<dtype1>\w[\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
-    (?:\.?\s*(?P<dftag1>Defn:|1\.|\(a\)|Lit\.,?)\s+\.?\s*(?P<defn_1>[^.]+(?:\.|$)))?\s*   # Defn 1 tag and first sentence of definition.
+    (?:\.?\s*(?P<dftag1>Defn:|1\.|\(a\)|Lit\.,?)\s+\.?\s*(?P<defn_1>[^.]+(?:\.|\n\n|$)))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*                # definition 1 sentence 2
     (?P<usage1>".*"[^\d]+)?\s*                  # example 1
     (?P<defn_2>\d.\s[^\d]+)?                    # definition 2, ...
