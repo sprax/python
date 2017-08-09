@@ -554,8 +554,8 @@ V_SHOW_TOKEN_IF_MATCH_FAILED_W = 3
 V_SHOW_TOKEN_IF_MATCH_FAILED_P = 4
 V_SHOW_TEXT_MAT_FAIL_W = 6
 V_SHOW_TEXT_MAT_FAIL_P = 7
+V_SHOW_TEXT_IF_UNDEF_B = 8
 
-# TODO: Start using this:
 V_SHOW_BOTH_IF_UNDEF_B = 9      # Show webs and part if both are undefined.
 
 V_SHOW_WEBS_IF_UNDEF_W = 10
@@ -573,7 +573,9 @@ V_SHOW_TEXT_ALWAYS = 22
 M_DEFN_1_NOT_FOUND = "Main Defn1 Not Found"
 
 def show_entry_on_verbose(webs_dict, part_dict, entry_text, entry_index, opts):
-    if (opts.verbose > V_SHOW_TEXT_IF_UNDEF_W and webs_dict.undef and (opts.webster or opts.failover and part_dict.undef) or
+    if (opts.verbose > V_SHOW_TEXT_IF_UNDEF_B and webs_dict.undef and part_dict.undef and (opts.failover or opts.both) or
+        opts.verbose > V_SHOW_TEXT_IF_UNDEF_W and webs_dict.undef and (opts.webster or opts.failover and part_dict.undef) or
+        opts.verbose > V_SHOW_TEXT_IF_UNDEF_W and webs_dict.undef and (opts.webster or opts.failover and part_dict.undef) or
         opts.verbose > V_SHOW_TEXT_IF_UNDEF_P and part_dict.undef and (opts.partial or opts.failover and webs_dict.undef) or
         opts.verbose > V_SHOW_TEXT_MAT_FAIL_W and webs_dict.empty and (opts.webster or opts.failover and part_dict.undef) or
         opts.verbose > V_SHOW_TEXT_MAT_FAIL_P and part_dict.empty and (opts.partial or opts.failover and webs_dict.undef) or
@@ -675,7 +677,8 @@ def parse_dictionary_file(path, opts, verbose=1):
                         print(" {:<20} >>>> WEBSTER MATCH FAILED <<<< {:>6}".format(first_token(entry_text), idx))
                 else:
                     webs_entry = WebsterEntry(webs_dict)
-                    if (verbose > V_SHOW_WEBS_IF_UNDEF_W and webs_dict.undef or
+                    if (verbose > V_SHOW_BOTH_IF_UNDEF_B and webs_dict.undef and part_dict.undef and opts.failover or
+                        verbose > V_SHOW_WEBS_IF_UNDEF_W and webs_dict.undef or
                         verbose > V_SHOW_WEBS_IF_UNDEF_P and part_dict.undef or
                         verbose > V_SHOW_WEBS_ALWAYS):
                         show_webster(webs_entry, idx, webster_partial_status(webs_dict, part_dict, opts))
@@ -686,7 +689,8 @@ def parse_dictionary_file(path, opts, verbose=1):
                         print(" {:<20} >>>> PARTIAL MATCH FAILED <<<< {:>6}".format(first_token(entry_text), idx))
                 else:
                     part_entry =  WebsterEntry(part_dict)
-                    if (verbose > V_SHOW_PART_IF_UNDEF_P and part_dict.undef or
+                    if (verbose > V_SHOW_BOTH_IF_UNDEF_B and webs_dict.undef and part_dict.undef and opts.failover or
+                        verbose > V_SHOW_PART_IF_UNDEF_P and part_dict.undef or
                         verbose > V_SHOW_PART_IF_UNDEF_W and webs_dict.undef or
                         verbose > V_SHOW_PART_ALWAYS):
                         show_partial_match(part_entry, idx, webster_partial_status(webs_dict, part_dict, opts))
