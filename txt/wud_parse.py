@@ -267,7 +267,7 @@ REC_PARTIAL = re.compile(r"""
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?          # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized
 
-    (?:,?\ *(?P<part1a>{}\.(?:(?:,|,?\ &|\ or)?\ {}\.)*(?:(?:(?!\n\n|\sEtym:|\sDefn:)[\w\ ])+)?)?)?  # PoS 1st defn (order varies) FIXME remove comma
+    (?:,?\ *(?P<part1a>{}(?:(?=\n\n)|\.(?:(?:,|,?\ &|\ or)?\ {}\.)*(?:(?:(?!\n\n|Etym:|\sDefn:)[\w\ ])+)?)?))?  # PoS 1st defn (order varies) FIXME remove comma
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.(?:\s?[A-Z]\.\s+)?(?:(?!\n\n|\sEtym:|\sDefn:)[\w\ -])+)+)?  # plural form/suffix
 
     (?:[\ ,;]*(?P<sing_1>(?:[A-Z]\.\s+)?sing\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
@@ -364,10 +364,11 @@ def show_partial_match(part_entry, entry_index, reason):
         "brack1: (", matgadd["brack1"], ") \n\t",
         "pron1a: (", matgadd["pron1a"], ") \n\t",
         "part1b: (", matgadd["part1b"], ") \n\t",
+        "brack2: (", matgadd["brack2"], ") \n\t",
+        "note_1: (", matgadd["note_1"], ") \n\t",
         "etym_1: (", matgadd["etym_1"], ") \n\t",
         "etym_2: (", matgadd["etym_2"], ") \n\t",
         "note_2: (", matgadd["note_2"], ") \n\t",
-        "brack2: (", matgadd["brack2"], ") \n\t",
         "obstag: (", matgadd["obstag"], ") \n\t",
         "dtype1: (", matgadd["dtype1"], ") \n\t",
         "dftag1: (", matgadd["dftag1"], ") \n\t",
