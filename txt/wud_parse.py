@@ -221,12 +221,12 @@ REC_WEBSTER = re.compile(r"""
     (?:(?:,|\ or)\ *(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
-
     (?:,?\ *(?P<part1a>{}\.(?:(?:,?|,?\ &|\ or)\ {}\.)*),?)?   # part of speech for first definition (order varies) FIXME remove comma
-
-    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?\(?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w\s\(\),`-]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
+    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?\(?pl\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w\s\(\),`-]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
-    (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed 1
+
+    (?:\.?\s+\[(?P<brack1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # bracketed 1
+
     (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?          # part of speech for first definition (order varies)
     (?:\.?\s*\[(?P<brack2>[^\]]+)\])?               # bracketed 2
     (?:\.?\s*Note:\s+\[(?P<note_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
@@ -249,8 +249,9 @@ REC_WEBSTER = re.compile(r"""
 # ADD?: (?:\ *(?P<pron1a>Also\ [A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?))? # Pron 1 (Capitalized)
 # NEW
 # OLD: (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
-##    (?P<pron_1>(?:(?!\sEtym:|\sDefn:)[A-Z*][\w'"`* ]+-?)+(?:\(\#\))?(?:\(,\ )?)?
-#     (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
+##  (?P<pron_1>(?:(?!\sEtym:|\sDefn:)[A-Z*][\w'"`* ]+-?)+(?:\(\#\))?(?:\(,\ )?)?
+#   (?P<pron_1>[A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
+#   (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed 1
 
 REC_PARTIAL = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
@@ -260,12 +261,12 @@ REC_PARTIAL = re.compile(r"""
     (?:(?:,|\ or)\ *(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
-
     (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*))?   # part of speech for first definition (order varies)
-
-    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s+(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
+    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
-    (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed 1
+
+    (?:\.?\s+\[(?P<brack1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
+
     (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?          # part of speech for first definition (order varies)
     (?:\.?\s*\[(?P<brack2>[^\]]+)\])?               # bracketed 2
     (?:\.?\s*Note:\s+\[(?P<note_1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
