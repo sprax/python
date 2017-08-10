@@ -225,6 +225,7 @@ REP_PART = r'(?:a|adv|conj|i|imp|i|interj|n|p|pl|pr|pre[pst]|pron|sing|superl|t|
 #   (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?\(?pl\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w\s\(\),`-]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
 #   (?:,?\ *(?P<part1a>{}\.(?:(?:,|,?\ &|\ or)?\ {}\.)*(?:(?!\n\n|\sEtym:|\sDefn:)[\w\ ])+)?)?   # part of speech for first definition (order varies) FIXME remove comma
 
+# TODO: 2nd line should match ((pron + part)+ etc) | porn + (paren|bracket) | pron as whole line )
 REC_WEBSTER = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\ +(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
@@ -397,7 +398,6 @@ class DictEntry:
             self.getrep('cetera'),
            )
 
-
 ###############################################################################
 class WebsterEntry:
     '''Represents a parsed dictionary entry a la Webster's Unabridged'''
@@ -442,28 +442,8 @@ class WebsterEntry:
         self.cetera = webs.get('cetera')
 
     def __str__(self):
-        stray = [
-            "    word_1: " + self.word_1, ' '*(28 - len(self.word_1)),
-            "word_2: " + self.word_2, "\t\t",
-            "word_3: " + self.word_3, "\n\t",
-            "pron_1: " + self.pron_1, ' '*(28 - len(self.pron_1)),
-            "pron_2: " + self.pron_2, "\t\t",
-            "pron_3: " + self.pron_3, "\n\t",
-            "part_1: " + self.part_1, "\n\t",
-            "sing_1: " + self.sing_1, "\n\t",
-            "plural: " + self.plural, "\n\t",
-            "brack1: " + self.brack1, "\n\t",
-            "etym_1: " + self.etym_1, "\n\t",
-            "dtype1: " + self.dtype1, "\n\t",
-            "dftag1: " + self.dftag1, "\n\t",
-            "defn_1: " + self.defn_1, "\n\t",
-            "defn1a: " + self.defn1a, "\n\t",
-            "usage1: " + self.usage1, "\n\t",
-            "defn_2: " + self.defn_2, "\n\t",
-            "cetera: " + self.cetera, "\n\n",
-        ]
-        strep = ''.join(stray)
-        return strep
+        '''FIXME: eventually this should be something useful, maybe a JSON'''
+        return self.spells[0]
 
     def token_string(self):
         return '; '.join(self.tokens)
