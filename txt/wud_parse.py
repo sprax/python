@@ -344,40 +344,6 @@ PLURAL:
 
 '''
 
-def show_partial_match(part_entry, entry_index, reason):
-    '''Show partial regex match as items in a dict seeded by the match's groupdict'''
-    part = part_entry.indict
-    matgadd = defaultdict(str, part.table)
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>  Partial  %d  %s  %s" % (entry_index, part_entry.token_string(), reason))
-    word_1, pron_1 = part.get("word_1"), part.get("pron_1")
-    put(part.getrep('word_1', ' '*(21 - len(word_1))),
-        part.getrep('word_2', "\t\t"),
-        part.getrep('word_3'),
-        part.getrep('pron_1', ' '*(21 - len(pron_1))),
-        part.getrep('pron_2'), "\t\t",
-        part.getrep('pron_3'),
-        part.getrep('pren1a'),
-        part.getrep('part1a'),
-        part.getrep('sing_1', "\t\t"),
-        part.getrep('plural'),
-        part.getrep('pren1b'),
-        part.getrep('brack1'),
-        part.getrep('part1b'),
-        part.getrep('brack2'),
-        part.getrep('note_1'),
-        part.getrep('etym_1'),
-        part.getrep('etym_2'),
-        part.getrep('note_2'),
-        part.getrep('obstag'),
-        part.getrep('dtype1'),
-        part.getrep('dftag1'),
-        part.getrep('defn_1'),
-        part.getrep('usage1'),
-        part.getrep('defn1a'),
-        part.getrep('defn_2'),
-        part.getrep('cetera'),
-       )
-
 ###############################################################################
 class DictEntry:
     def __init__(self, suffix, entry_dict):
@@ -388,36 +354,48 @@ class DictEntry:
         self.empty = not entry_dict
 
     def get(self, key):
-        '''Return key's value, '', or KeyError if not present'''
-        val = self.table[key]
-        return val if val else ''
+        '''Return key's value, which may be None, or throw KeyError if key not present'''
+        return self.table[key]
 
-    def getlow(self, key):
-        '''Return value lowered or KeyError'''
-        text = self.get(key)
-        return text.lower() if text else ''
+    def getstr(self, key):
+        '''Return key's value, if present, else ''.  Does NOT throw KeyError if key not present'''
+        val = self.table.get(key)
+        return val if val else ''
 
     def getrep(self, key, end="\n"):
         '''Return string for printing'''
-        return "    %s |%s|%s" % (key, self.get(key), end)
+        return "    %s |%s|%s" % (key, self.getstr(key), end)
 
-
-def make_dict_entry(metrics, suffix, index, matcher, entry_text):
-    '''Create a DectEntry object from a dictionary text entry and update metrics.
-    If the entry_text fails to parse, an object with an empty data store is returned.'''
-    beg = time.time()
-    mat = matcher(entry_text)
-    end = time.time()
-    metrics[str(index) + suffix] = end - beg
-    if mat:
-        metrics['matched' + suffix] += 1
-        dict_entry = DictEntry(suffix, mat.groupdict())
-        if dict_entry.undef:
-            metrics['undef' + suffix] += 1
-    else:
-        metrics['unmatched' + suffix] += 1
-        dict_entry = DictEntry(suffix, {})
-    return dict_entry
+    def show_dict(self):
+        '''Show dict fields to be compared'''
+        word_1, pron_1 = self.get("word_1"), self.get("pron_1")
+        put(self.getrep('word_1', ' '*(21 - len(word_1))),
+            self.getrep('word_2', "\t\t"),
+            self.getrep('word_3'),
+            self.getrep('pron_1', ' '*(21 - len(pron_1))),
+            self.getrep('pron_2'), "\t\t",
+            self.getrep('pron_3'),
+            self.getrep('pren1a'),
+            self.getrep('part1a'),
+            self.getrep('sing_1', "\t\t"),
+            self.getrep('plural'),
+            self.getrep('pren1b'),
+            self.getrep('brack1'),
+            self.getrep('part1b'),
+            self.getrep('brack2'),
+            self.getrep('note_1'),
+            self.getrep('etym_1'),
+            self.getrep('etym_2'),
+            self.getrep('note_2'),
+            self.getrep('obstag'),
+            self.getrep('dtype1'),
+            self.getrep('dftag1'),
+            self.getrep('defn_1'),
+            self.getrep('usage1'),
+            self.getrep('defn1a'),
+            self.getrep('defn_2'),
+            self.getrep('cetera'),
+           )
 
 
 ###############################################################################
@@ -426,16 +404,30 @@ class WebsterEntry:
     def __init__(self, webs):
         '''TODO: bifurcate on word_2 if present'''
         self.indict = webs
-        self.word_1 = webs.getlow('word_1')
-        self.word_2 = webs.getlow('word_2')
-        self.word_3 = webs.getlow('word_3')
-        self.pron_1 = webs.get('pron_1')
-        self.pron_2 = webs.get('pron_2')
-        self.pron_3 = webs.get('pron_3')
+        token1 = webs.get('word_1')
+        self.tokens = [token1]
+        self.word_1 = token1.lower()
+        self.spells = [self.word_1]
+        token2 = webs.get('word_2')
+        if token2:
+            self.tokens.append(token2)
+            self.spells.append(token2.lower())
+        token3 = webs.get('word_3')
+        if token3:
+            self.tokens.append(token3)
+            self.spells.append(token3.lower())
+        pron_1 = webs.get('pron_1')
+        self.prons = [pron_1] if pron_1 else []
+        pron_2 = webs.get('pron_2')
+        if pron_2:
+            self.prons.append(pron_2)
+        pron_3 = webs.get('pron_3')
+        if pron_3:
+            self.prons.append(pron_3)
+
         self.pren1a = webs.get('pren1a')
         self.pren1b = webs.get('pren1b')
         self.brack1 = webs.get('brack1')
-        # self.sepsp1 = webs.get('sepsp1')
         part1 = webs.get('part1a')
         self.part_1 = part1 if part1 else webs.get('part1b')
         self.sing_1 = webs.get('sing_1')
@@ -450,8 +442,8 @@ class WebsterEntry:
         self.cetera = webs.get('cetera')
 
     def __str__(self):
-        stray = [ "\t",
-            "word_1: " + self.word_1, ' '*(28 - len(self.word_1)),
+        stray = [
+            "    word_1: " + self.word_1, ' '*(28 - len(self.word_1)),
             "word_2: " + self.word_2, "\t\t",
             "word_3: " + self.word_3, "\n\t",
             "pron_1: " + self.pron_1, ' '*(28 - len(self.pron_1)),
@@ -474,27 +466,39 @@ class WebsterEntry:
         return strep
 
     def token_string(self):
-        tokens = self.indict.get('word_1')
-        word_2 = self.indict.get('word_2')
-        if word_2:
-            tokens += '; ' + word_2
-            word_3 = self.indict.get('word_3')
-            if word_3:
-                tokens += '; ' + word_3
-        return tokens
-
-    def variants(self):
-        '''return list of variant spellings'''
-        variants = [self.word_1]
-        if self.word_2:
-            variants.append(self.word_2)
-            if self.word_3:
-                variants.append(self.word_3)
-        return variants
+        return '; '.join(self.tokens)
 
     def parts_of_speech(self):
         '''return all identified parts of speech abbreviations'''
         return self.part_1
+
+def show_partial_match(part_entry, entry_index, reason):
+    '''Show partial regex match as items in a dict seeded by the match's groupdict'''
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>  Partial  %d  %s  %s" % (entry_index, part_entry.token_string(), reason))
+    part_entry.indict.show_dict()
+
+def show_webster_entry(webs_entry, index, status):
+    '''Show a WebsterEntry in a format comparable with that of show_partial_match.  Eventually it will diverge.'''
+    print("<<<<<<<<<<<<<<<<<<<<<<<<<<  Webster  %d  %s  %s" % (index, webs_entry.token_string(), status))
+    webs_entry.indict.show_dict()
+
+###############################################################################
+def make_dict_entry(metrics, suffix, index, matcher, entry_text):
+    '''Create a DectEntry object from a dictionary text entry and update metrics.
+    If the entry_text fails to parse, an object with an empty data store is returned.'''
+    beg = time.time()
+    mat = matcher(entry_text)
+    end = time.time()
+    metrics[str(index) + suffix] = end - beg
+    if mat:
+        metrics['matched' + suffix] += 1
+        dict_entry = DictEntry(suffix, mat.groupdict())
+        if dict_entry.undef:
+            metrics['undef' + suffix] += 1
+    else:
+        metrics['unmatched' + suffix] += 1
+        dict_entry = DictEntry(suffix, {})
+    return dict_entry
 
 def match_webster_entry(entry):
     '''return regex match on dictionary entry text; trying only one pattern for now'''
@@ -616,10 +620,6 @@ def webster_partial_status(webs, part, opts):
     part_stat = "; Partial " + dict_entry_status(part, opts.partial or opts.failover and webs.undef) + ")"
     return webs_stat + part_stat
 
-def show_webster(webs_entry, index, status):
-    print("<<<<<<<<<<<<<<<<<<<<<<<<<<  Webster  %d  %s  %s" % (index, webs_entry.token_string(), status))
-    utf_print(webs_entry)
-
 ###############################################################################
 def parse_dictionary_file(path, opts, verbose=1):
     '''
@@ -688,7 +688,7 @@ def parse_dictionary_file(path, opts, verbose=1):
                         verbose > V_SHOW_WEBS_IF_UNDEF_W and webs.undef or
                         verbose > V_SHOW_WEBS_IF_UNDEF_P and part.undef or
                         verbose > V_SHOW_WEBS_ALWAYS):
-                        show_webster(webs_entry, idx, webster_partial_status(webs, part, opts))
+                        show_webster_entry(webs_entry, idx, webster_partial_status(webs, part, opts))
 
             if verbose > V_SHOW_TOKEN_IF_MATCH_FAILED_P:
                 if part.empty:
