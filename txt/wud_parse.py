@@ -346,37 +346,36 @@ PLURAL:
 
 def show_partial_match(part_entry, entry_index, reason):
     '''Show partial regex match as items in a dict seeded by the match's groupdict'''
-    part_dict = part_entry.dict
-    matgadd = defaultdict(str, part_dict.table)
+    part = part_entry.indict
+    matgadd = defaultdict(str, part.table)
     print(">>>>>>>>>>>>>>>>>>>>>>>>>>  Partial  %d  %s  %s" % (entry_index, part_entry.token_string(), reason))
-    put("\t",
-        "word_1: (", matgadd["word_1"], ") \t\t",
-        "word_2: (", matgadd["word_2"], ") \t\t",
-        "word_3: (", matgadd["word_3"], ") \n\t",
-        "pron_1: (", matgadd["pron_1"], ") \t\t",
-        "pron_2: (", matgadd["pron_2"], ") \t\t",
-        "pron_3: (", matgadd["pron_3"], ") \n\t",
-        "pren1a: (", matgadd["pren1a"], ") \n\t",
-        "part1a: (", matgadd["part1a"], ") \n\t",
-        "sing_1: (", matgadd["sing_1"], ") \t\t",
-        "plural: (", matgadd["plural"], ") \n\t",
-        "pren1b: (", matgadd["pren1b"], ") \n\t",
-        "brack1: (", matgadd["brack1"], ") \n\t",
-        "pron1a: (", matgadd["pron1a"], ") \n\t",
-        "part1b: (", matgadd["part1b"], ") \n\t",
-        "brack2: (", matgadd["brack2"], ") \n\t",
-        "note_1: (", matgadd["note_1"], ") \n\t",
-        "etym_1: (", matgadd["etym_1"], ") \n\t",
-        "etym_2: (", matgadd["etym_2"], ") \n\t",
-        "note_2: (", matgadd["note_2"], ") \n\t",
-        "obstag: (", matgadd["obstag"], ") \n\t",
-        "dtype1: (", matgadd["dtype1"], ") \n\t",
-        "dftag1: (", matgadd["dftag1"], ") \n\t",
-        "defn_1: (", matgadd["defn_1"], ") \n\t",
-        "usage1: (", matgadd["usage1"], ") \n\t",
-        "defn1a: (", matgadd["defn1a"], ") \n\t",
-        "defn_2: (", matgadd["defn_2"], ") \n\t",
-        "cetera: (", matgadd["cetera"], ") \n\t",
+    word_1, pron_1 = part.get("word_1"), part.get("pron_1")
+    put(part.getrep('word_1', ' '*(21 - len(word_1))),
+        part.getrep('word_2', "\t\t"),
+        part.getrep('word_3'),
+        part.getrep('pron_1', ' '*(21 - len(pron_1))),
+        part.getrep('pron_2'), "\t\t",
+        part.getrep('pron_3'),
+        part.getrep('pren1a'),
+        part.getrep('part1a'),
+        part.getrep('sing_1', "\t\t"),
+        part.getrep('plural'),
+        part.getrep('pren1b'),
+        part.getrep('brack1'),
+        part.getrep('part1b'),
+        part.getrep('brack2'),
+        part.getrep('note_1'),
+        part.getrep('etym_1'),
+        part.getrep('etym_2'),
+        part.getrep('note_2'),
+        part.getrep('obstag'),
+        part.getrep('dtype1'),
+        part.getrep('dftag1'),
+        part.getrep('defn_1'),
+        part.getrep('usage1'),
+        part.getrep('defn1a'),
+        part.getrep('defn_2'),
+        part.getrep('cetera'),
        )
 
 ###############################################################################
@@ -389,13 +388,19 @@ class DictEntry:
         self.empty = not entry_dict
 
     def get(self, key):
-        '''Return key's value or KeyError if not present'''
-        return self.table[key]
+        '''Return key's value, '', or KeyError if not present'''
+        val = self.table[key]
+        return val if val else ''
 
     def getlow(self, key):
         '''Return value lowered or KeyError'''
         text = self.get(key)
-        return text.lower() if text else None
+        return text.lower() if text else ''
+
+    def getrep(self, key, end="\n"):
+        '''Return string for printing'''
+        return "    %s |%s|%s" % (key, self.get(key), end)
+
 
 def make_dict_entry(metrics, suffix, index, matcher, entry_text):
     '''Create a DectEntry object from a dictionary text entry and update metrics.
@@ -418,60 +423,62 @@ def make_dict_entry(metrics, suffix, index, matcher, entry_text):
 ###############################################################################
 class WebsterEntry:
     '''Represents a parsed dictionary entry a la Webster's Unabridged'''
-    def __init__(self, webs_dict):
+    def __init__(self, webs):
         '''TODO: bifurcate on word_2 if present'''
-        self.dict = webs_dict
-        self.word_1 = webs_dict.getlow('word_1')
-        self.word_2 = webs_dict.getlow('word_2')
-        self.word_3 = webs_dict.getlow('word_3')
-        self.pron_1 = webs_dict.get('pron_1')
-        self.pron_2 = webs_dict.get('pron_2')
-        self.pron_3 = webs_dict.get('pron_3')
-        self.pren1a = webs_dict.get('pren1a')
-        self.pren1b = webs_dict.get('pren1b')
-        self.brack1 = webs_dict.get('brack1')
-        # self.sepsp1 = webs_dict.get('sepsp1')
-        part1 = webs_dict.get('part1a')
-        self.part_1 = part1 if part1 else webs_dict.get('part1b')
-        self.sing_1 = webs_dict.get('sing_1')
-        self.plural = webs_dict.get('plural')
-        self.etym_1 = webs_dict.get('etym_1')
-        self.dftag1 = webs_dict.get('dftag1')
-        self.defn_1 = webs_dict.get('defn_1')
-        self.defn1a = webs_dict.get('defn1a')
-        self.usage1 = webs_dict.get('usage1')
-        self.defn_2 = webs_dict.get('defn_2')
-        self.cetera = webs_dict.get('cetera')
+        self.indict = webs
+        self.word_1 = webs.getlow('word_1')
+        self.word_2 = webs.getlow('word_2')
+        self.word_3 = webs.getlow('word_3')
+        self.pron_1 = webs.get('pron_1')
+        self.pron_2 = webs.get('pron_2')
+        self.pron_3 = webs.get('pron_3')
+        self.pren1a = webs.get('pren1a')
+        self.pren1b = webs.get('pren1b')
+        self.brack1 = webs.get('brack1')
+        # self.sepsp1 = webs.get('sepsp1')
+        part1 = webs.get('part1a')
+        self.part_1 = part1 if part1 else webs.get('part1b')
+        self.sing_1 = webs.get('sing_1')
+        self.plural = webs.get('plural')
+        self.etym_1 = webs.get('etym_1')
+        self.dftag1 = webs.get('dftag1')
+        self.dtype1 = webs.get('dtype1')
+        self.defn_1 = webs.get('defn_1')
+        self.defn1a = webs.get('defn1a')
+        self.usage1 = webs.get('usage1')
+        self.defn_2 = webs.get('defn_2')
+        self.cetera = webs.get('cetera')
 
     def __str__(self):
-        stray = [
-            "\tword_1: %s\t\t" % self.word_1,
-            "word_2: %s\t\t" % self.word_2,
-            "word_3: %s\n\t" % self.word_3,
-            "pron_1: %s\t\t" % self.pron_1,
-            "pron_2: %s\t\t" % self.pron_2,
-            "pron_3: %s\n\t" % self.pron_3,
-            "part_1: %s\n\t" % self.part_1,
-            "sing_1: %s\n\t" % self.sing_1,
-            "plural: %s\n\t" % self.plural,
-            "brack1: %s\n\t" % self.brack1,
-            "etym_1: %s\n\t" % self.etym_1,
-            "dftag1: %s\n\t" % self.dftag1,
-            "defn_1: %s\n\t" % self.defn_1,
-            "defn1a: %s\n\t" % self.defn1a,
-            "usage1: %s\n\t" % self.usage1,
-            "defn_2: %s\n\t" % self.defn_2,
-            "cetera: %s\n\t" % self.cetera,
+        stray = [ "\t",
+            "word_1: " + self.word_1, ' '*(28 - len(self.word_1)),
+            "word_2: " + self.word_2, "\t\t",
+            "word_3: " + self.word_3, "\n\t",
+            "pron_1: " + self.pron_1, ' '*(28 - len(self.pron_1)),
+            "pron_2: " + self.pron_2, "\t\t",
+            "pron_3: " + self.pron_3, "\n\t",
+            "part_1: " + self.part_1, "\n\t",
+            "sing_1: " + self.sing_1, "\n\t",
+            "plural: " + self.plural, "\n\t",
+            "brack1: " + self.brack1, "\n\t",
+            "etym_1: " + self.etym_1, "\n\t",
+            "dtype1: " + self.dtype1, "\n\t",
+            "dftag1: " + self.dftag1, "\n\t",
+            "defn_1: " + self.defn_1, "\n\t",
+            "defn1a: " + self.defn1a, "\n\t",
+            "usage1: " + self.usage1, "\n\t",
+            "defn_2: " + self.defn_2, "\n\t",
+            "cetera: " + self.cetera, "\n\n",
         ]
         strep = ''.join(stray)
         return strep
 
     def token_string(self):
-        tokens = self.dict.get('word_1')
-        word_2 = self.dict.get('word_2')
+        tokens = self.indict.get('word_1')
+        word_2 = self.indict.get('word_2')
         if word_2:
             tokens += '; ' + word_2
-            word_3 = self.dict.get('word_3')
+            word_3 = self.indict.get('word_3')
             if word_3:
                 tokens += '; ' + word_3
         return tokens
@@ -572,13 +579,13 @@ V_SHOW_TEXT_ALWAYS = 22
 
 M_DEFN_1_NOT_FOUND = "Main Defn1 Not Found"
 
-def show_entry_on_verbose(webs_dict, part_dict, entry_text, entry_index, opts):
-    if (opts.verbose > V_SHOW_TEXT_IF_UNDEF_B and webs_dict.undef and part_dict.undef and (opts.failover or opts.both) or
-        opts.verbose > V_SHOW_TEXT_IF_UNDEF_W and webs_dict.undef and (opts.webster or opts.failover and part_dict.undef) or
-        opts.verbose > V_SHOW_TEXT_IF_UNDEF_W and webs_dict.undef and (opts.webster or opts.failover and part_dict.undef) or
-        opts.verbose > V_SHOW_TEXT_IF_UNDEF_P and part_dict.undef and (opts.partial or opts.failover and webs_dict.undef) or
-        opts.verbose > V_SHOW_TEXT_MAT_FAIL_W and webs_dict.empty and (opts.webster or opts.failover and part_dict.undef) or
-        opts.verbose > V_SHOW_TEXT_MAT_FAIL_P and part_dict.empty and (opts.partial or opts.failover and webs_dict.undef) or
+def show_entry_on_verbose(webs, part, entry_text, entry_index, opts):
+    if (opts.verbose > V_SHOW_TEXT_IF_UNDEF_B and webs.undef and part.undef and (opts.failover or opts.both) or
+        opts.verbose > V_SHOW_TEXT_IF_UNDEF_W and webs.undef and (opts.webster or opts.failover and part.undef) or
+        opts.verbose > V_SHOW_TEXT_IF_UNDEF_W and webs.undef and (opts.webster or opts.failover and part.undef) or
+        opts.verbose > V_SHOW_TEXT_IF_UNDEF_P and part.undef and (opts.partial or opts.failover and webs.undef) or
+        opts.verbose > V_SHOW_TEXT_MAT_FAIL_W and webs.empty and (opts.webster or opts.failover and part.undef) or
+        opts.verbose > V_SHOW_TEXT_MAT_FAIL_P and part.empty and (opts.partial or opts.failover and webs.undef) or
         opts.verbose > V_SHOW_TEXT_ALWAYS):
         show_entry(entry_text, entry_index)
 
@@ -604,9 +611,9 @@ def dict_entry_status(entry, tried):
     else:
         return "is UNDEFINED" if entry.undef else "is defined"
 
-def webster_partial_status(webs_dict, part_dict, opts):
-    webs_stat = " (Webster " + dict_entry_status(webs_dict, opts.webster or opts.failover and part_dict.undef)
-    part_stat = "; Partial " + dict_entry_status(part_dict, opts.partial or opts.failover and webs_dict.undef) + ")"
+def webster_partial_status(webs, part, opts):
+    webs_stat = " (Webster " + dict_entry_status(webs, opts.webster or opts.failover and part.undef)
+    part_stat = "; Partial " + dict_entry_status(part, opts.partial or opts.failover and webs.undef) + ")"
     return webs_stat + part_stat
 
 def show_webster(webs_entry, index, status):
@@ -646,20 +653,20 @@ def parse_dictionary_file(path, opts, verbose=1):
             beg_entry = time.time()
 
             if opts.webster:
-                webs_dict = make_dict_entry(metrics, '_webs', idx, match_webster_entry, entry_text)
-                if opts.partial or opts.failover and webs_dict.undef:
-                    part_dict = make_dict_entry(metrics, '_part', idx, match_partial_entry, entry_text)
+                webs = make_dict_entry(metrics, '_webs', idx, match_webster_entry, entry_text)
+                if opts.partial or opts.failover and webs.undef:
+                    part = make_dict_entry(metrics, '_part', idx, match_partial_entry, entry_text)
                 else:
-                    part_dict = DictEntry('_part', {})
+                    part = DictEntry('_part', {})
             elif opts.partial:
-                part_dict = make_dict_entry(metrics, '_part', idx, match_partial_entry, entry_text)
-                if part_dict.undef and opts.failover:
-                    webs_dict = make_dict_entry(metrics, '_webs', idx, match_webster_entry, entry_text)
+                part = make_dict_entry(metrics, '_part', idx, match_partial_entry, entry_text)
+                if part.undef and opts.failover:
+                    webs = make_dict_entry(metrics, '_webs', idx, match_webster_entry, entry_text)
                 else:
-                    webs_dict = DictEntry('_webs', {})
+                    webs = DictEntry('_webs', {})
             else:
-                webs_dict = DictEntry('_webs', {})
-                part_dict = DictEntry('_part', {})
+                webs = DictEntry('_webs', {})
+                part = DictEntry('_part', {})
 
             entry_time = time.time() - beg_entry
             metrics[idx] = entry_time
@@ -667,33 +674,33 @@ def parse_dictionary_file(path, opts, verbose=1):
                 max_entry_time = entry_time
                 max_time_index = idx
 
-            show_entry_on_verbose(webs_dict, part_dict, entry_text, idx, opts)
+            show_entry_on_verbose(webs, part, entry_text, idx, opts)
 
             # TODO: unfold fields, starting with etym_1 and defn_1
 
             if verbose > V_SHOW_TOKEN_IF_MATCH_FAILED_W:
-                if webs_dict.empty:
+                if webs.empty:
                     if opts.webster:
                         print(" {:<20} >>>> WEBSTER MATCH FAILED <<<< {:>6}".format(first_token(entry_text), idx))
                 else:
-                    webs_entry = WebsterEntry(webs_dict)
-                    if (verbose > V_SHOW_BOTH_IF_UNDEF_B and webs_dict.undef and part_dict.undef and opts.failover or
-                        verbose > V_SHOW_WEBS_IF_UNDEF_W and webs_dict.undef or
-                        verbose > V_SHOW_WEBS_IF_UNDEF_P and part_dict.undef or
+                    webs_entry = WebsterEntry(webs)
+                    if (verbose > V_SHOW_BOTH_IF_UNDEF_B and webs.undef and part.undef and opts.failover or
+                        verbose > V_SHOW_WEBS_IF_UNDEF_W and webs.undef or
+                        verbose > V_SHOW_WEBS_IF_UNDEF_P and part.undef or
                         verbose > V_SHOW_WEBS_ALWAYS):
-                        show_webster(webs_entry, idx, webster_partial_status(webs_dict, part_dict, opts))
+                        show_webster(webs_entry, idx, webster_partial_status(webs, part, opts))
 
             if verbose > V_SHOW_TOKEN_IF_MATCH_FAILED_P:
-                if part_dict.empty:
+                if part.empty:
                     if opts.partial:
                         print(" {:<20} >>>> PARTIAL MATCH FAILED <<<< {:>6}".format(first_token(entry_text), idx))
                 else:
-                    part_entry =  WebsterEntry(part_dict)
-                    if (verbose > V_SHOW_BOTH_IF_UNDEF_B and webs_dict.undef and part_dict.undef and opts.failover or
-                        verbose > V_SHOW_PART_IF_UNDEF_P and part_dict.undef or
-                        verbose > V_SHOW_PART_IF_UNDEF_W and webs_dict.undef or
+                    part_entry =  WebsterEntry(part)
+                    if (verbose > V_SHOW_BOTH_IF_UNDEF_B and webs.undef and part.undef and opts.failover or
+                        verbose > V_SHOW_PART_IF_UNDEF_P and part.undef or
+                        verbose > V_SHOW_PART_IF_UNDEF_W and webs.undef or
                         verbose > V_SHOW_PART_ALWAYS):
-                        show_partial_match(part_entry, idx, webster_partial_status(webs_dict, part_dict, opts))
+                        show_partial_match(part_entry, idx, webster_partial_status(webs, part, opts))
 
         if opts.stop_index > 0 and idx >= opts.stop_index:
             break
