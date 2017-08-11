@@ -250,7 +250,7 @@ REC_WEBSTER = re.compile(r"""
     (?:\.?\s*\[(?P<brack3>[^\]]+)\])?               # bracketed 3
     (?:\.?\s+\[(?P<obstag>Obs|R)\.\])?              # Obsolete tag
     (?:\.?[\ \n]\((?P<dtype1>\w[\w\s&.]+\.?)\))?    # subject field abbreviations, e.g. (Arch., Bot. & Zool.)
-    (?:\.?\s*(?P<dftag1>Defn:|1\.|\(a\)|Lit\.,?)\s+\.?\s*(?P<defn_1>[^.]+(?:\.|\n\n|$)))?\s*   # Defn 1 tag and first sentence of definition.
+    (?:[,.]?\s*(?P<dftag1>Defn:|1\.|\(a\)|Lit\.,?)\s+\.?\s*(?P<defn_1>[^.]+(?:\.|\n\n|$)))?\s*   # Defn 1 tag and first sentence of definition.
     (?P<defn1a>[A-Z][^.]+\.)?\s*                # definition 1 sentence 2
     (?P<usage1>".*"[^\d]+)?\s*                  # example 1
     (?P<defn_2>\d.\s[^\d]+)?                    # definition 2, ...
@@ -268,7 +268,7 @@ REC_PARTIAL = re.compile(r"""
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?          # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized
 
-    (?:,?\ *(?P<part1a>{}(?:(?=\n\n)|\.(?:(?:,|,?\ &|\ or)?\ {}\.)*(?:(?:(?!\n\n|Etym:|\sDefn:)[\w\ ])+)?)?))?  # PoS 1st defn (order varies) FIXME remove comma
+    (?:,?\ *(?P<part1a>{}(?:(?=\n\n)|\.?(?:(?:,|,?\ &|\ or)?\ {}\.)*(?:(?:(?!\n\n|Etym:|\sDefn:)[\w\ ,.-])+)?)?))?  # PoS 1st defn (order varies) FIXME remove comma
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.(?:\s?[A-Z]\.\s+)?(?:(?!\n\n|\sEtym:|\sDefn:)[\w\ -])+)+)?  # plural form/suffix
 
     (?:[\ ,;]*(?P<sing_1>(?:[A-Z]\.\s+)?sing\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
@@ -374,7 +374,7 @@ class DictEntry:
             self.getrep('word_2', "\t\t"),
             self.getrep('word_3'),
             self.getrep('pron_1', ' '*(21 - len(pron_1))),
-            self.getrep('pron_2'), "\t\t",
+            self.getrep('pron_2', "\t\t"),
             self.getrep('pron_3'),
             self.getrep('pren1a'),
             self.getrep('part1a'),
