@@ -313,17 +313,14 @@ REC_PARTIAL = re.compile(r"""
     (?P<defn_2>\d.\s[^\d]+)?                    # definition 2, ...
 
 
-    (?:\.?,?\ *(?P<pron1a>(?:(?!\n\n|\sEtym:|\sDefn:)[A-Z*][\w'"`*, -]+)+(?:\(\#\))?(?:\(,\ )?))?
 
 Partial:
     # Add pron1a right after part1a:
     (?:,?\ *(?P<part1a>{}\.(?:(?:,?|\ &|\ or)\ {}\.)*))?   # part of speech for first definition (order varies)
-    (?:\ *(?P<pron1a>Also\ [A-Z-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?))? # Pron 1 (Capitalized)
 
     (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
 
 Webster:
-    (?P<pron_1>[A-Z*-](?:\w*[\`\'"*-]?\ ?)+\w+[\`\'"*-]?(?:\(\#\))?|[A-Z]-?(?:\(,\ )?)? # Pron 1 (Capitalized)
 
 
   # (?:\.?\s*\[(?P<brack1>[^\]]+)\])?               # bracketed
