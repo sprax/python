@@ -630,7 +630,8 @@ def parse_dictionary_file(path, opts, verbose=1):
 
             beg_entry = time.time()
 
-            clean_entry = entry_text.replace(" (,", ",")
+            cleaned = entry_text.replace(" (,", ",")
+            clean_entry = re.sub(r'\ ?\([^)]*277\)', '', cleaned)
             if opts.webster:
                 webs = make_dict_entry(metrics, '_webs', idx, match_webster_entry, clean_entry)
                 if opts.partial or opts.failover and webs.undef:
