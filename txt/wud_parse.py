@@ -237,8 +237,8 @@ REC_WEBSTER = re.compile(r"""
     (?:,?\ *(?P<part1a>{}\.(?:(?:,|,?\ &|\ or)?\ {}\.)*(?:(?!\n\n|\sEtym:|\sDefn:)[\w\ ]+)?))?  # PoS for 1st defn.
     (?:[\ ,;]*(?P<sing_1>(?:[A-Z]\.\s+)?sing\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
     (?:[\ ,;]*(?P<plural>(?:(?:E|F|Gr?|Heb|I|L)\.\s+)?pl\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
-    (?:[\ ,;]*(?P<compar>(?:(?:compar|superl)\.\s*(?:\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+)))? # plural form/suffix
 
+    (?:[\ ,;]*(?P<compar>(?:(?:compar|superl)\.\s*(?:\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+)))? # plural form/suffix
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
     (?:\.?\s*\[(?P<brack1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # bracketed 1
     (?:\.?\s*(?P<part1b>(?:{}\s*\.\s*)+))?          # part of speech for first definition (order varies)
@@ -264,12 +264,12 @@ REC_PARTIAL = re.compile(r"""
     (?:;\ +(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\ +(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
     (?:,?\ *(?P<pron_1>(?:(?!\n\n|\sEtym:|\sDefn:)[\w(#)'"`* -])+))?
-    (?:(?:,|\ or)\ *(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
+    (?:(?:[,.]|\ or)\ *(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[\w][^\s\(\[,.]+))?          # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized
     (?:,?\ *(?P<part1a>{}(?:(?=\n\n)|\.?(?:(?:,|,?\ &|\ or)?\ {}\.)*(?:(?:(?!\n\n|Etym:|\sDefn:)[\w\ ,.-])+)?)?))?  # PoS 1st defn (order varies) FIXME remove comma
-    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.(?:\s?[A-Z]\.\s+)?(?:(?!\n\n|\sEtym:|\sDefn:)[\w\ -])+)+)?  # plural form/suffix
-    (?:[\ ,;]*(?P<sing_1>(?:[A-Z]\.\s+)?sing\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # plural form/suffix
+    (?:[\ ,;]*(?P<plural>(?:[A-Z]\.\s+)?pl\.(?:\s?[A-Z]\.\s+)?(?:(?!\n\n|\sEtym:|\sDefn:)[\w(#)'"`* -])+)+)?  # plural form/suffix
+    (?:[\ ,;]*(?P<sing_1>(?:[A-Z]\.\s+)?sing\.\s*(?:(?:[A-Z]\.\s+)?-?\w+[\w,.()\ -]*-?\w+\s*[;,.(#)]+\ *)+))? # singular form/suffix
     (?:\ *\((?P<pren1b>[^\)]+)\)\s*)?               # parenthesized 1b
 
     (?:\.?\s*\[(?P<brack1>[^\]]+?(?=\]|\n\n|\s+Defn:|\s+1\.|\n+\(a\)))\]?)?       # Note
@@ -361,22 +361,27 @@ class DictEntry:
         val = self.table.get(key)
         return val if val else ''
 
-    def getrep(self, key, end="\n"):
+    def getrep(self, key, width=0, end="\n"):
         '''Return string for printing'''
-        return "    %s |%s|%s" % (key, self.getstr(key), end)
+        val = self.getstr(key)
+        rep = "    %s |%s|" % (key, val)
+        if width > 0:
+            lent = len(val)
+            if width > lent:
+               end = ' '*(width - lent)
+        return rep + end
 
     def show_dict(self):
         '''Show dict fields to be compared'''
-        word_1, pron_1 = self.get("word_1"), self.get("pron_1")
-        put(self.getrep('word_1', ' '*(21 - len(word_1))),
-            self.getrep('word_2', "\t\t"),
+        put(self.getrep('word_1', 28),
+            self.getrep('word_2', 28),
             self.getrep('word_3'),
-            self.getrep('pron_1', ' '*(21 - len(pron_1))),
-            self.getrep('pron_2', "\t\t"),
+            self.getrep('pron_1', 28),
+            self.getrep('pron_2', 28),
             self.getrep('pron_3'),
             self.getrep('pren1a'),
             self.getrep('part1a'),
-            self.getrep('sing_1', "\t\t"),
+            self.getrep('sing_1', 28),
             self.getrep('plural'),
             self.getrep('pren1b'),
             self.getrep('brack1'),
