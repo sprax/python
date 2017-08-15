@@ -230,8 +230,10 @@ REC_WEBSTER = re.compile(r"""
     ^(?P<word_1>(?:[A-Z]+['-]?\ ?)+[A-Z]+['-]?\b|[A-Z]+['-]?|[A-Z\ '-]+) # Primary WORD and whitespace
     (?:;\ +(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\ +(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
-    (?:,?\ *(?P<pron_1>(?:(?!\n\n|\sEtym:|\sDefn:)[\w(#)'"`* -])+))?
-    (?:,(?:\ or)?\ *(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
+    (?P<pron_1>[A-Z-](?:(?!\n\n|\sEtym:|\sDefn:)[\w#'"`* -])+)?
+    (?:,?\ *(?P<part1p>{}\.(?:(?:,|,?\ &|\ or)?\ {}\.)*(?:(?!\n\n|\sEtym:|\sDefn:)[\w\ ]+)?))?  # PoS for 1st defn.
+    (?:\ *\((?P<pren1p>[^\)]+)\)\.?)?               # parenthesized 1a
+    (?:,(?:\ or)?\ *(?P<pron_2>[A-Z-](?:(?!\n\n|\sEtym:|\sDefn:)[\w#'"`* -])+))?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized 1a
     (?:,?\ *(?P<part1a>{}\.(?:(?:,|,?\ &|\ or)?\ {}\.)*(?:(?!\n\n|\sEtym:|\sDefn:)[\w\ ]+)?))?  # PoS for 1st defn.
@@ -254,7 +256,7 @@ REC_WEBSTER = re.compile(r"""
     (?P<usage1>".*"[^\d]+)?\s*                  # example 1
     (?P<defn_2>\d.\s[^\d]+)?                    # definition 2, ...
     (?P<cetera>.*)?$                            # etc.
-""".format(REP_PART, REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
+""".format(REP_PART, REP_PART, REP_PART, REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
 
 #  ETC PART1: (?:(?!;|\n\n|\sEtym:|\sDefn:)[\w\ ]+)+)?)?   # part of speech for first definition (order varies) FIXME remove comma
 
