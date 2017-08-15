@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 # Note: do not use Latin-1 encoding, because it would force string
 # Sprax Lines       2017.07.01      Written with Python 3.5
-'''Parase Webster's Unabridge Dictionary.
+'''Parse Webster's Unabridged Dictionary.
    * Output will eventually be JSON and Pickle files
    * Semantic graph would be nice, too.
+    TODO: Divide and conquer:
+        1. Divide each entry into Headers and Definitions (Defn.|1.|(a))
+            a. Divide the Headers into Words, Pre-etymology, Etymology, & post-Etym
+            b. Divide Definitions into 1-N definitions and usages/citations.
     TODO: Eliminate suffix by making separate metrics dicts.
     TODO: Separate files: matchers, DictEntry(?), WebsterEntry, driver
 '''
