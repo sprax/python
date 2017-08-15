@@ -231,7 +231,7 @@ REC_WEBSTER = re.compile(r"""
     (?:;\ +(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\ +(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
     (?P<pron_1>[A-Z-](?:(?!\n\n|\sEtym:|\sDefn:)[\w#'"`* -])+)?
-    (?:,?\ *(?P<part1p>{}\.(?:(?:,|,?\ &|\ or)?\ {}\.)*(?:(?!\n\n|\sEtym:|\sDefn:)[\w\ ]+)?))?  # PoS for 1st defn.
+    (?:,?\ *(?P<part_1>{}\.(?:(?:,|,?\ &|\ or)?\ {}\.)*(?:(?!\n\n|\sEtym:|\sDefn:)[\w\ ]+)?))?  # PoS for 1st defn.
     (?:\ *\((?P<pren1p>[^\)]+)\)\.?)?               # parenthesized 1a
     (?:,(?:\ or)?\ *(?P<pron_2>[A-Z-](?:(?!\n\n|\sEtym:|\sDefn:)[\w#'"`* -])+))?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[A-Z][^\s\(\[,.]+))?[\ .,]*   # Pronunciation 3 (for variant 2)
@@ -265,6 +265,7 @@ REC_PARTIAL = re.compile(r"""
     (?:;\ +(?P<word_2>[A-Z'-]+))?                   # WORD 2 (variant spelling)
     (?:;\ +(?P<word_3>[A-Z'-]+))?\n                 # WORD 3 (variant spelling)
     (?:,?\ *(?P<pron_1>(?:(?!\n\n|\sEtym:|\sDefn:)[\w(#)'"`* -])+))?
+    (?:,?\ *(?P<part_1>{}\.(?:(?:,|,?\ &|\ or)?\ {}\.)*(?:(?!\n\n|\sEtym:|\sDefn:)[\w\ ]+)?))?  # PoS for 1st defn.
     (?:[,.](?:\ or)?\ *(?P<pron_2>[A-Z][^\s\(\[,.]+)(?:\(\#\))?)?          # Pronunciation 2 (for variant 2)
     (?:,\ *(?P<pron_3>[\w][^\s\(\[,.]+))?          # Pronunciation 3 (for variant 2)
     (?:\ *\((?P<pren1a>[^\)]+)\)\.?)?               # parenthesized
@@ -288,7 +289,7 @@ REC_PARTIAL = re.compile(r"""
     (?P<defn_2>\d.\s[^\d]+)?                    # definition 2, ...
 
     (?P<cetera>.*)?$                            # etc.
-""".format(REP_PART, REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
+""".format(REP_PART, REP_PART, REP_PART, REP_PART, REP_PART), re.DOTALL|re.MULTILINE|re.VERBOSE)
 
 #+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#
 '''
@@ -378,6 +379,7 @@ class DictEntry:
             self.getrep('pron_2', 28),
             self.getrep('pron_3'),
             self.getrep('pren1a'),
+            self.getrep('part_1'),
             self.getrep('part1a'),
             self.getrep('sing_1', 28),
             self.getrep('plural'),
@@ -429,8 +431,11 @@ class WebsterEntry:
         self.pren1a = webs.get('pren1a')
         self.pren1b = webs.get('pren1b')
         self.brack1 = webs.get('brack1')
-        part1 = webs.get('part1a')
-        self.part_1 = part1 if part1 else webs.get('part1b')
+
+        part_1 = webs.get('part_1')
+        part_1 = part_1 if part_1 else webs.get('part1a')
+        self.part_1 = part_1 if part_1 else webs.get('part1b')
+
         self.sing_1 = webs.get('sing_1')
         self.plural = webs.get('plural')
         self.etym_1 = webs.get('etym_1')
