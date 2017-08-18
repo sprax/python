@@ -24,8 +24,8 @@ def get_qa_pairs(text):
     qa_pairs = []
     for node in question_nodes:
         # Get question and answer texts
-        q_text = node.find_all('h3')[0].text.strip('1234567890. \s\t\n').strip().replace("\n", " ")
-        a_text = node.find_all(class_='border-blue semi-bold true-answer')[0].text.strip().replace("\n", " ")
+        q_text = node.find_all('h3')[0].text.strip('1234567890. \s\t\n').strip().replace("\n", " ").replace("’", "'")
+        a_text = node.find_all(class_='border-blue semi-bold true-answer')[0].text.strip().replace("\n", " ").replace("’", "'")
         qa_pairs.append((q_text, a_text))
     return qa_pairs
 
