@@ -77,13 +77,13 @@ def find_topic_from_parts(parts, verbose=0):
     return None
 
 class InputText(object):
-    '''input text iterator'''
+    '''input text iterator: abstract'''
     def read_next(self, in_prompt):
         '''get the next unit of text'''
         raise NotImplementedError
 
 class CliInputText(InputText):
-    '''Command-line input text, derived, concrete, and NOT generic'''
+    '''Command-line input text: derived, concrete, and NOT generic'''
     def __init__(self, prompt='> %s\n\t', farewell="Thanks for playing."):
         super().__init__()
         self.prompt = prompt
@@ -163,7 +163,7 @@ class NLPTextMixed(TopicFromPartsMixin, PartsOfSpeechMixin, NLPText):
     The order of mixin class names in the class signature should not matter,
     but if the mixins were to have their own __init__ methods, which would require
     calling super().__init__(), then the calling order would be right-to-left.
-    ProTip: Avoid worring about the order by never defining __init__ in a mixin.
+    ProTip: Avoid worries about the order by never defining __init__ in a mixin.
     '''
     def __init__(self, text):
         super().__init__(text)
