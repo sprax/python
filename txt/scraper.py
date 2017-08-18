@@ -59,3 +59,15 @@ def csv_read_qa(path):
     except Exception as ex:
         print("csv_read_qa failed to get qa_pairs from ({}) with error: {}".format(path, ex))
     return qa_pairs
+
+def scrape_and_save_qa(url, path):
+    raw_text = get_url_text(url)
+    if raw_text:
+        qa_pairs = get_qa_pairs(raw_text)
+        if qa_pairs:
+            csv_write_qa(qa_pairs, path)
+
+def scrap_moby_sparknotes():
+    for quiz_id in range(1570, 1589):
+        url = "http://www.sparknotes.com/lit/mobydick/section16.rhtml?quickquiz_id=%s" % quiz_id
+        scrape_and_save_qa(url, "MobySparkNotesQuiz%s.csv" % quiz_id)
