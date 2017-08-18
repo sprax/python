@@ -51,6 +51,7 @@ Here’s one of the simplest ways to merge our dictionaries:
 context = {}
 context.update(defaults)
 context.update(user)
+'''
 Here we’re making an empty dictionary and using the update method to add items from each of the other dictionaries. Notice that we’re adding defaults first so that any common keys in user will override those in defaults.
 
 All five of our requirements were met so this is accurate. This solution takes three lines of code and cannot be performed inline, but it’s pretty clear.
@@ -62,9 +63,10 @@ Idiomatic: fairly, but it would be nicer if it could be inlined
 Copy and update
 
 Alternatively, we could copy defaults and update the copy with user.
-
+'''
 context = defaults.copy()
 context.update(user)
+'''
 This solution is only slightly different from the previous one.
 
 For this particular problem, I prefer this solution of copying the defaults dictionary to make it clear that defaults represents default values.
@@ -76,9 +78,10 @@ Idiomatic: yes
 Dictionary constructor
 
 We could also pass our dictionary to the dict constructor which will also copy the dictionary for us:
-
+'''
 context = dict(defaults)
 context.update(user)
+'''
 This solution is very similar to the previous one, but it’s a little bit less explicit.
 
 Score:
@@ -88,8 +91,9 @@ Idiomatic: somewhat, though I’d prefer the first two solutions over this
 Keyword arguments hack
 
 You may have seen this clever answer before, possibly on StackOverflow:
-
+'''
 context = dict(defaults, **user)
+'''
 This is just one line of code. That’s kind of cool. However, this solution is a little hard to understand.
 
 Beyond readability, there’s an even bigger problem: this solution is wrong.
@@ -103,8 +107,9 @@ Idiomatic: no. This is a hack.
 Dictionary comprehension
 
 Just because we can, let’s try doing this with a dictionary comprehension:
-
+'''
 context = {k: v for d in [defaults, user] for k, v in d.items()}
+'''
 This works, but this is a little hard to read.
 
 If we have an unknown number of dictionaries this might be a good idea, but we’d probably want to break our comprehension over multiple lines to make it more readable. In our case of two dictionaries, this doubly-nested comprehension is a little much.
@@ -116,8 +121,9 @@ Idiomatic: arguably not
 Concatenate items
 
 What if we get a list of items from each dictionary, concatenate them, and then create a new dictionary from that?
-
+'''
 context = dict(list(defaults.items()) + list(user.items()))
+'''
 This actually works. We know that the user keys will win out over defaults because those keys come at the end of our concatenated list.
 
 In Python 2 we actually don’t need the list conversions, but we’re working in Python 3 here (you are on Python 3, right?).
@@ -129,8 +135,9 @@ Idiomatic: not particularly, there’s a bit of repetition
 Union items
 
 In Python 3, items is a dict_items object, which is a quirky object that supports union operations.
-
+'''
 context = dict(defaults.items() | user.items())
+'''
 That’s kind of interesting. But this is not accurate.
 
 Requirement 1 (user should “win” over defaults) fails because the union of two dict_items objects is a set of key-value pairs and sets are unordered so duplicate keys may resolve in an unpredictable way.
@@ -148,9 +155,10 @@ Chain items
 So far the most idiomatic way we’ve seen to perform this merge in a single line of code involves creating two lists of items, concatenating them, and forming a dictionary.
 
 We can join our items together more succinctly with itertools.chain:
-
+'''
 from itertools import chain
 context = dict(chain(defaults.items(), user.items()))
+'''
 This works well and may be more efficient than creating two unnecessary lists.
 
 Score:
@@ -160,9 +168,10 @@ Idiomatic: fairly, but those items calls seem slightly redundant
 ChainMap
 
 A ChainMap allows us to create a new dictionary without even looping over our initial dictionaries (well sort of, we’ll discuss this):
-
+'''
 from collections import ChainMap
 context = ChainMap({}, user, defaults)
+'''
 A ChainMap groups dictionaries together into a proxy object (a “view”); lookups query each provided dictionary until a match is found.
 
 This code raises a few questions.
@@ -186,8 +195,9 @@ Idiomatic: yes if we decide this suits our use case
 Dictionary from ChainMap
 
 If we really want a dictionary, we could convert our ChainMap to a dictionary:
-
+'''
 context = dict(ChainMap(user, defaults))
+'''
 It’s a little odd that user must come before defaults in this code whereas this order was flipped in most of our other solutions. Outside of that oddity, this code is fairly simple and should be clear enough for our purposes.
 
 Score:
@@ -197,8 +207,9 @@ Idiomatic: yes
 Dictionary concatenation
 
 What if we simply concatenate our dictionaries?
-
+'''
 context = defaults + user
+'''
 This is cool, but it isn’t valid. This was discussed in a python-ideas thread last year.
 
 Some of the concerns brought up in this thread include:
@@ -213,8 +224,9 @@ Idiomatic: no. This doesn’t work.
 Dictionary unpacking
 
 If you’re using Python 3.5, thanks to PEP 448, there’s a new way to merge dictionaries:
-
+'''
 context = {**defaults, **user}
+'''
 This is simple and Pythonic. There are quite a few symbols, but it’s fairly clear that the output is a dictionary at least.
 
 This is functionally equivalent to our very first solution where we made an empty dictionary and populated it with all items from defaults and user in turn. All of our requirements are met and this is likely the simplest solution we’ll ever get.
@@ -228,6 +240,8 @@ Summary
 There are a number of ways to combine multiple dictionaries, but there are few elegant ways to do this with just one line of code.
 
 If you’re using Python 3.5, this is the one obvious way to solve this problem:
-
+'''
 context = {**defaults, **user}
+'''
 If you are not yet using Python 3.5, you’ll need to review the solutions above to determine which is the most appropriate for your needs.
+'''
