@@ -67,7 +67,7 @@ def scrape_and_save_qa(url, path):
         if qa_pairs:
             csv_write_qa(qa_pairs, path)
 
-def scrap_moby_sparknotes():
-    for quiz_id in range(1570, 1589):
+def scrape_moby_sparknotes_quizzes(start=1570, stop=1590):
+    for quiz_id in range(start, stop):
         url = "http://www.sparknotes.com/lit/mobydick/section16.rhtml?quickquiz_id=%s" % quiz_id
         scrape_and_save_qa(url, "MobySparkNotesQuiz%s.csv" % quiz_id)
