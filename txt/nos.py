@@ -10,6 +10,7 @@ import sys
 from collections import defaultdict
 from collections import Counter
 
+import text_filters
 import utf_print
 
 class GetNo:
@@ -212,6 +213,8 @@ def main():
             # usage='%(prog)s [options]',
             description="Count some quoted ways of saying 'No'",
             )
+    parser.add_argument('-dir', dest='text_dir', type=str, default='/Users/sprax/Text',
+                        help='directory to search for in_path')
     parser.add_argument('adverb_file', type=str, nargs='?', default='adverb.txt',
             help='text file containing counted adverbs')
     parser.add_argument('corpus_file', type=str, nargs='?', default='corpus.txt',
@@ -224,7 +227,8 @@ def main():
         print("args:", args)
         print(__doc__)
 
-    find_quoted_no_phrases(args.adverb_file, args.corpus_file, args.verbose)
+    adverb_file = text_filters.get_abs_path(args.text_dir, args.adverb_file)
+    find_quoted_no_phrases(adverb_file, args.corpus_file, args.verbose)
 
 
 if __name__ == '__main__':
