@@ -17,7 +17,22 @@ def get_url_text(url):
 #css selectors:
 #non-main quizzes
 #.all-other-quizzes a
-def get_qa_pairs(text):
+def sparknotes_qa_pairs(text):
+    '''Get QA pairs from SparkNotes quiz pages'''
+    soup = BeautifulSoup(text, 'lxml')
+    question_nodes = soup.find_all(class_='quick-quiz-question')
+
+    qa_pairs = []
+    for node in question_nodes:
+        # Get question and answer texts
+        q_text = node.find_all('h3')[0].text.strip('1234567890. \s\t\n').strip().replace("\n", " ").replace("’", "'")
+        a_text = node.find_all(class_='border-blue semi-bold true-answer')[0].text.strip().replace("\n", " ").replace("’", "'")
+        qa_pairs.append((q_text, a_text))
+    return qa_pairs
+
+
+def enotes_qa_pairs(text):
+    '''Get QA pairs from eNotes quiz pages'''
     soup = BeautifulSoup(text, 'lxml')
     question_nodes = soup.find_all(class_='quick-quiz-question')
 
@@ -63,7 +78,7 @@ def csv_read_qa(path):
 def scrape_and_save_qa(url, path):
     raw_text = get_url_text(url)
     if raw_text:
-        qa_pairs = get_qa_pairs(raw_text)
+        qa_pairs = sparknotes_qa_pairs(raw_text)
         if qa_pairs:
             csv_write_qa(qa_pairs, path)
 
