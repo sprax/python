@@ -69,3 +69,4 @@ target/
 \.*.swp
 *.bak
 *.backup
+.idea
