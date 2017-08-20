@@ -13,10 +13,12 @@ from __future__ import division
 # import nltk
 # import scipy
 import inspect
-import string
+import random
 import re
+import string
 import time
 import gensim
+import numpy as np
 # from gensim.models import Word2Vec
 # from nltk.tokenize import sent_tokenize
 from nltk.tokenize import word_tokenize
@@ -52,12 +54,16 @@ def vocab_words(vocab, tokens):
     '''filtered words: returns the list of in-vocabulary words from a list of tokens'''
     return [tok for tok in tokens if tok in vocab]
 
-def word_tokens(vocab, text):
-    '''return list of word tokens from string'''
+def raw_tokens(text):
+    '''given a string, returns a list of tokens, not necessarily words'''
     # TODO: use tokenizer from emo project that saves contractions.
     # TODO: Replace "didn't" with "did not", etc.?  What does the model do?
     busted = re.sub(r'[\d%s]' % string.punctuation, ' ', text)
-    tokens = word_tokenize(busted)
+    return word_tokenize(busted)
+
+def word_tokens(vocab, text):
+    '''return list of word tokens from string'''
+    tokens = raw_tokens(text)
     return vocab_words(vocab, tokens)
 
 def similarity(vec_a, vec_b):
@@ -74,7 +80,7 @@ def sum_sentence_similarity(model, vocab, sent_1, sent_2):
     vsent_2 = sum([model[tok] for tok in word_tokens(vocab, sent_2)])
     return similarity(vsent_1, vsent_2)
 
-def sum_tokens(model, tokens, verbose=False):
+def sum_tokens(model, tokens, verbose=False, stops=None):
     '''Vector sum of in-vocabulary word vectors from tokens.'''
     v_sum = None
     for token in tokens:
@@ -82,7 +88,7 @@ def sum_tokens(model, tokens, verbose=False):
             v_tok = model[token]
             v_sum = v_tok if v_sum is None else v_sum + v_tok
         except KeyError as ex:
-            if verbose:
+            if verbose and token.lower() not in stops:
                 print("KeyError in", inspect.currentframe().f_code.co_name, ':', ex)
     return v_sum
 
@@ -105,6 +111,70 @@ def compare_token_lists(model, tokens_1, tokens_2, verbose=True):
         print("Comparing (%s) & (%s) %s sim %.5f  dif %.5f" % (st1, st2, " "*(24 - len(st1 + st2)), sim, dif))
     return sim
 
+def nearest_other(model, vocab, this_text, other_texts, offset, max_sim):
+    '''Too clever'''
+    max_oth = None
+    this_tok = raw_tokens(this_text)
+    this_sum = sum_tokens(model, this_tok)
+    for idx, other in enumerate(other_texts):
+        other_tok = word_tokens(vocab, other)
+        other_sum = sum_tokens(model, other_tok)
+        sim = similarity(this_sum, other_sum)
+        if max_sim < sim:
+            max_sim = sim
+            max_idx = idx
+    return max_idx + offset, max_sim
+
+def nearest_others(model, vocab, texts):
+    '''Cleverer'''
+    nearests = len(texts)*[None]
+    for idx, txt in enumerate(texts):
+        nearests[idx] = nearest_other(model, vocab, txt, texts[:idx], 0, -1)
+    return nearests
+
+def nearest_neighbors(model, vocab, texts, verbose=False):
+    '''For each text in texts, find the index of the most similar other text'''
+    nearests = len(texts)*[None]
+    stops_words = default_stop_words()
+    for idx, txt in enumerate(texts):
+        max_sim = 0.0
+        max_oth = None
+        txt_tok = raw_tokens(txt)
+        txt_sum = sum_tokens(model, txt_tok, verbose, stops_words)
+        for oix, oth in enumerate(texts[:idx] + texts[idx + 1:]):
+            oth_tok = word_tokens(vocab, oth)
+            oth_sum = sum_tokens(model, oth_tok)
+            sim = similarity(txt_sum, oth_sum)
+            if max_sim < sim:
+                max_sim = sim
+                max_idx = oix
+        nearests[idx] = max_idx if max_idx < idx else max_idx + 1
+    return nearests
+
+def show_nearest_neighbors(model, vocab, texts, verbose=True):
+    nearest_indexes = nearest_neighbors(model, vocab, texts, verbose)
+    for idx, txt in enumerate(texts):
+        nearest_idx = nearest_indexes[idx]
+        nearest_txt = texts[nearest_idx]
+        print("  %3d.  T  %s\n  %3d.  O  %s\n" % (idx, txt, nearest_idx, nearest_txt))
+
+
+def randomly(seq):
+    lst = list(seq)
+    random.shuffle(lst)
+    return iter(lst)
+
+def show_ascending_norms(model, thresh=4.11):
+    max_norm = thresh
+    for key in randomly(model.vocab.keys()):
+        vec = model[key]
+        nrm = np.sqrt(vec.dot(vec))
+        # nrm = np.linalg.norm(vec)
+        if max_norm < nrm:
+            max_norm = nrm
+            print("  %.4f  %s" % (nrm, key))
+        elif nrm > 6.0/7*max_norm:
+            print("           %.4f  %s" % (nrm, key))
 #################################### TESTS ####################################
 
 def test_word_similarity(model, aa='king', bb='queen', cc='man', dd='woman'):

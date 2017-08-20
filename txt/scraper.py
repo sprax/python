@@ -53,22 +53,22 @@ def get_quiz_relative_paths(text):
         relative_paths.append(node.get('href'))
     return relative_paths
 
-def csv_write_qa(qa_pairs, path, delimiter=','):
+def csv_write_qa(qa_pairs, path, delimiter=',', quotechar='"'):
     ''' Write a list of (question, answer) tuples to a CSV file. '''
     try:
         with open(path, "w", newline='') as csv_file:
-            writer = csv.writer(csv_file, delimiter)
+            writer = csv.writer(csv_file, delimiter=delimiter, quotechar=quotechar)
             for pair in qa_pairs:
                 writer.writerow(pair)
     except Exception as ex:
         print("csv_write_qa failed to write qa_pairs to ({}) with error: {}".format(path, ex))
 
-def csv_read_qa(path, delimiter=','):
+def csv_read_qa(path, delimiter=',', quotechar='"'):
     ''' Return a list of (question, answer) tuples read from a CSV file. '''
     qa_pairs = []
     try:
         with open(path, 'rt') as infile:
-            reader = csv.reader(infile, delimiter)
+            reader = csv.reader(infile, delimiter=delimiter, quotechar=quotechar)
             for row in reader:
                 qa_pairs.append(row)
     except Exception as ex:

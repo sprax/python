@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # Sprax Lines       2016.07.25      Written with Python 3.5
-'''print not necessarily ASCII text file to terminal'''
+'''regex matcher with rules from json file'''
 
 import json
 import re
 import sys
-
 
 def load_json_file(path, key='rules'):
     with open(path) as fh:
@@ -29,14 +28,8 @@ def load_rules(path='/Users/sprax/dev/magic/data/social_graces_regex.json'):
     compile(rules)
     return rules
 
-
-
-
-
-
 def my_print(line):
     print(line.encode("utf-8"))
-
 
 def uprint(*objects, sep=' ', end='\n', file=sys.stdout):
     enc = file.encoding
