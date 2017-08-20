@@ -12,6 +12,7 @@ TODO: understand accuracy, and some others in:
 from __future__ import division
 # import nltk
 # import scipy
+import inspect
 import string
 import re
 import time
@@ -22,11 +23,6 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from scipy.spatial.distance import cosine
 
-def default_stop_words():
-    '''get the default stop words'''
-    # TODO: exclude who, what, when, where, why, etc.
-    return stopwords.words('english')
-
 def default_word2vec_model(verbose=True):
     '''Load pre-made word2vec model'''
     # TODO: Use _save_specials and _load_specials?
@@ -34,39 +30,82 @@ def default_word2vec_model(verbose=True):
     model = gensim.models.KeyedVectors.load_word2vec_format(
         'Text/GoogleNews-vectors-negative300.bin', binary=True)
     if verbose:
-        print("Time to load_word2vec_format:", time.time() - beg)
+        print("Seconds to load_word2vec_format:", time.time() - beg)
         # Seconds to load_word2vec_format: 44.98383688926697
     return model
 
 def model_vocab(model, verbose=True):
-    '''Initialize vocab from word2vec model'''
+    '''Initialize vocab as the set of keys from a word2vec model'''
     beg = time.time()
     vocab = set([key for key in model.vocab.keys()])
     if verbose:
-        print("Time to initialize vocab model:", time.time() - beg)
+        print("Seconds to initialize vocab model:", time.time() - beg)
         # Seconds to initialize vocab model: 1.3567819595336914
     return vocab
+
+def default_stop_words():
+    '''get the default stop words'''
+    # TODO: exclude who, what, when, where, why, etc.
+    return stopwords.words('english')
+
+def vocab_words(vocab, tokens):
+    '''filtered words: returns the list of in-vocabulary words from a list of tokens'''
+    return [tok for tok in tokens if tok in vocab]
 
 def word_tokens(vocab, text):
     '''return list of word tokens from string'''
     # TODO: use tokenizer from emo project that saves contractions.
     # TODO: Replace "didn't" with "did not", etc.?  What does the model do?
-    txt = re.sub(r'[\d%s]' % string.punctuation, ' ', text)
-    raw = word_tokenize(txt)
-    tok = [key for key in raw if key in vocab]
-    return tok
+    busted = re.sub(r'[\d%s]' % string.punctuation, ' ', text)
+    tokens = word_tokenize(busted)
+    return vocab_words(vocab, tokens)
 
-def sum_tokens_distance(model, vocab, sent_1, sent_2):
-    '''simple sum-based distance'''
-    vs1 = sum([model[tok] for tok in word_tokens(vocab, sent_1)])
-    vs2 = sum([model[tok] for tok in word_tokens(vocab, sent_2)])
-    return 1.0 - cosine(vs1, vs2)
+def similarity(vec_a, vec_b):
+    '''similarity as cosine (dot product)'''
+    return cosine(vec_a, vec_b)
 
-def sum_tokens_distance(model, vocab, sent_1, sent_2):
-    '''simple sum-based distance'''
-    vs1 = sum([model[tok] for tok in word_tokens(vocab, sent_1)])
-    vs2 = sum([model[tok] for tok in word_tokens(vocab, sent_2)])
-    return 1.0 - cosine(vs1, vs2)
+def distance(vec_a, vec_b):
+    '''distance as 1.0 - dot_product'''
+    return 1.0 - similarity(vec_a, vec_b)
+
+def sum_sentence_similarity(model, vocab, sent_1, sent_2):
+    '''crude sentence-content similarity based on summing word vectors'''
+    vsent_1 = sum([model[tok] for tok in word_tokens(vocab, sent_1)])
+    vsent_2 = sum([model[tok] for tok in word_tokens(vocab, sent_2)])
+    return similarity(vsent_1, vsent_2)
+
+def sum_tokens(model, tokens, verbose=False):
+    '''Vector sum of in-vocabulary word vectors from tokens.'''
+    v_sum = None
+    for token in tokens:
+        try:
+            v_tok = model[token]
+            v_sum = v_tok if v_sum is None else v_sum + v_tok
+        except KeyError as ex:
+            if verbose:
+                print("KeyError in", inspect.currentframe().f_code.co_name, ':', ex)
+    return v_sum
+
+def sum_tokens_similarity(model, tokens_1, tokens_2, verbose=False):
+    '''
+    Crude token-list content similarity based on summing word vectors.
+    Only in-vocabulary tokens contribute; others are ignored.
+    '''
+    v_sum_1 = sum_tokens(model, tokens_1, verbose)
+    v_sum_2 = sum_tokens(model, tokens_2, verbose)
+    return cosine(v_sum_1, v_sum_2)
+
+def compare_token_lists(model, tokens_1, tokens_2, verbose=True):
+    '''Show crude token-list content similarity based on summing word vectors.'''
+    sim = sum_tokens_similarity(model, tokens_1, tokens_2, verbose)
+    dif = 1.0 - sim
+    st1 = ' '.join(tokens_1)
+    st2 = ' '.join(tokens_2)
+    if verbose:
+        print("Comparing (%s) & (%s) %s sim %.5f  dif %.5f" % (st1, st2, " "*(24 - len(st1 + st2)), sim, dif))
+    return sim
+
+#################################### TESTS ####################################
 
 def test_word_similarity(model, aa='king', bb='queen', cc='man', dd='woman'):
     '''show similarity on a tetrad of (analogous) words'''
@@ -132,21 +171,40 @@ def test_sentence_distance(model, vocab, sent_1="This is a sentence.",
     dist12 = sum_tokens_distance(model, vocab, sent_1, sent_2)
     print("sum_tokens_distance => ", dist12)
 
-def test_contractions(model):
-    vdo = model["do"]
-    vdoes = model["does"]
-    vdid = model["did"]
-    vnot = model["not"]
-    vdo_not = vdo + vnot
-    vdoes_not = vdoes + vnot
-    vdid_not = vdid + vnot
-    vdont = model["don't"]
-    vdoesnt = model["doesn't"]
-    vdidnt = model["didn't"]
-    # TODO: functions
-    sim = cosine(vdidnt, vdid_not)
-    dif = 1.0 - sim
-    print("Contraction:  didn't vs did not:  sim({})  dif({})".format(sim, dif))
+def test_contractions(model, verbose=True):
+    t_do = ["do"]
+    t_does = ["does"]
+    t_did = ["did"]
+    t_not = ["not"]
+    t_do_not = t_do + t_not
+    t_does_not = t_does + t_not
+    t_did_not = t_did + t_not
+    t_dont = ["don't"]
+    t_doesnt = ["doesn't"]
+    t_didnt = ["didn't"]
+    compare_token_lists(model, t_do, t_does, verbose=True)
+    compare_token_lists(model, t_do, t_did, verbose=True)
+    compare_token_lists(model, t_do, t_not, verbose=True)
+
+    compare_token_lists(model, t_do_not, t_not, verbose=True)
+    compare_token_lists(model, t_do_not, t_does_not, verbose=True)
+    compare_token_lists(model, t_do_not, t_did_not, verbose=True)
+
+    compare_token_lists(model, t_do_not, t_dont, verbose=True)
+    compare_token_lists(model, t_do_not, t_doesnt, verbose=True)
+    compare_token_lists(model, t_do_not, t_didnt, verbose=True)
+
+    compare_token_lists(model, t_does_not, t_dont, verbose=True)
+    compare_token_lists(model, t_does_not, t_doesnt, verbose=True)
+    compare_token_lists(model, t_does_not, t_didnt, verbose=True)
+
+    compare_token_lists(model, t_did_not, t_dont, verbose=True)
+    compare_token_lists(model, t_did_not, t_doesnt, verbose=True)
+    compare_token_lists(model, t_did_not, t_didnt, verbose=True)
+
+    compare_token_lists(model, t_dont, t_doesnt, verbose=True)
+    compare_token_lists(model, t_dont, t_didnt, verbose=True)
+    compare_token_lists(model, t_doesnt, t_didnt, verbose=True)
 
 def smoke_test(model, vocab):
     '''sanity checking'''
@@ -154,3 +212,4 @@ def smoke_test(model, vocab):
     test_word_differences(model)
     test_word_analogies(model)
     test_sentence_distance(model, vocab)
+    test_contractions(model, verbose=True)
