@@ -29,7 +29,8 @@ def get_stop_words():
 def init_word2vec_model(verbose=True):
     '''Initialize simple language processing'''
     beg = time.time()
-    model = gensim.models.KeyedVectors.load_word2vec_format('Text/GoogleNews-vectors-negative300.bin', binary=True)
+    model = gensim.models.KeyedVectors.load_word2vec_format(
+        'Text/GoogleNews-vectors-negative300.bin', binary=True)
     if verbose:
         print("Time to load_word2vec_format:", time.time() - beg)
         # Seconds to load_word2vec_format: 44.98383688926697
@@ -38,7 +39,7 @@ def init_word2vec_model(verbose=True):
 def init_vocab(model, verbose=True):
     '''Initialize vocab from word2vec model'''
     beg = time.time()
-    vocab = set([i for i in model.vocab.keys()])
+    vocab = set([key for key in model.vocab.keys()])
     if verbose:
         print("Time to initialize vocab model:", time.time() - beg)
         # Seconds to initialize vocab model: 1.3567819595336914
@@ -48,13 +49,13 @@ def word_tokens(vocab, text):
     '''return list of word tokens form string'''
     txt = re.sub(r'[\d%s]' % string.punctuation, ' ', text)
     raw = word_tokenize(txt)
-    tok = [i for i in raw if i in vocab]
+    tok = [key for key in raw if key in vocab]
     return tok
 
 def sum_tokens_distance(model, vocab, sent_1, sent_2):
     '''simple sum-based distance'''
-    vs1 = sum([model[i] for i in word_tokens(vocab, sent_1)])
-    vs2 = sum([model[i] for i in word_tokens(vocab, sent_2)])
+    vs1 = sum([model[tok] for tok in word_tokens(vocab, sent_1)])
+    vs2 = sum([model[tok] for tok in word_tokens(vocab, sent_2)])
     return 1.0 - cosine(vs1, vs2)
 
 def test_word_similarity(model, aa='king', bb='queen', cc='man', dd='woman'):
@@ -111,7 +112,8 @@ def test_word_analogies(model, aa='king', bb='queen', cc='man', dd='woman'):
     sim_bdca = cosine(vec_bdc, vec_aa)
     print("similarity of vec(%s) - vec(%s) + vec(%s) to vec(%s): %f" % (bb, dd, cc, aa, sim_bdca))
 
-def test_sentence_distance(model, vocab, sent_1="This is a sentence.", sent_2="This, IS, some, OTHER, Sentence!"):
+def test_sentence_distance(model, vocab, sent_1="This is a sentence.",
+                           sent_2="This, IS, some, OTHER, Sentence!"):
     '''show simple sub-based sentence distance'''
     toks_1 = word_tokens(vocab, sent_1)
     toks_2 = word_tokens(vocab, sent_2)
