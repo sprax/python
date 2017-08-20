@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-'''word2vec similarity'''
+'''
+word2vec similarity
+TODO: understand accuracy, and some others in:
+    ['_load_specials', '_save_specials', '_smart_save', 'accuracy', 'doesnt_match',
+    'evaluate_word_pairs', 'get_embedding_layer', 'index2word', 'init_sims', 'load',
+    'load_word2vec_format', 'log_accuracy', 'log_evaluate_word_pairs', 'most_similar',
+    'most_similar_cosmul', 'n_similarity', 'save', 'save_word2vec_format',
+    'similar_by_vector', 'similar_by_word', 'similarity', 'syn0', 'syn0norm',
+    'vector_size', 'vocab', 'wmdistance', 'word_vec', 'wv']
+'''
 from __future__ import division
 # import nltk
 # import scipy
