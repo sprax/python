@@ -53,22 +53,22 @@ def get_quiz_relative_paths(text):
         relative_paths.append(node.get('href'))
     return relative_paths
 
-def csv_write_qa(qa_pairs, path):
+def csv_write_qa(qa_pairs, path, delimiter=','):
     ''' Write a list of (question, answer) tuples to a CSV file. '''
     try:
         with open(path, "w", newline='') as csv_file:
-            writer = csv.writer(csv_file, delimiter=',')
+            writer = csv.writer(csv_file, delimiter)
             for pair in qa_pairs:
                 writer.writerow(pair)
     except Exception as ex:
         print("csv_write_qa failed to write qa_pairs to ({}) with error: {}".format(path, ex))
 
-def csv_read_qa(path):
+def csv_read_qa(path, delimiter=','):
     ''' Return a list of (question, answer) tuples read from a CSV file. '''
     qa_pairs = []
     try:
         with open(path, 'rt') as infile:
-            reader = csv.reader(infile)
+            reader = csv.reader(infile, delimiter)
             for row in reader:
                 qa_pairs.append(row)
     except Exception as ex:
@@ -76,6 +76,7 @@ def csv_read_qa(path):
     return qa_pairs
 
 def scrape_and_save_qa(url, path):
+    '''scrape QA pairs (SparkNotes) from one quiz and save them to CSV'''
     raw_text = get_url_text(url)
     if raw_text:
         qa_pairs = sparknotes_qa_pairs(raw_text)
@@ -83,6 +84,7 @@ def scrape_and_save_qa(url, path):
             csv_write_qa(qa_pairs, path)
 
 def scrape_moby_sparknotes_quizzes(start=1570, stop=1590):
+    '''scrape and save QA pairs from a range of quiz URLs'''
     for quiz_id in range(start, stop):
         url = "http://www.sparknotes.com/lit/mobydick/section16.rhtml?quickquiz_id=%s" % quiz_id
         scrape_and_save_qa(url, "MobySparkNotesQuiz%s.csv" % quiz_id)
