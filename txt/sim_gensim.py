@@ -81,12 +81,12 @@ def test_word_differences(model, aa='king', bb='queen', cc='man', dd='woman'):
 
     dif_ab = vec_aa - vec_bb
     dif_cd = vec_cc - vec_dd
-    sim_xx = model.similarity(dif_ab, dif_cd)
+    sim_xx = cosine(dif_ab, dif_cd)
     print("similarity of vec(%s) - vec(%s) to vec(%s) - vec(%s): %f" % (aa, bb, cc, dd, sim_xx))
 
     dif_ac = vec_aa - vec_cc
     dif_bd = vec_bb - vec_dd
-    sim_yy = model.similarity(dif_ac, dif_bd)
+    sim_yy = cosine(dif_ac, dif_bd)
     print("similarity of vec(%s) - vec(%s) to vec(%s) - vec(%s): %f" % (aa, cc, bb, dd, sim_yy))
 
 def test_word_analogies(model, aa='king', bb='queen', cc='man', dd='woman'):
@@ -97,10 +97,10 @@ def test_word_analogies(model, aa='king', bb='queen', cc='man', dd='woman'):
     vec_dd = model[dd]
     vec_acd = vec_aa - vec_cc + vec_dd
     vec_bdc = vec_bb - vec_dd + vec_cc
-    sim_acdb = model.similarity(vec_acd, vec_bb)
-    print("similarity of vec(%s) - vec(%s) + vec(%s) to vec(%s): %f", aa, cc, dd, bb, sim_acdb)
-    sim_bdca = model.similarity(vec_bdc, vec_aa)
-    print("similarity of vec(%s) - vec(%s) + vec(%s) to vec(%s): %f", bb, dd, cc, aa, sim_bdca)
+    sim_acdb = cosine(vec_acd, vec_bb)
+    print("similarity of vec(%s) - vec(%s) + vec(%s) to vec(%s): %f" % (aa, cc, dd, bb, sim_acdb))
+    sim_bdca = cosine(vec_bdc, vec_aa)
+    print("similarity of vec(%s) - vec(%s) + vec(%s) to vec(%s): %f" % (bb, dd, cc, aa, sim_bdca))
 
 def test_sentence_distance(model, vocab, sent_1="This is a sentence.", sent_2="This, IS, some, OTHER, Sentence!"):
     '''show simple sub-based sentence distance'''
@@ -111,9 +111,9 @@ def test_sentence_distance(model, vocab, sent_1="This is a sentence.", sent_2="T
     dist12 = sum_tokens_distance(model, vocab, sent_1, sent_2)
     print("sum_tokens_distance => ", dist12)
 
-def smoke_test(model):
+def smoke_test(model, vocab):
     '''sanity checking'''
     test_word_similarity(model)
-    # test_word_differences()
-    # test_word_analogies()
-    # test_sentence_distance()
+    test_word_differences(model)
+    test_word_analogies(model)
+    test_sentence_distance(model, vocab)
