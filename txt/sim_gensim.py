@@ -22,12 +22,14 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from scipy.spatial.distance import cosine
 
-def get_stop_words():
+def default_stop_words():
     '''get the default stop words'''
+    # TODO: exclude who, what, when, where, why, etc.
     return stopwords.words('english')
 
-def init_word2vec_model(verbose=True):
-    '''Initialize simple language processing'''
+def default_word2vec_model(verbose=True):
+    '''Load pre-made word2vec model'''
+    # TODO: Use _save_specials and _load_specials?
     beg = time.time()
     model = gensim.models.KeyedVectors.load_word2vec_format(
         'Text/GoogleNews-vectors-negative300.bin', binary=True)
@@ -36,7 +38,7 @@ def init_word2vec_model(verbose=True):
         # Seconds to load_word2vec_format: 44.98383688926697
     return model
 
-def init_vocab(model, verbose=True):
+def model_vocab(model, verbose=True):
     '''Initialize vocab from word2vec model'''
     beg = time.time()
     vocab = set([key for key in model.vocab.keys()])
@@ -46,11 +48,19 @@ def init_vocab(model, verbose=True):
     return vocab
 
 def word_tokens(vocab, text):
-    '''return list of word tokens form string'''
+    '''return list of word tokens from string'''
+    # TODO: use tokenizer from emo project that saves contractions.
+    # TODO: Replace "didn't" with "did not", etc.?  What does the model do?
     txt = re.sub(r'[\d%s]' % string.punctuation, ' ', text)
     raw = word_tokenize(txt)
     tok = [key for key in raw if key in vocab]
     return tok
+
+def sum_tokens_distance(model, vocab, sent_1, sent_2):
+    '''simple sum-based distance'''
+    vs1 = sum([model[tok] for tok in word_tokens(vocab, sent_1)])
+    vs2 = sum([model[tok] for tok in word_tokens(vocab, sent_2)])
+    return 1.0 - cosine(vs1, vs2)
 
 def sum_tokens_distance(model, vocab, sent_1, sent_2):
     '''simple sum-based distance'''
@@ -121,6 +131,22 @@ def test_sentence_distance(model, vocab, sent_1="This is a sentence.",
     print("word_tokens({}) == {}".format(sent_2, toks_2))
     dist12 = sum_tokens_distance(model, vocab, sent_1, sent_2)
     print("sum_tokens_distance => ", dist12)
+
+def test_contractions(model):
+    vdo = model["do"]
+    vdoes = model["does"]
+    vdid = model["did"]
+    vnot = model["not"]
+    vdo_not = vdo + vnot
+    vdoes_not = vdoes + vnot
+    vdid_not = vdid + vnot
+    vdont = model["don't"]
+    vdoesnt = model["doesn't"]
+    vdidnt = model["didn't"]
+    # TODO: functions
+    sim = cosine(vdidnt, vdid_not)
+    dif = 1.0 - sim
+    print("Contraction:  didn't vs did not:  sim({})  dif({})".format(sim, dif))
 
 def smoke_test(model, vocab):
     '''sanity checking'''
