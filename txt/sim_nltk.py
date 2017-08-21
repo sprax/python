@@ -67,6 +67,14 @@ def list_nearest_other_idx(texts, similarity_func=cosine_sim):
         nearests[idx] = 1 + idx + max_idx_1 if max_sim_1 > max_sim_0 else max_idx_0
     return nearests
 
+def show_nearest_neighbors(texts, nearest_indexes=None, similarity_func=cosine_sim, verbose=True):
+    if nearest_indexes is None:
+        nearest_indexes = list_nearest_other_idx(texts)
+    for idx, txt in enumerate(texts):
+        nearest_idx = nearest_indexes[idx]
+        nearest_txt = texts[nearest_idx]
+        print("  %3d.  T  %s\n  %3d.  O  %s\n" % (idx, txt, nearest_idx, nearest_txt))
+
 ###############################################################################
 def similarity_dict(similarity_func, all_texts, this_text, min_sim_val=0.0):
     '''
@@ -115,10 +123,12 @@ def list_most_sim_lists(texts, similarity_func=cosine_sim, max_count=5, min_sim_
     '''
     return [most_similar_items_list(similarity_func, texts, txt, max_count, min_sim_val) for txt in texts]
 
-def show_nearest_neighbors(texts, nearest_indexes=None, similarity_func=cosine_sim, verbose=True):
-    if nearest_indexes is None:
-        nearest_indexes = list_nearest_other_idx(texts)
+def show_most_sim_lists(texts, most_sim_lists=None, similarity_func=cosine_sim, verbose=True):
+    if most_sim_lists is None:
+        most_sim_lists = list_most_sim_lists(texts)     # use defaults
     for idx, txt in enumerate(texts):
-        nearest_idx = nearest_indexes[idx]
-        nearest_txt = texts[nearest_idx]
-        print("  %3d.  T  %s\n  %3d.  O  %s\n" % (idx, txt, nearest_idx, nearest_txt))
+        most_sim_list = most_sim_lists[idx]
+        print("  %3d.  %s" % (idx, txt))
+        for oix, sim in most_sim_list:
+            print("        %.5f  %3d.   %s" % (sim, oix, texts[oix]))
+        print()
