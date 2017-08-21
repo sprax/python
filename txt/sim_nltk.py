@@ -20,9 +20,13 @@ def cosine_sim(text1, text2):
     tfidf = vectorizer.fit_transform([text1, text2])
     return ((tfidf * tfidf.T).A)[0,1]
 
-print(cosine_sim('a little bird', 'a little bird'))
-print(cosine_sim('a little bird', 'a little bird chirps'))
-print(cosine_sim('a little bird', 'a big dog barks'))
+def smoke_test():
+    sent_1 = 'a little bird'
+    sent_2 = 'a little bird chirps'
+    sent_3 = 'a big dog barks'
+    print("cosine_sim(%s, %s) == %f" % (sent1, sent1, cosine_sim(sent_1, sent_1)))
+    print("cosine_sim(%s, %s) == %f" % (sent1, sent2, cosine_sim(sent_1, sent_2)))
+    print("cosine_sim(%s, %s) == %f" % (sent1, sent3, cosine_sim(sent_1, sent_3)))
 
 
 def nearest_other(sim_func, vocab, this_text, other_texts, starting_max):
