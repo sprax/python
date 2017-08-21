@@ -28,7 +28,15 @@ def smoke_test():
     print("cosine_sim(%s, %s) == %f" % (sent_1, sent_2, cosine_sim(sent_1, sent_2)))
     print("cosine_sim(%s, %s) == %f" % (sent_1, sent_3, cosine_sim(sent_1, sent_3)))
 
-def nearest_other(similarity_func, this_text, other_texts, max_sim_val):
+
+def nearest_saved(similarity_func, saved_texts, threshold, input_text):
+    idx, sim = nearest_other(similarity_func, saved_texts, input_text, threshold)
+    if idx < 0:
+        print("No saved text found more similar than %f" % threshold)
+    else:
+        print("Nearest at %f (%d) %s" % (sim, idx, saved_texts[idx]))
+
+def nearest_other(similarity_func, other_texts, this_text, max_sim_val):
     '''
     Find the text in other_texts most similar to this_text.
     Returns the index of the found text.
@@ -54,8 +62,8 @@ def nearest_others(texts, similarity_func=cosine_sim):
     '''
     nearests = len(texts)*[None]
     for idx, txt in enumerate(texts):
-        max_idx_0, max_sim_0 = nearest_other(similarity_func, txt, texts[:idx], -1)
-        max_idx_1, max_sim_1 = nearest_other(similarity_func, txt, texts[idx+1:], max_sim_0)
+        max_idx_0, max_sim_0 = nearest_other(similarity_func, texts[:idx], txt, -1)
+        max_idx_1, max_sim_1 = nearest_other(similarity_func, texts[idx+1:], txt, max_sim_0)
         nearests[idx] = 1 + idx + max_idx_1 if max_sim_1 > max_sim_0 else max_idx_0
     return nearests
 
