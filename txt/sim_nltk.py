@@ -52,6 +52,22 @@ def nearest_other_idx(similarity_func, other_texts, this_text, max_sim_val):
             max_sim_idx = idx
     return  max_sim_idx, max_sim_val
 
+def list_nearest_other_idx(texts, similarity_func=cosine_sim):
+    '''
+    For each text in texts, find the index of the most similar other text.
+    Returns the list of indexes.  The mapping is not necessarily 1-1, that is,
+    two texts may share a most similar other text.
+        similarity_func:    function returning the similariy between two texts (as in sentences)
+        vocab:              the set of all known words
+    '''
+    nearests = len(texts)*[None]
+    for idx, txt in enumerate(texts):
+        max_idx_0, max_sim_0 = nearest_other_idx(similarity_func, texts[:idx], txt, -1)
+        max_idx_1, max_sim_1 = nearest_other_idx(similarity_func, texts[idx+1:], txt, max_sim_0)
+        nearests[idx] = 1 + idx + max_idx_1 if max_sim_1 > max_sim_0 else max_idx_0
+    return nearests
+
+###############################################################################
 def similarity_dict(similarity_func, all_texts, this_text, min_sim_val=0.0):
     '''
     Returns a dict mapping all_texts' indexes to their similarity with this_text,
@@ -87,24 +103,21 @@ def most_similar_items_list(similarity_func, all_texts, this_text, max_count=5, 
         max_count           maximum size of returned dict
         max_sim_val:        the initial value of max, or the maximum similariy found so far.
     '''
-    sim_dict = imilarity_dict(similarity_func, all_texts, this_text, min_sim_val)
+    sim_dict = similarity_dict(similarity_func, all_texts, this_text, min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
-def list_nearest_other_idx(texts, similarity_func=cosine_sim):
+def list_most_sim_lists(texts, similarity_func=cosine_sim, max_count=5, min_sim_val=0.0):
     '''
-    For each text in texts, find the index of the most similar other text.
-    Returns the list of indexes.  The mapping is not necessarily 1-1, that is,
-    two texts may share a most similar other text.
+    For each text in texts, find a list of indexes of the most similar texts.
+    Returns list of lists of items as in: [[(index, similariy), ...], ...]
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
     '''
-    nearests = len(texts)*[None]
-    for idx, txt in enumerate(texts):
-        max_idx_0, max_sim_0 = nearest_other_idx(similarity_func, texts[:idx], txt, -1)
-        max_idx_1, max_sim_1 = nearest_other_idx(similarity_func, texts[idx+1:], txt, max_sim_0)
-        nearests[idx] = 1 + idx + max_idx_1 if max_sim_1 > max_sim_0 else max_idx_0
-    return nearests
-
+    # nearests = len(texts)*[None]
+    # for idx, txt in enumerate(texts):
+    #     nearests[idx] = most_similar_items_list(similarity_func, texts, txt, max_count, min_sim_val)
+    # return nearests
+    return [most_similar_items_list(similarity_func, texts, txt, max_count, min_sim_val) for txt in texts]
 
 def show_nearest_neighbors(texts, nearest_indexes=None, similarity_func=cosine_sim, verbose=True):
     if nearest_indexes is None:
