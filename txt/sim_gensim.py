@@ -111,34 +111,13 @@ def compare_token_lists(word2vec, tokens_1, tokens_2, verbose=True):
         print("Comparing (%s) & (%s) %s sim %.5f  dif %.5f" % (st1, st2, " "*(24 - len(st1 + st2)), sim, dif))
     return sim
 
-def nearest_other(word2vec, vocab, this_text, other_texts, offset, max_sim):
-    '''Too clever'''
-    max_oth = None
-    this_tok = raw_tokens(this_text)
-    this_sum = sum_tokens(word2vec, this_tok)
-    for idx, other in enumerate(other_texts):
-        other_tok = word_tokens(vocab, other)
-        other_sum = sum_tokens(word2vec, other_tok)
-        sim = similarity(this_sum, other_sum)
-        if max_sim < sim:
-            max_sim = sim
-            max_idx = idx
-    return max_idx + offset, max_sim
-
-def nearest_others(word2vec, vocab, texts):
-    '''Cleverer'''
-    nearests = len(texts)*[None]
-    for idx, txt in enumerate(texts):
-        nearests[idx] = nearest_other(word2vec, vocab, txt, texts[:idx], 0, -1)
-    return nearests
-
 def nearest_neighbors(word2vec, vocab, texts, verbose=False):
     '''For each text in texts, find the index of the most similar other text'''
     nearests = len(texts)*[None]
     stops_words = default_stop_words()
     for idx, txt in enumerate(texts):
         max_sim = 0.0
-        max_oth = None
+        max_idx = -99
         txt_tok = raw_tokens(txt)
         txt_sum = sum_tokens(word2vec, txt_tok, verbose, stops_words)
         for oix, oth in enumerate(texts[:idx] + texts[idx + 1:]):
@@ -157,7 +136,6 @@ def show_nearest_neighbors(word2vec, vocab, texts, verbose=True):
         nearest_idx = nearest_indexes[idx]
         nearest_txt = texts[nearest_idx]
         print("  %3d.  T  %s\n  %3d.  O  %s\n" % (idx, txt, nearest_idx, nearest_txt))
-
 
 def randomly(seq):
     lst = list(seq)
