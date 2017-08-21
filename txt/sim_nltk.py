@@ -113,10 +113,6 @@ def list_most_sim_lists(texts, similarity_func=cosine_sim, max_count=5, min_sim_
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
     '''
-    # nearests = len(texts)*[None]
-    # for idx, txt in enumerate(texts):
-    #     nearests[idx] = most_similar_items_list(similarity_func, texts, txt, max_count, min_sim_val)
-    # return nearests
     return [most_similar_items_list(similarity_func, texts, txt, max_count, min_sim_val) for txt in texts]
 
 def show_nearest_neighbors(texts, nearest_indexes=None, similarity_func=cosine_sim, verbose=True):
