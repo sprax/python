@@ -26,23 +26,23 @@ from nltk.corpus import stopwords
 from scipy.spatial.distance import cosine
 
 def default_word2vec_model(verbose=True):
-    '''Load pre-made word2vec model'''
+    '''Load pre-made word2vec word2vec'''
     # TODO: Use _save_specials and _load_specials?
     beg = time.time()
-    model = gensim.models.KeyedVectors.load_word2vec_format(
+    word2vec = gensim.models.KeyedVectors.load_word2vec_format(
         'Text/GoogleNews-vectors-negative300.bin', binary=True)
     if verbose:
         print("Seconds to load_word2vec_format:", time.time() - beg)
         # Seconds to load_word2vec_format: 44.98383688926697
-    return model
+    return word2vec
 
-def model_vocab(model, verbose=True):
-    '''Initialize vocab as the set of keys from a word2vec model'''
+def word2vec_vocab(word2vec, verbose=True):
+    '''Initialize vocab as the set of keys from a word2vec word2vec'''
     beg = time.time()
-    vocab = set([key for key in model.vocab.keys()])
+    vocab = set([key for key in word2vec.vocab.keys()])
     if verbose:
-        print("Seconds to initialize vocab model:", time.time() - beg)
-        # Seconds to initialize vocab model: 1.3567819595336914
+        print("Seconds to initialize vocab word2vec:", time.time() - beg)
+        # Seconds to initialize vocab word2vec: 1.3567819595336914
     return vocab
 
 def default_stop_words():
@@ -57,7 +57,7 @@ def vocab_words(vocab, tokens):
 def raw_tokens(text):
     '''given a string, returns a list of tokens, not necessarily words'''
     # TODO: use tokenizer from emo project that saves contractions.
-    # TODO: Replace "didn't" with "did not", etc.?  What does the model do?
+    # TODO: Replace "didn't" with "did not", etc.?  What does the word2vec do?
     busted = re.sub(r'[\d%s]' % string.punctuation, ' ', text)
     return word_tokenize(busted)
 
@@ -74,36 +74,36 @@ def distance(vec_a, vec_b):
     '''distance as 1.0 - dot_product'''
     return 1.0 - similarity(vec_a, vec_b)
 
-def sum_sentence_similarity(model, vocab, sent_1, sent_2):
+def sum_sentence_similarity(word2vec, vocab, sent_1, sent_2):
     '''crude sentence-content similarity based on summing word vectors'''
-    vsent_1 = sum([model[tok] for tok in word_tokens(vocab, sent_1)])
-    vsent_2 = sum([model[tok] for tok in word_tokens(vocab, sent_2)])
+    vsent_1 = sum([word2vec[tok] for tok in word_tokens(vocab, sent_1)])
+    vsent_2 = sum([word2vec[tok] for tok in word_tokens(vocab, sent_2)])
     return similarity(vsent_1, vsent_2)
 
-def sum_tokens(model, tokens, verbose=False, stops=None):
+def sum_tokens(word2vec, tokens, verbose=False, stops=None):
     '''Vector sum of in-vocabulary word vectors from tokens.'''
     v_sum = None
     for token in tokens:
         try:
-            v_tok = model[token]
+            v_tok = word2vec[token]
             v_sum = v_tok if v_sum is None else v_sum + v_tok
         except KeyError as ex:
             if verbose and token.lower() not in stops:
                 print("KeyError in", inspect.currentframe().f_code.co_name, ':', ex)
     return v_sum
 
-def sum_tokens_similarity(model, tokens_1, tokens_2, verbose=False):
+def sum_tokens_similarity(word2vec, tokens_1, tokens_2, verbose=False):
     '''
     Crude token-list content similarity based on summing word vectors.
     Only in-vocabulary tokens contribute; others are ignored.
     '''
-    v_sum_1 = sum_tokens(model, tokens_1, verbose)
-    v_sum_2 = sum_tokens(model, tokens_2, verbose)
+    v_sum_1 = sum_tokens(word2vec, tokens_1, verbose)
+    v_sum_2 = sum_tokens(word2vec, tokens_2, verbose)
     return cosine(v_sum_1, v_sum_2)
 
-def compare_token_lists(model, tokens_1, tokens_2, verbose=True):
+def compare_token_lists(word2vec, tokens_1, tokens_2, verbose=True):
     '''Show crude token-list content similarity based on summing word vectors.'''
-    sim = sum_tokens_similarity(model, tokens_1, tokens_2, verbose)
+    sim = sum_tokens_similarity(word2vec, tokens_1, tokens_2, verbose)
     dif = 1.0 - sim
     st1 = ' '.join(tokens_1)
     st2 = ' '.join(tokens_2)
@@ -111,28 +111,28 @@ def compare_token_lists(model, tokens_1, tokens_2, verbose=True):
         print("Comparing (%s) & (%s) %s sim %.5f  dif %.5f" % (st1, st2, " "*(24 - len(st1 + st2)), sim, dif))
     return sim
 
-def nearest_other(model, vocab, this_text, other_texts, offset, max_sim):
+def nearest_other(word2vec, vocab, this_text, other_texts, offset, max_sim):
     '''Too clever'''
     max_oth = None
     this_tok = raw_tokens(this_text)
-    this_sum = sum_tokens(model, this_tok)
+    this_sum = sum_tokens(word2vec, this_tok)
     for idx, other in enumerate(other_texts):
         other_tok = word_tokens(vocab, other)
-        other_sum = sum_tokens(model, other_tok)
+        other_sum = sum_tokens(word2vec, other_tok)
         sim = similarity(this_sum, other_sum)
         if max_sim < sim:
             max_sim = sim
             max_idx = idx
     return max_idx + offset, max_sim
 
-def nearest_others(model, vocab, texts):
+def nearest_others(word2vec, vocab, texts):
     '''Cleverer'''
     nearests = len(texts)*[None]
     for idx, txt in enumerate(texts):
-        nearests[idx] = nearest_other(model, vocab, txt, texts[:idx], 0, -1)
+        nearests[idx] = nearest_other(word2vec, vocab, txt, texts[:idx], 0, -1)
     return nearests
 
-def nearest_neighbors(model, vocab, texts, verbose=False):
+def nearest_neighbors(word2vec, vocab, texts, verbose=False):
     '''For each text in texts, find the index of the most similar other text'''
     nearests = len(texts)*[None]
     stops_words = default_stop_words()
@@ -140,10 +140,10 @@ def nearest_neighbors(model, vocab, texts, verbose=False):
         max_sim = 0.0
         max_oth = None
         txt_tok = raw_tokens(txt)
-        txt_sum = sum_tokens(model, txt_tok, verbose, stops_words)
+        txt_sum = sum_tokens(word2vec, txt_tok, verbose, stops_words)
         for oix, oth in enumerate(texts[:idx] + texts[idx + 1:]):
             oth_tok = word_tokens(vocab, oth)
-            oth_sum = sum_tokens(model, oth_tok)
+            oth_sum = sum_tokens(word2vec, oth_tok)
             sim = similarity(txt_sum, oth_sum)
             if max_sim < sim:
                 max_sim = sim
@@ -151,8 +151,8 @@ def nearest_neighbors(model, vocab, texts, verbose=False):
         nearests[idx] = max_idx if max_idx < idx else max_idx + 1
     return nearests
 
-def show_nearest_neighbors(model, vocab, texts, verbose=True):
-    nearest_indexes = nearest_neighbors(model, vocab, texts, verbose)
+def show_nearest_neighbors(word2vec, vocab, texts, verbose=True):
+    nearest_indexes = nearest_neighbors(word2vec, vocab, texts, verbose)
     for idx, txt in enumerate(texts):
         nearest_idx = nearest_indexes[idx]
         nearest_txt = texts[nearest_idx]
@@ -164,10 +164,10 @@ def randomly(seq):
     random.shuffle(lst)
     return iter(lst)
 
-def show_ascending_norms(model, thresh=4.11):
+def show_ascending_norms(word2vec, thresh=4.11):
     max_norm = thresh
-    for key in randomly(model.vocab.keys()):
-        vec = model[key]
+    for key in randomly(word2vec.vocab.keys()):
+        vec = word2vec[key]
         nrm = np.sqrt(vec.dot(vec))
         # nrm = np.linalg.norm(vec)
         if max_norm < nrm:
@@ -177,36 +177,36 @@ def show_ascending_norms(model, thresh=4.11):
             print("           %.4f  %s" % (nrm, key))
 #################################### TESTS ####################################
 
-def test_word_similarity(model, aa='king', bb='queen', cc='man', dd='woman'):
+def test_word_similarity(word2vec, aa='king', bb='queen', cc='man', dd='woman'):
     '''show similarity on a tetrad of (analogous) words'''
     print("test_word_similarity:", test_word_similarity.__doc__)
-    sim_aa = model.similarity(aa, aa)
-    sim_bb = model.similarity(bb, bb)
+    sim_aa = word2vec.similarity(aa, aa)
+    sim_bb = word2vec.similarity(bb, bb)
     absdif = abs(sim_aa - sim_bb)
     print("self similarities of %s and %s to themselves:\t%f and %f, dif %f" %
           (aa, bb, sim_aa, sim_bb, absdif))
-    sim_ab = model.similarity(aa, bb)
-    sim_ba = model.similarity(bb, aa)
+    sim_ab = word2vec.similarity(aa, bb)
+    sim_ba = word2vec.similarity(bb, aa)
     absdif = abs(sim_ab - sim_ba)
     print("symm similarities of %s to %s and %s to %s:\t%f and %f, dif %f" %
           (aa, bb, bb, aa, sim_ab, sim_ba, absdif))
-    sim_ab = model.similarity(aa, bb)
-    sim_cd = model.similarity(cc, dd)
+    sim_ab = word2vec.similarity(aa, bb)
+    sim_cd = word2vec.similarity(cc, dd)
     absdif = abs(sim_ab - sim_cd)
     print("opposite sims a:b:c:d %s to %s and %s to %s:\t%f and %f, dif %f" %
           (aa, bb, cc, dd, sim_ab, sim_cd, absdif))
-    sim_ac = model.similarity(aa, cc)
-    sim_bd = model.similarity(bb, dd)
+    sim_ac = word2vec.similarity(aa, cc)
+    sim_bd = word2vec.similarity(bb, dd)
     absdif = abs(sim_ac - sim_bd)
     print("analogous sims a:c:b:d %s to %s and %s to %s:\t%f and %f, dif %f" %
           (aa, cc, bb, dd, sim_ac, sim_bd, absdif))
 
-def test_word_differences(model, aa='king', bb='queen', cc='man', dd='woman'):
+def test_word_differences(word2vec, aa='king', bb='queen', cc='man', dd='woman'):
     '''show differences on a tetrad of (analogous) words'''
-    vec_aa = model[aa]
-    vec_bb = model[bb]
-    vec_cc = model[cc]
-    vec_dd = model[dd]
+    vec_aa = word2vec[aa]
+    vec_bb = word2vec[bb]
+    vec_cc = word2vec[cc]
+    vec_dd = word2vec[dd]
 
     dif_ab = vec_aa - vec_bb
     dif_cd = vec_cc - vec_dd
@@ -218,12 +218,12 @@ def test_word_differences(model, aa='king', bb='queen', cc='man', dd='woman'):
     sim_yy = cosine(dif_ac, dif_bd)
     print("similarity of vec(%s) - vec(%s) to vec(%s) - vec(%s): %f" % (aa, cc, bb, dd, sim_yy))
 
-def test_word_analogies(model, aa='king', bb='queen', cc='man', dd='woman'):
+def test_word_analogies(word2vec, aa='king', bb='queen', cc='man', dd='woman'):
     '''show arithmetic combos on a tetrad of (analogous) words'''
-    vec_aa = model[aa]
-    vec_bb = model[bb]
-    vec_cc = model[cc]
-    vec_dd = model[dd]
+    vec_aa = word2vec[aa]
+    vec_bb = word2vec[bb]
+    vec_cc = word2vec[cc]
+    vec_dd = word2vec[dd]
     vec_acd = vec_aa - vec_cc + vec_dd
     vec_bdc = vec_bb - vec_dd + vec_cc
     sim_acdb = cosine(vec_acd, vec_bb)
@@ -231,17 +231,17 @@ def test_word_analogies(model, aa='king', bb='queen', cc='man', dd='woman'):
     sim_bdca = cosine(vec_bdc, vec_aa)
     print("similarity of vec(%s) - vec(%s) + vec(%s) to vec(%s): %f" % (bb, dd, cc, aa, sim_bdca))
 
-def test_sentence_distance(model, vocab, sent_1="This is a sentence.",
+def test_sentence_distance(word2vec, vocab, sent_1="This is a sentence.",
                            sent_2="This, IS, some, OTHER, Sentence!"):
     '''show simple sub-based sentence distance'''
     toks_1 = word_tokens(vocab, sent_1)
     toks_2 = word_tokens(vocab, sent_2)
     print("word_tokens({}) == {}".format(sent_1, toks_1))
     print("word_tokens({}) == {}".format(sent_2, toks_2))
-    dist12 = sum_tokens_distance(model, vocab, sent_1, sent_2)
+    dist12 = sum_tokens_distance(word2vec, vocab, sent_1, sent_2)
     print("sum_tokens_distance => ", dist12)
 
-def test_contractions(model, verbose=True):
+def test_contractions(word2vec, verbose=True):
     t_do = ["do"]
     t_does = ["does"]
     t_did = ["did"]
@@ -252,34 +252,34 @@ def test_contractions(model, verbose=True):
     t_dont = ["don't"]
     t_doesnt = ["doesn't"]
     t_didnt = ["didn't"]
-    compare_token_lists(model, t_do, t_does, verbose=True)
-    compare_token_lists(model, t_do, t_did, verbose=True)
-    compare_token_lists(model, t_do, t_not, verbose=True)
+    compare_token_lists(word2vec, t_do, t_does, verbose=True)
+    compare_token_lists(word2vec, t_do, t_did, verbose=True)
+    compare_token_lists(word2vec, t_do, t_not, verbose=True)
 
-    compare_token_lists(model, t_do_not, t_not, verbose=True)
-    compare_token_lists(model, t_do_not, t_does_not, verbose=True)
-    compare_token_lists(model, t_do_not, t_did_not, verbose=True)
+    compare_token_lists(word2vec, t_do_not, t_not, verbose=True)
+    compare_token_lists(word2vec, t_do_not, t_does_not, verbose=True)
+    compare_token_lists(word2vec, t_do_not, t_did_not, verbose=True)
 
-    compare_token_lists(model, t_do_not, t_dont, verbose=True)
-    compare_token_lists(model, t_do_not, t_doesnt, verbose=True)
-    compare_token_lists(model, t_do_not, t_didnt, verbose=True)
+    compare_token_lists(word2vec, t_do_not, t_dont, verbose=True)
+    compare_token_lists(word2vec, t_do_not, t_doesnt, verbose=True)
+    compare_token_lists(word2vec, t_do_not, t_didnt, verbose=True)
 
-    compare_token_lists(model, t_does_not, t_dont, verbose=True)
-    compare_token_lists(model, t_does_not, t_doesnt, verbose=True)
-    compare_token_lists(model, t_does_not, t_didnt, verbose=True)
+    compare_token_lists(word2vec, t_does_not, t_dont, verbose=True)
+    compare_token_lists(word2vec, t_does_not, t_doesnt, verbose=True)
+    compare_token_lists(word2vec, t_does_not, t_didnt, verbose=True)
 
-    compare_token_lists(model, t_did_not, t_dont, verbose=True)
-    compare_token_lists(model, t_did_not, t_doesnt, verbose=True)
-    compare_token_lists(model, t_did_not, t_didnt, verbose=True)
+    compare_token_lists(word2vec, t_did_not, t_dont, verbose=True)
+    compare_token_lists(word2vec, t_did_not, t_doesnt, verbose=True)
+    compare_token_lists(word2vec, t_did_not, t_didnt, verbose=True)
 
-    compare_token_lists(model, t_dont, t_doesnt, verbose=True)
-    compare_token_lists(model, t_dont, t_didnt, verbose=True)
-    compare_token_lists(model, t_doesnt, t_didnt, verbose=True)
+    compare_token_lists(word2vec, t_dont, t_doesnt, verbose=True)
+    compare_token_lists(word2vec, t_dont, t_didnt, verbose=True)
+    compare_token_lists(word2vec, t_doesnt, t_didnt, verbose=True)
 
-def smoke_test(model, vocab):
+def smoke_test(word2vec, vocab):
     '''sanity checking'''
-    test_word_similarity(model)
-    test_word_differences(model)
-    test_word_analogies(model)
-    test_sentence_distance(model, vocab)
-    test_contractions(model, verbose=True)
+    test_word_similarity(word2vec)
+    test_word_differences(word2vec)
+    test_word_analogies(word2vec)
+    test_sentence_distance(word2vec, vocab)
+    test_contractions(word2vec, verbose=True)
