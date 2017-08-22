@@ -76,7 +76,7 @@ def show_nearest_neighbors(texts, nearest_indexes=None, similarity_func=cosine_s
         print("  %3d.  T  %s\n  %3d.  O  %s\n" % (idx, txt, nearest_idx, nearest_txt))
 
 ###############################################################################
-def similarity_dict(similarity_func, all_texts, this_text, min_sim_val=0.0):
+def similarity_dict(similarity_func, all_texts, this_text, excludes=None, min_sim_val=0.0):
     '''
     Returns a dict mapping all_texts' indexes to their similarity with this_text,
         provide their similarity value >= min_sim_val
@@ -85,6 +85,8 @@ def similarity_dict(similarity_func, all_texts, this_text, min_sim_val=0.0):
     '''
     sim_dict = {}
     for idx, a_text in enumerate(all_texts):
+        if excludes and idx in excludes:
+            continue
         sim = similarity_func(this_text, a_text)
         if  sim > min_sim_val:
             sim_dict[idx] = sim
@@ -102,7 +104,7 @@ def nlargest_values(dict_with_comparable_values, count=10):
     '''Returns a list of the greatest values in descending order.  Duplicates permitted.'''
     return heapq.nlargest(count, dict_with_comparable_values.values())
 
-def most_similar_items_list(similarity_func, all_texts, this_text, max_count=5, min_sim_val=0.0):
+def most_similar_items_list(similarity_func, all_texts, this_text, excludes=None, max_count=5, min_sim_val=0.0):
     '''
     Find the N most similar texts to this_text and return a list of (index, similarity) pairs in
     descending order of similarity.
@@ -111,17 +113,22 @@ def most_similar_items_list(similarity_func, all_texts, this_text, max_count=5, 
         max_count           maximum size of returned dict
         max_sim_val:        the initial value of max, or the maximum similariy found so far.
     '''
-    sim_dict = similarity_dict(similarity_func, all_texts, this_text, min_sim_val)
+    sim_dict = similarity_dict(similarity_func, all_texts, this_text, excludes, min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
-def list_most_sim_lists(texts, similarity_func=cosine_sim, max_count=5, min_sim_val=0.0):
+def list_most_sim_lists(texts, similarity_func=cosine_sim, exclude_self=True, max_count=5, min_sim_val=0.0):
     '''
     For each text in texts, find a list of indexes of the most similar texts.
     Returns list of lists of items as in: [[(index, similariy), ...], ...]
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
     '''
-    return [most_similar_items_list(similarity_func, texts, txt, max_count, min_sim_val) for txt in texts]
+    if exclude_self:
+        nearests = len(texts)*[None]
+        for idx, txt in enumerate(texts):
+            nearests[idx] = most_similar_items_list(similarity_func, texts, txt, [idx], max_count, min_sim_val)
+        return nearests
+    return [most_similar_items_list(similarity_func, texts, txt, None, max_count, min_sim_val) for txt in texts]
 
 def show_most_sim_lists(texts, most_sim_lists=None, similarity_func=cosine_sim, verbose=True):
     if most_sim_lists is None:
@@ -132,3 +139,17 @@ def show_most_sim_lists(texts, most_sim_lists=None, similarity_func=cosine_sim, 
         for oix, sim in most_sim_list:
             print("        %3d   %.5f   %s" % (oix, sim, texts[oix]))
         print()
+
+def save_most_sim_lists_tsv(texts, quandas, path, most_sim_lists=None, exclude_self=True,
+                            max_count=7, similarity_func=cosine_sim, verbose=True):
+    if most_sim_lists is None:
+        most_sim_lists = list_most_sim_lists(texts, max_count=max_count)     # use defaults
+    with open(path, "w") as out:
+        for idx, txt in enumerate(texts):
+            most_sim_list = most_sim_lists[idx]
+            assert(txt == quandas[idx][0])
+            print(txt, quandas[idx][1], sep="\t", file=out)
+            for oix, sim in most_sim_list:
+                print(oix, sim, texts[oix], quandas[oix][1], sep="\t", file=out)
+            print(file=out)
+    return most_sim_lists
