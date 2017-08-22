@@ -1,0 +1,1410 @@
+According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+ 94	0.24565	What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex
+
+According to Ishmael, what is the wealth of New Bedford built upon?	Whale oil
+  2	0.17078	According to Ishmael, which whale produces the best, purest, and sweetest of oils?	Sperm whale
+
+According to Ishmael, which whale produces the best, purest, and sweetest of oils?	Sperm whale
+ 14	0.31711	How do live whales smell, according to Ishmael?	Pleasantly musky
+
+According to Ishmael, who are the only people besides Stubb that still eat whale meat?	The Eskimos
+ 14	0.29527	How do live whales smell, according to Ishmael?	Pleasantly musky
+
+According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads
+100	0.25958	What was Queequeg on his home island?	A prince
+
+After his father's death, where was thirteen-year-old Herman Melville forced to find work?	At a bank
+ 20	0.28825	How old was Herman Melville when he made his first sea voyage as a merchant sailor?	19
+
+After the whale carcass is cut loose from the ship, who are the "mourners" at its "funeral?"	Sharks and vultures
+170	0.20614	Why are whaling ships always well-lit?	Free access to oil
+  0	0.20062	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+122	0.18443	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+  7	0.16171	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 80	0.16171	What is the name of Ahab's ship?	The Pequod
+ 87	0.16171	What is the name of the ship in the story?	The Pequod
+ 90	0.16171	What is the study of whales called?	Cetology
+
+After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 80	1.00000	What is the name of Ahab's ship?	The Pequod
+131	0.33610	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+137	0.33610	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+ 79	0.33610	What is the name of Ahab's harpooner?	Fedallah
+ 81	0.33610	What is the name of Ahab's wife?	She is nameless
+ 87	0.33610	What is the name of the ship in the story?	The Pequod
+161	0.31800	Who is the only crewmate who opposes Ahab's plan to devote the ship's mission to hunt the White Whale?	Starbuck
+
+Ahab claims that, "The path to my fixed purpose is laid" with what?	Iron rails
+  7	0.17579	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 79	0.17579	What is the name of Ahab's harpooner?	Fedallah
+ 80	0.17579	What is the name of Ahab's ship?	The Pequod
+ 81	0.17579	What is the name of Ahab's wife?	She is nameless
+137	0.17579	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+131	0.17579	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+ 32	0.15064	The fact that Ahab is using the Pequod for a different purpose than its owners intended means he could be charged with what?	Usurpation
+
+Because Pip's insane rantings move Ahab, Ahab gives Pip what?	The captain's quarters
+152	0.47368	Who is Pip?	The cabin boy on the Pequod. He is a young Negro who is very nervous and quiet by temperament and loses his mind when he has been abandoned in the sea for awhile.  He becomes half idiot-half prophet.
+ 63	0.34064	What experience catalyzed Pip and Ahab's close companionship?	Pip's near-drowning
+131	0.27461	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+  7	0.27461	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+137	0.27461	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+ 79	0.27461	What is the name of Ahab's harpooner?	Fedallah
+ 80	0.27461	What is the name of Ahab's ship?	The Pequod
+
+Before the Pequod had even left Nantucket, Ahab's fake leg had twisted around and very nearly done what?	Pierced his groin
+ 13	0.23774	From what is Ahab's false leg made?	A whale's jawbone
+164	0.23077	Who owns the Pequod?	Bildad and Peleg
+ 76	0.23077	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+ 68	0.19431	What is Captain Ahab's artificial leg made of?	Ivory
+ 65	0.18977	What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off
+117	0.16837	When the Pequod meets other sips, what is Ahab's only interest?	Information about Moby Dick
+131	0.13379	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+
+During the first part of the voyage, what kind of sounds do the crew think they hear from the cargo hold?	Human beings
+ 28	0.09270	Over the course of the voyage, Ahab destroys all of what?	The navigation equipment
+129	0.08177	Which member of the crew is a religious Christian man?	Starbuck
+ 86	0.07397	What is the name of the inn Ishmael stays at on the mainland before the voyage?	The Spouter Inn
+ 40	0.07397	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head
+175	0.07397	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+ 59	0.07397	What does the crew look for to indicate the presence of a whale?	Spouts
+ 15	0.06805	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target
+
+For what were whales primarily hunted?	Oil
+ 98	0.50310	What type of whale are they hunting?	Sperm whales
+132	0.31878	Who are the "five dusky phantoms" that appear when the first whale hunt begins?	Ahab's secret whaling crew
+ 25	0.29107	Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles
+ 52	0.29107	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
+119	0.29107	When the crew first hunt a whale, what nearly crushes Queequeg's boat?	The ship
+ 90	0.26056	What is the study of whales called?	Cetology
+ 56	0.22576	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+
+From what is Ahab's false leg made?	A whale's jawbone
+ 68	0.41121	What is Captain Ahab's artificial leg made of?	Ivory
+  7	0.26056	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 79	0.26056	What is the name of Ahab's harpooner?	Fedallah
+ 80	0.26056	What is the name of Ahab's ship?	The Pequod
+ 81	0.26056	What is the name of Ahab's wife?	She is nameless
+137	0.26056	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+131	0.26056	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+
+How do live whales smell, according to Ishmael?	Pleasantly musky
+147	0.33518	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+  2	0.31711	According to Ishmael, which whale produces the best, purest, and sweetest of oils?	Sperm whale
+  3	0.29527	According to Ishmael, who are the only people besides Stubb that still eat whale meat?	The Eskimos
+ 50	0.25233	What does Ishmael claim is the most famous part of a whale?	Its tail
+  0	0.24558	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+  1	0.22576	According to Ishmael, what is the wealth of New Bedford built upon?	Whale oil
+175	0.22576	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+
+How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target
+ 16	0.29107	How does Queequeg shave?	With a harpoon
+ 17	0.29107	How does the Pequod sink?	She is rammed by Moby Dick.
+178	0.29107	With what does Queequeg sleep?	His harpoon
+153	0.27894	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.
+ 76	0.27894	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+164	0.27894	Who owns the Pequod?	Bildad and Peleg
+111	0.23790	When Queequeg falls ill, what does he do?	Have his coffin made
+
+How does Queequeg shave?	With a harpoon
+178	0.50310	With what does Queequeg sleep?	His harpoon
+153	0.44944	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.
+111	0.41121	When Queequeg falls ill, what does he do?	Have his coffin made
+ 22	0.35630	In what state does Ishmael meet Queequeg?	Massachusetts
+ 15	0.29107	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target
+ 57	0.29107	What does Queequeg do when the bumpkin that was mocking him falls into the ocean?	Dives in after him
+110	0.25214	When Queequeg decorates the coffin that he'd had made, what does he use for the decoration?	His own tattoos
+
+How does the Pequod sink?	She is rammed by Moby Dick.
+ 76	0.44944	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+164	0.44944	Who owns the Pequod?	Bildad and Peleg
+128	0.41121	Which characters survive the Pequod's sinking?	Only Ishmael
+ 92	0.41121	What keeps Ishmael afloat after the Pequod sinks?	A coffin
+115	0.41121	When does the Pequod set sail?	Christmas Day
+ 58	0.31878	What does the Delight drop into the water as the Pequod passes by?	A dead body
+ 15	0.29107	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target
+
+How is the Pequod decorated?	With whale bones
+ 76	0.57974	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+164	0.57974	Who owns the Pequod?	Bildad and Peleg
+ 36	0.33610	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask
+179	0.33610	With what is the Pequod adorned?	Sperm whale teeth
+110	0.31126	When Queequeg decorates the coffin that he'd had made, what does he use for the decoration?	His own tattoos
+162	0.26056	Who is the second mate on the Pequod?	Stubb
+ 17	0.26056	How does the Pequod sink?	She is rammed by Moby Dick.
+
+How many of the Pequod's crew survive their encounter with Moby Dick?	One
+149	0.41036	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.
+ 76	0.27894	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+164	0.27894	Who owns the Pequod?	Bildad and Peleg
+ 64	0.23790	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale
+128	0.23790	Which characters survive the Pequod's sinking?	Only Ishmael
+ 78	0.23790	What is the famous first line of Moby Dick?	Call me Ishmael.
+125	0.18443	Which body part has Ahab lost to Moby Dick?	His leg
+
+How old was Herman Melville when he made his first sea voyage as a merchant sailor?	19
+  5	0.28825	After his father's death, where was thirteen-year-old Herman Melville forced to find work?	At a bank
+100	0.17857	What was Queequeg on his home island?	A prince
+ 99	0.12636	What was Ahab using to attack Moby Dick when he lost his leg?	A knife
+101	0.12636	What was the name of the whaling ship on which Melville spent 18 months between 1841 and 1842?	Achusnet
+123	0.11915	Which American literary figure, to whom Moby Dick was dedicated, influenced Melville's writing?	Nathaniel Hawthorne
+ 42	0.10011	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin
+130	0.09270	Which was the first team to kill a whale?	Stubb and Tashtego
+
+In what decade did historians rediscover and promote the previously ignored Moby Dick as a seminal work of American literature?	1920's
+149	0.29032	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.
+ 64	0.16831	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale
+ 78	0.16831	What is the famous first line of Moby Dick?	Call me Ishmael.
+123	0.15332	Which American literary figure, to whom Moby Dick was dedicated, influenced Melville's writing?	Nathaniel Hawthorne
+125	0.13048	Which body part has Ahab lost to Moby Dick?	His leg
+107	0.11914	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad
+ 43	0.11914	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon
+
+In what state does Ishmael meet Queequeg?	Massachusetts
+ 16	0.35630	How does Queequeg shave?	With a harpoon
+178	0.35630	With what does Queequeg sleep?	His harpoon
+147	0.33518	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+153	0.33518	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.
+111	0.29122	When Queequeg falls ill, what does he do?	Have his coffin made
+  4	0.25958	According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads
+ 50	0.25233	What does Ishmael claim is the most famous part of a whale?	Its tail
+
+Ishmael decides he likes the fact that Queequeg is a pagan because Queequeg lacks a Christian's what?	Hollow courtesies
+153	0.44944	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.
+  4	0.28070	According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads
+ 22	0.24558	In what state does Ishmael meet Queequeg?	Massachusetts
+147	0.20976	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 16	0.20199	How does Queequeg shave?	With a harpoon
+ 30	0.20199	Queequeg is a native of what island?	Kokovoko
+ 39	0.20199	What covers Queequeg's skin?	Tattoos
+
+Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher? 	Platonic
+  0	0.30413	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+ 90	0.23790	What is the study of whales called?	Cetology
+ 14	0.22327	How do live whales smell, according to Ishmael?	Pleasantly musky
+ 50	0.22327	What does Ishmael claim is the most famous part of a whale?	Its tail
+102	0.22327	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses
+ 51	0.20883	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel
+ 56	0.20614	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+
+Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles
+ 12	0.29107	For what were whales primarily hunted?	Oil
+ 98	0.29107	What type of whale are they hunting?	Sperm whales
+147	0.27894	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 52	0.27520	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
+ 14	0.20614	How do live whales smell, according to Ishmael?	Pleasantly musky
+ 50	0.20614	What does Ishmael claim is the most famous part of a whale?	Its tail
+132	0.18443	Who are the "five dusky phantoms" that appear when the first whale hunt begins?	Ahab's secret whaling crew
+
+Ishmael thinks Buckington is fated to die at sea, but that such a death will transform Buckington into what?	God
+147	0.21951	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+174	0.19280	Why does Ishmael think that the natural dangers of the sea are so insidious?	So much is hidden
+175	0.14292	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+ 54	0.13049	What does Ishmael think men and animals should be judged on, rather than their brains?	Their spines
+ 38	0.12083	What color does Ishmael think is horrible, unnatural and threatening when on an animal?	White
+173	0.12083	Why does Ishmael think that he doesn't keep a very good watch?	He daydreams too much
+104	0.11304	When Ahab bursts into fits of near-mad shrieking, what does Ishmael think is the cause?	His soul attempting escape
+
+Out of what is Fedallah's turban made?	His hair
+ 69	1.00000	What is Fedallah's turban made of?	His own hair
+143	0.57974	Who is Fedallah?	Strange, "oriental" old Parsee; Ahab's harpooner and personal prophet
+ 44	0.17579	What does Ahab recognize as the "first hearse" of Fedallah's prophecy?	Fedallah lashed to Moby Dick
+ 47	0.17579	What does Fedallah prophesize will kill Captain Ahab?	Hemp
+  0	0.12160	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+
+Over the course of the voyage, Ahab destroys all of what?	The navigation equipment
+  7	0.22029	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 79	0.22029	What is the name of Ahab's harpooner?	Fedallah
+ 80	0.22029	What is the name of Ahab's ship?	The Pequod
+ 81	0.22029	What is the name of Ahab's wife?	She is nameless
+137	0.22029	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+131	0.22029	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+  9	0.17999	Because Pip's insane rantings move Ahab, Ahab gives Pip what?	The captain's quarters
+
+Pip describes the doubloon on the mast as the ship's what?	Navel
+169	0.35630	Who wins the doubloon from the mast?	Ahab
+152	0.33518	Who is Pip?	The cabin boy on the Pequod. He is a young Negro who is very nervous and quiet by temperament and loses his mind when he has been abandoned in the sea for awhile.  He becomes half idiot-half prophet.
+ 45	0.20614	What does Ahab see when he studies the gold doubloon nailed to the mast?	Himself
+  7	0.19431	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 75	0.19431	What is the "doubloon" offered for?	The first man to spot Moby Dick
+ 80	0.19431	What is the name of Ahab's ship?	The Pequod
+ 87	0.19431	What is the name of the ship in the story?	The Pequod
+
+Queequeg is a native of what island?	Kokovoko
+ 83	1.00000	What is the name of Queequeg's native island?	Kokovoko
+153	0.44944	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.
+100	0.35630	What was Queequeg on his home island?	A prince
+  4	0.21289	According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads
+ 39	0.20199	What covers Queequeg's skin?	Tattoos
+ 16	0.20199	How does Queequeg shave?	With a harpoon
+178	0.20199	With what does Queequeg sleep?	His harpoon
+
+The crew believes that they saw mermaids in the night, but Ahab says that there were actually what?	Seals
+112	0.16889	When Starbuck confronts Ahab about leaking oil barrels that are costing the crew profit, how does Ahab respond?	Points a gun at Starbuck
+107	0.15593	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad
+120	0.15593	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head
+131	0.15056	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+  7	0.15056	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+137	0.15056	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+ 79	0.15056	What is the name of Ahab's harpooner?	Fedallah
+
+The fact that Ahab is using the Pequod for a different purpose than its owners intended means he could be charged with what?	Usurpation
+ 76	0.23077	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+164	0.23077	Who owns the Pequod?	Bildad and Peleg
+117	0.16837	When the Pequod meets other sips, what is Ahab's only interest?	Information about Moby Dick
+  8	0.15064	Ahab claims that, "The path to my fixed purpose is laid" with what?	Iron rails
+131	0.13379	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+  7	0.13379	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 18	0.13379	How is the Pequod decorated?	With whale bones
+
+The name of the First Mate is?	Starbuck
+ 85	1.00000	What is the name of the Third Mate?	Flask
+ 84	0.57974	What is the name of the Second Mate?	Stubb
+131	0.57974	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+ 36	0.57974	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask
+162	0.44944	Who is the second mate on the Pequod?	Stubb
+
+There once was a time when the "specksynder" or chief harpooner served as what?	The captain of the vessel
+ 73	0.27894	What is a "specksynder"?	Chief Harpooner
+ 79	0.16171	What is the name of Ahab's harpooner?	Fedallah
+160	0.12537	Who is the harpooner that Queequeq rescues?	Tashtego
+130	0.10599	Which was the first team to kill a whale?	Stubb and Tashtego
+ 37	0.10599	What causes Ahab's harpoon to flicker with fire?	Atmospheric static
+100	0.09349	What was Queequeg on his home island?	A prince
+102	0.09349	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses
+
+To what does Ishmael liken the experience of shipping aboard a whaler?	Committing suicide
+122	0.30413	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+147	0.27894	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 93	0.27520	What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford
+ 22	0.20614	In what state does Ishmael meet Queequeg?	Massachusetts
+180	0.20614	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg
+ 50	0.20614	What does Ishmael claim is the most famous part of a whale?	Its tail
+ 53	0.20614	What does Ishmael have tattooed on his forearm?	The dimensions of a whale
+
+What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask
+162	0.70930	Who is the second mate on the Pequod?	Stubb
+ 33	0.57974	The name of the First Mate is?	Starbuck
+ 76	0.57974	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+ 85	0.57974	What is the name of the Third Mate?	Flask
+164	0.57974	Who owns the Pequod?	Bildad and Peleg
+131	0.33610	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+179	0.33610	With what is the Pequod adorned?	Sperm whale teeth
+
+What causes Ahab's harpoon to flicker with fire?	Atmospheric static
+ 79	0.57974	What is the name of Ahab's harpooner?	Fedallah
+134	0.29122	Who is Ahab's personal harpooner and spiritual guide?	Fedallah
+105	0.26964	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes
+  7	0.22029	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 80	0.22029	What is the name of Ahab's ship?	The Pequod
+ 81	0.22029	What is the name of Ahab's wife?	She is nameless
+137	0.22029	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+
+What color does Ishmael think is horrible, unnatural and threatening when on an animal?	White
+ 54	0.36802	What does Ishmael think men and animals should be judged on, rather than their brains?	Their spines
+175	0.27983	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+147	0.25970	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+174	0.23298	Why does Ishmael think that the natural dangers of the sea are so insidious?	So much is hidden
+173	0.23298	Why does Ishmael think that he doesn't keep a very good watch?	He daydreams too much
+104	0.21693	When Ahab bursts into fits of near-mad shrieking, what does Ishmael think is the cause?	His soul attempting escape
+ 22	0.19087	In what state does Ishmael meet Queequeg?	Massachusetts
+
+What covers Queequeg's skin?	Tattoos
+153	0.44944	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.
+  4	0.21289	According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads
+ 16	0.20199	How does Queequeg shave?	With a harpoon
+178	0.20199	With what does Queequeg sleep?	His harpoon
+ 83	0.20199	What is the name of Queequeg's native island?	Kokovoko
+ 23	0.20199	Ishmael decides he likes the fact that Queequeg is a pagan because Queequeg lacks a Christian's what?	Hollow courtesies
+ 30	0.20199	Queequeg is a native of what island?	Kokovoko
+
+What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head
+130	0.26056	Which was the first team to kill a whale?	Stubb and Tashtego
+ 59	0.20199	What does the crew look for to indicate the presence of a whale?	Spouts
+119	0.18443	When the crew first hunt a whale, what nearly crushes Queequeg's boat?	The ship
+ 90	0.17579	What is the study of whales called?	Cetology
+ 91	0.15976	What is the term for a whale that has already been harpooned or marked by the crew of a specific ship?	Fast-fish
+ 56	0.15231	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+ 48	0.15064	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirt-spout
+
+What does Ahab carry in his pocket?	Vial of Nantucket sand
+103	0.38077	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)
+ 42	0.32493	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin
+ 53	0.25233	What does Ishmael have tattooed on his forearm?	The dimensions of a whale
+ 62	0.25233	What does the scar on Ahab's cheek resemble?	A lightning bolt
+105	0.23363	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes
+ 44	0.22576	What does Ahab recognize as the "first hearse" of Fedallah's prophecy?	Fedallah lashed to Moby Dick
+ 47	0.22576	What does Fedallah prophesize will kill Captain Ahab?	Hemp
+
+What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin
+106	0.37491	When Ahab insists on climbing the mast to be the first to see Moby Dick, what happens to his hat?	A hawk steals it
+103	0.34058	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)
+ 41	0.32493	What does Ahab carry in his pocket?	Vial of Nantucket sand
+ 65	0.29411	What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off
+ 99	0.29411	What was Ahab using to attack Moby Dick when he lost his leg?	A knife
+  7	0.27894	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 80	0.27894	What is the name of Ahab's ship?	The Pequod
+
+What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon
+149	0.41036	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.
+107	0.40298	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad
+105	0.36551	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes
+125	0.30413	Which body part has Ahab lost to Moby Dick?	His leg
+ 42	0.26050	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin
+ 64	0.23790	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale
+ 78	0.23790	What is the famous first line of Moby Dick?	Call me Ishmael.
+
+What does Ahab recognize as the "first hearse" of Fedallah's prophecy?	Fedallah lashed to Moby Dick
+ 47	0.33610	What does Fedallah prophesize will kill Captain Ahab?	Hemp
+143	0.30322	Who is Fedallah?	Strange, "oriental" old Parsee; Ahab's harpooner and personal prophet
+103	0.23225	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)
+ 41	0.22576	What does Ahab carry in his pocket?	Vial of Nantucket sand
+ 62	0.22576	What does the scar on Ahab's cheek resemble?	A lightning bolt
+105	0.20903	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes
+108	0.20199	When Ahab realizes that smoking no longer soothes him, what does he do?	Throws his pipe overboard
+
+What does Ahab see when he studies the gold doubloon nailed to the mast?	Himself
+169	0.29107	Who wins the doubloon from the mast?	Ahab
+ 42	0.26050	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin
+103	0.21205	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)
+ 29	0.20614	Pip describes the doubloon on the mast as the ship's what?	Navel
+ 41	0.20614	What does Ahab carry in his pocket?	Vial of Nantucket sand
+ 62	0.20614	What does the scar on Ahab's cheek resemble?	A lightning bolt
+105	0.19086	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes
+
+What does Captain Boomer want to do since Moby Dick took his arm?	Avoid Moby Dick
+138	0.33518	Who is Captain Boomer?	One-armed English whaling captain; master of the Samuel Enderby
+149	0.33518	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.
+ 42	0.27518	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin
+ 43	0.22150	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon
+107	0.22150	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad
+ 64	0.19431	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale
+ 78	0.19431	What is the famous first line of Moby Dick?	Call me Ishmael.
+
+What does Fedallah prophesize will kill Captain Ahab?	Hemp
+137	0.44944	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+ 44	0.33610	What does Ahab recognize as the "first hearse" of Fedallah's prophecy?	Fedallah lashed to Moby Dick
+143	0.30322	Who is Fedallah?	Strange, "oriental" old Parsee; Ahab's harpooner and personal prophet
+ 68	0.26056	What is Captain Ahab's artificial leg made of?	Ivory
+103	0.23225	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)
+ 41	0.22576	What does Ahab carry in his pocket?	Vial of Nantucket sand
+ 62	0.22576	What does the scar on Ahab's cheek resemble?	A lightning bolt
+
+What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirt-spout
+175	0.35630	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+ 50	0.27740	What does Ishmael claim is the most famous part of a whale?	Its tail
+ 59	0.24479	What does the crew look for to indicate the presence of a whale?	Spouts
+122	0.24479	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+147	0.23077	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 52	0.22150	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
+ 49	0.20380	What does Ishmael claim is the major difference between male and female whales?	Males abandon injured comrades
+
+What does Ishmael claim is the major difference between male and female whales?	Males abandon injured comrades
+ 50	0.47433	What does Ishmael claim is the most famous part of a whale?	Its tail
+122	0.27983	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+175	0.27983	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+147	0.25970	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 52	0.25321	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
+121	0.23298	Where does Ishmael keep a record of whale dimensions that he measured from a skeleton in Tranque?	Tattooed on his arm
+171	0.21693	Why does Ishmael claim that Nantucket has the largest empire in the world?	It owns the seas
+
+What does Ishmael claim is the most famous part of a whale?	Its tail
+ 49	0.47433	What does Ishmael claim is the major difference between male and female whales?	Males abandon injured comrades
+122	0.38087	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+175	0.38087	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+ 52	0.34464	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
+147	0.33518	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+121	0.31711	Where does Ishmael keep a record of whale dimensions that he measured from a skeleton in Tranque?	Tattooed on his arm
+171	0.29527	Why does Ishmael claim that Nantucket has the largest empire in the world?	It owns the seas
+
+What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel
+ 50	0.27740	What does Ishmael claim is the most famous part of a whale?	Its tail
+175	0.24479	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+122	0.24479	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+  0	0.23079	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+147	0.23077	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 52	0.22150	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
+ 24	0.20883	Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher? 	Platonic
+
+What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
+ 50	0.34464	What does Ishmael claim is the most famous part of a whale?	Its tail
+175	0.30413	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+122	0.30413	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+ 12	0.29107	For what were whales primarily hunted?	Oil
+ 98	0.29107	What type of whale are they hunting?	Sperm whales
+147	0.27894	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 25	0.27520	Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles
+
+What does Ishmael have tattooed on his forearm?	The dimensions of a whale
+147	0.33518	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 22	0.25233	In what state does Ishmael meet Queequeg?	Massachusetts
+ 41	0.25233	What does Ahab carry in his pocket?	Vial of Nantucket sand
+ 50	0.25233	What does Ishmael claim is the most famous part of a whale?	Its tail
+ 55	0.25233	What does Ishmael use as a life buoy?	Queequeg's coffin
+180	0.25233	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg
+175	0.22576	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+
+What does Ishmael think men and animals should be judged on, rather than their brains?	Their spines
+ 38	0.36802	What color does Ishmael think is horrible, unnatural and threatening when on an animal?	White
+175	0.30413	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+147	0.27894	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+174	0.25321	Why does Ishmael think that the natural dangers of the sea are so insidious?	So much is hidden
+173	0.25321	Why does Ishmael think that he doesn't keep a very good watch?	He daydreams too much
+104	0.23577	When Ahab bursts into fits of near-mad shrieking, what does Ishmael think is the cause?	His soul attempting escape
+ 22	0.20614	In what state does Ishmael meet Queequeg?	Massachusetts
+
+What does Ishmael use as a life buoy?	Queequeg's coffin
+147	0.33518	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 22	0.25233	In what state does Ishmael meet Queequeg?	Massachusetts
+ 50	0.25233	What does Ishmael claim is the most famous part of a whale?	Its tail
+ 53	0.25233	What does Ishmael have tattooed on his forearm?	The dimensions of a whale
+180	0.25233	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg
+175	0.22576	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+122	0.22576	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+
+What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+ 90	0.29122	What is the study of whales called?	Cetology
+ 50	0.27627	What does Ishmael claim is the most famous part of a whale?	Its tail
+175	0.24718	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+ 59	0.24718	What does the crew look for to indicate the presence of a whale?	Spouts
+122	0.24718	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+152	0.23077	Who is Pip?	The cabin boy on the Pequod. He is a young Negro who is very nervous and quiet by temperament and loses his mind when he has been abandoned in the sea for awhile.  He becomes half idiot-half prophet.
+  0	0.22576	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+
+What does Queequeg do when the bumpkin that was mocking him falls into the ocean?	Dives in after him
+111	0.40735	When Queequeg falls ill, what does he do?	Have his coffin made
+ 16	0.29107	How does Queequeg shave?	With a harpoon
+178	0.29107	With what does Queequeg sleep?	His harpoon
+153	0.27894	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.
+ 22	0.20614	In what state does Ishmael meet Queequeg?	Massachusetts
+100	0.20614	What was Queequeg on his home island?	A prince
+ 15	0.16840	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target
+
+What does the Delight drop into the water as the Pequod passes by?	A dead body
+ 17	0.31878	How does the Pequod sink?	She is rammed by Moby Dick.
+ 76	0.30322	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+164	0.30322	Who owns the Pequod?	Bildad and Peleg
+115	0.26056	When does the Pequod set sail?	Christmas Day
+ 15	0.18443	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target
+179	0.17579	With what is the Pequod adorned?	Sperm whale teeth
+ 18	0.17579	How is the Pequod decorated?	With whale bones
+
+What does the crew look for to indicate the presence of a whale?	Spouts
+ 56	0.24718	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+ 48	0.24479	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirt-spout
+ 50	0.22576	What does Ishmael claim is the most famous part of a whale?	Its tail
+175	0.20199	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+ 40	0.20199	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head
+122	0.20199	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+ 15	0.18443	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target
+
+What does the milk taste like on Nantucket?	Fish
+171	0.17857	Why does Ishmael claim that Nantucket has the largest empire in the world?	It owns the seas
+178	0.15064	With what does Queequeg sleep?	His harpoon
+ 16	0.15064	How does Queequeg shave?	With a harpoon
+ 17	0.15064	How does the Pequod sink?	She is rammed by Moby Dick.
+111	0.12736	When Queequeg falls ill, what does he do?	Have his coffin made
+115	0.12736	When does the Pequod set sail?	Christmas Day
+ 22	0.11234	In what state does Ishmael meet Queequeg?	Massachusetts
+
+What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt
+178	0.12537	With what does Queequeg sleep?	His harpoon
+ 16	0.12537	How does Queequeg shave?	With a harpoon
+ 17	0.12537	How does the Pequod sink?	She is rammed by Moby Dick.
+111	0.10599	When Queequeg falls ill, what does he do?	Have his coffin made
+115	0.10599	When does the Pequod set sail?	Christmas Day
+ 22	0.09349	In what state does Ishmael meet Queequeg?	Massachusetts
+ 41	0.09349	What does Ahab carry in his pocket?	Vial of Nantucket sand
+
+What does the scar on Ahab's cheek resemble?	A lightning bolt
+103	0.25958	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)
+ 41	0.25233	What does Ahab carry in his pocket?	Vial of Nantucket sand
+105	0.23363	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes
+ 44	0.22576	What does Ahab recognize as the "first hearse" of Fedallah's prophecy?	Fedallah lashed to Moby Dick
+ 47	0.22576	What does Fedallah prophesize will kill Captain Ahab?	Hemp
+108	0.22576	When Ahab realizes that smoking no longer soothes him, what does he do?	Throws his pipe overboard
+112	0.22327	When Starbuck confronts Ahab about leaking oil barrels that are costing the crew profit, how does Ahab respond?	Points a gun at Starbuck
+
+What experience catalyzed Pip and Ahab's close companionship?	Pip's near-drowning
+  9	0.34064	Because Pip's insane rantings move Ahab, Ahab gives Pip what?	The captain's quarters
+152	0.30322	Who is Pip?	The cabin boy on the Pequod. He is a young Negro who is very nervous and quiet by temperament and loses his mind when he has been abandoned in the sea for awhile.  He becomes half idiot-half prophet.
+  7	0.17579	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 79	0.17579	What is the name of Ahab's harpooner?	Fedallah
+ 80	0.17579	What is the name of Ahab's ship?	The Pequod
+ 81	0.17579	What is the name of Ahab's wife?	She is nameless
+137	0.17579	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+
+What frightens Ishmael the most about Moby Dick?	The whiteness of the whale
+149	0.57974	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.
+147	0.37998	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 78	0.33610	What is the famous first line of Moby Dick?	Call me Ishmael.
+125	0.26056	Which body part has Ahab lost to Moby Dick?	His leg
+ 19	0.23790	How many of the Pequod's crew survive their encounter with Moby Dick?	One
+ 43	0.23790	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon
+107	0.23790	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad
+
+What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off
+ 99	0.38756	What was Ahab using to attack Moby Dick when he lost his leg?	A knife
+106	0.38756	When Ahab insists on climbing the mast to be the first to see Moby Dick, what happens to his hat?	A hawk steals it
+149	0.35548	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.
+ 42	0.29411	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin
+125	0.26056	Which body part has Ahab lost to Moby Dick?	His leg
+ 13	0.25214	From what is Ahab's false leg made?	A whale's jawbone
+ 43	0.23577	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon
+
+What is "brit"?	Tiny sea creatures that whales eat
+
+What is Ahab's single fatal flaw?	Hubris
+ 89	0.60297	What is the source of Ahab's fatal flaw?	The damage he's suffered
+  7	0.22029	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 79	0.22029	What is the name of Ahab's harpooner?	Fedallah
+ 80	0.22029	What is the name of Ahab's ship?	The Pequod
+ 81	0.22029	What is the name of Ahab's wife?	She is nameless
+131	0.22029	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+137	0.22029	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+
+What is Captain Ahab's artificial leg made of?	Ivory
+137	0.57974	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+ 13	0.41121	From what is Ahab's false leg made?	A whale's jawbone
+ 47	0.26056	What does Fedallah prophesize will kill Captain Ahab?	Hemp
+  7	0.22029	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+139	0.22029	Who is Captain Peleg?	Retired whaleman of Nantucket.  Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man.  Bildad and Peleg hire the crew.
+138	0.22029	Who is Captain Boomer?	One-armed English whaling captain; master of the Samuel Enderby
+ 79	0.22029	What is the name of Ahab's harpooner?	Fedallah
+
+What is Fedallah's turban made of?	His own hair
+ 27	1.00000	Out of what is Fedallah's turban made?	His hair
+143	0.57974	Who is Fedallah?	Strange, "oriental" old Parsee; Ahab's harpooner and personal prophet
+ 44	0.17579	What does Ahab recognize as the "first hearse" of Fedallah's prophecy?	Fedallah lashed to Moby Dick
+ 47	0.17579	What does Fedallah prophesize will kill Captain Ahab?	Hemp
+  0	0.12160	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+
+What is Flask's nickname?	King-Post
+144	0.57974	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard
+
+What is Ishmael constantly trying to pin down throughout the novel?	The essence of whales
+147	0.33518	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 88	0.25233	What is the ship that rescues Ishmael at the end of the novel?	Rachel
+159	0.15064	Who is telling the story in the novel?	Ishmael
+ 64	0.12736	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale
+ 82	0.12736	What is the name of Ishmael's unlikely roommate and bedfellow?	Queequeg
+ 92	0.12736	What keeps Ishmael afloat after the Pequod sinks?	A coffin
+ 14	0.11234	How do live whales smell, according to Ishmael?	Pleasantly musky
+
+What is a "gam"?	A social meeting of two, or more, whaling ships at sea
+
+What is a "specksynder"?	Chief Harpooner
+ 34	0.27894	There once was a time when the "specksynder" or chief harpooner served as what?	The captain of the vessel
+
+What is cetology?	The study of whales
+
+What is the "doubloon" offered for?	The first man to spot Moby Dick
+169	0.26056	Who wins the doubloon from the mast?	Ahab
+ 29	0.19431	Pip describes the doubloon on the mast as the ship's what?	Navel
+ 45	0.16171	What does Ahab see when he studies the gold doubloon nailed to the mast?	Himself
+
+What is the Pequod named after?	An extinct Massachusetts Indian tribe
+164	1.00000	Who owns the Pequod?	Bildad and Peleg
+ 36	0.57974	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask
+179	0.57974	With what is the Pequod adorned?	Sperm whale teeth
+ 18	0.57974	How is the Pequod decorated?	With whale bones
+162	0.44944	Who is the second mate on the Pequod?	Stubb
+ 17	0.44944	How does the Pequod sink?	She is rammed by Moby Dick.
+128	0.37998	Which characters survive the Pequod's sinking?	Only Ishmael
+
+What is the biblical subject of Father Mapple's sermon at the Whaleman's Chapel?	Jonah
+163	0.63481	Who is the subject of Father Mapple's sermon?	Jonah
+124	0.45027	Which biblical figure is the focus of Father Mapple's sermon?	Jonah
+142	0.41036	Who is Father Mapple?	The chaplain (in New Bedford) who gives a moving sermon based on the Biblical story of Jonah and the whale in the Whalemen's chapel.
+  5	0.06805	After his father's death, where was thirteen-year-old Herman Melville forced to find work?	At a bank
+
+What is the famous first line of Moby Dick?	Call me Ishmael.
+149	0.57974	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.
+ 64	0.33610	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale
+125	0.26056	Which body part has Ahab lost to Moby Dick?	His leg
+107	0.23790	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad
+ 43	0.23790	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon
+ 19	0.23790	How many of the Pequod's crew survive their encounter with Moby Dick?	One
+ 65	0.20608	What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off
+
+What is the name of Ahab's harpooner?	Fedallah
+ 37	0.57974	What causes Ahab's harpoon to flicker with fire?	Atmospheric static
+134	0.50233	Who is Ahab's personal harpooner and spiritual guide?	Fedallah
+105	0.46510	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes
+  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 80	0.33610	What is the name of Ahab's ship?	The Pequod
+ 81	0.33610	What is the name of Ahab's wife?	She is nameless
+137	0.33610	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+
+What is the name of Ahab's ship?	The Pequod
+  7	1.00000	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+131	0.33610	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+137	0.33610	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+ 79	0.33610	What is the name of Ahab's harpooner?	Fedallah
+ 81	0.33610	What is the name of Ahab's wife?	She is nameless
+ 87	0.33610	What is the name of the ship in the story?	The Pequod
+161	0.31800	Who is the only crewmate who opposes Ahab's plan to devote the ship's mission to hunt the White Whale?	Starbuck
+
+What is the name of Ahab's wife?	She is nameless
+  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 79	0.33610	What is the name of Ahab's harpooner?	Fedallah
+ 80	0.33610	What is the name of Ahab's ship?	The Pequod
+137	0.33610	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+131	0.33610	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+  9	0.27461	Because Pip's insane rantings move Ahab, Ahab gives Pip what?	The captain's quarters
+103	0.27461	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)
+
+What is the name of Ishmael's unlikely roommate and bedfellow?	Queequeg
+147	0.37998	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+  4	0.18436	According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads
+ 64	0.14438	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale
+ 92	0.14438	What keeps Ishmael afloat after the Pequod sinks?	A coffin
+ 71	0.12736	What is Ishmael constantly trying to pin down throughout the novel?	The essence of whales
+ 14	0.12736	How do live whales smell, according to Ishmael?	Pleasantly musky
+180	0.12736	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg
+
+What is the name of Queequeg's native island?	Kokovoko
+ 30	1.00000	Queequeg is a native of what island?	Kokovoko
+153	0.44944	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.
+100	0.35630	What was Queequeg on his home island?	A prince
+  4	0.21289	According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads
+ 39	0.20199	What covers Queequeg's skin?	Tattoos
+ 16	0.20199	How does Queequeg shave?	With a harpoon
+178	0.20199	With what does Queequeg sleep?	His harpoon
+
+What is the name of the Second Mate?	Stubb
+162	0.70930	Who is the second mate on the Pequod?	Stubb
+ 33	0.57974	The name of the First Mate is?	Starbuck
+ 85	0.57974	What is the name of the Third Mate?	Flask
+131	0.33610	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+ 36	0.33610	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask
+
+What is the name of the Third Mate?	Flask
+ 33	1.00000	The name of the First Mate is?	Starbuck
+ 84	0.57974	What is the name of the Second Mate?	Stubb
+131	0.57974	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+ 36	0.57974	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask
+162	0.44944	Who is the second mate on the Pequod?	Stubb
+
+What is the name of the inn Ishmael stays at on the mainland before the voyage?	The Spouter Inn
+147	0.30322	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 93	0.18443	What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford
+ 64	0.11522	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale
+ 82	0.11522	What is the name of Ishmael's unlikely roommate and bedfellow?	Queequeg
+ 28	0.11522	Over the course of the voyage, Ahab destroys all of what?	The navigation equipment
+ 92	0.11522	What keeps Ishmael afloat after the Pequod sinks?	A coffin
+ 71	0.10163	What is Ishmael constantly trying to pin down throughout the novel?	The essence of whales
+
+What is the name of the ship in the story?	The Pequod
+ 94	0.35548	What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex
+  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 80	0.33610	What is the name of Ahab's ship?	The Pequod
+159	0.26056	Who is telling the story in the novel?	Ishmael
+ 95	0.26056	What religion are the owners of the ship?	Quakers
+170	0.19431	Why are whaling ships always well-lit?	Free access to oil
+ 88	0.19431	What is the ship that rescues Ishmael at the end of the novel?	Rachel
+
+What is the ship that rescues Ishmael at the end of the novel?	Rachel
+147	0.33518	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 71	0.25233	What is Ishmael constantly trying to pin down throughout the novel?	The essence of whales
+122	0.22576	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+ 35	0.20614	To what does Ishmael liken the experience of shipping aboard a whaler?	Committing suicide
+ 93	0.20614	What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford
+  7	0.19431	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 80	0.19431	What is the name of Ahab's ship?	The Pequod
+
+What is the source of Ahab's fatal flaw?	The damage he's suffered
+ 67	0.60297	What is Ahab's single fatal flaw?	Hubris
+  7	0.22029	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 79	0.22029	What is the name of Ahab's harpooner?	Fedallah
+ 80	0.22029	What is the name of Ahab's ship?	The Pequod
+ 81	0.22029	What is the name of Ahab's wife?	She is nameless
+137	0.22029	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+131	0.22029	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+
+What is the study of whales called?	Cetology
+ 56	0.29122	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+  0	0.26056	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+ 12	0.26056	For what were whales primarily hunted?	Oil
+ 98	0.26056	What type of whale are they hunting?	Sperm whales
+ 24	0.23790	Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher? 	Platonic
+130	0.22029	Which was the first team to kill a whale?	Stubb and Tashtego
+ 14	0.19431	How do live whales smell, according to Ishmael?	Pleasantly musky
+
+What is the term for a whale that has already been harpooned or marked by the crew of a specific ship?	Fast-fish
+170	0.17857	Why are whaling ships always well-lit?	Free access to oil
+  0	0.17379	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+ 40	0.15976	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head
+ 59	0.15976	What does the crew look for to indicate the presence of a whale?	Spouts
+122	0.15976	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+  6	0.14587	After the whale carcass is cut loose from the ship, who are the "mourners" at its "funeral?"	Sharks and vultures
+119	0.14587	When the crew first hunt a whale, what nearly crushes Queequeg's boat?	The ship
+
+What keeps Ishmael afloat after the Pequod sinks?	A coffin
+ 17	0.41121	How does the Pequod sink?	She is rammed by Moby Dick.
+147	0.37998	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 76	0.37998	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+164	0.37998	Who owns the Pequod?	Bildad and Peleg
+128	0.33610	Which characters survive the Pequod's sinking?	Only Ishmael
+179	0.22029	With what is the Pequod adorned?	Sperm whale teeth
+ 18	0.22029	How is the Pequod decorated?	With whale bones
+
+What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford
+122	0.30413	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+147	0.27894	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 35	0.27520	To what does Ishmael liken the experience of shipping aboard a whaler?	Committing suicide
+ 22	0.20614	In what state does Ishmael meet Queequeg?	Massachusetts
+ 50	0.20614	What does Ishmael claim is the most famous part of a whale?	Its tail
+ 53	0.20614	What does Ishmael have tattooed on his forearm?	The dimensions of a whale
+ 55	0.20614	What does Ishmael use as a life buoy?	Queequeg's coffin
+
+What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex
+ 87	0.35548	What is the name of the ship in the story?	The Pequod
+  0	0.24565	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+101	0.20199	What was the name of the whaling ship on which Melville spent 18 months between 1841 and 1842?	Achusnet
+102	0.17857	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses
+170	0.17857	Why are whaling ships always well-lit?	Free access to oil
+122	0.15976	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+ 24	0.15800	Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher? 	Platonic
+
+What religion are the owners of the ship?	Quakers
+  7	0.26056	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 80	0.26056	What is the name of Ahab's ship?	The Pequod
+ 87	0.26056	What is the name of the ship in the story?	The Pequod
+170	0.15064	Why are whaling ships always well-lit?	Free access to oil
+ 88	0.15064	What is the ship that rescues Ishmael at the end of the novel?	Rachel
+ 29	0.15064	Pip describes the doubloon on the mast as the ship's what?	Navel
+122	0.13628	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+
+What religious sect do Peleg and Bildad belong to?	Quakers
+135	0.33518	Who is Bildad?	The other co-owner of the ship Pequod. He is the exact opposite of Captain Peleg; he is cool in temperament, religious, and shrewd.  Bildad and Peleg hire the crew.
+139	0.19431	Who is Captain Peleg?	Retired whaleman of Nantucket.  Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man.  Bildad and Peleg hire the crew.
+129	0.11234	Which member of the crew is a religious Christian man?	Starbuck
+
+What shape does the ship's carpenter make Quequeeq's coffin?	A canoe
+122	0.18443	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+ 35	0.16840	To what does Ishmael liken the experience of shipping aboard a whaler?	Committing suicide
+ 93	0.16840	What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford
+  7	0.16171	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+151	0.16171	Who is Peter Coffin?	The deathly-named innkeeper of the Spouter Inn at New Bedford.
+ 80	0.16171	What is the name of Ahab's ship?	The Pequod
+ 87	0.16171	What is the name of the ship in the story?	The Pequod
+
+What type of whale are they hunting?	Sperm whales
+ 12	0.50310	For what were whales primarily hunted?	Oil
+132	0.31878	Who are the "five dusky phantoms" that appear when the first whale hunt begins?	Ahab's secret whaling crew
+ 25	0.29107	Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles
+ 52	0.29107	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
+119	0.29107	When the crew first hunt a whale, what nearly crushes Queequeg's boat?	The ship
+ 90	0.26056	What is the study of whales called?	Cetology
+ 56	0.22576	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+
+What was Ahab using to attack Moby Dick when he lost his leg?	A knife
+ 65	0.38756	What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off
+125	0.38082	Which body part has Ahab lost to Moby Dick?	His leg
+149	0.35548	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.
+ 42	0.29411	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin
+106	0.28825	When Ahab insists on climbing the mast to be the first to see Moby Dick, what happens to his hat?	A hawk steals it
+ 13	0.25214	From what is Ahab's false leg made?	A whale's jawbone
+ 43	0.23577	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon
+
+What was Queequeg on his home island?	A prince
+ 83	0.35630	What is the name of Queequeg's native island?	Kokovoko
+ 30	0.35630	Queequeg is a native of what island?	Kokovoko
+153	0.33518	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.
+  4	0.25958	According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads
+ 57	0.20614	What does Queequeg do when the bumpkin that was mocking him falls into the ocean?	Dives in after him
+  5	0.17857	After his father's death, where was thirteen-year-old Herman Melville forced to find work?	At a bank
+ 20	0.17857	How old was Herman Melville when he made his first sea voyage as a merchant sailor?	19
+
+What was the name of the whaling ship on which Melville spent 18 months between 1841 and 1842?	Achusnet
+130	0.20608	Which was the first team to kill a whale?	Stubb and Tashtego
+ 94	0.20199	What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex
+102	0.17857	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses
+170	0.17857	Why are whaling ships always well-lit?	Free access to oil
+  0	0.17379	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+122	0.15976	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+  6	0.14587	After the whale carcass is cut loose from the ship, who are the "mourners" at its "funeral?"	Sharks and vultures
+
+What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses
+130	0.29122	Which was the first team to kill a whale?	Stubb and Tashtego
+  0	0.24558	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+ 24	0.22327	Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher? 	Platonic
+ 90	0.19431	What is the study of whales called?	Cetology
+ 94	0.17857	What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex
+101	0.17857	What was the name of the whaling ship on which Melville spent 18 months between 1841 and 1842?	Achusnet
+ 56	0.16837	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+
+When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)
+ 41	0.38077	What does Ahab carry in his pocket?	Vial of Nantucket sand
+ 42	0.34058	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin
+112	0.32249	When Starbuck confronts Ahab about leaking oil barrels that are costing the crew profit, how does Ahab respond?	Points a gun at Starbuck
+120	0.30405	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head
+131	0.27461	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+  7	0.27461	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+137	0.27461	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+
+When Ahab bursts into fits of near-mad shrieking, what does Ishmael think is the cause?	His soul attempting escape
+175	0.26056	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+147	0.24396	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 54	0.23577	What does Ishmael think men and animals should be judged on, rather than their brains?	Their spines
+ 38	0.21693	What color does Ishmael think is horrible, unnatural and threatening when on an animal?	White
+173	0.21693	Why does Ishmael think that he doesn't keep a very good watch?	He daydreams too much
+174	0.21693	Why does Ishmael think that the natural dangers of the sea are so insidious?	So much is hidden
+ 37	0.20608	What causes Ahab's harpoon to flicker with fire?	Atmospheric static
+
+When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes
+ 79	0.46510	What is the name of Ahab's harpooner?	Fedallah
+125	0.40840	Which body part has Ahab lost to Moby Dick?	His leg
+ 43	0.36551	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon
+107	0.36551	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad
+149	0.29032	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.
+ 37	0.26964	What causes Ahab's harpoon to flicker with fire?	Atmospheric static
+103	0.26705	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)
+
+When Ahab insists on climbing the mast to be the first to see Moby Dick, what happens to his hat?	A hawk steals it
+ 65	0.38756	What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off
+ 42	0.37491	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin
+149	0.35548	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.
+ 99	0.28825	What was Ahab using to attack Moby Dick when he lost his leg?	A knife
+125	0.26056	Which body part has Ahab lost to Moby Dick?	His leg
+ 43	0.23577	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon
+107	0.23577	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad
+
+When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad
+149	0.41036	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.
+ 43	0.40298	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon
+105	0.36551	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes
+108	0.30413	When Ahab realizes that smoking no longer soothes him, what does he do?	Throws his pipe overboard
+125	0.30413	Which body part has Ahab lost to Moby Dick?	His leg
+ 42	0.26050	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin
+ 64	0.23790	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale
+
+When Ahab realizes that smoking no longer soothes him, what does he do?	Throws his pipe overboard
+107	0.30413	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad
+103	0.23225	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)
+ 41	0.22576	What does Ahab carry in his pocket?	Vial of Nantucket sand
+ 62	0.22576	What does the scar on Ahab's cheek resemble?	A lightning bolt
+105	0.20903	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes
+ 44	0.20199	What does Ahab recognize as the "first hearse" of Fedallah's prophecy?	Fedallah lashed to Moby Dick
+ 47	0.20199	What does Fedallah prophesize will kill Captain Ahab?	Hemp
+
+When Daggoo and a Spanish sailor start to fight, what stops them?	A storm
+140	0.30322	Who is Daggoo?	Third harpooner on the Pequod; described as 'a gigantic, coal-black negro-savage'
+ 65	0.07397	What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off
+ 20	0.07397	How old was Herman Melville when he made his first sea voyage as a merchant sailor?	19
+
+When Queequeg decorates the coffin that he'd had made, what does he use for the decoration?	His own tattoos
+ 18	0.31126	How is the Pequod decorated?	With whale bones
+ 16	0.25214	How does Queequeg shave?	With a harpoon
+178	0.25214	With what does Queequeg sleep?	His harpoon
+153	0.24396	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.
+111	0.20608	When Queequeg falls ill, what does he do?	Have his coffin made
+  4	0.18369	According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads
+ 22	0.17857	In what state does Ishmael meet Queequeg?	Massachusetts
+
+When Queequeg falls ill, what does he do?	Have his coffin made
+ 16	0.41121	How does Queequeg shave?	With a harpoon
+178	0.41121	With what does Queequeg sleep?	His harpoon
+ 57	0.40735	What does Queequeg do when the bumpkin that was mocking him falls into the ocean?	Dives in after him
+153	0.37998	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.
+ 22	0.29122	In what state does Ishmael meet Queequeg?	Massachusetts
+ 15	0.23790	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target
+110	0.20608	When Queequeg decorates the coffin that he'd had made, what does he use for the decoration?	His own tattoos
+
+When Starbuck confronts Ahab about leaking oil barrels that are costing the crew profit, how does Ahab respond?	Points a gun at Starbuck
+103	0.32249	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)
+120	0.25946	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head
+131	0.23790	Who are Ahab's mates?	Starbuck, Stubbs, Flask
+  7	0.23790	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+137	0.23790	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+ 79	0.23790	What is the name of Ahab's harpooner?	Fedallah
+ 80	0.23790	What is the name of Ahab's ship?	The Pequod
+
+When Starbuck sees a row of muskets, what does he consider doing?	Killing Ahab
+155	0.33518	Who is Starbuck?	A Quaker from Nantucket who serves as the first mate to the captain on the Pequod. He is an intelligent and brave officer who lives his life by Christian principles.
+103	0.15974	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)
+178	0.15064	With what does Queequeg sleep?	His harpoon
+ 16	0.15064	How does Queequeg shave?	With a harpoon
+ 17	0.15064	How does the Pequod sink?	She is rammed by Moby Dick.
+112	0.14012	When Starbuck confronts Ahab about leaking oil barrels that are costing the crew profit, how does Ahab respond?	Points a gun at Starbuck
+111	0.12736	When Queequeg falls ill, what does he do?	Have his coffin made
+
+When Tashtego nearly drowns, what is he trapped in?	A whale's head
+158	0.37998	Who is Tashtego?	Stubb's harpooner; craves rum
+165	0.10599	Who rescues Tashtego when he falls overboard inside the whale's head?	Queequeg
+119	0.10599	When the crew first hunt a whale, what nearly crushes Queequeg's boat?	The ship
+ 10	0.08769	Before the Pequod had even left Nantucket, Ahab's fake leg had twisted around and very nearly done what?	Pierced his groin
+
+When does the Pequod set sail?	Christmas Day
+ 17	0.41121	How does the Pequod sink?	She is rammed by Moby Dick.
+ 76	0.37998	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+164	0.37998	Who owns the Pequod?	Bildad and Peleg
+ 58	0.26056	What does the Delight drop into the water as the Pequod passes by?	A dead body
+ 15	0.23790	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target
+179	0.22029	With what is the Pequod adorned?	Sperm whale teeth
+ 18	0.22029	How is the Pequod decorated?	With whale bones
+
+When preparing to process the first dead whale, how does Queequeg almost loose his hand?	A dead shark's teeth
+ 16	0.25214	How does Queequeg shave?	With a harpoon
+178	0.25214	With what does Queequeg sleep?	His harpoon
+153	0.24396	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.
+111	0.20608	When Queequeg falls ill, what does he do?	Have his coffin made
+ 56	0.19551	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+  4	0.18369	According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads
+ 22	0.17857	In what state does Ishmael meet Queequeg?	Massachusetts
+
+When the Pequod meets other sips, what is Ahab's only interest?	Information about Moby Dick
+ 76	0.33518	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+164	0.33518	Who owns the Pequod?	Bildad and Peleg
+  7	0.19431	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+137	0.19431	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+ 79	0.19431	What is the name of Ahab's harpooner?	Fedallah
+ 80	0.19431	What is the name of Ahab's ship?	The Pequod
+ 81	0.19431	What is the name of Ahab's wife?	She is nameless
+
+When the crew encounter the crazed prophet Gabriel, what does Gabriel prophesize as Ahab's fate?	Dead and down there
+146	0.44944	Who is Gabriel?	The self-styled prophet on the ship, Jeroboam. He believes himself to be the incarnation of the Shaker God and influences all the crewmembers on board. He warns them of the White Whale.
+ 47	0.22029	What does Fedallah prophesize will kill Captain Ahab?	Hemp
+120	0.19933	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head
+112	0.18793	When Starbuck confronts Ahab about leaking oil barrels that are costing the crew profit, how does Ahab respond?	Points a gun at Starbuck
+103	0.15669	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)
+ 41	0.15231	What does Ahab carry in his pocket?	Vial of Nantucket sand
+ 62	0.15231	What does the scar on Ahab's cheek resemble?	A lightning bolt
+
+When the crew first hunt a whale, what nearly crushes Queequeg's boat?	The ship
+ 12	0.29107	For what were whales primarily hunted?	Oil
+ 98	0.29107	What type of whale are they hunting?	Sperm whales
+153	0.27894	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.
+ 56	0.22569	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+ 40	0.18443	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head
+ 59	0.18443	What does the crew look for to indicate the presence of a whale?	Spouts
+132	0.18443	Who are the "five dusky phantoms" that appear when the first whale hunt begins?	Ahab's secret whaling crew
+
+When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head
+103	0.30405	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)
+112	0.25946	When Starbuck confronts Ahab about leaking oil barrels that are costing the crew profit, how does Ahab respond?	Points a gun at Starbuck
+ 41	0.20614	What does Ahab carry in his pocket?	Vial of Nantucket sand
+ 62	0.20614	What does the scar on Ahab's cheek resemble?	A lightning bolt
+118	0.19933	When the crew encounter the crazed prophet Gabriel, what does Gabriel prophesize as Ahab's fate?	Dead and down there
+105	0.19086	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes
+ 44	0.18443	What does Ahab recognize as the "first hearse" of Fedallah's prophecy?	Fedallah lashed to Moby Dick
+
+Where does Ishmael keep a record of whale dimensions that he measured from a skeleton in Tranque?	Tattooed on his arm
+ 50	0.31711	What does Ishmael claim is the most famous part of a whale?	Its tail
+175	0.27983	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+122	0.27983	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+147	0.25970	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 52	0.25321	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
+ 49	0.23298	What does Ishmael claim is the major difference between male and female whales?	Males abandon injured comrades
+172	0.21693	Why does Ishmael find it odd that the French have been most successful in representing whales in art?	France doesn't hunt whales
+
+Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+ 50	0.38087	What does Ishmael claim is the most famous part of a whale?	Its tail
+175	0.33610	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+ 35	0.30413	To what does Ishmael liken the experience of shipping aboard a whaler?	Committing suicide
+ 52	0.30413	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
+ 93	0.30413	What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford
+147	0.30322	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 49	0.27983	What does Ishmael claim is the major difference between male and female whales?	Males abandon injured comrades
+
+Which American literary figure, to whom Moby Dick was dedicated, influenced Melville's writing?	Nathaniel Hawthorne
+149	0.33518	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.
+ 64	0.19431	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale
+ 78	0.19431	What is the famous first line of Moby Dick?	Call me Ishmael.
+ 99	0.18977	What was Ahab using to attack Moby Dick when he lost his leg?	A knife
+ 21	0.15332	In what decade did historians rediscover and promote the previously ignored Moby Dick as a seminal work of American literature?	1920's
+125	0.15064	Which body part has Ahab lost to Moby Dick?	His leg
+107	0.13754	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad
+
+Which biblical figure is the focus of Father Mapple's sermon?	Jonah
+ 77	0.45027	What is the biblical subject of Father Mapple's sermon at the Whaleman's Chapel?	Jonah
+163	0.45018	Who is the subject of Father Mapple's sermon?	Jonah
+142	0.44944	Who is Father Mapple?	The chaplain (in New Bedford) who gives a moving sermon based on the Biblical story of Jonah and the whale in the Whalemen's chapel.
+  5	0.07397	After his father's death, where was thirteen-year-old Herman Melville forced to find work?	At a bank
+123	0.06997	Which American literary figure, to whom Moby Dick was dedicated, influenced Melville's writing?	Nathaniel Hawthorne
+
+Which body part has Ahab lost to Moby Dick?	His leg
+149	0.44944	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.
+105	0.40840	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes
+ 99	0.38082	What was Ahab using to attack Moby Dick when he lost his leg?	A knife
+ 43	0.30413	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon
+107	0.30413	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad
+ 64	0.26056	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale
+ 78	0.26056	What is the famous first line of Moby Dick?	Call me Ishmael.
+
+Which character falls overboard and goes insane as a result?	Pip
+133	0.20199	Who goes insane after being left alone adrift at sea?	Pip
+165	0.18443	Who rescues Tashtego when he falls overboard inside the whale's head?	Queequeg
+128	0.11522	Which characters survive the Pequod's sinking?	Only Ishmael
+111	0.11522	When Queequeg falls ill, what does he do?	Have his coffin made
+127	0.10163	Which character is often seen as an allegorical representation of God?	Moby Dick
+ 57	0.08458	What does Queequeg do when the bumpkin that was mocking him falls into the ocean?	Dives in after him
+ 56	0.06997	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+
+Which character is often seen as an allegorical representation of God?	Moby Dick
+128	0.12736	Which characters survive the Pequod's sinking?	Only Ishmael
+126	0.10163	Which character falls overboard and goes insane as a result?	Pip
+
+Which characters survive the Pequod's sinking?	Only Ishmael
+ 17	0.41121	How does the Pequod sink?	She is rammed by Moby Dick.
+ 76	0.37998	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+164	0.37998	Who owns the Pequod?	Bildad and Peleg
+ 92	0.33610	What keeps Ishmael afloat after the Pequod sinks?	A coffin
+ 19	0.23790	How many of the Pequod's crew survive their encounter with Moby Dick?	One
+ 36	0.22029	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask
+179	0.22029	With what is the Pequod adorned?	Sperm whale teeth
+
+Which member of the crew is a religious Christian man?	Starbuck
+ 96	0.11234	What religious sect do Peleg and Bildad belong to?	Quakers
+ 40	0.10163	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head
+ 59	0.10163	What does the crew look for to indicate the presence of a whale?	Spouts
+119	0.09349	When the crew first hunt a whale, what nearly crushes Queequeg's boat?	The ship
+ 43	0.09349	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon
+ 15	0.09349	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target
+ 19	0.09349	How many of the Pequod's crew survive their encounter with Moby Dick?	One
+
+Which was the first team to kill a whale?	Stubb and Tashtego
+102	0.29122	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses
+ 40	0.26056	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head
+ 90	0.22029	What is the study of whales called?	Cetology
+101	0.20608	What was the name of the whaling ship on which Melville spent 18 months between 1841 and 1842?	Achusnet
+ 56	0.19087	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+  0	0.17078	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+ 12	0.17078	For what were whales primarily hunted?	Oil
+
+Who are Ahab's mates?	Starbuck, Stubbs, Flask
+ 33	0.57974	The name of the First Mate is?	Starbuck
+ 85	0.57974	What is the name of the Third Mate?	Flask
+  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 36	0.33610	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask
+137	0.33610	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+ 79	0.33610	What is the name of Ahab's harpooner?	Fedallah
+ 80	0.33610	What is the name of Ahab's ship?	The Pequod
+
+Who are the "five dusky phantoms" that appear when the first whale hunt begins?	Ahab's secret whaling crew
+ 12	0.31878	For what were whales primarily hunted?	Oil
+ 98	0.31878	What type of whale are they hunting?	Sperm whales
+ 25	0.18443	Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles
+ 52	0.18443	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
+119	0.18443	When the crew first hunt a whale, what nearly crushes Queequeg's boat?	The ship
+ 90	0.17579	What is the study of whales called?	Cetology
+ 56	0.15231	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+
+Who goes insane after being left alone adrift at sea?	Pip
+126	0.20199	Which character falls overboard and goes insane as a result?	Pip
+174	0.07874	Why does Ishmael think that the natural dangers of the sea are so insidious?	So much is hidden
+ 20	0.07397	How old was Herman Melville when he made his first sea voyage as a merchant sailor?	19
+ 56	0.06997	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+ 10	0.06997	Before the Pequod had even left Nantucket, Ahab's fake leg had twisted around and very nearly done what?	Pierced his groin
+  9	0.06656	Because Pip's insane rantings move Ahab, Ahab gives Pip what?	The captain's quarters
+ 26	0.06656	Ishmael thinks Buckington is fated to die at sea, but that such a death will transform Buckington into what?	God
+
+Who is Ahab's personal harpooner and spiritual guide?	Fedallah
+ 79	0.50233	What is the name of Ahab's harpooner?	Fedallah
+ 37	0.29122	What causes Ahab's harpoon to flicker with fire?	Atmospheric static
+105	0.23363	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes
+  7	0.19431	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 80	0.19431	What is the name of Ahab's ship?	The Pequod
+ 81	0.19431	What is the name of Ahab's wife?	She is nameless
+137	0.19431	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+
+Who is Bildad?	The other co-owner of the ship Pequod. He is the exact opposite of Captain Peleg; he is cool in temperament, religious, and shrewd.  Bildad and Peleg hire the crew.
+ 96	0.33518	What religious sect do Peleg and Bildad belong to?	Quakers
+
+Who is Bulkington?	A quiet but dangerous sailor, whom Ishmael sees for the first time in the Spouter Inn. Later, Bulkington is Ishmael's shipmate on the whaling voyage.
+
+Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+ 68	0.57974	What is Captain Ahab's artificial leg made of?	Ivory
+ 47	0.44944	What does Fedallah prophesize will kill Captain Ahab?	Hemp
+  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+139	0.33610	Who is Captain Peleg?	Retired whaleman of Nantucket.  Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man.  Bildad and Peleg hire the crew.
+138	0.33610	Who is Captain Boomer?	One-armed English whaling captain; master of the Samuel Enderby
+ 79	0.33610	What is the name of Ahab's harpooner?	Fedallah
+ 80	0.33610	What is the name of Ahab's ship?	The Pequod
+
+Who is Captain Boomer?	One-armed English whaling captain; master of the Samuel Enderby
+137	0.33610	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+139	0.33610	Who is Captain Peleg?	Retired whaleman of Nantucket.  Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man.  Bildad and Peleg hire the crew.
+ 46	0.33518	What does Captain Boomer want to do since Moby Dick took his arm?	Avoid Moby Dick
+ 68	0.22029	What is Captain Ahab's artificial leg made of?	Ivory
+ 47	0.17579	What does Fedallah prophesize will kill Captain Ahab?	Hemp
+
+Who is Captain Peleg?	Retired whaleman of Nantucket.  Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man.  Bildad and Peleg hire the crew.
+137	0.33610	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.
+138	0.33610	Who is Captain Boomer?	One-armed English whaling captain; master of the Samuel Enderby
+ 68	0.22029	What is Captain Ahab's artificial leg made of?	Ivory
+ 96	0.19431	What religious sect do Peleg and Bildad belong to?	Quakers
+ 47	0.17579	What does Fedallah prophesize will kill Captain Ahab?	Hemp
+ 46	0.13379	What does Captain Boomer want to do since Moby Dick took his arm?	Avoid Moby Dick
+
+Who is Daggoo?	Third harpooner on the Pequod; described as 'a gigantic, coal-black negro-savage'
+109	0.30322	When Daggoo and a Spanish sailor start to fight, what stops them?	A storm
+
+Who is Elijah?	Shabbily dressed street prophet in New Bedford; warns of Captain Ahab as 'Old Thunder'
+
+Who is Father Mapple?	The chaplain (in New Bedford) who gives a moving sermon based on the Biblical story of Jonah and the whale in the Whalemen's chapel.
+163	0.57974	Who is the subject of Father Mapple's sermon?	Jonah
+124	0.44944	Which biblical figure is the focus of Father Mapple's sermon?	Jonah
+ 77	0.41036	What is the biblical subject of Father Mapple's sermon at the Whaleman's Chapel?	Jonah
+  5	0.14143	After his father's death, where was thirteen-year-old Herman Melville forced to find work?	At a bank
+
+Who is Fedallah?	Strange, "oriental" old Parsee; Ahab's harpooner and personal prophet
+ 27	0.57974	Out of what is Fedallah's turban made?	His hair
+ 69	0.57974	What is Fedallah's turban made of?	His own hair
+ 44	0.30322	What does Ahab recognize as the "first hearse" of Fedallah's prophecy?	Fedallah lashed to Moby Dick
+ 47	0.30322	What does Fedallah prophesize will kill Captain Ahab?	Hemp
+  0	0.20976	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+
+Who is Flask?	Third mate of the Pequod; from Martha's Vineyard
+ 70	0.57974	What is Flask's nickname?	King-Post
+
+Who is Fleece?	The old Negro cook on the ship.  He has bad knees. Under Stubb's instructions, he preaches a sermon to the sharks hovering around the dead sperm whale, tied to the ship's side.
+
+Who is Gabriel?	The self-styled prophet on the ship, Jeroboam. He believes himself to be the incarnation of the Shaker God and influences all the crewmembers on board. He warns them of the White Whale.
+118	0.44944	When the crew encounter the crazed prophet Gabriel, what does Gabriel prophesize as Ahab's fate?	Dead and down there
+
+Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 64	0.37998	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale
+ 82	0.37998	What is the name of Ishmael's unlikely roommate and bedfellow?	Queequeg
+ 92	0.37998	What keeps Ishmael afloat after the Pequod sinks?	A coffin
+ 71	0.33518	What is Ishmael constantly trying to pin down throughout the novel?	The essence of whales
+ 14	0.33518	How do live whales smell, according to Ishmael?	Pleasantly musky
+180	0.33518	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg
+ 88	0.33518	What is the ship that rescues Ishmael at the end of the novel?	Rachel
+
+Who is Mayhew?	The captain of the Jeroboam, who had sighted and chased Moby Dick. Mayhew meets Ahab and tells him how the whale had killed his mate, Macey, during the chase.
+
+Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.
+ 64	0.57974	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale
+ 78	0.57974	What is the famous first line of Moby Dick?	Call me Ishmael.
+125	0.44944	Which body part has Ahab lost to Moby Dick?	His leg
+107	0.41036	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad
+ 43	0.41036	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon
+ 19	0.41036	How many of the Pequod's crew survive their encounter with Moby Dick?	One
+ 65	0.35548	What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off
+
+Who is Mrs. Hosea Hussey?	The irate wife of the innkeeper at 'Try Pots', Nantucket. In the innkeeper's absence, she runs the affairs of the inn efficiently.
+
+Who is Peter Coffin?	The deathly-named innkeeper of the Spouter Inn at New Bedford.
+  4	0.31800	According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads
+ 97	0.16171	What shape does the ship's carpenter make Quequeeq's coffin?	A canoe
+110	0.14143	When Queequeg decorates the coffin that he'd had made, what does he use for the decoration?	His own tattoos
+
+Who is Pip?	The cabin boy on the Pequod. He is a young Negro who is very nervous and quiet by temperament and loses his mind when he has been abandoned in the sea for awhile.  He becomes half idiot-half prophet.
+  9	0.47368	Because Pip's insane rantings move Ahab, Ahab gives Pip what?	The captain's quarters
+ 29	0.33518	Pip describes the doubloon on the mast as the ship's what?	Navel
+ 63	0.30322	What experience catalyzed Pip and Ahab's close companionship?	Pip's near-drowning
+ 56	0.23077	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+
+Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.
+  4	0.47368	According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads
+ 39	0.44944	What covers Queequeg's skin?	Tattoos
+ 16	0.44944	How does Queequeg shave?	With a harpoon
+178	0.44944	With what does Queequeg sleep?	His harpoon
+ 83	0.44944	What is the name of Queequeg's native island?	Kokovoko
+ 23	0.44944	Ishmael decides he likes the fact that Queequeg is a pagan because Queequeg lacks a Christian's what?	Hollow courtesies
+ 30	0.44944	Queequeg is a native of what island?	Kokovoko
+
+Who is Radney?	The wicked and unjust mate on the Town-Ho. He is punished as though by divine providence when Moby Dick kills him.
+
+Who is Starbuck?	A Quaker from Nantucket who serves as the first mate to the captain on the Pequod. He is an intelligent and brave officer who lives his life by Christian principles.
+113	0.33518	When Starbuck sees a row of muskets, what does he consider doing?	Killing Ahab
+103	0.21951	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)
+112	0.19360	When Starbuck confronts Ahab about leaking oil barrels that are costing the crew profit, how does Ahab respond?	Points a gun at Starbuck
+
+Who is Steel Kit?	The popular sailor on Town-Ho who leads a mutiny on board. He secretly plans to kill Radney, the most hated mate on the Town-Ho.
+
+Who is Stubb?	Second mate of the Pequod; from Cape Cod
+  3	0.24396	According to Ishmael, who are the only people besides Stubb that still eat whale meat?	The Eskimos
+
+Who is Tashtego?	Stubb's harpooner; craves rum
+114	0.37998	When Tashtego nearly drowns, what is he trapped in?	A whale's head
+165	0.27894	Who rescues Tashtego when he falls overboard inside the whale's head?	Queequeg
+
+Who is telling the story in the novel?	Ishmael
+ 87	0.26056	What is the name of the ship in the story?	The Pequod
+ 88	0.15064	What is the ship that rescues Ishmael at the end of the novel?	Rachel
+ 71	0.15064	What is Ishmael constantly trying to pin down throughout the novel?	The essence of whales
+ 94	0.10964	What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex
+
+Who is the harpooner that Queequeq rescues?	Tashtego
+ 79	0.26056	What is the name of Ahab's harpooner?	Fedallah
+ 37	0.17078	What causes Ahab's harpoon to flicker with fire?	Atmospheric static
+134	0.15064	Who is Ahab's personal harpooner and spiritual guide?	Fedallah
+ 88	0.15064	What is the ship that rescues Ishmael at the end of the novel?	Rachel
+165	0.12537	Who rescues Tashtego when he falls overboard inside the whale's head?	Queequeg
+ 34	0.12537	There once was a time when the "specksynder" or chief harpooner served as what?	The captain of the vessel
+ 91	0.10964	What is the term for a whale that has already been harpooned or marked by the crew of a specific ship?	Fast-fish
+
+Who is the only crewmate who opposes Ahab's plan to devote the ship's mission to hunt the White Whale?	Starbuck
+  7	0.31800	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 80	0.31800	What is the name of Ahab's ship?	The Pequod
+ 12	0.22555	For what were whales primarily hunted?	Oil
+ 98	0.22555	What type of whale are they hunting?	Sperm whales
+170	0.15974	Why are whaling ships always well-lit?	Free access to oil
+117	0.15974	When the Pequod meets other sips, what is Ahab's only interest?	Information about Moby Dick
+  0	0.15547	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+
+Who is the second mate on the Pequod?	Stubb
+ 36	0.70930	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask
+ 84	0.70930	What is the name of the Second Mate?	Stubb
+ 33	0.44944	The name of the First Mate is?	Starbuck
+ 76	0.44944	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+ 85	0.44944	What is the name of the Third Mate?	Flask
+164	0.44944	Who owns the Pequod?	Bildad and Peleg
+179	0.26056	With what is the Pequod adorned?	Sperm whale teeth
+
+Who is the subject of Father Mapple's sermon?	Jonah
+ 77	0.63481	What is the biblical subject of Father Mapple's sermon at the Whaleman's Chapel?	Jonah
+142	0.57974	Who is Father Mapple?	The chaplain (in New Bedford) who gives a moving sermon based on the Biblical story of Jonah and the whale in the Whalemen's chapel.
+124	0.45018	Which biblical figure is the focus of Father Mapple's sermon?	Jonah
+  5	0.09270	After his father's death, where was thirteen-year-old Herman Melville forced to find work?	At a bank
+
+Who owns the Pequod?	Bildad and Peleg
+ 76	1.00000	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+ 36	0.57974	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask
+179	0.57974	With what is the Pequod adorned?	Sperm whale teeth
+ 18	0.57974	How is the Pequod decorated?	With whale bones
+162	0.44944	Who is the second mate on the Pequod?	Stubb
+ 17	0.44944	How does the Pequod sink?	She is rammed by Moby Dick.
+128	0.37998	Which characters survive the Pequod's sinking?	Only Ishmael
+
+Who rescues Tashtego when he falls overboard inside the whale's head?	Queequeg
+158	0.27894	Who is Tashtego?	Stubb's harpooner; craves rum
+  0	0.20062	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+126	0.18443	Which character falls overboard and goes insane as a result?	Pip
+ 90	0.16171	What is the study of whales called?	Cetology
+ 56	0.14012	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear
+ 51	0.13754	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel
+ 12	0.12537	For what were whales primarily hunted?	Oil
+
+Who says the following: "If man will strike, strike through the mask! . . . That inscrutable thing is chiefly what I hate."	Ahab
+168	0.11887	Who says the following: "Vengeance on a dumb brute! That simply smote thee from blindest instinct! Madness! To be enraged with a dumb thing seems blasphemous."	Starbuck
+167	0.08458	Who says the following: "Though it come to the last, I shall still go before thee thy pilot . . . . Hemp only can kill thee."	Fedallah
+129	0.07030	Which member of the crew is a religious Christian man?	Starbuck
+ 43	0.05851	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon
+107	0.05851	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad
+ 31	0.05447	The crew believes that they saw mermaids in the night, but Ahab says that there were actually what?	Seals
+
+Who says the following: "Though it come to the last, I shall still go before thee thy pilot . . . . Hemp only can kill thee."	Fedallah
+168	0.15472	Who says the following: "Vengeance on a dumb brute! That simply smote thee from blindest instinct! Madness! To be enraged with a dumb thing seems blasphemous."	Starbuck
+166	0.08458	Who says the following: "If man will strike, strike through the mask! . . . That inscrutable thing is chiefly what I hate."	Ahab
+130	0.07357	Which was the first team to kill a whale?	Stubb and Tashtego
+117	0.06489	When the Pequod meets other sips, what is Ahab's only interest?	Information about Moby Dick
+ 40	0.05870	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head
+ 47	0.05870	What does Fedallah prophesize will kill Captain Ahab?	Hemp
+ 86	0.05870	What is the name of the inn Ishmael stays at on the mainland before the voyage?	The Spouter Inn
+
+Who says the following: "Vengeance on a dumb brute! That simply smote thee from blindest instinct! Madness! To be enraged with a dumb thing seems blasphemous."	Starbuck
+167	0.15472	Who says the following: "Though it come to the last, I shall still go before thee thy pilot . . . . Hemp only can kill thee."	Fedallah
+166	0.11887	Who says the following: "If man will strike, strike through the mask! . . . That inscrutable thing is chiefly what I hate."	Ahab
+107	0.04885	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad
+ 31	0.04548	The crew believes that they saw mermaids in the night, but Ahab says that there were actually what?	Seals
+
+Who wins the doubloon from the mast?	Ahab
+ 29	0.35630	Pip describes the doubloon on the mast as the ship's what?	Navel
+ 45	0.29107	What does Ahab see when he studies the gold doubloon nailed to the mast?	Himself
+ 75	0.26056	What is the "doubloon" offered for?	The first man to spot Moby Dick
+106	0.10964	When Ahab insists on climbing the mast to be the first to see Moby Dick, what happens to his hat?	A hawk steals it
+ 42	0.08701	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin
+
+Why are whaling ships always well-lit?	Free access to oil
+  0	0.35909	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+177	0.22576	Why is the whale-line so dangerous once it is attached to a whale?	People can get tangled
+175	0.22576	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+122	0.22576	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+  6	0.20614	After the whale carcass is cut loose from the ship, who are the "mourners" at its "funeral?"	Sharks and vultures
+  7	0.19431	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts
+ 80	0.19431	What is the name of Ahab's ship?	The Pequod
+
+Why does Ishmael claim that Nantucket has the largest empire in the world?	It owns the seas
+ 50	0.29527	What does Ishmael claim is the most famous part of a whale?	Its tail
+175	0.26056	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+147	0.24396	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+174	0.21693	Why does Ishmael think that the natural dangers of the sea are so insidious?	So much is hidden
+ 49	0.21693	What does Ishmael claim is the major difference between male and female whales?	Males abandon injured comrades
+173	0.21693	Why does Ishmael think that he doesn't keep a very good watch?	He daydreams too much
+172	0.20199	Why does Ishmael find it odd that the French have been most successful in representing whales in art?	France doesn't hunt whales
+
+Why does Ishmael find it odd that the French have been most successful in representing whales in art?	France doesn't hunt whales
+175	0.38082	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+ 50	0.29527	What does Ishmael claim is the most famous part of a whale?	Its tail
+122	0.26056	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+147	0.24396	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 52	0.23577	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
+174	0.21693	Why does Ishmael think that the natural dangers of the sea are so insidious?	So much is hidden
+ 49	0.21693	What does Ishmael claim is the major difference between male and female whales?	Males abandon injured comrades
+
+Why does Ishmael think that he doesn't keep a very good watch?	He daydreams too much
+175	0.41121	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+174	0.33610	Why does Ishmael think that the natural dangers of the sea are so insidious?	So much is hidden
+147	0.25970	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 54	0.25321	What does Ishmael think men and animals should be judged on, rather than their brains?	Their spines
+ 38	0.23298	What color does Ishmael think is horrible, unnatural and threatening when on an animal?	White
+172	0.21693	Why does Ishmael find it odd that the French have been most successful in representing whales in art?	France doesn't hunt whales
+171	0.21693	Why does Ishmael claim that Nantucket has the largest empire in the world?	It owns the seas
+
+Why does Ishmael think that the natural dangers of the sea are so insidious?	So much is hidden
+175	0.41121	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+173	0.33610	Why does Ishmael think that he doesn't keep a very good watch?	He daydreams too much
+147	0.25970	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 52	0.25321	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
+ 54	0.25321	What does Ishmael think men and animals should be judged on, rather than their brains?	Their spines
+ 38	0.23298	What color does Ishmael think is horrible, unnatural and threatening when on an animal?	White
+172	0.21693	Why does Ishmael find it odd that the French have been most successful in representing whales in art?	France doesn't hunt whales
+
+Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+173	0.41121	Why does Ishmael think that he doesn't keep a very good watch?	He daydreams too much
+174	0.41121	Why does Ishmael think that the natural dangers of the sea are so insidious?	So much is hidden
+ 50	0.38087	What does Ishmael claim is the most famous part of a whale?	Its tail
+172	0.38082	Why does Ishmael find it odd that the French have been most successful in representing whales in art?	France doesn't hunt whales
+ 48	0.35630	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirt-spout
+122	0.33610	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+ 52	0.30413	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
+
+Why is the Pequod unable to purse the "Grand Armada" of sperm whales that they encounter near Sunda?	Malaysian Pirates appear
+ 76	0.21951	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+164	0.21951	Who owns the Pequod?	Bildad and Peleg
+  0	0.21833	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+170	0.15974	Why are whaling ships always well-lit?	Free access to oil
+102	0.15974	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses
+177	0.14292	Why is the whale-line so dangerous once it is attached to a whale?	People can get tangled
+175	0.14292	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+
+Why is the whale-line so dangerous once it is attached to a whale?	People can get tangled
+170	0.22576	Why are whaling ships always well-lit?	Free access to oil
+  0	0.21973	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
+175	0.20199	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+ 52	0.18443	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
+ 90	0.17579	What is the study of whales called?	Cetology
+174	0.17078	Why does Ishmael think that the natural dangers of the sea are so insidious?	So much is hidden
+172	0.15976	Why does Ishmael find it odd that the French have been most successful in representing whales in art?	France doesn't hunt whales
+
+With what does Queequeg sleep?	His harpoon
+ 16	0.50310	How does Queequeg shave?	With a harpoon
+153	0.44944	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.
+111	0.41121	When Queequeg falls ill, what does he do?	Have his coffin made
+ 22	0.35630	In what state does Ishmael meet Queequeg?	Massachusetts
+ 15	0.29107	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target
+ 57	0.29107	What does Queequeg do when the bumpkin that was mocking him falls into the ocean?	Dives in after him
+110	0.25214	When Queequeg decorates the coffin that he'd had made, what does he use for the decoration?	His own tattoos
+
+With what is the Pequod adorned?	Sperm whale teeth
+ 76	0.57974	What is the Pequod named after?	An extinct Massachusetts Indian tribe
+164	0.57974	Who owns the Pequod?	Bildad and Peleg
+ 36	0.33610	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask
+ 18	0.33610	How is the Pequod decorated?	With whale bones
+162	0.26056	Who is the second mate on the Pequod?	Stubb
+ 17	0.26056	How does the Pequod sink?	She is rammed by Moby Dick.
+128	0.22029	Which characters survive the Pequod's sinking?	Only Ishmael
+
+With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg
+147	0.33518	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
+ 22	0.25233	In what state does Ishmael meet Queequeg?	Massachusetts
+ 50	0.25233	What does Ishmael claim is the most famous part of a whale?	Its tail
+ 53	0.25233	What does Ishmael have tattooed on his forearm?	The dimensions of a whale
+ 55	0.25233	What does Ishmael use as a life buoy?	Queequeg's coffin
+175	0.22576	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+122	0.22576	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
+
