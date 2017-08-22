@@ -1119,40 +1119,16 @@ Why does Ishmael find it odd that the French have been most successful in repres
  49	0.21693	What does Ishmael claim is the major difference between male and female whales?	Males abandon injured comrades
 
 Why does Ishmael think that he doesn't keep a very good watch?	He daydreams too much
-175	0.41121	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
 174	0.33610	Why does Ishmael think that the natural dangers of the sea are so insidious?	So much is hidden
-147	0.25970	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
- 54	0.25321	What does Ishmael think men and animals should be judged on, rather than their brains?	Their spines
- 38	0.23298	What color does Ishmael think is horrible, unnatural and threatening when on an animal?	White
-172	0.21693	Why does Ishmael find it odd that the French have been most successful in representing whales in art?	France doesn't hunt whales
-171	0.21693	Why does Ishmael claim that Nantucket has the largest empire in the world?	It owns the seas
 
 Why does Ishmael think that the natural dangers of the sea are so insidious?	So much is hidden
 175	0.41121	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
-173	0.33610	Why does Ishmael think that he doesn't keep a very good watch?	He daydreams too much
-147	0.25970	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
- 52	0.25321	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
- 54	0.25321	What does Ishmael think men and animals should be judged on, rather than their brains?	Their spines
- 38	0.23298	What color does Ishmael think is horrible, unnatural and threatening when on an animal?	White
-172	0.21693	Why does Ishmael find it odd that the French have been most successful in representing whales in art?	France doesn't hunt whales
 
 Why does Ishmael think whales are so mysterious?	They're always mostly hidden
-173	0.41121	Why does Ishmael think that he doesn't keep a very good watch?	He daydreams too much
 174	0.41121	Why does Ishmael think that the natural dangers of the sea are so insidious?	So much is hidden
- 50	0.38087	What does Ishmael claim is the most famous part of a whale?	Its tail
-172	0.38082	Why does Ishmael find it odd that the French have been most successful in representing whales in art?	France doesn't hunt whales
- 48	0.35630	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirt-spout
-122	0.33610	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
- 52	0.30413	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will
 
-Why is the Pequod unable to purse the "Grand Armada" of sperm whales that they encounter near Sunda?	Malaysian Pirates appear
- 76	0.21951	What is the Pequod named after?	An extinct Massachusetts Indian tribe
-164	0.21951	Who owns the Pequod?	Bildad and Peleg
-  0	0.21833	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize
-170	0.15974	Why are whaling ships always well-lit?	Free access to oil
-102	0.15974	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses
-177	0.14292	Why is the whale-line so dangerous once it is attached to a whale?	People can get tangled
-175	0.14292	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
+Why is the Pequod unable to pursue the "Grand Armada" of sperm whales that they encounter near Sunda?	Malaysian Pirates appear
+182	0.00000	What happened when the Pequod neared Sunda? ?	Malaysian Pirates scared them away from the hunting grounds.
 
 Why is the whale-line so dangerous once it is attached to a whale?	People can get tangled
 170	0.22576	Why are whaling ships always well-lit?	Free access to oil
@@ -1182,11 +1158,6 @@ With what is the Pequod adorned?	Sperm whale teeth
 128	0.22029	Which characters survive the Pequod's sinking?	Only Ishmael
 
 With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg
-147	0.33518	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.
  22	0.25233	In what state does Ishmael meet Queequeg?	Massachusetts
- 50	0.25233	What does Ishmael claim is the most famous part of a whale?	Its tail
- 53	0.25233	What does Ishmael have tattooed on his forearm?	The dimensions of a whale
- 55	0.25233	What does Ishmael use as a life buoy?	Queequeg's coffin
-175	0.22576	Why does Ishmael think whales are so mysterious?	They're always mostly hidden
-122	0.22576	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket
 
+What happened when the Pequod neared Sunda? ?	Malaysian Pirates scared them away from the hunting grounds.
