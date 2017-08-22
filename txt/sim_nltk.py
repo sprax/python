@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # Depends on: nltk.download('punkt')
 
-import heapq
-import nltk, string
+import heapq, string, time
+import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 stemmer = nltk.stem.porter.PorterStemmer()
@@ -143,13 +143,16 @@ def show_most_sim_lists(texts, most_sim_lists=None, similarity_func=cosine_sim, 
 def save_most_sim_lists_tsv(texts, quandas, path, most_sim_lists=None, exclude_self=True,
                             max_count=7, similarity_func=cosine_sim, verbose=True):
     if most_sim_lists is None:
+        beg_time = time.time()
         most_sim_lists = list_most_sim_lists(texts, max_count=max_count)     # use defaults
+        seconds = time.time() - beg_time
+        print("list_most_sim_lists(size=%d, count=%d) took %.1f seconds" % (len(texts), max_count, seconds))
     with open(path, "w") as out:
         for idx, txt in enumerate(texts):
             most_sim_list = most_sim_lists[idx]
             assert(txt == quandas[idx][0])
             print(txt, quandas[idx][1], sep="\t", file=out)
             for oix, sim in most_sim_list:
-                print(oix, sim, texts[oix], quandas[oix][1], sep="\t", file=out)
+                print("%3d\t%.5f\t%s\t%s" % (oix, sim, texts[oix], quandas[oix][1]), file=out)
             print(file=out)
     return most_sim_lists
