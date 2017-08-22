@@ -130,5 +130,5 @@ def show_most_sim_lists(texts, most_sim_lists=None, similarity_func=cosine_sim, 
         most_sim_list = most_sim_lists[idx]
         print("  %3d.  %s" % (idx, txt))
         for oix, sim in most_sim_list:
-            print("        %.5f  %3d.   %s" % (sim, oix, texts[oix]))
+            print("        %3d   %.5f   %s" % (oix, sim, texts[oix]))
         print()
