@@ -140,7 +140,7 @@ def show_most_sim_lists(texts, most_sim_lists=None, similarity_func=cosine_sim, 
             print("        %3d   %.5f   %s" % (oix, sim, texts[oix]))
         print()
 
-def save_most_sim_lists_tsv(texts, quandas, path, most_sim_lists=None, exclude_self=True,
+def save_most_sim_lists_tsv(texts, qas, path, most_sim_lists=None, exclude_self=True,
                             max_count=7, similarity_func=cosine_sim, verbose=True):
     if most_sim_lists is None:
         beg_time = time.time()
@@ -150,9 +150,9 @@ def save_most_sim_lists_tsv(texts, quandas, path, most_sim_lists=None, exclude_s
     with open(path, "w") as out:
         for idx, txt in enumerate(texts):
             most_sim_list = most_sim_lists[idx]
-            assert(txt == quandas[idx][0])
-            print(txt, quandas[idx][1], sep="\t", file=out)
+            assert(txt == qas[idx][0])
+            print(idx, txt, qas[idx][1], qas[idx][2], sep="\t", file=out)
             for oix, sim in most_sim_list:
-                print("%3d\t%.5f\t%s\t%s" % (oix, sim, texts[oix], quandas[oix][1]), file=out)
+                print("%3d\t%.5f\t%s\t%s" % (oix, sim, texts[oix], qas[oix][1], qas[oix][2]), file=out)
             print(file=out)
     return most_sim_lists
