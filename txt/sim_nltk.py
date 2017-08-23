@@ -153,6 +153,6 @@ def save_most_sim_lists_tsv(texts, qas, path, most_sim_lists=None, exclude_self=
             assert(txt == qas[idx][0])
             print(idx, txt, qas[idx][1], qas[idx][2], sep="\t", file=out)
             for oix, sim in most_sim_list:
-                print("%3d\t%.5f\t%s\t%s" % (oix, sim, texts[oix], qas[oix][1], qas[oix][2]), file=out)
+                print("%3d\t%.5f\t%s\t%s\t%s" % (oix, sim, texts[oix], qas[oix][1], str(qas[oix][2])), file=out)
             print(file=out)
     return most_sim_lists
