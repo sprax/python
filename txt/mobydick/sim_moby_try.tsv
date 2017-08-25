@@ -437,15 +437,7 @@
 122	0.20199	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket	
  15	0.18443	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target	16
 
-60	What does the milk taste like on Nantucket?	Fish	
-171	0.17857	Why does Ishmael claim that Nantucket has the largest empire in the world?	It owns the seas	
-178	0.15064	With what does Queequeg sleep?	His harpoon	16
- 16	0.15064	How does Queequeg shave?	With a harpoon	178
- 17	0.15064	How does the Pequod sink?	She is rammed by Moby Dick. 	92
-111	0.12736	When Queequeg falls ill, what does he do?	Have his coffin made	
-115	0.12736	When does the Pequod set sail?	Christmas Day	
- 22	0.11234	In what state does Ishmael meet Queequeg?	Massachusetts	4
-
+60	What does the milk taste like on Nantucket?	Fish	191	What flavor permeates all others on Nantucket?	Fish	
 
 61	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt	186	Who wears a whale-penis pelt while slicing pieces of blubber for the pots?	The mincer
 
@@ -589,23 +581,10 @@
 170	0.19431	Why are whaling ships always well-lit?	Free access to oil	
  88	0.19431	What is the ship that rescues Ishmael at the end of the novel?	Rachel	
 
-88	What is the ship that rescues Ishmael at the end of the novel?	Rachel	
-147	0.33518	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	
- 71	0.25233	What is Ishmael constantly trying to pin down throughout the novel?	The essence of whales	
-122	0.22576	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket	
- 35	0.20614	To what does Ishmael liken the experience of shipping aboard a whaler?	Committing suicide	122
- 93	0.20614	What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford	
-  7	0.19431	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	80
- 80	0.19431	What is the name of Ahab's ship?	The Pequod	
 
-89	What is the source of Ahab's fatal flaw?	The damage he's suffered	
- 67	0.60297	What is Ahab's single fatal flaw?	Hubris	
-  7	0.22029	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	80
- 79	0.22029	What is the name of Ahab's harpooner?	Fedallah	
- 80	0.22029	What is the name of Ahab's ship?	The Pequod	
- 81	0.22029	What is the name of Ahab's wife?	She is nameless	
-137	0.22029	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	
-131	0.22029	Who are Ahab's mates?	Starbuck, Stubbs, Flask	
+88	What is the ship that rescues Ishmael at the end of the novel?	Rachel	190	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.
+
+89	What is the source of Ahab's fatal flaw?	The damage he's suffered	67	0.60297	What is Ahab's single fatal flaw?	Hubris	
 
 90	What is the study of whales called?	Cetology	12	0.26056	For what were whales primarily hunted?	Oil	98
 
@@ -620,14 +599,7 @@
 
 92	What keeps Ishmael afloat after the Pequod sinks?	A coffin	128	0.33610	Which characters survive the Pequod's sinking?	Only Ishmael	
 
-93	What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford	
-122	0.30413	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket	
-147	0.27894	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	
- 35	0.27520	To what does Ishmael liken the experience of shipping aboard a whaler?	Committing suicide	122
- 22	0.20614	In what state does Ishmael meet Queequeg?	Massachusetts	4
- 50	0.20614	What does Ishmael claim is the most famous part of a whale?	Its tail	
- 53	0.20614	What does Ishmael have tattooed on his forearm?	The dimensions of a whale	
- 55	0.20614	What does Ishmael use as a life buoy?	Queequeg's coffin	
+93	What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford	122	0.30413	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket	
 
 94	What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex	
  87	0.35548	What is the name of the ship in the story?	The Pequod	
@@ -638,14 +610,7 @@
 122	0.15976	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket	
  24	0.15800	Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher? 	Platonic	0
 
-95	What religion are the owners of the ship?	Quakers	
-  7	0.26056	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	80
- 80	0.26056	What is the name of Ahab's ship?	The Pequod	
- 87	0.26056	What is the name of the ship in the story?	The Pequod	
-170	0.15064	Why are whaling ships always well-lit?	Free access to oil	
- 88	0.15064	What is the ship that rescues Ishmael at the end of the novel?	Rachel	
- 29	0.15064	Pip describes the doubloon on the mast as the ship's what?	Navel	45
-122	0.13628	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket	
+95	What religion are the owners of the ship?	Quakers	164	0.37998	Who owns the Pequod?	Bildad and Peleg	
 
 96	What religious sect do Peleg and Bildad belong to?	Quakers	
 135	0.33518	Who is Bildad?	The other co-owner of the ship Pequod. He is the exact opposite of Captain Peleg; he is cool in temperament, religious, and shrewd.  Bildad and Peleg hire the crew.	
@@ -1172,3 +1137,8 @@
 188	To whom did Melville dedicate Moby Dick?	Nathaniel Hawthorne	123	Which American literary figure, to whom Moby Dick was dedicated, influenced Melville's writing?	Nathaniel Hawthorne	
 
 189	  When does Ahab's secret whaling crew come out of hiding?	  At the beginning of the first whale hunt.	132	Who are the "five dusky phantoms" that appear when the first whale hunt begins?	Ahab's secret whaling crew	
+
+190	How does the ship Rachel figure in Ishmael's story?		She rescues him in the end.  88	What is the ship that rescues Ishmael at the end of the novel?	Rachel	
+
+191	What flavor permeates all others on Nantucket?	Fish	60	What does the milk taste like on Nantucket?	Fish	
+
