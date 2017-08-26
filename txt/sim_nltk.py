@@ -124,7 +124,7 @@ def most_similar_items_list(similarity_func, all_texts, this_text, excludes=None
     sim_dict = similarity_dict(similarity_func, all_texts, this_text, excludes, min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
-def list_most_sim_lists(texts, similarity_func=cosine_sim, exclude_self=True, max_count=5, min_sim_val=0.0):
+    def list_most_sim_texts_list(texts, similarity_func=cosine_sim, exclude_self=True, max_count=5, min_sim_val=0.0):
     '''
     For each text in texts, find a list of indexes of the most similar texts.
     Returns list of lists of items as in: [[(index, similariy), ...], ...]
@@ -138,15 +138,15 @@ def list_most_sim_lists(texts, similarity_func=cosine_sim, exclude_self=True, ma
         return nearests
     return [most_similar_items_list(similarity_func, texts, txt, None, max_count, min_sim_val) for txt in texts]
 
-def list_most_sim_lists_verbose(texts, similarity_func=cosine_sim, exclude_self=True, max_count=5, min_sim_val=0.0):
+def list_most_sim_texts_list_verbose(texts, similarity_func=cosine_sim, exclude_self=True, max_count=5, min_sim_val=0.0):
     beg_time = time.time()
-    most_sim_lists = list_most_sim_lists(texts, similarity_func, exclude_self, max_count, min_sim_val)
+    most_sim_texts_list = list_most_sim_texts_list(texts, similarity_func, exclude_self, max_count, min_sim_val)
     seconds = time.time() - beg_time
-    print("list_most_sim_lists(size=%d, count=%d) took %.1f seconds" % (len(texts), max_count, seconds))
+    print("list_most_sim_texts_list(size=%d, count=%d) took %.1f seconds" % (len(texts), max_count, seconds))
 
-def show_most_sim_lists(texts, most_sim_lists=None, similarity_func=cosine_sim, verbose=True):
+def show_most_sim_texts_list(texts, most_sim_lists=None, similarity_func=cosine_sim):
     if most_sim_lists is None:
-        most_sim_lists = list_most_sim_lists_verbose(texts)     # use defaults
+        most_sim_lists = list_most_sim_texts_list_verbose(texts)     # use defaults
     for idx, txt in enumerate(texts):
         most_sim_list = most_sim_lists[idx]
         print("  %3d.  %s" % (idx, txt))
@@ -155,10 +155,9 @@ def show_most_sim_lists(texts, most_sim_lists=None, similarity_func=cosine_sim, 
         print()
     return most_sim_lists
 
-def save_most_sim_lists_tsv(texts, qas, path, most_sim_lists=None, exclude_self=True,
-                            max_count=7, similarity_func=cosine_sim, verbose=True):
+def save_most_sim_lists_tsv(texts, qas, path, most_sim_lists=None, exclude_self=True, max_count=7):
     if most_sim_lists is None:
-        most_sim_lists = list_most_sim_lists_verbose(texts, max_count=max_count)     # use defaults
+        most_sim_lists = list_most_sim_texts_list_verbose(texts, exclude_self=exclude_self, max_count=max_count)
     with open(path, "w") as out:
         for idx, txt in enumerate(texts):
             most_sim_list = most_sim_lists[idx]
