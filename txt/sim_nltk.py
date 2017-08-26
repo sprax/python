@@ -1,25 +1,30 @@
 #!/usr/bin/env python3
 # Depends on: nltk.download('punkt')
+'''Text similarity (between sentences or phrases) using NLTK'''
 
-import heapq, string, time
+import heapq
+import string
+import time
 import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-stemmer = nltk.stem.porter.PorterStemmer()
-remove_punctuation_map = dict((ord(char), None) for char in string.punctuation)
+STEMMER = nltk.stem.porter.PorterStemmer()
+TRANS_NO_PUNCT = str.maketrans('', '', string.punctuation)
+VECTORIZER = TfidfVectorizer(tokenizer=normalize, stop_words='english')
 
-def stem_tokens(tokens):
+
+def stem_tokens(tokens, stemmer=STEMMER):
+    '''list of stems, one per input tokens'''
     return [stemmer.stem(item) for item in tokens]
 
-def normalize(text):
+def normalize(text, translation=TRANS_NO_PUNCT):
     '''remove punctuation, lowercase, stem'''
-    return stem_tokens(nltk.word_tokenize(text.lower().translate(remove_punctuation_map)))
+    return stem_tokens(nltk.word_tokenize(text.translate(TRANS_NO_PUNCT).lower()))
 
-vectorizer = TfidfVectorizer(tokenizer=normalize, stop_words='english')
 
-def cosine_sim(text1, text2):
+def cosine_sim(text1, text2, vectorizer=VECTORIZER):
     tfidf = vectorizer.fit_transform([text1, text2])
-    return ((tfidf * tfidf.T).A)[0,1]
+    return ((tfidf * tfidf.T).A)[0, 1]
 
 def smoke_test():
     sent_1 = 'a little bird'
@@ -132,11 +137,11 @@ def list_most_sim_lists(texts, similarity_func=cosine_sim, exclude_self=True, ma
         return nearests
     return [most_similar_items_list(similarity_func, texts, txt, None, max_count, min_sim_val) for txt in texts]
 
-def list_most_sim_lists_verbose:
-        beg_time = time.time()
-        most_sim_lists = list_most_sim_lists(texts, max_count=max_count)     # use defaults
-        seconds = time.time() - beg_time
-        print("list_most_sim_lists(size=%d, count=%d) took %.1f seconds" % (len(texts), max_count, seconds))
+def list_most_sim_lists_verbose(texts, similarity_func=cosine_sim, exclude_self=True, max_count=5, min_sim_val=0.0):
+    beg_time = time.time()
+    most_sim_lists = list_most_sim_lists(texts, similarity_func, exclude_self, max_count, min_sim_val)
+    seconds = time.time() - beg_time
+    print("list_most_sim_lists(size=%d, count=%d) took %.1f seconds" % (len(texts), max_count, seconds))
 
 def show_most_sim_lists(texts, most_sim_lists=None, similarity_func=cosine_sim, verbose=True):
     if most_sim_lists is None:
@@ -147,18 +152,16 @@ def show_most_sim_lists(texts, most_sim_lists=None, similarity_func=cosine_sim, 
         for oix, sim in most_sim_list:
             print("        %3d   %.5f   %s" % (oix, sim, texts[oix]))
         print()
+    return most_sim_lists
 
 def save_most_sim_lists_tsv(texts, qas, path, most_sim_lists=None, exclude_self=True,
                             max_count=7, similarity_func=cosine_sim, verbose=True):
     if most_sim_lists is None:
-        beg_time = time.time()
-        most_sim_lists = list_most_sim_lists(texts, max_count=max_count)     # use defaults
-        seconds = time.time() - beg_time
-        print("list_most_sim_lists(size=%d, count=%d) took %.1f seconds" % (len(texts), max_count, seconds))
+        most_sim_lists = list_most_sim_lists_verbose(texts, max_count=max_count)     # use defaults
     with open(path, "w") as out:
         for idx, txt in enumerate(texts):
             most_sim_list = most_sim_lists[idx]
-            assert(txt == qas[idx][0])
+            assert txt == qas[idx][0]
             print(idx, txt, qas[idx][1], qas[idx][2], sep="\t", file=out)
             for oix, sim in most_sim_list:
                 print("%3d\t%.5f\t%s\t%s\t%s" % (oix, sim, texts[oix], qas[oix][1], str(qas[oix][2])), file=out)
