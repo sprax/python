@@ -428,27 +428,11 @@
 179	0.17579	With what is the Pequod adorned?	Sperm whale teeth	18
  18	0.17579	How is the Pequod decorated?	With whale bones	179
 
-59	What does the crew look for to indicate the presence of a whale?	Spouts	
- 56	0.24718	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear	
- 48	0.24479	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirt-spout	
- 50	0.22576	What does Ishmael claim is the most famous part of a whale?	Its tail	
-175	0.20199	Why does Ishmael think whales are so mysterious?	They're always mostly hidden	174
- 40	0.20199	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head	59
-122	0.20199	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket	
- 15	0.18443	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target	16
-
-60	What does the milk taste like on Nantucket?	Fish	191	What flavor permeates all others on Nantucket?	Fish	
+59	What does the crew look for to indicate the presence of a whale?	Spouts	48	0.24479	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirt-spout	
 
 61	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt	186	Who wears a whale-penis pelt while slicing pieces of blubber for the pots?	The mincer
 
-62	What does the scar on Ahab's cheek resemble?	A lightning bolt	
-103	0.25958	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool(Correct)	
- 41	0.25233	What does Ahab carry in his pocket?	Vial of Nantucket sand	103
-105	0.23363	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes	
- 44	0.22576	What does Ahab recognize as the "first hearse" of Fedallah's prophecy?	Fedallah lashed to Moby Dick	
- 47	0.22576	What does Fedallah prophesize will kill Captain Ahab?	Hemp	
-108	0.22576	When Ahab realizes that smoking no longer soothes him, what does he do?	Throws his pipe overboard	
-112	0.22327	When Starbuck confronts Ahab about leaking oil barrels that are costing the crew profit, how does Ahab respond?	Points a gun at Starbuck	
+62	What does the scar on Ahab's cheek resemble?	A lightning bolt	192	Where is Ahab's scar that resembles a lightning bolt?	On Ahab's cheek
 
 63	What experience catalyzed Pip and Ahab's close companionship?	Pip's near-drowning	9	0.34064	Because Pip's insane rantings move Ahab, Ahab gives Pip what?	The captain's quarters	63
 
@@ -1141,4 +1125,6 @@
 190	How does the ship Rachel figure in Ishmael's story?		She rescues him in the end.  88	What is the ship that rescues Ishmael at the end of the novel?	Rachel	
 
 191	What flavor permeates all others on Nantucket?	Fish	60	What does the milk taste like on Nantucket?	Fish	
+
+192	Where is Ahab's scar that resembles a lightning bolt?	On Ahab's cheek 62	What does the scar on Ahab's cheek resemble?	A lightning bolt	
 
