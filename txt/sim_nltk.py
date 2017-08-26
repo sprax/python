@@ -23,17 +23,18 @@ def normalize(text, translation=TRANS_NO_PUNCT):
 
 
 def cosine_sim(text1, text2, vectorizer=VECTORIZER):
+    '''dot-product (projection) similarity'''
     tfidf = vectorizer.fit_transform([text1, text2])
     return ((tfidf * tfidf.T).A)[0, 1]
 
 def smoke_test():
+    '''Tests that basic sentence similarity functionality works, or at least does not blow-up'''
     sent_1 = 'a little bird'
     sent_2 = 'a little bird chirps'
     sent_3 = 'a big dog barks a lot'
     print("cosine_sim(%s, %s) == %f" % (sent_1, sent_1, cosine_sim(sent_1, sent_1)))
     print("cosine_sim(%s, %s) == %f" % (sent_1, sent_2, cosine_sim(sent_1, sent_2)))
     print("cosine_sim(%s, %s) == %f" % (sent_1, sent_3, cosine_sim(sent_1, sent_3)))
-
 
 def nearest_known(similarity_func, saved_texts, threshold, input_text):
     idx, sim = nearest_other_idx(similarity_func, saved_texts, input_text, threshold)
