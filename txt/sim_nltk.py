@@ -83,9 +83,11 @@ def similarity_dict(similarity_func, all_texts, this_text, excludes=None, min_si
         similarity_func:    function returning the similariy between two texts (as in sentences)
         min_sim_val:        similarity threshold
     '''
+    if excludes == None:
+        excludes = []
     sim_dict = {}
     for idx, a_text in enumerate(all_texts):
-        if excludes and idx in excludes:
+        if idx in excludes:
             continue
         sim = similarity_func(this_text, a_text)
         if  sim > min_sim_val:
@@ -130,9 +132,15 @@ def list_most_sim_lists(texts, similarity_func=cosine_sim, exclude_self=True, ma
         return nearests
     return [most_similar_items_list(similarity_func, texts, txt, None, max_count, min_sim_val) for txt in texts]
 
+def list_most_sim_lists_verbose:
+        beg_time = time.time()
+        most_sim_lists = list_most_sim_lists(texts, max_count=max_count)     # use defaults
+        seconds = time.time() - beg_time
+        print("list_most_sim_lists(size=%d, count=%d) took %.1f seconds" % (len(texts), max_count, seconds))
+
 def show_most_sim_lists(texts, most_sim_lists=None, similarity_func=cosine_sim, verbose=True):
     if most_sim_lists is None:
-        most_sim_lists = list_most_sim_lists(texts)     # use defaults
+        most_sim_lists = list_most_sim_lists_verbose(texts)     # use defaults
     for idx, txt in enumerate(texts):
         most_sim_list = most_sim_lists[idx]
         print("  %3d.  %s" % (idx, txt))
