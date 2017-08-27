@@ -44,14 +44,14 @@ def cosine_sim_txt(txt_obj_1, txt_obj_2, get_text=ident, vectorizer=VECTORIZER):
     tfidf = vectorizer.fit_transform([get_text(txt_obj_1), get_text(txt_obj_2)])
     return ((tfidf * tfidf.T).A)[0, 1]
 
-def cosine_sim_qa(txt_obj_1, txt_obj_2, get_question=first, get_answer=second, q_weight=0.5, vectorizer=VECTORIZER):
+def cosine_sim_qas(qas_obj_1, qas_obj_2, get_question=first, get_answer=second, q_weight=0.5, vectorizer=VECTORIZER):
     '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
     assert 0.0 < q_weight and q_weight <= 1.0
-    tfidf = vectorizer.fit_transform([get_question(txt_obj_1), get_question(txt_obj_2)])
+    tfidf = vectorizer.fit_transform([get_question(qas_obj_1), get_question(qas_obj_2)])
     q_sim = ((tfidf * tfidf.T).A)[0, 1]
     if q_weight < 1.0:
-        ans_1 = get_answer(txt_obj_1)
-        ans_2 = get_answer(txt_obj_2)
+        ans_1 = get_answer(qas_obj_1)
+        ans_2 = get_answer(qas_obj_2)
         if ans_1 and ans_2:
             tfidf = vectorizer.fit_transform([ans_1, ans_2])
             a_sim = ((tfidf * tfidf.T).A)[0, 1]
@@ -155,7 +155,7 @@ def most_similar_items_list(similarity_func, all_texts, this_text, excludes=None
     sim_dict = similarity_dict(similarity_func, all_texts, this_text, excludes, min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
-    def list_most_sim_texts_list(texts, similarity_func=cosine_sim_txt, exclude_self=True, max_count=5, min_sim_val=0.0):
+def list_most_sim_texts_list(texts, similarity_func=cosine_sim_txt, exclude_self=True, max_count=5, min_sim_val=0.0):
     '''
     For each text in texts, find a list of indexes of the most similar texts.
     Returns list of lists of items as in: [[(index, similariy), ...], ...]
@@ -176,10 +176,10 @@ def list_most_sim_texts_list_verbose(texts, similarity_func=cosine_sim_txt,
     seconds = time.time() - beg_time
     print("list_most_sim_texts_list(size=%d, count=%d) took %.1f seconds" % (len(texts), max_count, seconds))
 
-def list_most_sim_qas_list_verbose(qas, similarity_func=cosine_sim_qa,
-        exclude_self=True, max_count=5, min_sim_val=0.2):
+def list_most_sim_qas_list_verbose(qas, similarity_func=cosine_sim_qas,
+        exclude_self=True, max_count=5, min_sim_val=0.2, q_weight=0.6667):
     beg_time = time.time()
-    most_sim_texts_list = list_most_sim_qas_list(texts, similarity_func, exclude_self, max_count, min_sim_val)
+    most_sim_texts_list = list_most_sim_texts_list(qas, similarity_func, exclude_self, max_count, min_sim_val)
     seconds = time.time() - beg_time
     print("list_most_sim_qas_list(size=%d, count=%d) took %.1f seconds" % (len(texts), max_count, seconds))
 
