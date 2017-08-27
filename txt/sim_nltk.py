@@ -21,12 +21,6 @@ def normalize(text, translation=TRANS_NO_PUNCT):
     '''remove punctuation, lowercase, stem'''
     return stem_tokens(nltk.word_tokenize(text.translate(TRANS_NO_PUNCT).lower()))
 
-
-def cosine_text_sim(text1, text2, vectorizer=VECTORIZER):
-    '''dot-product (projection) similarity'''
-    tfidf = vectorizer.fit_transform([text1, text2])
-    return ((tfidf * tfidf.T).A)[0, 1]
-
 def ident(obj):
     '''identify function: just returns its argument'''
     return obj
@@ -45,32 +39,33 @@ def second(obj):
     except:
         return obj
 
-def cosine_sim(txt_obj_1, txt_obj_2, get_text=ident, vectorizer=VECTORIZER):
+def cosine_sim_txt(txt_obj_1, txt_obj_2, get_text=ident, vectorizer=VECTORIZER):
     '''dot-product (projection) similarity'''
     tfidf = vectorizer.fit_transform([get_text(txt_obj_1), get_text(txt_obj_2)])
     return ((tfidf * tfidf.T).A)[0, 1]
 
-def cosine_sim_qa(txt_obj_1, txt_obj_2, get_question=first, get_answer=second, vectorizer=VECTORIZER):
-    '''dot-product (projection) similarity'''
+def cosine_sim_qa(txt_obj_1, txt_obj_2, get_question=first, get_answer=second, q_weight=0.5, vectorizer=VECTORIZER):
+    '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
+    assert 0.0 < q_weight and q_weight <= 1.0
     tfidf = vectorizer.fit_transform([get_question(txt_obj_1), get_question(txt_obj_2)])
     q_sim = ((tfidf * tfidf.T).A)[0, 1]
-    ans_1 = get_answer(txt_obj_1)
-    ans_2 = get_answer(txt_obj_2)
-    if ans_1 and ans_2:
-        tfidf = vectorizer.fit_transform([ans_1, ans_2])
-        a_sim = ((tfidf * tfidf.T).A)[0, 1]
-        return (q_sim + a_ans) * 0.5
+    if q_weight < 1.0:
+        ans_1 = get_answer(txt_obj_1)
+        ans_2 = get_answer(txt_obj_2)
+        if ans_1 and ans_2:
+            tfidf = vectorizer.fit_transform([ans_1, ans_2])
+            a_sim = ((tfidf * tfidf.T).A)[0, 1]
+            return (q_sim - a_ans) * q_weight - a_ans
     return q_sim
-
 
 def smoke_test():
     '''Tests that basic sentence similarity functionality works, or at least does not blow-up'''
     sent_1 = 'a little bird'
     sent_2 = 'a little bird chirps'
     sent_3 = 'a big dog barks a lot'
-    print("cosine_text_sim(%s, %s) == %f" % (sent_1, sent_1, cosine_text_sim(sent_1, sent_1)))
-    print("cosine_text_sim(%s, %s) == %f" % (sent_1, sent_2, cosine_text_sim(sent_1, sent_2)))
-    print("cosine_text_sim(%s, %s) == %f" % (sent_1, sent_3, cosine_text_sim(sent_1, sent_3)))
+    print("cosine_sim_txt(%s, %s) == %f" % (sent_1, sent_1, cosine_sim_txt(sent_1, sent_1)))
+    print("cosine_sim_txt(%s, %s) == %f" % (sent_1, sent_2, cosine_sim_txt(sent_1, sent_2)))
+    print("cosine_sim_txt(%s, %s) == %f" % (sent_1, sent_3, cosine_sim_txt(sent_1, sent_3)))
 
 def nearest_known(similarity_func, saved_texts, threshold, input_text):
     idx, sim = nearest_other_idx(similarity_func, saved_texts, input_text, threshold)
@@ -94,7 +89,7 @@ def nearest_other_idx(similarity_func, other_texts, this_text, max_sim_val):
             max_sim_idx = idx
     return  max_sim_idx, max_sim_val
 
-def list_nearest_other_idx(texts, similarity_func=cosine_text_sim):
+def list_nearest_other_idx(texts, similarity_func=cosine_sim_txt):
     '''
     For each text in texts, find the index of the most similar other text.
     Returns the list of indexes.  The mapping is not necessarily 1-1, that is,
@@ -109,7 +104,7 @@ def list_nearest_other_idx(texts, similarity_func=cosine_text_sim):
         nearests[idx] = 1 + idx + max_idx_1 if max_sim_1 > max_sim_0 else max_idx_0
     return nearests
 
-def show_nearest_neighbors(texts, nearest_indexes=None, similarity_func=cosine_text_sim, verbose=True):
+def show_nearest_neighbors(texts, nearest_indexes=None, similarity_func=cosine_sim_txt, verbose=True):
     if nearest_indexes is None:
         nearest_indexes = list_nearest_other_idx(texts)
     for idx, txt in enumerate(texts):
@@ -160,7 +155,7 @@ def most_similar_items_list(similarity_func, all_texts, this_text, excludes=None
     sim_dict = similarity_dict(similarity_func, all_texts, this_text, excludes, min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
-    def list_most_sim_texts_list(texts, similarity_func=cosine_text_sim, exclude_self=True, max_count=5, min_sim_val=0.0):
+    def list_most_sim_texts_list(texts, similarity_func=cosine_sim_txt, exclude_self=True, max_count=5, min_sim_val=0.0):
     '''
     For each text in texts, find a list of indexes of the most similar texts.
     Returns list of lists of items as in: [[(index, similariy), ...], ...]
@@ -174,13 +169,21 @@ def most_similar_items_list(similarity_func, all_texts, this_text, excludes=None
         return nearests
     return [most_similar_items_list(similarity_func, texts, txt, None, max_count, min_sim_val) for txt in texts]
 
-def list_most_sim_texts_list_verbose(texts, similarity_func=cosine_text_sim, exclude_self=True, max_count=5, min_sim_val=0.0):
+def list_most_sim_texts_list_verbose(texts, similarity_func=cosine_sim_txt,
+        exclude_self=True, max_count=5, min_sim_val=0.2):
     beg_time = time.time()
     most_sim_texts_list = list_most_sim_texts_list(texts, similarity_func, exclude_self, max_count, min_sim_val)
     seconds = time.time() - beg_time
     print("list_most_sim_texts_list(size=%d, count=%d) took %.1f seconds" % (len(texts), max_count, seconds))
 
-def show_most_sim_texts_list(texts, most_sim_lists=None, similarity_func=cosine_text_sim):
+def list_most_sim_qas_list_verbose(qas, similarity_func=cosine_sim_qa,
+        exclude_self=True, max_count=5, min_sim_val=0.2):
+    beg_time = time.time()
+    most_sim_texts_list = list_most_sim_qas_list(texts, similarity_func, exclude_self, max_count, min_sim_val)
+    seconds = time.time() - beg_time
+    print("list_most_sim_qas_list(size=%d, count=%d) took %.1f seconds" % (len(texts), max_count, seconds))
+
+def show_most_sim_texts_list(texts, most_sim_lists=None, similarity_func=cosine_sim_txt):
     if most_sim_lists is None:
         most_sim_lists = list_most_sim_texts_list_verbose(texts)     # use defaults
     for idx, txt in enumerate(texts):
@@ -191,9 +194,27 @@ def show_most_sim_texts_list(texts, most_sim_lists=None, similarity_func=cosine_
         print()
     return most_sim_lists
 
-def save_most_sim_lists_tsv(texts, qas, path, most_sim_lists=None, exclude_self=True, max_count=7):
+def save_most_sim_lists_tsv(texts, qas, path, most_sim_lists=None, exclude_self=True, max_count=7,
+    min_sim_val = 0.2, q_weight=0.6667):
     if most_sim_lists is None:
-        most_sim_lists = list_most_sim_texts_list_verbose(texts, exclude_self=exclude_self, max_count=max_count)
+        most_sim_lists = list_most_sim_texts_list_verbose(texts, exclude_self=exclude_self,
+            max_count=max_count, min_sim_val=min_sim_val, q_weight=q_weight)
+    with open(path, "w") as out:
+        for idx, txt in enumerate(texts):
+            most_sim_list = most_sim_lists[idx]
+            assert txt == qas[idx][0]
+            print(idx, txt, qas[idx][1], qas[idx][2], sep="\t", file=out)
+            for oix, sim in most_sim_list:
+                print("%3d\t%.5f\t%s\t%s\t%s" % (oix, sim, texts[oix], qas[oix][1], str(qas[oix][2])), file=out)
+            print(file=out)
+    return most_sim_lists
+
+
+def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists=None, exclude_self=True, max_count=7,
+    min_sim_val = 0.2, q_weight=0.6667):
+    if most_sim_lists is None:
+        most_sim_lists = list_most_sim_qas_list_verbose(qas, exclude_self=exclude_self,
+            max_count=max_count, min_sim_val=min_sim_val, q_weight=q_weight)
     with open(path, "w") as out:
         for idx, txt in enumerate(texts):
             most_sim_list = most_sim_lists[idx]
