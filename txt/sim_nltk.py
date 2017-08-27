@@ -165,6 +165,7 @@ def list_most_sim_texts_list(texts, similarity_func=cosine_sim_txt, exclude_self
     if exclude_self:
         nearests = len(texts)*[None]
         for idx, txt in enumerate(texts):
+            print("DBG: ", txt)
             nearests[idx] = most_similar_items_list(similarity_func, texts, txt, [idx], max_count, min_sim_val)
         return nearests
     return [most_similar_items_list(similarity_func, texts, txt, None, max_count, min_sim_val) for txt in texts]
@@ -185,7 +186,7 @@ def list_most_sim_qas_list_verbose(qas, similarity_func=cosine_sim_qas,
 
 def show_most_sim_texts_list(texts, most_sim_lists=None, similarity_func=cosine_sim_txt):
     if most_sim_lists is None:
-        most_sim_lists = list_most_sim_texts_list_verbose(texts)     # use defaults
+        most_sim_lists = list_most_sim_qas_list_verbose(texts)     # use defaults
     for idx, txt in enumerate(texts):
         most_sim_list = most_sim_lists[idx]
         print("  %3d.  %s" % (idx, txt))
@@ -197,7 +198,7 @@ def show_most_sim_texts_list(texts, most_sim_lists=None, similarity_func=cosine_
 def save_most_sim_lists_tsv(texts, qas, path, most_sim_lists=None, exclude_self=True, max_count=7,
     min_sim_val = 0.2, q_weight=0.6667):
     if most_sim_lists is None:
-        most_sim_lists = list_most_sim_texts_list_verbose(texts, exclude_self=exclude_self,
+        most_sim_lists = list_most_sim_qas_list_verbose(texts, exclude_self=exclude_self,
             max_count=max_count, min_sim_val=min_sim_val, q_weight=q_weight)
     with open(path, "w") as out:
         for idx, txt in enumerate(texts):
