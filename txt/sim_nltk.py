@@ -282,7 +282,13 @@ def score_distance_counts(dist_counts, weights):
         score += weight * dist_counts[idx]
     return score / gold_scored
 
-def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, max_count=7, min_sim_val = 0.2):
+def score_most_sim_lists(qas, most_sim_lists, weights=None):
+    if weights == None:
+        weights = [1.0, 0.8, 0.6, 0.4, 0.2, 0.1]
+    dist_counts = distance_counts(qas, most_sim_lists, len(weights))
+    return score_distance_counts(dist_counts, weights)
+
+def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists):
     out = text_fio.open_out_file(path)
     for idx, lst in enumerate(qas):
         most_sim_list = most_sim_lists[idx]
@@ -292,9 +298,12 @@ def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, max_count=7, min_sim_v
         print(file=out)
     if path != '-':
         close(out)
-    return most_sim_lists
 
-
-    if most_sim_lists is None:
-        most_sim_lists = list_most_sim_qas_list_verbose(qas, exclude_self=exclude_self,
-            max_count=max_count, min_sim_val=min_sim_val, q_weight=q_weight)
+def sim_score_save(qas, path="simlists.tsv", sim_func=cosine_sim_qas_2, max_count=7, min_sim_val=0.15):
+    '''Compute similarities using sim_func, score them against gold standard, and save
+    the list of similarity lists to TSV for further work.  Many default values are
+    assumed, and the score is returned, not saved.'''
+    most_sim_lists = list_most_sim_qas_list_verbose(qas,  similarity_func=sim_func, 
+            exclude_self=True, max_count=max_count, min_sim_val=min_sim_val, q_weight=0.8)
+    score = score_most_sim_lists(qas, most_sim_lists)
+    save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, max_count=max_count, min_sim_val=min_sim_val)
