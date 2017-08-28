@@ -40,7 +40,6 @@ def second(obj):
     except:
         return obj
 
-
 def third(obj):
     '''second: returns second item from an indexible, or failing that, just the object'''
     try:
@@ -56,16 +55,19 @@ def cosine_sim_txt(txt_obj_1, txt_obj_2, get_text=ident, vectorizer=VECTORIZER):
 def cosine_sim_qas(qas_obj_1, qas_obj_2, get_question=second, get_answer=third, q_weight=0.5, vectorizer=VECTORIZER):
     '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
     assert 0.0 < q_weight and q_weight <= 1.0
-    print("DBG CSQ:  Q(%s)  A(%s)" % (get_question(qas_obj_2), get_answer(qas_obj_2)))
+    # print("DBG CSQ:  Q(%s)  A(%s)" % (get_question(qas_obj_2), get_answer(qas_obj_2)))
     tfidf = vectorizer.fit_transform([get_question(qas_obj_1), get_question(qas_obj_2)])
     q_sim = ((tfidf * tfidf.T).A)[0, 1]
     if q_weight < 1.0:
         ans_1 = get_answer(qas_obj_1)
         ans_2 = get_answer(qas_obj_2)
         if ans_1 and ans_2:
-            tfidf = vectorizer.fit_transform([ans_1, ans_2])
-            a_sim = ((tfidf * tfidf.T).A)[0, 1]
-            return (q_sim - a_sim) * q_weight - a_sim
+            try:
+                tfidf = vectorizer.fit_transform([ans_1, ans_2])
+                a_sim = ((tfidf * tfidf.T).A)[0, 1]
+                return (q_sim - a_sim) * q_weight - a_sim
+            except ValueError as vex:
+                print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
     return q_sim
 
 def smoke_test():
@@ -175,7 +177,7 @@ def list_most_sim_texts_list(texts, similarity_func=cosine_sim_txt, exclude_self
     if exclude_self:
         nearests = len(texts)*[None]
         for idx, txt in enumerate(texts):
-            print("DBG LMSTL: ", txt)
+            # print("DBG LMSTL: ", txt)
             nearests[idx] = most_similar_items_list(similarity_func, texts, txt, [idx], max_count, min_sim_val)
         return nearests
     return [most_similar_items_list(similarity_func, texts, txt, None, max_count, min_sim_val) for txt in texts]
@@ -229,11 +231,13 @@ def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists=None, exclude_self=True
         most_sim_lists = list_most_sim_qas_list_verbose(qas, exclude_self=exclude_self,
             max_count=max_count, min_sim_val=min_sim_val, q_weight=q_weight)
         assert len(most_sim_lists) > 2
-    # with text_fio.open_out_file(path) as out:
-    #     for idx, lst in enumerate(qas):
-    #         most_sim_list = most_sim_lists[idx]
-    #         print(idx, lst[0], lst[1], lst[2], sep="\t", file=out)
-    #         for oix, sim in most_sim_list:
-    #             print("%3d\t%.5f\t%s\t%s\t%d" % (oix, sim, qas[oix][0], qas[oix][1], qas[oix][2]), file=out)
-    #         print(file=out)
+    out = text_fio.open_out_file(path)
+    for idx, lst in enumerate(qas):
+        most_sim_list = most_sim_lists[idx]
+        print(idx, lst[1], lst[2], lst[3], sep="\t", file=out)
+        for oix, sim in most_sim_list:
+            print("%3d\t%.5f\t%s\t%s\t%s\t" % (oix, sim, qas[oix][1], qas[oix][2], qas[oix][3]), file=out)
+        print(file=out)
+    if path != '-':
+        close(out)
     return most_sim_lists
