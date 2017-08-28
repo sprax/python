@@ -77,9 +77,10 @@ def cosine_sim_qas_2(qas_obj_1, qas_obj_2, get_question=second, get_answer=third
     '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
     assert 0.0 < q_weight and q_weight <= 1.0
     if q_weight >= 1.0:
+        print("Degenerate q_weight: ", q_weight)
         return cosine_sim_txt(qas_obj_1, qas_obj_2, get_question, vectorizer)
     # print("DBG CSQ:  Q(%s)  A(%s)" % (get_question(qas_obj_2), get_answer(qas_obj_2)))
-    qst_1 = get_question(qas_obj_1),
+    qst_1 = get_question(qas_obj_1)
     qst_2 = get_question(qas_obj_2)
     ans_1 = get_answer(qas_obj_1)
     ans_2 = get_answer(qas_obj_2)
@@ -213,7 +214,7 @@ def list_most_sim_texts_list_verbose(texts, similarity_func=cosine_sim_txt,
     print("list_most_sim_texts_list(size=%d, count=%d) took %.1f seconds" % (len(texts), max_count, seconds))
     return most_sim_texts_list
 
-def list_most_sim_qas_list_verbose(qas, similarity_func=cosine_sim_qas,
+def list_most_sim_qas_list_verbose(qas, similarity_func=cosine_sim_qas_2,
         exclude_self=True, max_count=5, min_sim_val=0.2, q_weight=0.6667):
     beg_time = time.time()
     most_sim_texts_list = list_most_sim_texts_list(qas, similarity_func, exclude_self, max_count, min_sim_val)
@@ -249,17 +250,17 @@ def save_most_sim_lists_tsv(texts, qas, path, most_sim_lists=None, exclude_self=
 
 
 def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists=None, exclude_self=True, max_count=7,
-    min_sim_val = 0.2, q_weight=0.6667):
+    min_sim_val = 0.2, q_weight=0.8):
     if most_sim_lists is None:
         most_sim_lists = list_most_sim_qas_list_verbose(qas, exclude_self=exclude_self,
             max_count=max_count, min_sim_val=min_sim_val, q_weight=q_weight)
-        assert len(most_sim_lists) > 2
+        assert len(most_sim_lists) > 0
     out = text_fio.open_out_file(path)
     for idx, lst in enumerate(qas):
         most_sim_list = most_sim_lists[idx]
         print(idx, lst[1], lst[2], lst[3], sep="\t", file=out)
         for oix, sim in most_sim_list:
-            print("%3d\t%.5f\t%s\t%s\t%s\t" % (oix, sim, qas[oix][1], qas[oix][2], qas[oix][3]), file=out)
+            print("\t%3d\t%.5f\t%s\t%s\t%s\t" % (oix, sim, qas[oix][1], qas[oix][2], qas[oix][3]), file=out)
         print(file=out)
     if path != '-':
         close(out)

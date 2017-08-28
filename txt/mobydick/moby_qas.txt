@@ -186,8 +186,15 @@
 186	Who wears a whale-penis pelt while slicing pieces of blubber for the pots?	The mincer 61	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt	
 187	What is the world capital of whaling?	Nantucket 171	Why does Ishmael claim that Nantucket has the largest empire in the world?	It owns the seas	
 188	To whom did Melville dedicate Moby Dick?	Nathaniel Hawthorne	123	Which American literary figure, to whom Moby Dick was dedicated, influenced Melville's writing?	Nathaniel Hawthorne	
+189	What is the scientific study of whales called?	cetology?
 190	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	88	What is the ship that rescues Ishmael at the end of the novel?	Rachel	
 191	What flavor permeates all others on Nantucket?	Fish	60	What does the milk taste like on Nantucket?	Fish	
 192	Where is Ahab's scar that resembles a lightning bolt?	On Ahab's cheek	62	What does the scar on Ahab's cheek resemble?	A lightning bolt	
 193	Who is the third mate?	Flask	85	What is the name of the Third Mate?	Flask	85	What is the name of the Third Mate?	Flask	193	Who is the third mate?	Flask
 194	What does Ishmail say about himself keeping watch?	He daydreams too much	173
+195	Who wears a turban made of his own hair?	Fedallah's		69
+196	What religion do Peleg, Bildad, and Starbuck share?	Quakerism	   
+197	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	
+198	With what does Starbuck consider killing Ahab?	Musket
+199	Who are the Quakers in the story of Moby Dick?	Starbuck, Peleg, and Bildad
+200	What happened to the whaling ship called The Essex?r	It was attacked and sunk by a sperm whale, inspiring Melville's story
