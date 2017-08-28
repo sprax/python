@@ -248,19 +248,39 @@ def save_most_sim_lists_tsv(texts, qas, path, most_sim_lists=None, exclude_self=
             print(file=out)
     return most_sim_lists
 
-def score_qas_matching(qas, most_sim_lists, max_dist):
-    dist_counts = max_dist * [0]
-    gold_scores = 0
+def distance_counts(qas, most_sim_lists, max_dist):
+    '''
+    Returns a list of miss-distance counts: how many missed the gold standard by 0 (exact match),
+    how many missed it by one (as in the gold standard got the second highest similarity score)
+    how many missed it by two, on up to max_dist.  The total number of items with a gold standard
+    is added as the last element in the list.
+    '''
+    dist_counts = (max_dist + 1) * [0]
+    gold_scored = 0
     for qa, lst in zip(qas, most_sim_lists):
         if len(qa) > 3:
             gold = qa[3]
             assert isinstance(gold), int):
-            gold_scores += 1
+            gold_scored += 1
             for idx, oix, sim in enumerate(most_sim_lists):
                 if gold = oix:
                     dist_counts[idx] += 1
                     break
-    return gold_scores, dist_counts
+    # save the number of gold standard matches as the last count in the list
+    dist_counts[max_dist] = gold_scored
+    return dist_counts
+
+def score_distance_counts(dist_counts, weights):
+    '''Compute a score from miss-distance counts.  The perfect score would be 1.0'''
+    assert len(weights) > 0 and weights[0] = 1.0
+    assert len(weights) < len(dist_counts)
+    gold_scored = dist_counts[-1]
+    assert gold_scored > 0
+    score = dist_counts[0]                  # number of exact matches
+    for idx, weight in enumerate(weights, 1):
+        assert weight <= weights[idx - 1]
+        score += weight * dist_counts[idx]
+    return score / gold_scored
 
 def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, max_count=7, min_sim_val = 0.2):
     out = text_fio.open_out_file(path)
