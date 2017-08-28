@@ -55,20 +55,21 @@ def cosine_sim_txt(txt_obj_1, txt_obj_2, get_text=ident, vectorizer=VECTORIZER):
 def cosine_sim_qas(qas_obj_1, qas_obj_2, get_question=second, get_answer=third, q_weight=0.5, vectorizer=VECTORIZER):
     '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
     assert 0.0 < q_weight and q_weight <= 1.0
+    if q_weight >= 1.0:
+        return cosine_sim_txt(qas_obj_1, qas_obj_2, get_question, vectorizer)
     # print("DBG CSQ:  Q(%s)  A(%s)" % (get_question(qas_obj_2), get_answer(qas_obj_2)))
-    tfidf = vectorizer.fit_transform([get_question(qas_obj_1), get_question(qas_obj_2)])
-    q_sim = ((tfidf * tfidf.T).A)[0, 1]
-    if q_weight < 1.0:
-        ans_1 = get_answer(qas_obj_1)
-        ans_2 = get_answer(qas_obj_2)
-        if ans_1 and ans_2:
-            try:
-                tfidf = vectorizer.fit_transform([ans_1, ans_2])
-                a_sim = ((tfidf * tfidf.T).A)[0, 1]
-                return (q_sim - a_sim) * q_weight - a_sim
-            except ValueError as vex:
-                print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
-    return q_sim
+    qst_1 = get_question(qas_obj_1),
+    qst_2 = get_question(qas_obj_2)
+    ans_1 = get_answer(qas_obj_1)
+    ans_2 = get_answer(qas_obj_2)
+    try:
+        tfidf = vectorizer.fit_transform([qst_1, qst_2, ans_1, ans_2])
+        q_sim = ((tfidf * tfidf.T).A)[0, 1]
+        a_sim = ((tfidf * tfidf.T).A)[2, 3]
+        return (q_sim - a_sim) * q_weight - a_sim
+    except ValueError as vex:
+        print("Error, probably on answers (%s|%s): %s" % (ans_1, ans_2, vex))
+    return 0.0
 
 def smoke_test():
     '''Tests that basic sentence similarity functionality works, or at least does not blow-up'''
