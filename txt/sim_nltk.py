@@ -217,10 +217,10 @@ def list_most_sim_texts_list_verbose(texts, similarity_func=cosine_sim_txt,
 def list_most_sim_qas_list_verbose(qas, similarity_func=cosine_sim_qas_2,
         exclude_self=True, max_count=5, min_sim_val=0.2, q_weight=0.6667):
     beg_time = time.time()
-    most_sim_texts_list = list_most_sim_texts_list(qas, similarity_func, exclude_self, max_count, min_sim_val)
+    most_sim_list = list_most_sim_texts_list(qas, similarity_func, exclude_self, max_count, min_sim_val)
     seconds = time.time() - beg_time
     print("list_most_sim_qas_list(size=%d, count=%d) took %.1f seconds" % (len(qas), max_count, seconds))
-    return most_sim_texts_list
+    return most_sim_list
 
 def show_most_sim_texts_list(texts, most_sim_lists=None, similarity_func=cosine_sim_txt):
     if most_sim_lists is None:
@@ -248,13 +248,21 @@ def save_most_sim_lists_tsv(texts, qas, path, most_sim_lists=None, exclude_self=
             print(file=out)
     return most_sim_lists
 
+def score_qas_matching(qas, most_sim_lists, max_dist):
+    dist_counts = max_dist * [0]
+    gold_scores = 0
+    for qa, lst in zip(qas, most_sim_lists):
+        if len(qa) > 3:
+            gold = qa[3]
+            assert isinstance(gold), int):
+            gold_scores += 1
+            for idx, oix, sim in enumerate(most_sim_lists):
+                if gold = oix:
+                    dist_counts[idx] += 1
+                    break
+    return gold_scores, dist_counts
 
-def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists=None, exclude_self=True, max_count=7,
-    min_sim_val = 0.2, q_weight=0.8):
-    if most_sim_lists is None:
-        most_sim_lists = list_most_sim_qas_list_verbose(qas, exclude_self=exclude_self,
-            max_count=max_count, min_sim_val=min_sim_val, q_weight=q_weight)
-        assert len(most_sim_lists) > 0
+def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, max_count=7, min_sim_val = 0.2):
     out = text_fio.open_out_file(path)
     for idx, lst in enumerate(qas):
         most_sim_list = most_sim_lists[idx]
@@ -265,3 +273,8 @@ def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists=None, exclude_self=True
     if path != '-':
         close(out)
     return most_sim_lists
+
+
+    if most_sim_lists is None:
+        most_sim_lists = list_most_sim_qas_list_verbose(qas, exclude_self=exclude_self,
+            max_count=max_count, min_sim_val=min_sim_val, q_weight=q_weight)
