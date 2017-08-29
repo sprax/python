@@ -22,6 +22,11 @@ def normalize(text, translation=TRANS_NO_PUNCT):
 
 VECTORIZER = TfidfVectorizer(tokenizer=normalize, stop_words='english')
 
+STOP_WORDS = nltk.corpus.stopwords.words('english')
+
+def remove_stop_words(tokens, stop_words=STOP_WORDS):
+    return [tok for tok in tokens if tok not in stop_words]
+
 def ident(obj):
     '''identify function: just returns its argument'''
     return obj
@@ -105,7 +110,7 @@ def smoke_test():
     questions = ['How is that fair?!', 'What is fair?!', 'When is the fair?', 'Where is the fair?',
                  'Who is fair?', 'Why is that fair?']
     for qst in questions:
-        print("normalize(%s) -> " % qst, normalize(qst))
+        print("remove_stop_words(normalize(%s)) -> " % qst, remove_stop_words(normalize(qst)))
 
 
 def nearest_known(similarity_func, saved_texts, threshold, input_text):
