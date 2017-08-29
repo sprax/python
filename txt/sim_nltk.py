@@ -102,6 +102,11 @@ def smoke_test():
     print("cosine_sim_txt(%s, %s) == %f" % (sent_1, sent_1, cosine_sim_txt(sent_1, sent_1)))
     print("cosine_sim_txt(%s, %s) == %f" % (sent_1, sent_2, cosine_sim_txt(sent_1, sent_2)))
     print("cosine_sim_txt(%s, %s) == %f" % (sent_1, sent_3, cosine_sim_txt(sent_1, sent_3)))
+    questions = ['How is that fair?!', 'What is fair?!', 'When is the fair?', 'Where is the fair?',
+                 'Who is fair?', 'Why is that fair?']
+    for qst in questions:
+        print("normalize(%s) -> " % qst, normalize(qst))
+
 
 def nearest_known(similarity_func, saved_texts, threshold, input_text):
     idx, sim = nearest_other_idx(similarity_func, saved_texts, input_text, threshold)
