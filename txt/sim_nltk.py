@@ -215,7 +215,7 @@ def list_most_sim_texts_list_verbose(texts, similarity_func=cosine_sim_txt,
     return most_sim_texts_list
 
 def list_most_sim_qas_list_verbose(qas, similarity_func=cosine_sim_qas_2,
-        exclude_self=True, max_count=5, min_sim_val=0.2, q_weight=0.6667):
+        exclude_self=True, max_count=6, min_sim_val=0.15, q_weight=0.8):
     beg_time = time.time()
     most_sim_list = list_most_sim_texts_list(qas, similarity_func, exclude_self, max_count, min_sim_val)
     seconds = time.time() - beg_time
@@ -233,7 +233,7 @@ def show_most_sim_texts_list(texts, most_sim_lists=None, similarity_func=cosine_
         print()
     return most_sim_lists
 
-def save_most_sim_lists_tsv(texts, qas, path, most_sim_lists=None, exclude_self=True, max_count=7,
+def save_most_sim_lists_tsv(texts, qas, path, most_sim_lists=None, exclude_self=True, max_count=6,
     min_sim_val = 0.0):
     if most_sim_lists is None:
         most_sim_lists = list_most_sim_texts_list(texts, exclude_self=exclude_self,
@@ -257,13 +257,18 @@ def distance_counts(qas, most_sim_lists, max_dist):
     '''
     dist_counts = (max_dist + 1) * [0]
     gold_scored = 0
-    for qa, lst in zip(qas, most_sim_lists):
-        if len(qa) > 3:
-            gold = qa[3]
-            assert isinstance(gold), int):
+    for qa, sim_list in zip(qas, most_sim_lists):
+        if len(qa) > 3 and qa[3]:
+            try:
+                gold = int(qa[3])
+                assert isinstance(gold, int)
+            except Exception as ex:
+                print("ERROR on: ", qa, ex)
+                continue
             gold_scored += 1
-            for idx, oix, sim in enumerate(most_sim_lists):
-                if gold = oix:
+            for idx, item in enumerate(sim_list):
+                # print("DC: %d  item(%d, %f)" % (idx, item[0], item[1]))
+                if gold == item[0]:
                     dist_counts[idx] += 1
                     break
     # save the number of gold standard matches as the last count in the list
@@ -272,7 +277,7 @@ def distance_counts(qas, most_sim_lists, max_dist):
 
 def score_distance_counts(dist_counts, weights):
     '''Compute a score from miss-distance counts.  The perfect score would be 1.0'''
-    assert len(weights) > 0 and weights[0] = 1.0
+    assert len(weights) > 0 and weights[0] == 1.0
     assert len(weights) < len(dist_counts)
     gold_scored = dist_counts[-1]
     assert gold_scored > 0
@@ -292,18 +297,25 @@ def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists):
     out = text_fio.open_out_file(path)
     for idx, lst in enumerate(qas):
         most_sim_list = most_sim_lists[idx]
-        print(idx, lst[1], lst[2], lst[3], sep="\t", file=out)
+        gold = lst[3] if len(lst) > 3 else ''
+        print(idx, lst[1], lst[2], gold, sep="\t", file=out)
         for oix, sim in most_sim_list:
-            print("\t%3d\t%.5f\t%s\t%s\t%s\t" % (oix, sim, qas[oix][1], qas[oix][2], qas[oix][3]), file=out)
+            gold = qas[oix][3] if len(qas[oix]) > 3 else ''
+            print("\t%3d\t%.5f\t%s\t%s\t%s\t" % (oix, sim, qas[oix][1], qas[oix][2], gold), file=out)
         print(file=out)
     if path != '-':
-        close(out)
+        out.close()
 
-def sim_score_save(qas, path="simlists.tsv", sim_func=cosine_sim_qas_2, max_count=7, min_sim_val=0.15):
+def sim_score_save(qas, path="simlists.tsv", sim_func=cosine_sim_qas_2, max_count=6, min_sim_val=0.15):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''
-    most_sim_lists = list_most_sim_qas_list_verbose(qas,  similarity_func=sim_func, 
+    beg_time = time.time()
+    most_sim_lists = list_most_sim_qas_list_verbose(qas,  similarity_func=sim_func,
             exclude_self=True, max_count=max_count, min_sim_val=min_sim_val, q_weight=0.8)
     score = score_most_sim_lists(qas, most_sim_lists)
     save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, max_count=max_count, min_sim_val=min_sim_val)
+    seconds = time.time() - beg_time
+    print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (len(qas), max_count,
+        seconds, score))
+    return score

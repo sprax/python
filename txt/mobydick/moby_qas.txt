@@ -40,7 +40,7 @@
 39	What covers Queequeg's skin?	Tattoos	153
 40	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head	59
 41	What does Ahab carry in his pocket?	Vial of Nantucket sand	103
-42	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin	106 106	0.37491	When Ahab insists on climbing the mast to be the first to see Moby Dick, what happens to his hat?	A hawk steals it	
+42	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin	106	0.37491	When Ahab insists on climbing the mast to be the first to see Moby Dick, what happens to his hat?	A hawk steals it	
 43	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon	42	0.26050	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin	106
 44	What does Ahab recognize as the "first hearse" of Fedallah's prophecy?	Fedallah lashed to Moby Dick	47	0.33610	What does Fedallah prophesize will kill Captain Ahab?	Hemp	
 45	What does Ahab see when he studies the gold doubloon nailed to the mast?	Himself	42	0.26050	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin	106
@@ -58,6 +58,7 @@
 57	What does Queequeg do when the bumpkin that was mocking him falls into the ocean?	Dives in after him	
 58	What does the Delight drop into the water as the Pequod passes by?	A dead body	
 59	What does the crew look for to indicate the presence of a whale?	Spouts	48	0.24479	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirt-spout	
+60	Which two characters consider shooting each the other with guns?	Ahab and Starbuck
 61	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt	186	Who wears a whale-penis pelt while slicing pieces of blubber for the pots?	The mincer
 62	What does the scar on Ahab's cheek resemble?	A lightning bolt	192	Where is Ahab's scar that resembles a lightning bolt?	On Ahab's cheek
 63	What experience catalyzed Pip and Ahab's close companionship?	Pip's near-drowning	9	0.34064	Because Pip's insane rantings move Ahab, Ahab gives Pip what?	The captain's quarters	63
@@ -67,7 +68,7 @@
 67	What is Ahab's single fatal flaw?	Hubris	89	0.60297	What is the source of Ahab's fatal flaw?	The damage he's suffered	
 68	What is Captain Ahab's artificial leg made of?	Ivory	13	0.41121	From what is Ahab's false leg made?	A whale's jawbone	68
 69	What is Fedallah's turban made of?	His own hair	27	1.00000	Out of what is Fedallah's turban made?	His hair	69
-70	What is Flask's nickname?	King-Post	144 0.57974	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard	70
+70	What is Flask's nickname?	King-Post	144	0.57974	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard	70
 71	What is Ishmael constantly trying to pin down throughout the novel?	The essence of whales	147	0.33518	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	
 72	What is a "gam"?	A social meeting of two, or more, whaling ships at sea	184	What is it called when two or more whale ships meet at sea?	  A "gam"
 73	What is a "specksynder"?	Chief Harpooner	34
@@ -179,12 +180,12 @@
 179	With what is the Pequod adorned?	Sperm whale teeth	18
 180	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg	22
 181	What happened when the Pequod neared Sunda? ?	Malaysian Pirates scared them away from the hunting grounds.	176	0.31017	Why is the Pequod unable to pursue the "Grand Armada" of sperm whales that they encounter near Sunda?	Malaysian Pirates appear	182
-182	What do whales eat?	Plankton and other brit.  66	What is "brit"?	Tiny sea creatures that whales eat
-183	How dangerous is whaling?	Whaling was one of the most dangerous occupations of the 19th century 52	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will	
+182	What do whales eat?	Plankton and other brit		66	What is "brit"?	Tiny sea creatures that whales eat
+183	How dangerous is whaling?	Whaling was one of the most dangerous occupations of the 19th century	52	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will	
 184	What is it called when two or more whale ships meet at sea?	  A "gam"	72	What is a "gam"?	A social meeting of two, or more, whaling ships at sea	
 185	Who warns Ishmael of Captain Ahab as 'Old Thunder'?	Elijah	141	Who is Elijah?	Shabbily dressed street prophet in New Bedford; warns of Captain Ahab as 'Old Thunder'	
-186	Who wears a whale-penis pelt while slicing pieces of blubber for the pots?	The mincer 61	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt	
-187	What is the world capital of whaling?	Nantucket 171	Why does Ishmael claim that Nantucket has the largest empire in the world?	It owns the seas	
+186	Who wears a whale-penis pelt while slicing pieces of blubber for the pots?	The mincer	61	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt	
+187	What is the world capital of whaling?	Nantucket	171	Why does Ishmael claim that Nantucket has the largest empire in the world?	It owns the seas	
 188	To whom did Melville dedicate Moby Dick?	Nathaniel Hawthorne	123	Which American literary figure, to whom Moby Dick was dedicated, influenced Melville's writing?	Nathaniel Hawthorne	
 189	What is the scientific study of whales called?	cetology?
 190	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	88	What is the ship that rescues Ishmael at the end of the novel?	Rachel	
@@ -193,8 +194,8 @@
 193	Who is the third mate?	Flask	85	What is the name of the Third Mate?	Flask	85	What is the name of the Third Mate?	Flask	193	Who is the third mate?	Flask
 194	What does Ishmail say about himself keeping watch?	He daydreams too much	173
 195	Who wears a turban made of his own hair?	Fedallah's		69
-196	What religion do Peleg, Bildad, and Starbuck share?	Quakerism	   
+196	What religion do Peleg, Bildad, and Starbuck share?	Quakerism	
 197	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	
 198	With what does Starbuck consider killing Ahab?	Musket
-199	Who are the Quakers in the story of Moby Dick?	Starbuck, Peleg, and Bildad
-200	What happened to the whaling ship called The Essex?r	It was attacked and sunk by a sperm whale, inspiring Melville's story
+199	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad
+200	What happened to the whaling ship called The Essex?	It was attacked and sunk by a sperm whale, inspiring Melville's story 
