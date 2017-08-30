@@ -69,16 +69,13 @@ def cosine_sim_qas(qas_obj_1, qas_obj_2, get_question=second, get_answer=third, 
     assert 0.0 < q_weight and q_weight <= 1.0
     if q_weight >= 1.0:
         return cosine_sim_txt(qas_obj_1, qas_obj_2, get_question, vectorizer)
-    # print("DBG CSQ:  Q(%s)  A(%s)" % (get_question(qas_obj_2), get_answer(qas_obj_2)))
-    tfidf = vectorizer.fit_transform([get_question(qas_obj_1), get_question(qas_obj_2)])
-    q_sim = ((tfidf * tfidf.T).A)[0, 1]
+    q_sim = cosine_sim_txt(qas_obj_1, qas_obj_2, get_question, vectorizer)
     if q_weight < 1.0:
         ans_1 = get_answer(qas_obj_1)
         ans_2 = get_answer(qas_obj_2)
         if ans_1 and ans_2:
             try:
-                tfidf = vectorizer.fit_transform([ans_1, ans_2])
-                a_sim = ((tfidf * tfidf.T).A)[0, 1]
+                a_sim = cosine_sim_txt(qas_obj_1, qas_obj_2, get_answer, vectorizer)
                 return (q_sim - a_sim) * q_weight - a_sim
             except ValueError as vex:
                 print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
@@ -173,20 +170,21 @@ def show_nearest_neighbors(texts, nearest_indexes=None, similarity_func=cosine_s
         print("  %3d.  T  %s\n  %3d.  O  %s\n" % (idx, txt, nearest_idx, nearest_txt))
 
 ###############################################################################
-def similarity_dict(similarity_func, all_texts, this_text, excludes=None, min_sim_val=0.0):
+def similarity_dict(qas, qas_obj_1, excludes=None, q_weight=1.0, vectorizer=VECTORIZER, min_sim_val=0.0):
     '''
     Returns a dict mapping all_texts' indexes to their similarity with this_text,
         provide their similarity value >= min_sim_val
         similarity_func:    function returning the similariy between two texts (as in sentences)
         min_sim_val:        similarity threshold
     '''
+
     if excludes == None:
         excludes = []
     sim_dict = {}
-    for idx, a_text in enumerate(all_texts):
+    for idx, qas_obj_2 in enumerate(qas):
         if idx in excludes:
             continue
-        sim = similarity_func(this_text, a_text)
+        sim = cosine_sim_qas(qas_obj_1, qas_obj_2, q_weight=q_weight, vectorizer=vectorizer)
         if  sim > min_sim_val:
             sim_dict[idx] = sim
     return  sim_dict
@@ -203,7 +201,7 @@ def nlargest_values(dict_with_comparable_values, count=10):
     '''Returns a list of the greatest values in descending order.  Duplicates permitted.'''
     return heapq.nlargest(count, dict_with_comparable_values.values())
 
-def most_similar_items_list(similarity_func, all_texts, this_text, excludes=None, max_count=5, min_sim_val=0.0):
+def most_similar_items_list(all_texts, this_text, excludes=None, q_weight=1.0, vectorizer=VECTORIZER, max_count=5, min_sim_val=0.0):
     '''
     Find the N most similar texts to this_text and return a list of (index, similarity) pairs in
     descending order of similarity.
@@ -212,36 +210,38 @@ def most_similar_items_list(similarity_func, all_texts, this_text, excludes=None
         max_count           maximum size of returned dict
         max_sim_val:        the initial value of max, or the maximum similariy found so far.
     '''
-    sim_dict = similarity_dict(similarity_func, all_texts, this_text, excludes, min_sim_val)
+    sim_dict = similarity_dict(all_texts, this_text, excludes, q_weight=q_weight, vectorizer=vectorizer, min_sim_val=min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
-def list_most_sim_texts_list(texts, similarity_func=cosine_sim_txt, exclude_self=True, max_count=5, min_sim_val=0.0):
+def list_most_sim_texts_list(texts, q_weight=1.0, vectorizer=VECTORIZER, exclude_self=True, max_count=5, min_sim_val=0.0):
     '''
     For each text in texts, find a list of indexes of the most similar texts.
     Returns list of lists of items as in: [[(index, similariy), ...], ...]
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
     '''
+
+    # similarity_func=cosine_sim_txt
     if exclude_self:
         nearests = len(texts)*[None]
         for idx, txt in enumerate(texts):
             # print("DBG LMSTL: ", txt)
-            nearests[idx] = most_similar_items_list(similarity_func, texts, txt, [idx], max_count, min_sim_val)
+            nearests[idx] = most_similar_items_list(texts, txt, [idx], q_weight=q_weight,
+                vectorizer=vectorizer, max_count=max_count, min_sim_val=min_sim_val)
         return nearests
-    return [most_similar_items_list(similarity_func, texts, txt, None, max_count, min_sim_val) for txt in texts]
+    return [most_similar_items_list(texts, txt, None, q_weight, vectorizer,
+        max_count, min_sim_val) for txt in texts]
 
-def list_most_sim_texts_list_verbose(texts, similarity_func=cosine_sim_txt,
-        exclude_self=True, max_count=5, min_sim_val=0.2):
+def list_most_sim_qas_list_verbose(qas, q_weight=1.0, vectorizer=VECTORIZER, exclude_self=True,
+        max_count=6, min_sim_val=0.15):
+    '''
+    Returns list of most similar lists.  For each object in qas, compute the similarity with all
+    (other) objects in qas, and save at most max_count indices and similarity measures in descending
+    order of similarity, where similiary >= min_sim_val.  If exclude_self is false, compare each object
+    with itself as well as the others (sanity check)
+    '''
     beg_time = time.time()
-    most_sim_texts_list = list_most_sim_texts_list(texts, similarity_func, exclude_self, max_count, min_sim_val)
-    seconds = time.time() - beg_time
-    print("list_most_sim_texts_list(size=%d, count=%d) took %.1f seconds" % (len(texts), max_count, seconds))
-    return most_sim_texts_list
-
-def list_most_sim_qas_list_verbose(qas, similarity_func=cosine_sim_qas_2,
-        exclude_self=True, max_count=6, min_sim_val=0.15, q_weight=0.8):
-    beg_time = time.time()
-    most_sim_list = list_most_sim_texts_list(qas, similarity_func, exclude_self, max_count, min_sim_val)
+    most_sim_list = list_most_sim_texts_list(qas, q_weight, vectorizer, exclude_self, max_count, min_sim_val)
     seconds = time.time() - beg_time
     print("list_most_sim_qas_list(size=%d, count=%d) took %.1f seconds" % (len(qas), max_count, seconds))
     return most_sim_list
@@ -255,21 +255,6 @@ def show_most_sim_texts_list(texts, most_sim_lists=None, similarity_func=cosine_
         for oix, sim in most_sim_list:
             print("        %3d   %.5f   %s" % (oix, sim, texts[oix]))
         print()
-    return most_sim_lists
-
-def save_most_sim_lists_tsv(texts, qas, path, most_sim_lists=None, exclude_self=True, max_count=6,
-    min_sim_val = 0.0):
-    if most_sim_lists is None:
-        most_sim_lists = list_most_sim_texts_list(texts, exclude_self=exclude_self,
-            max_count=max_count, min_sim_val=min_sim_val)
-    with open(path, "w") as out:
-        for idx, txt in enumerate(texts):
-            most_sim_list = most_sim_lists[idx]
-            assert txt == qas[idx][0]
-            print(idx, txt, qas[idx][1], qas[idx][2], sep="\t", file=out)
-            for oix, sim in most_sim_list:
-                print("\t%d\t%.5f\t%s\t%s\t%s" % (oix, sim, texts[oix], qas[oix][1], str(qas[oix][2])), file=out)
-            print(file=out)
     return most_sim_lists
 
 def distance_counts(qas, most_sim_lists, max_dist):
@@ -331,13 +316,13 @@ def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=0.15):
     if path != '-':
         out.close()
 
-def sim_score_save(qas, path="simlists.tsv", sim_func=cosine_sim_qas_2, max_count=6, min_sim_val=0.15):
+def sim_score_save(qas, path="simlists.tsv", q_weight=1.0, vectorizer=VECT_MOST_STOPS, max_count=6, min_sim_val=0.15):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''
     beg_time = time.time()
-    most_sim_lists = list_most_sim_qas_list_verbose(qas,  similarity_func=sim_func,
-            exclude_self=True, max_count=max_count, min_sim_val=min_sim_val, q_weight=0.8)
+    most_sim_lists = list_most_sim_qas_list_verbose(qas, exclude_self=True, q_weight=q_weight,
+        vectorizer=vectorizer, max_count=max_count, min_sim_val=min_sim_val)
     score = score_most_sim_lists(qas, most_sim_lists)
     save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=min_sim_val)
     seconds = time.time() - beg_time

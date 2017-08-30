@@ -415,7 +415,6 @@ class EmoTrans:
         word = match_obj.group()
         return self.emojize_word(word, space)
 
-
     def emojize_sentence_beg_mid_end(self, sentence, mid_translator, space=' '):
         ''' Segment sentence into beg, mid, and end, translate each, then recombine, where:
             beg = chars before any words
@@ -442,7 +441,8 @@ class EmoTrans:
     def emojize_text_subs(self, text, space=' '):
         '''
         Translate text word by word to emojis, where possible, using regex substitution.
-        Intenting text to be the body of a sentence: the part between any leading or trailing punctuation.
+        By design, text is to be the body of a sentence: the part between any leading or
+        trailing punctuation.
         '''
         emojize_match_bound = partial(self.emojize_match, space=space)
 
