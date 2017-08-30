@@ -316,7 +316,10 @@ def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=0.15):
     if path != '-':
         out.close()
 
-def sim_score_save(qas, path="simlists.tsv", q_weight=1.0, vectorizer=VECT_MOST_STOPS, max_count=6, min_sim_val=0.15):
+# VECTORIZER (default):                  (size=201, count=6) took 96.1 seconds; score 0.8583
+# VECT_MOST_STOPS (DEFAULT-QUERY_WORDS): (size=201, count=6) took 96.3 seconds; score 0.6635
+# TODO: Why do the query words make the score worse?
+def sim_score_save(qas, path="simlists.tsv", q_weight=1.0, vectorizer=VECTORIZER, max_count=6, min_sim_val=0.15):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''
