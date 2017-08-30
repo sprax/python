@@ -21,6 +21,7 @@ def normalize(text, translation=TRANS_NO_PUNCT):
     return stem_tokens(nltk.word_tokenize(text.translate(TRANS_NO_PUNCT).lower()))
 
 VECTORIZER = TfidfVectorizer(tokenizer=normalize, stop_words='english')
+VECT_NO_STOPS = TfidfVectorizer(tokenizer=normalize)
 
 STOP_WORDS = nltk.corpus.stopwords.words('english')
 
@@ -77,9 +78,10 @@ def cosine_sim_qas(qas_obj_1, qas_obj_2, get_question=second, get_answer=third, 
                 print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
     return q_sim
 
-
-def cosine_sim_qas_2(qas_obj_1, qas_obj_2, get_question=second, get_answer=third, q_weight=0.5, vectorizer=VECTORIZER):
-    '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
+def cosine_sim_qas_2(qas_obj_1, qas_obj_2, get_question=second, get_answer=third,
+        q_weight=0.5, vectorizer=VECT_NO_STOPS):
+    '''dot-product (projection) similarity combining similarities of questions
+    and, if available, answers'''
     assert 0.0 < q_weight and q_weight <= 1.0
     if q_weight >= 1.0:
         print("Degenerate q_weight: ", q_weight)
@@ -114,6 +116,7 @@ def smoke_test():
 
 
 def nearest_known(similarity_func, saved_texts, threshold, input_text):
+    '''find text in saved_texts most similar to input_text, if similarity >= threshold'''
     idx, sim = nearest_other_idx(similarity_func, saved_texts, input_text, threshold)
     if idx < 0:
         print("No saved text found more similar than %f" % threshold)
@@ -303,15 +306,16 @@ def score_most_sim_lists(qas, most_sim_lists, weights=None):
     dist_counts = distance_counts(qas, most_sim_lists, len(weights))
     return score_distance_counts(dist_counts, weights)
 
-def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists):
+def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=0.15):
     out = text_fio.open_out_file(path)
     for idx, lst in enumerate(qas):
         most_sim_list = most_sim_lists[idx]
         gold = lst[3] if len(lst) > 3 else ''
         print(idx, lst[1], lst[2], gold, sep="\t", file=out)
         for oix, sim in most_sim_list:
-            gold = qas[oix][3] if len(qas[oix]) > 3 else ''
-            print("\t%3d\t%.5f\t%s\t%s\t%s\t" % (oix, sim, qas[oix][1], qas[oix][2], gold), file=out)
+            if sim >= min_sim_val:
+                gold = qas[oix][3] if len(qas[oix]) > 3 else ''
+                print("\t%3d\t%.5f\t%s\t%s\t%s\t" % (oix, sim, qas[oix][1], qas[oix][2], gold), file=out)
         print(file=out)
     if path != '-':
         out.close()
@@ -324,7 +328,7 @@ def sim_score_save(qas, path="simlists.tsv", sim_func=cosine_sim_qas_2, max_coun
     most_sim_lists = list_most_sim_qas_list_verbose(qas,  similarity_func=sim_func,
             exclude_self=True, max_count=max_count, min_sim_val=min_sim_val, q_weight=0.8)
     score = score_most_sim_lists(qas, most_sim_lists)
-    save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, max_count=max_count, min_sim_val=min_sim_val)
+    save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=min_sim_val)
     seconds = time.time() - beg_time
     print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (len(qas), max_count,
         seconds, score))
