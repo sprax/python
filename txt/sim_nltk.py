@@ -11,6 +11,11 @@ import text_fio
 
 STEMMER = nltk.stem.porter.PorterStemmer()
 TRANS_NO_PUNCT = str.maketrans('', '', string.punctuation)
+STOP_WORDS = nltk.corpus.stopwords.words('english')
+
+# Most question words can also be used in qualifiers.  It's not the word, but the useage we want.
+QUERY_WORDS = ['how', 'what', 'when', 'where', 'who', 'why']
+MOST_STOPS = [word for word in STOP_WORDS if word not in QUERY_WORDS]
 
 def stem_tokens(tokens, stemmer=STEMMER):
     '''list of stems, one per input tokens'''
@@ -22,8 +27,9 @@ def normalize(text, translation=TRANS_NO_PUNCT):
 
 VECTORIZER = TfidfVectorizer(tokenizer=normalize, stop_words='english')
 VECT_NO_STOPS = TfidfVectorizer(tokenizer=normalize)
+VECT_MOST_STOPS = TfidfVectorizer(tokenizer=normalize, stop_words=MOST_STOPS)
 
-STOP_WORDS = nltk.corpus.stopwords.words('english')
+
 
 def remove_stop_words(tokens, stop_words=STOP_WORDS):
     return [tok for tok in tokens if tok not in stop_words]
@@ -99,6 +105,11 @@ def cosine_sim_qas_2(qas_obj_1, qas_obj_2, get_question=second, get_answer=third
     except ValueError as vex:
         print("Error, probably on answers (%s|%s): %s" % (ans_1, ans_2, vex))
     return 0.0
+
+def cosine_sim_qas_ms(qas_obj_1, qas_obj_2, get_question=second, get_answer=third,
+        q_weight=0.5, vectorizer=VECT_MOST_STOPS):
+    return cosine_sim_qas_2(qas_obj_1, qas_obj_2, get_question, get_answer,
+        q_weight, vectorizer)
 
 
 def smoke_test():
