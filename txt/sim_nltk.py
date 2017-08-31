@@ -275,11 +275,16 @@ def distance_counts(qas, most_sim_lists, max_dist):
                 print("ERROR on: ", qa, ex)
                 continue
             gold_scored += 1
+            ms = sim_list[0]
+            msi = ms[0]
+            sim = ms[1]
+            print("DBG_F: Q_%d <==> Q_%d (%s <==> %s) first, %.4f (%s : %s)" % (int(qa[0]), msi, qa[1],
+                  qas[msi][1], sim, remove_stop_words(normalize(qa[1])), remove_stop_words(normalize(qas[msi][1]))))
             for idx, item in enumerate(sim_list):
                 # print("DC: %d  item(%d, %f)" % (idx, item[0], item[1]))
                 if gold == item[0]:
-                    print("DBG_DC: Q_%d <==> Q_%d (%s <==> %s) %.4f (%s : %s)" % (int(qa[0]), item[0], qa[1], qas[item[0]][1],
-                    item[1], remove_stop_words(normalize(qa[1])), remove_stop_words(normalize(qas[item[0]][1]))))
+                    print("DBG_G: Q_%d <==> Q_%d (%s <==> %s) at %d, %.4f (%s : %s)\n" % (int(qa[0]), item[0], qa[1], qas[item[0]][1],
+                          idx, item[1], remove_stop_words(normalize(qa[1])), remove_stop_words(normalize(qas[item[0]][1]))))
                     dist_counts[idx] += 1
                     break
     # save the number of gold standard matches as the last count in the list
@@ -291,11 +296,15 @@ def score_distance_counts(dist_counts, weights):
     assert len(weights) > 0 and weights[0] == 1.0
     assert len(weights) < len(dist_counts)
     gold_scored = dist_counts[-1]
+    # print("DBG SDC DCS:", dist_counts)
+    # print("DBG SDC WTS:", weights)
     assert gold_scored > 0
     score = dist_counts[0]                  # number of exact matches
-    for idx, weight in enumerate(weights, 1):
+    for idx, weight in enumerate(weights[1:], 1):
         assert weight <= weights[idx - 1]
+        # print("DBG SDC LOOP:", idx, dist_counts[idx])
         score += weight * dist_counts[idx]
+    # print("DBG_SDC: score(%.4f) / %d == %f" % (score, gold_scored, score/gold_scored))
     return score / gold_scored
 
 def score_most_sim_lists(qas, most_sim_lists, weights=None):
