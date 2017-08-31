@@ -1,0 +1,6 @@
+0	How is that actually fair?!	It's isn't.	5
+1	What is truly fair?!	Life's not fair.	4
+2	When for sure is the fair?	It's never certain.	3
+3	Where actually is the fair?	Nobody knows.	2
+4	Who really is fair?	No one, really.	1
+5	Why is that certainly fair?	It's not certain.	0
