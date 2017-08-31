@@ -213,7 +213,7 @@ def most_similar_items_list(all_texts, this_text, excludes=None, q_weight=1.0, v
     sim_dict = similarity_dict(all_texts, this_text, excludes, q_weight=q_weight, vectorizer=vectorizer, min_sim_val=min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
-def list_most_sim_texts_list(texts, q_weight=1.0, vectorizer=VECTORIZER, exclude_self=True, max_count=5, min_sim_val=0.0):
+def list_most_sim_qas_list(texts, q_weight=1.0, vectorizer=VECTORIZER, exclude_self=True, max_count=5, min_sim_val=0.0):
     '''
     For each text in texts, find a list of indexes of the most similar texts.
     Returns list of lists of items as in: [[(index, similariy), ...], ...]
@@ -241,7 +241,7 @@ def list_most_sim_qas_list_verbose(qas, q_weight=1.0, vectorizer=VECTORIZER, exc
     with itself as well as the others (sanity check)
     '''
     beg_time = time.time()
-    most_sim_list = list_most_sim_texts_list(qas, q_weight, vectorizer, exclude_self, max_count, min_sim_val)
+    most_sim_list = list_most_sim_qas_list(qas, q_weight, vectorizer, exclude_self, max_count, min_sim_val)
     seconds = time.time() - beg_time
     print("list_most_sim_qas_list(size=%d, count=%d) took %.1f seconds" % (len(qas), max_count, seconds))
     return most_sim_list
