@@ -1,42 +1,42 @@
 0	How is that actually fair?!	It's isn't.	5
-	  3	0.50310	Where actually is the fair?	Nobody knows.	2	
-	  1	0.20199	What is truly fair?!	Life's not fair.	4	
-	  2	0.20199	When for sure is the fair?	It's never certain.	3	
-	  4	0.20199	Who really is fair?	No one, really.	1	
-	  5	0.20199	Why is that certainly fair?	It's not certain.	0	
+	  3	1.00000	Where actually is the fair?	Nobody knows.	2	
+	  1	0.33610	What is truly fair?!	Life's not fair.	4	
+	  2	0.33610	When for sure is the fair?	It's never certain.	3	
+	  4	0.33610	Who really is fair?	No one, really.	1	
+	  5	0.26056	Why is that certainly fair?	It's not certain.	0	
 
 1	What is truly fair?!	Life's not fair.	4
-	  0	0.20199	How is that actually fair?!	It's isn't.	5	
-	  2	0.20199	When for sure is the fair?	It's never certain.	3	
-	  3	0.20199	Where actually is the fair?	Nobody knows.	2	
-	  4	0.20199	Who really is fair?	No one, really.	1	
-	  5	0.20199	Why is that certainly fair?	It's not certain.	0	
+	  0	0.33610	How is that actually fair?!	It's isn't.	5	
+	  2	0.33610	When for sure is the fair?	It's never certain.	3	
+	  3	0.33610	Where actually is the fair?	Nobody knows.	2	
+	  4	0.33610	Who really is fair?	No one, really.	1	
+	  5	0.26056	Why is that certainly fair?	It's not certain.	0	
 
 2	When for sure is the fair?	It's never certain.	3
-	  0	0.20199	How is that actually fair?!	It's isn't.	5	
-	  1	0.20199	What is truly fair?!	Life's not fair.	4	
-	  3	0.20199	Where actually is the fair?	Nobody knows.	2	
-	  4	0.20199	Who really is fair?	No one, really.	1	
-	  5	0.20199	Why is that certainly fair?	It's not certain.	0	
+	  0	0.33610	How is that actually fair?!	It's isn't.	5	
+	  1	0.33610	What is truly fair?!	Life's not fair.	4	
+	  3	0.33610	Where actually is the fair?	Nobody knows.	2	
+	  4	0.33610	Who really is fair?	No one, really.	1	
+	  5	0.26056	Why is that certainly fair?	It's not certain.	0	
 
 3	Where actually is the fair?	Nobody knows.	2
-	  0	0.50310	How is that actually fair?!	It's isn't.	5	
-	  1	0.20199	What is truly fair?!	Life's not fair.	4	
-	  2	0.20199	When for sure is the fair?	It's never certain.	3	
-	  4	0.20199	Who really is fair?	No one, really.	1	
-	  5	0.20199	Why is that certainly fair?	It's not certain.	0	
+	  0	1.00000	How is that actually fair?!	It's isn't.	5	
+	  1	0.33610	What is truly fair?!	Life's not fair.	4	
+	  2	0.33610	When for sure is the fair?	It's never certain.	3	
+	  4	0.33610	Who really is fair?	No one, really.	1	
+	  5	0.26056	Why is that certainly fair?	It's not certain.	0	
 
 4	Who really is fair?	No one, really.	1
-	  0	0.20199	How is that actually fair?!	It's isn't.	5	
-	  1	0.20199	What is truly fair?!	Life's not fair.	4	
-	  2	0.20199	When for sure is the fair?	It's never certain.	3	
-	  3	0.20199	Where actually is the fair?	Nobody knows.	2	
-	  5	0.20199	Why is that certainly fair?	It's not certain.	0	
+	  0	0.33610	How is that actually fair?!	It's isn't.	5	
+	  1	0.33610	What is truly fair?!	Life's not fair.	4	
+	  2	0.33610	When for sure is the fair?	It's never certain.	3	
+	  3	0.33610	Where actually is the fair?	Nobody knows.	2	
+	  5	0.26056	Why is that certainly fair?	It's not certain.	0	
 
 5	Why is that certainly fair?	It's not certain.	0
-	  0	0.20199	How is that actually fair?!	It's isn't.	5	
-	  1	0.20199	What is truly fair?!	Life's not fair.	4	
-	  2	0.20199	When for sure is the fair?	It's never certain.	3	
-	  3	0.20199	Where actually is the fair?	Nobody knows.	2	
-	  4	0.20199	Who really is fair?	No one, really.	1	
+	  0	0.26056	How is that actually fair?!	It's isn't.	5	
+	  1	0.26056	What is truly fair?!	Life's not fair.	4	
+	  2	0.26056	When for sure is the fair?	It's never certain.	3	
+	  3	0.26056	Where actually is the fair?	Nobody knows.	2	
+	  4	0.26056	Who really is fair?	No one, really.	1	
 

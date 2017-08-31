@@ -278,6 +278,8 @@ def distance_counts(qas, most_sim_lists, max_dist):
             for idx, item in enumerate(sim_list):
                 # print("DC: %d  item(%d, %f)" % (idx, item[0], item[1]))
                 if gold == item[0]:
+                    print("DBG_DC: Q_%d <==> Q_%d (%s <==> %s) %.4f (%s : %s)" % (int(qa[0]), item[0], qa[1], qas[item[0]][1],
+                    item[1], remove_stop_words(normalize(qa[1])), remove_stop_words(normalize(qas[item[0]][1]))))
                     dist_counts[idx] += 1
                     break
     # save the number of gold standard matches as the last count in the list
