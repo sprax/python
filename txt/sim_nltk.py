@@ -14,7 +14,7 @@ TRANS_NO_PUNCT = str.maketrans('', '', string.punctuation)
 STOP_WORDS = nltk.corpus.stopwords.words('english')
 
 # Most question words can also be used in qualifiers.  It's not the word, but the useage we want.
-QUERY_WORDS = ['how', 'what', 'when', 'where', 'who', 'why']
+QUERY_WORDS = ['how', 'what', 'when', 'where', 'which', 'who', 'why']
 MOST_STOPS = [word for word in STOP_WORDS if word not in QUERY_WORDS]
 
 def stem_tokens(tokens, stemmer=STEMMER):
@@ -308,12 +308,14 @@ def score_distance_counts(dist_counts, weights):
     return score / gold_scored
 
 def score_most_sim_lists(qas, most_sim_lists, weights=None):
+    '''Sum up gold-standard accuracy score'''
     if weights == None:
         weights = [1.0, 0.8, 0.6, 0.4, 0.2, 0.1]
     dist_counts = distance_counts(qas, most_sim_lists, len(weights))
     return score_distance_counts(dist_counts, weights)
 
 def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=0.15):
+    '''Save ranked most-similar lists to TSV file'''
     out = text_fio.open_out_file(path)
     for idx, lst in enumerate(qas):
         most_sim_list = most_sim_lists[idx]

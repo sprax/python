@@ -21,7 +21,9 @@ Hierarchy:
     Paragraph
       Sentence
         Statement
+          features include: what kind of question it may answer.
         Question
           Query (factual, 3rd person)
-            Are/Is, How, What, When, Where, Which, Who, Why
+            features:
+              kind of question: Are/Is, How, What, When, Where, Which, Who, Why
           Request/Command/exhortation (2nd person, explicit or implied)
