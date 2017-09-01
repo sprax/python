@@ -2,7 +2,6 @@
 TODO:
 ML/DL for human-readable, human-compiler-like index
 
-timeit dict
 
 SOV paraphrasis
 
@@ -16,3 +15,13 @@ Sentence Similarity:
     Pariphrasis
     Word2Vec
     *Grammar
+
+Hierarchy:
+  Text
+    Paragraph
+      Sentence
+        Statement
+        Question
+          Query (factual, 3rd person)
+            Are/Is, How, What, When, Where, Which, Who, Why
+          Request/Command/exhortation (2nd person, explicit or implied)
