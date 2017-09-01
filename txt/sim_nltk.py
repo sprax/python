@@ -275,16 +275,16 @@ def distance_counts(qas, most_sim_lists, max_dist):
                 print("ERROR on: ", qa, ex)
                 continue
             gold_scored += 1
-            ms = sim_list[0]
-            msi = ms[0]
-            sim = ms[1]
-            print("DBG_F: Q_%d <==> Q_%d (%s <==> %s) first, %.4f (%s : %s)" % (int(qa[0]), msi, qa[1],
-                  qas[msi][1], sim, remove_stop_words(normalize(qa[1])), remove_stop_words(normalize(qas[msi][1]))))
+            # ms = sim_list[0]
+            # msi = ms[0]
+            # sim = ms[1]
+            # print("DBG_F: Q_%d <==> Q_%d (%s <==> %s) first, %.4f (%s : %s)" % (int(qa[0]), msi, qa[1],
+            #       qas[msi][1], sim, remove_stop_words(normalize(qa[1])), remove_stop_words(normalize(qas[msi][1]))))
             for idx, item in enumerate(sim_list):
                 # print("DC: %d  item(%d, %f)" % (idx, item[0], item[1]))
                 if gold == item[0]:
-                    print("DBG_G: Q_%d <==> Q_%d (%s <==> %s) at %d, %.4f (%s : %s)\n" % (int(qa[0]), item[0], qa[1], qas[item[0]][1],
-                          idx, item[1], remove_stop_words(normalize(qa[1])), remove_stop_words(normalize(qas[item[0]][1]))))
+                    # print("DBG_G: Q_%d <==> Q_%d (%s <==> %s) at %d, %.4f (%s : %s)\n" % (int(qa[0]), item[0], qa[1], qas[item[0]][1],
+                    #       idx, item[1], remove_stop_words(normalize(qa[1])), remove_stop_words(normalize(qas[item[0]][1]))))
                     dist_counts[idx] += 1
                     break
     # save the number of gold standard matches as the last count in the list
