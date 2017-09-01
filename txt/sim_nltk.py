@@ -178,7 +178,7 @@ def similarity_dict(qas, qas_obj_1, excludes=None, q_weight=1.0, vectorizer=VECT
         min_sim_val:        similarity threshold
     '''
 
-    if excludes == None:
+    if excludes is None:
         excludes = []
     sim_dict = {}
     for idx, qas_obj_2 in enumerate(qas):
@@ -309,7 +309,7 @@ def score_distance_counts(dist_counts, weights):
 
 def score_most_sim_lists(qas, most_sim_lists, weights=None):
     '''Sum up gold-standard accuracy score'''
-    if weights == None:
+    if weights is None:
         weights = [1.0, 0.8, 0.6, 0.4, 0.2, 0.1]
     dist_counts = distance_counts(qas, most_sim_lists, len(weights))
     return score_distance_counts(dist_counts, weights)
