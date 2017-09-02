@@ -216,8 +216,8 @@ def test_sentence_distance(word2vec, vocab, sent_1="This is a sentence.",
     toks_2 = word_tokens(vocab, sent_2)
     print("word_tokens({}) == {}".format(sent_1, toks_1))
     print("word_tokens({}) == {}".format(sent_2, toks_2))
-    dist12 = sum_tokens_distance(word2vec, vocab, sent_1, sent_2)
-    print("sum_tokens_distance => ", dist12)
+    sim_1_2 = sum_tokens_similarity(word2vec, sent_1, sent_2)
+    print("sum_tokens_similarity => ", sim_1_2)
 
 def test_contractions(word2vec, verbose=True):
     t_do = ["do"]

@@ -146,6 +146,28 @@ def print_sentences(sentences, list_numbers, max_words, out_file):
         else:
             utf_print(sentence, outfile=out_file)
 
+###############################################################################
+def csv_read(path, newline=None, delimiter=',', quotechar='"'):
+    ''' Return a list of tuples read from a CSV file. '''
+    tuples = []
+    try:
+        with open(path, 'rt', newline=newline) as in_file:
+            reader = csv.reader(in_file, delimiter=delimiter, quotechar=quotechar)
+            for row in reader:
+                tuples.append(row)
+    except Exception as ex:
+        print("csv_read failed to read from ({}) with error: {}".format(path, ex))
+    return tuples
+
+def csv_write(tuples, path, newline=None, delimiter=',', quotechar='"'):
+    ''' Write a list of tuples to a CSV file. '''
+    try:
+        with open(path, "w", newline=newline) as csv_file:
+            writer = csv.writer(csv_file, delimiter=delimiter, quotechar=quotechar)
+            for tup in tuples:
+                writer.writerow(tup)
+    except Exception as ex:
+        print("csv_write_qa failed to write tuples to ({}) with error: {}".format(path, ex))
 
 ########################################################
 
