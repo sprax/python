@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 # -*- encoding: <utf-8> -*-
 # Sprax Lines from sujitpal@github      2017.08.31      Ported to Python 3.5
-# Python/NLTK implementation of algorithm to detect similarity between
-# short sentences described in the paper - "Sentence Similarity based
-# on Semantic Nets and Corpus Statistics" by Li, et al.
-# Results achieved are NOT identical to that reported in the paper, but
-# this is very likely due to the differences in the way the algorithm was
-# described in the paper and how I implemented it.
+'''
+sim_wosc_nltk.py - Semantic similarity of words, and word-order similarity of sentences
+using NLTK tools. (word-order + semantic content = wosc)
+Python/NLTK implementation of algorithm to detect similarity between
+short sentences described in the paper - "Sentence Similarity based
+on Semantic Nets and Corpus Statistics" by Li, et al.
+Results achieved are NOT identical to that reported in the paper, but
+this is very likely due to the differences in the way the algorithm was
+described in the paper and how I implemented it.
+'''
 from __future__ import division
 import nltk
 from nltk.corpus import wordnet as wn
