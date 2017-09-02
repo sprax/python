@@ -35,10 +35,10 @@ def get_best_synset_pair(word_1, word_2):
     synsets_2 = wn.synsets(word_2)
 
     if synsets_1 is None:
-        print("synset(%s) is None" % word_1)
+        # print("synset(%s) is None" % word_1)
         return None, None
     elif synsets_2 is None:
-        print("synset(%s) is None" % word_2)
+        # print("synset(%s) is None" % word_2)
         return None, None
     elif len(synsets_1) == 0 or len(synsets_2) == 0:
         return None, None
@@ -49,7 +49,7 @@ def get_best_synset_pair(word_1, word_2):
             for synset_2 in synsets_2:
                sim = wn.path_similarity(synset_1, synset_2)
                if sim is None:
-                   print("path_similarity from (%s, %s) is None" % (word_1, word_2))
+                   # print("path_similarity from (%s, %s) is None" % (word_1, word_2))
                    return None, None
                if sim > max_sim:
                    max_sim = sim
@@ -245,7 +245,7 @@ def word_order_similarity(sentence_1, sentence_2):
 
 ######################### overall similarity ##########################
 
-def similarity(sentence_1, sentence_2, info_content_norm):
+def sentence_similarity(sentence_1, sentence_2, info_content_norm):
     """
     Calculate the semantic similarity between two sentences. The last
     parameter is True or False depending on whether information content
@@ -312,7 +312,9 @@ sentence_pairs = [
     ["I have a hammer.", "Take some nails.", 0.508],
     ["I have a hammer.", "Take some apples.", 0.121]
 ]
+print("sentence_1 \t Sentence_2 \t Saved \t S-Similarity(F) \t S-Similarity(T)")
+print("---------- \t ---------- \t ----- \t --------------- \t ---------------")
 for sent_pair in sentence_pairs:
     print("%s\t%s\t%.3f\t%.3f\t%.3f" % (sent_pair[0], sent_pair[1], sent_pair[2],
-        similarity(sent_pair[0], sent_pair[1], False),
-        similarity(sent_pair[0], sent_pair[1], True)))
+        sentence_similarity(sent_pair[0], sent_pair[1], False),
+        sentence_similarity(sent_pair[0], sent_pair[1], True)))
