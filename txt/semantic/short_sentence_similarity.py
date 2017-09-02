@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- encoding: <utf-8> -*-
+# Sprax Lines from sujitpal@github      2017.08.31      Ported to Python 3.5
 # Python/NLTK implementation of algorithm to detect similarity between
 # short sentences described in the paper - "Sentence Similarity based
 # on Semantic Nets and Corpus Statistics" by Li, et al.
@@ -245,19 +248,20 @@ def word_order_similarity(sentence_1, sentence_2):
 
 ######################### overall similarity ##########################
 
-def sentence_similarity(sentence_1, sentence_2, info_content_norm):
+def sentence_similarity(sentence_1, sentence_2, info_content_norm, delta=DELTA):
     """
     Calculate the semantic similarity between two sentences. The last
     parameter is True or False depending on whether information content
     normalization is desired or not.
     """
-    return DELTA * semantic_similarity(sentence_1, sentence_2, info_content_norm) + \
-        (1.0 - DELTA) * word_order_similarity(sentence_1, sentence_2)
+    return delta * semantic_similarity(sentence_1, sentence_2, info_content_norm) + \
+        (1.0 - delta) * word_order_similarity(sentence_1, sentence_2)
 
 ######################### main / test ##########################
 
 # the results of the algorithm are largely dependent on the results of
 # the word similarities, so we should test this first...
+print("\n\t Word Similarity:")
 word_pairs = [
   ["asylum", "fruit", 0.21],
   ["autograph", "shore", 0.29],
@@ -290,10 +294,13 @@ word_pairs = [
   ["oracle", "sage", 0.43],
   ["serf", "slave", 0.39]
 ]
+print("W-Sim \t Paper \t word_1 \t word_2")
+print("----- \t ----- \t ------ \t ------")
 for word_pair in word_pairs:
-    print("%s\t%s\t%.2f\t%.2f" % (word_pair[0], word_pair[1], word_pair[2],
-                                  word_similarity(word_pair[0], word_pair[1])))
+    print(" %.2f \t %.2f \t %s %s %s" % (word_similarity(word_pair[0], word_pair[1]), word_pair[2],
+          word_pair[0], ' '*(14 - len(word_pair[0])), word_pair[1]))
 
+print("\n\t Sentence Similarity:")
 sentence_pairs = [
     ["I like that bachelor.", "I like that unmarried man.", 0.561],
     ["John is very nice.", "Is John very nice?", 0.977],
@@ -312,9 +319,11 @@ sentence_pairs = [
     ["I have a hammer.", "Take some nails.", 0.508],
     ["I have a hammer.", "Take some apples.", 0.121]
 ]
-print("Sim(F) \t Sim(T) \t Saved \t sentence_1 \t Sentence_2")
-print("------ \t ------ \t ----- \t ---------- \t ---------")
+spacing = 32
+spaces = ' '*(spacing - len('sentence_1'))
+print("Sim-F \t Sim-T \t Paper \t sentence_1 %s Sentence_2" % spaces)
+print("----- \t ----- \t ----- \t ---------- %s ----------" % spaces)
 for sent_pair in sentence_pairs:
-    print("%s\t%s\t%.3f\t%.3f\t%.3f" % (sentence_similarity(sent_pair[0], sent_pair[1], False),
-                                        sentence_similarity(sent_pair[0], sent_pair[1], True),
-                                        sent_pair[2], sent_pair[0], sent_pair[1]))
+    print("%.3f\t %.3f\t %.3f\t %s %s %s" % (sentence_similarity(sent_pair[0], sent_pair[1], False),
+          sentence_similarity(sent_pair[0], sent_pair[1], True),
+          sent_pair[2], sent_pair[0], ' '*(spacing - len(sent_pair[0])), sent_pair[1]))
