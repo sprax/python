@@ -312,9 +312,9 @@ sentence_pairs = [
     ["I have a hammer.", "Take some nails.", 0.508],
     ["I have a hammer.", "Take some apples.", 0.121]
 ]
-print("sentence_1 \t Sentence_2 \t Saved \t S-Similarity(F) \t S-Similarity(T)")
-print("---------- \t ---------- \t ----- \t --------------- \t ---------------")
+print("Sim(F) \t Sim(T) \t Saved \t sentence_1 \t Sentence_2")
+print("------ \t ------ \t ----- \t ---------- \t ---------")
 for sent_pair in sentence_pairs:
-    print("%s\t%s\t%.3f\t%.3f\t%.3f" % (sent_pair[0], sent_pair[1], sent_pair[2],
-        sentence_similarity(sent_pair[0], sent_pair[1], False),
-        sentence_similarity(sent_pair[0], sent_pair[1], True)))
+    print("%s\t%s\t%.3f\t%.3f\t%.3f" % (sentence_similarity(sent_pair[0], sent_pair[1], False),
+                                        sentence_similarity(sent_pair[0], sent_pair[1], True),
+                                        sent_pair[2], sent_pair[0], sent_pair[1]))
