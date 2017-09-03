@@ -1,0 +1,175 @@
+0	How is that actually fair?!	It's isn't.	5
+	 10	0.66653	How much is truly fair for that?	Whatever makes the market.	11	
+	  5	0.62120	Why is that certainly fair?	It's not certain.	0	
+	  3	0.61922	Where actually is the fair?	Nobody knows.	2	
+	  1	0.61823	What is truly fair?!	Life's not fair.	4	
+	  4	0.50691	Who really is fair?	No one, really.	1	
+	 13	0.49412	And what is a fair price for that?	Fair to whom, the producer or the consumer?	12	
+
+1	What is truly fair?!	Life's not fair.	4
+	  0	0.57860	How is that actually fair?!	It's isn't.	5	
+	 10	0.57498	How much is truly fair for that?	Whatever makes the market.	11	
+	 11	0.55184	What amount is honestly fair for this?	The labor value should equal the use-value.	10	
+	  9	0.54377	Who is truly the most fair of all?	The one with nothing to lose.	6	
+	  4	0.51948	Who really is fair?	No one, really.	1	
+	 18	0.50709	What is a 401k?	A kind of retirement savings account.	19	
+
+2	When for sure is the fair?	It's never certain.	3
+	  3	0.61119	Where actually is the fair?	Nobody knows.	2	
+	 10	0.53656	How much is truly fair for that?	Whatever makes the market.	11	
+	 11	0.52754	What amount is honestly fair for this?	The labor value should equal the use-value.	10	
+	 13	0.51043	And what is a fair price for that?	Fair to whom, the producer or the consumer?	12	
+	  4	0.50691	Who really is fair?	No one, really.	1	
+	  9	0.48235	Who is truly the most fair of all?	The one with nothing to lose.	6	
+
+3	Where actually is the fair?	Nobody knows.	2
+	  0	0.61922	How is that actually fair?!	It's isn't.	5	
+	  2	0.61119	When for sure is the fair?	It's never certain.	3	
+	  4	0.53891	Who really is fair?	No one, really.	1	
+	  9	0.53798	Who is truly the most fair of all?	The one with nothing to lose.	6	
+	  1	0.50739	What is truly fair?!	Life's not fair.	4	
+	  5	0.50686	Why is that certainly fair?	It's not certain.	0	
+
+4	Who really is fair?	No one, really.	1
+	  9	0.59872	Who is truly the most fair of all?	The one with nothing to lose.	6	
+	  1	0.54538	What is truly fair?!	Life's not fair.	4	
+	  5	0.54459	Why is that certainly fair?	It's not certain.	0	
+	  3	0.53891	Where actually is the fair?	Nobody knows.	2	
+	  0	0.50691	How is that actually fair?!	It's isn't.	5	
+	  2	0.50691	When for sure is the fair?	It's never certain.	3	
+
+5	Why is that certainly fair?	It's not certain.	0
+	  0	0.62120	How is that actually fair?!	It's isn't.	5	
+	 10	0.58370	How much is truly fair for that?	Whatever makes the market.	11	
+	 13	0.54462	And what is a fair price for that?	Fair to whom, the producer or the consumer?	12	
+	  4	0.54459	Who really is fair?	No one, really.	1	
+	  1	0.51410	What is truly fair?!	Life's not fair.	4	
+	  3	0.50686	Where actually is the fair?	Nobody knows.	2	
+
+6	Who is the fairest of them all?	Snow White.	9
+	  9	0.70087	Who is truly the most fair of all?	The one with nothing to lose.	6	
+	  8	0.61597	Which of them is the lightest one?	They're all the same.	7	
+	  7	0.60890	Which one is the whitest of all?	They are all white.	8	
+	  4	0.47190	Who really is fair?	No one, really.	1	
+	  3	0.42503	Where actually is the fair?	Nobody knows.	2	
+	  2	0.39840	When for sure is the fair?	It's never certain.	3	
+
+7	Which one is the whitest of all?	They are all white.	8
+	  8	0.74963	Which of them is the lightest one?	They're all the same.	7	
+	  6	0.60890	Who is the fairest of them all?	Snow White.	9	
+	  9	0.57635	Who is truly the most fair of all?	The one with nothing to lose.	6	
+	  3	0.42319	Where actually is the fair?	Nobody knows.	2	
+	  2	0.39589	When for sure is the fair?	It's never certain.	3	
+	 12	0.34882	But what is the just amount for that?	That's very hard to know.	13	
+
+8	Which of them is the lightest one?	They're all the same.	7
+	  7	0.73785	Which one is the whitest of all?	They are all white.	8	
+	  6	0.60535	Who is the fairest of them all?	Snow White.	9	
+	  9	0.46275	Who is truly the most fair of all?	The one with nothing to lose.	6	
+	  3	0.42169	Where actually is the fair?	Nobody knows.	2	
+	  2	0.39359	When for sure is the fair?	It's never certain.	3	
+	 12	0.34727	But what is the just amount for that?	That's very hard to know.	13	
+
+9	Who is truly the most fair of all?	The one with nothing to lose.	6
+	  6	0.67604	Who is the fairest of them all?	Snow White.	9	
+	  4	0.57024	Who really is fair?	No one, really.	1	
+	  1	0.54033	What is truly fair?!	Life's not fair.	4	
+	  7	0.52623	Which one is the whitest of all?	They are all white.	8	
+	  3	0.50575	Where actually is the fair?	Nobody knows.	2	
+	  2	0.48031	When for sure is the fair?	It's never certain.	3	
+
+10	How much is truly fair for that?	Whatever makes the market.	11
+	  0	0.63620	How is that actually fair?!	It's isn't.	5	
+	  1	0.57646	What is truly fair?!	Life's not fair.	4	
+	 13	0.55282	And what is a fair price for that?	Fair to whom, the producer or the consumer?	12	
+	  5	0.55184	Why is that certainly fair?	It's not certain.	0	
+	  2	0.50408	When for sure is the fair?	It's never certain.	3	
+	  9	0.47033	Who is truly the most fair of all?	The one with nothing to lose.	6	
+
+11	What amount is honestly fair for this?	The labor value should equal the use-value.	10
+	  2	0.52601	When for sure is the fair?	It's never certain.	3	
+	  1	0.52475	What is truly fair?!	Life's not fair.	4	
+	 10	0.49371	How much is truly fair for that?	Whatever makes the market.	11	
+	 13	0.48246	And what is a fair price for that?	Fair to whom, the producer or the consumer?	12	
+	 12	0.46028	But what is the just amount for that?	That's very hard to know.	13	
+	  4	0.45467	Who really is fair?	No one, really.	1	
+
+12	But what is the just amount for that?	That's very hard to know.	13
+	 13	0.56909	And what is a fair price for that?	Fair to whom, the producer or the consumer?	12	
+	  2	0.48573	When for sure is the fair?	It's never certain.	3	
+	 11	0.46132	What amount is honestly fair for this?	The labor value should equal the use-value.	10	
+	 10	0.46111	How much is truly fair for that?	Whatever makes the market.	11	
+	  5	0.42927	Why is that certainly fair?	It's not certain.	0	
+	  3	0.39984	Where actually is the fair?	Nobody knows.	2	
+
+13	And what is a fair price for that?	Fair to whom, the producer or the consumer?	12
+	 10	0.58272	How much is truly fair for that?	Whatever makes the market.	11	
+	 12	0.57278	But what is the just amount for that?	That's very hard to know.	13	
+	  5	0.54490	Why is that certainly fair?	It's not certain.	0	
+	  0	0.50827	How is that actually fair?!	It's isn't.	5	
+	  2	0.50225	When for sure is the fair?	It's never certain.	3	
+	 11	0.48406	What amount is honestly fair for this?	The labor value should equal the use-value.	10	
+
+14	What could be more just than this one?	Nothing.	15
+	 17	0.64505	When would this be more just than that?	We'd need some form of consensus.	16	
+	 15	0.43745	How could anything else be as just as that?	It couldn't.	14	
+	 11	0.34805	What amount is honestly fair for this?	The labor value should equal the use-value.	10	
+	 16	0.31814	And at which point could that be any fairer?	I don't know.	17	
+	 18	0.30868	What is a 401k?	A kind of retirement savings account.	19	
+	 19	0.27836	What is an IRA?	A kind of retirement savings account.	18	
+
+15	How could anything else be as just as that?	It couldn't.	14
+	 17	0.44070	When would this be more just than that?	We'd need some form of consensus.	16	
+	 14	0.43745	What could be more just than this one?	Nothing.	15	
+	 16	0.41633	And at which point could that be any fairer?	I don't know.	17	
+	  0	0.34547	How is that actually fair?!	It's isn't.	5	
+	 10	0.32677	How much is truly fair for that?	Whatever makes the market.	11	
+	 12	0.30842	But what is the just amount for that?	That's very hard to know.	13	
+
+16	And at which point could that be any fairer?	I don't know.	17
+	 15	0.41674	How could anything else be as just as that?	It couldn't.	14	
+	 13	0.38630	And what is a fair price for that?	Fair to whom, the producer or the consumer?	12	
+	 14	0.31852	What could be more just than this one?	Nothing.	15	
+	 17	0.31852	When would this be more just than that?	We'd need some form of consensus.	16	
+	  5	0.31298	Why is that certainly fair?	It's not certain.	0	
+	 18	0.25119	What is a 401k?	A kind of retirement savings account.	19	
+
+17	When would this be more just than that?	We'd need some form of consensus.	16
+	 14	0.64680	What could be more just than this one?	Nothing.	15	
+	 15	0.44196	How could anything else be as just as that?	It couldn't.	14	
+	 12	0.32511	But what is the just amount for that?	That's very hard to know.	13	
+	 16	0.31913	And at which point could that be any fairer?	I don't know.	17	
+	  5	0.25911	Why is that certainly fair?	It's not certain.	0	
+	  0	0.24145	How is that actually fair?!	It's isn't.	5	
+
+18	What is a 401k?	A kind of retirement savings account.	19
+	 19	0.64586	What is an IRA?	A kind of retirement savings account.	18	
+	  1	0.53200	What is truly fair?!	Life's not fair.	4	
+	 11	0.48561	What amount is honestly fair for this?	The labor value should equal the use-value.	10	
+	 13	0.44641	And what is a fair price for that?	Fair to whom, the producer or the consumer?	12	
+	  4	0.40644	Who really is fair?	No one, really.	1	
+	  3	0.37184	Where actually is the fair?	Nobody knows.	2	
+
+19	What is an IRA?	A kind of retirement savings account.	18
+	 18	0.66381	What is a 401k?	A kind of retirement savings account.	19	
+	  1	0.54459	What is truly fair?!	Life's not fair.	4	
+	 11	0.49266	What amount is honestly fair for this?	The labor value should equal the use-value.	10	
+	  4	0.40554	Who really is fair?	No one, really.	1	
+	  3	0.37119	Where actually is the fair?	Nobody knows.	2	
+	  5	0.37119	Why is that certainly fair?	It's not certain.	0	
+
+20	How can I borrow against my 401k?	Login in to Fidelity and fill out a form.	21
+	 18	0.31885	What is a 401k?	A kind of retirement savings account.	19	
+	 21	0.31230	Why should you take out a loan against your 401k, not a withdrawal?	A withdrawal would have tax penalties; a loan would not.	20	
+	  0	0.23421	How is that actually fair?!	It's isn't.	5	
+	 10	0.22114	How much is truly fair for that?	Whatever makes the market.	11	
+	 15	0.20325	How could anything else be as just as that?	It couldn't.	14	
+
+21	Why should you take out a loan against your 401k, not a withdrawal?	A withdrawal would have tax penalties; a loan would not.	20
+	 18	0.38113	What is a 401k?	A kind of retirement savings account.	19	
+	 20	0.31206	How can I borrow against my 401k?	Login in to Fidelity and fill out a form.	21	
+	  5	0.22994	Why is that certainly fair?	It's not certain.	0	
+	 13	0.21958	And what is a fair price for that?	Fair to whom, the producer or the consumer?	12	
+	 19	0.20139	What is an IRA?	A kind of retirement savings account.	18	
+	 16	0.17988	And at which point could that be any fairer?	I don't know.	17	
+
