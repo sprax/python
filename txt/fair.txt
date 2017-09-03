@@ -14,3 +14,9 @@
 13	And what is a fair price for that?	12
 14	What could be more just than this one?	15
 15	How could anything else be as just as that?	14
+16	And at which point could that be any fairer?	17
+17	When would this be more just than that?	16
+18	What is a 401k?	19
+19	What is an IRA?	18
+20	How can I borrow against my 401k?	21
+21	Why should you take out a loan against your 401k, not a withdrawal? 20
