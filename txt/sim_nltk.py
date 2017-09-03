@@ -76,6 +76,7 @@ def sim_weighted_qas(qas_obj_1, qas_obj_2, get_question=second, get_answer=third
                 return (q_sim - a_sim) * q_weight - a_sim
             except ValueError as vex:
                 print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
+                raise vex
     return q_sim
 
 def cosine_sim_qas(qas_obj_1, qas_obj_2, get_question=second, get_answer=third, q_weight=0.5, vectorizer=VECTORIZER):
@@ -184,7 +185,7 @@ def show_nearest_neighbors(texts, nearest_indexes=None, similarity_func=cosine_s
         print("  %3d.  T  %s\n  %3d.  O  %s\n" % (idx, txt, nearest_idx, nearest_txt))
 
 ###############################################################################
-def similarity_dict(qas, qas_obj_1, excludes=None, q_weight=1.0, sim_func=cosine_sim_qas, min_sim_val=0.0):
+def similarity_dict(qas, qas_obj_1, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt, min_sim_val=0.0):
     '''
     Returns a dict mapping all_texts' indexes to their similarity with this_text,
         provide their similarity value >= min_sim_val
@@ -198,9 +199,12 @@ def similarity_dict(qas, qas_obj_1, excludes=None, q_weight=1.0, sim_func=cosine
     for idx, qas_obj_2 in enumerate(qas):
         if idx in excludes:
             continue
-        sim = sim_weighted_qas(qas_obj_1, qas_obj_2, q_weight=q_weight, sim_func=sim_func)
-        if  sim > min_sim_val:
-            sim_dict[idx] = sim
+        try:
+            sim = sim_weighted_qas(qas_obj_1, qas_obj_2, q_weight=q_weight, sim_func=sim_func)
+            if  sim > min_sim_val:
+                sim_dict[idx] = sim
+        except Exception as ex:
+            print("Continuing past error at %d (%s)" % (idx, ex))
     return  sim_dict
 
 def nlargest_items_by_value(dict_with_comparable_values, count=10):
@@ -215,7 +219,7 @@ def nlargest_values(dict_with_comparable_values, count=10):
     '''Returns a list of the greatest values in descending order.  Duplicates permitted.'''
     return heapq.nlargest(count, dict_with_comparable_values.values())
 
-def most_similar_items_list(all_texts, this_text, excludes=None, q_weight=1.0, sim_func=cosine_sim_qas, max_count=5, min_sim_val=0.0):
+def most_similar_items_list(all_texts, this_text, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5, min_sim_val=0.0):
     '''
     Find the N most similar texts to this_text and return a list of (index, similarity) pairs in
     descending order of similarity.
@@ -224,29 +228,31 @@ def most_similar_items_list(all_texts, this_text, excludes=None, q_weight=1.0, s
         max_count           maximum size of returned dict
         max_sim_val:        the initial value of max, or the maximum similariy found so far.
     '''
+    assert(q_weight >= 1.0)
+
     sim_dict = similarity_dict(all_texts, this_text, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
-def list_most_sim_qas_list(texts, q_weight=1.0, sim_func=cosine_sim_qas, exclude_self=True, max_count=5, min_sim_val=0.0):
+def list_most_sim_qas_list(texts, exclude_self=True, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5, min_sim_val=0.0):
     '''
     For each text in texts, find a list of indexes of the most similar texts.
     Returns list of lists of items as in: [[(index, similariy), ...], ...]
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
     '''
-
+    assert(q_weight >= 1.0)
     # similarity_func=cosine_sim_txt
     if exclude_self:
         nearests = len(texts)*[None]
         for idx, txt in enumerate(texts):
             # print("DBG LMSTL: ", txt)
             nearests[idx] = most_similar_items_list(texts, txt, [idx], q_weight=q_weight,
-                sim_func=cosine_sim_qas, max_count=max_count, min_sim_val=min_sim_val)
+                sim_func=sim_func, max_count=max_count, min_sim_val=min_sim_val)
         return nearests
     return [most_similar_items_list(texts, txt, None, q_weight, sim_func,
         max_count, min_sim_val) for txt in texts]
 
-def list_most_sim_qas_list_verbose(qas, q_weight=1.0, sim_func=cosine_sim_qas, exclude_self=True,
+def list_most_sim_qas_list_verbose(qas, exclude_self=True, q_weight=1.0, sim_func=cosine_sim_txt,
         max_count=6, min_sim_val=0.15):
     '''
     Returns list of most similar lists.  For each object in qas, compute the similarity with all
@@ -255,7 +261,7 @@ def list_most_sim_qas_list_verbose(qas, q_weight=1.0, sim_func=cosine_sim_qas, e
     with itself as well as the others (sanity check)
     '''
     beg_time = time.time()
-    most_sim_list = list_most_sim_qas_list(qas, q_weight, sim_func, exclude_self, max_count, min_sim_val)
+    most_sim_list = list_most_sim_qas_list(qas, exclude_self, q_weight, sim_func, max_count, min_sim_val)
     seconds = time.time() - beg_time
     print("list_most_sim_qas_list(size=%d, count=%d) took %.1f seconds" % (len(qas), max_count, seconds))
     return most_sim_list
@@ -346,7 +352,7 @@ def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=0.15):
 # VECTORIZER (default):                  (size=201, count=6) took 96.1 seconds; score 0.8583
 # VECT_MOST_STOPS (DEFAULT-QUERY_WORDS): (size=201, count=6) took 96.3 seconds; score 0.6635
 # TODO: Why do the query words make the score worse?
-def sim_score_save(qas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_qas, max_count=6, min_sim_val=0.15):
+def sim_score_save(qas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_txt, max_count=6, min_sim_val=0.15):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''

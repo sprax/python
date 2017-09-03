@@ -4,3 +4,13 @@
 3	Where actually is the fair?	Nobody knows.	2
 4	Who really is fair?	No one, really.	1
 5	Why is that certainly fair?	It's not certain.	0
+6	Who is the fairest of them all?	9
+7	Which one is the whitest of all?	8
+8	Which of them is the lightest one?	7
+9	Who is truly the most fair of all?	6
+10	How much is truly fair for that?	11
+11	What amount is honestly fair for this?	10
+12	But what is the just amount for that?	13
+13	And what is a fair price for that?	12
+14	What could be more just than this one?	15
+15	How could anything else be as just as that?	14

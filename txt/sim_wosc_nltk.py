@@ -166,7 +166,7 @@ def info_content(lookup_word):
     n = 0 if not lookup_word in brown_freqs else brown_freqs[lookup_word]
     return 1.0 - (math.log(n + 1) / math.log(N + 1))
 
-def semantic_vector(words, joint_words, info_content_norm):
+def semantic_vector(words, joint_words, use_content_norm=False):
     """
     Computes the semantic vector of a sentence. The sentence is passed in as
     a collection of words. The size of the semantic vector is the same as the
@@ -174,7 +174,7 @@ def semantic_vector(words, joint_words, info_content_norm):
     already exists in the joint word set, or the similarity of the word to the
     most similar word in the joint word set if it doesn't. Both values are
     further normalized by the word's (and similar word's) information content
-    if info_content_norm is True.
+    if use_content_norm is True.
     """
     sent_set = set(words)
     semvec = np.zeros(len(joint_words))
@@ -183,18 +183,18 @@ def semantic_vector(words, joint_words, info_content_norm):
         if joint_word in sent_set:
             # if word in union exists in the sentence, s(i) = 1 (unnormalized)
             semvec[i] = 1.0
-            if info_content_norm:
+            if use_content_norm:
                 semvec[i] = semvec[i] * math.pow(info_content(joint_word), 2)
         else:
             # find the most similar word in the joint set and set the sim value
             sim_word, max_sim = most_similar_word(joint_word, sent_set)
             semvec[i] = PHI if max_sim > PHI else 0.0
-            if info_content_norm:
+            if use_content_norm:
                 semvec[i] = semvec[i] * info_content(joint_word) * info_content(sim_word)
         i = i + 1
     return semvec
 
-def semantic_similarity(sentence_1, sentence_2, info_content_norm):
+def semantic_similarity(sentence_1, sentence_2, use_content_norm=False):
     """
     Computes the semantic similarity between two sentences as the cosine
     similarity between the semantic vectors computed for each sentence.
@@ -202,8 +202,8 @@ def semantic_similarity(sentence_1, sentence_2, info_content_norm):
     words_1 = nltk.word_tokenize(sentence_1)
     words_2 = nltk.word_tokenize(sentence_2)
     joint_words = set(words_1).union(set(words_2))
-    vec_1 = semantic_vector(words_1, joint_words, info_content_norm)
-    vec_2 = semantic_vector(words_2, joint_words, info_content_norm)
+    vec_1 = semantic_vector(words_1, joint_words, use_content_norm)
+    vec_2 = semantic_vector(words_2, joint_words, use_content_norm)
     return np.dot(vec_1, vec_2.T) / (np.linalg.norm(vec_1) * np.linalg.norm(vec_2))
 
 ######################### word order similarity ##########################
@@ -252,82 +252,83 @@ def word_order_similarity(sentence_1, sentence_2):
 
 ######################### overall similarity ##########################
 
-def sentence_similarity(sentence_1, sentence_2, info_content_norm, delta=DELTA):
+def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
     """
     Calculate the semantic similarity between two sentences. The last
     parameter is True or False depending on whether information content
     normalization is desired or not.
     """
-    return delta * semantic_similarity(sentence_1, sentence_2, info_content_norm) + \
+    return delta * semantic_similarity(sentence_1, sentence_2, use_content_norm) + \
         (1.0 - delta) * word_order_similarity(sentence_1, sentence_2)
 
 ######################### main / test ##########################
 
-# the results of the algorithm are largely dependent on the results of
-# the word similarities, so we should test this first...
-print("\n\t Word Similarity:")
-word_pairs = [
-  ["asylum", "fruit", 0.21],
-  ["autograph", "shore", 0.29],
-  ["autograph", "signature", 0.55],
-  ["automobile", "car", 0.64],
-  ["bird", "woodland", 0.33],
-  ["boy", "rooster", 0.53],
-  ["boy", "lad", 0.66],
-  ["boy", "sage", 0.51],
-  ["cemetery", "graveyard", 0.73],
-  ["coast", "forest", 0.36],
-  ["coast", "shore", 0.76],
-  ["cock", "rooster", 1.00],
-  ["cord", "smile", 0.33],
-  ["cord", "string", 0.68],
-  ["cushion", "pillow", 0.66],
-  ["forest", "graveyard", 0.55],
-  ["forest", "woodland", 0.70],
-  ["furnace", "stove", 0.72],
-  ["glass", "tumbler", 0.65],
-  ["grin", "smile", 0.49],
-  ["gem", "jewel", 0.83],
-  ["hill", "woodland", 0.59],
-  ["hill", "mound", 0.74],
-  ["implement", "tool", 0.75],
-  ["journey", "voyage", 0.52],
-  ["magician", "oracle", 0.44],
-  ["magician", "wizard", 0.65],
-  ["midday", "noon", 1.0],
-  ["oracle", "sage", 0.43],
-  ["serf", "slave", 0.39]
-]
-print("W-Sim \t Paper \t word_1 \t word_2")
-print("----- \t ----- \t ------ \t ------")
-for word_pair in word_pairs:
-    print(" %.2f \t %.2f \t %s %s %s" % (word_similarity(word_pair[0], word_pair[1]), word_pair[2],
-          word_pair[0], ' '*(14 - len(word_pair[0])), word_pair[1]))
+def smoke_test():
+    # the results of the algorithm are largely dependent on the results of
+    # the word similarities, so we should test this first...
+    print("\n\t Word Similarity:")
+    word_pairs = [
+      ["asylum", "fruit", 0.21],
+      ["autograph", "shore", 0.29],
+      ["autograph", "signature", 0.55],
+      ["automobile", "car", 0.64],
+      ["bird", "woodland", 0.33],
+      ["boy", "rooster", 0.53],
+      ["boy", "lad", 0.66],
+      ["boy", "sage", 0.51],
+      ["cemetery", "graveyard", 0.73],
+      ["coast", "forest", 0.36],
+      ["coast", "shore", 0.76],
+      ["cock", "rooster", 1.00],
+      ["cord", "smile", 0.33],
+      ["cord", "string", 0.68],
+      ["cushion", "pillow", 0.66],
+      ["forest", "graveyard", 0.55],
+      ["forest", "woodland", 0.70],
+      ["furnace", "stove", 0.72],
+      ["glass", "tumbler", 0.65],
+      ["grin", "smile", 0.49],
+      ["gem", "jewel", 0.83],
+      ["hill", "woodland", 0.59],
+      ["hill", "mound", 0.74],
+      ["implement", "tool", 0.75],
+      ["journey", "voyage", 0.52],
+      ["magician", "oracle", 0.44],
+      ["magician", "wizard", 0.65],
+      ["midday", "noon", 1.0],
+      ["oracle", "sage", 0.43],
+      ["serf", "slave", 0.39]
+    ]
+    print("W-Sim \t Paper \t word_1 \t word_2")
+    print("----- \t ----- \t ------ \t ------")
+    for word_pair in word_pairs:
+        print(" %.2f \t %.2f \t %s %s %s" % (word_similarity(word_pair[0], word_pair[1]), word_pair[2],
+              word_pair[0], ' '*(14 - len(word_pair[0])), word_pair[1]))
 
-print("\n\t Sentence Similarity:")
-sentence_pairs = [
-    ["I like that bachelor.", "I like that unmarried man.", 0.561],
-    ["John is very nice.", "Is John very nice?", 0.977],
-    ["Red alcoholic drink.", "A bottle of wine.", 0.585],
-    ["Red alcoholic drink.", "Fresh orange juice.", 0.611],
-    ["Red alcoholic drink.", "An English dictionary.", 0.0],
-    ["Red alcoholic drink.", "Fresh apple juice.", 0.420],
-    ["A glass of cider.", "A full cup of apple juice.", 0.678],
-    ["It is a dog.", "That must be your dog.", 0.739],
-    ["It is a dog.", "It is a log.", 0.623],
-    ["It is a dog.", "It is a pig.", 0.790],
-    ["Dogs are animals.", "They are common pets.", 0.738],
-    ["Canis familiaris are animals.", "Dogs are common pets.", 0.362],
-    ["I have a pen.", "Where do you live?", 0.0],
-    ["I have a pen.", "Where is ink?", 0.129],
-    ["I have a hammer.", "Take some nails.", 0.508],
-    ["I have a hammer.", "Take some apples.", 0.121]
-]
-spacing = 32
-spaces = ' '*(spacing - len('sentence_1'))
-print("Sim-F \t Sim-T \t Paper \t sentence_1 %s Sentence_2" % spaces)
-print("----- \t ----- \t ----- \t ---------- %s ----------" % spaces)
-for sent_pair in sentence_pairs:
-    print("%.3f\t %.3f\t %.3f\t %s %s %s" % (sentence_similarity(sent_pair[0], sent_pair[1], False),
-          sentence_similarity(sent_pair[0], sent_pair[1], True),
-          sent_pair[2], sent_pair[0], ' '*(spacing - len(sent_pair[0])), sent_pair[1]))
+    print("\n\t Sentence Similarity:")
+    sentence_pairs = [
+        ["I like that bachelor.", "I like that unmarried man.", 0.561],
+        ["John is very nice.", "Is John very nice?", 0.977],
+        ["Red alcoholic drink.", "A bottle of wine.", 0.585],
+        ["Red alcoholic drink.", "Fresh orange juice.", 0.611],
+        ["Red alcoholic drink.", "An English dictionary.", 0.0],
+        ["Red alcoholic drink.", "Fresh apple juice.", 0.420],
+        ["A glass of cider.", "A full cup of apple juice.", 0.678],
+        ["It is a dog.", "That must be your dog.", 0.739],
+        ["It is a dog.", "It is a log.", 0.623],
+        ["It is a dog.", "It is a pig.", 0.790],
+        ["Dogs are animals.", "They are common pets.", 0.738],
+        ["Canis familiaris are animals.", "Dogs are common pets.", 0.362],
+        ["I have a pen.", "Where do you live?", 0.0],
+        ["I have a pen.", "Where is ink?", 0.129],
+        ["I have a hammer.", "Take some nails.", 0.508],
+        ["I have a hammer.", "Take some apples.", 0.121]
+    ]
+    spacing = 32
+    spaces = ' '*(spacing - len('sentence_1'))
+    print("Sim-F \t Sim-T \t Paper \t sentence_1 %s Sentence_2" % spaces)
+    print("----- \t ----- \t ----- \t ---------- %s ----------" % spaces)
+    for sent_pair in sentence_pairs:
+        print("%.3f\t %.3f\t %.3f\t %s %s %s" % (sentence_similarity(sent_pair[0], sent_pair[1], False),
+              sentence_similarity(sent_pair[0], sent_pair[1], True),
+              sent_pair[2], sent_pair[0], ' '*(spacing - len(sent_pair[0])), sent_pair[1]))
