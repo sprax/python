@@ -82,7 +82,7 @@ def cosine_sim_qas(qas_obj_1, qas_obj_2, get_question=second, get_answer=third, 
     return q_sim
 
 def cosine_sim_qas_2(qas_obj_1, qas_obj_2, get_question=second, get_answer=third,
-        q_weight=0.5, vectorizer=VECT_NO_STOPS):
+                     q_weight=0.5, vectorizer=VECT_NO_STOPS):
     '''dot-product (projection) similarity combining similarities of questions
     and, if available, answers'''
     assert 0.0 < q_weight and q_weight <= 1.0
@@ -105,6 +105,7 @@ def cosine_sim_qas_2(qas_obj_1, qas_obj_2, get_question=second, get_answer=third
 
 def cosine_sim_qas_ms(qas_obj_1, qas_obj_2, get_question=second, get_answer=third,
         q_weight=0.5, vectorizer=VECT_MOST_STOPS):
+    '''cosine similarity with query words removed from stop words'''
     return cosine_sim_qas_2(qas_obj_1, qas_obj_2, get_question, get_answer,
         q_weight, vectorizer)
 
@@ -283,8 +284,9 @@ def distance_counts(qas, most_sim_lists, max_dist):
             for idx, item in enumerate(sim_list):
                 # print("DC: %d  item(%d, %f)" % (idx, item[0], item[1]))
                 if gold == item[0]:
-                    # print("DBG_G: Q_%d <==> Q_%d (%s <==> %s) at %d, %.4f (%s : %s)\n" % (int(qa[0]), item[0], qa[1], qas[item[0]][1],
-                    #       idx, item[1], remove_stop_words(normalize(qa[1])), remove_stop_words(normalize(qas[item[0]][1]))))
+                    # print("DBG_G: Q_%d <==> Q_%d (%s <==> %s) at %d, %.4f (%s : %s)\n" % (int(qa[0]), item[0],
+                    # qa[1], qas[item[0]][1], idx, item[1], remove_stop_words(normalize(qa[1])),
+                    # remove_stop_words(normalize(qas[item[0]][1]))))
                     dist_counts[idx] += 1
                     break
     # save the number of gold standard matches as the last count in the list
