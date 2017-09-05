@@ -31,6 +31,7 @@ VECT_MOST_STOPS = TfidfVectorizer(tokenizer=normalize, stop_words=MOST_STOPS)
 
 
 def remove_stop_words(tokens, stop_words=STOP_WORDS):
+    '''filter out stip words'''
     return [tok for tok in tokens if tok not in stop_words]
 
 def ident(obj):
@@ -176,7 +177,7 @@ def list_nearest_other_idx(texts, similarity_func=cosine_sim_txt):
         nearests[idx] = 1 + idx + max_idx_1 if max_sim_1 > max_sim_0 else max_idx_0
     return nearests
 
-def show_nearest_neighbors(texts, nearest_indexes=None, similarity_func=cosine_sim_txt, verbose=True):
+def show_nearest_neighbors(texts, nearest_indexes=None  , verbose=True):
     if nearest_indexes is None:
         nearest_indexes = list_nearest_other_idx(texts)
     for idx, txt in enumerate(texts):
@@ -266,7 +267,8 @@ def list_most_sim_qas_list_verbose(qas, exclude_self=True, q_weight=1.0, sim_fun
     print("list_most_sim_qas_list(size=%d, count=%d) took %.1f seconds" % (len(qas), max_count, seconds))
     return most_sim_list
 
-def show_most_sim_texts_list(texts, most_sim_lists=None, similarity_func=cosine_sim_txt):
+def show_most_sim_texts_list(texts, most_sim_lists=None):
+    '''print already-found similarity lists'''
     if most_sim_lists is None:
         most_sim_lists = list_most_sim_qas_list_verbose(texts)     # use defaults
     for idx, txt in enumerate(texts):
@@ -286,25 +288,25 @@ def distance_counts(qas, most_sim_lists, max_dist):
     '''
     dist_counts = (max_dist + 1) * [0]
     gold_scored = 0
-    for qa, sim_list in zip(qas, most_sim_lists):
-        if len(qa) > 3 and qa[3]:
+    for qax, sim_list in zip(qas, most_sim_lists):
+        if len(qax) > 3 and qax[3]:
             try:
-                gold = int(qa[3])
+                gold = int(qax[3])
                 assert isinstance(gold, int)
-            except Exception as ex:
-                print("ERROR on: ", qa, ex)
+            except ValueError as ex:
+                print("ERROR on: ", qax, ex)
                 continue
             gold_scored += 1
             # ms = sim_list[0]
             # msi = ms[0]
             # sim = ms[1]
-            # print("DBG_F: Q_%d <==> Q_%d (%s <==> %s) first, %.4f (%s : %s)" % (int(qa[0]), msi, qa[1],
-            #       qas[msi][1], sim, remove_stop_words(normalize(qa[1])), remove_stop_words(normalize(qas[msi][1]))))
+            # print("DBG_F: Q_%d <==> Q_%d (%s <==> %s) first, %.4f (%s : %s)" % (int(qax[0]), msi, qax[1],
+            #       qas[msi][1], sim, remove_stop_words(normalize(qax[1])), remove_stop_words(normalize(qas[msi][1]))))
             for idx, item in enumerate(sim_list):
                 # print("DC: %d  item(%d, %f)" % (idx, item[0], item[1]))
                 if gold == item[0]:
-                    # print("DBG_G: Q_%d <==> Q_%d (%s <==> %s) at %d, %.4f (%s : %s)\n" % (int(qa[0]), item[0], qa[1], qas[item[0]][1],
-                    #       idx, item[1], remove_stop_words(normalize(qa[1])), remove_stop_words(normalize(qas[item[0]][1]))))
+                    # print("DBG_G: Q_%d <==> Q_%d (%s <==> %s) at %d, %.4f (%s : %s)\n" % (int(qax[0]), item[0], qax[1], qas[item[0]][1],
+                    #       idx, item[1], remove_stop_words(normalize(qax[1])), remove_stop_words(normalize(qas[item[0]][1]))))
                     dist_counts[idx] += 1
                     break
     # save the number of gold standard matches as the last count in the list
@@ -363,5 +365,5 @@ def sim_score_save(qas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_t
     save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=min_sim_val)
     seconds = time.time() - beg_time
     print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (len(qas), max_count,
-        seconds, score))
+                                                                               seconds, score))
     return score
