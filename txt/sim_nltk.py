@@ -64,7 +64,8 @@ def cosine_sim_txt(txt_obj_1, txt_obj_2, get_text=ident, vectorizer=VECTORIZER):
     tfidf = vectorizer.fit_transform([get_text(txt_obj_1), get_text(txt_obj_2)])
     return ((tfidf * tfidf.T).A)[0, 1]
 
-def sim_weighted_qas(qas_obj_1, qas_obj_2, get_question=second, get_answer=third, q_weight=0.5, sim_func=cosine_sim_txt):
+def sim_weighted_qas(qas_obj_1, qas_obj_2, get_question=second, get_answer=third, q_weight=0.5,
+        sim_func=cosine_sim_txt):
     '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
     assert 0.0 < q_weight and q_weight <= 1.0
     q_sim = sim_func(get_question(qas_obj_1), get_question(qas_obj_2))
@@ -98,7 +99,7 @@ def cosine_sim_qas(qas_obj_1, qas_obj_2, get_question=second, get_answer=third, 
     return q_sim
 
 def cosine_sim_qas_2(qas_obj_1, qas_obj_2, get_question=second, get_answer=third,
-        q_weight=0.5, vectorizer=VECT_NO_STOPS):
+                     q_weight=0.5, vectorizer=VECT_NO_STOPS):
     '''dot-product (projection) similarity combining similarities of questions
     and, if available, answers'''
     assert 0.0 < q_weight and q_weight <= 1.0
@@ -186,7 +187,8 @@ def show_nearest_neighbors(texts, nearest_indexes=None):
         print("  %3d.  T  %s\n  %3d.  O  %s\n" % (idx, txt, nearest_idx, nearest_txt))
 
 ###############################################################################
-def similarity_dict(qas, qas_obj_1, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt, min_sim_val=0.0):
+def similarity_dict(qas, qas_obj_1, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt,
+                    min_sim_val=0.0):
     '''
     Returns a dict mapping all_texts' indexes to their similarity with this_text,
         provide their similarity value >= min_sim_val
@@ -248,13 +250,14 @@ def list_most_sim_qas_list(texts, exclude_self=True, q_weight=1.0, sim_func=cosi
         for idx, txt in enumerate(texts):
             # print("DBG LMSTL: ", txt)
             nearests[idx] = most_similar_items_list(texts, txt, [idx], q_weight=q_weight,
-                sim_func=sim_func, max_count=max_count, min_sim_val=min_sim_val)
+                                                    sim_func=sim_func, max_count=max_count, \
+                                                    min_sim_val=min_sim_val)
         return nearests
     return [most_similar_items_list(texts, txt, None, q_weight, sim_func,
-        max_count, min_sim_val) for txt in texts]
+                                    max_count, min_sim_val) for txt in texts]
 
 def list_most_sim_qas_list_verbose(qas, exclude_self=True, q_weight=1.0, sim_func=cosine_sim_txt,
-        max_count=6, min_sim_val=0.15):
+                                   max_count=6, min_sim_val=0.15):
     '''
     Returns list of most similar lists.  For each object in qas, compute the similarity with all
     (other) objects in qas, and save at most max_count indices and similarity measures in descending
