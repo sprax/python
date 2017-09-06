@@ -22,7 +22,7 @@ def stem_tokens(tokens, stemmer=STEMMER):
 
 def normalize(text, translation=TRANS_NO_PUNCT):
     '''remove punctuation, lowercase, stem'''
-    return stem_tokens(nltk.word_tokenize(text.translate(TRANS_NO_PUNCT).lower()))
+    return stem_tokens(nltk.word_tokenize(text.translate(translation).lower()))
 
 VECTORIZER = TfidfVectorizer(tokenizer=normalize, stop_words='english')
 VECT_NO_STOPS = TfidfVectorizer(tokenizer=normalize)
@@ -120,9 +120,9 @@ def cosine_sim_qas_2(qas_obj_1, qas_obj_2, get_question=second, get_answer=third
     return 0.0
 
 def cosine_sim_qas_ms(qas_obj_1, qas_obj_2, get_question=second, get_answer=third,
-        q_weight=0.5, vectorizer=VECT_MOST_STOPS):
+                      q_weight=0.5, vectorizer=VECT_MOST_STOPS):
     return cosine_sim_qas_2(qas_obj_1, qas_obj_2, get_question, get_answer,
-        q_weight, vectorizer)
+                            q_weight, vectorizer)
 
 
 def smoke_test():
@@ -177,7 +177,7 @@ def list_nearest_other_idx(texts, similarity_func=cosine_sim_txt):
         nearests[idx] = 1 + idx + max_idx_1 if max_sim_1 > max_sim_0 else max_idx_0
     return nearests
 
-def show_nearest_neighbors(texts, nearest_indexes=None  , verbose=True):
+def show_nearest_neighbors(texts, nearest_indexes=None):
     if nearest_indexes is None:
         nearest_indexes = list_nearest_other_idx(texts)
     for idx, txt in enumerate(texts):
@@ -204,7 +204,7 @@ def similarity_dict(qas, qas_obj_1, excludes=None, q_weight=1.0, sim_func=cosine
             sim = sim_weighted_qas(qas_obj_1, qas_obj_2, q_weight=q_weight, sim_func=sim_func)
             if  sim > min_sim_val:
                 sim_dict[idx] = sim
-        except Exception as ex:
+        except ValueError as ex:
             print("Continuing past error at %d (%s)" % (idx, ex))
     return  sim_dict
 
@@ -360,7 +360,8 @@ def sim_score_save(qas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_t
     assumed, and the score is returned, not saved.'''
     beg_time = time.time()
     most_sim_lists = list_most_sim_qas_list_verbose(qas, exclude_self=True, q_weight=q_weight,
-        sim_func=sim_func, max_count=max_count, min_sim_val=min_sim_val)
+                                                    sim_func=sim_func, max_count=max_count,
+                                                    min_sim_val=min_sim_val)
     score = score_most_sim_lists(qas, most_sim_lists)
     save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=min_sim_val)
     seconds = time.time() - beg_time
