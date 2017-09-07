@@ -45,6 +45,8 @@ import time
 import editdistance
 
 import nltk
+from nltk.corpus import wordnet
+
 import emotuples as ET
 import inflection
 import text_fio
@@ -103,6 +105,15 @@ def unicode_chr_str(hex_unicode):
     return ''.join(char(int(x, 16)) for x in parts)
 
 EMO_SYNONYMS = {}
+
+def wordnet_syn_set(word, pos):
+    result = set()
+    '''TODO: verify that word is in a trusted dictionary or word list.'''
+    sns = wn.synsets(word, pos)
+    for ss in sns:
+        result.add(ss)
+
+
 
 def emo_synonyms(word):
     '''
