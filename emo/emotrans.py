@@ -436,11 +436,12 @@ class EmoTrans:
         if self.verbose > SHOW_TEXT_DIVISION:
             print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
 
+        # TODO: use a more germaine tokenizer
         tokens = nltk.word_tokenize(sentence)
         tagged = nltk.pos_tag(tokens)
         print_tagged(tagged)
 
-        subs = mid_translator(body)
+        subs = mid_translator(body, tagged)
         #print("ESBME: mid(%s) --> subs(%s): " % (body, subs))
         tend = self.emojize_token(end)
         if tend:
@@ -449,11 +450,15 @@ class EmoTrans:
         emo_tran = ''.join([beg, subs, end])
         return emo_tran
 
-    def emojize_text_subs(self, text, space=' '):
+    def emojize_text_subs(self, text, tagged, space=' '):
         '''
         Translate text word by word to emojis, where possible, using regex substitution.
         By design, text is to be the body of a sentence: the part between any leading or
         trailing punctuation.
+        TODO: decouple translation from sentence rendering.  How?
+            1. Use same tokenizer for extraction and substitution, and EITHER:
+                a. Use regex-replacement to convert body into a template for string-substitution.  OR:
+                b. Cut everything into a sequence of strings, translate tokens, and reconcatenate.
         '''
         emojize_match_bound = partial(self.emojize_match, space=space)
 
