@@ -474,6 +474,8 @@ class EmoTrans:
         Split phrase in to tokens (destructive), translate words,
         then join them back together.  Characters lost in the split
         are genearlly not restorable.  So round trips are not faithful.
+        FIXME: replace splitter with a non-destructive version that keeps the seperators.
+        The return product should be a tagged list, i.e. a list of pairs [(token, {word|fill}), ...]
         '''
         srcs = text_regex.words_split_out(txt_phrase.strip())
         if self.verbose > 2:
