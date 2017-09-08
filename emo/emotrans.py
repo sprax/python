@@ -107,15 +107,16 @@ def unicode_chr_str(hex_unicode):
 EMO_SYNONYMS = {}
 
 def wordnet_syn_set(word, pos):
-    result = set()
+    words = []
     '''TODO: verify that word is in a trusted dictionary or word list.'''
-    sns = wn.synsets(word, pos)
-    for ss in sns:
-        result.add(ss)
+    synsets = wordnet.synsets(word, pos)
+    for synset in synsets:
+        synonyms = synset.lemma_names
+        for syn in synonyms:
+            words.append(syn)
+    return words
 
-
-
-def emo_synonyms(word):
+def emo_synonyms(word, pos):
     '''
     TODO: replace with real synonyms from a dedicated class.
     If word is not already all lower case, put both the orignal
@@ -125,7 +126,10 @@ def emo_synonyms(word):
     '''
     syns = [word]
     try:
-        syns.extend(EMO_SYNONYMS[word])
+        if pos:
+            syns.extend(wordnet_syn_set(word, pos))
+        else:
+            syns.extend(EMO_SYNONYMS[word])
     except KeyError:
         pass
     if not word.islower():
@@ -380,12 +384,12 @@ class EmoTrans:
         assert('🇸' in self.emo_txt)
         return ' ➖ 🇸 '
 
-    def emojize_word(self, src_word, space=' '):
+    def emojize_word(self, src_word, pos=None, space=' '):
         '''
         Return a translation of src_word into a string of emoji characters,
         or, failing that, return the original src_word.
         '''
-        synonyms = emo_synonyms(src_word)
+        synonyms = emo_synonyms(src_word, pos)
         if self.verbose > SHOW_LIST_VALUES:
             print("EW SYNONYMS: {} -:> {}".format(src_word, synonyms))
         for word in synonyms:
@@ -424,7 +428,7 @@ class EmoTrans:
     def emojize_match(self, match_obj, space=' '):
         '''Translate word tokens from a regex match.'''
         word = match_obj.group()
-        return self.emojize_word(word, space)
+        return self.emojize_word(word, space=space)
 
     def emojize_sentence_beg_mid_end(self, sentence, mid_translator, space=' '):
         ''' Segment sentence into beg, mid, and end, translate each, then recombine, where:
@@ -436,12 +440,7 @@ class EmoTrans:
         if self.verbose > SHOW_TEXT_DIVISION:
             print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
 
-        # TODO: use a more germaine tokenizer
-        tokens = nltk.word_tokenize(sentence)
-        tagged = nltk.pos_tag(tokens)
-        print_tagged(tagged)
-
-        subs = mid_translator(body, tagged)
+        subs = mid_translator(body)
         #print("ESBME: mid(%s) --> subs(%s): " % (body, subs))
         tend = self.emojize_token(end)
         if tend:
@@ -450,7 +449,7 @@ class EmoTrans:
         emo_tran = ''.join([beg, subs, end])
         return emo_tran
 
-    def emojize_text_subs(self, text, tagged, space=' '):
+    def emojize_text_syntags(self, text, space=' '):
         '''
         Translate text word by word to emojis, where possible, using regex substitution.
         By design, text is to be the body of a sentence: the part between any leading or
@@ -459,6 +458,30 @@ class EmoTrans:
             1. Use same tokenizer for extraction and substitution, and EITHER:
                 a. Use regex-replacement to convert body into a template for string-substitution.  OR:
                 b. Cut everything into a sequence of strings, translate tokens, and reconcatenate.
+        '''
+        emojize_match_bound = partial(self.emojize_match, space=space)
+
+        # TODO: use a more germaine tokenizer
+        tokens = text_regex.RE_NOT_NON_WORD_TOKEN.split(text)
+        # strips = [tok.strip() for tok in tokens]
+        twords = tokens[1::2]
+        tagged = nltk.pos_tag(twords)
+        print_tagged(tagged)
+        subbed = []
+        for index, token in enumerate(tokens):
+            if index % 2:
+                subbed.append(self.emojize_word(token, tagged[index // 2][1], ''))
+            else:
+                subbed.append(token)
+        subs = ''.join(subbed)
+        return subs
+
+
+    def emojize_text_subs(self, text, space=' '):
+        '''
+        Translate text word by word to emojis, where possible, using regex substitution.
+        By design, text is to be the body of a sentence: the part between any leading or
+        trailing punctuation.
         '''
         emojize_match_bound = partial(self.emojize_match, space=space)
 
@@ -775,10 +798,13 @@ class EmoTrans:
 
     def emojize_sentence(self, sentence):
         '''translate text sentence to emojis according to options'''
+        emojize_body = self.emojize_text_subs
         if self.options.split_join:
-            return self.emojize_sentence_split_join(sentence)
+            emojize_body = self.emojize_text_split_join
         else:
-            return self.emojize_sentence_subs(sentence)
+            emojize_body = self.emojize_text_syntags
+        # NOTE: emojize_text_subs is being deprecated?
+        return self.emojize_sentence_beg_mid_end(sentence, emojize_body, space='')
 
     def textize_sentence(self, sentence):
         '''translate emoji sentence to text according to options'''
