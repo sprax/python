@@ -12,12 +12,12 @@ this is very likely due to the differences in the way the algorithm was
 described in the paper and how I implemented it.
 '''
 from __future__ import division
+import math
+import sys
 import nltk
 from nltk.corpus import wordnet as wn
 from nltk.corpus import brown
-import math
 import numpy as np
-import sys
 
 # Parameters to the algorithm. Currently set to values that was reported
 # in the paper to produce "best" results.
@@ -124,6 +124,7 @@ def hierarchy_dist(synset_1, synset_2):
         (math.exp(BETA * h_dist) + math.exp(-BETA * h_dist)))
 
 def word_similarity(word_1, word_2):
+    '''synset distance between two words'''
     synset_pair = get_best_synset_pair(word_1, word_2)
     return (length_dist(synset_pair[0], synset_pair[1]) *
         hierarchy_dist(synset_pair[0], synset_pair[1]))
@@ -264,8 +265,8 @@ def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DE
 ######################### main / test ##########################
 
 def smoke_test():
-    # the results of the algorithm are largely dependent on the results of
-    # the word similarities, so we should test this first...
+    '''The results of the algorithm are largely dependent on the results of
+    the word similarities, so we should test that first...'''
     print("\n\t Word Similarity:")
     word_pairs = [
       ["asylum", "fruit", 0.21],
