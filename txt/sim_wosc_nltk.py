@@ -27,7 +27,7 @@ ETA = 0.4
 PHI = 0.2
 DELTA = 0.85
 
-brown_freqs = dict()
+BROWN_FREQS = dict()
 N = 0
 
 ######################### word similarity ##########################
@@ -54,13 +54,13 @@ def get_best_synset_pair(word_1, word_2):
         best_pair = None, None
         for synset_1 in synsets_1:
             for synset_2 in synsets_2:
-               sim = wn.path_similarity(synset_1, synset_2)
-               if sim is None:
-                   # print("path_similarity from (%s, %s) is None" % (word_1, word_2))
-                   return None, None
-               if sim > max_sim:
-                   max_sim = sim
-                   best_pair = synset_1, synset_2
+                sim = wn.path_similarity(synset_1, synset_2)
+                if sim is None:
+                    # print("path_similarity from (%s, %s) is None" % (word_1, word_2))
+                    return None, None
+                if sim > max_sim:
+                    max_sim = sim
+                    best_pair = synset_1, synset_2
         return best_pair
 
 def length_dist(synset_1, synset_2):
@@ -69,7 +69,7 @@ def length_dist(synset_1, synset_2):
     ontology (Wordnet in our case as well as the paper's) between two
     synsets.
     """
-    l_dist = sys.maxsize
+    l_dist = float("inf")
     if synset_1 is None or synset_2 is None:
         return 0.0
     if synset_1 == synset_2:
@@ -121,13 +121,13 @@ def hierarchy_dist(synset_1, synset_2):
         else:
             h_dist = 0
     return ((math.exp(BETA * h_dist) - math.exp(-BETA * h_dist)) /
-        (math.exp(BETA * h_dist) + math.exp(-BETA * h_dist)))
+            (math.exp(BETA * h_dist) + math.exp(-BETA * h_dist)))
 
 def word_similarity(word_1, word_2):
     '''synset distance between two words'''
     synset_pair = get_best_synset_pair(word_1, word_2)
     return (length_dist(synset_pair[0], synset_pair[1]) *
-        hierarchy_dist(synset_pair[0], synset_pair[1]))
+            hierarchy_dist(synset_pair[0], synset_pair[1]))
 
 ######################### sentence similarity ##########################
 
@@ -141,10 +141,10 @@ def most_similar_word(word, word_set):
     max_sim = -1.0
     sim_word = ""
     for ref_word in word_set:
-      sim = word_similarity(word, ref_word)
-      if sim > max_sim:
-          max_sim = sim
-          sim_word = ref_word
+        sim = word_similarity(word, ref_word)
+        if sim > max_sim:
+            max_sim = sim
+            sim_word = ref_word
     return sim_word, max_sim
 
 def info_content(lookup_word):
@@ -159,13 +159,13 @@ def info_content(lookup_word):
         for sent in brown.sents():
             for word in sent:
                 word = word.lower()
-                if not word in brown_freqs:
-                    brown_freqs[word] = 0
-                brown_freqs[word] = brown_freqs[word] + 1
+                if not word in BROWN_FREQS:
+                    BROWN_FREQS[word] = 0
+                BROWN_FREQS[word] = BROWN_FREQS[word] + 1
                 N = N + 1
     lookup_word = lookup_word.lower()
-    n = 0 if not lookup_word in brown_freqs else brown_freqs[lookup_word]
-    return 1.0 - (math.log(n + 1) / math.log(N + 1))
+    count = 0 if not lookup_word in BROWN_FREQS else BROWN_FREQS[lookup_word]
+    return 1.0 - (math.log(count + 1) / math.log(N + 1))
 
 def semantic_vector(words, joint_words, use_content_norm=False):
     """
@@ -247,9 +247,9 @@ def word_order_similarity(sentence_1, sentence_2):
     words_2 = nltk.word_tokenize(sentence_2)
     joint_words = list(set(words_1).union(set(words_2)))
     windex = {x[1]: x[0] for x in enumerate(joint_words)}
-    r1 = word_order_vector(words_1, joint_words, windex)
-    r2 = word_order_vector(words_2, joint_words, windex)
-    return 1.0 - (np.linalg.norm(r1 - r2) / np.linalg.norm(r1 + r2))
+    wov_1 = word_order_vector(words_1, joint_words, windex)
+    wov_2 = word_order_vector(words_2, joint_words, windex)
+    return 1.0 - (np.linalg.norm(wov_1 - wov_2) / np.linalg.norm(wov_1 + wov_2))
 
 ######################### overall similarity ##########################
 
@@ -269,42 +269,42 @@ def smoke_test():
     the word similarities, so we should test that first...'''
     print("\n\t Word Similarity:")
     word_pairs = [
-      ["asylum", "fruit", 0.21],
-      ["autograph", "shore", 0.29],
-      ["autograph", "signature", 0.55],
-      ["automobile", "car", 0.64],
-      ["bird", "woodland", 0.33],
-      ["boy", "rooster", 0.53],
-      ["boy", "lad", 0.66],
-      ["boy", "sage", 0.51],
-      ["cemetery", "graveyard", 0.73],
-      ["coast", "forest", 0.36],
-      ["coast", "shore", 0.76],
-      ["cock", "rooster", 1.00],
-      ["cord", "smile", 0.33],
-      ["cord", "string", 0.68],
-      ["cushion", "pillow", 0.66],
-      ["forest", "graveyard", 0.55],
-      ["forest", "woodland", 0.70],
-      ["furnace", "stove", 0.72],
-      ["glass", "tumbler", 0.65],
-      ["grin", "smile", 0.49],
-      ["gem", "jewel", 0.83],
-      ["hill", "woodland", 0.59],
-      ["hill", "mound", 0.74],
-      ["implement", "tool", 0.75],
-      ["journey", "voyage", 0.52],
-      ["magician", "oracle", 0.44],
-      ["magician", "wizard", 0.65],
-      ["midday", "noon", 1.0],
-      ["oracle", "sage", 0.43],
-      ["serf", "slave", 0.39]
+        ["asylum", "fruit", 0.21],
+        ["autograph", "shore", 0.29],
+        ["autograph", "signature", 0.55],
+        ["automobile", "car", 0.64],
+        ["bird", "woodland", 0.33],
+        ["boy", "rooster", 0.53],
+        ["boy", "lad", 0.66],
+        ["boy", "sage", 0.51],
+        ["cemetery", "graveyard", 0.73],
+        ["coast", "forest", 0.36],
+        ["coast", "shore", 0.76],
+        ["cock", "rooster", 1.00],
+        ["cord", "smile", 0.33],
+        ["cord", "string", 0.68],
+        ["cushion", "pillow", 0.66],
+        ["forest", "graveyard", 0.55],
+        ["forest", "woodland", 0.70],
+        ["furnace", "stove", 0.72],
+        ["glass", "tumbler", 0.65],
+        ["grin", "smile", 0.49],
+        ["gem", "jewel", 0.83],
+        ["hill", "woodland", 0.59],
+        ["hill", "mound", 0.74],
+        ["implement", "tool", 0.75],
+        ["journey", "voyage", 0.52],
+        ["magician", "oracle", 0.44],
+        ["magician", "wizard", 0.65],
+        ["midday", "noon", 1.0],
+        ["oracle", "sage", 0.43],
+        ["serf", "slave", 0.39]
     ]
     print("W-Sim \t Paper \t word_1 \t word_2")
     print("----- \t ----- \t ------ \t ------")
     for word_pair in word_pairs:
         print(" %.2f \t %.2f \t %s %s %s" % (word_similarity(word_pair[0], word_pair[1]), word_pair[2],
-              word_pair[0], ' '*(14 - len(word_pair[0])), word_pair[1]))
+                                             word_pair[0], ' '*(14 - len(word_pair[0])), word_pair[1]))
 
     print("\n\t Sentence Similarity:")
     sentence_pairs = [
@@ -331,5 +331,6 @@ def smoke_test():
     print("----- \t ----- \t ----- \t ---------- %s ----------" % spaces)
     for sent_pair in sentence_pairs:
         print("%.3f\t %.3f\t %.3f\t %s %s %s" % (sentence_similarity(sent_pair[0], sent_pair[1], False),
-              sentence_similarity(sent_pair[0], sent_pair[1], True),
-              sent_pair[2], sent_pair[0], ' '*(spacing - len(sent_pair[0])), sent_pair[1]))
+                                                 sentence_similarity(sent_pair[0], sent_pair[1], True),
+                                                 sent_pair[2], sent_pair[0], ' '*(spacing - len(sent_pair[0])),
+                                                 sent_pair[1]))
