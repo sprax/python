@@ -26,7 +26,8 @@ SENTENCES = [
     "For me, painting is a way to forget life.  It is a cry in the night, a strangled laugh. --Georges Rouault",
     "Art is the stored honey of the human soul. --Theodore Dreiser",
     "I would rather die of passion than of boredom. --Vincent van Gogh",
-    "Go on, take the money and run.  --Steve Miller"
+    "Go on, take the money and run.  --Steve Miller",
+    "Run feed the fish"
     # "You sailed off on the boat I blew up.",
     # "Ice ale da faun the bowtie blue up.",
     # "You sail off on the boat I blow up.",

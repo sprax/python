@@ -111,7 +111,8 @@ def wordnet_syn_set(word, pos):
     '''TODO: verify that word is in a trusted dictionary or word list.'''
     synsets = wordnet.synsets(word, pos)
     for synset in synsets:
-        synonyms = synset.lemma_names
+        synonyms = synset.lemma_names()
+        print(synonyms)
         for syn in synonyms:
             words.append(syn)
     return words
@@ -128,8 +129,10 @@ def emo_synonyms(word, pos):
     try:
         if pos:
             syns.extend(wordnet_syn_set(word, pos))
+            print("XXX SYNONYMS(%s):" % word, syns)
         else:
             syns.extend(EMO_SYNONYMS[word])
+            print("YYY EMO_SYNONYMS:", syns)
     except KeyError:
         pass
     if not word.islower():
@@ -390,6 +393,7 @@ class EmoTrans:
         or, failing that, return the original src_word.
         '''
         synonyms = emo_synonyms(src_word, pos)
+        print("ZZZ emojize_word(%s, %s) with SYNONYMS: " % (src_word, pos), synonyms)
         if self.verbose > SHOW_LIST_VALUES:
             print("EW SYNONYMS: {} -:> {}".format(src_word, synonyms))
         for word in synonyms:
@@ -459,7 +463,7 @@ class EmoTrans:
                 a. Use regex-replacement to convert body into a template for string-substitution.  OR:
                 b. Cut everything into a sequence of strings, translate tokens, and reconcatenate.
         '''
-        emojize_match_bound = partial(self.emojize_match, space=space)
+        # emojize_match_bound = partial(self.emojize_match, space=space)
 
         # TODO: use a more germaine tokenizer
         tokens = text_regex.RE_NOT_NON_WORD_TOKEN.split(text)
@@ -470,7 +474,8 @@ class EmoTrans:
         subbed = []
         for index, token in enumerate(tokens):
             if index % 2:
-                subbed.append(self.emojize_word(token, tagged[index // 2][1], ''))
+                pos = tagged[index // 2][1].lower()
+                subbed.append(self.emojize_word(token, pos, ''))
             else:
                 subbed.append(token)
         subs = ''.join(subbed)
@@ -804,7 +809,7 @@ class EmoTrans:
         else:
             emojize_body = self.emojize_text_syntags
         # NOTE: emojize_text_subs is being deprecated?
-        return self.emojize_sentence_beg_mid_end(sentence, emojize_body, space='')
+        return self.emojize_sentence_beg_mid_end(sentence, emojize_body, space=' ')
 
     def textize_sentence(self, sentence):
         '''translate emoji sentence to text according to options'''
@@ -904,7 +909,7 @@ def main():
 
     # if args.verbose > 7:
     #     print("module emoji:", EJ)
-
+    print(args)
     translate_sentences(args)
 
 if __name__ == '__main__':
