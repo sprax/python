@@ -115,32 +115,44 @@ def syl_count_sentence(cmu_prons, sentence):
 
 TOMATO = [['T', 'AH0', 'M', 'EY1', 'T', 'OW2'], ['T', 'AH0', 'M', 'AA1', 'T', 'OW2']]
 
+def phone_seq(pron):
+    syl_count = 0
+    phonetics = []
+    syllables = []
+    for phon in pron:
+        last = phon[-1]
+        if '0' <= last and last <= '9':
+            phonetics.append(phon[0:-1])
+            syl_count += 1
+        else:
+            phonetics.append(phon)
+    return syl_count, ''.join(phonetics), syllables
+
 class PhoneSeq:
-    def __init__(self, cmu_prons, word):
-        self.word = word
-        self.cmu_pron = cmu_prons[word.lower()]
+    def __init__(self, cmu_pron):
+        self.syl_count, self.phonetics, self.syllables = phone_seq(cmu_pron)
 
-
-def phone_sex_cmu(cmu_prons, lwrd, verbose):
+def phone_sex_cmu(cmu_prons, word, verbose=False):
     '''Create comparable sequences of phonemes from a CMU pronunciation entry'''
     phone_sex = []
     try:
-        prons = cmu_prons[lwrd]
+        prons = cmu_prons[word]
         for pron in prons:
-            sequence = []
-            sylcount = 0
-            for phon in pron:
-                last = phon[-1]
-                if '0' <= last and last <= '9':
-                    sequence.append(phon[0:-1])
-                    sylcount += 1
-                else:
-                    sequence.append(phon)
-            phone_sex.append(PhoneSeq(sylcount, sequence))
+            syl_count, sequence = phone_seq(pron)
+            phonetic = ''.join(sequence)
+            phone_sex.append(phonetic)
     except KeyError:
         if verbose:
-            print("phone_sex_cmu NonKEY: ", lwrd)
+            print("phone_sex_cmu NonKEY: ", word)
     return phone_sex
+
+class PhoneticWord:
+    def __init__(self, cmu_prons_dict, word):
+        # print("PhoneSeq.__init__(cmu_prons{}, {})".format(type(cmu_prons), word))
+        self.word = word
+        self.lwrd = word.lower()
+        self.cmu_prons = cmu_prons_dict.get(self.lwrd, [])
+        self.phone_sex = [PhoneSeq(cmu_pron) for cmu_pron in self.cmu_prons]
 
 
 def main():
