@@ -126,23 +126,26 @@ def emo_synonyms(word, pos):
     (Custom emojis, syllabified names.)
     '''
     syns = [word]
-    try:
-        if pos:
+    if pos:
+        try:
             syns.extend(wordnet_syn_set(word, pos))
             print("XXX SYNONYMS(%s):" % word, syns)
-        else:
+        except KeyError as kex:
+            print("KeyError:", kex)
+    else:
+        try:
             syns.extend(EMO_SYNONYMS[word])
             print("YYY EMO_SYNONYMS:", syns)
-    except KeyError:
-        pass
-    if not word.islower():
-        lwrd = word.lower()
-        syns.append(lwrd)
-        try:
-            syns.extend(EMO_SYNONYMS[lwrd])
         except KeyError:
             pass
-    return syns
+        if not word.islower():
+            lwrd = word.lower()
+            syns.append(lwrd)
+            try:
+                syns.extend(EMO_SYNONYMS[lwrd])
+            except KeyError:
+                pass
+    return set(syns)
 
 def pluralize(word):
     '''
@@ -474,7 +477,7 @@ class EmoTrans:
         subbed = []
         for index, token in enumerate(tokens):
             if index % 2:
-                pos = tagged[index // 2][1].lower()
+                pos = tagged[index // 2][1][0].lower()
                 subbed.append(self.emojize_word(token, pos, ''))
             else:
                 subbed.append(token)
