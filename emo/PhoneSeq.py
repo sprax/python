@@ -116,8 +116,7 @@ def syl_count_sentence(cmu_prons, sentence):
 TOMATO = [['T', 'AH0', 'M', 'EY1', 'T', 'OW2'], ['T', 'AH0', 'M', 'AA1', 'T', 'OW2']]
 
 class PhoneSeq:
-
-    def __init__(cmu_prons, word):
+    def __init__(self, cmu_prons, word):
         self.word = word
         self.cmu_pron = cmu_prons[word.lower()]
 
