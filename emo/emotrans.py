@@ -106,46 +106,70 @@ def unicode_chr_str(hex_unicode):
 
 EMO_SYNONYMS = {}
 
-def wordnet_syn_set(word, pos):
-    words = []
-    '''TODO: verify that word is in a trusted dictionary or word list.'''
+def wordnet_syn_set(word, pos, lower_only=True):
+    '''
+    Returns a list of wordnet synonyms of word based on part of speech
+    identifier(s) in the string pos.  The recognized POS identifiers are
+    the single letters [a, n, r, s, v], a.k.a. the wordnet module constants
+    [ADJ, NOUN, ADV, ADJ_SAT, VERB], that is,
+    ADJ, ADJ_SAT, ADV, NOUN, VERB = 'a', 's', 'r', 'n', 'v'.
+    In practice, satellite synsets (s or ADJ_SAT) are not useful for simple
+    word substitution.  Just use the first letter from a common NLTK POS tagger.
+    If lower_only is True, only lowercase synonyms are included.
+    The list may contain duplicates, which are likely to be more common words.
+    '''
+    synonyms = []
     synsets = wordnet.synsets(word, pos)
     for synset in synsets:
-        synonyms = synset.lemma_names()
-        print(synonyms)
-        for syn in synonyms:
-            words.append(syn)
-    return words
+        lemmas = synset.lemma_names()
+        # print(synonyms)
+        if lower_only:
+            for lemma in lemmas:
+                if lemma.islower():
+                    synonyms.append(lemma.replace('_', ' '))
+        else:
+            for lemma in lemmas:
+                synonyms.append(lemma.replace('_', ' '))
+    return synonyms
 
-def emo_synonyms(word, pos):
+def emo_synonyms(word, pos=None):
     '''
-    TODO: replace with real synonyms from a dedicated class.
+    Returns a list of synonyms of the given word, based on its part of
+    speech if specified.
     If word is not already all lower case, put both the orignal
     (partially capitalized) word and its all-lower-cased form in
     the list of synonyms, so as to match proper names.
-    (Custom emojis, syllabified names.)
+    That is to support custom emojis and/or syllabified names, but including
+    proper names may objuscate common meanings.
+    Also note that wordnet always lowercases input words, and returns proper names
+    mixed in with lower case words.  You may want to filter out the capitalized
+    "synonyms", if you can even call them that.
     '''
-    syns = [word]
-    if pos:
+    synonyms = [word]
+    is_lower = word.islower()
+    if pos in [wordnet.ADJ, wordnet.NOUN, wordnet.ADV, wordnet.VERB]:
         try:
-            syns.extend(wordnet_syn_set(word, pos))
-            print("XXX SYNONYMS(%s):" % word, syns)
+            synonyms.extend(wordnet_syn_set(word, pos, is_lower))
+            # print("XXX SYNONYMS(%s, %s):" % (word, pos), synonyms)
         except KeyError as kex:
-            print("KeyError:", kex)
+            print("Wordnet Synset KeyError:", kex)
     else:
         try:
-            syns.extend(EMO_SYNONYMS[word])
-            print("YYY EMO_SYNONYMS:", syns)
-        except KeyError:
+            synonyms.extend(EMO_SYNONYMS[word])
+            if len(synonyms) > 1:
+                print("YYY EMO_SYNONYMS:", synonyms)
+        except KeyError as kex:
+            # print("EMO_SYNONYMS KeyError:", kex)
             pass
-        if not word.islower():
+        if not is_lower:
             lwrd = word.lower()
-            syns.append(lwrd)
+            synonyms.append(lwrd)
             try:
-                syns.extend(EMO_SYNONYMS[lwrd])
-            except KeyError:
+                synonyms.extend(EMO_SYNONYMS[lwrd])
+            except KeyError as kex:
+                # print("EMO_SYNONYMS KeyError:", kex)
                 pass
-    return set(syns)
+    return synonyms
 
 def pluralize(word):
     '''
@@ -396,7 +420,10 @@ class EmoTrans:
         or, failing that, return the original src_word.
         '''
         synonyms = emo_synonyms(src_word, pos)
-        print("ZZZ emojize_word(%s, %s) with SYNONYMS: " % (src_word, pos), synonyms)
+        # if len(synonyms) > 1:
+        #     synset = set([syn.lower() for syn in synonyms])
+        #     if len(synset) > 1:
+        #         print("ZZZ emojize_word(%s, %s) with SYNONYMS: " % (src_word, pos), synonyms)
         if self.verbose > SHOW_LIST_VALUES:
             print("EW SYNONYMS: {} -:> {}".format(src_word, synonyms))
         for word in synonyms:
@@ -478,7 +505,7 @@ class EmoTrans:
         for index, token in enumerate(tokens):
             if index % 2:
                 pos = tagged[index // 2][1][0].lower()
-                subbed.append(self.emojize_word(token, pos, ''))
+                subbed.append(self.emojize_word(token, pos, space=' '))
             else:
                 subbed.append(token)
         subs = ''.join(subbed)
@@ -829,6 +856,11 @@ class EmoTrans:
         dist = editdistance.eval(sentence, txt_sent)
         print("Edit distance: {:>4}".format(dist))
 
+def shuffled(seq):
+    shuffled = list(seq)
+    random.shuffle(shuffled)
+    return shuffled
+
 def translate_sentences(options):
     '''Test translation from Enlish to emojis and back.'''
     emotrans = EmoTrans(options)
@@ -842,6 +874,13 @@ def translate_sentences(options):
         emotrans.trans_to_emo_and_back(options.sentence)
         exit(0)
 
+    # rand_order = shuffled(range(len(SENTENCES)))
+    # for idx in rand_order:
+    #     emotrans.trans_to_emo_and_back(SENTENCES[idx])
+    #     print()
+
+    if not options.order:
+        random.shuffle(SENTENCES)
     for sentence in SENTENCES:
         emotrans.trans_to_emo_and_back(sentence)
         print()
@@ -875,6 +914,8 @@ def main():
                         help='use multiple emoji for some words (presets)')
     parser.add_argument('-no_articles', '-noa', action='store_true',
                         help='remove articles (a, an, the)')
+    parser.add_argument('-order', '-original', action='store_true',
+                        help='Translate and show sentences in original order, not in random order')
     parser.add_argument('-pluralize', '-singularize', action='store_false',
                         help='Disable pluralization and singularization (which are on by default)')
     # parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
