@@ -325,7 +325,7 @@ class EmoTrans:
 
     # FIXME stub
     def gen_phonetic(self, text):
-        return word_phonetics.cmu_phonetic(self.cmu_pro, text, verbose=self.verbose)
+        return word_phonetics.cmu_phonetic(self.cmu_pro, text, verbose=(self.verbose > SHOW_USABLE_EMOJIS + 1))
 
     def _gen_pros_to_emos(self, txt_emo):
         '''Generates a pronunciation-to-emojis mapping.
@@ -339,7 +339,8 @@ class EmoTrans:
                     pro_emo[pro_key].extend(emo_lst)
                 except KeyError:
                     pro_emo[pro_key] = emo_lst
-                print("PRO_EMO: {} -> {} -> {}".format(txt_key, pro_key, pro_emo[pro_key]))
+                if self.verbose > SHOW_USABLE_EMOJIS:
+                    print("PRO_EMO: {} -> {} -> {}".format(txt_key, pro_key, pro_emo[pro_key]))
         return pro_emo
 
     def gen_txt_to_emo(self, presets, i_words = ET.INDEX_FREQUENT_WORDS):
@@ -412,11 +413,9 @@ class EmoTrans:
     def emojize_token(self, token):
         '''
         Return emoji string translation of token or None.
-        The token will not be transformed in any way.  If
-        it is meant to match an all lower-case key, the token
+        The token is to be matched as-is; it will not be transformed in any way.
+        If it is meant to match an all lower-case key, the token
         must already be itself all lower-case.
-        TODO: make protected ?
-        TODO: return token instead of None ?
         '''
         try:
             lst = self.txt_emo[token]
@@ -429,6 +428,25 @@ class EmoTrans:
         emo = random.choice(lst) if self.options.random else lst[0]
         if self.verbose > SHOW_TOKEN_TRANS:
             print("ET: {} :-> {}".format(token, emo))
+        return emo
+
+    def emojize_phone(self, phone):
+        '''
+        Return emoji string translation of phone or None.
+        Like a bottom-level token, the phone (phonetic string representation)
+        is to be matched as-is, and will not be transformed in any way.
+        '''
+        try:
+            lst = self.pro_emo[phone]
+            if self.verbose > SHOW_LIST_VALUES:
+                print("EP: {} -:> {}".format(phone, lst))
+        except KeyError:
+            if self.verbose > SHOW_TOKEN_TRANS:
+                print("EP: {} -:> {}".format(phone, None))
+            return None
+        emo = random.choice(lst) if self.options.random else lst[0]
+        if self.verbose > SHOW_TOKEN_TRANS:
+            print("EP: {} :-> {}".format(phone, emo))
         return emo
 
     def emo_or_txt_token(self, token):
@@ -474,6 +492,16 @@ class EmoTrans:
                 if self.verbose > SHOW_TOKEN_TRANS:
                     print("EW  TOKEN: {} -:> {}".format(word, emojis))
                 return emojis + space
+
+            if self.options.phonetics:
+                phonetic = self.gen_phonetic(word)
+                if phonetic:
+                    emojis = self.emojize_phone(phonetic)
+                    if emojis:
+                        if self.verbose > SHOW_TOKEN_TRANS:
+                            print("EW  PHONE: {} -> {} -:> {}".format(word, phonetic, emojis))
+                        return emojis + space
+
             if self.options.singularize and self.is_plural_noun(word):
                 emostr = self.emojize_plural_noun(word, space)
                 if emostr:
@@ -533,7 +561,6 @@ class EmoTrans:
         '''
         # emojize_match_bound = partial(self.emojize_match, space=space)
 
-        # TODO: use a more germaine tokenizer
         tokens = text_regex.RE_NOT_NON_WORD_TOKEN.split(text)
         # strips = [tok.strip() for tok in tokens]
         twords = tokens[1::2]
@@ -954,6 +981,8 @@ def main():
                         help='remove articles (a, an, the)')
     parser.add_argument('-order', '-original', action='store_true',
                         help='Translate and show sentences in original order, not in random order')
+    parser.add_argument('-phonetics', action='store_false',
+                        help='Disable phonetic matching (which is on by default)')
     parser.add_argument('-pluralize', action='store_false',
                         help='Disable pluralization (which is on by default)')
     # parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
@@ -993,7 +1022,7 @@ def main():
 
     # if args.verbose > 7:
     #     print("module emoji:", EJ)
-    print(args)
+    #     print(args)
     translate_sentences(args)
 
 if __name__ == '__main__':

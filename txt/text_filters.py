@@ -21,6 +21,7 @@ from utf_print import utf_print
 TRANS_NO_WHAT = str.maketrans(u"\u2018\u2019\u201c\u201d", "\'\'\"\"")
 TRANS_NO_SMART = str.maketrans("\x91\x92\x93\x94", "''\"\"")
 TRANS_NO_PUNCT = str.maketrans('', '', string.punctuation)
+TRANS_NO_DIGITS = str.maketrans('', '', string.digits)
 
 UNICODE_TO_ASCII = str.maketrans({
 u"\u2018" : "'",
