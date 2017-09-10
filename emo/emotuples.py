@@ -697,7 +697,7 @@ EMO_TUPLES = [
     ('1f478-1f3fd'           , 2,  664,   'people', 1, '👸🏽', ['crown', 'princess'], ['crown', 'princess'], ':princess_tone3:', []),
     ('1f478-1f3fe'           , 2,  665,   'people', 1, '👸🏾', ['crown', 'princess'], ['crown', 'princess'], ':princess_tone4:', []),
     ('1f478-1f3ff'           , 2,  666,   'people', 1, '👸🏿', ['crown', 'princess'], ['crown', 'princess'], ':princess_tone5:', []),
-    ('1f934'                 , 1,  667,   'people', 1, '🤴', ['prince'], ['prince'], ':prince:', []),
+    ('1f934'                 , 1,  667,   'people', 1, '🤴', ['prince', 'crown prince'], ['prince'], ':prince:', []),
     ('1f934-1f3fb'           , 2,  668,   'people', 1, '🤴🏻', ['prince', 'crown'], ['prince', 'crown'], ':prince_tone1:', []),
     ('1f934-1f3fc'           , 2,  669,   'people', 1, '🤴🏼', ['prince', 'crown'], ['prince', 'crown'], ':prince_tone2:', []),
     ('1f934-1f3fd'           , 2,  670,   'people', 1, '🤴🏽', ['prince', 'crown'], ['prince', 'crown'], ':prince_tone3:', []),

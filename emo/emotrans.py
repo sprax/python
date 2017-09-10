@@ -43,10 +43,11 @@ from collections import defaultdict
 from functools import partial
 import time
 import editdistance
-import phone
+import word_phonetics
 
 import nltk
 from nltk.corpus import wordnet
+from nltk.corpus import cmudict
 
 import emotuples as ET
 import inflection
@@ -244,7 +245,7 @@ def print_tagged(tagged):
         print("%*s" % (mxl, tup[1]), end=' ')
     print(")")
 
-RE_TONED_EMO_NAME = re.compile(r"\w+tone\d:$")
+RE_TONED_EMO_NAME = re.compile(r"^:\w+tone\d:$")
 
 TOKENIZER_NOT_NON_WORD = 1
 TOKENIZER_WORD_EXTENDED = 2
@@ -268,7 +269,8 @@ class EmoTrans:
     def __init__(self, options):
         self.options = options
         self.verbose = options.verbose
-        self.usables = self.gen_usables()
+        self.cmu_pro = cmudict.dict() # get the CMU Pronouncing Dict # TODO: wrap in sep class
+        self.usables = self._gen_usables()
         if self.verbose > SHOW_USABLE_EMOJIS:
             self.print_usable_emojis()
         self.presets = self._gen_txt_emo_presets()
@@ -288,7 +290,7 @@ class EmoTrans:
             print("Most common emo parts (single unichars):", counter.most_common(12))
         return counter
 
-    def gen_usables(self, i_flags=ET.INDEX_DISPLAY_FLAGS, i_short=ET.INDEX_SHORT_NAME):
+    def _gen_usables(self, i_flags=ET.INDEX_DISPLAY_FLAGS, i_short=ET.INDEX_SHORT_NAME):
         '''
         Generate list of emo tuples to use on this platform
         TODO: generalize.
@@ -322,8 +324,8 @@ class EmoTrans:
         return presets
 
     # FIXME stub
-    def gen_pron(self, text):
-        return text
+    def gen_phonetic(self, text):
+        return word_phonetics.cmu_phonetic(self.cmu_pro, text, verbose=self.verbose)
 
     def _gen_pros_to_emos(self, txt_emo):
         '''Generates a pronunciation-to-emojis mapping.
@@ -331,12 +333,13 @@ class EmoTrans:
         pro_emo = {}
         for txt_key, emo_lst in txt_emo.items():
             # FIXME: Single key for now
-            pro_key = self.gen_pron(txt_key)
-            try:
-                pro_emo[pro_key].extend(emo_lst)
-            except KeyError:
-                pro_emo[pro_key] = emo_lst
-            print("PRO_EMO: {} -> {} -> {}".format(txt_key, pro_key, pro_emo[pro_key]))
+            pro_key = self.gen_phonetic(txt_key)
+            if pro_key:
+                try:
+                    pro_emo[pro_key].extend(emo_lst)
+                except KeyError:
+                    pro_emo[pro_key] = emo_lst
+                print("PRO_EMO: {} -> {} -> {}".format(txt_key, pro_key, pro_emo[pro_key]))
         return pro_emo
 
     def gen_txt_to_emo(self, presets, i_words = ET.INDEX_FREQUENT_WORDS):
