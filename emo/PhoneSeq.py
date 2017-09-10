@@ -119,13 +119,43 @@ def phone_seq(pron):
     syl_count = 0
     phonetics = []
     syllables = []
+    sylstring = ''
+    got_vowel = False
+    is_prev_cons = False
     for phon in pron:
-        last = phon[-1]
-        if '0' <= last and last <= '9':
-            phonetics.append(phon[0:-1])
+        final = phon[-1]
+        if '0' <= final and final <= '9':
+            # This phon is a vowel string; strip off the digit and increment syllable the count.
             syl_count += 1
+            vowels = phon[0:-1]
+            phonetics.append(vowels)
+            if got_vowel:
+                # End of an open syllable.  Save it and start new syllable.
+                print("OPEN syllables{} appending {}".format(syllables, sylstring))
+                syllables.append(sylstring)
+                sylstring = vowels
+            else:
+                got_vowel = True
+                sylstring += vowels
+            is_prev_cons = False
         else:
+            # This phon is a consonant string.
             phonetics.append(phon)
+            if sylstring:
+                if got_vowel and is_prev_cons:
+                    # End of a closed syllable.  Save it and start a new one.
+                    print("CLOSED syllables{} appending {}".format(syllables, sylstring))
+                    syllables.append(sylstring)
+                    sylstring = phon
+                    got_vowel = False
+                else:
+                    sylstring += phon
+            else:
+                # The syllable string is empty, so start a new one with this consonant.
+                sylstring = phon
+            is_prev_cons = True
+    print("WORD syllables{} appending {}\n".format(syllables, sylstring))
+    syllables.append(sylstring)
     return syl_count, ''.join(phonetics), syllables
 
 class PhoneSeq:
