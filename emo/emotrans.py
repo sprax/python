@@ -221,7 +221,7 @@ def show_sorted_dict(dct, idx, lbl=''):
     for key, val in sorted(dct.items(), key=lambda dit: dit[idx].lower()):
         print("{}  {} => {}".format(lbl, key, val))
 
-def add_preset_multiples(preset_dict):
+def _add_txt_emo_multiples(preset_dict):
     '''Add preset word to multiple emoji mapping'''
     preset_dict.update({
         "crew"   : ['👦 👲🏽 👧🏿 👨 👦🏽'],
@@ -270,9 +270,10 @@ class EmoTrans:
         self.usables = self.gen_usables()
         if self.verbose > SHOW_USABLE_EMOJIS:
             self.print_usable_emojis()
-        self.presets = self._gen_presets()
+        self.presets = self._gen_txt_emo_presets()
         self.txt_emo = self.gen_txt_to_emo(self.presets)
         self.emo_txt = self.gen_emo_to_txt(self.presets)
+        self.pro_emo = self._gen_pros_to_emos(self.txt_emo)
         self.emo_chr_counts = self.count_emo_chrs()
         self.singular_nouns = read_pickle('en_singular_nouns.pkl')
         self.plural_nouns = read_pickle('en_plural_nouns.pkl')
@@ -304,7 +305,7 @@ class EmoTrans:
             print(tup[ET.INDEX_EMOJI_UNICHRS], end='  ')
         print()
 
-    def _gen_presets(self):
+    def _gen_txt_emo_presets(self):
         '''populate preset text to emoji mappings'''
         presets = {}
         if self.options.no_articles:
@@ -312,17 +313,34 @@ class EmoTrans:
         if self.options.arithmetic:
             presets.update({'can': ['🍬 ➖ D'], 'crew': ['© ➕ 🍺 ➖ 🐝'], 'you': ['🆕 ➖ N']})
         if self.options.multiple:
-            add_preset_multiples(presets)
+            _add_txt_emo_multiples(presets)
         return presets
 
-    def gen_txt_to_emo(self, presets):
-        '''generate text to emoji mapping'''
+    # FIXME stub
+    def gen_pron(self, text):
+        return text
+
+    def _gen_pros_to_emos(self, txt_emo):
+        '''Generates a pronunciation-to-emojis mapping.
+        NB: Call this AFTER self.txt_emo is initialized.'''
+        pro_emo = {}
+        for txt_key, emo_lst in txt_emo.items():
+            # FIXME: Single key for now
+            pro_key = self.gen_pron(txt_key)
+            try:
+                pro_emo[pro_key].extend(emo_lst)
+            except KeyError:
+                pro_emo[pro_key] = emo_lst
+            print("PRO_EMO: {} -> {} -> {}".format(txt_key, pro_key, pro_emo[pro_key]))
+        return pro_emo
+
+    def gen_txt_to_emo(self, presets, i_words = ET.INDEX_FREQUENT_WORDS):
+        '''Generates the text-to-emojis mapping.'''
         txt_emo = presets
-        i_words = ET.INDEX_FREQUENT_WORDS
         i_unchr = ET.INDEX_EMOJI_UNICHRS
         for tup in self.usables:
+            emo = tup[i_unchr]
             for txt in tup[i_words]:
-                emo = tup[i_unchr]
                 try:
                     txt_emo[txt].append(emo)
                 except KeyError:
@@ -330,8 +348,11 @@ class EmoTrans:
                 # print("txt(%s) --> emo( %s )" % (txt, tup[i_unchr]))
         return txt_emo
 
-    def gen_emo_to_txt(self, presets):
-        '''generate emoji to texts mapping'''
+    def gen_emo_to_txt(self, presets, i_words = ET.INDEX_FREQUENT_WORDS):
+        '''
+        Generates the emoji to texts mapping by first reverse mapping the preset
+        text-to-emojis map, then extending text lists (which are the map's values).
+        '''
         emo_txt = {}
         for txt, lst in presets.items():
             for emo in lst:
@@ -339,12 +360,14 @@ class EmoTrans:
                     emo_txt[emo].append(txt)
                 except KeyError:
                     emo_txt[emo] = [txt]
-
         # print("PRESET emo_txt:", emo_txt)
         i_unchr = ET.INDEX_EMOJI_UNICHRS
-        i_words = ET.INDEX_FREQUENT_WORDS
         for tup in self.usables:
-            emo_txt[tup[i_unchr]] = tup[i_words]
+            emo = tup[i_unchr]
+            try:
+                emo_txt[emo].extend(tup[i_words])
+            except KeyError:
+                emo_txt[emo] = tup[i_words]
         return emo_txt
 
     def rev_txt_to_gen(self):

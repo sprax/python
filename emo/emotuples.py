@@ -25,7 +25,7 @@ INDEX_EMOJI_CATEGORY = 3
 INDEX_DISPLAY_FLAGS  = 4
 INDEX_EMOJI_UNICHRS  = 5
 INDEX_FREQUENT_WORDS = 6
-INDEX_WORDSYLLABLES  = 7
+INDEX_WORD_SYLLABLES = 7
 INDEX_SHORT_NAME     = 8
 INDEX_ALTERNATIVES   = 9  # not used much; may go away
 COUNTRY_FLAGS_RANGE  = range(2120, 2377)
@@ -53,7 +53,7 @@ EMO_TUPLES = [
     ('1f61a'                 , 1,   20,   'people', 1, '😚', ['closed eye kissing', 'kissing'], ['closed eye kissing', 'kissing'], ':kissing_closed_eyes:', []),
     ('1f60b'                 , 1,   21,   'people', 1, '😋', ['yum', 'mmm', 'yum'], ['yum', 'mmm', 'yum'], ':yum:', []),
     ('1f61c'                 , 1,   22,   'people', 1, '😜', ['wink', 'joking', 'winking', 'eye', 'joke', 'tongue stuck out', 'stuck out tongue'], ['wink', 'joking', 'winking', 'eye', 'joke', 'tongue stuck out', 'stuck out tongue'], ':stuck_out_tongue_winking_eye:', []),
-    ('1f61d'                 , 1,   23,   'people', 1, '😝', ['eyes', 'closed', 'stuck', 'craz', 'out', 'tongue'], ['eyes', 'closed', 'stuck', 'craz', 'out', 'tongue'], ':stuck_out_tongue_closed_eyes:', []),
+    ('1f61d'                 , 1,   23,   'people', 1, '😝', ['crazy', 'eyes-closed stuck out tongue'], ['crazy', 'eyes-closed stuck out tongue'], ':stuck_out_tongue_closed_eyes:', []),
     ('1f61b'                 , 1,   24,   'people', 1, '😛', ['out', 'tongue', 'stuck', 'tongue'], ['out', 'tongue', 'stuck', 'tongue'], ':stuck_out_tongue:', []),
     ('1f911'                 , 1,   25,   'people', 1, '🤑', ['mouth', 'money'], ['mouth', 'money'], ':money_mouth:', [':money_mouth_face:']),
     ('1f917'                 , 1,   26,   'people', 1, '🤗', ['hug', 'hugging'], ['hug', 'hugging'], ':hugging:', [':hugging_face:']),
