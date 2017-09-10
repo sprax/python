@@ -222,7 +222,7 @@ def show_sorted_dict(dct, idx, lbl=''):
         print("{}  {} => {}".format(lbl, key, val))
 
 def _add_txt_emo_multiples(preset_dict):
-    '''Add preset word to multiple emoji mapping'''
+    '''Add preset word-to-multiple-emojis mapping'''
     preset_dict.update({
         "crew"   : ['👦 👲🏽 👧🏿 👨 👦🏽'],
         "husband": ['💑 👈', '💏 👈', '👩❤👨 ⬅'],
@@ -292,11 +292,15 @@ class EmoTrans:
         Generate list of emo tuples to use on this platform
         TODO: generalize.
         '''
-        if self.options.all_skin_tones:
+        if self.options.all_skin_tones and self.options.multiples:
             return [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0]
-        else:
+        if self.options.all_skin_tones:
+            return [tup for tup in ET.EMO_TUPLES if tup[i_flags] == 1]
+        if self.options.multiples:
             return [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0 and
                 not RE_TONED_EMO_NAME.match(tup[i_short])]
+        return [tup for tup in ET.EMO_TUPLES if tup[i_flags] == 1 and
+            not RE_TONED_EMO_NAME.match(tup[i_short])]
 
     def print_usable_emojis(self):
         '''Print the usable emojis'''
@@ -312,7 +316,7 @@ class EmoTrans:
             presets.update({'a': [' '], 'an': [' '], 'but': [' '], 'the': [' ']})
         if self.options.arithmetic:
             presets.update({'can': ['🍬 ➖ D'], 'crew': ['© ➕ 🍺 ➖ 🐝'], 'you': ['🆕 ➖ N']})
-        if self.options.multiple:
+        if self.options.multiples:
             _add_txt_emo_multiples(presets)
         return presets
 
@@ -940,8 +944,8 @@ def main():
                         help='show the emoji-to-text mapping')
     parser.add_argument('-flags', action='store_true',
                         help='use flag emojis in translations of words not representing countries')
-    parser.add_argument('-multiple', action='store_true',
-                        help='use multiple emoji for some words (presets)')
+    parser.add_argument('-multiples', action='store_true',
+                        help='use multiple emojis for words when needed (not only for presets)')
     parser.add_argument('-no_articles', '-noa', action='store_true',
                         help='remove articles (a, an, the)')
     parser.add_argument('-order', '-original', action='store_true',
