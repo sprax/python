@@ -414,6 +414,17 @@ class EmoTrans:
         assert('🇸' in self.emo_txt)
         return ' ➖ 🇸 '
 
+    def emojize_plural_noun(self, word, space=' '):
+        singular = singularize(word)
+        if singular != word:
+            emojis = self.emojize_token(singular)
+            if emojis:
+                emostr = emojis + space + emojis + space
+                if self.verbose > SHOW_NOUN_SINGPLUR:
+                    print("EW PLURAL: {} --> {}".format(word, emostr))
+                return emostr
+        return None
+
     def emojize_word(self, src_word, pos=None, space=' '):
         '''
         Return a translation of src_word into a string of emoji characters,
@@ -432,19 +443,15 @@ class EmoTrans:
                 if self.verbose > SHOW_TOKEN_TRANS:
                     print("EW  TOKEN: {} -:> {}".format(word, emojis))
                 return emojis + space
-            if self.options.pluralize:
-                if self.is_plural_noun(word):
-                    singular = singularize(word)
-                    if singular != word:
-                        emojis = self.emojize_token(singular)
-                        if emojis:
-                            emostr = emojis + space + emojis + space
-                            if self.verbose > SHOW_NOUN_SINGPLUR:
-                                print("EW PLURAL: {} --> {}".format(word, emostr))
-                            return emostr
+            if self.options.singularize and self.is_plural_noun(word):
+                emostr = self.emojize_plural_noun(word, space)
+                if emostr:
+                    return emostr
+
                 # At least when subtraction is allowed, lip == lips - S ~= <kiss> - S == 💋 - S == 💋 <-> <S>
                 # NB: Not elif, because some nouns can be either singular and plural, e.g. fish, sheep, dice,
                 # briefs,data, agenda, heuristics,
+            if self.options.pluralize:
                 if self.is_singular_noun(word):
                     plural = pluralize(word)
                     if plural != word:
@@ -916,13 +923,15 @@ def main():
                         help='remove articles (a, an, the)')
     parser.add_argument('-order', '-original', action='store_true',
                         help='Translate and show sentences in original order, not in random order')
-    parser.add_argument('-pluralize', '-singularize', action='store_false',
-                        help='Disable pluralization and singularization (which are on by default)')
+    parser.add_argument('-pluralize', action='store_false',
+                        help='Disable pluralization (which is on by default)')
     # parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
     #                     help='output path for filtered text (default: - <stdout>)')
     parser.add_argument('-random', action='store_true',
                         help='Choose random emojis or words from translation lists '
                                 '(instead of always choosing the first)')
+    parser.add_argument('-singularize', action='store_false',
+                        help='Disable singularization (which is on by default)')
     parser.add_argument('-split_join', '-sj', action='store_true',
                         help='translate using split and join (irreversible because destructive), '
                                 'not substitution (conservative)')

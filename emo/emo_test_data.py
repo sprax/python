@@ -61,5 +61,6 @@ SENTENCES = [
     # "Ice ale da faun the bowtie blue up.",
     # "You sail off on the boat I blow up.",
     # "Gosh dang it for me if I ain't what's-its-name from Tie's nightmare bowling party?",
+    "Go call my horses.",
     "Call me Ishmael."
 ]
