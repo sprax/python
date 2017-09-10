@@ -115,7 +115,7 @@ def syl_count_sentence(cmu_prons, sentence):
 
 TOMATO = [['T', 'AH0', 'M', 'EY1', 'T', 'OW2'], ['T', 'AH0', 'M', 'AA1', 'T', 'OW2']]
 
-def phone_seq(pron):
+def phone_seq(pron, verbose=False):
     syl_count = 0
     phonetics = []
     syllables = []
@@ -131,7 +131,8 @@ def phone_seq(pron):
             phonetics.append(vowels)
             if got_vowel:
                 # End of an open syllable.  Save it and start new syllable.
-                print("OPEN syllables{} appending {}".format(syllables, sylstring))
+                if verbose:
+                    print("OPEN syllables{} appending {}".format(syllables, sylstring))
                 syllables.append(sylstring)
                 sylstring = vowels
             else:
@@ -144,7 +145,8 @@ def phone_seq(pron):
             if sylstring:
                 if got_vowel and is_prev_cons:
                     # End of a closed syllable.  Save it and start a new one.
-                    print("CLOSED syllables{} appending {}".format(syllables, sylstring))
+                    if verbose:
+                        print("CLOSED syllables{} appending {}".format(syllables, sylstring))
                     syllables.append(sylstring)
                     sylstring = phon
                     got_vowel = False
@@ -154,7 +156,8 @@ def phone_seq(pron):
                 # The syllable string is empty, so start a new one with this consonant.
                 sylstring = phon
             is_prev_cons = True
-    print("WORD syllables{} appending {}\n".format(syllables, sylstring))
+    if verbose:
+        print("WORD syllables{} appending {}\n".format(syllables, sylstring))
     syllables.append(sylstring)
     return syl_count, ''.join(phonetics), syllables
 
@@ -177,13 +180,17 @@ def phone_sex_cmu(cmu_prons, word, verbose=False):
     return phone_sex
 
 class PhoneticWord:
-    def __init__(self, cmu_prons_dict, word):
+    def __init__(self, cmu_prons_dict, word, verbose=0):
         # print("PhoneSeq.__init__(cmu_prons{}, {})".format(type(cmu_prons), word))
         self.word = word
         self.lwrd = word.lower()
         self.cmu_prons = cmu_prons_dict.get(self.lwrd, [])
-        self.phone_sex = [PhoneSeq(cmu_pron) for cmu_pron in self.cmu_prons]
-
+        self.phone_sex = [PhoneSeq(cmu_pron, verbose) for cmu_pron in self.cmu_prons]
+        if verbose:
+            for idx, seq in enumerate(self.phone_sex):
+                print(idx, self.word, seq.syllables)
+            else:
+                print(self.word, ": No CMU pronunciations")
 
 def main():
     '''test english -> emoji translation'''
