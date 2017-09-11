@@ -26,13 +26,19 @@ from nltk.corpus import stopwords
 from scipy.spatial.distance import cosine
 
 DEFAULT_MODEL_FILE = '/Users/sprax/asdf/spryt/txt/Text/GoogleNews-vectors-negative300.bin'
+DEFAULT_W2V_MODEL = None
+DEFAULT_W2V_VOCAB = None
+DEFAULT_STOPWORDS = None
 
 def init():
     print("Returning defaults as tuple:  (word2vec, vocab, stopwords)")
-    w2v = default_word2vec_model()
-    voc = word2vec_vocab(w2v)
-    stp = default_stop_words()
-    return (w2v, voc, stp)
+    if DEFAULT_W2V_MODEL == None:
+        DEFAULT_W2V_MODEL = default_word2vec_model()
+    if DEFAULT_W2V_VOCAB == None:
+        DEFAULT_W2V_VOCAB = word2vec_vocab(DEFAULT_W2V_MODEL)
+    if DEFAULT_STOPWORDS == None:
+        DEFAULT_STOPWORDS = default_stop_words()
+    return (DEFAULT_W2V_MODEL, DEFAULT_W2V_VOCAB, DEFAULT_STOPWORDS)
 
 def default_word2vec_model(model_file=DEFAULT_MODEL_FILE, verbose=True):
     '''Load pre-made word2vec word2vec'''
