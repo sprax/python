@@ -25,12 +25,20 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from scipy.spatial.distance import cosine
 
-def default_word2vec_model(verbose=True):
+DEFAULT_MODEL_FILE = '/Users/sprax/asdf/spryt/txt/Text/GoogleNews-vectors-negative300.bin'
+
+def init():
+    print("Returning defaults as tuple:  (word2vec, vocab, stopwords)")
+    w2v = default_word2vec_model()
+    voc = word2vec_vocab(w2v)
+    stp = default_stop_words()
+    return (w2v, voc, stp)
+
+def default_word2vec_model(model_file=DEFAULT_MODEL_FILE, verbose=True):
     '''Load pre-made word2vec word2vec'''
     # TODO: Use _save_specials and _load_specials?
     beg = time.time()
-    word2vec = gensim.models.KeyedVectors.load_word2vec_format(
-        'Text/GoogleNews-vectors-negative300.bin', binary=True)
+    word2vec = gensim.models.KeyedVectors.load_word2vec_format(model_file, binary=True)
     if verbose:
         print("Seconds to load_word2vec_format:", time.time() - beg)
         # Seconds to load_word2vec_format: 44.98383688926697
@@ -254,6 +262,23 @@ def test_contractions(word2vec, verbose=True):
     compare_token_lists(word2vec, t_dont, t_didnt, verbose=True)
     compare_token_lists(word2vec, t_doesnt, t_didnt, verbose=True)
 
+def most_sim_2pos_1neg(word2vec, pos1, pos2, neg1):
+    sims = word2vec.most_similar(positive=[pos1, pos2], negative=[neg1], topn=5)
+    print("Most similar to:  %s - %s + %s =" % (pos1, neg1, pos2))
+    for sim in sims:
+        print(sim)
+
+def most_sim_1pos_2neg(word2vec, pos1, neg1, neg2):
+    sims = word2vec.most_similar(positive=[pos1], negative=[neg1, neg2], topn=5)
+    print("Most similar to:  %s - %s - %s =" % (pos1, neg1, neg2))
+    for sim in sims:
+        print(sim)
+
+def test_word_algebra(word2vec):
+    most_sim_2pos_1neg('cat', 'puppy', 'dog')
+    most_sim_2pos_1neg('Taiwan', 'Beijing', 'China')
+    most_sim_1pos_2neg('queen', 'king', 'man')
+
 def smoke_test(word2vec, vocab):
     '''sanity checking'''
     test_word_similarity(word2vec)
@@ -261,3 +286,9 @@ def smoke_test(word2vec, vocab):
     test_word_analogies(word2vec)
     test_sentence_distance(word2vec, vocab)
     test_contractions(word2vec, verbose=True)
+    test_word_algebra(word2vec)
+
+if __name__ == '__main__':
+    word2vec = default_word2vec_model(verbose=True)
+    vocab = word2vec_vocab(word2vec, verbose=True)
+    smoke_test(word2vec, vocab)
