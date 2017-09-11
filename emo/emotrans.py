@@ -324,8 +324,12 @@ class EmoTrans:
         return presets
 
     # FIXME stub
-    def gen_phonetic(self, text):
+    def gen_phonetic_repl(self, text):
         return word_phonetics.cmu_phonetic(self.cmu_pro, text, verbose=(self.verbose > SHOW_USABLE_EMOJIS + 1))
+
+    # FIXME stub
+    def gen_phonetic_word(self, text):
+        return word_phonetics.PhoneticWord(self.cmu_pro, text, verbose=(self.verbose > SHOW_USABLE_EMOJIS + 1))
 
     def _gen_pros_to_emos(self, txt_emo):
         '''Generates a pronunciation-to-emojis mapping.
@@ -333,7 +337,7 @@ class EmoTrans:
         pro_emo = {}
         for txt_key, emo_lst in txt_emo.items():
             # FIXME: Single key for now
-            pro_key = self.gen_phonetic(txt_key)
+            pro_key = self.gen_phonetic_repl(txt_key)
             if pro_key:
                 try:
                     pro_emo[pro_key].extend(emo_lst)
@@ -494,13 +498,16 @@ class EmoTrans:
                 return emojis + space
 
             if self.options.phonetics:
-                phonetic = self.gen_phonetic(word)
-                if phonetic:
-                    emojis = self.emojize_phone(phonetic)
-                    if emojis:
-                        if self.verbose > SHOW_TOKEN_TRANS:
-                            print("EW  PHONE: {} -> {} -:> {}".format(word, phonetic, emojis))
-                        return emojis + space
+                phon_word = self.gen_phonetic_word(word)
+                if phon_word:
+                    for phone_tuple in phon_word.phons():
+                        emojis = self.emojize_phone(phone_tuple.phonetics)
+                        print("PHONETICS: {} --> {} ? ".format(phone_tuple.phonetics, emojis))
+                        if emojis:
+                            if self.verbose > SHOW_TOKEN_TRANS:
+                                print("EW  PHONE: {} -> {} -:> {}".format(word, phonetic, emojis))
+                            return emojis + space
+
 
             if self.options.singularize and self.is_plural_noun(word):
                 emostr = self.emojize_plural_noun(word, space)
