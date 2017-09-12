@@ -38,6 +38,7 @@ import json
 import pickle
 import random
 import re
+import struct
 from collections import Counter
 from collections import defaultdict
 from functools import partial
