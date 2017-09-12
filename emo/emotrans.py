@@ -82,7 +82,7 @@ def selflist(word):
 def getsyl(table, word):
     '''syllables'''
     syls = table.get(word)
-    return sysl if syls else word
+    return syls if syls else word
 
 def trans():
     wtsl = defaultdict(selflist)
@@ -259,7 +259,9 @@ SHOW_LIST_VALUES = 4
 SHOW_TEXT_BUILDERS = 5
 SHOW_NOUN_SINGPLUR = 6
 SHOW_TEXT_DIVISION = 7
-SHOW_USABLE_EMOJIS = 8
+SHOW_TEXT_BIGRAMS = 8
+SHOW_TEXT_PHONETICS = 8
+SHOW_USABLE_EMOJIS = 10
 
 class EmoTrans:
     '''
@@ -325,10 +327,12 @@ class EmoTrans:
 
     # FIXME stub
     def gen_phonetic_repl(self, text):
+        '''Returns single phonetic spelling representation of the given text.'''
         return word_phonetics.cmu_phonetic(self.cmu_pro, text, verbose=(self.verbose > SHOW_USABLE_EMOJIS + 1))
 
     # FIXME stub
     def gen_phonetic_word(self, text):
+        '''Returns a PhoneticWord object based on text'''
         return word_phonetics.PhoneticWord(self.cmu_pro, text, verbose=(self.verbose > SHOW_USABLE_EMOJIS + 1))
 
     def _gen_pros_to_emos(self, txt_emo):
@@ -468,6 +472,7 @@ class EmoTrans:
         return ' ➖ 🇸 '
 
     def emojize_plural_noun(self, word, space=' '):
+        '''Replaces a plural noun with reduplicated emojis, if one matches the singular form.'''
         singular = singularize(word)
         if singular != word:
             emojis = self.emojize_token(singular)
@@ -502,7 +507,8 @@ class EmoTrans:
                 if phon_word:
                     for phone_tuple in phon_word.phons():
                         emojis = self.emojize_phone(phone_tuple.phonetics, space)
-                        print("PHONETICS: {} --> {} ? ".format(phone_tuple.phonetics, emojis))
+                        if self.verbose > SHOW_TEXT_PHONETICS:
+                            print("PHONETICS: {} --> {} ? ".format(phone_tuple.phonetics, emojis))
                         if emojis:
                             if self.verbose > SHOW_TOKEN_TRANS:
                                 print("EW  PHONE: {} -> {} -:> {}".format(word, phonetic, emojis))
@@ -584,19 +590,20 @@ class EmoTrans:
         subbed = []
         idx, size = 0, len(tokens)
         while idx < size:
-            print("INDEX IS: ", idx)
             if idx % 2:                     # odd-indexed tokens are wordy
                 wrd = tokens[idx]
                 if idx + 2 < size and tokens[idx + 1].isspace():
                     bigram = wrd + ' ' + tokens[idx + 2]
-                    print("BIGRAM: ", bigram)
+                    if self.verbose > SHOW_TEXT_BIGRAMS:
+                        print("BIGRAM: ", bigram)
                     lst = self.txt_emo.get(bigram)
                     if not lst and not bigram.islower():
                         lst = self.txt_emo.get(bigram.lower())
                     if lst:
                         emo = random.choice(lst) if self.options.random else lst[0]
                         subbed.append(emo + space)
-                        print("BIGRAM: APPENDED {}  FROM list( {} )".format(emo, lst))
+                        if self.verbose > SHOW_TEXT_BIGRAMS:
+                            print("BIGRAM: APPENDED {}  FROM list( {} )".format(emo, lst))
                         idx += 3
                         continue
                 # If no bigram match was found, look for single-word match.
@@ -953,7 +960,9 @@ class EmoTrans:
         dist = editdistance.eval(sentence, txt_sent)
         print("Edit distance: {:>4}".format(dist))
 
-def shuffled(seq):
+def shuffled_list(seq):
+    '''Randomly shuffle an iterable into a list.
+    Call this on the list of indices to avoid modifying a source list in-place.'''
     shuffled = list(seq)
     random.shuffle(shuffled)
     return shuffled
@@ -971,7 +980,7 @@ def translate_sentences(options):
         emotrans.trans_to_emo_and_back(options.sentence)
         exit(0)
 
-    # rand_order = shuffled(range(len(SENTENCES)))
+    # rand_order = shuffled_list(range(len(SENTENCES)))
     # for idx in rand_order:
     #     emotrans.trans_to_emo_and_back(SENTENCES[idx])
     #     print()
@@ -1044,8 +1053,8 @@ def main():
     if args.extract_words:
         print("Collecting words from emotuples.nemo_tuples...")
         words = set()
-        et = ET.EmoTuples()
-        for nut in et.nemo_tuples:
+        emt = ET.EmoTuples()
+        for nut in emt.nemo_tuples:
             for phrase in nut.words:
                 words.update(text_regex.gen_normal_word_tokens(phrase, 2))
         text_regex.print_sorted(words, args.print_end)
