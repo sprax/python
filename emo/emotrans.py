@@ -57,8 +57,8 @@ from emo_test_data import SENTENCES
 # import sylcount
 
 DEFAULT_SENTENCE = '"Rocks and waves may rock the boat," she said, "but only you can tip the crew!!"'
-DEFAULT_SENTENCE = '"Rocks, paper, and scissors can rock, cover, or cut your hand," she said, "but you can\'t know when!!"'
-DEFAULT_SENTENCE = '"Rocks and paper!!"'
+DEFAULT_SENTENCE = '"Rocks, paper, and scissors can rock, cover, or cut your hand, but you can\'t know when!!"'
+DEFAULT_SENTENCE = '"Rocks," she said, "and paper, too, y\'know!!"'
 
 # def is_emoji(uchar):
 #   return uchar in EJ.UNICODE_EMOJI
@@ -72,8 +72,8 @@ def test_load():
     for i, tup in enumerate(sorted(emodict.items(), key=lambda x: int(x[1]['order']), reverse=True)):
         if i > 5:
             break
-        ck = unicode_chr_str(tup[0])
-        print(ck, "\t", len(ck), "\t", tup[1]['order'], "\t", tup[0], "\t", tup[1]['shortname'])
+        ucs = unicode_chr_str(tup[0])
+        print(ucs, "\t", len(ucs), "\t", tup[1]['order'], "\t", tup[0], "\t", tup[1]['shortname'])
 
 def selflist(word):
     '''return argument as sole element in list'''
@@ -85,6 +85,7 @@ def getsyl(table, word):
     return syls if syls else word
 
 def trans():
+    '''Translate to syllables?'''
     wtsl = defaultdict(selflist)
     sent = SENTENCES[0]
     words = re.split(r'\W+', sent.rstrip())
@@ -216,10 +217,12 @@ def is_plural(word):
     return word != singularize(word)
 
 def read_pickle(path):
+    '''returns a loaded pickle'''
     with open(path, 'rb') as pkl:
         return pickle.load(pkl)
 
 def show_sorted_dict(dct, idx, lbl=''):
+    '''print sorted dictionary'''
     for key, val in sorted(dct.items(), key=lambda dit: dit[idx].lower()):
         print("{}  {} => {}".format(lbl, key, val))
 
@@ -234,6 +237,7 @@ def _add_txt_emo_multiples(preset_dict):
     })
 
 def print_tagged(tagged):
+    '''Pretty prints words and the POS-tags aligned on two lines.'''
     maxlen = [max(len(tag[0]), len(tag[1])) for tag in tagged]
     # print(tagged)
     print("+++++> txt => tok (", end='')
@@ -303,9 +307,9 @@ class EmoTrans:
             return [tup for tup in ET.EMO_TUPLES if tup[i_flags] == 1]
         if self.options.multiples:
             return [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0 and
-                not RE_TONED_EMO_NAME.match(tup[i_short])]
+                    not RE_TONED_EMO_NAME.match(tup[i_short])]
         return [tup for tup in ET.EMO_TUPLES if tup[i_flags] == 1 and
-            not RE_TONED_EMO_NAME.match(tup[i_short])]
+                not RE_TONED_EMO_NAME.match(tup[i_short])]
 
     def print_usable_emojis(self):
         '''Print the usable emojis'''
@@ -351,7 +355,7 @@ class EmoTrans:
                     print("PRO_EMO: {} -> {} -> {}".format(txt_key, pro_key, pro_emo[pro_key]))
         return pro_emo
 
-    def gen_txt_to_emo(self, presets, i_words = ET.INDEX_FREQUENT_WORDS):
+    def gen_txt_to_emo(self, presets, i_words=ET.INDEX_FREQUENT_WORDS):
         '''Generates the text-to-emojis mapping.'''
         txt_emo = presets
         i_unchr = ET.INDEX_EMOJI_UNICHRS
@@ -365,7 +369,7 @@ class EmoTrans:
                 # print("txt(%s) --> emo( %s )" % (txt, tup[i_unchr]))
         return txt_emo
 
-    def gen_emo_to_txt(self, presets, i_words = ET.INDEX_FREQUENT_WORDS):
+    def gen_emo_to_txt(self, presets, i_words=ET.INDEX_FREQUENT_WORDS):
         '''
         Generates the emoji to texts mapping by first reverse mapping the preset
         text-to-emojis map, then extending text lists (which are the map's values).
@@ -467,8 +471,8 @@ class EmoTrans:
         Return string of emoji characters representing "minus S",
         as in singularizing a plural noun.
         '''
-        assert('➖' in self.emo_txt)
-        assert('🇸' in self.emo_txt)
+        assert '➖' in self.emo_txt
+        assert '🇸' in self.emo_txt
         return ' ➖ 🇸 '
 
     def emojize_plural_noun(self, word, space=' '):
@@ -511,14 +515,14 @@ class EmoTrans:
                             print("PHONETICS: {} --> {} ? ".format(phone_tuple.phonetics, emojis))
                         if emojis:
                             if self.verbose > SHOW_TOKEN_TRANS:
-                                print("EW  PHONE: {} -> {} -:> {}".format(word, phonetic, emojis))
+                                print("EW  PHONE: {} -> {} -:> {}".format(word, phone_tuple.phonetics, emojis))
                             return emojis # space already appended
                         if len(phone_tuple.syllables) > 1:
                             emo_lst = []
                             for syllable in phone_tuple.syllables:
                                 emojis = self.emojize_phone(syllable, space)
                                 if not emojis:
-                                    break;
+                                    break
                                 emo_lst.append(emojis)
                             else:
                                 return '➖ '.join(emo_lst) # space already appended
@@ -787,11 +791,13 @@ class EmoTrans:
                 substr = emo_span[max_index:]
                 word_calcs = self.emo_txt.get(substr, [])
                 if self.verbose > SHOW_TEXT_DIVISION:
-                    print("while min({})  max({})  substr({})  calcs({})".format(min_index, max_index, substr, word_calcs))
+                    print("while min({})  max({})  substr({})  calcs({})".format(
+                        min_index, max_index, substr, word_calcs))
                 if len(word_calcs) > 0:
                     txt = self.append_to_prev_list(word_calcs, prev_words)
                     if self.verbose > SHOW_TEXT_DIVISION:
-                        print("TESFE D: Calling textize_emo_span_from_end({}, {})".format(emo_span[0:max_index], txt))
+                        print("TESFE D: Calling textize_emo_span_from_end({}, {})".format(
+                            emo_span[0:max_index], txt))
                     more_words = self.textize_emo_span_from_end(emo_span[0:max_index], txt)
                     if more_words:
                         return more_words
@@ -844,7 +850,7 @@ class EmoTrans:
                             sing_calc = sing_last
                         if self.verbose > SHOW_NOUN_SINGPLUR:
                             print("TEL SING:  list{}  prev{} ::> sing{}  old({})  now({}) -> ({})".format(
-                                    emo_list, all_calcs, sing_calcs, old_emos, emo_str, sing_calc))
+                                emo_list, all_calcs, sing_calcs, old_emos, emo_str, sing_calc))
                         txt_list[-2] = sing_calc
                         txt_list.pop()  # truncate list by popping off the calc for <-> ('➖')
                         continue
@@ -1029,13 +1035,13 @@ def main():
     # parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
     #                     help='output path for filtered text (default: - <stdout>)')
     parser.add_argument('-random', action='store_true',
-                        help='Choose random emojis or words from translation lists '
-                                '(instead of always choosing the first)')
+                        help='Choose random emojis or words from translation lists '\
+                             '(instead of always choosing the first)')
     parser.add_argument('-singularize', action='store_false',
                         help='Disable singularization (which is on by default)')
     parser.add_argument('-split_join', '-sj', action='store_true',
                         help='translate using split and join (irreversible because destructive), '
-                                'not substitution (conservative)')
+                             'not substitution (conservative)')
     parser.add_argument('-text_file', dest='text_file', type=str, nargs='?',
                         const='quotations.txt', default=None,
                         help='translate sentences from this text_file')
