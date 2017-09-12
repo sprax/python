@@ -515,7 +515,7 @@ class EmoTrans:
                                     break;
                                 emo_lst.append(emojis)
                             else:
-                                return space.join(emo_lst) # space already appended
+                                return '➖ '.join(emo_lst) # space already appended
 
             if self.options.singularize and self.is_plural_noun(word):
                 emostr = self.emojize_plural_noun(word, space)
@@ -582,12 +582,29 @@ class EmoTrans:
         tagged = nltk.pos_tag(twords)
         print_tagged(tagged)
         subbed = []
-        for index, token in enumerate(tokens):
-            if index % 2:
-                pos = tagged[index // 2][1][0].lower()
-                subbed.append(self.emojize_word(token, pos, space=' '))
+        idx, size = 0, len(tokens)
+        while idx < size:
+            print("INDEX IS: ", idx)
+            if idx % 2:                     # odd-indexed tokens are wordy
+                wrd = tokens[idx]
+                if idx + 2 < size and tokens[idx + 1].isspace():
+                    bigram = wrd + ' ' + tokens[idx + 2]
+                    print("BIGRAM: ", bigram)
+                    lst = self.txt_emo.get(bigram)
+                    if not lst and not bigram.islower():
+                        lst = self.txt_emo.get(bigram.lower())
+                    if lst:
+                        emo = random.choice(lst) if self.options.random else lst[0]
+                        subbed.append(emo + space)
+                        print("BIGRAM: APPENDED {}  FROM list( {} )".format(emo, lst))
+                        idx += 3
+                        continue
+                # If no bigram match was found, look for single-word match.
+                pos = tagged[idx // 2][1][0].lower()
+                subbed.append(self.emojize_word(wrd, pos, space=' '))
             else:
-                subbed.append(token)
+                subbed.append(tokens[idx])
+            idx += 1
         subs = ''.join(subbed)
         return subs
 
