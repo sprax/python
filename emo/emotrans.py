@@ -278,9 +278,10 @@ class EmoTrans:
     Translate text to emojis, emojis to text.
     TODO: break up into 2 or 3 classes.
     '''
-    def __init__(self, options):
-        self.options = options
-        self.verbose = options.verbose
+    def __init__(self, options=None):
+        self.options = self._init_options(options)
+        print("EmoTrans: self.options: ", self.options)
+        self.verbose = self.options.verbose
         self.cmu_pro = cmudict.dict() # get the CMU Pronouncing Dict # TODO: wrap in sep class
         self.usables = self._gen_usables()
         if self.verbose > SHOW_USABLE_EMOJIS:
@@ -290,8 +291,25 @@ class EmoTrans:
         self.emo_txt = self.gen_emo_to_txt(self.presets)
         self.pro_emo = self._gen_pros_to_emos(self.txt_emo)
         self.emo_chr_counts = self.count_emo_chrs()
+        # FIXME: Don't use pickle here; instead read en_singular_nouns_different_from_plural.txt into a set
         self.singular_nouns = read_pickle('en_singular_nouns.pkl')
+        # FIXME: Don't use pickle here; instead read en_plural_nouns_different_from_singular.txt
         self.plural_nouns = read_pickle('en_plural_nouns.pkl')
+
+    def _init_options(self, options):
+        if options == None:
+            options = argparse.Namespace(
+                all_skin_tones = False,
+                arithmetic = False,
+                multiples = False,
+                no_articles = False,
+                phonetics = True,
+                pluralize = True,
+                random = False,
+                singularize = True,
+                verbose = 2,
+            )
+        return options
 
     def count_emo_chrs(self):
         '''count chars used in emoji codes'''
@@ -1075,7 +1093,8 @@ def main():
 
     # if args.verbose > 7:
     #     print("module emoji:", EJ)
-    #     print(args)
+    print("Type(args): ", type(args))
+    print(args)
     translate_sentences(args)
 
 if __name__ == '__main__':

@@ -63,5 +63,6 @@ SENTENCES = [
     # "Gosh dang it for me if I ain't what's-its-name from Tie's nightmare bowling party?",
     # "Go call my horses.",
     # "You got a maelstrom of mail and email, you male female mailman.",
-    "Call me Ishmael."
+    "Call me Ishmael.",
+    "Cartwheelers gotta cartwheel."
 ]
