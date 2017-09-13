@@ -3,20 +3,26 @@
 #
 # # # coding: iso-8859-15
 '''
-Plan:
-        General sentence translation:
-    while not completely translated:
+Plan for General sentence translation [square brackets for the still TBD parts]:
+    while not completely translated, try translating in this order:
         phrases => emojis
+            [trigrams -> emojis] ?
+            bigrams -> emojis
         phrases -> words
-            words => emojis
-        words -> syllables
-            sysllables -> emojis
-        words -> phonemes (possibly multiple phonemic decompositions)
+            words => emojis (orthonyms)
+        words => (lemmas/stems) => sets of synonymous tokens (synonyms)
+            synsets -> emojis
+        words => phonemic string representations
+            phonetic reps -> emojis (homonyms)
+        words -> phonemic syllables
+            syllables -> emojis
+        [words -> sub-syllabic phonemes (possibly multiple phonemic decompositions)
             phonemes combined across word boundaries into phrases for whole sentences
                 (or just the untranslated parts)
             match sublists of phonemes from sentences and emoji-to-word translations
+                (virtual or realized lattices weighted by probabilities and/or scores)
             recombine into sentences and/or objects that contain sentences and skeletons
-                tracking original word boundaries
+                tracking original word boundaries] ?
 
     score and rank each (partial) translation
     show top ranked (partial) translation(s)
@@ -24,13 +30,12 @@ Plan:
     Alternatively:
         Score each partial translation when formed
         Stop after a threshold is reached
-        Show top ranked translation(s)
+        Show top ranked translation(s), or just choose
 
-
-        Syllabic:
-    Words|phrases -> words => [phonetic syllables reprs]
-    Emojis => [phontic syllable reprs]
-    Text => <syllabic repr> => <emoji>
+    Syllabic:
+        Words|phrases -> words => [phonetic syllables reprs]
+        Emojis => [phontic syllable reprs]
+        Text => <syllabic repr> => <emoji>
 '''
 
 import argparse
