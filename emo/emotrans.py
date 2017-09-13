@@ -297,6 +297,7 @@ class EmoTrans:
         self.plural_nouns = read_pickle('en_plural_nouns.pkl')
 
     def _init_options(self, options):
+        '''initialize options with default values'''
         if options == None:
             options = argparse.Namespace(
                 all_skin_tones = False,
@@ -310,6 +311,15 @@ class EmoTrans:
                 verbose = 2,
             )
         return options
+
+    def get_opt(self, opt):
+        '''get option value'''
+        try:
+            return self.options.__getattribute__(opt)
+        except AttributeError as aex:
+            if self.options.verbose > 1:
+                print("EmoTrans option not set: ", aex)
+            return None
 
     def count_emo_chrs(self):
         '''count chars used in emoji codes'''
