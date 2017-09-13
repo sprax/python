@@ -204,6 +204,14 @@ class PhoneticWord:
         '''Returns a list of phonetic representations of word; it may be empty.'''
         return self.phone_sex
 
+CMU_PRON_DICT = None
+
+def cmu_pd():
+    '''returns the CMU Pronouncing Dict'''
+    if CMU_PRON_DICT == None:
+        CMU_PRON_DICT = cmudict.dict()
+    return CMU_PRON_DICT
+
 def main():
     '''extract vowels, syllables, pronunciations, etc. from text'''
     parser = argparse.ArgumentParser(
@@ -221,7 +229,7 @@ def main():
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-    cmu_prons = cmudict.dict() # get the CMU Pronouncing Dict
+    cmu_prons = cmu_pd() # get the CMU Pronouncing Dict
 
     if args.verbose:
         print(parser.prog, ":", main.__doc__, "\n")
@@ -237,8 +245,6 @@ def main():
         print("SYLLABLES:  manual(%d)  cmupro(%d)  vowel_groups(%d)  nrules(%d)" % (
             counts[1], scount, vcount, fcount))
         print()
-
-
 
 if __name__ == '__main__':
     main()
