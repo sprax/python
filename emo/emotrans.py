@@ -170,14 +170,14 @@ def emo_synonyms(word, pos=None):
         except KeyError as kex:
             # print("EMO_SYNONYMS KeyError:", kex)
             pass
-        if not is_lower:
-            lwrd = word.lower()
-            synonyms.append(lwrd)
-            try:
-                synonyms.extend(EMO_SYNONYMS[lwrd])
-            except KeyError as kex:
-                # print("EMO_SYNONYMS KeyError:", kex)
-                pass
+    if not is_lower:
+        lwrd = word.lower()
+        synonyms.append(lwrd)
+        try:
+            synonyms.extend(EMO_SYNONYMS[lwrd])
+        except KeyError as kex:
+            # print("EMO_SYNONYMS KeyError:", kex)
+            pass
     return synonyms
 
 def pluralize(word):
@@ -280,7 +280,7 @@ class EmoTrans:
     '''
     def __init__(self, options=None):
         self.options = self._init_options(options)
-        print("EmoTrans: self.options: ", self.options)
+        # print("EmoTrans: self.options: ", self.options)
         self.verbose = self.options.verbose
         self.cmu_pro = cmudict.dict() # get the CMU Pronouncing Dict # TODO: wrap in sep class
         self.usables = self._gen_usables()
@@ -291,10 +291,9 @@ class EmoTrans:
         self.emo_txt = self.gen_emo_to_txt(self.presets)
         self.pro_emo = self._gen_pros_to_emos(self.txt_emo)
         self.emo_chr_counts = self.count_emo_chrs()
-        # FIXME: Don't use pickle here; instead read en_singular_nouns_different_from_plural.txt into a set
-        self.singular_nouns = read_pickle('en_singular_nouns.pkl')
-        # FIXME: Don't use pickle here; instead read en_plural_nouns_different_from_singular.txt
-        self.plural_nouns = read_pickle('en_plural_nouns.pkl')
+        self.singular_nouns = set(text_fio.read_text_lines('en_singular_nouns_different_from_plural.txt'))
+        self.plural_nouns = set(text_fio.read_text_lines('en_plural_nouns_different_from_singular.txt'))
+        # print("DBG self.plural_nouns:", self.plural_nouns)
 
     def _init_options(self, options):
         '''initialize options with default values'''
@@ -1103,8 +1102,8 @@ def main():
 
     # if args.verbose > 7:
     #     print("module emoji:", EJ)
-    print("Type(args): ", type(args))
-    print(args)
+    #     print("Type(args): ", type(args))
+    #     print(args)
     translate_sentences(args)
 
 if __name__ == '__main__':
