@@ -141,45 +141,6 @@ def wordnet_syn_set(word, pos, lower_only=True):
                 synonyms.append(lemma.replace('_', ' '))
     return synonyms
 
-def emo_synonyms(word, pos=None):
-    '''
-    Returns a list of synonyms of the given word, based on its part of
-    speech if specified.
-    If word is not already all lower case, put both the orignal
-    (partially capitalized) word and its all-lower-cased form in
-    the list of synonyms, so as to match proper names.
-    That is to support custom emojis and/or syllabified names, but including
-    proper names may objuscate common meanings.
-    Also note that wordnet always lowercases input words, and returns proper names
-    mixed in with lower case words.  You may want to filter out the capitalized
-    "synonyms", if you can even call them that.
-    '''
-    synonyms = [word]
-    is_lower = word.islower()
-    if pos in [wordnet.ADJ, wordnet.NOUN, wordnet.ADV, wordnet.VERB]:
-        try:
-            synonyms.extend(wordnet_syn_set(word, pos, is_lower))
-            # print("XXX SYNONYMS(%s, %s):" % (word, pos), synonyms)
-        except KeyError as kex:
-            print("Wordnet Synset KeyError:", kex)
-    else:
-        try:
-            synonyms.extend(EMO_SYNONYMS[word])
-            if len(synonyms) > 1:
-                print("YYY EMO_SYNONYMS:", synonyms)
-        except KeyError as kex:
-            # print("EMO_SYNONYMS KeyError:", kex)
-            pass
-    if not is_lower:
-        lwrd = word.lower()
-        synonyms.append(lwrd)
-        try:
-            synonyms.extend(EMO_SYNONYMS[lwrd])
-        except KeyError as kex:
-            # print("EMO_SYNONYMS KeyError:", kex)
-            pass
-    return synonyms
-
 def pluralize(word):
     '''
     Return the plural form of the given word.
@@ -511,6 +472,7 @@ class EmoTrans:
     def emojize_plural_noun(self, word, space=' '):
         '''Replaces a plural noun with reduplicated emojis, if one matches the singular form.'''
         singular = singularize(word)
+        print("emojize_plural_noun %s -> %s" % (word, singular))
         if singular != word:
             emojis = self.emojize_token(singular)
             if emojis:
@@ -520,18 +482,73 @@ class EmoTrans:
                 return emostr
         return None
 
+    def emo_synonyms(self, word, pos=None):
+        '''
+        Returns a list of synonyms of the given word, based on its part of
+        speech if specified.
+        If word is not already all lower case, put both the orignal
+        (partially capitalized) word and its all-lower-cased form in
+        the list of synonyms, so as to match proper names.
+        That is to support custom emojis and/or syllabified names, but including
+        proper names may objuscate common meanings.
+        Also note that wordnet always lowercases input words, and returns proper names
+        mixed in with lower case words.  You may want to filter out the capitalized
+        "synonyms", if you can even call them that.
+        '''
+
+        # FIXME: reject synonyms that merely singularize or pluralize the source word.
+        rejects = []
+        if self.is_singular_noun(word):
+            plural = pluralize(word)
+            if plural != word:
+                rejects.append(plural)
+        elif self.is_plural_noun(word):
+            singular = singularize(word)
+            if singular != word:
+                rejects.append(singular)
+
+        # FIXME: stricter: if the source word is singular [plural], so must be any synonyms
+
+        synonyms = [word]
+        is_lower = word.islower()
+        if pos in [wordnet.ADJ, wordnet.NOUN, wordnet.ADV, wordnet.VERB]:
+            try:
+                synonyms.extend(wordnet_syn_set(word, pos, is_lower))
+                # print("XXX SYNONYMS(%s, %s):" % (word, pos), synonyms)
+            except KeyError as kex:
+                print("Wordnet Synset KeyError:", kex)
+        else:
+            try:
+                synonyms.extend(EMO_SYNONYMS[word])
+                if len(synonyms) > 1:
+                    print("YYY EMO_SYNONYMS:", synonyms)
+            except KeyError as kex:
+                # print("EMO_SYNONYMS KeyError:", kex)
+                pass
+        if not is_lower:
+            lwrd = word.lower()
+            synonyms.append(lwrd)
+            try:
+                synonyms.extend(EMO_SYNONYMS[lwrd])
+            except KeyError as kex:
+                # print("EMO_SYNONYMS KeyError:", kex)
+                pass
+        synonyms = [syn for syn in synonyms if syn not in rejects]
+        return synonyms
+
     def emojize_word(self, src_word, pos=None, space=' '):
         '''
         Return a translation of src_word into a string of emoji characters,
         or, failing that, return the original src_word.
         '''
-        synonyms = emo_synonyms(src_word, pos)
+        synonyms = self.emo_synonyms(src_word, pos)
         # if len(synonyms) > 1:
         #     synset = set([syn.lower() for syn in synonyms])
         #     if len(synset) > 1:
         #         print("ZZZ emojize_word(%s, %s) with SYNONYMS: " % (src_word, pos), synonyms)
         if self.verbose > SHOW_LIST_VALUES:
             print("EW SYNONYMS: {} -:> {}".format(src_word, synonyms))
+
         for word in synonyms:
             emojis = self.emojize_token(word)
             if emojis:
@@ -578,6 +595,7 @@ class EmoTrans:
                             if self.verbose > SHOW_NOUN_SINGPLUR:
                                 print("EW SINGLE: {} --> {}".format(word, emostr))
                             return emostr
+
         hyphenated = src_word.split('-')
         if len(hyphenated) > 1:
             return ' ➖ '.join([self.emo_or_txt_token(token) for token in hyphenated])
