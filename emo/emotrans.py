@@ -498,13 +498,14 @@ class EmoTrans:
 
         # FIXME: reject synonyms that merely singularize or pluralize the source word.
         rejects = []
-        if self.is_singular_noun(word):
-            plural = pluralize(word)
-            if plural != word:
+        lwrd = word.lower()
+        if self.is_singular_noun(lwrd):
+            plural = pluralize(lwrd)
+            if plural != lwrd:
                 rejects.append(plural)
-        elif self.is_plural_noun(word):
-            singular = singularize(word)
-            if singular != word:
+        elif self.is_plural_noun(lwrd):
+            singular = singularize(lwrd)
+            if singular != lwrd:
                 rejects.append(singular)
 
         # FIXME: stricter: if the source word is singular [plural], so must be any synonyms
@@ -533,6 +534,8 @@ class EmoTrans:
             except KeyError as kex:
                 # print("EMO_SYNONYMS KeyError:", kex)
                 pass
+        if self.verbose > 11:
+            print("SYNS:{} before REJECTS:{}".format(synonyms, rejects))
         synonyms = [syn for syn in synonyms if syn not in rejects]
         return synonyms
 
