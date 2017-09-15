@@ -237,7 +237,11 @@ SHOW_USABLE_EMOJIS = 10
 class EmoTrans:
     '''
     Translate text to emojis, emojis to text.
-    TODO: break up into 2 or 3 classes.
+    TODO: disallow 'uh' for 'a', etc.
+    TODO: finish gen* -> _gen*
+    TODO: simple anaphora: 'Neil is an astronaut.  He[astronaut] went to the moon.'  Beware dog syllogisms.
+    TODO: break up into 2 or 3 classes: Translater, POSer, Chunker, SynSubber?
+    TODO: Add lattice & scoring, probability weighting.
     '''
     def __init__(self, options=None):
         self.options = self._init_options(options)
