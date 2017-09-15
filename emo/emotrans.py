@@ -433,7 +433,8 @@ class EmoTrans:
             return None
         emo = random.choice(lst) if self.options.random else lst[0]
         if self.verbose > SHOW_TOKEN_TRANS:
-            print("ET: {} :-> {}".format(token, emo))
+            print("ET: {} :-> {} -> {}".format(token, lst, emo))
+
         return emo
 
     def emojize_phone(self, phone, space=' '):
@@ -555,8 +556,6 @@ class EmoTrans:
         for word in synonyms:
             emojis = self.emojize_token(word)
             if emojis:
-                if self.verbose > SHOW_TOKEN_TRANS:
-                    print("EW  TOKEN: {} -:> {}".format(word, emojis))
                 return emojis + space
 
             if self.options.phonetics:
