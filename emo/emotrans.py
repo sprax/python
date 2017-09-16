@@ -198,7 +198,7 @@ def _add_txt_emo_multiples(preset_dict):
     preset_dict.update({
         "crew"   : ['👦 👲🏽 👧🏿 👨 👦🏽'],
         "husband": ['💑 👈', '💏 👈', '👩❤👨 ⬅'],
-        "eye'd"    : ["👁 '🇩"],
+        "eye'd"  : ["👁 '🇩"],
         "I'd"    : ["👁 '🇩"],
         'wife'   : ['👉 💑', '👉 💏', '➡ 👩❤👨'],
     })
@@ -272,6 +272,7 @@ class EmoTrans:
                 pluralize = True,
                 random = False,
                 singularize = True,
+                uh_for_article_a = False,
                 verbose = 2,
             )
         return options
@@ -321,7 +322,9 @@ class EmoTrans:
 
     def _gen_txt_emo_presets(self):
         '''populate preset text to emoji mappings'''
-        presets = {}
+        presets = {
+            "fifth"  : ['5⃣ -th'],
+        }
         if self.options.no_articles:
             presets.update({'a': [' '], 'an': [' '], 'but': [' '], 'the': [' ']})
         if self.options.arithmetic:
@@ -552,6 +555,9 @@ class EmoTrans:
         Return a translation of src_word into a string of emoji characters,
         or, failing that, return the original src_word.
         '''
+        if src_word == 'a' and not self.options.uh_for_article_a:
+            return 'a'
+
         synonyms = self.emo_synonyms(src_word, pos)
         # if len(synonyms) > 1:
         #     synset = set([syn.lower() for syn in synonyms])
@@ -1112,6 +1118,8 @@ def main():
                         help='specify tokenizer as: 1=NOT_NON_WORD, 2=WORD_EXTENDED')
     parser.add_argument('-txt_emo', action='store_true',
                         help='show the text-to-emoji mapping')
+    parser.add_argument('-uh_for_article_a', action='store_true',
+                        help='allow phonetic substitute for the indefinite article "a"')
     parser.add_argument('-usable', action='store_true',
                         help='show all usable emoji under current options')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,

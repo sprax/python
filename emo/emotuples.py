@@ -2266,7 +2266,7 @@ def gen_emo_tuples():
     ('1f1ee-1f1e9'           , 2, 2224,    'flags', 1, '🇮🇩', ['IDN', 'ID', 'Indonesia'], ['IDN', 'ID', 'Indonesia'], ':flag_id:', [':id:']),
     ('1f1ee-1f1f7'           , 2, 2225,    'flags', 1, '🇮🇷', ['IR', 'IRN', 'Iran', 'Islamic Republic of Iran'], ['IR', 'IRN', 'Iran', 'Islamic Republic of Iran'], ':flag_ir:', [':ir:']),
     ('1f1ee-1f1f6'           , 2, 2226,    'flags', 1, '🇮🇶', ['IRQ', 'IQ', 'Iraq'], ['IRQ', 'IQ', 'Iraq'], ':flag_iq:', [':iq:']),
-    ('1f1ee-1f1ea'           , 2, 2227,    'flags', 1, '🇮🇪', ['IRL', 'IE', 'Ireland'], ['IRL', 'IE', 'Ireland'], ':flag_ie:', [':ie:']),
+    ('1f1ee-1f1ea'           , 2, 2227,    'flags', 1, '🇮🇪', ['IRL', 'IE', 'Ireland', 'Irish'], ['IRL', 'IE', 'Ireland'], ':flag_ie:', [':ie:']),
     ('1f1ee-1f1f2'           , 2, 2228,    'flags', 1, '🇮🇲', ['IMN', 'IM', 'Isle of Man'], ['IMN', 'IM', 'Isle of Man'], ':flag_im:', [':im:']),
     ('1f1ee-1f1f1'           , 2, 2229,    'flags', 1, '🇮🇱', ['IL', 'ISR', 'Israel'], ['IL', 'ISR', 'Israel'], ':flag_il:', [':il:']),
     ('1f1ee-1f1f9'           , 2, 2230,    'flags', 1, '🇮🇹', ['IT', 'ITA', 'Italy'], ['IT', 'ITA', 'Italy'], ':flag_it:', [':it:']),
