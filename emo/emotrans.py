@@ -207,11 +207,11 @@ def print_tagged(tagged):
     '''Pretty prints words and the POS-tags aligned on two lines.'''
     maxlen = [max(len(tag[0]), len(tag[1])) for tag in tagged]
     # print(tagged)
-    print("+++++> txt => tok (", end='')
+    print("++++++++++> txt => tok (", end='')
     for mxl, tup in zip(maxlen, tagged):
         print("%*s" % (mxl, tup[0]), end=' ')
     print(")")
-    print("+++++> tok => pos (", end='')
+    print("++++++++++> tok => pos (", end='')
     for mxl, tup in zip(maxlen, tagged):
         print("%*s" % (mxl, tup[1]), end=' ')
     print(")")
@@ -584,7 +584,7 @@ class EmoTrans:
                                     break
                                 emo_lst.append(emojis)
                             else:
-                                return '➖ '.join(emo_lst) # space already appended
+                                return ''.join(emo_lst) # space already appended
 
             if self.options.singularize and self.is_plural_noun(word):
                 emostr = self.emojize_plural_noun(word, space)
@@ -1017,11 +1017,11 @@ class EmoTrans:
 
     def trans_to_emo_and_back(self, sentence):
         '''translate text sentence to emoji and back, showing stages according to options'''
-        print("=====> src => txt (%s)" % sentence)
+        print("==========> src => txt (%s)" % sentence)
         emo_sent = self.emojize_sentence(sentence)
-        print("=====> txt => emo (%s)" % emo_sent)
+        print("==========> txt => emo (%s)" % emo_sent)
         txt_sent = self.textize_sentence(emo_sent)
-        print("=====> emo => txt (%s)" % txt_sent)
+        print("==========> emo => txt (%s)" % txt_sent)
 
         dist = editdistance.eval(sentence, txt_sent)
         print("Edit distance: {:>4}".format(dist))
