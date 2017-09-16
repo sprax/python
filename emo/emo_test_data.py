@@ -65,5 +65,6 @@ SENTENCES = [
     # "Call me Ishmael.",
     # "Haters gonna hate.",
     # "Cartwheelers gotta cartwheel.",
-    "A bird in hand is no substitute for two hands of Wild Turkey."
+    "A bird in hand is no substitute for two hands of Wild Turkey.",
+    "Whenever there are four Irish together there's bound to be a fifth."
 ]
