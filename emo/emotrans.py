@@ -333,7 +333,7 @@ class EmoTrans:
     # FIXME stub
     def gen_phonetic_repl(self, text):
         '''Returns single phonetic spelling representation of the given text.'''
-        return word_phonetics.cmu_phonetic(self.cmu_pro, text, verbose=(self.verbose > SHOW_USABLE_EMOJIS + 1))
+        return word_phonetics.cmu_phon(self.cmu_pro, text, verbose=(self.verbose > SHOW_USABLE_EMOJIS + 1))
 
     # FIXME stub
     def gen_phonetic_word(self, text):

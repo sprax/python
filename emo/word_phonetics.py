@@ -171,15 +171,33 @@ def phone_seq(pron, verbose=False):
 
 TRANS_NO_DIGITS = str.maketrans('', '', string.digits)
 
-def cmu_phonetic(cmu_prons, word, verbose=False):
-    '''Creates a comparable sequence of phonemes from the first CMU pronunciation, if present.'''
+def phon_from_pron(pron):
+    '''Returns string representing the phonetic spelling
+    from a single CMU pronunciation list of phonemes.'''
+    joined = ''.join(pron)
+    return joined.translate(TRANS_NO_DIGITS)
+
+def cmu_phon(cmu_prons, word, verbose=False):
+    '''Returns a comparable sequence of phonemes from the first CMU pronunciation,
+    if present, else an empty string.'''
     try:
-        joined = ''.join(cmu_prons[word][0])
-        return joined.translate(TRANS_NO_DIGITS)
+        return phon_from_pron(cmu_prons[word][0])
     except KeyError:
         if verbose:
-            print("cmu_phonetic NonKEY: ", word)
+            print("cmu_phonetics NonKEY: ", word)
     return ''
+
+def cmu_phonetics(cmu_prons, word, verbose=False):
+    '''Creates a comparable sequence of phonemes for each CMU pronunciation and
+    returns the (possibly empty) list.'''
+    phons = []
+    try:
+        for pron in cmu_prons[word]:
+            phons.append(phon_from_pron(pron))
+    except KeyError:
+        if verbose:
+            print("cmu_phonetics NonKEY: ", word)
+    return phons
 
 class PhoneticWord:
     '''Class holding phonetic representations of a single word.'''
@@ -188,7 +206,7 @@ class PhoneticWord:
         self.word = word
         self.lwrd = word.lower()
         self.cmu_prons = cmu_prons_dict.get(self.lwrd, [])
-        self.phone_sex = [phone_seq(cmu_pron, verbose) for cmu_pron in self.cmu_prons]
+        self.phone_sex = [phone_seq(pron, verbose) for pron in self.cmu_prons]
         if verbose:
             if self.cmu_prons:
                 for idx, seq in enumerate(self.phone_sex):
@@ -207,10 +225,17 @@ class PhoneticWord:
 CMU_PRON_DICT = None
 
 def cmu_pd():
-    '''returns the CMU Pronouncing Dict'''
+    '''Returns CMU Pronouncing Dictionary as a global.'''
+    global CMU_PRON_DICT
     if CMU_PRON_DICT == None:
         CMU_PRON_DICT = cmudict.dict()
     return CMU_PRON_DICT
+
+def get_prons(word):
+    '''Returns CMU Pronouncing Dictionary entry for word, or None.'''
+    return cmu_pd().get(word)
+
+
 
 def main():
     '''extract vowels, syllables, pronunciations, etc. from text'''
