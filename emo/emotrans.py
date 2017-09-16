@@ -299,6 +299,9 @@ class EmoTrans:
         Generate list of emo tuples to use on this platform
         TODO: generalize.
         '''
+        # for tup in ET.EMO_TUPLES:
+        #     print(tup)
+        #     assert type(tup[i_short]) == str
         if self.options.all_skin_tones and self.options.multiples:
             return [tup for tup in ET.EMO_TUPLES if tup[i_flags] > 0]
         if self.options.all_skin_tones:

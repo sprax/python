@@ -30,7 +30,8 @@ INDEX_SHORT_NAME     = 8
 INDEX_ALTERNATIVES   = 9  # not used much; may go away
 COUNTRY_FLAGS_RANGE  = range(2120, 2377)
 EMO_HEADER = ('code', 'len', 'order', 'category', 'flags', 'chr', 'texts', 'syllables', 'shortname', 'alternates')
-EMO_TUPLES = [
+def gen_emo_tuples():
+    emo_tuples = [
     ('1f600'                 , 1,    1,   'people', 1, '😀', ['grin', 'smirking', 'grinning'], ['grin', 'smirking', 'grinning'], ':grinning:', ['smiling']),
     ('1f603'                 , 1,    2,   'people', 1, '😃', ['grin', 'smile', 'smiley', 'happy face'], ['grin', 'smile', 'smiley', 'smile ee'], ':smiley:', []),
     ('1f604'                 , 1,    3,   'people', 1, '😄', ['smile', 'smile'], ['smile', 'smile'], ':smile:', []),
@@ -254,12 +255,12 @@ EMO_TUPLES = [
     ('1f91a-1f3fd'           , 2,  221,   'people', 1, '🤚🏽', ['hand'], ['hand'], ':raised_back_of_hand_tone3:', [':back_of_hand_tone3:']),
     ('1f91a-1f3fe'           , 2,  222,   'people', 1, '🤚🏾', ['hand'], ['hand'], ':raised_back_of_hand_tone4:', [':back_of_hand_tone4:']),
     ('1f91a-1f3ff'           , 2,  223,   'people', 1, '🤚🏿', ['hand'], ['hand'], ':raised_back_of_hand_tone5:', [':back_of_hand_tone5:']),
-    ('1f590'                 , 1,  224,   'people', 1, '🖐', ['hand', 'splayed'], ['hand', 'splayed'], ':hand_splayed:', [':raised_hand_with_fingers_splayed:']),
-    ('1f590-1f3fb'           , 2,  225,   'people', 1, '🖐🏻', ['hand', 'five', 'splayed', 'splayed'], ['hand', 'five', 'splayed', 'splayed'], ':hand_splayed_tone1:', [':raised_hand_with_fingers_splayed_tone1:']),
-    ('1f590-1f3fc'           , 2,  226,   'people', 1, '🖐🏼', ['hand', 'five', 'splayed', 'splayed'], ['hand', 'five', 'splayed', 'splayed'], ':hand_splayed_tone2:', [':raised_hand_with_fingers_splayed_tone2:']),
-    ('1f590-1f3fd'           , 2,  227,   'people', 1, '🖐🏽', ['hand', 'five', 'splayed', 'splayed'], ['hand', 'five', 'splayed', 'splayed'], ':hand_splayed_tone3:', [':raised_hand_with_fingers_splayed_tone3:']),
-    ('1f590-1f3fe'           , 2,  228,   'people', 1, '🖐🏾', ['hand', 'five', 'splayed', 'splayed'], ['hand', 'five', 'splayed', 'splayed'], ':hand_splayed_tone4:', [':raised_hand_with_fingers_splayed_tone4:']),
-    ('1f590-1f3ff'           , 2,  229,   'people', 1, '🖐🏿', ['hand', 'five', 'splayed', 'splayed'], ['hand', 'five', 'splayed', 'splayed'], ':hand_splayed_tone5:', [':raised_hand_with_fingers_splayed_tone5:']),
+    ('1f590'                 , 1,  224,   'people', 1, '🖐', ['splayed hand', 'five', 'five fingers', 'five-finger', 'splayed'], ['hand', 'splayed'], ':hand_splayed:', [':raised_hand_with_fingers_splayed:']),
+    ('1f590-1f3fb'           , 2,  225,   'people', 1, '🖐🏻', ['splayed hand', 'five', 'five fingers', 'five-finger'], ['hand', 'five', 'splayed', 'splayed'], ':hand_splayed_tone1:', [':raised_hand_with_fingers_splayed_tone1:']),
+    ('1f590-1f3fc'           , 2,  226,   'people', 1, '🖐🏼', ['splayed hand', 'five', 'five fingers', 'five-finger', 'splayed'], ['hand', 'five', 'splayed', 'splayed'], ':hand_splayed_tone2:', [':raised_hand_with_fingers_splayed_tone2:']),
+    ('1f590-1f3fd'           , 2,  227,   'people', 1, '🖐🏽', ['splayed hand', 'five', 'five fingers', 'five-finger', 'splayed'], ['hand', 'five', 'splayed', 'splayed'], ':hand_splayed_tone3:', [':raised_hand_with_fingers_splayed_tone3:']),
+    ('1f590-1f3fe'           , 2,  228,   'people', 1, '🖐🏾', ['splayed hand', 'five', 'five fingers', 'five-finger', 'splayed'], ['hand', 'five', 'splayed', 'splayed'], ':hand_splayed_tone4:', [':raised_hand_with_fingers_splayed_tone4:']),
+    ('1f590-1f3ff'           , 2,  229,   'people', 1, '🖐🏿', ['splayed hand', 'five', 'five fingers', 'five-finger', 'splayed'], ['splayed'], ':hand_splayed_tone5:', [':raised_hand_with_fingers_splayed_tone5:']),
     ('1f596'                 , 1,  230,   'people', 1, '🖖', ['spock', 'vulcan'], ['spock', 'vulcan'], ':vulcan:', [':raised_hand_with_part_between_middle_and_ring_fingers:']),
     ('1f596-1f3fb'           , 2,  231,   'people', 1, '🖖🏻', ['spock', 'vulcan'], ['spock', 'vulcan'], ':vulcan_tone1:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone1:']),
     ('1f596-1f3fc'           , 2,  232,   'people', 1, '🖖🏼', ['spock', 'vulcan'], ['spock', 'vulcan'], ':vulcan_tone2:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone2:']),
@@ -2458,7 +2459,10 @@ EMO_TUPLES = [
     ('1f468-1f469-1f466'     , 3, 2425,   'people', 1, '👨👩👦', ['heads', 'family', 'woman'], ['heads', 'family', 'woman'], ':family_man_woman_boy:', []),
     ('1f469-2764-1f468'      , 3, 2426,   'people', 1, '👩❤👨', ['pair', 'couple', 'woman'], ['pair', 'couple', 'woman'], ':couple_with_heart_woman_man:', []),
     ('1f469-2764-1f48b-1f468', 4, 2427,   'people', 1, '👩❤💋👨', ['kiss', 'woman'], ['kiss', 'woman'], ':kiss_woman_man:', []),
-]
+    ]
+    return emo_tuples
+
+EMO_TUPLES = gen_emo_tuples()
 
 NemoTuple = namedtuple('NemoTuple', 'code size ord cat flags chrs words short')
 
