@@ -257,8 +257,8 @@ def gen_emo_tuples():
     ('1f91a-1f3ff'           , 2,  223,   'hands', 1, '🤚🏿', ['hand'], ['hand'], ':raised_back_of_hand_tone5:', [':back_of_hand_tone5:']),
     ]
 
-    texts = ['splayed hand', 'five fingers', 'five', 'five-finger', 'splayed']
-    sylls = ['SPLEYD HHAEND']
+    texts = ['splayed hand',  'five fingers',   'five', 'five-finger',     'splayed']
+    sylls = ['SPLEYD HHAEND', 'FAYV FIHNG GERS', 'FAYV', 'FAYV FIHNG GER', 'SPLEYD']
     emo_tuples += [
     ('1f590'                 , 1,  224,   'hands', 1, '🖐', texts, sylls, ':hand_splayed:', [':raised_hand_with_fingers_splayed:']),
     ('1f590-1f3fb'           , 2,  225,   'hands', 1, '🖐🏻', texts, sylls, ':hand_splayed_tone1:', [':raised_hand_with_fingers_splayed_tone1:']),
