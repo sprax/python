@@ -169,11 +169,11 @@ def gen_words_and_separaters(sentence_body):
 
 
 ###############################################################################
-RE_SENTENCE_ENDS = re.compile(r"(\w.*)\b(?=\W*$)")
+REC_BEG_MID_END = re.compile(r"(^\W*)\b(\w.*\w)\b(\W*$)", re.DOTALL|re.MULTILINE)
 
-def sentence_body_and_end(sentence):
+def sentence_beg_body_and_end(sentence):
     '''return sentence parts as [beg, body, end] where beg and end may be 0-length'''
-    return RE_SENTENCE_ENDS.split(sentence)
+    return REC_BEG_MID_END.match(sentence).groups()
 
 # The < is for <3, <=, <--, etc.
 WORD_EXT_BEG = r'[<]'

@@ -618,7 +618,7 @@ class EmoTrans:
             end = chars after all words
             mid = everthing between beg and end.
         '''
-        beg, body, end = text_regex.sentence_body_and_end(sentence)
+        beg, body, end = text_regex.sentence_beg_body_and_end(sentence)
         if self.verbose > SHOW_TEXT_DIVISION:
             print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
 
@@ -1030,7 +1030,7 @@ def shuffled_list(seq):
     random.shuffle(shuffled)
     return shuffled
 
-def translate_sentences(options):
+def test_translate_sentences(options):
     '''Test translation from Enlish to emojis and back.'''
     emotrans = EmoTrans(options)
     txt_emo = emotrans.txt_emo
@@ -1039,8 +1039,9 @@ def translate_sentences(options):
         show_sorted_dict(txt_emo, 0)
     if options.emo_txt:
         show_sorted_dict(emo_txt, 0)
-    if options.sentence:
-        emotrans.trans_to_emo_and_back(options.sentence)
+    if options.sinput:
+        for sentence in nltk.sent_tokenize(options.sinput):
+            emotrans.trans_to_emo_and_back(sentence)
         exit(0)
 
     # rand_order = shuffled_list(range(len(SENTENCES)))
@@ -1050,9 +1051,10 @@ def translate_sentences(options):
 
     if not options.order:
         random.shuffle(SENTENCES)
-    for sentence in SENTENCES:
-        emotrans.trans_to_emo_and_back(sentence)
-        print()
+    for paragraph in SENTENCES:
+        for sentence in nltk.sent_tokenize(paragraph):
+            emotrans.trans_to_emo_and_back(sentence)
+            print()
 
     if options.text_file:
         for sentence in text_fio.read_text_lines(options.text_file, options.charset):
@@ -1073,7 +1075,7 @@ def main():
                         help='end= argument to give print')
     parser.add_argument('-extract_words', action='store_true',
                         help='extract words from emotuples')
-    parser.add_argument('-input', dest='sentence', type=str, nargs='?', default=None,
+    parser.add_argument('-input', dest='sinput', type=str, nargs='?', default=None,
                         const=DEFAULT_SENTENCE, help='input a sentence to translate (or use default)')
     parser.add_argument('-emo_txt', action='store_true',
                         help='show the emoji-to-text mapping')
@@ -1128,7 +1130,7 @@ def main():
     #     print("module emoji:", EJ)
     #     print("Type(args): ", type(args))
     #     print(args)
-    translate_sentences(args)
+    test_translate_sentences(args)
 
 if __name__ == '__main__':
     START_TIME = time.time()
