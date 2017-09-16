@@ -235,6 +235,16 @@ def get_prons(word):
     '''Returns CMU Pronouncing Dictionary entry for word, or None.'''
     return cmu_pd().get(word)
 
+def get_pron(word):
+    '''Returns first pron in CMU Pronouncing Dictionary entry for word, or None.'''
+    try:
+        return cmu_pd()[word][0]
+    except KeyError:
+        return None
+
+def get_phons(word, verbose=False):
+    '''Returns phonetic spellings for word based on CMU Pronouncing Dictionary.'''
+    return cmu_phonetics(cmu_pd(), word, verbose)
 
 
 def main():

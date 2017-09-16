@@ -257,14 +257,15 @@ def gen_emo_tuples():
     ('1f91a-1f3ff'           , 2,  223,   'hands', 1, '🤚🏿', ['hand'], ['hand'], ':raised_back_of_hand_tone5:', [':back_of_hand_tone5:']),
     ]
 
-    splayed_hand = ['splayed hand', 'five fingers', 'five', 'five-finger', 'splayed']
+    texts = ['splayed hand', 'five fingers', 'five', 'five-finger', 'splayed']
+    sylls = ['SPLEYD HHAEND']
     emo_tuples += [
-    ('1f590'                 , 1,  224,   'hands', 1, '🖐', splayed_hand, splayed_hand, ':hand_splayed:', [':raised_hand_with_fingers_splayed:']),
-    ('1f590-1f3fb'           , 2,  225,   'hands', 1, '🖐🏻', splayed_hand, splayed_hand, ':hand_splayed_tone1:', [':raised_hand_with_fingers_splayed_tone1:']),
-    ('1f590-1f3fc'           , 2,  226,   'hands', 1, '🖐🏼', splayed_hand, splayed_hand, ':hand_splayed_tone2:', [':raised_hand_with_fingers_splayed_tone2:']),
-    ('1f590-1f3fd'           , 2,  227,   'hands', 1, '🖐🏽', splayed_hand, splayed_hand, ':hand_splayed_tone3:', [':raised_hand_with_fingers_splayed_tone3:']),
-    ('1f590-1f3fe'           , 2,  228,   'hands', 1, '🖐🏾', splayed_hand, splayed_hand, ':hand_splayed_tone4:', [':raised_hand_with_fingers_splayed_tone4:']),
-    ('1f590-1f3ff'           , 2,  229,   'hands', 1, '🖐🏿', splayed_hand, splayed_hand, ':hand_splayed_tone5:', [':raised_hand_with_fingers_splayed_tone5:']),
+    ('1f590'                 , 1,  224,   'hands', 1, '🖐', texts, sylls, ':hand_splayed:', [':raised_hand_with_fingers_splayed:']),
+    ('1f590-1f3fb'           , 2,  225,   'hands', 1, '🖐🏻', texts, sylls, ':hand_splayed_tone1:', [':raised_hand_with_fingers_splayed_tone1:']),
+    ('1f590-1f3fc'           , 2,  226,   'hands', 1, '🖐🏼', texts, sylls, ':hand_splayed_tone2:', [':raised_hand_with_fingers_splayed_tone2:']),
+    ('1f590-1f3fd'           , 2,  227,   'hands', 1, '🖐🏽', texts, sylls, ':hand_splayed_tone3:', [':raised_hand_with_fingers_splayed_tone3:']),
+    ('1f590-1f3fe'           , 2,  228,   'hands', 1, '🖐🏾', texts, sylls, ':hand_splayed_tone4:', [':raised_hand_with_fingers_splayed_tone4:']),
+    ('1f590-1f3ff'           , 2,  229,   'hands', 1, '🖐🏿', texts, sylls, ':hand_splayed_tone5:', [':raised_hand_with_fingers_splayed_tone5:']),
     ]
 
     emo_tuples += [
@@ -2471,7 +2472,7 @@ def gen_emo_tuples():
 
 EMO_TUPLES = gen_emo_tuples()
 
-NemoTuple = namedtuple('NemoTuple', 'code size ord cat flags chrs words short')
+NemoTuple = namedtuple('NemoTuple', 'code size ord categ flags chrs words short')
 
 def gen_named_emo_tuples(emotups):
     nemos = []
@@ -2496,10 +2497,6 @@ class EmoTuples:
             print(tt)
         print("-----------------------------------------------------------------------------------------")
         print(self.emo_header)
-
-
-
-
 
 def test_emo_tuples(options):
     et = EmoTuples()
