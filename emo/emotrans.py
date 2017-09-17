@@ -224,15 +224,20 @@ TOKENIZER_WORD_EXTENDED = 2
 MAX_MULTI_EMO_LEN = 8
 MIN_SOLIT_EMO_LEN = 1
 
-# Verbosity levels:
-SHOW_TOKEN_TRANS = 3
-SHOW_LIST_VALUES = 4
-SHOW_TEXT_BUILDERS = 5
-SHOW_NOUN_SINGPLUR = 6
-SHOW_TEXT_DIVISION = 7
-SHOW_TEXT_BIGRAMS = 8
-SHOW_TEXT_PHONETICS = 8
-SHOW_USABLE_EMOJIS = 10
+# Verbosity flags:
+SHOW_TRANSLATION = 1
+SHOW_SOURCE_TEXT = 2
+SHOW_RETRANS_TXT = 4
+SHOW_TOKEN_TRANS = 8
+SHOW_LIST_VALUES = 16
+SHOW_TEXT_BUILDERS = 32
+SHOW_NOUN_SINGPLUR = 64
+SHOW_TEXT_DIVISION = 128
+SHOW_TEXT_BIGRAMS  = 256
+SHOW_TEXT_PHONETICS = 512
+SHOW_USABLE_EMOJIS = 1024
+SHOW_SYNONYM_LISTS = 2056
+SHOW_PHONETICS_KEX = 4096
 
 class EmoTrans:
     '''
@@ -247,9 +252,10 @@ class EmoTrans:
         self.options = self._init_options(options)
         # print("EmoTrans: self.options: ", self.options)
         self.verbose = self.options.verbose
+        self.waflags  = self.options.waflags
         self.cmu_pro = cmudict.dict() # get the CMU Pronouncing Dict # TODO: wrap in sep class
         self.usables = self._gen_usables()
-        if self.verbose > SHOW_USABLE_EMOJIS:
+        if self.waflags & SHOW_USABLE_EMOJIS:
             self.print_usable_emojis()
         self.presets = self._gen_txt_emo_presets()
         self.txt_emo = self.gen_txt_to_emo(self.presets)
@@ -291,7 +297,7 @@ class EmoTrans:
         counter = Counter()
         for tup in self.usables:
             counter.update(tup[ET.INDEX_EMOJI_UNICHRS])
-        if self.verbose > 7:
+        if self.waflags & SHOW_USABLE_EMOJIS:
             print("Most common emo parts (single unichars):", counter.most_common(12))
         return counter
 
@@ -336,12 +342,12 @@ class EmoTrans:
     # FIXME stub
     def gen_phonetic_repl(self, text):
         '''Returns single phonetic spelling representation of the given text.'''
-        return word_phonetics.cmu_phon(self.cmu_pro, text, verbose=(self.verbose > SHOW_USABLE_EMOJIS + 1))
+        return word_phonetics.cmu_phon(self.cmu_pro, text, verbose=(self.waflags & SHOW_PHONETICS_KEX))
 
     # FIXME stub
     def gen_phonetic_word(self, text):
         '''Returns a PhoneticWord object based on text'''
-        return word_phonetics.PhoneticWord(self.cmu_pro, text, verbose=(self.verbose > SHOW_USABLE_EMOJIS + 1))
+        return word_phonetics.PhoneticWord(self.cmu_pro, text, verbose=(self.waflags & SHOW_PHONETICS_KEX))
 
     def _gen_pros_to_emos(self, txt_emo):
         '''Generates a pronunciation-to-emojis mapping.
@@ -355,7 +361,7 @@ class EmoTrans:
                     pro_emo[pro_key].extend(emo_lst)
                 except KeyError:
                     pro_emo[pro_key] = emo_lst
-                if self.verbose > SHOW_USABLE_EMOJIS:
+                if self.waflags & SHOW_USABLE_EMOJIS:
                     print("PRO_EMO: {} -> {} -> {}".format(txt_key, pro_key, pro_emo[pro_key]))
         return pro_emo
 
@@ -402,7 +408,7 @@ class EmoTrans:
             # print("emo_txt 1: {} -:> {}".format(txt, lst))
             for emo in lst:
                 emo_txt[emo].append(txt)
-                if self.verbose > 1:
+                if self.waflags & 1:
                     print("emo_txt 3: {} --> {}".format(emo, txt))
         return emo_txt
 
@@ -434,14 +440,14 @@ class EmoTrans:
         '''
         try:
             lst = self.txt_emo[token]
-            if self.verbose > SHOW_LIST_VALUES:
+            if self.waflags & SHOW_LIST_VALUES:
                 print("ET: {} -:> {}".format(token, lst))
         except KeyError:
-            if self.verbose > SHOW_TOKEN_TRANS:
+            if self.waflags & SHOW_TOKEN_TRANS:
                 print("ET: {} -:> {}".format(token, None))
             return None
         emo = random.choice(lst) if self.options.random else lst[0]
-        if self.verbose > SHOW_TOKEN_TRANS:
+        if self.waflags & SHOW_TOKEN_TRANS:
             print("ET: {} :-> {} -> {}".format(token, lst, emo))
         return emo
 
@@ -457,14 +463,14 @@ class EmoTrans:
         '''
         try:
             lst = self.pro_emo[phone]
-            if self.verbose > SHOW_LIST_VALUES:
+            if self.waflags & SHOW_LIST_VALUES:
                 print("EP: {} -:> {}".format(phone, lst))
         except KeyError:
-            if self.verbose > SHOW_TOKEN_TRANS:
+            if self.waflags & SHOW_TOKEN_TRANS:
                 print("EP: {} -:> {}".format(phone, None))
             return None
         emo = random.choice(lst) if self.options.random else lst[0]
-        if self.verbose > SHOW_TOKEN_TRANS:
+        if self.waflags & SHOW_TOKEN_TRANS:
             print("EP: {} :-> {}".format(phone, emo))
         return emo + space
 
@@ -485,13 +491,13 @@ class EmoTrans:
     def emojize_plural_noun(self, word, space=' '):
         '''Replaces a plural noun with reduplicated emojis, if one matches the singular form.'''
         singular = singularize(word)
-        if self.verbose > 7:
+        if self.waflags & SHOW_NOUN_SINGPLUR:
             print("emojize_plural_noun %s -> %s" % (word, singular))
         if singular != word:
             emojis = self.emojize_token(singular)
             if emojis:
                 emostr = emojis + space + emojis + space
-                if self.verbose > SHOW_NOUN_SINGPLUR:
+                if self.waflags & SHOW_NOUN_SINGPLUR:
                     print("EW PLURAL: {} --> {}".format(word, emostr))
                 return emostr
         return None
@@ -548,7 +554,7 @@ class EmoTrans:
             except KeyError as kex:
                 # print("EMO_SYNONYMS KeyError:", kex)
                 pass
-        if self.verbose > 11:
+        if self.waflags & SHOW_SYNONYM_LISTS:
             print("SYNS:{} before REJECTS:{}".format(synonyms, rejects))
         synonyms = [syn for syn in synonyms if syn not in rejects]
         return synonyms
@@ -566,7 +572,7 @@ class EmoTrans:
         #     synset = set([syn.lower() for syn in synonyms])
         #     if len(synset) > 1:
         #         print("ZZZ emojize_word(%s, %s) with SYNONYMS: " % (src_word, pos), synonyms)
-        if self.verbose > SHOW_LIST_VALUES:
+        if self.waflags & SHOW_LIST_VALUES:
             print("EW SYNONYMS: {} -:> {}".format(src_word, synonyms))
 
         for word in synonyms:
@@ -584,10 +590,10 @@ class EmoTrans:
                 if phon_word:
                     for phone_tuple in phon_word.phons():
                         emojis = self.emojize_phone(phone_tuple.phonetics, space)
-                        if self.verbose > SHOW_TEXT_PHONETICS:
+                        if self.waflags & SHOW_TEXT_PHONETICS:
                             print("PHONETICS: {} --> {} ? ".format(phone_tuple.phonetics, emojis))
                         if emojis:
-                            if self.verbose > SHOW_TOKEN_TRANS:
+                            if self.waflags & SHOW_TOKEN_TRANS:
                                 print("EW  PHONE: {} -> {} -:> {}".format(word, phone_tuple.phonetics, emojis))
                             return emojis # space already appended
                         if len(phone_tuple.syllables) > 1:
@@ -615,7 +621,7 @@ class EmoTrans:
                         emojis = self.emojize_token(plural)
                         if emojis:
                             emostr = emojis + self.minus_s_emo()
-                            if self.verbose > SHOW_NOUN_SINGPLUR:
+                            if self.waflags & SHOW_NOUN_SINGPLUR:
                                 print("EW SINGLE: {} --> {}".format(word, emostr))
                             return emostr
 
@@ -636,7 +642,7 @@ class EmoTrans:
             mid = everthing between beg and end.
         '''
         beg, body, end = text_regex.sentence_beg_body_and_end(sentence)
-        if self.verbose > SHOW_TEXT_DIVISION:
+        if self.waflags & SHOW_TEXT_DIVISION:
             print("beg(%s)  body(%s)  end(%s)" % (beg, body, end))
 
         subs = mid_translator(body)
@@ -672,7 +678,7 @@ class EmoTrans:
                 wrd = tokens[idx]
                 if idx + 2 < size and tokens[idx + 1].isspace():
                     bigram = wrd + ' ' + tokens[idx + 2]
-                    if self.verbose > SHOW_TEXT_BIGRAMS:
+                    if self.waflags & SHOW_TEXT_BIGRAMS:
                         print("BIGRAM: ", bigram)
                     lst = self.txt_emo.get(bigram)
                     if not lst and not bigram.islower():
@@ -680,7 +686,7 @@ class EmoTrans:
                     if lst:
                         emo = random.choice(lst) if self.options.random else lst[0]
                         subbed.append(emo + space)
-                        if self.verbose > SHOW_TEXT_BIGRAMS:
+                        if self.waflags & SHOW_TEXT_BIGRAMS:
                             print("BIGRAM: APPENDED {}  FROM list( {} )".format(emo, lst))
                         idx += 3
                         continue
@@ -718,7 +724,7 @@ class EmoTrans:
         The return product should be a tagged list, i.e. a list of pairs [(token, {word|fill}), ...]
         '''
         srcs = text_regex.words_split_out(txt_phrase.strip())
-        if self.verbose > 2:
+        if self.waflags & SHOW_SOURCE_TEXT:
             print(srcs)
         emo_phrase = []
         for raw in srcs:
@@ -757,11 +763,11 @@ class EmoTrans:
 
     def textize_emo_span_recurse_busted(self, emo_span):
         '''FIXME: busted.  translate a string or slice of emojis into a text string'''
-        if self.verbose > 2:
+        if self.waflags & 2:
             print("TSPAN: span({})".format(emo_span))
         try:
             lst = self.emo_txt[emo_span]
-            if self.verbose > 1:
+            if self.waflags & 1:
                 print("TES: {} -:> {}".format(emo_span, lst))
             txt = random.choice(lst) if self.options.random else lst[0]
             return txt
@@ -771,14 +777,14 @@ class EmoTrans:
 
     def textize_emo_chars(self, emo_span, space=' '):
         '''translate a string or slice of emojis char by char into a text string'''
-        if self.verbose > SHOW_TEXT_BUILDERS:
+        if self.waflags & SHOW_TEXT_BUILDERS:
             print("TCHRS: span({})".format(emo_span))
         text = ''
         prev = False
         for uchr in emo_span:
             try:
                 lst = self.emo_txt[uchr]
-                if self.verbose > 1:
+                if self.waflags & 1:
                     print("TES: {} -:> {}".format(uchr, lst))
                 txt = random.choice(lst) if self.options.random else lst[0]
                 text += txt
@@ -795,7 +801,7 @@ class EmoTrans:
         Select word from the word_calcs list and append it to
         the list of previously translated words.
         '''
-        if self.verbose > 7:
+        if self.waflags & 7:
             print("append_to_prev_list:  word_calcs({})  list({})".format(word_calcs, prev_words))
         if prev_words:
             for word in word_calcs:
@@ -815,7 +821,7 @@ class EmoTrans:
                             prev_words[-1] = singular
                             return prev_words
                 prev_words.append(word)
-                if self.verbose > 7:
+                if self.waflags & SHOW_NOUN_SINGPLUR:
                     print("append_to_prev_list:  ({})  -:> ({})".format(word, prev_words))
                 return prev_words
         word = random.choice(word_calcs) if self.options.random else word_calcs[0]
@@ -837,7 +843,7 @@ class EmoTrans:
         separated by single spaces.  If no emoji to text translation is found,
         the original span is returned as-is.
         '''
-        if  self.verbose > SHOW_TEXT_DIVISION:
+        if  self.waflags & SHOW_TEXT_DIVISION:
             print("TESFE A:  span({})  prev_words({})".format(emo_span, prev_words))
         # emo_span = emo_span.rstrip() -- should no longer need (or want) to strip.
 
@@ -850,7 +856,7 @@ class EmoTrans:
             # else:
             #     lst = self.emo_txt[emo_span]
             word_calcs = self.emo_txt[emo_span]
-            if self.verbose > 5:
+            if self.waflags & SHOW_TEXT_DIVISION:
                 print("TESFE B: {} -:> {}".format(emo_span, word_calcs))
             return self.append_to_prev_list(word_calcs, prev_words).reverse()
         except KeyError:
@@ -864,12 +870,12 @@ class EmoTrans:
             while max_index >= min_index:
                 substr = emo_span[max_index:]
                 word_calcs = self.emo_txt.get(substr, [])
-                if self.verbose > SHOW_TEXT_DIVISION:
+                if self.waflags & SHOW_TEXT_DIVISION:
                     print("while min({})  max({})  substr({})  calcs({})".format(
                         min_index, max_index, substr, word_calcs))
                 if len(word_calcs) > 0:
                     txt = self.append_to_prev_list(word_calcs, prev_words)
-                    if self.verbose > SHOW_TEXT_DIVISION:
+                    if self.waflags & SHOW_TEXT_DIVISION:
                         print("TESFE D: Calling textize_emo_span_from_end({}, {})".format(
                             emo_span[0:max_index], txt))
                     more_words = self.textize_emo_span_from_end(emo_span[0:max_index], txt)
@@ -887,7 +893,7 @@ class EmoTrans:
         The output list will have the same number of items (length) as the input list.
         TODO: Helper methods.
         '''
-        if  self.verbose > SHOW_LIST_VALUES:
+        if  self.waflags & SHOW_LIST_VALUES:
             print("TEL A input{}".format(emo_list))
 
         txt_list = []           # output
@@ -922,7 +928,7 @@ class EmoTrans:
                             sing_calc = space.join(sing_words)
                         else:
                             sing_calc = sing_last
-                        if self.verbose > SHOW_NOUN_SINGPLUR:
+                        if self.waflags & SHOW_NOUN_SINGPLUR:
                             print("TEL SING:  list{}  prev{} ::> sing{}  old({})  now({}) -> ({})".format(
                                 emo_list, all_calcs, sing_calcs, old_emos, emo_str, sing_calc))
                         txt_list[-2] = sing_calc
@@ -934,12 +940,12 @@ class EmoTrans:
                 # Is the whole emo_str a key?
                 word_calcs = self.emo_txt[emo_str]
                 calc = random.choice(word_calcs) if self.options.random else word_calcs[0]
-                if self.verbose > SHOW_LIST_VALUES:
+                if self.waflags & SHOW_LIST_VALUES:
                     print("TEL emo_txt: {} -:> {} --> ({})".format(emo_str, word_calcs, calc))
                 txt_list.append(calc)
             except KeyError:
                 # Else divide the string recursively into parts, and try to tranlate each part.
-                if self.verbose > SHOW_TEXT_DIVISION:
+                if self.waflags & SHOW_TEXT_DIVISION:
                     print("TEL : Calling TESFE(%s)" % emo_str)
                 calc = self.textize_emo_span_from_end(emo_str)
                 txt_list.append(calc)
@@ -973,20 +979,20 @@ class EmoTrans:
             elif emo_span:
                 txt_list = self.textize_emo_span(emo_span)
                 if txt_list:
-                    if self.verbose > SHOW_LIST_VALUES:
+                    if self.waflags & SHOW_LIST_VALUES:
                         print("TSS list: {}".format(txt_list))
                     txt_join = space.join(txt_list)
-                    if self.verbose > SHOW_TOKEN_TRANS:
+                    if self.waflags & SHOW_TOKEN_TRANS:
                         print("TSS REBUS: {} --> {}".format(emo_span, txt_join))
                     if first:
                         txt_sent += txt_join.capitalize()
                         first = False
                     else:
                         txt_sent += txt_join
-                    if self.verbose > SHOW_TEXT_BUILDERS:
+                    if self.waflags & SHOW_TEXT_BUILDERS:
                         print("TSS text: ({})".format(txt_sent))
                 else:
-                    if self.verbose > SHOW_TEXT_BUILDERS:
+                    if self.waflags & SHOW_TEXT_BUILDERS:
                         print("TSS add: {} += {}", txt_sent, emo_span)
                     txt_sent += emo_span
                 emo_span = ''
@@ -999,9 +1005,9 @@ class EmoTrans:
             txt_list = self.textize_emo_span(emo_span)
             if txt_list:
                 txt_join = space.join(txt_list)
-                if self.verbose > SHOW_LIST_VALUES:
+                if self.waflags & SHOW_LIST_VALUES:
                     print("TSS list: {}".format(txt_list))
-                if self.verbose > SHOW_TOKEN_TRANS:
+                if self.waflags & SHOW_TOKEN_TRANS:
                     print("TSS REBUS: {} --> {}".format(emo_span, txt_join))
                 if txt_list[0].isalnum():
                     txt_sent = txt_sent + txt_join
@@ -1031,14 +1037,16 @@ class EmoTrans:
 
     def trans_to_emo_and_back(self, sentence):
         '''translate text sentence to emoji and back, showing stages according to options'''
-        print("==========> src => txt (%s)" % sentence)
+        if self.options.waflags & SHOW_SOURCE_TEXT:
+            print("==========> src => txt (%s)" % sentence)
         emo_sent = self.emojize_sentence(sentence)
-        print("==========> txt => emo (%s)" % emo_sent)
-        txt_sent = self.textize_sentence(emo_sent)
-        print("==========> emo => txt (%s)" % txt_sent)
-
-        dist = editdistance.eval(sentence, txt_sent)
-        print("Edit distance: {:>4}".format(dist))
+        if self.options.waflags & SHOW_TRANSLATION:
+            print("==========> txt => emo (%s)" % emo_sent)
+        if self.options.waflags & SHOW_RETRANS_TXT:
+            txt_sent = self.textize_sentence(emo_sent)
+            print("==========> emo => txt (%s)" % txt_sent)
+            dist = editdistance.eval(sentence, txt_sent)
+            print("Edit distance: {:>4}".format(dist))
 
 def shuffled_list(seq):
     '''Randomly shuffle an iterable into a list.
@@ -1131,8 +1139,14 @@ def main():
     parser.add_argument('-usable', action='store_true',
                         help='show all usable emoji under current options')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
-                        help='verbosity of output (default: 1)')
+                        help='verbosity level of output (default: 1); adds to waflags')
+    parser.add_argument('-waflags', type=int, nargs='?', const=1, default=1,
+                        help='watch flags for specific output (default: 1 [from verbose])')
     args = parser.parse_args()
+
+    verbose = args.verbose
+    if verbose > 0:
+        args.waflags |= (2**verbose - 1)
 
     if args.extract_words:
         print("Collecting words from emotuples.nemo_tuples...")
@@ -1145,7 +1159,7 @@ def main():
         # words = extract_words_from_file(args.input_file, gen_normal_word_tokens))
         exit(0)
 
-    # if args.verbose > 7:
+    # if verbose > 7:
     #     print("module emoji:", EJ)
     #     print("Type(args): ", type(args))
     #     print(args)
