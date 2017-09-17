@@ -227,17 +227,19 @@ MIN_SOLIT_EMO_LEN = 1
 # Verbosity flags:
 SHOW_TRANSLATION = 1
 SHOW_SOURCE_TEXT = 2
-SHOW_RETRANS_TXT = 4
-SHOW_TOKEN_TRANS = 8
-SHOW_LIST_VALUES = 16
-SHOW_TEXT_BUILDERS = 32
-SHOW_NOUN_SINGPLUR = 64
-SHOW_TEXT_DIVISION = 128
-SHOW_TEXT_BIGRAMS  = 256
-SHOW_TEXT_PHONETICS = 512
-SHOW_USABLE_EMOJIS = 1024
-SHOW_SYNONYM_LISTS = 2056
-SHOW_PHONETICS_KEX = 4096
+SHOW_RETRANS_TEXTS = 4
+SHOW_TOKEN_REPLACE = 8
+SHOW_EMO_LIST_VALS = 16
+SHOW_TXT_LIST_VALS = 32
+SHOW_TEXT_BUILDERS = 64
+SHOW_NOUN_SINGPLUR = 128
+SHOW_TEXT_DIVISION = 256
+SHOW_SPACE_BIGRAMS = 512
+SHOW_TEXT_TRIGRAMS = 1024
+SHOW_PHONETIC_TEXT = 2056
+SHOW_USABLE_EMOJIS = 4096
+SHOW_SYNONYM_LISTS = 8192
+SHOW_PHONETICS_KEX = 16384
 
 class EmoTrans:
     '''
@@ -440,14 +442,14 @@ class EmoTrans:
         '''
         try:
             lst = self.txt_emo[token]
-            if self.waflags & SHOW_LIST_VALUES:
+            if self.waflags & SHOW_EMO_LIST_VALS:
                 print("ET: {} -:> {}".format(token, lst))
         except KeyError:
-            if self.waflags & SHOW_TOKEN_TRANS:
+            if self.waflags & SHOW_TOKEN_REPLACE:
                 print("ET: {} -:> {}".format(token, None))
             return None
         emo = random.choice(lst) if self.options.random else lst[0]
-        if self.waflags & SHOW_TOKEN_TRANS:
+        if self.waflags & SHOW_TOKEN_REPLACE:
             print("ET: {} :-> {} -> {}".format(token, lst, emo))
         return emo
 
@@ -463,14 +465,14 @@ class EmoTrans:
         '''
         try:
             lst = self.pro_emo[phone]
-            if self.waflags & SHOW_LIST_VALUES:
+            if self.waflags & SHOW_EMO_LIST_VALS:
                 print("EP: {} -:> {}".format(phone, lst))
         except KeyError:
-            if self.waflags & SHOW_TOKEN_TRANS:
+            if self.waflags & SHOW_TOKEN_REPLACE:
                 print("EP: {} -:> {}".format(phone, None))
             return None
         emo = random.choice(lst) if self.options.random else lst[0]
-        if self.waflags & SHOW_TOKEN_TRANS:
+        if self.waflags & SHOW_TOKEN_REPLACE:
             print("EP: {} :-> {}".format(phone, emo))
         return emo + space
 
@@ -572,7 +574,7 @@ class EmoTrans:
         #     synset = set([syn.lower() for syn in synonyms])
         #     if len(synset) > 1:
         #         print("ZZZ emojize_word(%s, %s) with SYNONYMS: " % (src_word, pos), synonyms)
-        if self.waflags & SHOW_LIST_VALUES:
+        if self.waflags & SHOW_EMO_LIST_VALS:
             print("EW SYNONYMS: {} -:> {}".format(src_word, synonyms))
 
         for word in synonyms:
@@ -590,10 +592,10 @@ class EmoTrans:
                 if phon_word:
                     for phone_tuple in phon_word.phons():
                         emojis = self.emojize_phone(phone_tuple.phonetics, space)
-                        if self.waflags & SHOW_TEXT_PHONETICS:
+                        if self.waflags & SHOW_PHONETIC_TEXT:
                             print("PHONETICS: {} --> {} ? ".format(phone_tuple.phonetics, emojis))
                         if emojis:
-                            if self.waflags & SHOW_TOKEN_TRANS:
+                            if self.waflags & SHOW_TOKEN_REPLACE:
                                 print("EW  PHONE: {} -> {} -:> {}".format(word, phone_tuple.phonetics, emojis))
                             return emojis # space already appended
                         if len(phone_tuple.syllables) > 1:
@@ -678,15 +680,29 @@ class EmoTrans:
                 wrd = tokens[idx]
                 if idx + 2 < size and tokens[idx + 1].isspace():
                     bigram = wrd + ' ' + tokens[idx + 2]
-                    if self.waflags & SHOW_TEXT_BIGRAMS:
+                    if self.waflags & SHOW_SPACE_BIGRAMS:
                         print("BIGRAM: ", bigram)
+                    if idx + 4 < size and tokens[idx + 3].isspace():
+                        trigram = bigram + ' ' + tokens[idx + 4]
+                        if self.waflags & SHOW_TEXT_TRIGRAMS:
+                            print("TRIGRAM: ", trigram)
+                        lst = self.txt_emo.get(trigram)
+                        if not lst and not trigram.islower():
+                            lst = self.txt_emo.get(trigram.lower())
+                        if lst:
+                            emo = random.choice(lst) if self.options.random else lst[0]
+                            subbed.append(emo + space)
+                            if self.waflags & SHOW_TEXT_TRIGRAMS:
+                                print("TRIGRAM: APPENDED {}  FROM list( {} )".format(emo, lst))
+                            idx += 5
+                            continue
                     lst = self.txt_emo.get(bigram)
                     if not lst and not bigram.islower():
                         lst = self.txt_emo.get(bigram.lower())
                     if lst:
                         emo = random.choice(lst) if self.options.random else lst[0]
                         subbed.append(emo + space)
-                        if self.waflags & SHOW_TEXT_BIGRAMS:
+                        if self.waflags & SHOW_SPACE_BIGRAMS:
                             print("BIGRAM: APPENDED {}  FROM list( {} )".format(emo, lst))
                         idx += 3
                         continue
@@ -893,7 +909,7 @@ class EmoTrans:
         The output list will have the same number of items (length) as the input list.
         TODO: Helper methods.
         '''
-        if  self.waflags & SHOW_LIST_VALUES:
+        if  self.waflags & SHOW_EMO_LIST_VALS:
             print("TEL A input{}".format(emo_list))
 
         txt_list = []           # output
@@ -940,7 +956,7 @@ class EmoTrans:
                 # Is the whole emo_str a key?
                 word_calcs = self.emo_txt[emo_str]
                 calc = random.choice(word_calcs) if self.options.random else word_calcs[0]
-                if self.waflags & SHOW_LIST_VALUES:
+                if self.waflags & SHOW_EMO_LIST_VALS:
                     print("TEL emo_txt: {} -:> {} --> ({})".format(emo_str, word_calcs, calc))
                 txt_list.append(calc)
             except KeyError:
@@ -979,10 +995,10 @@ class EmoTrans:
             elif emo_span:
                 txt_list = self.textize_emo_span(emo_span)
                 if txt_list:
-                    if self.waflags & SHOW_LIST_VALUES:
+                    if self.waflags & SHOW_EMO_LIST_VALS:
                         print("TSS list: {}".format(txt_list))
                     txt_join = space.join(txt_list)
-                    if self.waflags & SHOW_TOKEN_TRANS:
+                    if self.waflags & SHOW_TOKEN_REPLACE:
                         print("TSS REBUS: {} --> {}".format(emo_span, txt_join))
                     if first:
                         txt_sent += txt_join.capitalize()
@@ -1005,9 +1021,9 @@ class EmoTrans:
             txt_list = self.textize_emo_span(emo_span)
             if txt_list:
                 txt_join = space.join(txt_list)
-                if self.waflags & SHOW_LIST_VALUES:
+                if self.waflags & SHOW_EMO_LIST_VALS:
                     print("TSS list: {}".format(txt_list))
-                if self.waflags & SHOW_TOKEN_TRANS:
+                if self.waflags & SHOW_TOKEN_REPLACE:
                     print("TSS REBUS: {} --> {}".format(emo_span, txt_join))
                 if txt_list[0].isalnum():
                     txt_sent = txt_sent + txt_join
@@ -1042,7 +1058,7 @@ class EmoTrans:
         emo_sent = self.emojize_sentence(sentence)
         if self.options.waflags & SHOW_TRANSLATION:
             print("==========> txt => emo (%s)" % emo_sent)
-        if self.options.waflags & SHOW_RETRANS_TXT:
+        if self.options.waflags & SHOW_RETRANS_TEXTS:
             txt_sent = self.textize_sentence(emo_sent)
             print("==========> emo => txt (%s)" % txt_sent)
             dist = editdistance.eval(sentence, txt_sent)
