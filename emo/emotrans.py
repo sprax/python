@@ -445,9 +445,9 @@ class EmoTrans:
             print("ET: {} :-> {} -> {}".format(token, lst, emo))
         return emo
 
-    def emojize_chars(self, token, space=' '):
+    def emojize_chars(self, token):
         '''Return string joined from separate emoji translations of each character in token.'''
-        return ' '.join([self.emojize_token(char) for char in token]) + space
+        return ' '.join([self.emojize_token(char) for char in token])
 
     def emojize_phone(self, phone, space=' '):
         '''
@@ -485,7 +485,8 @@ class EmoTrans:
     def emojize_plural_noun(self, word, space=' '):
         '''Replaces a plural noun with reduplicated emojis, if one matches the singular form.'''
         singular = singularize(word)
-        print("emojize_plural_noun %s -> %s" % (word, singular))
+        if self.verbose > 7:
+            print("emojize_plural_noun %s -> %s" % (word, singular))
         if singular != word:
             emojis = self.emojize_token(singular)
             if emojis:
@@ -576,7 +577,7 @@ class EmoTrans:
             if word.isnumeric():
                 emojis = self.emojize_chars(word)
                 if emojis:
-                    return emojis
+                    return emojis + space
 
             if self.options.phonetics:
                 phon_word = self.gen_phonetic_word(word)
