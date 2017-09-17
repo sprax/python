@@ -2020,7 +2020,7 @@ def gen_emo_tuples():
     ('1f192'                 , 1, 1978,  'symbols', 1, '🆒', ['cool'], ['cool'], ':cool:', []),
     ('1f195'                 , 1, 1979,  'symbols', 1, '🆕', ['new', 'NEW'], ['new', 'NEW'], ':new:', []),
     ('1f193'                 , 1, 1980,  'symbols', 1, '🆓', ['free', 'FREE'], ['free', 'FREE'], ':free:', []),
-    ('0030-20e3'             , 2, 1981,  'symbols', 1, '0⃣', ['zilch', 'zero', 'nada'], ['zilch', 'zero', 'nada'], ':zero:', []),
+    ('0030-20e3'             , 2, 1981,  'symbols', 1, '0⃣', ['zero', '0', 'nada', 'zilch'], ['zilch', 'nada'], ':zero:', []),
     ('0031-20e3'             , 2, 1982,  'symbols', 1, '1⃣', ['one', '1', 'won'], ['one'], ':one:', []),
     ('0032-20e3'             , 2, 1983,  'symbols', 1, '2⃣', ['two', '2', 'too'], ['two'], ':two:', []),
     ('0033-20e3'             , 2, 1984,  'symbols', 1, '3⃣', ['three', '3'], ['three'], ':three:', []),

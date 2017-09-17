@@ -425,7 +425,6 @@ class EmoTrans:
         '''
         return word in self.singular_nouns
 
-
     def emojize_token(self, token):
         '''
         Return emoji string translation of token or None.
@@ -444,8 +443,11 @@ class EmoTrans:
         emo = random.choice(lst) if self.options.random else lst[0]
         if self.verbose > SHOW_TOKEN_TRANS:
             print("ET: {} :-> {} -> {}".format(token, lst, emo))
-
         return emo
+
+    def emojize_chars(self, token, space=' '):
+        '''Return string joined from separate emoji translations of each character in token.'''
+        return ' '.join([self.emojize_token(char) for char in token]) + space
 
     def emojize_phone(self, phone, space=' '):
         '''
@@ -570,6 +572,11 @@ class EmoTrans:
             emojis = self.emojize_token(word)
             if emojis:
                 return emojis + space
+
+            if word.isnumeric():
+                emojis = self.emojize_chars(word)
+                if emojis:
+                    return emojis
 
             if self.options.phonetics:
                 phon_word = self.gen_phonetic_word(word)
