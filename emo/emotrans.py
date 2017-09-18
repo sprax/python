@@ -6,12 +6,19 @@
 Plan for General sentence translation [square brackets for the still TBD parts]:
     while not completely translated, try translating in this order:
         phrases => emojis
-            [trigrams -> emojis] ?
+            [tetragrams -> emojis] ?
+            trigrams -> emojis
             bigrams -> emojis
         phrases -> words
             words => emojis (orthonyms)
         words => (lemmas/stems) => sets of synonymous tokens (synonyms)
             synsets -> emojis
+            TODO: control this better:
+                identify transitive and intransitive verbs and distinguish:
+                    Intrans: run, runs, running, ran (not the nouns: run, runner)
+                    Trans: run a race, run a machine, run a deficit, etc.
+                Generate phrases: 'male runner' <-> 'running man',
+                    'male water polo player' <-> 'man playing water polo', etc.
         words => phonemic string representations
             phonetic reps -> emojis (homonyms)
         words -> phonemic syllables
