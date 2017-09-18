@@ -7,6 +7,7 @@ Plan:
     Words|phrases -> words >= [phonetic syllables reprs]
     Emojis >= [phontic syllable reprs]
     Text => <syllabic repr> => <emoji>
+    TODO: ':person_Xing_Y' => ['person Xing Y', 'Y player'] with male/female variants
 '''
 
 import argparse
@@ -1364,13 +1365,13 @@ def gen_emo_tuples():
     ('1f938-1f3fd'           , 2, 1322, 'activity', 1, '🤸🏽', ['cartwheel', 'cartwheeler'], ['cartwheel doing', 'cartwheeler'], ':person_doing_cartwheel_tone3:', [':cartwheel_tone3:']),
     ('1f938-1f3fe'           , 2, 1323, 'activity', 1, '🤸🏾', ['cartwheel', 'cartwheeler'], ['cartwheel doing', 'cartwheeler'], ':person_doing_cartwheel_tone4:', [':cartwheel_tone4:']),
     ('1f938-1f3ff'           , 2, 1324, 'activity', 1, '🤸🏿', ['cartwheel', 'cartwheeler'], ['cartwheel doing', 'cartwheeler'], ':person_doing_cartwheel_tone5:', [':cartwheel_tone5:']),
-    ('26f9-2640'             , 2, 1325, 'activity', 0, '⛹♀', ['ball', 'bouncing', 'woman'], ['ball', 'bouncing', 'woman'], ':woman_bouncing_ball:', []),
+    ('26f9-2640'             , 2, 1325, 'activity', 0, '⛹♀', ['female basketball player', 'woman dribbling', 'ball-bouncing woman'], ['ball', 'bouncing', 'woman'], ':woman_bouncing_ball:', []),
     ('26f9-1f3fb-2640'       , 3, 1326, 'activity', 0, '⛹🏻♀', ['ball', 'bouncing', 'woman'], ['ball', 'bouncing', 'woman'], ':woman_bouncing_ball_tone1:', [':woman_bouncing_ball_light_skin_tone:']),
     ('26f9-1f3fc-2640'       , 3, 1327, 'activity', 0, '⛹🏼♀', ['ball', 'bouncing woman'], ['ball', 'bouncing woman'], ':woman_bouncing_ball_tone2:', [':woman_bouncing_ball_medium_light_skin_tone:']),
     ('26f9-1f3fd-2640'       , 3, 1328, 'activity', 0, '⛹🏽♀', ['ball', 'bouncing woman'], ['ball', 'bouncing woman'], ':woman_bouncing_ball_tone3:', [':woman_bouncing_ball_medium_skin_tone:']),
     ('26f9-1f3fe-2640'       , 3, 1329, 'activity', 0, '⛹🏾♀', ['ball', 'bouncing woman'], ['ball', 'bouncing woman'], ':woman_bouncing_ball_tone4:', [':woman_bouncing_ball_medium_dark_skin_tone:']),
     ('26f9-1f3ff-2640'       , 3, 1330, 'activity', 0, '⛹🏿♀', ['ball', 'bouncing woman'], ['ball', 'bouncing woman'], ':woman_bouncing_ball_tone5:', [':woman_bouncing_ball_dark_skin_tone:']),
-    ('26f9'                  , 1, 1331, 'activity', 1, '⛹', ['dribble', 'dribbling', 'bounce', 'bouncing'], ['ball', 'dribbler', 'bouncing'], ':person_bouncing_ball:', [':basketball_player:', ':person_with_ball:']),
+    ('26f9'                  , 1, 1331, 'activity', 1, '⛹', ['dribble', 'dribbling', 'bounce', 'bouncing', 'basketball player', 'person bounding ball'], ['ball', 'dribbler', 'bouncing'], ':person_bouncing_ball:', [':basketball_player:', ':person_with_ball:']),
     ('26f9-1f3fb'            , 2, 1332, 'activity', 1, '⛹🏻', ['dribble', 'dribbling', 'bounce', 'bouncing'], ['ball', 'dribbler', 'bouncing'], ':person_bouncing_ball_tone1:', [':basketball_player_tone1:', ':person_with_ball_tone1:']),
     ('26f9-1f3fc'            , 2, 1333, 'activity', 1, '⛹🏼', ['dribble', 'dribbling', 'bounce', 'bouncing'], ['ball', 'dribbler', 'bouncing'], ':person_bouncing_ball_tone2:', [':basketball_player_tone2:', ':person_with_ball_tone2:']),
     ('26f9-1f3fd'            , 2, 1334, 'activity', 1, '⛹🏽', ['dribble', 'dribbling', 'bounce', 'bouncing'], ['ball', 'dribbler', 'bouncing'], ':person_bouncing_ball_tone3:', [':basketball_player_tone3:', ':person_with_ball_tone3:']),
@@ -1394,7 +1395,7 @@ def gen_emo_tuples():
     ('1f93e-1f3fd-2642'      , 3, 1352, 'activity', 0, '🤾🏽♂', ['man', 'playing', 'handball'], ['man', 'playing', 'handball'], ':man_playing_handball_tone3:', [':man_playing_handball_medium_skin_tone:']),
     ('1f93e-1f3fe-2642'      , 3, 1353, 'activity', 0, '🤾🏾♂', ['man', 'playing', 'handball'], ['man', 'playing', 'handball'], ':man_playing_handball_tone4:', [':man_playing_handball_medium_dark_skin_tone:']),
     ('1f93e-1f3ff-2642'      , 3, 1354, 'activity', 0, '🤾🏿♂', ['man', 'playing', 'handball'], ['man', 'playing', 'handball'], ':man_playing_handball_tone5:', [':man_playing_handball_dark_skin_tone:']),
-    ('1f93e'                 , 1, 1355, 'activity', 0, '🤾', ['handball', 'playing', 'player'], ['handball', 'playing', 'player'], ':person_playing_handball:', [':handball:']),
+    ('1f93e'                 , 1, 1355, 'activity', 0, '🤾', ['handball player', 'handball', 'person playing handball'], ['handball', 'playing', 'player'], ':person_playing_handball:', [':handball:']),
     ('1f93e-1f3fb'           , 2, 1356, 'activity', 0, '🤾🏻', ['handball', 'playing', 'player'], ['handball', 'playing', 'player'], ':person_playing_handball_tone1:', [':handball_tone1:']),
     ('1f93e-1f3fc'           , 2, 1357, 'activity', 0, '🤾🏼', ['handball', 'playing', 'player'], ['handball', 'playing', 'player'], ':person_playing_handball_tone2:', [':handball_tone2:']),
     ('1f93e-1f3fd'           , 2, 1358, 'activity', 0, '🤾🏽', ['handball', 'playing', 'player'], ['handball', 'playing', 'player'], ':person_playing_handball_tone3:', [':handball_tone3:']),
