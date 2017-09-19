@@ -11,13 +11,11 @@ Plan:
 '''
 
 import argparse
-import json
-import random
-import re
-from collections import defaultdict
+# import re
+# from collections import defaultdict
 from collections import namedtuple
 
-import emoji
+# import emoji
 
 INDEX_HEX_CHR_CODES  = 0
 INDEX_UNICHR_LENGTH  = 1
@@ -2485,6 +2483,7 @@ def gen_named_emo_tuples(emotups):
     return nemos
 
 class EmoTuples:
+    '''class to contain associations between emojis and English text'''
     def __init__(self):
         self.emo_tuples = EMO_TUPLES
         self.emo_header = EMO_HEADER
@@ -2499,9 +2498,10 @@ class EmoTuples:
         print("-----------------------------------------------------------------------------------------")
         print(self.emo_header)
 
-def test_emo_tuples(options):
-    et = EmoTuples()
-    et.print_all()
+def test_emo_tuples():
+    '''test the data'''
+    emt = EmoTuples()
+    emt.print_all()
 
 
 def test_it():
