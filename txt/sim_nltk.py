@@ -358,6 +358,9 @@ def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=0.15):
 # VECTORIZER (default):                  (size=201, count=6) took 96.1 seconds; score 0.8583
 # VECT_MOST_STOPS (DEFAULT-QUERY_WORDS): (size=201, count=6) took 96.3 seconds; score 0.6635
 # TODO: Why do the query words make the score worse?
+# TEST: >>> sim_score_save(fair, sim_func=sim_wosc_nltk.sentence_similarity)
+# #     list_most_sim_qas_list(size=27, count=6) took 39.8 seconds
+# #     sim_score_save(size=27, count=6) took 39.8 seconds; score 0.7370
 def sim_score_save(qas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_txt, max_count=6, min_sim_val=0.15):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are

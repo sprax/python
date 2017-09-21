@@ -20,6 +20,8 @@
 19	What is an IRA?	A kind of retirement savings account.	18
 20	How can I borrow against my 401k?	Login in to Fidelity and fill out a form.	21
 21	Why should you take out a loan against your 401k, not a withdrawal?	A withdrawal would have tax penalties; a loan would not.	20
-22	Is contributing to the Social Security pool fairer saving to your own tax-exempt IRA?	Possibly.	23
+22	Is contributing to the Social Security pool fairer than saving to your own tax-exempt IRA?	Possibly.	23
 23	Isn't more just if the government guarantees every citizen a basic share in social security?	Possibly.	22
 24	What's more fair, each one for themself, or everyone for all?	It depends.	22
+25	What is fairly true?	Anything.	26
+26	What is somewhat certain?	Something.	25
