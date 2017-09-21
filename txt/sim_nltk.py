@@ -6,6 +6,7 @@ import string
 import time
 import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
+import scraper
 import text_fio
 
 STEMMER = nltk.stem.porter.PorterStemmer()
@@ -371,3 +372,12 @@ def sim_score_save(qas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_t
     print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (len(qas), max_count,
                                                                                seconds, score))
     return score
+
+
+def test_fair():
+    fair = scraper.csv_read_qa('fair.txt', delimiter='\t')
+    score = sim_score_save(fair)
+    print("sim_score_save(fair) => %.3f" % score)
+
+if __name__ == '__main__':
+    test_fair()

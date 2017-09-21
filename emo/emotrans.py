@@ -277,7 +277,7 @@ class EmoTrans:
 
     def _init_options(self, options):
         '''initialize options with default values'''
-        if options == None:
+        if options is None:
             options = argparse.Namespace(
                 all_skin_tones = False,
                 arithmetic = False,
