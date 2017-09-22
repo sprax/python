@@ -66,7 +66,7 @@ def cosine_sim_txt(txt_obj_1, txt_obj_2, get_text=ident, vectorizer=VECTORIZER):
     return ((tfidf * tfidf.T).A)[0, 1]
 
 def sim_weighted_qas(qas_obj_1, qas_obj_2, get_question=second, get_answer=third, q_weight=0.5,
-        sim_func=cosine_sim_txt):
+                     sim_func=cosine_sim_txt):
     '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
     assert 0.0 < q_weight and q_weight <= 1.0
     q_sim = sim_func(get_question(qas_obj_1), get_question(qas_obj_2))
@@ -123,6 +123,7 @@ def cosine_sim_qas_2(qas_obj_1, qas_obj_2, get_question=second, get_answer=third
 
 def cosine_sim_qas_ms(qas_obj_1, qas_obj_2, get_question=second, get_answer=third,
                       q_weight=0.5, vectorizer=VECT_MOST_STOPS):
+    '''Returns weighted Q & A similarity between two question-answer pairs'''
     return cosine_sim_qas_2(qas_obj_1, qas_obj_2, get_question, get_answer,
                             q_weight, vectorizer)
 
@@ -180,6 +181,7 @@ def list_nearest_other_idx(texts, similarity_func=cosine_sim_txt):
     return nearests
 
 def show_nearest_neighbors(texts, nearest_indexes=None):
+    '''print the most similar pairs'''
     if nearest_indexes is None:
         nearest_indexes = list_nearest_other_idx(texts)
     for idx, txt in enumerate(texts):
@@ -232,7 +234,7 @@ def most_similar_items_list(all_texts, this_text, excludes=None, q_weight=1.0, s
         max_count           maximum size of returned dict
         max_sim_val:        the initial value of max, or the maximum similariy found so far.
     '''
-    assert(q_weight >= 1.0)
+    assert q_weight >= 1.0
 
     sim_dict = similarity_dict(all_texts, this_text, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
@@ -244,7 +246,7 @@ def list_most_sim_qas_list(texts, exclude_self=True, q_weight=1.0, sim_func=cosi
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
     '''
-    assert(q_weight >= 1.0)
+    assert q_weight >= 1.0
     # similarity_func=cosine_sim_txt
     if exclude_self:
         nearests = len(texts)*[None]
@@ -378,6 +380,7 @@ def sim_score_save(qas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_t
 
 
 def test_fair():
+    '''test similariy of QA pairs containing many stop words, including "fair"'''
     fair = scraper.csv_read_qa('fair.txt', delimiter='\t')
     score = sim_score_save(fair)
     print("sim_score_save(fair) => %.3f" % score)
