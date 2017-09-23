@@ -282,7 +282,7 @@ def most_sim_1pos_2neg(word2vec, pos1, neg1, neg2):
     for sim in sims:
         print(sim)
 
-def test_word_algebra(word2vec):
+def test_word_algebra():
     most_sim_2pos_1neg('cat', 'puppy', 'dog')
     most_sim_2pos_1neg('Taiwan', 'Beijing', 'China')
     most_sim_1pos_2neg('queen', 'king', 'man')
@@ -294,7 +294,7 @@ def smoke_test(word2vec, vocab):
     test_word_analogies(word2vec)
     test_sentence_distance(word2vec, vocab)
     test_contractions(word2vec, verbose=True)
-    test_word_algebra(word2vec)
+    test_word_algebra()
 
 if __name__ == '__main__':
     word2vec = default_word2vec_model(verbose=True)

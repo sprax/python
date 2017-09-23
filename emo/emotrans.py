@@ -3,6 +3,10 @@
 #
 # # # coding: iso-8859-15
 '''
+TODO: Divide EmoTrans parent class TransEmo which holds a TxtEmo(En) and an EmoTxt(En).
+        Keep TxtEmo as a calc or substitute translator
+        Make EmoTxt a probabilistic translater by giving it a trainable model of En-sentences.
+
 Plan for General sentence translation [square brackets for the still TBD parts]:
     while not completely translated, try translating in this order:
         phrases => emojis
