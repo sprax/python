@@ -31,6 +31,8 @@ DEFAULT_W2V_VOCAB = None
 DEFAULT_STOPWORDS = None
 
 def init():
+    '''Returns default word2vec model, vocab, and stopwords'''
+    global DEFAULT_W2V_MODEL, DEFAULT_W2V_VOCAB, DEFAULT_STOPWORDS
     print("Returning defaults as tuple:  (word2vec, vocab, stopwords)")
     if DEFAULT_W2V_MODEL == None:
         DEFAULT_W2V_MODEL = default_word2vec_model()
