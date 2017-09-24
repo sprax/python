@@ -147,6 +147,7 @@ def nearest_neighbors(word2vec, vocab, texts, verbose=False):
     return nearests
 
 def show_nearest_neighbors(word2vec, vocab, texts, verbose=True):
+    '''show closes text pair'''
     nearest_indexes = nearest_neighbors(word2vec, vocab, texts, verbose)
     for idx, txt in enumerate(texts):
         nearest_idx = nearest_indexes[idx]
