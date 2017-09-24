@@ -272,12 +272,14 @@ def test_contractions(word2vec, verbose=True):
     compare_token_lists(word2vec, t_doesnt, t_didnt, verbose=True)
 
 def most_sim_2pos_1neg(word2vec, pos1, pos2, neg1):
+    '''most similar word to the result of adding 2 word-vector minus 1 other'''
     sims = word2vec.most_similar(positive=[pos1, pos2], negative=[neg1], topn=5)
     print("Most similar to:  %s - %s + %s =" % (pos1, neg1, pos2))
     for sim in sims:
         print(sim)
 
 def most_sim_1pos_2neg(word2vec, pos1, neg1, neg2):
+    '''most similar word to the result of 1 word-vector minus 2 others'''
     sims = word2vec.most_similar(positive=[pos1], negative=[neg1, neg2], topn=5)
     print("Most similar to:  %s - %s - %s =" % (pos1, neg1, neg2))
     for sim in sims:
