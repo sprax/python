@@ -55,6 +55,7 @@ def read_text_lines(file_spec, charset='utf8'):
                 yield line
 
 def pickle_file(in_path, out_path, data_struct, data_adder, charset='utf8'):
+    '''read in_file into data_struct via data_adder then save to out_path'''
     lines_in = 0
     lines = read_text_lines(in_path, charset)
     for line in lines:
@@ -65,7 +66,8 @@ def pickle_file(in_path, out_path, data_struct, data_adder, charset='utf8'):
     return (lines_in, len(data_struct))
 
 def pickle_word_list(in_path, out_path, word_set=None, adder=set.add, charset='utf8'):
-    if word_set == None:
+    '''read single words/strings per line from in_file and save them as a set to out_path as a pickle file'''
+    if word_set is None:
         word_set = set()
     return pickle_file(in_path, out_path, word_set, adder, charset)
 
