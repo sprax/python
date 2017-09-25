@@ -34,11 +34,11 @@ def init():
     '''Returns default word2vec model, vocab, and stopwords'''
     global DEFAULT_W2V_MODEL, DEFAULT_W2V_VOCAB, DEFAULT_STOPWORDS
     print("Returning defaults as tuple:  (word2vec, vocab, stopwords)")
-    if DEFAULT_W2V_MODEL == None:
+    if DEFAULT_W2V_MODEL is None:
         DEFAULT_W2V_MODEL = default_word2vec_model()
-    if DEFAULT_W2V_VOCAB == None:
+    if DEFAULT_W2V_VOCAB is None:
         DEFAULT_W2V_VOCAB = word2vec_vocab(DEFAULT_W2V_MODEL)
-    if DEFAULT_STOPWORDS == None:
+    if DEFAULT_STOPWORDS is None:
         DEFAULT_STOPWORDS = default_stop_words()
     return (DEFAULT_W2V_MODEL, DEFAULT_W2V_VOCAB, DEFAULT_STOPWORDS)
 
@@ -155,11 +155,13 @@ def show_nearest_neighbors(word2vec, vocab, texts, verbose=True):
         print("  %3d.  T  %s\n  %3d.  O  %s\n" % (idx, txt, nearest_idx, nearest_txt))
 
 def randomly(seq):
+    '''support random order iteration'''
     lst = list(seq)
     random.shuffle(lst)
     return iter(lst)
 
 def show_ascending_norms(word2vec, thresh=4.11):
+    '''show norms larger than the max so far'''
     max_norm = thresh
     for key in randomly(word2vec.vocab.keys()):
         vec = word2vec[key]
@@ -237,6 +239,7 @@ def test_sentence_distance(word2vec, vocab, sent_1="This is a sentence.",
     print("sum_tokens_similarity => ", sim_1_2)
 
 def test_contractions(word2vec, verbose=True):
+    '''test doesn't, don't, etc.'''
     t_do = ["do"]
     t_does = ["does"]
     t_did = ["did"]
@@ -247,29 +250,29 @@ def test_contractions(word2vec, verbose=True):
     t_dont = ["don't"]
     t_doesnt = ["doesn't"]
     t_didnt = ["didn't"]
-    compare_token_lists(word2vec, t_do, t_does, verbose=True)
-    compare_token_lists(word2vec, t_do, t_did, verbose=True)
-    compare_token_lists(word2vec, t_do, t_not, verbose=True)
+    compare_token_lists(word2vec, t_do, t_does, verbose)
+    compare_token_lists(word2vec, t_do, t_did, verbose)
+    compare_token_lists(word2vec, t_do, t_not, verbose)
 
-    compare_token_lists(word2vec, t_do_not, t_not, verbose=True)
-    compare_token_lists(word2vec, t_do_not, t_does_not, verbose=True)
-    compare_token_lists(word2vec, t_do_not, t_did_not, verbose=True)
+    compare_token_lists(word2vec, t_do_not, t_not, verbose)
+    compare_token_lists(word2vec, t_do_not, t_does_not, verbose)
+    compare_token_lists(word2vec, t_do_not, t_did_not, verbose)
 
-    compare_token_lists(word2vec, t_do_not, t_dont, verbose=True)
-    compare_token_lists(word2vec, t_do_not, t_doesnt, verbose=True)
-    compare_token_lists(word2vec, t_do_not, t_didnt, verbose=True)
+    compare_token_lists(word2vec, t_do_not, t_dont, verbose)
+    compare_token_lists(word2vec, t_do_not, t_doesnt, verbose)
+    compare_token_lists(word2vec, t_do_not, t_didnt, verbose)
 
-    compare_token_lists(word2vec, t_does_not, t_dont, verbose=True)
-    compare_token_lists(word2vec, t_does_not, t_doesnt, verbose=True)
-    compare_token_lists(word2vec, t_does_not, t_didnt, verbose=True)
+    compare_token_lists(word2vec, t_does_not, t_dont, verbose)
+    compare_token_lists(word2vec, t_does_not, t_doesnt, verbose)
+    compare_token_lists(word2vec, t_does_not, t_didnt, verbose)
 
-    compare_token_lists(word2vec, t_did_not, t_dont, verbose=True)
-    compare_token_lists(word2vec, t_did_not, t_doesnt, verbose=True)
-    compare_token_lists(word2vec, t_did_not, t_didnt, verbose=True)
+    compare_token_lists(word2vec, t_did_not, t_dont, verbose)
+    compare_token_lists(word2vec, t_did_not, t_doesnt, verbose)
+    compare_token_lists(word2vec, t_did_not, t_didnt, verbose)
 
-    compare_token_lists(word2vec, t_dont, t_doesnt, verbose=True)
-    compare_token_lists(word2vec, t_dont, t_didnt, verbose=True)
-    compare_token_lists(word2vec, t_doesnt, t_didnt, verbose=True)
+    compare_token_lists(word2vec, t_dont, t_doesnt, verbose)
+    compare_token_lists(word2vec, t_dont, t_didnt, verbose)
+    compare_token_lists(word2vec, t_doesnt, t_didnt, verbose)
 
 def most_sim_2pos_1neg(word2vec, pos1, pos2, neg1):
     '''most similar word to the result of adding 2 word-vector minus 1 other'''
@@ -285,10 +288,11 @@ def most_sim_1pos_2neg(word2vec, pos1, neg1, neg2):
     for sim in sims:
         print(sim)
 
-def test_word_algebra():
-    most_sim_2pos_1neg('cat', 'puppy', 'dog')
-    most_sim_2pos_1neg('Taiwan', 'Beijing', 'China')
-    most_sim_1pos_2neg('queen', 'king', 'man')
+def test_word_algebra(word2vec):
+    '''word vector algebra'''
+    most_sim_2pos_1neg(word2vec, 'cat', 'puppy', 'dog')
+    most_sim_2pos_1neg(word2vec, 'Taiwan', 'Beijing', 'China')
+    most_sim_1pos_2neg(word2vec, 'queen', 'king', 'man')
 
 def smoke_test(word2vec, vocab):
     '''sanity checking'''
@@ -297,9 +301,13 @@ def smoke_test(word2vec, vocab):
     test_word_analogies(word2vec)
     test_sentence_distance(word2vec, vocab)
     test_contractions(word2vec, verbose=True)
-    test_word_algebra()
+    test_word_algebra(word2vec)
 
-if __name__ == '__main__':
+def main():
+    '''test driver calls smoke_test'''
     word2vec = default_word2vec_model(verbose=True)
     vocab = word2vec_vocab(word2vec, verbose=True)
     smoke_test(word2vec, vocab)
+
+if __name__ == '__main__':
+    main()
