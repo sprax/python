@@ -100,3 +100,6 @@ def logic():
     q.pcntrain(b[:,0:2],b[:,2:],0.25,10)
     q.confmat(b[:,0:2],b[:,2:])
 
+
+if __name__ == '__main__':
+    logic()
