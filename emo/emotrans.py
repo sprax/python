@@ -3,6 +3,7 @@
 #
 # # # coding: iso-8859-15
 '''
+TODO: Add the set of all synonyms to emo_words
 TODO: Divide EmoTrans parent class TransEmo which holds a TxtEmo(En) and an EmoTxt(En).
         Keep TxtEmo as a calc or substitute translator
         Make EmoTxt a probabilistic translater by giving it a trainable model of En-sentences.
