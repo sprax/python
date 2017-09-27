@@ -77,6 +77,8 @@ DEFAULT_SENTENCE = '"Rocks and waves may rock the boat," she said, "but only you
 DEFAULT_SENTENCE = '"Rocks, paper, and scissors can rock, cover, or cut your hand, but you can\'t know when!!"'
 DEFAULT_SENTENCE = '"Rocks," she said, "and paper, too, y\'know!!"'
 
+DEFAULT_TRANSLAT = "🤙  😐 📬 "
+
 # def is_emoji(uchar):
 #   return uchar in EJ.UNICODE_EMOJI
 
@@ -236,8 +238,8 @@ MAX_MULTI_EMO_LEN = 8
 MIN_SOLIT_EMO_LEN = 1
 
 # Verbosity flags:
-SHOW_TRANSLATION = 1
-SHOW_SOURCE_TEXT = 2
+SHOW_SOURCE_TEXT = 1
+SHOW_TRANSLATION = 2
 SHOW_RETRANS_TEXTS = 4
 SHOW_TOKEN_REPLACE = 8
 SHOW_EMO_LIST_VALS = 16
@@ -1062,18 +1064,32 @@ class EmoTrans:
         '''translate emoji sentence to text according to options'''
         return self.textize_sentence_subs(sentence)
 
-    def trans_to_emo_and_back(self, sentence):
+    def trans_txt_to_emo_and_back(self, sentence):
         '''translate text sentence to emoji and back, showing stages according to options'''
         if self.options.waflags & SHOW_SOURCE_TEXT:
             print("==========> src => txt (%s)" % sentence)
-        emo_sent = self.emojize_sentence(sentence)
         if self.options.waflags & SHOW_TRANSLATION:
+            emo_sent = self.emojize_sentence(sentence)
             print("==========> txt => emo (%s)" % emo_sent)
-        if self.options.waflags & SHOW_RETRANS_TEXTS:
-            txt_sent = self.textize_sentence(emo_sent)
-            print("==========> emo => txt (%s)" % txt_sent)
-            dist = editdistance.eval(sentence, txt_sent)
-            print("Edit distance: {:>4}".format(dist))
+            if self.options.waflags & SHOW_RETRANS_TEXTS:
+                txt_sent = self.textize_sentence(emo_sent)
+                print("==========> emo => txt (%s)" % txt_sent)
+                dist = editdistance.eval(sentence, txt_sent)
+                print("Edit distance: {:>4}".format(dist))
+
+    def trans_emo_to_txt_and_back(self, sentence):
+        '''translate emoji sentence to text and back, showing stages according to options'''
+        if self.options.waflags & SHOW_SOURCE_TEXT:
+            print("=~=~=~=~=~> src => emo (%s)" % sentence)
+        if self.options.waflags & SHOW_TRANSLATION:
+            txt_sent = self.textize_sentence(sentence)
+            print("=~=~=~=~=~> emo => txt (%s)" % txt_sent)
+            if self.options.waflags & SHOW_RETRANS_TEXTS:
+                emo_sent = self.emojize_sentence(txt_sent)
+                print("=~=~=~=~=~> txt => emo (%s)" % emo_sent)
+                dist = editdistance.eval(sentence, emo_sent)
+                print("Edit distance: {:>4}".format(dist))
+
 
 def shuffled_list(seq):
     '''Randomly shuffle an iterable into a list.
@@ -1091,26 +1107,29 @@ def test_translate_sentences(options):
         show_sorted_dict(txt_emo, 0)
     if options.emo_txt:
         show_sorted_dict(emo_txt, 0)
-    if options.sinput:
-        for sentence in nltk.sent_tokenize(options.sinput):
-            emotrans.trans_to_emo_and_back(sentence)
+    if options.enj:
+        for sentence in nltk.sent_tokenize(options.enj):
+            emotrans.trans_txt_to_emo_and_back(sentence)
+    if options.jen:
+        emotrans.trans_emo_to_txt_and_back(options.jen)
+    if options.enj or options.jen:
         exit(0)
 
     # rand_order = shuffled_list(range(len(SENTENCES)))
     # for idx in rand_order:
-    #     emotrans.trans_to_emo_and_back(SENTENCES[idx])
+    #     emotrans.trans_txt_to_emo_and_back(SENTENCES[idx])
     #     print()
 
     if not options.order:
         random.shuffle(SENTENCES)
     for paragraph in SENTENCES:
         for sentence in nltk.sent_tokenize(paragraph):
-            emotrans.trans_to_emo_and_back(sentence)
+            emotrans.trans_txt_to_emo_and_back(sentence)
             print()
 
     if options.text_file:
         for sentence in text_fio.read_text_lines(options.text_file, options.charset):
-            emotrans.trans_to_emo_and_back(sentence)
+            emotrans.trans_txt_to_emo_and_back(sentence)
 
 def main():
     '''test english -> emoji translation'''
@@ -1127,12 +1146,14 @@ def main():
                         help='end= argument to give print')
     parser.add_argument('-extract_words', action='store_true',
                         help='extract words from emotuples')
-    parser.add_argument('-input', dest='sinput', type=str, nargs='?', default=None,
-                        const=DEFAULT_SENTENCE, help='input a sentence to translate (or use default)')
+    parser.add_argument('-enj', type=str, nargs='?', default=None,
+                        const=DEFAULT_SENTENCE, help='input an English sentence to translate to emoji (or use default)')
     parser.add_argument('-emo_txt', action='store_true',
                         help='show the emoji-to-text mapping')
     parser.add_argument('-flags', action='store_true',
                         help='use flag emojis in translations of words not representing countries')
+    parser.add_argument('-jen', type=str, nargs='?', default=None,
+                        const=DEFAULT_TRANSLAT, help='input an emoji sentence to translate to English (or use default)')
     parser.add_argument('-multiples', action='store_true',
                         help='use multiple emojis for words when needed (not only for presets)')
     parser.add_argument('-no_articles', '-noa', action='store_true',
