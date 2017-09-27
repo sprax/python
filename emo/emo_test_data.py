@@ -1,7 +1,7 @@
 
 
 SENTENCES = [
-    # "Wind and waves may rock the boat, but only you can tip the crew.",
+    "Wind and waves may rock the boat, but only you can tip the crew.",
     # "I love you",
     # "So it's the US vs. Canada in football, I mean soccer!?",
     # "Lady Astor: “Winston, if I were your wife I’d put poison in your coffee.",
@@ -39,7 +39,7 @@ SENTENCES = [
     # "For me, painting is a way to forget life.  It is a cry in the night, a strangled laugh. --Georges Rouault",
     # "Art is the stored honey of the human soul. --Theodore Dreiser",
     # "I would rather die of passion than of boredom. --Vincent van Gogh",
-    # "Go on, take the money and run.  --Steve Miller",
+    # "Go on, take the money and run. --Steve Miller",
     # """Call me Ishmael. Some years ago--never mind how long precisely--having,
     # little or no money in my purse, and nothing particular to interest me on
     # shore, I thought I would sail about a little and see the watery part of
@@ -65,7 +65,8 @@ SENTENCES = [
     # "Call me Ishmael.",
     # "Haters gonna hate.",
     # "Cartwheelers gotta cartwheel.",
+    # "A Lady Bird in hand is worth two birds in the Bush White House.",
     # "A bird in hand is no substitute for two hands of Wild Turkey.",
     # "Whenever there are four Irish together there's bound to be a fifth.",
-    "The mountain biking woman biked from the upper left arrow to the lower right arrow."
+    # "The mountain biking woman biked from the upper left arrow to the lower right arrow."
 ]
