@@ -123,6 +123,16 @@ def phone_seq(pron, verbose=False):
     '''
     Extracts a syllable-count, phonetic string representation,
     and a phonetic syllable list from a CMU-style pronunciation sequence.
+    ALGORITHM:
+        Add any phoneme to pending syllable S up to an including the vowel, marked with a number.  Set got_vowel.
+        After got_vowel, get the next phoneme P, and:
+            If P is NIL (because the workd ended), save the pending (open) syllable S and break.
+            If P is another vowel, save the pending (open) syllable S and start a new one with P.
+            If P is a consonant, look ahead to the phoneme Q.
+                If Q is NIL (because the word ended), save S+P as the final (closed) syllable and break.
+                If Q is a vowel, save (open) syllable S and start a new S with P (or P+Q and skip ahead).
+                If Q is a consonant, save S+P as a (closed) syllable and continue (or start a new S with Q and skip ahead).
+
     '''
     syl_count = 0
     phon_list = []
