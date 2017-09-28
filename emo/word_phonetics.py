@@ -3,6 +3,8 @@
 #
 # # # coding: iso-8859-15
 '''
+FIXME: fix wrong syllable segmentation for "asexual", "abort", "Obama", etc.
+
 Plan:
     Words|phrases -> words >= [phonetic syllables reprs]
     Emojis >= [phontic syllable reprs]
