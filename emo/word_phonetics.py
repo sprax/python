@@ -133,6 +133,9 @@ def phone_seq(pron, verbose=False):
                 If Q is a vowel, save (open) syllable S and start a new S with P (or P+Q and skip ahead).
                 If Q is a consonant, save S+P as a (closed) syllable and continue (or start a new S with Q and skip ahead).
 
+        Examples: arthroscopy ar·thros·co·py (är-thrŏs'kə-pē);  anthropology  [an-thruh-pol-uh-jee]; asexual [ey-sek-shoo-uh l]
+        Examples: lobotomy [luh-bot-uh-mee, loh-] 
+
     '''
     syl_count = 0
     phon_list = []
