@@ -295,7 +295,9 @@ class EmoTrans:
                 random = False,
                 singularize = True,
                 uh_for_article_a = False,
-                verbose = 2,
+                verbose = 3,
+                waflags = 4,
+                tokenizer = TOKENIZER_WORD_EXTENDED,
             )
         return options
 
@@ -1187,8 +1189,8 @@ def main():
                         help='allow phonetic substitute for the indefinite article "a"')
     parser.add_argument('-usable', action='store_true',
                         help='show all usable emoji under current options')
-    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
-                        help='verbosity level of output (default: 1); adds to waflags')
+    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=3,
+                        help='verbosity level of output (default: 3); adds to waflags')
     parser.add_argument('-waflags', type=int, nargs='?', const=1, default=1,
                         help='watch flags for specific output (default: 1 [from verbose])')
     args = parser.parse_args()

@@ -1,7 +1,7 @@
 
 
 SENTENCES = [
-    "Wind and waves may rock the boat, but only you can tip the crew.",
+    # "Wind and waves may rock the boat, but only you can tip the crew.",
     # "I love you",
     # "So it's the US vs. Canada in football, I mean soccer!?",
     # "Lady Astor: “Winston, if I were your wife I’d put poison in your coffee.",
@@ -69,4 +69,5 @@ SENTENCES = [
     # "A bird in hand is no substitute for two hands of Wild Turkey.",
     # "Whenever there are four Irish together there's bound to be a fifth.",
     # "The mountain biking woman biked from the upper left arrow to the lower right arrow."
+    "Yeah right and oh thanks, Obama! "
 ]
