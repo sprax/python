@@ -132,20 +132,23 @@ def phone_seq(pron, verbose=False):
             If P is another vowel, save the pending (open) syllable S and start a new one with P.
             If P is a consonant, look ahead to the phoneme Q.
                 If Q is NIL (because the word ended), save S+P as the final (closed) syllable and break.
-                If Q is a consonant, save S+P as a (closed) syllable and continue (or start a new S with Q and skip ahead).
+                If Q is a consonant, save S+P as a (closed) syllable
+                    and continue (or start a new S with Q and skip ahead).
                 If Q is a stressed vowel, save (open) syllable S and start a new S with P (or P+Q and skip ahead).
                 If Q is an unstressed vowel (marked by 0 or 2):
                     If S's vowell was stressed (marked 1), then save S+P as a (closed) syllable
                     and continue (or start a new S with Q and skip ahead).
                     Else (neither S nor Q has a stressed vowel):
-                        For now, save current S as an (open) syllable and start new syllable with P+Q. 
+                        For now, save current S as an (open) syllable and start new syllable with P+Q.
 
-
-        Examples: arthroscopy ar·thros·co·py (är-thrŏs'kə-pē);  anthropology  [an-thruh-pol-uh-jee]; asexual [ey-sek-shoo-uh l]
-        Examples: lobotomy [luh-bot-uh-mee, loh-]; unconscious /ʌnˈkɒnʃəs/
+        EXAMPLE: 'potato' => ['P', 'AH0', 'T', 'EY1', 'T', 'OW2']
+        EXAMPLE: 'potable' =>['P', 'OW1', 'T', 'AH0', 'B', 'AH0', 'L']
+        Examples: arthroscopy ar·thros·co·py (är-thrŏs'kə-pē);  anthropology  [an-thruh-pol-uh-jee];
+            asexual [ey-sek-shoo-uh l]; lobotomy [luh-bot-uh-mee, loh-]; unconscious /ʌnˈkɒnʃəs/
         Counters: laparectomy [lap-uh-rek-tuh-mee]; unconscious [uhn-kon-shuh s]
         Example/Counter:    la·pel vs lap·i·da·ry and lap·a·ro·to·my
         Example/Counter:    sop·o·rif·ic vs so·pran·o
+
         Thus:  O·bam·a vs. Ob·am·a vs. O·ba·ma?  No, it's only O·bam·a.
 
 
@@ -255,7 +258,7 @@ CMU_PRON_DICT = None
 def cmu_pd():
     '''Returns CMU Pronouncing Dictionary as a global.'''
     global CMU_PRON_DICT
-    if CMU_PRON_DICT == None:
+    if CMU_PRON_DICT is None:
         CMU_PRON_DICT = cmudict.dict()
     return CMU_PRON_DICT
 
