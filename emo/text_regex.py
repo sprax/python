@@ -117,7 +117,7 @@ WORD_SEP_INTERIOR = r"-',."
 RE_WORD_TOKEN = re.compile(r"((?:\w+[{}]\w*)+\w|\w+)".format(WORD_SEP_INTERIOR))
 
 def word_tokens(sentence):
-    '''
+    r'''
     Returns tokens comprised of word chars (\w) embedding one or more single
     interior punctuation characters (',.-) ').  Because \w matches _, tokens
     are stripped of _ (underscores) at either end.
@@ -129,7 +129,7 @@ def word_tokens(sentence):
 RE_NOT_NON_WORD_TOKEN = re.compile(r"((?:[^\W_]+[{}][^\W_]*)+[^\W_]|[^\W_]+)".format(WORD_SEP_INTERIOR))
 
 def notnonword_tokens(sentence):
-    '''
+    r'''
     Returns tokens comprised of not non-word chars (\W and _) surrounding one or more
     individual interior punctuation characters (-',.) ').  Because \w matches _,
     \W does not match _, so we must add it to the characters that cannot begin, end, or
