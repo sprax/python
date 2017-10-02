@@ -10,12 +10,8 @@ Plan:
 '''
 
 import argparse
-import random
 import re
 import string
-from collections import defaultdict
-import emoji
-import emotuples
 
 EXAMPLES = [
     # (text, words, syllables)
@@ -140,6 +136,7 @@ def notnonword_tokens(sentence):
 
 
 def replace_non_non_words(rep_func, text_phrase):
+    '''replace other than non-words with text_phrase'''
     return RE_NOT_NON_WORD_TOKEN.sub(rep_func, text_phrase)
 
 ###############################################################################
@@ -154,10 +151,12 @@ RE_WORD_SPLITTER = re.compile(r"(?:{})".format(RE_WORD_SEP_PATTERN))
 RE_WORD_SEPARATOR = re.compile(r"({})".format(RE_WORD_SEP_PATTERN))
 
 def words_split_out(sentence_body):
+    '''split out non-empty words'''
     splits = RE_WORD_SPLITTER.split(sentence_body)
     return [ss for ss in splits if len(ss) > 0]
 
 def words_and_separaters(sentence_body):
+    '''returns list of words and their separators'''
     separated = RE_WORD_SEP_PATTERN.findall(sentence_body)
     return [ss for ss in separated if len(ss) > 0]
 
@@ -176,7 +175,7 @@ def sentence_beg_body_and_end(sentence):
     try:
         return REC_BEG_MID_END.match(sentence).groups()
     except AttributeError:
-        return [ '', sentence, '']
+        return ['', sentence, '']
 
 # The < is for <3, <=, <--, etc.
 WORD_EXT_BEG = r'[<]'
@@ -232,7 +231,7 @@ def main():
                         help='output path for filtered text (default: - <stdout>)')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
-    parser.add_argument('-words_only', '-wrdo',action='store_true',
+    parser.add_argument('-words_only', '-wrdo', action='store_true',
                         help='extract only dictionary words')
     parser.add_argument('-words_or_names', '-won', action='store_true',
                         help='extract only dictionary words or proper names')
