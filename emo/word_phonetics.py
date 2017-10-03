@@ -119,7 +119,7 @@ TOMATO = [['T', 'AH0', 'M', 'EY1', 'T', 'OW2'], ['T', 'AH0', 'M', 'AA1', 'T', 'O
 # NamedTuple to hold basic info on the phonetic sequencing of some text, such as a word.
 PhoneTuple = namedtuple('PhoneTuple', 'length phonetics count syllables')
 
-def phone_seq(pron, verbose=False):
+def phone_seq(pron, verbose=0):
     '''
     Extracts a syllable-count, phonetic string representation,
     and a phonetic syllable list from a CMU-style pronunciation sequence.
@@ -160,7 +160,8 @@ def phone_seq(pron, verbose=False):
     while idx < end:
         phon = pron[idx]
         last = phon[-1]
-        print("=============================== phon: %s \t last: %s" % (phon, last))
+        if verbose > 1:
+            print("=============================== phon: %s \t last: %s" % (phon, last))
         if '0' <= last and last <= '9':
             # This phon is a vowel string; strip off the digit and increment the syllable  count.
             vowels = phon[0:-1]
@@ -168,7 +169,7 @@ def phone_seq(pron, verbose=False):
             syl_count += 1
             if got_vowel:
                 # End of an open syllable.  Save it and start new syllable.
-                if verbose:
+                if verbose > 0:
                     print("OPEN syllables{} appending {}".format(syllables, sylstring))
                 syllables.append(sylstring)
                 sylstring = vowels
@@ -185,7 +186,7 @@ def phone_seq(pron, verbose=False):
                     if was_prev_cons:
                         # Already got a consonant following a vowel, so this is the
                         # end of a closed syllable.  Save it and start a new one.
-                        if verbose:
+                        if verbose > 0:
                             print("CLOSED syllables{} appending {}".format(syllables, sylstring))
                         syllables.append(sylstring)
                         sylstring = phon
@@ -198,24 +199,29 @@ def phone_seq(pron, verbose=False):
                             # Look ahead:
                             nxtp = pron[nxti]
                             nxtf = nxtp[-1]
-                            print("+++++++++++++++++++++++++++++++++++++ nxtp: %s \t nxtf: %s" % (nxtp, nxtf))
+                            if verbose > 1:
+                                print("+++++++++++++++++++++++++++++++++++++ nxtp: %s \t nxtf: %s" % (nxtp, nxtf))
                             if '0' <= nxtf and nxtf <= '9':
-                                print("# Next phon is vowels")
+                                if verbose > 3:
+                                    print("# Next phon is vowels")
                                 syl_count += 1
                                 vowels = nxtp[0:-1]
                                 phon_list.append(vowels)
                                 if nxtf == '1' or got_vowel != '1':
-                                    print("# Next phoneme Q is a stressed vowel (%s) or last(%s); it takes current consonant P." % (nxtf, last))
+                                    if verbose > 1:
+                                        print("# Next phoneme Q is a stressed vowel (%s) or last(%s); it takes current consonant P." % (nxtf, last))
                                     syllables.append(sylstring)
                                     sylstring = phon + vowels
                                 else:
-                                    print("# Next phoneme Q is an unstressed vowel; current syllable appends current P.")
+                                    if verbose > 1:
+                                        print("# Next phoneme Q is an unstressed vowel; current syllable appends current P.")
                                     syllables.append(sylstring + phon)
                                     sylstring = vowels
                                 got_vowel = nxtf
                                 was_prev_cons = False
                             else:
-                                print("# Next phon is a consonant")
+                                if verbose > 2:
+                                    print("# Next phon is a consonant")
                                 phon_list.append(nxtp)
                                 syllables.append(sylstring + phon)
                                 sylstring = nxtp
@@ -223,7 +229,8 @@ def phone_seq(pron, verbose=False):
                                 was_prev_cons = True
                             idx = nxti
                         else:
-                            print(">>>> TRIED TO LOOK AHEAD AND SAW THE END")
+                            if verbose > 3:
+                                print(">>>>>>>> TRIED TO LOOK AHEAD AND SAW THE END")
                 else:
                     # So sylstring is not empty, but does not yet have a vowel.  Just append current consonant P.
                     sylstring += phon
@@ -235,7 +242,7 @@ def phone_seq(pron, verbose=False):
                 was_prev_cons = True
         idx = idx + 1
 
-    if verbose:
+    if verbose > 0:
         print("WORD syllables{} appending {}\n".format(syllables, sylstring))
     syllables.append(sylstring)
     phonetics = ''.join(phon_list)
