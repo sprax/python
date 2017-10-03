@@ -128,7 +128,7 @@ def phone_seq(pron, verbose=False):
             marked with a number (usually 0, 1, 2, where 1 means stressed).
             Set got_vowel.
         After got_vowel, get the next phoneme P, and:
-            If P is NIL (because the workd ended), save the pending (open) syllable S and break.
+            If P is NIL (because the word ended), save the pending (open) syllable S and break.
             If P is another vowel, save the pending (open) syllable S and start a new one with P.
             If P is a consonant, look ahead to the phoneme Q.
                 If Q is NIL (because the word ended), save S+P as the final (closed) syllable and break.
@@ -148,10 +148,7 @@ def phone_seq(pron, verbose=False):
         Counters: laparectomy [lap-uh-rek-tuh-mee]; unconscious [uhn-kon-shuh s]
         Example/Counter:    la·pel vs lap·i·da·ry and lap·a·ro·to·my
         Example/Counter:    sop·o·rif·ic vs so·pran·o
-
         Thus:  O·bam·a vs. Ob·am·a vs. O·ba·ma?  No, it's only O·bam·a.
-
-
     '''
     syl_count = 0
     phon_list = []
@@ -159,9 +156,11 @@ def phone_seq(pron, verbose=False):
     sylstring = ''
     got_vowel = False
     was_prev_cons = False
-    for phon in pron:
-        final = phon[-1]
-        if '0' <= final and final <= '9':
+    idx, end = 0, len(pron)
+    while idx < end:
+        phon = pron[idx]
+        last = phon[-1]
+        if '0' <= last and last <= '9':
             # This phon is a vowel string; strip off the digit and increment syllable the count.
             syl_count += 1
             vowels = phon[0:-1]
@@ -179,6 +178,33 @@ def phone_seq(pron, verbose=False):
         else:
             # This phon is a consonant string.
             phon_list.append(phon)
+            nxti = idx + 1
+            if nxti < end:
+                nxtp = pron[nxti]
+                nxtf = nxtp[-1]
+                if '0' <= nxtf and nxtf <= '9':
+                    if nxtf == '1' or last != '1':
+                        # Next phoneme Q is a stressed vowel, which takes P.
+                        syllables.append(sylstring)
+                        sylstring = phon + nxtp
+                    else:
+                        # Next phoneme Q is an unstressed vowel, which yields P to previous.
+                        syllables.append(sylstring + phon)
+                        sylstring = nxtp
+                    got_vowel = True
+                    was_prev_cons = False
+                    idx = nxti
+                else:
+                    sylstring += phon[0:-1]
+                    syllables.append(sylstring)
+                    sylstring = nxtp
+                    got_vowel = False
+                    was_prev_cons = True
+                    idx = nxti
+
+
+
+
             if sylstring:
                 if got_vowel and was_prev_cons:
                     # End of a closed syllable.  Save it and start a new one.
@@ -193,6 +219,7 @@ def phone_seq(pron, verbose=False):
                 # The syllable string is empty, so start a new one with this consonant.
                 sylstring = phon
             was_prev_cons = True
+        idx = idx + 1
     if verbose:
         print("WORD syllables{} appending {}\n".format(syllables, sylstring))
     syllables.append(sylstring)
