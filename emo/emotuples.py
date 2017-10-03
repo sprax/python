@@ -78,7 +78,7 @@ def gen_emo_tuples():
         ('1f620'                 , 1,   44,   'people', 1, '😠', ['mad', 'angry'], ['mad', 'angry'], ':angry:', []),
         ('1f621'                 , 1,   45,   'people', 1, '😡', ['rage', 'wrath', 'hate', 'hater', 'ire', 'red faced'], ['rage', 'wrath', 'ire', 'red faced'], ':rage:', []),
         ('1f636'                 , 1,   46,   'people', 1, '😶', ['blank', 'no mouth', 'silent', 'mouthless'], ['blank', 'no mouth', 'silent', 'mouthless'], ':no_mouth:', []),
-        ('1f610'                 , 1,   47,   'people', 1, '😐', ['uh', 'ish'], ['neutral face'], ':neutral_face:', []),
+        ('1f610'                 , 1,   47,   'people', 1, '😐', ['uh', 'ah', 'ish'], ['neutral face'], ':neutral_face:', []),
         ('1f611'                 , 1,   48,   'people', 1, '😑', ['bored', 'boredom', 'meh', 'ish', 'blank', 'expressionless'], ['meh', 'blank', 'expressionless'], ':expressionless:', []),
         ('1f62f'                 , 1,   49,   'people', 1, '😯', ['hushed'], ['hushed'], ':hushed:', []),
         ('1f626'                 , 1,   50,   'people', 1, '😦', ['frown', 'frowning'], ['frown', 'frowning'], ':frowning:', []),

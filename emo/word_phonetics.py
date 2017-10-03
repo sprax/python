@@ -154,17 +154,18 @@ def phone_seq(pron, verbose=False):
     phon_list = []
     syllables = []
     sylstring = ''
-    got_vowel = False
+    got_vowel = None
     was_prev_cons = False
     idx, end = 0, len(pron)
     while idx < end:
         phon = pron[idx]
         last = phon[-1]
+        print("=============================== phon: %s \t last: %s" % (phon, last))
         if '0' <= last and last <= '9':
-            # This phon is a vowel string; strip off the digit and increment syllable the count.
-            syl_count += 1
+            # This phon is a vowel string; strip off the digit and increment the syllable  count.
             vowels = phon[0:-1]
             phon_list.append(vowels)
+            syl_count += 1
             if got_vowel:
                 # End of an open syllable.  Save it and start new syllable.
                 if verbose:
@@ -172,54 +173,68 @@ def phone_seq(pron, verbose=False):
                 syllables.append(sylstring)
                 sylstring = vowels
             else:
-                got_vowel = True
+                got_vowel = last
                 sylstring += vowels
             was_prev_cons = False
         else:
-            # This phon is a consonant string.
+            # This phon P is a consonant string.
             phon_list.append(phon)
-            nxti = idx + 1
-            if nxti < end:
-                nxtp = pron[nxti]
-                nxtf = nxtp[-1]
-                if '0' <= nxtf and nxtf <= '9':
-                    if nxtf == '1' or last != '1':
-                        # Next phoneme Q is a stressed vowel, which takes P.
-                        syllables.append(sylstring)
-                        sylstring = phon + nxtp
-                    else:
-                        # Next phoneme Q is an unstressed vowel, which yields P to previous.
-                        syllables.append(sylstring + phon)
-                        sylstring = nxtp
-                    got_vowel = True
-                    was_prev_cons = False
-                    idx = nxti
-                else:
-                    sylstring += phon[0:-1]
-                    syllables.append(sylstring)
-                    sylstring = nxtp
-                    got_vowel = False
-                    was_prev_cons = True
-                    idx = nxti
-
-
-
-
             if sylstring:
-                if got_vowel and was_prev_cons:
-                    # End of a closed syllable.  Save it and start a new one.
-                    if verbose:
-                        print("CLOSED syllables{} appending {}".format(syllables, sylstring))
-                    syllables.append(sylstring)
-                    sylstring = phon
-                    got_vowel = False
+                nxti = idx + 1
+                if got_vowel:
+                    if was_prev_cons:
+                        # Already got a consonant following a vowel, so this is the
+                        # end of a closed syllable.  Save it and start a new one.
+                        if verbose:
+                            print("CLOSED syllables{} appending {}".format(syllables, sylstring))
+                        syllables.append(sylstring)
+                        sylstring = phon
+                        got_vowel = None
+                        was_prev_cons = True
+                    else:
+                        # The previous phoneme was the vowel string.  Must decide:
+                        # append this consonant to current syllable or start a new one?
+                        if nxti < end:
+                            # Look ahead:
+                            nxtp = pron[nxti]
+                            nxtf = nxtp[-1]
+                            print("+++++++++++++++++++++++++++++++++++++ nxtp: %s \t nxtf: %s" % (nxtp, nxtf))
+                            if '0' <= nxtf and nxtf <= '9':
+                                print("# Next phon is vowels")
+                                syl_count += 1
+                                vowels = nxtp[0:-1]
+                                phon_list.append(vowels)
+                                if nxtf == '1' or got_vowel != '1':
+                                    print("# Next phoneme Q is a stressed vowel (%s) or last(%s); it takes current consonant P." % (nxtf, last))
+                                    syllables.append(sylstring)
+                                    sylstring = phon + vowels
+                                else:
+                                    print("# Next phoneme Q is an unstressed vowel; current syllable appends current P.")
+                                    syllables.append(sylstring + phon)
+                                    sylstring = vowels
+                                got_vowel = nxtf
+                                was_prev_cons = False
+                            else:
+                                print("# Next phon is a consonant")
+                                phon_list.append(nxtp)
+                                syllables.append(sylstring + phon)
+                                sylstring = nxtp
+                                got_vowel = None
+                                was_prev_cons = True
+                            idx = nxti
+                        else:
+                            print(">>>> TRIED TO LOOK AHEAD AND SAW THE END")
                 else:
+                    # So sylstring is not empty, but does not yet have a vowel.  Just append current consonant P.
                     sylstring += phon
+                    was_prev_cons = True
             else:
                 # The syllable string is empty, so start a new one with this consonant.
                 sylstring = phon
-            was_prev_cons = True
+                assert got_vowel == None
+                was_prev_cons = True
         idx = idx + 1
+
     if verbose:
         print("WORD syllables{} appending {}\n".format(syllables, sylstring))
     syllables.append(sylstring)
@@ -266,6 +281,7 @@ class PhoneticWord:
         self.cmu_prons = cmu_prons_dict.get(self.lwrd, [])
         self.phone_sex = [phone_seq(pron, verbose) for pron in self.cmu_prons]
         if verbose:
+            print("PhoneticWord.__init__: ", end='')
             if self.cmu_prons:
                 for idx, seq in enumerate(self.phone_sex):
                     print(idx, self.word, seq.syllables)
