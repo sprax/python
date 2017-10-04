@@ -209,12 +209,15 @@ def phone_seq(pron, verbose=0):
                                 phon_list.append(vowels)
                                 if nxtf == '1' or got_vowel != '1':
                                     if verbose > 1:
-                                        print("# Next phoneme Q is a stressed vowel (%s) or last(%s); it takes current consonant P." % (nxtf, last))
+                                        print("# Next phoneme Q is a stressed vowel (%s) or last(%s)" % (
+                                            nxtf, last), end='')
+                                        print("; it takes current consonant P.")
                                     syllables.append(sylstring)
                                     sylstring = phon + vowels
                                 else:
                                     if verbose > 1:
-                                        print("# Next phoneme Q is an unstressed vowel; current syllable appends current P.")
+                                        print("# Next phoneme Q is an unstressed vowel;", end='')
+                                        print(" current syllable appends current P.")
                                     syllables.append(sylstring + phon)
                                     sylstring = vowels
                                 got_vowel = nxtf
@@ -238,7 +241,7 @@ def phone_seq(pron, verbose=0):
             else:
                 # The syllable string is empty, so start a new one with this consonant.
                 sylstring = phon
-                assert got_vowel == None
+                assert got_vowel is None
                 was_prev_cons = True
         idx = idx + 1
 
