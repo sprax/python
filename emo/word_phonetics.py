@@ -252,6 +252,111 @@ def phone_seq(pron, verbose=0):
     return PhoneTuple(len(phonetics), phonetics, syl_count, syllables)
 
 
+
+def phone_seq_2(pron, verbose=0):
+    '''Extract PhoneTuple from a CMU-style pronunciation sequence.'''
+    phon_list = []
+    syllables = []
+    sylstring = ''
+    got_vowel = None
+    was_prev_cons = False
+    for phon in pron:
+        last = phon[-1]
+        if verbose > 1:
+            print("=============================== phon: %s \t last: %s" % (phon, last))
+        if '0' <= last and last <= '9':
+            # This phon is a vowel string; strip off the digit and increment the syllable  count.
+            phon = phon[0:-1]
+        phon_list.append(phon)
+
+
+        
+            syl_count += 1
+            if got_vowel:
+                # End of an open syllable.  Save it and start new syllable.
+                if verbose > 0:
+                    print("OPEN syllables{} appending {}".format(syllables, sylstring))
+                syllables.append(sylstring)
+                sylstring = vowels
+            else:
+                got_vowel = last
+                sylstring += vowels
+            was_prev_cons = False
+        else:
+            # This phon P is a consonant string.
+            phon_list.append(phon)
+            if sylstring:
+                nxti = idx + 1
+                if got_vowel:
+                    if was_prev_cons:
+                        # Already got a consonant following a vowel, so this is the
+                        # end of a closed syllable.  Save it and start a new one.
+                        if verbose > 0:
+                            print("CLOSED syllables{} appending {}".format(syllables, sylstring))
+                        syllables.append(sylstring)
+                        sylstring = phon
+                        got_vowel = None
+                        was_prev_cons = True
+                    else:
+                        # The previous phoneme was the vowel string.  Must decide:
+                        # append this consonant to current syllable or start a new one?
+                        if nxti < end:
+                            # Look ahead:
+                            nxtp = pron[nxti]
+                            nxtf = nxtp[-1]
+                            if verbose > 1:
+                                print("+++++++++++++++++++++++++++++++++++++ nxtp: %s \t nxtf: %s" % (nxtp, nxtf))
+                            if '0' <= nxtf and nxtf <= '9':
+                                if verbose > 3:
+                                    print("# Next phon is vowels")
+                                syl_count += 1
+                                vowels = nxtp[0:-1]
+                                phon_list.append(vowels)
+                                if nxtf == '1' or got_vowel != '1':
+                                    if verbose > 1:
+                                        print("# Next phoneme Q is a stressed vowel (%s) or last(%s)" % (
+                                            nxtf, last), end='')
+                                        print("; it takes current consonant P.")
+                                    syllables.append(sylstring)
+                                    sylstring = phon + vowels
+                                else:
+                                    if verbose > 1:
+                                        print("# Next phoneme Q is an unstressed vowel;", end='')
+                                        print(" current syllable appends current P.")
+                                    syllables.append(sylstring + phon)
+                                    sylstring = vowels
+                                got_vowel = nxtf
+                                was_prev_cons = False
+                            else:
+                                if verbose > 2:
+                                    print("# Next phon is a consonant")
+                                phon_list.append(nxtp)
+                                syllables.append(sylstring + phon)
+                                sylstring = nxtp
+                                got_vowel = None
+                                was_prev_cons = True
+                            idx = nxti
+                        else:
+                            if verbose > 3:
+                                print(">>>>>>>> TRIED TO LOOK AHEAD AND SAW THE END")
+                else:
+                    # So sylstring is not empty, but does not yet have a vowel.  Just append current consonant P.
+                    sylstring += phon
+                    was_prev_cons = True
+            else:
+                # The syllable string is empty, so start a new one with this consonant.
+                sylstring = phon
+                assert got_vowel is None
+                was_prev_cons = True
+        idx = idx + 1
+
+    if verbose > 0:
+        print("WORD syllables{} appending {}\n".format(syllables, sylstring))
+    syllables.append(sylstring)
+    phonetics = ''.join(phon_list)
+    return PhoneTuple(len(phonetics), phonetics, syl_count, syllables)
+
+
 TRANS_NO_DIGITS = str.maketrans('', '', string.digits)
 
 def phon_from_pron(pron):
