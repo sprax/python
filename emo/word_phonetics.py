@@ -254,28 +254,42 @@ def phone_seq(pron, verbose=0):
 
 
 def phone_seq_2(pron, verbose=0):
-    '''Extract PhoneTuple from a CMU-style pronunciation sequence, as simply as possible.'''
-    phon_list = []
+    '''Extract PhoneTuple from a CMU-style pronunciation sequence, no look ahead.'''
+    phons = []
+    pcons = []
     syllables = []
     sylstring = ''
     got_vowel = None
     was_prev_cons = False
+
     for phon in pron:
         last = phon[-1]
         if verbose > 1:
             print("=============================== phon: %s \t last: %s" % (phon, last))
         if '0' <= last and last <= '9':
             # This phon is a vowel string; strip off the digit and increment the syllable  count.
-            phon = phon[0:-1]
-            new_vowel = last
+            vowel = phon[0:-1]
+            newac = last
+            phons.append(vowel)
+            if sylstring:
+                if got_vowel:
+                    if new_vowel:
+                        if prev_cons > 1:
+
         else:
-            new_vowel = None
-        phon_list.append(phon)
+            vowel = None
+            phons.append(phon)
+            pcons.append(phon)
+
+
+
+
         if sylstring:
             if got_vowel:
                 if new_vowel:
-                    if prev_cons
-                    syllables.append(sylstring)
+                    if prev_cons > 1:
+                        # split previous consonants
+                        syllables.append(sylstring)
             else:
                 sylstring += phon
                 if new_vowel:
