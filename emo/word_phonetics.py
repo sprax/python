@@ -254,7 +254,7 @@ def phone_seq(pron, verbose=0):
 
 
 def phone_seq_2(pron, verbose=0):
-    '''Extract PhoneTuple from a CMU-style pronunciation sequence.'''
+    '''Extract PhoneTuple from a CMU-style pronunciation sequence, as simply as possible.'''
     phon_list = []
     syllables = []
     sylstring = ''
@@ -267,10 +267,24 @@ def phone_seq_2(pron, verbose=0):
         if '0' <= last and last <= '9':
             # This phon is a vowel string; strip off the digit and increment the syllable  count.
             phon = phon[0:-1]
+            new_vowel = last
+        else:
+            new_vowel = None
         phon_list.append(phon)
+        if sylstring:
+            if got_vowel:
+                if new_vowel:
+                    if prev_cons
+                    syllables.append(sylstring)
+            else:
+                sylstring += phon
+                if new_vowel:
+                    got_vowel = new_vowel
+        else:
+            sylstring = phon
 
 
-        
+
             syl_count += 1
             if got_vowel:
                 # End of an open syllable.  Save it and start new syllable.
