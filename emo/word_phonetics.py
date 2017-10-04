@@ -273,9 +273,24 @@ def phone_seq_2(pron, verbose=0):
             phons.append(vowel)
             if sylstring:
                 if got_vowel:
-                    if new_vowel:
-                        if prev_cons > 1:
+                    ncons = len(pcons)
+                    if ncons > 1:
+                        # split consonants between current and new syllable
+                        syl = ''.join(syltring, pcons[0:-2])
+                        if verbose > 0:
+                            print("CLOSED syllables{} appending {}".format(syllables, syl))
+                        syllables.append(syl)
+                        sylstring = join(pcons[-1], vowel)
+                    elif ncons == 1:
+                        # FIXME: attach the consonant to the syllable with the stroger vowel
+                    else:
+                        # this vowel immediately follows previous vowel
+                        if verbose > 0:
+                            print("OPEN syllables{} appending {}".format(syllables, sylstring))
+                        syllables.append(sylstring)
+                        sylstring = vowel
 
+            got_vowel = last
         else:
             vowel = None
             phons.append(phon)
@@ -284,48 +299,6 @@ def phone_seq_2(pron, verbose=0):
 
 
 
-        if sylstring:
-            if got_vowel:
-                if new_vowel:
-                    if prev_cons > 1:
-                        # split previous consonants
-                        syllables.append(sylstring)
-            else:
-                sylstring += phon
-                if new_vowel:
-                    got_vowel = new_vowel
-        else:
-            sylstring = phon
-
-
-
-            syl_count += 1
-            if got_vowel:
-                # End of an open syllable.  Save it and start new syllable.
-                if verbose > 0:
-                    print("OPEN syllables{} appending {}".format(syllables, sylstring))
-                syllables.append(sylstring)
-                sylstring = vowels
-            else:
-                got_vowel = last
-                sylstring += vowels
-            was_prev_cons = False
-        else:
-            # This phon P is a consonant string.
-            phon_list.append(phon)
-            if sylstring:
-                nxti = idx + 1
-                if got_vowel:
-                    if was_prev_cons:
-                        # Already got a consonant following a vowel, so this is the
-                        # end of a closed syllable.  Save it and start a new one.
-                        if verbose > 0:
-                            print("CLOSED syllables{} appending {}".format(syllables, sylstring))
-                        syllables.append(sylstring)
-                        sylstring = phon
-                        got_vowel = None
-                        was_prev_cons = True
-                    else:
                         # The previous phoneme was the vowel string.  Must decide:
                         # append this consonant to current syllable or start a new one?
                         if nxti < end:
