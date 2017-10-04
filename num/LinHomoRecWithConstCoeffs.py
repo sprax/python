@@ -11,8 +11,6 @@ import lucas_list
 class LinHomoRecWithConstCoeffs:
     """LHRWCC: Linear Homogenous Recurrence With Constant Coefficients"""
 
-    MY_CONST = 42
-
     def __init__(self, coeffs, inits):
         '''Constructor'''
         self.order = len(coeffs)
@@ -20,7 +18,6 @@ class LinHomoRecWithConstCoeffs:
         self.inits = inits
         self.coeffs = coeffs
         self.length = self.order
-        print("my const is", self.MY_CONST)
 
     def a_n_recurse(self, idx):
         '''Deprecated: recursively computes Nth term in the LHRWCC sequence'''
@@ -70,46 +67,6 @@ class LinHomoRecWithConstCoeffs:
             start_len += 1
         return self.inits
 
-def test_fibonacci():
-    '''Test against fibonacci sequence'''
-    length = 30
-    print("test_fibonaccis", length)
-    ref_list = [y for y in fibonaccis.fib_generate(length+1)][1:]
-    try_reference_rec([1, 1], [1, 1], ref_list, length)
-
-#####################################################
-class TestLinHomoRecWithConstCoef(unittest.TestCase):
-    '''unit tests'''
-
-    # def __init__(self):
-    #     self.className = "TestLinHomoRecWithConstCoef(unittest.TestCase)"
-
-    def setUp(self):
-        print(str(LinHomoRecWithConstCoeffs.__doc__))
-        print(str(self.id()), '\n')
-
-
-    def test_lucas(self):
-        '''Test against Lucas number sequence'''
-        length = 30
-        print("test_lucas", length)
-        ref_list = lucas_list.lucas_list(length+1)
-        self.try_reference_rec([1, 1], [1, 3], ref_list, length)
-
-    def test_3_7(self):
-        '''Test against coef[3, 7] and init[1, 2] number sequence'''
-        length = 6
-        print("test_3_7", length)
-        ref_list = [1, 2, 13, 53, 250, 1121]
-        self.try_reference_rec([3, 7], [1, 2], ref_list, length)
-
-    def test_2_3_5(self):
-        '''Test against coef[2, 3, 5] and init[1, 2, 3] number sequence'''
-        length = 7
-        print("test_2_3_5", length)
-        ref_list = [1, 2, 3, 17, 53, 172, 588]
-        self.try_reference_rec([2, 3, 5], [1, 2, 3], ref_list, length)
-
 def try_reference_rec(ref_coef, ref_init, ref_list, ref_length):
     '''Test against a known reference recurrence'''
     length = ref_length
@@ -126,6 +83,46 @@ def try_reference_rec(ref_coef, ref_init, ref_list, ref_length):
     test_list = test_rec.a_n_list(length)
     print(test_list)
     assert test_list == save_list
+
+#####################################################
+class TestLinHomoRecWithConstCoef(unittest.TestCase):
+    '''unit tests'''
+
+    # def __init__(self):
+    #     self.className = "TestLinHomoRecWithConstCoef(unittest.TestCase)"
+
+    def setUp(self):
+        print(str(LinHomoRecWithConstCoeffs.__doc__))
+        print(str(self.id()), '\n')
+
+    def test_fibonacci(self):
+        '''Test against fibonacci sequence'''
+        length = 30
+        print("test_fibonaccis", length)
+        ref_list = [y for y in fibonaccis.fib_generate(length+1)][1:]
+        try_reference_rec([1, 1], [1, 1], ref_list, length)
+
+    def test_lucas(self):
+        '''Test against Lucas number sequence'''
+        length = 30
+        print("test_lucas", length)
+        ref_list = lucas_list.lucas_list(length+1)
+        try_reference_rec([1, 1], [1, 3], ref_list, length)
+
+    def test_3_7(self):
+        '''Test against coef[3, 7] and init[1, 2] number sequence'''
+        length = 6
+        print("test_3_7", length)
+        ref_list = [1, 2, 13, 53, 250, 1121]
+        try_reference_rec([3, 7], [1, 2], ref_list, length)
+
+    def test_2_3_5(self):
+        '''Test against coef[2, 3, 5] and init[1, 2, 3] number sequence'''
+        length = 7
+        print("test_2_3_5", length)
+        ref_list = [1, 2, 3, 17, 53, 172, 588]
+        try_reference_rec([2, 3, 5], [1, 2, 3], ref_list, length)
+
 
 if __name__ == '__main__':
     unittest.main()
