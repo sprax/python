@@ -32,10 +32,12 @@ def lucas_binet(idx):
     '''Uses Binet's formula (only good for n < 70)'''
     return int(round(pow(PHI, idx) + pow(OMP, idx)))
 
+DEFAULT_LEN = 34
+
 def main():
-    '''Print lists of Lucas numbers (default length 31)'''
+    '''Print lists of Lucas numbers (default length 34)'''
     argc = len(sys.argv)
-    end_num = int(sys.argv[1]) if argc > 1 else 31
+    end_num = int(sys.argv[1]) if argc > 1 else DEFAULT_LEN
     end_fib = fibonaccis.fib_binet(end_num + 2)
     numbers = lucas_interval(1, end_fib)
     print(numbers)
