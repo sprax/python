@@ -1,4 +1,7 @@
-""" Hyphenation, using Frank Liang's algorithm.
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# public domain code modified by Sprax Lines 2017.10.04
+""" Hyphenation and syllabification, using Frank Liang's algorithm.
 
     This module provides a single function to hyphenate words.  hyphenate_word takes
     a string (the word), and returns a list of parts that can be separated by hyphens.
@@ -9,9 +12,11 @@
     ['su', 'per', 'cal', 'ifrag', 'ilis', 'tic', 'ex', 'pi', 'ali', 'do', 'cious']
     >>> hyphenate_word("project")
     ['project']
-    
+
     Ned Batchelder, July 2007.
     This Python code is in the public domain.
+    Modifications by Sprax Lines 2017.10.04 are also public domain.
+
 """
 
 import re
@@ -45,12 +50,68 @@ class Hyphenator:
             t = t[c]
         t[None] = points
 
+
+    def word_syllables(self, word):
+        """ Given a word, returns a list of syllables separated at the possible
+            hyphenation points, even if they are close to the beginning or end
+            of the word.
+        """
+        # Short words aren't hyphenated.
+        # if len(word) < 5:
+        #     return [word]
+
+        # If the word is an exception, get the stored points.
+        if word.lower() in self.exceptions:
+            points = self.exceptions[word.lower()]
+        else:
+            work = '.' + word.lower() + '.'
+            points = [0] * (len(work)+1)
+            for i in range(len(work)):
+                t = self.tree
+                for c in work[i:]:
+                    if c in t:
+                        t = t[c]
+                        if None in t:
+                            p = t[None]
+                            for j in range(len(p)):
+                                points[i+j] = max(points[i+j], p[j])
+                    else:
+                        break
+            # No hyphens in the first two chars or the last two.
+            # points[1] = points[2] = points[-2] = points[-3] = 0
+
+        # Examine the points to build the pieces list.
+        syllables = ['']
+        for c, p in zip(word, points[2:]):
+            syllables[-1] += c
+            if p % 2:
+                syllables.append('')
+        return syllables
+
+    def hyphenated_syllables(self, word):
+        if len(word) < 5:
+            return [word]
+        syllables = self.word_syllables(word)
+        if len(syllables) > 1:
+            if len(syllables[0] < 3):
+                syllables[1] = syllables[0] + syllables[1]
+                syllables = syllables[1:]
+        if len(syllables) > 1:
+            if len(syllables[-1] < 3):
+                syllables[-2] = syllables[-2] + syllables[-1]
+                syllables = syllables[0:-1]
+        return syllables
+
+
+
+
+
     def hyphenate_word(self, word):
         """ Given a word, returns a list of pieces, broken at the possible
             hyphenation points.
         """
         # Short words aren't hyphenated.
-        if len(word) <= 4:
+        if len(word) < 5:
             return [word]
         # If the word is an exception, get the stored points.
         if word.lower() in self.exceptions:
@@ -509,6 +570,7 @@ ret-ri-bu-tion ta-ble
 
 hyphenator = Hyphenator(patterns, exceptions)
 hyphenate_word = hyphenator.hyphenate_word
+word_syllables = hyphenator.word_syllables
 
 del patterns
 del exceptions
@@ -516,8 +578,11 @@ del exceptions
 if __name__ == '__main__':
     import sys
     if len(sys.argv) > 1:
+        print("WORD \t HYPHENATED \t JOINED \t SYLLABLES")
         for word in sys.argv[1:]:
-            print '-'.join(hyphenate_word(word))
+            hyphenoms = hyphenate_word(word)
+            syllables = word_syllables(word)
+            print(word, hyphenoms, '-'.join(hyphenoms), syllables)
     else:
         import doctest
         doctest.testmod(verbose=True)
