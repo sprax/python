@@ -111,10 +111,6 @@ class Hyphenator:
                 syllables = syllables[0:-1]
         return syllables
 
-
-
-
-
     def hyphenate_word(self, word):
         """ Given a word, returns a list of pieces, broken at the possible
             hyphenation points.
@@ -552,7 +548,12 @@ uea1m u2r1al. uri4al. us2er. v1ativ v1oir5du1 va6guer vaude3v 1verely. v1er1eig
 ves1tite vi1vip3a3r voice1p waste3w6a2 wave1g4 w3c week1n wide5sp wo4k1en
 wrap3aro writ6er. x1q xquis3 y5che3d ym5e5try y1stro yes5ter1y z3ian. z3o1phr
 z2z3w
-""")
+"""
+# More patterns to allow, for instance, wind-y
+"""
+3y
+"""
+)
 
 exceptions = """
 as-so-ciate as-so-ciates dec-li-na-tion oblig-a-tory phil-an-thropic present
