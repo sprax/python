@@ -248,7 +248,8 @@ def phone_seq(pron, verbose=0):
     if verbose > 0:
         print("WORD syllables{} appending {}\n".format(syllables, sylstring))
     syllables.append(sylstring)
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> phon_list:", phon_list)
+    if verbose > 2:
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> phon_list:", phon_list)
     phonetics = ''.join(phon_list)
     len_syllables = len(syllables)
     if syl_count != len_syllables:
@@ -260,6 +261,7 @@ def phone_seq(pron, verbose=0):
 
 def phone_seq_2(pron, verbose=0):
     '''Extract PhoneTuple from a CMU-style pronunciation sequence, no look ahead.'''
+    print("- - - - - - - - - - phone_seq_2 - - - - - - - - - - - -")
     phons = []
     pcons = []
     syllables = []
@@ -283,7 +285,8 @@ def phone_seq_2(pron, verbose=0):
                         # split consonants between current and new syllable
                         syllable = sylstring + ''.join(pcons[0:-1])
                         if verbose > 0:
-                            print("CLOSED syllables{} appending {}".format(syllables, syllable))
+                            print("PCONS:", pcons, "   sylstring:", sylstring)
+                            print("syllables{} appending CLOSED {}".format(syllables, syllable))
                         syllables.append(syllable)
                         sylstring = ''.join(pcons[-1]) + vowel
                         pcons = []
@@ -291,9 +294,12 @@ def phone_seq_2(pron, verbose=0):
                         # Affix the consonant to the syllable with the stroger vowel
                         if newac == '1' or got_vowel != '1':
                             if verbose > 1:
-                                print("# Next phoneme Q is a stressed vowel (%s) or prev was unstressed (%s)" % (
-                                    newac, got_vowel), end='')
+                                print("# Next phoneme Q = %s is a stressed vowel (%s) or prev was unstressed (%s)" % (
+                                    vowel, newac, got_vowel), end='')
                                 print("; new vowel takes last consonant P = %s." % pcons[0])
+                            if verbose > 0:
+                                print("PCONS:", pcons, "   sylstring:", sylstring)
+                                print("syllables{} appending OPEN {}".format(syllables, sylstring))
                             syllables.append(sylstring)
                             sylstring = pcons[0] + vowel
                         else:
@@ -302,18 +308,20 @@ def phone_seq_2(pron, verbose=0):
                                 print("; current syllable appends current consonant P = %s." % pcons[0])
                             syllables.append(sylstring + pcons[0])
                             sylstring = vowel
-                            pcons = []
+                        pcons = []
                     else:
                         # this vowel immediately follows previous vowel
                         if verbose > 0:
-                            print("OPEN syllables{} appending {}".format(syllables, sylstring))
+                            print("syllables{} appending OPEN {}".format(syllables, sylstring))
                         syllables.append(sylstring)
                         sylstring = vowel
                 else:   # current syllable had not gotten a vowel; now it has
                     sylstring = ''.join(pcons, vowel)
                     pcons = []
             else:
-                sylstring = vowel
+                print("INITIALIZING sylstring?  pcons{}  vowel({})".format(pcons, vowel))
+                sylstring = ''.join(pcons) + vowel
+                pcons = []
             got_vowel = last
         else:
             phons.append(phon)
@@ -328,12 +336,12 @@ def phone_seq_2(pron, verbose=0):
     return PhoneTuple(len(phonetics), phonetics, len(syllables), syllables)
 
 def test_seq_2(cmu_prons):
-    words = ['obama']
+    words = ['obama', 'fledgling', 'cooperate', 'inadvertant', 'fortify', 'squidward']
     for word in words:
         prons = cmu_prons.get(word)
         for pron in prons:
             seq1 = phone_seq(pron)
-            seq2 = phone_seq_2(pron)
+            seq2 = phone_seq_2(pron, 5)
             print("syllables counts: %d v. %d" % (seq1.count, seq2.count))
             print("SEQ1:", seq1)
             print("SEQ2:", seq2)
