@@ -50,16 +50,10 @@ class Hyphenator:
             t = t[c]
         t[None] = points
 
-
-    def word_syllables(self, word):
-        """ Given a word, returns a list of syllables separated at the possible
-            hyphenation points, even if they are close to the beginning or end
-            of the word.
+    def break_points(self, word):
+        """ Given a word, returns a list of possible hyphenation points,
+        even if they are close to the beginning or end of the word.
         """
-        # Short words aren't hyphenated.
-        # if len(word) < 5:
-        #     return [word]
-
         # If the word is an exception, get the stored points.
         if word.lower() in self.exceptions:
             points = self.exceptions[word.lower()]
@@ -77,8 +71,23 @@ class Hyphenator:
                                 points[i+j] = max(points[i+j], p[j])
                     else:
                         break
-            # No hyphens in the first two chars or the last two.
-            # points[1] = points[2] = points[-2] = points[-3] = 0
+        return points
+
+    def hyphen_points(self, word):
+        """ Given a word, returns a list of possible hyphenation points,
+        unless they are close to the beginning or end of the word.
+        """
+        points = self.break_points(word)
+        # No hyphens in the first two chars or the last two.
+        points[1] = points[2] = points[-2] = points[-3] = 0
+        return points
+
+    def word_syllables(self, word):
+        """ Given a word, returns a list of syllables separated at the possible
+            hyphenation points, even if they are close to the beginning or end
+            of the word.
+        """
+        points = self.break_points(word)
 
         # Examine the points to build the pieces list.
         syllables = ['']
@@ -113,25 +122,8 @@ class Hyphenator:
         # Short words aren't hyphenated.
         if len(word) < 5:
             return [word]
-        # If the word is an exception, get the stored points.
-        if word.lower() in self.exceptions:
-            points = self.exceptions[word.lower()]
-        else:
-            work = '.' + word.lower() + '.'
-            points = [0] * (len(work)+1)
-            for i in range(len(work)):
-                t = self.tree
-                for c in work[i:]:
-                    if c in t:
-                        t = t[c]
-                        if None in t:
-                            p = t[None]
-                            for j in range(len(p)):
-                                points[i+j] = max(points[i+j], p[j])
-                    else:
-                        break
-            # No hyphens in the first two chars or the last two.
-            points[1] = points[2] = points[-2] = points[-3] = 0
+
+        points = self.hyphen_points(word)
 
         # Examine the points to build the pieces list.
         pieces = ['']
