@@ -74,8 +74,8 @@ class Hyphenator:
                     if c in t:
                         t = t[c]
                         if None in t:
-                            p = t[None]
-                            for jdx, pnt in enumerate(p):
+                            pnts = t[None]
+                            for jdx, pnt in enumerate(pnts):
                                 points[i + jdx] = max(points[i + jdx], pnt)
                     else:
                         break
@@ -99,9 +99,9 @@ class Hyphenator:
 
         # Examine the points to build the pieces list.
         syllables = ['']
-        for c, p in zip(word, points[2:]):
+        for c, point in zip(word, points[2:]):
             syllables[-1] += c
-            if p % 2:
+            if point % 2:
                 syllables.append('')
         return syllables
 
@@ -131,9 +131,9 @@ class Hyphenator:
 
         # Examine the points to build the pieces list.
         pieces = ['']
-        for c, p in zip(word, points[2:]):
+        for c, point in zip(word, points[2:]):
             pieces[-1] += c
-            if p % 2:
+            if point % 2:
                 pieces.append('')
         return pieces
 
