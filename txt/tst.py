@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python
 import re
 
 rgxb = re.compile(r"^\s*['\"]")
