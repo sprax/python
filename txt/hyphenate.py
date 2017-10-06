@@ -31,6 +31,7 @@ import re
 __version__ = '1.0.20070709'
 
 class Hyphenator:
+    '''Hyhenate or syllabify words based on Liang, Knuth, Kuiken (TeX); Batchelder.'''
     def __init__(self, patterns, exceptions=''):
         self.tree = {}
         for pattern in patterns.split():
@@ -42,7 +43,7 @@ class Hyphenator:
             self.exceptions[ex.replace('-', '')] = [0] + [ int(h == '-') for h in re.split(r"[a-z]", ex) ]
 
     def _insert_pattern(self, pattern):
-        # Convert the a pattern like 'a1bc3d4' into a string of chars 'abcd'
+        # Convert a pattern like 'a1bc3d4' into a string of chars 'abcd'
         # and a list of points [ 0, 1, 0, 3, 4 ].
         chars = re.sub('[0-9]', '', pattern)
         points = [ int(d or 0) for d in re.split("[.a-z]", pattern) ]
@@ -74,8 +75,8 @@ class Hyphenator:
                         t = t[c]
                         if None in t:
                             p = t[None]
-                            for j in range(len(p)):
-                                points[i+j] = max(points[i+j], p[j])
+                            for jdx, pnt in enumerate(p):
+                                points[i + jdx] = max(points[i + jdx], pnt)
                     else:
                         break
         return points
@@ -136,7 +137,7 @@ class Hyphenator:
                 pieces.append('')
         return pieces
 
-patterns = (
+PATTERNS = (
 # Knuth and Liang's original hyphenation patterns from classic TeX.
 # In the public domain.
 """
@@ -562,20 +563,20 @@ z2z3w
 """
 )
 
-exceptions = """
+EXCEPTIONS = """
 as-so-ciate as-so-ciates dec-li-na-tion oblig-a-tory phil-an-thropic present
 presents project projects reci-procity re-cog-ni-zance ref-or-ma-tion
 ret-ri-bu-tion ta-ble
 """
 
-hyphenator = Hyphenator(patterns, exceptions)
+hyphenator = Hyphenator(PATTERNS, EXCEPTIONS)
 # hyphenate_word = hyphenator.hyphenate_word
 # word_syllables = hyphenator.word_syllables
 # syllab_points = hyphenator.syllab_points
 # hyphen_points = hyphenator.hyphen_points
 
-del patterns
-del exceptions
+del PATTERNS
+del EXCEPTIONS
 
 if __name__ == '__main__':
     import sys
