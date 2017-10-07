@@ -52,10 +52,10 @@ class Hyphenator:
         # another level down in the tree, and leaf nodes have the list of
         # points.
         t = self.tree
-        for c in chars:
-            if c not in t:
-                t[c] = {}
-            t = t[c]
+        for char in chars:
+            if char not in t:
+                t[char] = {}
+            t = t[char]
         t[None] = points
 
     def syllab_points(self, word):
@@ -70,15 +70,18 @@ class Hyphenator:
             points = [0] * (len(work)+1)
             for i in range(len(work)):
                 t = self.tree
-                for c in work[i:]:
-                    if c in t:
-                        t = t[c]
+                for char in work[i:]:
+                    if char in t:
+                        t = t[char]
                         if None in t:
                             pnts = t[None]
+                            # print("tree nodes(%s): " % char, t)
+                            # print()
                             for jdx, pnt in enumerate(pnts):
                                 points[i + jdx] = max(points[i + jdx], pnt)
                     else:
                         break
+        # print("points: ", points)
         return points
 
     def hyphen_points(self, word):
@@ -90,6 +93,21 @@ class Hyphenator:
         points[1] = points[2] = points[-2] = points[-3] = 0
         return points
 
+
+    def syllabify(self, word, points):
+        """ Given a word and syllable breaking poings, returns a list of
+            syllables separated at the possible hyphenation points, even
+            if they are close to the beginning or end of the word.
+        """
+        # Examine the points to build the pieces list.
+        syllables = ['']
+        for char, point in zip(word, points[2:]):
+            syllables[-1] += char           # add char to last syllable
+            if point % 2:
+                syllables.append('')     # start a new syllable
+        return syllables
+
+
     def word_syllables(self, word):
         """ Given a word, returns a list of syllables separated at the possible
             hyphenation points, even if they are close to the beginning or end
@@ -99,11 +117,11 @@ class Hyphenator:
 
         # Examine the points to build the pieces list.
         syllables = ['']
-        for c, point in zip(word, points[2:]):
-            syllables[-1] += c
+        for char, point in zip(word, points[2:]):
+            syllables[-1] += char           # add char to last syllable
             if point % 2:
-                syllables.append('')
-        return syllables
+                syllables.append('')     # start a new syllable
+        return self.syllabify(word, points)
 
     def hyphenated_syllables(self, word):
         if len(word) < 5:
@@ -131,8 +149,8 @@ class Hyphenator:
 
         # Examine the points to build the pieces list.
         pieces = ['']
-        for c, point in zip(word, points[2:]):
-            pieces[-1] += c
+        for char, point in zip(word, points[2:]):
+            pieces[-1] += char
             if point % 2:
                 pieces.append('')
         return pieces
@@ -569,24 +587,30 @@ presents project projects reci-procity re-cog-ni-zance ref-or-ma-tion
 ret-ri-bu-tion ta-ble
 """
 
-hyphenator = Hyphenator(PATTERNS, EXCEPTIONS)
+def get_default_hyphenator():
+    return Hyphenator(PATTERNS, EXCEPTIONS)
+
+hyphenator = get_default_hyphenator()
+
 # hyphenate_word = hyphenator.hyphenate_word
 # word_syllables = hyphenator.word_syllables
 # syllab_points = hyphenator.syllab_points
 # hyphen_points = hyphenator.hyphen_points
 
-del PATTERNS
-del EXCEPTIONS
+# del PATTERNS
+# del EXCEPTIONS
 
 if __name__ == '__main__':
     import sys
     if len(sys.argv) > 1:
+        hyphenator = get_default_hyphenator()
         print("WORD \t HYPHENATED \t JOINED \t SYLLABLES")
         for word in sys.argv[1:]:
-            hyphenoms = hyphenator.hyphenate_word(word)
+            # hyphenoms = hyphenator.hyphenate_word(word)
             syllables = hyphenator.word_syllables(word)
-            print(word, hyphenoms, '-'.join(hyphenoms), syllables)
+            print(word, syllables)
+
+            # print(word, hyphenoms, '-'.join(hyphenoms), syllables)
     else:
         import doctest
         doctest.testmod(verbose=True)
-
