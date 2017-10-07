@@ -75,13 +75,13 @@ class Hyphenator:
                         t = t[char]
                         if None in t:
                             pnts = t[None]
-                            # print("tree nodes(%s): " % char, t)
-                            # print()
+                            print("tree nodes(%s): " % char, t)
+                            print()
                             for jdx, pnt in enumerate(pnts):
                                 points[i + jdx] = max(points[i + jdx], pnt)
                     else:
                         break
-        # print("points: ", points)
+        print("points: ", points)
         return points
 
     def hyphen_points(self, word):
