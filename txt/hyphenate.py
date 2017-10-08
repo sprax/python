@@ -124,6 +124,7 @@ class Hyphenator:
         return self.syllabify(word, points)
 
     def hyphenated_syllables(self, word):
+        '''returns hyphenation based on syllables (limited)'''
         if len(word) < 5:
             return [word]
         syllables = self.word_syllables(word)
@@ -588,6 +589,7 @@ ret-ri-bu-tion ta-ble
 """
 
 def get_default_hyphenator():
+    '''returns Hyphenator constructed from default patterns & exceptons.'''
     return Hyphenator(PATTERNS, EXCEPTIONS)
 
 hyphenator = get_default_hyphenator()
@@ -601,6 +603,7 @@ hyphenator = get_default_hyphenator()
 # del EXCEPTIONS
 
 if __name__ == '__main__':
+    '''test driver'''
     import sys
     if len(sys.argv) > 1:
         hyphenator = get_default_hyphenator()
