@@ -30,6 +30,19 @@ import re
 
 __version__ = '1.0.20070709'
 
+def syllabify(word, points):
+    """ Given a word and syllable breaking poings, returns a list of
+        syllables separated at the possible hyphenation points, even
+        if they are close to the beginning or end of the word.
+    """
+    # Examine the points to build the pieces list.
+    syllables = ['']
+    for char, point in zip(word, points[2:]):
+        syllables[-1] += char           # add char to last syllable
+        if point % 2:
+            syllables.append('')     # start a new syllable
+    return syllables
+
 class Hyphenator:
     '''Hyhenate or syllabify words based on Liang, Knuth, Kuiken (TeX); Batchelder.'''
     def __init__(self, patterns, exceptions=''):
@@ -93,21 +106,6 @@ class Hyphenator:
         points[1] = points[2] = points[-2] = points[-3] = 0
         return points
 
-
-    def syllabify(word, points):
-        """ Given a word and syllable breaking poings, returns a list of
-            syllables separated at the possible hyphenation points, even
-            if they are close to the beginning or end of the word.
-        """
-        # Examine the points to build the pieces list.
-        syllables = ['']
-        for char, point in zip(word, points[2:]):
-            syllables[-1] += char           # add char to last syllable
-            if point % 2:
-                syllables.append('')     # start a new syllable
-        return syllables
-
-
     def word_syllables(self, word):
         """ Given a word, returns a list of syllables separated at the possible
             hyphenation points, even if they are close to the beginning or end
@@ -121,7 +119,7 @@ class Hyphenator:
             syllables[-1] += char           # add char to last syllable
             if point % 2:
                 syllables.append('')     # start a new syllable
-        return self.syllabify(word, points)
+        return syllabify(word, points)
 
     def hyphenated_syllables(self, word):
         '''returns hyphenation based on syllables (limited)'''
