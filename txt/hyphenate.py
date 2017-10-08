@@ -94,7 +94,7 @@ class Hyphenator:
         return points
 
 
-    def syllabify(self, word, points):
+    def syllabify(word, points):
         """ Given a word and syllable breaking poings, returns a list of
             syllables separated at the possible hyphenation points, even
             if they are close to the beginning or end of the word.
