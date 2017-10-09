@@ -576,7 +576,7 @@ PATTERNS = (
     """
     # More patterns to allow breaking on short syllables, as in: wind-y
     """
-    3y
+    ar5a a3tho n3dy in3ach ou3po y3th
     """
 )
 
@@ -609,7 +609,7 @@ def main():
         for token in sys.argv[1:]:
             hyphenoms = HYPHENATOR.hyphenate_word(token)
             syllables = HYPHENATOR.word_syllables(token)
-            print(token, syllables)
+            # print(token, syllables)
             print(token, hyphenoms, '-'.join(hyphenoms), syllables)
     else:
         import doctest
