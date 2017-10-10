@@ -605,7 +605,7 @@ def main():
     import sys
     if len(sys.argv) > 1:
         # hyphenator = get_default_hyphenator()
-        print("WORD \t HYPHENATED \t JOINED \t SYLLABLES")
+        print("ORIGINAL \t HYPHENATED \t JOINED \t SYLLABIFIED")
         for token in sys.argv[1:]:
             hyphenoms = HYPHENATOR.hyphenate_word(token)
             syllables = HYPHENATOR.word_syllables(token)
