@@ -256,9 +256,14 @@ def phone_seq_1(pron, verbose=0):
                 prev_cons = True
         idx = idx + 1
 
-    if verbose > 0:
-        print("WORD syllables{} appending {}\n".format(syllables, sylstring))
-    syllables.append(sylstring)
+    if oldaccent:
+        if verbose > 0:
+            print("WORD syllables{} appending {}\n".format(syllables, sylstring))
+        syllables.append(sylstring)
+    else:
+        if verbose > 0:
+            print("WORD syllables{} appending {} to last syllable\n".format(syllables, sylstring))
+        syllables[-1] += sylstring
     if verbose > 2:
         print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> phon_list:", phon_list)
     phonetics = ''.join(phon_list)
@@ -361,13 +366,15 @@ def test_phone_seqs(cmu_prons, hyphenator, verbose):
     'egg', 'banana', 'hopelessness', 'aphrodisiac', 'lightproof', 'matchstick',
     'nightclub', 'corkscrew',
     'lengthwise', 'aardvark']
+    if verbose > 5:
+        words = ['aardvark']
     for word in words:
         prons = cmu_prons.get(word)
         if prons:
             print("Testing phonetic sequencing on WORD %s" % word)
             for pron in prons:
-                seq1 = phone_seq_1(pron, verbose)
                 seq2 = phone_seq_2(pron, hyphenator, verbose)
+                seq1 = phone_seq_1(pron, verbose)
                 # print("syllable counts: %d v. %d" % (seq1.count, seq2.count))
                 print("SEQ1:", seq1)
                 print("SEQ2:", seq2)
