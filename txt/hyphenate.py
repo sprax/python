@@ -13,6 +13,13 @@
     The method syllabify inputs both a word and a list of breaking points,
     and again outputs a list of syllables.
 
+    TODO: The data used to populate the tree used for finding breaking points
+    is hand-crafted.  It could be used as a starting point for training a
+    network to hyphenate words that do not accept the hand-crafted patterns,
+    where the numbers embedded in the patterns become the parameters.  Training
+    the network as an exercise in supervised learning could be done using
+    syllable-boundary data from a dictionary.  
+
     >>> HYPHENATOR.syllab_points("hyphenation")
     [0, 0, 0, 3, 0, 0, 2, 5, 4, 2, 0, 2, 0, 0]
     >>> HYPHENATOR.hyphen_points("hyphenation")
