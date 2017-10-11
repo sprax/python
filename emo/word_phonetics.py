@@ -268,7 +268,8 @@ def phone_seq_1(pron, verbose=0):
 
     return PhoneTuple(len(phonetics), phonetics, syl_count, syllables)
 
-
+TRANS_PCONS = str.maketrans({'k': 'c'})
+TRANS_PARTS = str.maketrans({'c': 'k'})
 
 def phone_seq_2(pron, hyphenator, verbose=0):
     '''Extract PhoneTuple from a CMU-style pronunciation sequence, no look ahead.'''
@@ -295,13 +296,13 @@ def phone_seq_2(pron, hyphenator, verbose=0):
                     ncons = len(pcons)
                     if ncons > 1:
                         # split consonants between current and new syllable
-                        scons = ''.join(pcons).lower()
+                        scons = ''.join(pcons).lower().translate(TRANS_PCONS)
                         parts = hyphenator.word_syllables(scons)
                         if verbose > 0:
                             print("PCONS:", pcons, "   sylstring:", sylstring,  "  SCONS: ", scons, "  PARTS: ", parts)
                         if len(parts) > 1:
                             syllable = sylstring + parts[0].upper()
-                            sylstring = parts[1].upper() + vowel
+                            sylstring = parts[1].translate(TRANS_PARTS).upper() + vowel
                         else:
                             syllable = sylstring + ''.join(pcons[0:-1])
                             sylstring = ''.join(pcons[-1]) + vowel
