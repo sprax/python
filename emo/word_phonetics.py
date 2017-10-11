@@ -19,6 +19,7 @@ from collections import namedtuple
 from nltk.corpus import cmudict
 from text_regex import words_split_out
 from text_regex import word_tokens
+import hyphenate
 
 def syl_count_cmu(pron):
     '''number of syllables in a CMU-style pronunciation'''
@@ -269,7 +270,7 @@ def phone_seq_1(pron, verbose=0):
 
 
 
-def phone_seq_2(pron, verbose=0):
+def phone_seq_2(pron, hyphenator, verbose=0):
     '''Extract PhoneTuple from a CMU-style pronunciation sequence, no look ahead.'''
     if verbose > 1:
         print("= = = = = = = = = = phone_seq_2 = = = = = = = = = = = =")
@@ -294,12 +295,19 @@ def phone_seq_2(pron, verbose=0):
                     ncons = len(pcons)
                     if ncons > 1:
                         # split consonants between current and new syllable
-                        syllable = sylstring + ''.join(pcons[0:-1])
+                        scons = ''.join(pcons).lower()
+                        parts = hyphenator.word_syllables(scons)
                         if verbose > 0:
-                            print("PCONS:", pcons, "   sylstring:", sylstring)
+                            print("PCONS:", pcons, "   sylstring:", sylstring,  "  SCONS: ", scons, "  PARTS: ", parts)
+                        if len(parts) > 1:
+                            syllable = sylstring + parts[0].upper()
+                            sylstring = parts[1].upper() + vowel
+                        else:
+                            syllable = sylstring + ''.join(pcons[0:-1])
+                            sylstring = ''.join(pcons[-1]) + vowel
+                        if verbose > 0:
                             print("syllables{} appending CLOSED {}".format(syllables, syllable))
                         syllables.append(syllable)
-                        sylstring = ''.join(pcons[-1]) + vowel
                         pcons = []
                     elif ncons == 1:
                         # Affix the consonant to the syllable with the stroger vowel
@@ -346,7 +354,7 @@ def phone_seq_2(pron, verbose=0):
     return PhoneTuple(len(phonetics), phonetics, len(syllables), syllables)
 
 
-def test_phone_seqs(cmu_prons, verbose):
+def test_phone_seqs(cmu_prons, hyphenator, verbose):
     words = ['obama', 'fledgling', 'cooperate', 'inadvertant', 'fortify',
     'aggressive', 'ornery', 'potato', 'potable', 'preternatural', 'chivalry',
     'egg', 'banana', 'hopelessness', 'aphrodisiac', 'lightproof', 'matchstick',
@@ -358,12 +366,12 @@ def test_phone_seqs(cmu_prons, verbose):
             print("Testing phonetic sequencing on WORD %s" % word)
             for pron in prons:
                 seq1 = phone_seq_1(pron, verbose)
-                seq2 = phone_seq_2(pron, verbose)
+                seq2 = phone_seq_2(pron, hyphenator, verbose)
                 # print("syllable counts: %d v. %d" % (seq1.count, seq2.count))
                 print("SEQ1:", seq1)
                 print("SEQ2:", seq2)
                 if seq1 != seq2:
-                    print("^^^^ WRONG ^^^^")
+                    print("^^^^ WRONG! ^^^^")
                 print()
         else:
             print("WORD %s has no CMU prons" % word)
@@ -433,7 +441,10 @@ def cmu_pd():
 
 def get_prons(word):
     '''Returns CMU Pronouncing Dictionary entry for word, or None.'''
-    return cmu_pd().get(word)
+    try:
+        return CMU_PRON_DICT.get(word)
+    except:
+        return cmu_pd().get(word)
 
 def get_pron(word):
     '''Returns first pron in CMU Pronouncing Dictionary entry for word, or None.'''
@@ -465,6 +476,7 @@ def main():
     args = parser.parse_args()
 
     cmu_prons = cmu_pd() # get the CMU Pronouncing Dict
+    hyphenator = hyphenate.get_default_hyphenator()
 
     if args.verbose:
         print(parser.prog, ":", main.__doc__, "\n")
@@ -481,7 +493,7 @@ def main():
             counts[1], scount, vcount, fcount))
         print()
 
-        test_phone_seqs(cmu_prons, args.verbose)
+        test_phone_seqs(cmu_prons, hyphenator, args.verbose)
 
 if __name__ == '__main__':
     main()
