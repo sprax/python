@@ -23,7 +23,7 @@ def compile(rules):
     for rule in rules:
         rule['re'] = re.compile(rule['pattern'], re.IGNORECASE)
 
-def load_rules(path='/Users/sprax/dev/magic/data/social_graces_regex.json'):
+def load_rules(path='social_graces_regex.json'):
     rules = load_json_file(path, 'rules')
     compile(rules)
     return rules
