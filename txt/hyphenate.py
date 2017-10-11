@@ -3,8 +3,15 @@
 # public domain code modified by Sprax Lines 2017.10.04
 """ Hyphenation and syllabification, using Frank Liang's algorithm.
 
-    This module provides a single function to hyphenate words.  hyphenate_word takes
-    a string (the word), and returns a list of parts that can be separated by hyphens.
+    This module defines functions to hyphenate and syllabify words.
+    hyphenate_word takes a string (the word), and returns a list of parts
+        that can be separated by hyphens.
+    word_syllables also inputs a string and outputs a list of syllables.
+    Both rely on an a list of hyphenation or syllable-breaking points as an
+    intermediate product.  The get the list of points directly the hyphen_points
+    or syllab_points methods.
+    The method syllabify inputs both a word and a list of breaking points,
+    and again outputs a list of syllables.
 
     >>> HYPHENATOR.syllab_points("hyphenation")
     [0, 0, 0, 3, 0, 0, 2, 5, 4, 2, 0, 2, 0, 0]
