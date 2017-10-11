@@ -7,19 +7,23 @@
     a string (the word), and returns a list of parts that can be separated by hyphens.
 
     >>> HYPHENATOR.syllab_points("hyphenation")
-    [0, 0, 3, 3, 0, 0, 2, 5, 4, 2, 0, 2, 0, 0]
+    [0, 0, 0, 3, 0, 0, 2, 5, 4, 2, 0, 2, 0, 0]
     >>> HYPHENATOR.hyphen_points("hyphenation")
     [0, 0, 0, 3, 0, 0, 2, 5, 4, 2, 0, 0, 0, 0]
     >>> HYPHENATOR.hyphenate_word("hyphenation")
+    ['hy', 'phen', 'ation']
+    >>> HYPHENATOR.word_syllables("hyphenation")
     ['hy', 'phen', 'ation']
     >>> HYPHENATOR.hyphenate_word("supercalifragilisticexpialidocious")
     ['su', 'per', 'cal', 'ifrag', 'ilis', 'tic', 'ex', 'pi', 'ali', 'do', 'cious']
     >>> HYPHENATOR.hyphenate_word("project")
     ['project']
     >>> HYPHENATOR.hyphenate_word("windy")
-    ['windy']
+    ['win', 'dy']
     >>> HYPHENATOR.word_syllables("windy")
-    ['wind', 'y']
+    ['win', 'dy']
+    >>> HYPHENATOR.word_syllables("manchurian")
+    ['man', 'chur', 'i', 'an']
 
     Ned Batchelder, July 2007.
     This Python code is in the public domain.
@@ -576,7 +580,7 @@ PATTERNS = (
     """
     # More patterns to allow breaking on short syllables, as in: wind-y
     """
-    ar5a a3tho n3dy in3ach ou3po y3th
+    n3ch ar5a a3tho n3dy in3ach ou3po ur3ia y3th
     """
 )
 
