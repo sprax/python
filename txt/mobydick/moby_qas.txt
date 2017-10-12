@@ -46,7 +46,7 @@
 45	What does Ahab see when he studies the gold doubloon nailed to the mast?	Himself	42	0.26050	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin	106
 46	What does Captain Boomer want to do since Moby Dick took his arm?	Avoid Moby Dick	138	0.33518	Who is Captain Boomer?	One-armed English whaling captain; master of the Samuel Enderby	
 47	What does Fedallah prophesize will kill Captain Ahab?	Hemp	44	0.33610	What does Ahab recognize as the "first hearse" of Fedallah's prophecy?	Fedallah lashed to Moby Dick	
-48	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirt-spout	
+48	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirt-spout	59
 49	What does Ishmael claim is the major difference between male and female whales?	Males abandon injured comrades	50	0.47433	What does Ishmael claim is the most famous part of a whale?	Its tail	
 50	What does Ishmael claim is the most famous part of a whale?	Its tail	175	0.38087	Why does Ishmael think whales are so mysterious?	They're always mostly hidden	174
 51	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel	
@@ -70,7 +70,7 @@
 69	What is Fedallah's turban made of?	His own hair	27	1.00000	Out of what is Fedallah's turban made?	His hair	69
 70	What is Flask's nickname?	King-Post	144	0.57974	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard	70
 71	What is Ishmael constantly trying to pin down throughout the novel?	The essence of whales	147	0.33518	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	
-72	What is a "gam"?	A social meeting of two, or more, whaling ships at sea	184	What is it called when two or more whale ships meet at sea?	  A "gam"
+72	What is a "gam"?	184	A social meeting of two, or more, whaling ships at sea	184	What is it called when two or more whale ships meet at sea?	  A "gam"
 73	What is a "specksynder"?	Chief Harpooner	34
 74	What is cetology?	The study of whales	
 75	What is the "doubloon" offered for?	The first man to spot Moby Dick	
