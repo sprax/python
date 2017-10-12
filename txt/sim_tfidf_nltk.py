@@ -29,8 +29,6 @@ VECTORIZER = TfidfVectorizer(tokenizer=normalize, stop_words='english')
 VECT_NO_STOPS = TfidfVectorizer(tokenizer=normalize)
 VECT_MOST_STOPS = TfidfVectorizer(tokenizer=normalize, stop_words=MOST_STOPS)
 
-
-
 def remove_stop_words(tokens, stop_words=STOP_WORDS):
     return [tok for tok in tokens if tok not in stop_words]
 

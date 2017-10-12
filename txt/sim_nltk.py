@@ -29,8 +29,6 @@ VECTORIZER = TfidfVectorizer(tokenizer=normalize, stop_words='english')
 VECT_NO_STOPS = TfidfVectorizer(tokenizer=normalize)
 VECT_MOST_STOPS = TfidfVectorizer(tokenizer=normalize, stop_words=MOST_STOPS)
 
-
-
 def remove_stop_words(tokens, stop_words=STOP_WORDS):
     '''filter out stip words'''
     return [tok for tok in tokens if tok not in stop_words]
@@ -378,7 +376,7 @@ def sim_score_save(qas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_t
                                                                                seconds, score))
     return score
 
-
+###############################################################################
 def test_fair():
     '''test similariy of QA pairs containing many stop words, including "fair"'''
     fair = scraper.csv_read_qa('fair.txt', delimiter='\t')
