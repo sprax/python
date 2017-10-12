@@ -798,26 +798,18 @@
 
 127	Which character is often seen as an allegorical representation of God?	Moby Dick	
 
-128	Which characters survive the Pequod's sinking?	Only Ishmael	
-	 17	0.41121	How does the Pequod sink?	She is rammed by Moby Dick. 	92	
-	164	0.37998	Who owns the Pequod?	Bildad and Peleg	135	
-	 76	0.37998	What is the Pequod named after?	An extinct Massachusetts Indian tribe		
-	 92	0.33610	What keeps Ishmael afloat after the Pequod sinks?	A coffin	128	
-	 19	0.23790	How many of the Pequod's crew survive their encounter with Moby Dick?	One	128	
-	 18	0.22029	How is the Pequod decorated?	With whale bones	179	
+128	Which characters survive the Pequod's sinking?	Only Ishmael	19	0.23790	How many of the Pequod's crew survive their encounter with Moby Dick?	One	128	
 
 129	Which member of the crew is a religious Christian man?	Starbuck	
 
-130	Which was the first team to kill a whale?	Stubb and Tashtego	
-	102	0.29122	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses		
+130	Which was the first team to kill a whale?	Stubb and Tashtego	102	0.29122	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses		
 	 40	0.26056	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head	59	
 	182	0.22029	What do whales eat?	Plankton and other brit		
 	183	0.22029	How dangerous is whaling?	Whaling was one of the most dangerous occupations of the 19th century	52	
 	 90	0.22029	What is the study of whales called?	Cetology	12	
 	101	0.20608	What was the name of the whaling ship on which Melville spent 18 months between 1841 and 1842?	Achusnet		
 
-131	Who are Ahab's mates?	Starbuck, Stubbs, Flask	
-	193	0.57974	Who is the third mate?	Flask	85	
+131	Who are Ahab's mates?	Starbuck, Stubbs, Flask	193	0.57974	Who is the third mate?	Flask	85	
 	 85	0.57974	What is the name of the Third Mate?	Flask	193	
 	 33	0.57974	The name of the First Mate is?	Starbuck	85	
 	197	0.33610	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask		
@@ -832,11 +824,9 @@
 	 25	0.18443	Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles	12	
 	182	0.17579	What do whales eat?	Plankton and other brit		
 
-133	Who goes insane after being left alone adrift at sea?	Pip	
-	126	0.20199	Which character falls overboard and goes insane as a result?	Pip		
+133	Who goes insane after being left alone adrift at sea?	Pip	126	0.20199	Which character falls overboard and goes insane as a result?	Pip		
 
-134	Who is Ahab's personal harpooner and spiritual guide?	Fedallah	
-	 79	0.50233	What is the name of Ahab's harpooner?	Fedallah		
+134	Who is Ahab's personal harpooner and spiritual guide?	Fedallah	79	0.50233	What is the name of Ahab's harpooner?	Fedallah		
 	 37	0.29122	What causes Ahab's harpoon to flicker with fire?	Atmospheric static	105	
 	105	0.23363	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes		
 	131	0.19431	Who are Ahab's mates?	Starbuck, Stubbs, Flask		
@@ -959,8 +949,7 @@
 	 88	0.15064	What is the ship that rescues Ishmael at the end of the novel?	Rachel	190	
 	 71	0.15064	What is Ishmael constantly trying to pin down throughout the novel?	The essence of whales	147	
 
-160	Who is the harpooner that Queequeq rescues?	Tashtego	
-	 79	0.26056	What is the name of Ahab's harpooner?	Fedallah		
+160	Who is the harpooner that Queequeq rescues?	Tashtego	79	0.26056	What is the name of Ahab's harpooner?	Fedallah		
 	 37	0.17078	What causes Ahab's harpoon to flicker with fire?	Atmospheric static	105	
 	 88	0.15064	What is the ship that rescues Ishmael at the end of the novel?	Rachel	190	
 	134	0.15064	Who is Ahab's personal harpooner and spiritual guide?	Fedallah		
@@ -1007,16 +996,14 @@
 167	Who says the following: "Though it come to the last, I shall still go before thee thy pilot . . . . Hemp only can kill thee."	Fedallah	
 	168	0.15472	Who says the following: "Vengeance on a dumb brute! That simply smote thee from blindest instinct! Madness! To be enraged with a dumb thing seems blasphemous."	Starbuck		
 
-168	Who says the following: "Vengeance on a dumb brute! That simply smote thee from blindest instinct! Madness! To be enraged with a dumb thing seems blasphemous."	Starbuck	
-	167	0.15472	Who says the following: "Though it come to the last, I shall still go before thee thy pilot . . . . Hemp only can kill thee."	Fedallah		
+168	Who says the following: "Vengeance on a dumb brute! That simply smote thee from blindest instinct! Madness! To be enraged with a dumb thing seems blasphemous."	Starbuck	167	0.15472	Who says the following: "Though it come to the last, I shall still go before thee thy pilot . . . . Hemp only can kill thee."	Fedallah		
 
 169	Who wins the doubloon from the mast?	Ahab	106
 	 29	0.35630	Pip describes the doubloon on the mast as the ship's what?	Navel	45	
 	 45	0.29107	What does Ahab see when he studies the gold doubloon nailed to the mast?	Himself	42	
 	 75	0.26056	What is the "doubloon" offered for?	The first man to spot Moby Dick		
 
-170	Why are whaling ships always well-lit?	Free access to oil	
-	  0	0.35909	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize	94	
+170	Why are whaling ships always well-lit?	Free access to oil	0	0.35909	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize	94	
 	200	0.29122	What happened to the whaling ship called The Essex?	It was attacked and sunk by a sperm whale, inspiring Melville's story 		
 	184	0.29122	What is it called when two or more whale ships meet at sea?	  A "gam"	72	
 	175	0.22576	Why does Ishmael think whales are so mysterious?	They're always mostly hidden	174	
@@ -1111,8 +1098,7 @@
 	179	0.22029	With what is the Pequod adorned?	Sperm whale teeth	18	
 	 36	0.22029	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	162	
 
-182	What do whales eat?	Plankton and other brit	
-	  3	0.35548	According to Ishmael, who are the only people besides Stubb that still eat whale meat?	The Eskimos	14	
+182	What do whales eat?	Plankton and other brit	3	0.35548	According to Ishmael, who are the only people besides Stubb that still eat whale meat?	The Eskimos	14	
 	183	0.33610	How dangerous is whaling?	Whaling was one of the most dangerous occupations of the 19th century	52	
 	 90	0.33610	What is the study of whales called?	Cetology	12	
 	 56	0.29122	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear		
@@ -1203,36 +1189,21 @@
 	 17	0.17078	How does the Pequod sink?	She is rammed by Moby Dick. 	92	
 	178	0.17078	With what does Queequeg sleep?	His harpoon	16	
 
-195	Who wears a turban made of his own hair?	Fedallah's	
-	 27	0.22029	Out of what is Fedallah's turban made?	His hair	69	
+195	Who wears a turban made of his own hair?	Fedallah's	27	0.22029	Out of what is Fedallah's turban made?	His hair	69	
 	 69	0.22029	What is Fedallah's turban made of?	His own hair	27	
 	 42	0.15593	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin	106	
 
-196	What religion do Peleg, Bildad, and Starbuck share?	Quakerism	
-	155	0.33518	Who is Starbuck?	A Quaker from Nantucket who serves as the first mate to the captain on the Pequod. He is an intelligent and brave officer who lives his life by Christian principles.		
+196	What religion do Peleg, Bildad, and Starbuck share?	Quakerism	155	0.33518	Who is Starbuck?	A Quaker from Nantucket who serves as the first mate to the captain on the Pequod. He is an intelligent and brave officer who lives his life by Christian principles.		
 	135	0.33518	Who is Bildad?	The other co-owner of the ship Pequod. He is the exact opposite of Captain Peleg; he is cool in temperament, religious, and shrewd.  Bildad and Peleg hire the crew.		
 	 96	0.25233	What religious sect do Peleg and Bildad belong to?	Quakers		
 	139	0.19431	Who is Captain Peleg?	Retired whaleman of Nantucket.  Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man.  Bildad and Peleg hire the crew.		
 	 95	0.15064	What religion are the owners of the ship?	Quakers	164	
 
-197	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	
-	 84	1.00000	What is the name of the Second Mate?	Stubb	162	
-	162	0.70930	Who is the second mate on the Pequod?	Stubb	84	
-	 33	0.57974	The name of the First Mate is?	Starbuck	85	
-	 85	0.57974	What is the name of the Third Mate?	Flask	193	
-	193	0.57974	Who is the third mate?	Flask	85	
-	131	0.33610	Who are Ahab's mates?	Starbuck, Stubbs, Flask		
+197	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	85	
 
-198	With what does Starbuck consider killing Ahab?	Musket	
-	113	0.43161	When Starbuck sees a row of muskets, what does he consider doing?	Killing Ahab		
-	 47	0.38087	What does Fedallah prophesize will kill Captain Ahab?	Hemp	44	
-	103	0.38077	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool		
-	155	0.33518	Who is Starbuck?	A Quaker from Nantucket who serves as the first mate to the captain on the Pequod. He is an intelligent and brave officer who lives his life by Christian principles.		
-	112	0.32493	When Starbuck confronts Ahab about leaking oil barrels that are costing the crew profit, how does Ahab respond?	Points a gun at Starbuck		
-	 41	0.25233	What does Ahab carry in his pocket?	Vial of Nantucket sand	103	
+198	With what does Starbuck consider killing Ahab?	Musket	113	
 
-199	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad	
-	149	0.57974	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.		
+199	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad	149	0.57974	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.		
 	 64	0.33610	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale	149	
 	 78	0.33610	What is the famous first line of Moby Dick?	Call me Ishmael.		
 	188	0.29122	To whom did Melville dedicate Moby Dick?	Nathaniel Hawthorne	123	
