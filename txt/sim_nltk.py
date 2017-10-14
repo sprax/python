@@ -213,7 +213,7 @@ def similarity_dict(qas, qas_obj_1, excludes=None, q_weight=1.0, sim_func=cosine
 
 def nlargest_items_by_value(dict_with_comparable_values, count=10):
     '''Returns a list of the maximally valued N items (key, value)-tuples) in descending order by value.'''
-    return heapq.nlargest(count, dict_with_comparable_values.items(), key=lambda item: (item[1], item[0]))
+    return heapq.nlargest(count, dict_with_comparable_values.items(), key=lambda item: (item[1], -item[0]))
 
 def nlargest_keys_by_value(dict_with_comparable_values, count=10):
     '''Returns a list of the keys to the greatest values, in descending order by value.'''
@@ -251,7 +251,7 @@ def list_most_sim_qas_list(texts, exclude_self=True, q_weight=1.0, sim_func=cosi
         for idx, txt in enumerate(texts):
             # print("DBG LMSTL: ", txt)
             if idx != int(txt[0]):
-                print(idx, "!=", txt[0], "at", txt)
+                print("ERROR:", idx, "!=", txt[0], "at", txt)
                 return None
             nearests[idx] = most_similar_items_list(texts, txt, [idx], q_weight=q_weight,
                                                     sim_func=sim_func, max_count=max_count, \
@@ -351,11 +351,12 @@ def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=0.15, sort
         # TODO: replace with zip
         for idx, lst in enumerate(qas):
             most_sim_list = most_sim_lists[idx]
+            max_oix = most_sim_list[0][0]
             max_sim = most_sim_list[0][1]
             sum_sim = sum([y[1] for y in most_sim_list])
-            sim_oix.append((sum_sim, max_sim, idx))
+            sim_oix.append((max_sim, -max_oix, -idx))
         # TODO: sorted with 2 keys??
-        isorted = [tup[2] for tup in sorted(sim_oix, reverse=True)]
+        isorted = [-tup[2] for tup in sorted(sim_oix, reverse=True)]
     else:
         isorted = range(len(qas))
 
