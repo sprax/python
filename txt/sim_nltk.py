@@ -350,7 +350,7 @@ def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=0.15, sort
             most_sim_list = most_sim_lists[idx]
             sim_oix.append((most_sim_list[0][1], idx))
         # TODO: sorted with 2 keys??
-        isorted = [tup[1] for tup in sorted(sim_oix, key=lambda x: x[0])]
+        isorted = [tup[1] for tup in sorted(sim_oix, key=lambda x: x[0], reverse=True)]
     else:
         isorted = range(len(qas))
 
