@@ -41,21 +41,21 @@ def first(obj):
     '''first: returns the first item from an indexible, or failing that, just the object'''
     try:
         return obj.__getitem__(0)
-    except:
+    except TypeError:
         return obj
 
 def second(obj):
     '''second: returns second item from an indexible, or failing that, just the object'''
     try:
         return obj.__getitem__(1)
-    except:
+    except TypeError:
         return obj
 
 def third(obj):
     '''second: returns second item from an indexible, or failing that, just the object'''
     try:
         return obj.__getitem__(2)
-    except:
+    except TypeError:
         return obj
 
 def cosine_sim_txt(txt_obj_1, txt_obj_2, get_text=ident, vectorizer=VECTORIZER):
