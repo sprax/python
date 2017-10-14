@@ -1514,7 +1514,9 @@
 290	By whom is Tashtego rescued when he falls inside the whale's head?	Queequeg	165
 
 
-51	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel	
+51	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel	291
+291	To what does Ishmael compare the valuable oil in a sperm whale's head?	A massive wine barrel	51
+
 	 50	0.27740	What does Ishmael claim is the most famous part of a whale?	Its tail	175	
 	122	0.24479	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket		
 	175	0.24479	Why does Ishmael think whales are so mysterious?	They're always mostly hidden	174	
@@ -1522,7 +1524,9 @@
 	147	0.23077	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	71	
 	 52	0.22150	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will	183	
 
-75	What is the "doubloon" offered for?	The first man to spot Moby Dick	
+75	What is the "doubloon" offered for?	The first man to spot Moby Dick	292
+292	To whom does Ahab promise a gold "doubloon"?	Whoever first spots Moby Dick	75
+
 	169	0.26056	Who wins the doubloon from the mast?	Ahab	106	
 	 29	0.19431	Pip describes the doubloon on the mast as the ship's what?	Navel	45	
 	 45	0.16171	What does Ahab see when he studies the gold doubloon nailed to the mast?	Himself	245	
@@ -1546,7 +1550,9 @@
 	 94	0.10964	What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex		
 	  0	0.00000	Is Moby Dick alive or dead at the end of Moby Dick?	Alive	251	
 
-160	Who is the harpooner that Queequeq rescues?	Tashtego	
+160	Who is the harpooner that Queequeq rescues?	Tashtego	293
+293	Who does that Queequeq rescue?	Tashtego	160
+
 	 79	0.26056	What is the name of Ahab's harpooner?	Fedallah		
 	 37	0.17078	What causes Ahab's harpoon to flicker with fire?	Atmospheric static	237	
 	 88	0.15064	What is the ship that rescues Ishmael at the end of the novel?	Rachel	190	
@@ -1562,13 +1568,8 @@
 	131	0.26056	Who are Ahab's mates?	Starbuck, Stubbs, Flask		
 	137	0.26056	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68	
 
-104	When Ahab bursts into fits of near-mad shrieking, what does Ishmael think is the cause?	His soul attempting escape	
-	175	0.26056	Why does Ishmael think whales are so mysterious?	They're always mostly hidden	174	
-	244	0.26056	When does Ahab see what he thinks is the "first hearse" prophesied by Fedallah?	Fedallah lashed to Moby Dick	44	
-	208	0.25214	What does Ahab say keeps him going?	An iron path	8	
-	147	0.24396	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	71	
-	 54	0.23577	What does Ishmael think men and animals should be judged on, rather than their brains?	Their spines		
-	226	0.23577	What does Ishmael think Buckington will become after he dies at sea?	God	26	
+104	When Ahab bursts into fits of near-mad shrieking, what does Ishmael think is the cause?	His soul attempting escape	294
+294	What does Ishmael think causes Ahab's bursts of mad shrieking?	His soul attempting escape	104
 
 236	Does Ishmael suggests that sailing out on a whaler is not so different from commiting suicide?	Yes	235
 	147	0.25970	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	71	
@@ -1578,13 +1579,8 @@
 	235	0.21693	Ishmael compares shipping out on a whale ship to committing what?  Suicide	35		
 	 22	0.19087	In what state does Ishmael meet Queequeg?	Massachusetts	222	
 
-116	When preparing to process the first dead whale, how does Queequeg almost loose his hand?	A dead shark's teeth	
-	 16	0.25214	How does Queequeg shave?	With a harpoon	216	
-	178	0.25214	With what does Queequeg sleep?	His harpoon	16	
-	216	0.25214	With what does Queequeg shave?	With a harpoon	16	
-	153	0.24396	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.		
-	111	0.20608	When Queequeg falls ill, what does he do?	Have his coffin made		
-	206	0.20608	What happens when a dead whale is abandoned?	Vultures and sharks come eat it.	6	
+116	When preparing to process the first dead whale, how does Queequeg almost loose his hand?	A dead shark's teeth	295
+295	How does Queequeg injure his hand?	A dead shark's teeth	116
 
 59	What does the crew look for to indicate the presence of a whale?	Spouts	48
 	 56	0.24718	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear		
@@ -1618,7 +1614,9 @@
 	  8	0.15064	Ahab claims that, "The path to my fixed purpose is laid" with what?	Iron rails	218	
 	  7	0.13379	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
 
-195	Who wears a turban made of his own hair?	Fedallah's	
+195	Who wears a turban made of his own hair?	Fedallah	296
+296	Which crewmember uses a turban made that is made from his own hair?	Fedallah	195
+
 	 27	0.22029	Out of what is Fedallah's turban made?	His hair	69	
 	 69	0.22029	What is Fedallah's turban made of?	His own hair	27	
 	 42	0.15593	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin	242	
@@ -1626,15 +1624,14 @@
 	 53	0.12736	What does Ishmael have tattooed on his forearm?	The dimensions of a whale		
 	100	0.12736	What was Queequeg on his home island?	A prince	153	
 
-91	What is the term for a whale that has already been harpooned or marked by the crew of a specific ship?	Fast-fish	
-	235	0.20994	Ishmael compares shipping out on a whale ship to committing what?  Suicide	35		
-	184	0.20608	What is it called when two or more whale ships meet at sea?	  A "gam"	72	
-	227	0.20608	What happened to the whaling ship called The Essex?	It was attacked and sunk by a sperm whale, inspiring Melville's story 		
-	170	0.17857	Why are whaling ships always well-lit?	Free access to oil		
+91	What is the term for a whale that has already been harpooned or marked by the crew of a specific ship?	Fast-fish	297
+297	What did they call a whale that was harpooned or marked before by a particular whaling ship?	Fast-fish	91
 	200	0.17379	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize	400	
 	 40	0.15976	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head	240	
 
-101	What was the name of the whaling ship on which Melville spent 18 months between 1841 and 1842?	Achusnet	
+101	What was the name of the whaling ship on which Melville spent 18 months between 1841 and 1842?	Achusnet	298
+298	Herman Melville spent a year and a half on what actual whaling ship?	Achusnet	101
+
 	235	0.20994	Ishmael compares shipping out on a whale ship to committing what?  Suicide	35		
 	130	0.20608	Which was the first team to kill a whale?	Stubb and Tashtego		
 	184	0.20608	What is it called when two or more whale ships meet at sea?	  A "gam"	72	
@@ -1642,21 +1639,8 @@
 	227	0.20608	What happened to the whaling ship called The Essex?	It was attacked and sunk by a sperm whale, inspiring Melville's story 		
 	 94	0.20199	What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex		
 
-126	Which character falls overboard and goes insane as a result?	Pip	
-	133	0.20199	Who goes insane after being left alone adrift at sea?	Pip		
-	165	0.18443	Who rescues Tashtego when he falls overboard inside the whale's head?	Queequeg		
-	 60	0.11522	Which two characters consider shooting each the other with guns?	Ahab and Starbuck		
-	111	0.11522	When Queequeg falls ill, what does he do?	Have his coffin made		
-	128	0.11522	Which characters survive the Pequod's sinking?	Only Ishmael		
-	199	0.11522	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad		
-
-133	Who goes insane after being left alone adrift at sea?	Pip	
-	126	0.20199	Which character falls overboard and goes insane as a result?	Pip		
-	184	0.11522	What is it called when two or more whale ships meet at sea?	  A "gam"	72	
-	226	0.08458	What does Ishmael think Buckington will become after he dies at sea?	God	26	
-	174	0.07874	Why does Ishmael think that the natural dangers of the sea are so insidious?	So much is hidden	175	
-	 20	0.07397	How old was Herman Melville when he made his first sea voyage as a merchant sailor?	220	5	
-	220	0.07397	How old was Herman Melville when he made his first sea voyage as a merchant sailor?	20	5	
+126	Which character falls overboard and goes insane as a result?	Pip	133
+133	Who goes insane after being left alone adrift at sea?	Pip	126
 
 223	Which a native of Kokovoko in the Fiji islands and an expert harpooner, despite his religion and customs, is able to develop a bond with Ishmael?	Queequeg	23
 	 30	0.19785	Queequeg is a native of what island?	Kokovoko	230	
@@ -1674,7 +1658,8 @@
 	222	0.12736	Where did  Ishmael meet Queequeg?	New Bedford, Massachusetts	22	
 	170	0.11234	Why are whaling ships always well-lit?	Free access to oil		
 
-97	What shape does the ship's carpenter make Quequeeq's coffin?	A canoe	
+97	What shape does the ship's carpenter make Quequeeq's coffin?	A canoe	299
+299	What is Quequeeq's coffin shaped like?	A canoe	97
 	122	0.18443	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket		
 	190	0.18443	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	88	
 	 35	0.16840	To what does Ishmael liken the experience of shipping aboard a whaler?	Committing suicide	235	
@@ -1690,13 +1675,8 @@
 	131	0.17579	Who are Ahab's mates?	Starbuck, Stubbs, Flask		
 	137	0.17579	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68	
 
-167	Who says the following: "Though it come to the last, I shall still go before thee thy pilot . . . . Hemp only can kill thee."	Fedallah	
-	168	0.15472	Who says the following: "Vengeance on a dumb brute! That simply smote thee from blindest instinct! Madness! To be enraged with a dumb thing seems blasphemous."	Starbuck		
-	208	0.08701	What does Ahab say keeps him going?	An iron path	8	
-	166	0.08458	Who says the following: "If man will strike, strike through the mask! . . . That inscrutable thing is chiefly what I hate."	Ahab		
-	130	0.07357	Which was the first team to kill a whale?	Stubb and Tashtego		
-	194	0.07357	What does Ishmail say about himself keeping watch?	He daydreams too much	173	
-	117	0.06489	When the Pequod meets other sips, what is Ahab's only interest?	Information about Moby Dick		
+167	Who says the following: "Though it come to the last, I shall still go before thee thy pilot . . . . Hemp only can kill thee."	Fedallah	300
+300	Who pophesies to Ahab that, "Though it come to the last, I shall still go before thee thy pilot," and, "Hemp only can kill thee."	Fedallah	167
 
 168	Who says the following: "Vengeance on a dumb brute! That simply smote thee from blindest instinct! Madness! To be enraged with a dumb thing seems blasphemous."	Starbuck	
 	167	0.15472	Who says the following: "Though it come to the last, I shall still go before thee thy pilot . . . . Hemp only can kill thee."	Fedallah		
