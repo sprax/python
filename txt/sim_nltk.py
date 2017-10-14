@@ -250,6 +250,9 @@ def list_most_sim_qas_list(texts, exclude_self=True, q_weight=1.0, sim_func=cosi
         nearests = len(texts)*[None]
         for idx, txt in enumerate(texts):
             # print("DBG LMSTL: ", txt)
+            if idx != int(txt[0]):
+                print(idx, "!=", txt[0], "at", txt)
+                return None
             nearests[idx] = most_similar_items_list(texts, txt, [idx], q_weight=q_weight,
                                                     sim_func=sim_func, max_count=max_count, \
                                                     min_sim_val=min_sim_val)
@@ -268,7 +271,7 @@ def list_most_sim_qas_list_verbose(qas, exclude_self=True, q_weight=1.0, sim_fun
     beg_time = time.time()
     most_sim_list = list_most_sim_qas_list(qas, exclude_self, q_weight, sim_func, max_count, min_sim_val)
     seconds = time.time() - beg_time
-    print("list_most_sim_qas_list(size=%d, count=%d) took %.1f seconds" % (len(qas), max_count, seconds))
+    print("Finding all similarity lists (size=%d, count=%d) took %.1f seconds" % (len(qas), max_count, seconds))
     return most_sim_list
 
 def show_most_sim_texts_list(texts, most_sim_lists=None):
@@ -355,16 +358,27 @@ def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=0.15, sort
         isorted = range(len(qas))
 
     out = text_fio.open_out_file(path)
+    mix = 0
     for idx in isorted:
         lst = qas[idx]
         most_sim_list = most_sim_lists[idx]
-        gold = lst[3] if len(lst) > 3 else ''
-        print(idx, lst[1], lst[2], gold, sep="\t", file=out)
+        llen, ansr = len(lst), 'N/A'
+        if llen < 3:
+            print("MISSING ANSWER at:", idx, lst[0], lst[1], "ANSWER:", ansr, sep="\t")
+        else:
+            ansr = lst[2]
+            gold = lst[3] if len(lst) > 3 else ''
+        print(idx, lst[1], ansr, gold, sep="\t", file=out)
         for oix, sim in most_sim_list:  # Note: oix = other index, i.e., the index of the gold standard other QAS
             if sim >= min_sim_val:
-                gold = qas[oix][3] if len(qas[oix]) > 3 else ''
-                print("\t%3d\t%.5f\t%s\t%s\t%s\t" % (oix, sim, qas[oix][1], qas[oix][2], gold), file=out)
+                try:
+                    sans = qas[oix][2] if len(qas[oix]) > 2 else 'N/A'
+                    gold = qas[oix][3] if len(qas[oix]) > 3 else ''
+                    print("\t%3d\t%.5f\t%s\t%s\t%s\t" % (oix, sim, qas[oix][1], sans, gold), file=out)
+                except:
+                    print("ERROR AT MIX {}: idx {}  lst {}\n".format(mix, idx, lst))
         print(file=out)
+        mix += 1
     if path != '-':
         out.close()
 
@@ -372,8 +386,6 @@ def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=0.15, sort
 # VECT_MOST_STOPS (DEFAULT-QUERY_WORDS): (size=201, count=6) took 96.3 seconds; score 0.6635
 # TODO: Why do the query words make the score worse?
 # TEST: >>> sim_score_save(fair, sim_func=sim_wosc_nltk.sentence_similarity)
-# #     list_most_sim_qas_list(size=27, count=6) took 39.8 seconds
-# #     sim_score_save(size=27, count=6) took 39.8 seconds; score 0.7370
 def sim_score_save(qas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_txt, max_count=6, min_sim_val=0.15):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are

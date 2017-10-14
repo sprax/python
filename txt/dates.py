@@ -37,7 +37,7 @@ def day_locs(wday):
     ans = 'Home'
     if wday < 5:
         ans += '/Talla'
-    if wday in [1, 4, 6]:  # Tues or Friday
+    if wday in [1, 4]:  # Tues or Friday
         ans += '/CFC'
     return ans
 
