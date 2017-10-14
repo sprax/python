@@ -40,51 +40,18 @@
 219	Who among the Pequod's crew survives their encounter with Moby Dick?	Ishmael	19
 20	How old was Herman Melville when he made his first sea voyage as a merchant sailor?	220	5
 220	How old was Herman Melville when he made his first sea voyage as a merchant sailor?	20	5
+21	In what decade did historians rediscover and promote the previously ignored Moby Dick as a seminal work of American literature?	1920's	210
+221	When was Moby Dick repopularized and promoted to the canon of American literature?	The nineteen-twenties's	21
+22	In what state does Ishmael meet Queequeg?	Massachusetts	222
+222	Where did  Ishmael meet Queequeg?	New Bedford, Massachusetts	22
+23	Ishmael decides he likes the fact that Queequeg is a pagan because Queequeg lacks a Christian's what?	Hollow courtesies	223
+223	Which a native of Kokovoko in the Fiji islands and an expert harpooner, despite his religion and customs, is able to develop a bond with Ishmael?	Queequeg	23
+24	Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher? 	Platonic	224
+224	Ishmael likens the sperm whale to a Platonic philosopher and the right whale to what other kind of philosopher? 	Stoic	24
 
+25	Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles	225
+225	Where, according to Ishmael, are whales hunted?	All around the world	25
 
-
-
-
-
-21	In what decade did historians rediscover and promote the previously ignored Moby Dick as a seminal work of American literature?	1920's	123
-	149	0.29032	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.		
-	188	0.23855	To whom did Melville dedicate Moby Dick?	Nathaniel Hawthorne	123	
-	 64	0.16831	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale	149	
-	199	0.16831	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad		
-	 78	0.16831	What is the famous first line of Moby Dick?	Call me Ishmael.		
-	123	0.15332	Which American literary figure, to whom Moby Dick was dedicated, influenced Melville's writing?	Nathaniel Hawthorne?	188	
-
-22	In what state does Ishmael meet Queequeg?	Massachusetts	4
-	 16	0.35630	How does Queequeg shave?	With a harpoon	178	
-	178	0.35630	With what does Queequeg sleep?	His harpoon	16	
-	147	0.33518	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	71	
-	153	0.33518	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.		
-	111	0.29122	When Queequeg falls ill, what does he do?	Have his coffin made		
-	  4	0.25958	According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads	100	
-
-23	Ishmael decides he likes the fact that Queequeg is a pagan because Queequeg lacks a Christian's what?	Hollow courtesies	153
-	153	0.44944	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.		
-	  4	0.28070	According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads	100	
-	 22	0.24558	In what state does Ishmael meet Queequeg?	Massachusetts	4	
-	147	0.20976	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	71	
-	 16	0.20199	How does Queequeg shave?	With a harpoon	178	
-	 30	0.20199	Queequeg is a native of what island?	Kokovoko	83	
-
-24	Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher? 	Platonic	0
-	  0	0.30413	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize	94	
-	182	0.23790	What do whales eat?	Plankton and other brit		
-	183	0.23790	How dangerous is whaling?	Whaling was one of the most dangerous occupations of the 19th century	52	
-	 90	0.23790	What is the study of whales called?	Cetology	12	
-	 14	0.22327	How do live whales smell, according to Ishmael?	Pleasantly musky	2	
-	 50	0.22327	What does Ishmael claim is the most famous part of a whale?	Its tail	175	
-
-25	Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles	12
-	 12	0.29107	For what were whales primarily hunted?	Oil	98	
-	 98	0.29107	What type of whale are they hunting?	Sperm whales	12	
-	187	0.29107	What is the world capital of whaling?	Nantucket	171	
-	147	0.27894	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	71	
-	 52	0.27520	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will	183	
-	 14	0.20614	How do live whales smell, according to Ishmael?	Pleasantly musky	2	
 
 26	Ishmael thinks Buckington is fated to die at sea, but that such a death will transform Buckington into what?	God	174
 	147	0.21951	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	71	
@@ -1344,7 +1311,7 @@
 	125	0.26056	Which body part has Ahab lost to Moby Dick?	His leg		
 	107	0.23790	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad		
 
-200	What happened to the whaling ship called The Essex?	It was attacked and sunk by a sperm whale, inspiring Melville's story 	
+300	What happened to the whaling ship called The Essex?	It was attacked and sunk by a sperm whale, inspiring Melville's story 	
 	184	0.33610	What is it called when two or more whale ships meet at sea?	  A "gam"	72	
 	170	0.29122	Why are whaling ships always well-lit?	Free access to oil		
 	  0	0.28343	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize	94	

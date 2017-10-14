@@ -205,7 +205,7 @@ def similarity_dict(qas, qas_obj_1, excludes=None, q_weight=1.0, sim_func=cosine
             continue
         try:
             sim = sim_weighted_qas(qas_obj_1, qas_obj_2, q_weight=q_weight, sim_func=sim_func)
-            if  sim > min_sim_val:
+            if  sim >= min_sim_val:
                 sim_dict[idx] = sim
         except ValueError as ex:
             print("Continuing past error at %d (%s)" % (idx, ex))
@@ -340,14 +340,27 @@ def score_most_sim_lists(qas, most_sim_lists, weights=None):
     dist_counts = distance_counts(qas, most_sim_lists, len(weights))
     return score_distance_counts(dist_counts, weights)
 
-def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=0.15):
+def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=0.15, sort_most_sim=True):
     '''Save ranked most-similar lists to TSV file'''
+    isorted = None
+    if sort_most_sim:
+        sim_oix = []
+        # TODO: replace with zip
+        for idx, lst in enumerate(qas):
+            most_sim_list = most_sim_lists[idx]
+            sim_oix.append((most_sim_list[0][1], idx))
+        # TODO: sorted with 2 keys??
+        isorted = [tup[1] for tup in sorted(sim_oix, key=lambda x: x[0])]
+    else:
+        isorted = range(len(qas))
+
     out = text_fio.open_out_file(path)
-    for idx, lst in enumerate(qas):
+    for idx in isorted:
+        lst = qas[idx]
         most_sim_list = most_sim_lists[idx]
         gold = lst[3] if len(lst) > 3 else ''
         print(idx, lst[1], lst[2], gold, sep="\t", file=out)
-        for oix, sim in most_sim_list:
+        for oix, sim in most_sim_list:  # Note: oix = other index, i.e., the index of the gold standard other QAS
             if sim >= min_sim_val:
                 gold = qas[oix][3] if len(qas[oix]) > 3 else ''
                 print("\t%3d\t%.5f\t%s\t%s\t%s\t" % (oix, sim, qas[oix][1], qas[oix][2], gold), file=out)
