@@ -213,7 +213,7 @@ def similarity_dict(qas, qas_obj_1, excludes=None, q_weight=1.0, sim_func=cosine
 
 def nlargest_items_by_value(dict_with_comparable_values, count=10):
     '''Returns a list of the maximally valued N items (key, value)-tuples) in descending order by value.'''
-    return heapq.nlargest(count, dict_with_comparable_values.items(), key=lambda item: item[1])
+    return heapq.nlargest(count, dict_with_comparable_values.items(), key=lambda item: (item[1], item[0]))
 
 def nlargest_keys_by_value(dict_with_comparable_values, count=10):
     '''Returns a list of the keys to the greatest values, in descending order by value.'''
@@ -351,9 +351,11 @@ def save_most_sim_qa_lists_tsv(qas, path, most_sim_lists, min_sim_val=0.15, sort
         # TODO: replace with zip
         for idx, lst in enumerate(qas):
             most_sim_list = most_sim_lists[idx]
-            sim_oix.append((most_sim_list[0][1], idx))
+            max_sim = most_sim_list[0][1]
+            sum_sim = sum([y[1] for y in most_sim_list])
+            sim_oix.append((sum_sim, max_sim, idx))
         # TODO: sorted with 2 keys??
-        isorted = [tup[1] for tup in sorted(sim_oix, key=lambda x: x[0], reverse=True)]
+        isorted = [tup[2] for tup in sorted(sim_oix, reverse=True)]
     else:
         isorted = range(len(qas))
 
@@ -399,7 +401,7 @@ def sim_score_save(qas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_t
     seconds = time.time() - beg_time
     print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (len(qas), max_count,
                                                                                seconds, score))
-    return score
+    return score, most_sim_lists
 
 ###############################################################################
 def test_fair():
