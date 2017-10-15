@@ -22,7 +22,7 @@
 	  4	0.21289	According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads	214	
 	 16	0.20199	How does Queequeg shave?	With a harpoon	216	
 
-162	Who is the second mate on the Pequod?	Stubb	84
+162	Who is the second mate on the Pequod?	Stubb	83
 	 83	1.00000	Who is the Pequod's Second Mate?	Stubb	84	
 	254	1.00000	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
 	252	0.77651	Who are the first, second, and third mates' aboard the Pequod?	Starbuck, Stubbs, Flask	36	
@@ -30,13 +30,37 @@
 	 84	0.70930	What is the name of the Second Mate?	Stubb	162	
 	197	0.70930	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	254	
 
-254	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197
+252	What are all the mates' names on the Pequod?	Starbuck, Stubbs, Flask	36
+	 83	0.70930	Who is the Pequod's Second Mate?	Stubb	84	
+	162	0.70930	Who is the second mate on the Pequod?	Stubb	84	
+	254	0.70930	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
+	 33	0.57974	The name of the First Mate is?	Starbuck.	233	
+	 76	0.57974	What is the Pequod named after?	An extinct Massachusetts Indian tribe	207	
+	 85	0.57974	What is the name of the Third Mate?	Flask	193	
+
+131	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	36
+	 84	1.00000	What is the name of the Second Mate?	Stubb	162	
+	 83	0.70930	Who is the Pequod's Second Mate?	Stubb	84	
+	162	0.70930	Who is the second mate on the Pequod?	Stubb	84	
+	254	0.70930	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
+	 33	0.57974	The name of the First Mate is?	Starbuck.	233	
+	 85	0.57974	What is the name of the Third Mate?	Flask	193	
+
+36	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197
 	 83	1.00000	Who is the Pequod's Second Mate?	Stubb	84	
 	162	1.00000	Who is the second mate on the Pequod?	Stubb	84	
 	252	0.77651	Who are the first, second, and third mates' aboard the Pequod?	Starbuck, Stubbs, Flask	36	
 	 36	0.70930	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
 	 84	0.70930	What is the name of the Second Mate?	Stubb	162	
 	197	0.70930	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	254	
+
+197	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36
+	 33	0.57974	The name of the First Mate is?	Starbuck.	233	
+	 85	0.57974	What is the name of the Third Mate?	Flask	193	
+	193	0.57974	Who is the third mate?	Flask	85	
+	233	0.57974	Who is the First Mate?	Starbuck.	33	
+	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	 36	0.33610	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
 
 83	Who is the Pequod's Second Mate?	Stubb	84
 	162	1.00000	Who is the second mate on the Pequod?	Stubb	84	
@@ -222,13 +246,6 @@
 	131	0.33610	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
 	137	0.33610	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68	
 
-197	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	254
-	 84	1.00000	What is the name of the Second Mate?	Stubb	162	
-	 83	0.70930	Who is the Pequod's Second Mate?	Stubb	84	
-	162	0.70930	Who is the second mate on the Pequod?	Stubb	84	
-	254	0.70930	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
-	 33	0.57974	The name of the First Mate is?	Starbuck.	233	
-	 85	0.57974	What is the name of the Third Mate?	Flask	193	
 
 84	What is the name of the Second Mate?	Stubb	162
 	197	1.00000	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	254	
@@ -566,13 +583,6 @@
 	 23	0.26056	Ishmael decides he likes the fact that Queequeg is a pagan because Queequeg lacks a Christian's what?	Hollow courtesies	223	
 	 30	0.26056	Queequeg is a native of what island?	Kokovoko	230	
 
-36	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252
-	 83	0.70930	Who is the Pequod's Second Mate?	Stubb	84	
-	162	0.70930	Who is the second mate on the Pequod?	Stubb	84	
-	254	0.70930	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
-	 33	0.57974	The name of the First Mate is?	Starbuck.	233	
-	 76	0.57974	What is the Pequod named after?	An extinct Massachusetts Indian tribe	207	
-	 85	0.57974	What is the name of the Third Mate?	Flask	193	
 
 189	What is the scientific study of whales called?	cetology?	
 	 90	0.70930	What is the study of whales called?	Cetology	12	
@@ -862,13 +872,6 @@
 	 47	0.30322	What does Fedallah prophesize will kill Captain Ahab?	Hemp	247	
 	244	0.30322	When does Ahab see what he thinks is the "first hearse" prophesied by Fedallah?	Fedallah lashed to Moby Dick	44	
 
-131	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36
-	 33	0.57974	The name of the First Mate is?	Starbuck.	233	
-	 85	0.57974	What is the name of the Third Mate?	Flask	193	
-	193	0.57974	Who is the third mate?	Flask	85	
-	233	0.57974	Who is the First Mate?	Starbuck.	33	
-	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
-	 36	0.33610	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
 
 79	What is the name of Ahab's harpooner?	Fedallah	134
 	 37	0.57974	What causes Ahab's harpoon to flicker with fire?	Atmospheric static	237	
