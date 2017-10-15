@@ -22,53 +22,29 @@
 	  4	0.21289	According to Peter Coffin, what is Queequeg out doing when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads	214	
 	 16	0.20199	How does Queequeg shave?	With a harpoon	216	
 
-162	Who is the second mate on the Pequod?	Stubb	83
-	 83	1.00000	Who is the Pequod's Second Mate?	Stubb	84	
-	254	1.00000	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
-	252	0.77651	Who are the first, second, and third mates' aboard the Pequod?	Starbuck, Stubbs, Flask	36	
-	 36	0.70930	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
+83	Who is the Pequod's Second Mate?	Stubb	84
+	 36	1.00000	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
+	162	1.00000	Who is the second mate on the Pequod?	Stubb	83	
+	254	0.77651	Who are the first, second, and third mates' aboard the Pequod?	Starbuck, Stubbs, Flask	36	
 	 84	0.70930	What is the name of the Second Mate?	Stubb	162	
-	197	0.70930	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	254	
+	131	0.70930	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	36	
+	252	0.70930	What are all the mates' names on the Pequod?	Starbuck, Stubbs, Flask	36	
 
-252	What are all the mates' names on the Pequod?	Starbuck, Stubbs, Flask	36
-	 83	0.70930	Who is the Pequod's Second Mate?	Stubb	84	
-	162	0.70930	Who is the second mate on the Pequod?	Stubb	84	
-	254	0.70930	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
-	 33	0.57974	The name of the First Mate is?	Starbuck.	233	
-	 76	0.57974	What is the Pequod named after?	An extinct Massachusetts Indian tribe	207	
-	 85	0.57974	What is the name of the Third Mate?	Flask	193	
-
-131	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	36
-	 84	1.00000	What is the name of the Second Mate?	Stubb	162	
-	 83	0.70930	Who is the Pequod's Second Mate?	Stubb	84	
-	162	0.70930	Who is the second mate on the Pequod?	Stubb	84	
-	254	0.70930	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
-	 33	0.57974	The name of the First Mate is?	Starbuck.	233	
-	 85	0.57974	What is the name of the Third Mate?	Flask	193	
+162	Who is the second mate on the Pequod?	Stubb	83
+	 36	1.00000	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
+	 83	1.00000	Who is the Pequod's Second Mate?	Stubb	84	
+	254	0.77651	Who are the first, second, and third mates' aboard the Pequod?	Starbuck, Stubbs, Flask	36	
+	 84	0.70930	What is the name of the Second Mate?	Stubb	162	
+	131	0.70930	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	36	
+	252	0.70930	What are all the mates' names on the Pequod?	Starbuck, Stubbs, Flask	36	
 
 36	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197
 	 83	1.00000	Who is the Pequod's Second Mate?	Stubb	84	
-	162	1.00000	Who is the second mate on the Pequod?	Stubb	84	
-	252	0.77651	Who are the first, second, and third mates' aboard the Pequod?	Starbuck, Stubbs, Flask	36	
-	 36	0.70930	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
+	162	1.00000	Who is the second mate on the Pequod?	Stubb	83	
+	254	0.77651	Who are the first, second, and third mates' aboard the Pequod?	Starbuck, Stubbs, Flask	36	
 	 84	0.70930	What is the name of the Second Mate?	Stubb	162	
-	197	0.70930	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	254	
-
-197	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36
-	 33	0.57974	The name of the First Mate is?	Starbuck.	233	
-	 85	0.57974	What is the name of the Third Mate?	Flask	193	
-	193	0.57974	Who is the third mate?	Flask	85	
-	233	0.57974	Who is the First Mate?	Starbuck.	33	
-	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
-	 36	0.33610	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
-
-83	Who is the Pequod's Second Mate?	Stubb	84
-	162	1.00000	Who is the second mate on the Pequod?	Stubb	84	
-	254	1.00000	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
-	252	0.77651	Who are the first, second, and third mates' aboard the Pequod?	Starbuck, Stubbs, Flask	36	
-	 36	0.70930	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
-	 84	0.70930	What is the name of the Second Mate?	Stubb	162	
-	197	0.70930	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	254	
+	131	0.70930	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	36	
+	252	0.70930	What are all the mates' names on the Pequod?	Starbuck, Stubbs, Flask	36	
 
 16	How does Queequeg shave?	With a harpoon	216
 	216	1.00000	With what does Queequeg shave?	With a harpoon	16	
@@ -98,25 +74,25 @@
 	 33	1.00000	The name of the First Mate is?	Starbuck.	233	
 	193	1.00000	Who is the third mate?	Flask	85	
 	233	1.00000	Who is the First Mate?	Starbuck.	33	
-	 36	0.57974	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
 	 84	0.57974	What is the name of the Second Mate?	Stubb	162	
-	131	0.57974	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
+	131	0.57974	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	36	
+	197	0.57974	Who are Ahab's mates first to third?	Starbuck, Stubbs, Flask	36	
 
 193	Who is the third mate?	Flask	85
 	 33	1.00000	The name of the First Mate is?	Starbuck.	233	
 	 85	1.00000	What is the name of the Third Mate?	Flask	193	
 	233	1.00000	Who is the First Mate?	Starbuck.	33	
-	 36	0.57974	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
 	 84	0.57974	What is the name of the Second Mate?	Stubb	162	
-	131	0.57974	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
+	131	0.57974	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	36	
+	197	0.57974	Who are Ahab's mates first to third?	Starbuck, Stubbs, Flask	36	
 
 233	Who is the First Mate?	Starbuck.	33
 	 33	1.00000	The name of the First Mate is?	Starbuck.	233	
 	 85	1.00000	What is the name of the Third Mate?	Flask	193	
 	193	1.00000	Who is the third mate?	Flask	85	
-	 36	0.57974	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
 	 84	0.57974	What is the name of the Second Mate?	Stubb	162	
-	131	0.57974	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
+	131	0.57974	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	36	
+	197	0.57974	Who are Ahab's mates first to third?	Starbuck, Stubbs, Flask	36	
 
 234	What is a "specksynder"?	The chief harpooner and sometime captain 	34
 	 73	1.00000	What is a "specksynder"?	Chief Harpooner	34	
@@ -130,33 +106,33 @@
 	 76	1.00000	What is the Pequod named after?	An extinct Massachusetts Indian tribe	207	
 	207	1.00000	What is the Pequod named after?	A dead Indian nation in the Massachusetts Colony	7	
 	 18	0.57974	How is the Pequod decorated?	With whale bones	218	
-	 36	0.57974	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
 	179	0.57974	With what is the Pequod adorned?	Sperm whale teeth	18	
 	218	0.57974	What decorates the Pequod?	Whale bones	18	
+	252	0.57974	What are all the mates' names on the Pequod?	Starbuck, Stubbs, Flask	36	
 
 207	What is the Pequod named after?	A dead Indian nation in the Massachusetts Colony	7
 	 76	1.00000	What is the Pequod named after?	An extinct Massachusetts Indian tribe	207	
 	164	1.00000	Who owns the Pequod?	Bildad and Peleg	135	
 	 18	0.57974	How is the Pequod decorated?	With whale bones	218	
-	 36	0.57974	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
 	179	0.57974	With what is the Pequod adorned?	Sperm whale teeth	18	
 	218	0.57974	What decorates the Pequod?	Whale bones	18	
+	252	0.57974	What are all the mates' names on the Pequod?	Starbuck, Stubbs, Flask	36	
 
 33	The name of the First Mate is?	Starbuck.	233
 	 85	1.00000	What is the name of the Third Mate?	Flask	193	
 	193	1.00000	Who is the third mate?	Flask	85	
 	233	1.00000	Who is the First Mate?	Starbuck.	33	
-	 36	0.57974	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
 	 84	0.57974	What is the name of the Second Mate?	Stubb	162	
-	131	0.57974	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
+	131	0.57974	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	36	
+	197	0.57974	Who are Ahab's mates first to third?	Starbuck, Stubbs, Flask	36	
 
 76	What is the Pequod named after?	An extinct Massachusetts Indian tribe	207
 	164	1.00000	Who owns the Pequod?	Bildad and Peleg	135	
 	207	1.00000	What is the Pequod named after?	A dead Indian nation in the Massachusetts Colony	7	
 	 18	0.57974	How is the Pequod decorated?	With whale bones	218	
-	 36	0.57974	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
 	179	0.57974	With what is the Pequod adorned?	Sperm whale teeth	18	
 	218	0.57974	What decorates the Pequod?	Whale bones	18	
+	252	0.57974	What are all the mates' names on the Pequod?	Starbuck, Stubbs, Flask	36	
 
 256	Which characters in Moby Dick are Quakers?	Starbuck, Peleg, and Bildad	199
 	199	1.00000	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad	256	
@@ -184,7 +160,7 @@
 
 277	What is Ahab's only interest when the Pequod meets other ships?	Getting information about Moby Dick	117
 	117	1.00000	When the Pequod meets other ships, what is Ahab's only interest?	Information about Moby Dick	276	
-	  7	0.50233	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.50233	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 80	0.50233	What is the name of Ahab's ship?	The Pequod	253	
 	 76	0.33518	What is the Pequod named after?	An extinct Massachusetts Indian tribe	207	
 	164	0.33518	Who owns the Pequod?	Bildad and Peleg	135	
@@ -192,14 +168,14 @@
 
 117	When the Pequod meets other ships, what is Ahab's only interest?	Information about Moby Dick	276
 	277	1.00000	What is Ahab's only interest when the Pequod meets other ships?	Getting information about Moby Dick	117	
-	  7	0.50233	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.50233	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 80	0.50233	What is the name of Ahab's ship?	The Pequod	253	
 	 76	0.33518	What is the Pequod named after?	An extinct Massachusetts Indian tribe	207	
 	164	0.33518	Who owns the Pequod?	Bildad and Peleg	135	
 	207	0.33518	What is the Pequod named after?	A dead Indian nation in the Massachusetts Colony	7	
 
 80	What is the name of Ahab's ship?	The Pequod	253
-	  7	1.00000	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	1.00000	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	117	0.50233	When the Pequod meets other ships, what is Ahab's only interest?	Information about Moby Dick	276	
 	277	0.50233	What is Ahab's only interest when the Pequod meets other ships?	Getting information about Moby Dick	117	
 	 79	0.33610	What is the name of Ahab's harpooner?	Fedallah	134	
@@ -211,8 +187,8 @@
 	 76	0.57974	What is the Pequod named after?	An extinct Massachusetts Indian tribe	207	
 	164	0.57974	Who owns the Pequod?	Bildad and Peleg	135	
 	207	0.57974	What is the Pequod named after?	A dead Indian nation in the Massachusetts Colony	7	
-	 36	0.33610	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
 	179	0.33610	With what is the Pequod adorned?	Sperm whale teeth	18	
+	252	0.33610	What are all the mates' names on the Pequod?	Starbuck, Stubbs, Flask	36	
 
 69	What is Fedallah's turban made of?	His own hair	27
 	 27	1.00000	Out of what is Fedallah's turban made?	His hair	69	
@@ -240,18 +216,25 @@
 
 274	What is Ahab's wife's name?	She isn't named	81
 	 81	1.00000	What is the name of Ahab's wife?	She is nameless	273	
-	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 79	0.33610	What is the name of Ahab's harpooner?	Fedallah	134	
 	 80	0.33610	What is the name of Ahab's ship?	The Pequod	253	
-	131	0.33610	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
 	137	0.33610	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68	
+	197	0.33610	Who are Ahab's mates first to third?	Starbuck, Stubbs, Flask	36	
 
+131	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	36
+	 84	1.00000	What is the name of the Second Mate?	Stubb	162	
+	 36	0.70930	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
+	 83	0.70930	Who is the Pequod's Second Mate?	Stubb	84	
+	162	0.70930	Who is the second mate on the Pequod?	Stubb	83	
+	 33	0.57974	The name of the First Mate is?	Starbuck.	233	
+	 85	0.57974	What is the name of the Third Mate?	Flask	193	
 
 84	What is the name of the Second Mate?	Stubb	162
-	197	1.00000	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	254	
+	131	1.00000	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	36	
+	 36	0.70930	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
 	 83	0.70930	Who is the Pequod's Second Mate?	Stubb	84	
-	162	0.70930	Who is the second mate on the Pequod?	Stubb	84	
-	254	0.70930	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
+	162	0.70930	Who is the second mate on the Pequod?	Stubb	83	
 	 33	0.57974	The name of the First Mate is?	Starbuck.	233	
 	 85	0.57974	What is the name of the Third Mate?	Flask	193	
 
@@ -260,16 +243,16 @@
 	 76	0.57974	What is the Pequod named after?	An extinct Massachusetts Indian tribe	207	
 	164	0.57974	Who owns the Pequod?	Bildad and Peleg	135	
 	207	0.57974	What is the Pequod named after?	A dead Indian nation in the Massachusetts Colony	7	
-	 36	0.33610	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
 	179	0.33610	With what is the Pequod adorned?	Sperm whale teeth	18	
+	252	0.33610	What are all the mates' names on the Pequod?	Starbuck, Stubbs, Flask	36	
 
 81	What is the name of Ahab's wife?	She is nameless	273
 	274	1.00000	What is Ahab's wife's name?	She isn't named	81	
-	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 79	0.33610	What is the name of Ahab's harpooner?	Fedallah	134	
 	 80	0.33610	What is the name of Ahab's ship?	The Pequod	253	
-	131	0.33610	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
 	137	0.33610	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68	
+	197	0.33610	Who are Ahab's mates first to third?	Starbuck, Stubbs, Flask	36	
 
 285	Who does Ahab talk to on deck when the crew takes a break from whale-processing?	The whale's severed head	120
 	120	1.00000	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head	284	
@@ -322,7 +305,7 @@
 242	What does Ahab nail to the ship's mast as motivation for his crew to find Moby Dick?	A gold doubloon	42
 	 42	0.89889	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin	242	
 	106	0.36091	When Ahab insists on climbing the mast to be the first to see Moby Dick, what happens to his hat?	A hawk steals it	268	
-	  7	0.33518	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.33518	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 80	0.33518	What is the name of Ahab's ship?	The Pequod	253	
 	149	0.33518	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.		
 	253	0.32787	What's the name of the whaling ship in Moby Dick?	The Pequod	80	
@@ -399,13 +382,13 @@
 	149	0.35548	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.		
 	259	0.34082	What part of his body did Ahab lose to Moby Dick?	His leg	125	
 
-252	Who are the first, second, and third mates' aboard the Pequod?	Starbuck, Stubbs, Flask	36
+254	Who are the first, second, and third mates' aboard the Pequod?	Starbuck, Stubbs, Flask	36
+	 36	0.77651	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
 	 83	0.77651	Who is the Pequod's Second Mate?	Stubb	84	
-	162	0.77651	Who is the second mate on the Pequod?	Stubb	84	
-	254	0.77651	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
-	 36	0.57974	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
+	162	0.77651	Who is the second mate on the Pequod?	Stubb	83	
 	 84	0.57974	What is the name of the Second Mate?	Stubb	162	
-	197	0.57974	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	254	
+	131	0.57974	Who are the first, second, and third mates?	Starbuck, Stubbs, Flask	36	
+	252	0.57974	What are all the mates' names on the Pequod?	Starbuck, Stubbs, Flask	36	
 
 281	What does Ahab do with his pipe after he realizes that smoking no longer soothes him?	He throws his pipe overboard	108
 	108	0.77651	When Ahab realizes that smoking no longer soothes him, what does he do?	Throws his pipe overboard	280	
@@ -575,6 +558,14 @@
 	263	0.44944	What almost crushes Queequeg's boat during the first whale hunt?	The Pequod	119	
 	290	0.41121	What whaling team killed the first whale?	Stubb and Tashtego and Stubb	130	
 
+252	What are all the mates' names on the Pequod?	Starbuck, Stubbs, Flask	36
+	 36	0.70930	Who are the names of the Pequod's first, second, and third mates?	Starbuck, Stubbs, Flask	197	
+	 83	0.70930	Who is the Pequod's Second Mate?	Stubb	84	
+	162	0.70930	Who is the second mate on the Pequod?	Stubb	83	
+	 33	0.57974	The name of the First Mate is?	Starbuck.	233	
+	 76	0.57974	What is the Pequod named after?	An extinct Massachusetts Indian tribe	207	
+	 85	0.57974	What is the name of the Third Mate?	Flask	193	
+
 239	Queequeg is covered with what?	Tattoos	39
 	 39	0.70930	What covers Queequeg's skin?	Tattoos	239	
 	153	0.57974	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner. Despite his religion and customs, he is able to develop a bond with Ishmael. Queequeg accompanies Ishmael on the whaling voyage to the Pacific and dies when the ship sinks.		
@@ -582,7 +573,6 @@
 	 16	0.26056	How does Queequeg shave?	With a harpoon	216	
 	 23	0.26056	Ishmael decides he likes the fact that Queequeg is a pagan because Queequeg lacks a Christian's what?	Hollow courtesies	223	
 	 30	0.26056	Queequeg is a native of what island?	Kokovoko	230	
-
 
 189	What is the scientific study of whales called?	cetology?	
 	 90	0.70930	What is the study of whales called?	Cetology	12	
@@ -786,19 +776,19 @@
 
 89	What is the source of Ahab's fatal flaw?	The damage he's suffered	67
 	 67	0.60297	What is Ahab's single fatal flaw?	Hubris	89	
-	  7	0.22029	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.22029	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 79	0.22029	What is the name of Ahab's harpooner?	Fedallah	134	
 	 80	0.22029	What is the name of Ahab's ship?	The Pequod	253	
 	 81	0.22029	What is the name of Ahab's wife?	She is nameless	273	
-	131	0.22029	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
+	137	0.22029	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68	
 
 67	What is Ahab's single fatal flaw?	Hubris	89
 	 89	0.60297	What is the source of Ahab's fatal flaw?	The damage he's suffered	67	
-	  7	0.22029	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.22029	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 79	0.22029	What is the name of Ahab's harpooner?	Fedallah	134	
 	 80	0.22029	What is the name of Ahab's ship?	The Pequod	253	
 	 81	0.22029	What is the name of Ahab's wife?	She is nameless	273	
-	131	0.22029	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
+	137	0.22029	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68	
 
 260	What does Queequeg have made for him when he becomes ill?	His coffin	111
 	111	0.60297	When Queequeg falls ill, what does he do?	Have his coffin made	260	
@@ -872,6 +862,13 @@
 	 47	0.30322	What does Fedallah prophesize will kill Captain Ahab?	Hemp	247	
 	244	0.30322	When does Ahab see what he thinks is the "first hearse" prophesied by Fedallah?	Fedallah lashed to Moby Dick	44	
 
+197	Who are Ahab's mates first to third?	Starbuck, Stubbs, Flask	36
+	 33	0.57974	The name of the First Mate is?	Starbuck.	233	
+	 85	0.57974	What is the name of the Third Mate?	Flask	193	
+	193	0.57974	Who is the third mate?	Flask	85	
+	233	0.57974	Who is the First Mate?	Starbuck.	33	
+	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
+	 79	0.33610	What is the name of Ahab's harpooner?	Fedallah	134	
 
 79	What is the name of Ahab's harpooner?	Fedallah	134
 	 37	0.57974	What causes Ahab's harpoon to flicker with fire?	Atmospheric static	237	
@@ -879,14 +876,14 @@
 	105	0.46510	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes	258	
 	237	0.37998	Why does Ahab's harpoon to flicker and spark with fire-like electricity?	Atmospheric static	37	
 	258	0.37998	What material does Ahab give the blacksmith out of which to make a harpoon for Moby Dick?	Nails from racehorse shoes	105	
-	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 
 137	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68
 	 68	0.57974	What is Captain Ahab's artificial leg made of?	Ivory	13	
 	247	0.50233	In Fedallah's prophecy, what will kill Captain Ahab?	Hemp	47	
 	 47	0.44944	What does Fedallah prophesize will kill Captain Ahab?	Hemp	247	
 	185	0.44944	Who warns Ishmael of Captain Ahab as 'Old Thunder'?	Elijah	141	
-	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 79	0.33610	What is the name of Ahab's harpooner?	Fedallah	134	
 
 144	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard	70
@@ -902,8 +899,8 @@
 	164	0.57974	Who owns the Pequod?	Bildad and Peleg	135	
 	207	0.57974	What is the Pequod named after?	A dead Indian nation in the Massachusetts Colony	7	
 	 18	0.33610	How is the Pequod decorated?	With whale bones	218	
-	 36	0.33610	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
 	218	0.33610	What decorates the Pequod?	Whale bones	18	
+	252	0.33610	What are all the mates' names on the Pequod?	Starbuck, Stubbs, Flask	36	
 
 37	What causes Ahab's harpoon to flicker with fire?	Atmospheric static	237
 	 79	0.57974	What is the name of Ahab's harpooner?	Fedallah	134	
@@ -919,7 +916,7 @@
 	247	0.29122	In Fedallah's prophecy, what will kill Captain Ahab?	Hemp	47	
 	 47	0.26056	What does Fedallah prophesize will kill Captain Ahab?	Hemp	247	
 	185	0.26056	Who warns Ishmael of Captain Ahab as 'Old Thunder'?	Elijah	141	
-	  7	0.22029	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.22029	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 
 70	What is Flask's nickname?	King-Post	144
 	144	0.57974	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard	70	
@@ -1055,7 +1052,7 @@
 	152	0.27894	Who is Pip?	The cabin boy on the Pequod. He is a young Negro who is very nervous and quiet by temperament and loses his mind when he has been abandoned in the sea for awhile.  He becomes half idiot-half prophet.		
 	 45	0.16840	What does Ahab see when he studies the gold doubloon nailed to the mast?	Himself	245	
 	245	0.16840	What does Ahab see when he peers at the gold doubloon mounted on the mast?	His own reflection  45		
-	  7	0.16171	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.16171	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 
 169	Who wins the doubloon from the mast?	Ahab	106
 	229	0.52459	Who wins the doubloon that Pip calls the ship's navel from the main the mast?	Ahab	29	
@@ -1087,7 +1084,7 @@
 	152	0.33518	Who is Pip?	The cabin boy on the Pequod. He is a young Negro who is very nervous and quiet by temperament and loses his mind when he has been abandoned in the sea for awhile.  He becomes half idiot-half prophet.		
 	 45	0.20614	What does Ahab see when he studies the gold doubloon nailed to the mast?	Himself	245	
 	245	0.20614	What does Ahab see when he peers at the gold doubloon mounted on the mast?	His own reflection  45		
-	  7	0.19431	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.19431	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 
 180	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg	22
 	270	0.51939	With whome does Ishmael share a bed in New Bedford?	82		
@@ -1245,7 +1242,7 @@
 	 79	0.50233	What is the name of Ahab's harpooner?	Fedallah	134	
 	 37	0.29122	What causes Ahab's harpoon to flicker with fire?	Atmospheric static	237	
 	105	0.23363	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes	258	
-	  7	0.19431	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.19431	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 80	0.19431	What is the name of Ahab's ship?	The Pequod	253	
 	 81	0.19431	What is the name of Ahab's wife?	She is nameless	273	
 
@@ -1293,7 +1290,7 @@
 	152	0.47368	Who is Pip?	The cabin boy on the Pequod. He is a young Negro who is very nervous and quiet by temperament and loses his mind when he has been abandoned in the sea for awhile.  He becomes half idiot-half prophet.		
 	 63	0.34064	What experience catalyzed Pip and Ahab's close companionship?	Pip's near-drowning	9	
 	209	0.31103	Why does Ahab give his quarters to the deranged Pip?	Pip moves him	9	
-	  7	0.27461	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.27461	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 79	0.27461	What is the name of Ahab's harpooner?	Fedallah	134	
 	 80	0.27461	What is the name of Ahab's ship?	The Pequod	253	
 
@@ -1399,7 +1396,7 @@
 	 68	0.26056	What is Captain Ahab's artificial leg made of?	Ivory	13	
 	247	0.22576	In Fedallah's prophecy, what will kill Captain Ahab?	Hemp	47	
 	 47	0.20199	What does Fedallah prophesize will kill Captain Ahab?	Hemp	247	
-	  7	0.17579	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.17579	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 
 118	When the crew encounter the crazed prophet Gabriel, what does Gabriel prophesize as Ahab's fate?	Dead and down there	146
 	146	0.44944	Who is Gabriel?	The self-styled prophet on the ship, Jeroboam. He believes himself to be the incarnation of the Shaker God and influences all the crewmembers on board. He warns them of the White Whale.		
@@ -1436,7 +1433,7 @@
 87	What is the name of the ship in the story?	The Pequod	80
 	190	0.44944	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	88	
 	 94	0.35548	What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex	273	
-	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 80	0.33610	What is the name of Ahab's ship?	The Pequod	253	
 	235	0.31126	Ishmael compares shipping out on a whale ship to committing what?  Suicide	35		
 	 95	0.26056	What religion are the owners of the ship?	Quakers	164	
@@ -1491,11 +1488,11 @@
 
 192	Where is Ahab's scar that resembles a lightning bolt?	On Ahab's cheek	62
 	 62	0.43161	What does the scar on Ahab's cheek resemble?	A lightning bolt	192	
-	  7	0.19431	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.19431	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 79	0.19431	What is the name of Ahab's harpooner?	Fedallah	134	
 	 80	0.19431	What is the name of Ahab's ship?	The Pequod	253	
 	 81	0.19431	What is the name of Ahab's wife?	She is nameless	273	
-	131	0.19431	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
+	137	0.19431	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68	
 
 198	With what does Starbuck consider killing Ahab?	Musket	113
 	113	0.43161	When Starbuck sees a row of muskets, what does he consider doing?	Killing Ahab	198	
@@ -1555,11 +1552,11 @@
 
 13	From what is Ahab's false leg made?	A whale's jawbone	223
 	 68	0.41121	What is Captain Ahab's artificial leg made of?	Ivory	13	
-	  7	0.26056	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.26056	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 79	0.26056	What is the name of Ahab's harpooner?	Fedallah	134	
 	 80	0.26056	What is the name of Ahab's ship?	The Pequod	253	
 	 81	0.26056	What is the name of Ahab's wife?	She is nameless	273	
-	131	0.26056	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
+	137	0.26056	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68	
 
 194	What does Ishmail say about himself keeping watch?	He daydreams too much	173
 	208	0.41121	What does Ahab say keeps him going?	An iron path	8	
@@ -1571,7 +1568,7 @@
 
 250	What can happen to an unbalanced ship?	It can capsize	200
 	227	0.41121	What happened to the whaling ship called The Essex?	It was attacked and sunk by a sperm whale, inspiring Melville's story 		
-	  7	0.26056	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.26056	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 80	0.26056	What is the name of Ahab's ship?	The Pequod	253	
 	 87	0.26056	What is the name of the ship in the story?	The Pequod	80	
 	235	0.24130	Ishmael compares shipping out on a whale ship to committing what?  Suicide	35		
@@ -1719,7 +1716,7 @@
 	184	0.34239	What is it called when two or more whale ships meet at sea?	  A "gam"	72	
 	227	0.34239	What happened to the whaling ship called The Essex?	It was attacked and sunk by a sperm whale, inspiring Melville's story 		
 	253	0.34239	What's the name of the whaling ship in Moby Dick?	The Pequod	80	
-	  7	0.31126	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.31126	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 
 65	What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off	99
 	 99	0.38756	What was Ahab using to attack Moby Dick when he lost his leg?	A knife	267	
@@ -1783,7 +1780,7 @@
 	207	0.37998	What is the Pequod named after?	A dead Indian nation in the Massachusetts Colony	7	
 	176	0.31017	Why is the Pequod unable to pursue the "Grand Armada" of sperm whales that they encounter near Sunda?	Malaysian Pirates appear	181	
 	 18	0.22029	How is the Pequod decorated?	With whale bones	218	
-	 36	0.22029	What are the mates' names on the Pequod?	Starbuck, Stubbs, Flask	252	
+	179	0.22029	With what is the Pequod adorned?	Sperm whale teeth	18	
 
 237	Why does Ahab's harpoon to flicker and spark with fire-like electricity?	Atmospheric static	37
 	 79	0.37998	What is the name of Ahab's harpooner?	Fedallah	134	
@@ -1867,11 +1864,11 @@
 
 28	Over the course of the voyage, Ahab destroys all of what?	The navigation equipment	228
 	228	0.37481	What does Ahab destroy piece by piece throughout the voyage?	The navigation equipment	28	
-	  7	0.22029	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.22029	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 79	0.22029	What is the name of Ahab's harpooner?	Fedallah	134	
 	 80	0.22029	What is the name of Ahab's ship?	The Pequod	253	
 	 81	0.22029	What is the name of Ahab's wife?	She is nameless	273	
-	131	0.22029	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
+	137	0.22029	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68	
 
 273	What actual whaler was sunk by a sperm whale and inspired Melville's Moby Dick?	The Essex	94
 	 94	0.36091	What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex	273	
@@ -1915,11 +1912,11 @@
 
 241	What's in the vial in Ahab's pocket?	Nantucket sand	41
 	 41	0.35630	What does Ahab carry in his pocket?	Vial of Nantucket sand	241	
-	  7	0.26056	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.26056	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 79	0.26056	What is the name of Ahab's harpooner?	Fedallah	134	
 	 80	0.26056	What is the name of Ahab's ship?	The Pequod	253	
 	 81	0.26056	What is the name of Ahab's wife?	She is nameless	273	
-	131	0.26056	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
+	137	0.26056	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68	
 
 306	Whom among the crew is a devout Christian?	Starbuck	129
 	129	0.35630	Which member of the crew is a religious Christian man?	Starbuck	305	
@@ -1997,7 +1994,7 @@
 	  9	0.34064	Because Pip's insane rantings move Ahab, Ahab gives Pip what?	The captain's quarters	219	
 	152	0.30322	Who is Pip?	The cabin boy on the Pequod. He is a young Negro who is very nervous and quiet by temperament and loses his mind when he has been abandoned in the sea for awhile.  He becomes half idiot-half prophet.		
 	209	0.18443	Why does Ahab give his quarters to the deranged Pip?	Pip moves him	9	
-	  7	0.17579	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.17579	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 79	0.17579	What is the name of Ahab's harpooner?	Fedallah	134	
 	 80	0.17579	What is the name of Ahab's ship?	The Pequod	253	
 
@@ -2010,12 +2007,12 @@
 	201	0.22029	For what were the whales hunted?	Oil	1	
 
 213	What is Ahab's prosthetic made of?	A whale's jawbone	13
-	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.33610	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 79	0.33610	What is the name of Ahab's harpooner?	Fedallah	134	
 	 80	0.33610	What is the name of Ahab's ship?	The Pequod	253	
 	 81	0.33610	What is the name of Ahab's wife?	She is nameless	273	
-	131	0.33610	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
 	137	0.33610	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68	
+	197	0.33610	Who are Ahab's mates first to third?	Starbuck, Stubbs, Flask	36	
 
 139	Who is Captain Peleg?	Retired whaleman of Nantucket.  Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man.  Bildad and Peleg hire the crew.	
 	137	0.33610	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68	
@@ -2114,7 +2111,7 @@
 	  0	0.00000	Is Moby Dick alive or dead at the end of Moby Dick?	Alive	251	
 
 161	Who is the only crewmate who opposes Ahab's plan to devote the ship's mission to hunt the White Whale?	Starbuck	281
-	  7	0.31800	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.31800	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 80	0.31800	What is the name of Ahab's ship?	The Pequod	253	
 	201	0.31800	For what were the whales hunted?	Oil	1	
 	117	0.26242	When the Pequod meets other ships, what is Ahab's only interest?	Information about Moby Dick	276	
@@ -2191,7 +2188,7 @@
 	120	0.13754	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head	284	
 	259	0.13754	What part of his body did Ahab lose to Moby Dick?	His leg	125	
 	285	0.13754	Who does Ahab talk to on deck when the crew takes a break from whale-processing?	The whale's severed head	120	
-	  7	0.13379	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.13379	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 
 31	The crew believes that they saw mermaids in the night, but Ahab says that there were actually what?	Seals	231
 	231	0.29122	What did the crew see at night, thay they thought were mermaids, but Ahab said were just animals?	Seals 31		
@@ -2242,7 +2239,7 @@
 	 40	0.20199	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head	240	
 
 95	What religion are the owners of the ship?	Quakers	164
-	  7	0.26056	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.26056	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 80	0.26056	What is the name of Ahab's ship?	The Pequod	253	
 	 87	0.26056	What is the name of the ship in the story?	The Pequod	80	
 	235	0.24130	Ishmael compares shipping out on a whale ship to committing what?  Suicide	35		
@@ -2250,12 +2247,12 @@
 	184	0.17078	What is it called when two or more whale ships meet at sea?	  A "gam"	72	
 
 232	What is Ahab's crime of usurpation?	Using the Pequod to chase Moby Dick, which was not what its owners intended	32
-	  7	0.26056	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.26056	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 79	0.26056	What is the name of Ahab's harpooner?	Fedallah	134	
 	 80	0.26056	What is the name of Ahab's ship?	The Pequod	253	
 	 81	0.26056	What is the name of Ahab's wife?	She is nameless	273	
-	131	0.26056	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
 	137	0.26056	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68	
+	197	0.26056	Who are Ahab's mates first to third?	Starbuck, Stubbs, Flask	36	
 
 159	Who is telling the story in the novel?	Ishmael	71
 	 87	0.26056	What is the name of the ship in the story?	The Pequod	80	
@@ -2338,12 +2335,12 @@
 	170	0.11234	Why are whaling ships always well-lit?	Free access to oil	272	
 
 8	Ahab claims that, "The path to my fixed purpose is laid" with what?	Iron rails	218
-	  7	0.17579	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	217	
+	  7	0.17579	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts	207	
 	 79	0.17579	What is the name of Ahab's harpooner?	Fedallah	134	
 	 80	0.17579	What is the name of Ahab's ship?	The Pequod	253	
 	 81	0.17579	What is the name of Ahab's wife?	She is nameless	273	
-	131	0.17579	Who are Ahab's mates?	Starbuck, Stubbs, Flask	36	
 	137	0.17579	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod, and the protagonist of the novel. His entire motivation in the book is to find and kill Moby Dick, the whale that  caused him to lose his leg.	68	
+	197	0.17579	Who are Ahab's mates first to third?	Starbuck, Stubbs, Flask	36	
 
 168	Who says the following: "Vengeance on a dumb brute! That simply smote thee from blindest instinct! Madness! To be enraged with a dumb thing seems blasphemous."	Starbuck	301
 	167	0.15472	Who says the following: "Though it come to the last, I shall still go before thee thy pilot . . . . Hemp only can kill thee."	Fedallah	300	
