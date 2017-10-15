@@ -237,7 +237,8 @@ def most_similar_items_list(all_texts, this_text, excludes=None, q_weight=1.0, s
     sim_dict = similarity_dict(all_texts, this_text, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
-def list_most_sim_qas_list(texts, exclude_self=True, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5, min_sim_val=0.0):
+def list_most_sim_qas_list(texts, exclude_self=True, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5,
+    min_sim_val=0.0, id_eq_index=False):
     '''
     For each text in texts, find a list of indexes of the most similar texts.
     Returns list of lists of items as in: [[(index, similariy), ...], ...]
@@ -249,10 +250,11 @@ def list_most_sim_qas_list(texts, exclude_self=True, q_weight=1.0, sim_func=cosi
     if exclude_self:
         nearests = len(texts)*[None]
         for idx, txt in enumerate(texts):
-            # print("DBG LMSTL: ", txt)
-            if idx != int(txt[0]):
-                print("ERROR:", idx, "!=", txt[0], "at", txt)
-                return None
+            if id_eq_index:
+                # print("DBG LMSTL: ", txt)
+                if idx != int(txt[0]):
+                    print("ERROR:", idx, "!=", txt[0], "at", txt)
+                    return None
             nearests[idx] = most_similar_items_list(texts, txt, [idx], q_weight=q_weight,
                                                     sim_func=sim_func, max_count=max_count, \
                                                     min_sim_val=min_sim_val)
@@ -404,6 +406,11 @@ def sim_score_save(qas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_t
                                                                                seconds, score))
     return score, most_sim_lists
 
+###############################################################################
+# >>> qas = sc.csv_read_qa("simsilver.tsv", delimiter="\t")
+# >>> score, msl = sn.sim_score_save(qas, "simlists_sort.tsv", min_sim_val=0.00)
+# Finding all similarity lists (size=309, count=6) took 218.1 seconds
+# sim_score_save(size=309, count=6) took 218.1 seconds; score 0.5941
 ###############################################################################
 def test_fair():
     '''test similariy of QA pairs containing many stop words, including "fair"'''
