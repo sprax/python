@@ -1,8 +1,8 @@
-
 #!/usr/bin/env python3
-import csv
 import requests
 from bs4 import BeautifulSoup
+
+import qa_csv
 
 def get_url_text(url):
     # validate url?
@@ -12,7 +12,6 @@ def get_url_text(url):
     except:
         print("Could not open connection to {}".format(url))
     return ""
-
 
 #css selectors:
 #non-main quizzes
@@ -53,35 +52,13 @@ def get_quiz_relative_paths(text):
         relative_paths.append(node.get('href'))
     return relative_paths
 
-def csv_read_qa(path, newline=None, delimiter=',', quotechar='"'):
-    ''' Return a list of (question, answer)-tuples read from a CSV file. '''
-    qa_pairs = []
-    try:
-        with open(path, 'rt', newline=newline) as in_file:
-            reader = csv.reader(in_file, delimiter=delimiter, quotechar=quotechar)
-            for row in reader:
-                qa_pairs.append(row)
-    except Exception as ex:
-        print("csv_read_qa failed to get qa_pairs from ({}) with error: {}".format(path, ex))
-    return qa_pairs
-
-def csv_write_qa(qa_pairs, path, newline=None, delimiter=',', quotechar='"'):
-    ''' Write a list of (question, answer)-tuples to a CSV file. '''
-    try:
-        with open(path, "w", newline=newline) as csv_file:
-            writer = csv.writer(csv_file, delimiter=delimiter, quotechar=quotechar)
-            for pair in qa_pairs:
-                writer.writerow(pair)
-    except Exception as ex:
-        print("csv_write_qa failed to write qa_pairs to ({}) with error: {}".format(path, ex))
-
 def scrape_and_save_qa(url, path):
     '''scrape QA pairs (SparkNotes) from one quiz and save them to CSV'''
     raw_text = get_url_text(url)
     if raw_text:
         qa_pairs = sparknotes_qa_pairs(raw_text)
         if qa_pairs:
-            csv_write_qa(qa_pairs, path)
+            qa_csv.csv_write_qa(qa_pairs, path)
 
 def scrape_moby_sparknotes_quizzes(start=1570, stop=1590):
     '''scrape and save QA pairs from a range of quiz URLs'''
