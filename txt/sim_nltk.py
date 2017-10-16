@@ -155,7 +155,7 @@ def nearest_other_idx(other_texts, this_text, similarity_func, max_sim_val):
         vocab:              the set of all known words
         max_sim_val:        the initial value of max, or the maximum similariy found so far.
     '''
-    max_sim_idx = -99
+    max_sim_idx = -9999
     for idx, other_text in enumerate(other_texts):
         sim = similarity_func(this_text, other_text)
         if  max_sim_val < sim:
@@ -256,8 +256,8 @@ def list_most_sim_qas_list(quandas, exclude_self=True, q_weight=1.0, sim_func=co
             assert isinstance(idn, int)
             if id_eq_index:
                 # print("DBG LMSTL: ", txt)
-                if idx > 0 and idx + 99 != idn:
-                    print("ERROR:", (idx + 99), "!=", txt[0], "at", txt)
+                if idx > 0 and idx + 100 != idn:
+                    print("ERROR:", (idx + 100), "!=", txt[0], "at", txt)
                     raise IndexError
             nearests[idx] = most_similar_items_list(quandas, txt, [idx], q_weight=q_weight,
                                                     sim_func=sim_func, max_count=max_count,
@@ -409,7 +409,7 @@ def sim_score_save(quandas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_s
                                                     sim_func=sim_func, max_count=max_count,
                                                     min_sim_val=min_sim_val)
     score = score_most_sim_lists(quandas, most_sim_lists)
-    save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=min_sim_val)
+    save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=min_sim_val, sort_most_sim=False)
     seconds = time.time() - beg_time
     print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (len(quandas), max_count,
                                                                                seconds, score))
