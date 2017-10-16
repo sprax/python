@@ -318,7 +318,7 @@ def distance_counts(quandas, most_sim_lists, max_dist):
             for idx, item in enumerate(sim_list):
                 # print("DC: %d  item(%d, %f)" % (idx, item[0], item[1]))
                 qax = quandas[item[0]]
-                if gold == qax[0]:
+                if gold == qax[0]:      # compare idn to idn (not idx)
                     # print("DBG_G: Q_%d <==> Q_%d (%s <==> %s) at %d, %.4f (%s : %s)\n" % (int(qax[0]), item[0], qax[1], quandas[item[0]][1],
                     #       idx, item[1], remove_stop_words(normalize(qax[1])), remove_stop_words(normalize(quandas[item[0]][1]))))
                     dist_counts[idx] += 1
@@ -356,13 +356,12 @@ def save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=0.15, 
     if sort_most_sim:
         sim_oix = []
         # TODO: replace with zip
-        for idx, lst in enumerate(quandas):
-            most_sim_list = most_sim_lists[idx]
-            max_oix = most_sim_list[0][0]
-            max_sim = most_sim_list[0][1]
-            sum_sim = sum([y[1] for y in most_sim_list])
-            sim_oix.append((max_sim, -max_oix, -idx))
-        # TODO: sorted with 2 keys??
+        for idx, sim_list in enumerate(most_sim_lists):
+            max_oix = sim_list[0][0]
+            max_sim = sim_list[0][1]
+            sum_sim = sum([y[1] for y in sim_list])
+            sim_oix.append((max_sim, sum_sim, -idx, -max_oix))
+        # TODO: sorted with 2 keys?? FIXME: should sort on all keys!!
         isorted = [-tup[2] for tup in sorted(sim_oix, reverse=True)]
     else:
         isorted = range(len(quandas))
@@ -370,26 +369,27 @@ def save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=0.15, 
     out = text_fio.open_out_file(path)
     mix = 0
     for idx in isorted:
-        lst = quandas[idx]
+        qax = quandas[idx]
+        idn = qax[0]
         most_sim_list = most_sim_lists[idx]
-        llen, ansr = len(lst), 'N/A'
-        if llen < 3:
-            print("MISSING ANSWER at:", idx, lst[0], lst[1], "ANSWER:", ansr, sep="\t")
+        lqax, ansr = len(qax), 'N/A'
+        if lqax < 3:
+            print("MISSING ANSWER at:", idx, qax[0], qax[1], "ANSWER:", ansr, sep="\t")
         else:
-            ansr = lst[2]
-            gold = lst[3] if len(lst) > 3 else ''
-        print(idx, lst[1], ansr, gold, sep="\t", file=out)
+            ansr = qax[2]
+            gold = qax[3] if lqax > 3 else None
+        print(idn, qax[1], ansr, gold, sep="\t", file=out)
         for oix, sim in most_sim_list:  # Note: oix = other index, i.e., the index of the gold standard other QAS
             if sim >= min_sim_val:
                 try:
-                    print("IDX: ", idx, " OIX: ", oix, " SIM: ", sim)
-                    if oix > 99:
-                        oix -= 99
+                    # print("IDX: ", idx, " OIX: ", oix, " SIM: ", sim)
+                    sidn = quandas[oix][0]
+                    stxt = quandas[oix][1]
                     sans = quandas[oix][2] if len(quandas[oix]) > 2 else 'N/A'
-                    gold = quandas[oix][3] if len(quandas[oix]) > 3 else ''
-                    print("\t%3d\t%.5f\t%s\t%s\t%s\t" % (oix, sim, quandas[oix][1], sans, gold), file=out)
+                    sgld = quandas[oix][3] if len(quandas[oix]) > 3 else None
+                    print("\t%3d\t%.5f\t%s\t%s\t%s\t" % (sidn, sim, stxt, sans, sgld), file=out)
                 except Exception as ex:
-                    print("ERROR AT MIX {}: idx {}  lst {},  err: {}\n".format(mix, idx, lst, ex))
+                    print("ERROR AT MIX {}: idx {}  qax {},  err: {}\n".format(mix, idx, qax, ex))
                     raise IndexError
         print(file=out)
         mix += 1
