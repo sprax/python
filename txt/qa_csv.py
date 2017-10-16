@@ -23,10 +23,10 @@ def csv_write_qa(qa_pairs, path, newline=None, delimiter=',', quotechar='"'):
     except Exception as ex:
         print("csv_write_qa failed to write qa_pairs to ({}) with error: {}".format(path, ex))
 
-def add_offset(inpath, outpath, offset=100, newl=None, delim=',', quote='"'):
+def add_offset(inpath, outpath, offset=100, newline=None, delimiter=',', quotechar='"'):
     '''Add a fixed offset to the indices in QuandA rows.'''
-    quandas = csv_read_qa(inpath, newline=newl, delimiter=delim, quotechar=quote)
+    quandas = csv_read_qa(inpath, newline=newline, delimiter=delimiter, quotechar=quotechar)
     for qax in quandas:
         qax[0] = int(qax[0]) + offset
         qax[3] = int(qax[3]) + offset
-    csv_write_qa(qas, outpath, newline=newl, delimiter=delim, quotechar=quote)
+    csv_write_qa(quandas, outpath, newline=newline, delimiter=delimiter, quotechar=quotechar)
