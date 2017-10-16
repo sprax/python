@@ -6,7 +6,7 @@ import string
 import time
 import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
-import scraper
+import qa_csv
 import text_fio
 
 STEMMER = nltk.stem.porter.PorterStemmer()
@@ -414,7 +414,7 @@ def sim_score_save(qas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_t
 ###############################################################################
 def test_fair():
     '''test similariy of QA pairs containing many stop words, including "fair"'''
-    fair = scraper.csv_read_qa('fair.txt', delimiter='\t')
+    fair = qa_csv.csv_read_qa('fair.txt', delimiter='\t')
     score = sim_score_save(fair)
     print("sim_score_save(fair) => %.3f" % score)
 
