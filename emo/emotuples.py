@@ -231,18 +231,24 @@ def gen_emo_tuples():
         ('1f446-1f3fd'           , 2,  197,   'hands', 1, '👆🏽', ['point up', 'pointing up'], ['point up'], ':point_up_2_tone3:', []),
         ('1f446-1f3fe'           , 2,  198,   'hands', 1, '👆🏾', ['point up', 'pointing up'], ['point up'], ':point_up_2_tone4:', []),
         ('1f446-1f3ff'           , 2,  199,   'hands', 1, '👆🏿', ['point up', 'pointing up'], ['point up'], ':point_up_2_tone5:', []),
-        ('1f447'                 , 1,  200,   'hands', 1, '👇', ['point down'], ['point down'], ':point_down:', []),
-        ('1f447-1f3fb'           , 2,  201,   'hands', 1, '👇🏻', ['point down'], ['point down'], ':point_down_tone1:', []),
-        ('1f447-1f3fc'           , 2,  202,   'hands', 1, '👇🏼', ['point down'], ['point down'], ':point_down_tone2:', []),
-        ('1f447-1f3fd'           , 2,  203,   'hands', 1, '👇🏽', ['point down'], ['point down'], ':point_down_tone3:', []),
-        ('1f447-1f3fe'           , 2,  204,   'hands', 1, '👇🏾', ['point down'], ['point down'], ':point_down_tone4:', []),
-        ('1f447-1f3ff'           , 2,  205,   'hands', 1, '👇🏿', ['point down'], ['point down'], ':point_down_tone5:', []),
-        ('261d'                  , 1,  206,   'hands', 1, '☝',  ['number one', 'point up'], ['number one', 'point up'], ':point_up:', []),
-        ('261d-1f3fb'            , 2,  207,   'hands', 1, '☝🏻', ['number one', 'point up'], ['number one', 'point up'], ':point_up_tone1:', []),
-        ('261d-1f3fc'            , 2,  208,   'hands', 1, '☝🏼', ['number one', 'point up'], ['number one', 'point up'], ':point_up_tone2:', []),
-        ('261d-1f3fd'            , 2,  209,   'hands', 1, '☝🏽', ['number one', 'point up'], ['number one', 'point up'], ':point_up_tone3:', []),
-        ('261d-1f3fe'            , 2,  210,   'hands', 1, '☝🏾', ['number one', 'point up'], ['number one', 'point up'], ':point_up_tone4:', []),
-        ('261d-1f3ff'            , 2,  211,   'hands', 1, '☝🏿', ['number one', 'point up'], ['number one', 'point up'], ':point_up_tone5:', []),
+        ]
+    texts = ['point down', 'down', 'downward', 'going down']
+    emo_tuples += [
+        ('1f447'                 , 1,  200,   'hands', 1, '👇', texts, ['point down'], ':point_down:', []),
+        ('1f447-1f3fb'           , 2,  201,   'hands', 1, '👇🏻', texts, ['point down'], ':point_down_tone1:', []),
+        ('1f447-1f3fc'           , 2,  202,   'hands', 1, '👇🏼', texts, ['point down'], ':point_down_tone2:', []),
+        ('1f447-1f3fd'           , 2,  203,   'hands', 1, '👇🏽', texts, ['point down'], ':point_down_tone3:', []),
+        ('1f447-1f3fe'           , 2,  204,   'hands', 1, '👇🏾', texts, ['point down'], ':point_down_tone4:', []),
+        ('1f447-1f3ff'           , 2,  205,   'hands', 1, '👇🏿', texts, ['point down'], ':point_down_tone5:', []),
+        ]
+    texts = ['point up', 'number one', 'up', 'upward', 'going up', 'numero uno']
+    emo_tuples += [
+        ('261d'                  , 1,  206,   'hands', 1, '☝',  texts, ['number one', 'point up'], ':point_up:', []),
+        ('261d-1f3fb'            , 2,  207,   'hands', 1, '☝🏻', texts, ['number one', 'point up'], ':point_up_tone1:', []),
+        ('261d-1f3fc'            , 2,  208,   'hands', 1, '☝🏼', texts, ['number one', 'point up'], ':point_up_tone2:', []),
+        ('261d-1f3fd'            , 2,  209,   'hands', 1, '☝🏽', texts, ['number one', 'point up'], ':point_up_tone3:', []),
+        ('261d-1f3fe'            , 2,  210,   'hands', 1, '☝🏾', texts, ['number one', 'point up'], ':point_up_tone4:', []),
+        ('261d-1f3ff'            , 2,  211,   'hands', 1, '☝🏿', texts, ['number one', 'point up'], ':point_up_tone5:', []),
         ('270b'                  , 1,  212,   'hands', 1, '✋', ['raised', 'hand'], ['raised', 'hand'], ':raised_hand:', []),
         ('270b-1f3fb'            , 2,  213,   'hands', 1, '✋🏻', ['raised', 'hand'], ['raised', 'hand'], ':raised_hand_tone1:', []),
         ('270b-1f3fc'            , 2,  214,   'hands', 1, '✋🏼', ['raised', 'hand'], ['raised', 'hand'], ':raised_hand_tone2:', []),
@@ -256,7 +262,6 @@ def gen_emo_tuples():
         ('1f91a-1f3fe'           , 2,  222,   'hands', 1, '🤚🏾', ['hand'], ['hand'], ':raised_back_of_hand_tone4:', [':back_of_hand_tone4:']),
         ('1f91a-1f3ff'           , 2,  223,   'hands', 1, '🤚🏿', ['hand'], ['hand'], ':raised_back_of_hand_tone5:', [':back_of_hand_tone5:']),
         ]
-
     texts = ['splayed hand',  'five fingers',    'five', 'five-finger',    'splayed']
     sylls = ['SPLEYD HHAEND', 'FAYV FIHNG GERS', 'FAYV', 'FAYV FIHNG GER', 'SPLEYD']
     emo_tuples += [
@@ -266,9 +271,6 @@ def gen_emo_tuples():
         ('1f590-1f3fd'           , 2,  227,   'hands', 1, '🖐🏽', texts, sylls, ':hand_splayed_tone3:', [':raised_hand_with_fingers_splayed_tone3:']),
         ('1f590-1f3fe'           , 2,  228,   'hands', 1, '🖐🏾', texts, sylls, ':hand_splayed_tone4:', [':raised_hand_with_fingers_splayed_tone4:']),
         ('1f590-1f3ff'           , 2,  229,   'hands', 1, '🖐🏿', texts, sylls, ':hand_splayed_tone5:', [':raised_hand_with_fingers_splayed_tone5:']),
-    ]
-
-    emo_tuples += [
         ('1f596'                 , 1,  230,   'hands', 1, '🖖', ['spock', 'vulcan'], ['spock', 'vulcan'], ':vulcan:', [':raised_hand_with_part_between_middle_and_ring_fingers:']),
         ('1f596-1f3fb'           , 2,  231,   'hands', 1, '🖖🏻', ['spock', 'vulcan'], ['spock', 'vulcan'], ':vulcan_tone1:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone1:']),
         ('1f596-1f3fc'           , 2,  232,   'hands', 1, '🖖🏼', ['spock', 'vulcan'], ['spock', 'vulcan'], ':vulcan_tone2:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone2:']),
@@ -2059,8 +2061,8 @@ def gen_emo_tuples():
         ('2196'                  , 1, 2017,  'symbols', 1, '↖', ['upper left arrow'], ['left', 'upper', 'arrow'], ':arrow_upper_left:', []),
         ('2195'                  , 1, 2018,  'symbols', 1, '↕', ['up and down', 'up and down arrow'], ['up', 'down', 'arrow'], ':arrow_up_down:', []),
         ('2194'                  , 1, 2019,  'symbols', 1, '↔', ['left and right', 'both ways', 'left right arrow'], ['arrow', 'two way', 'left right arrow'], ':left_right_arrow:', []),
-        ('21aa'                  , 1, 2020,  'symbols', 1, '↪', ['forward arrow', 'hook forward'], ['forward arrow', 'hook forward'], ':arrow_right_hook:', []),
-        ('21a9'                  , 1, 2021,  'symbols', 1, '↩', ['back arrow', 'leftwards arrow'], ['back arrow', 'leftwards arrow'], ':leftwards_arrow_with_hook:', []),
+        ('21aa'                  , 1, 2020,  'symbols', 1, '↪', ['forward arrow', 'hook forward', 'right hook', 'hook'], ['forward arrow', 'hook forward'], ':arrow_right_hook:', []),
+        ('21a9'                  , 1, 2021,  'symbols', 1, '↩', ['back arrow', 'leftwards arrow', 'left hook', 'hook'], ['back arrow', 'leftwards arrow'], ':leftwards_arrow_with_hook:', []),
         ('2934'                  , 1, 2022,  'symbols', 1, '⤴', ['turn up', 'upturn', 'uproot', 'remove'], ['up', 'arrow', 'heading'], ':arrow_heading_up:', []),
         ('2935'                  , 1, 2023,  'symbols', 1, '⤵', ['turn down', 'downturn', 'throw down', 'throw away'], ['down', 'arrow', 'heading'], ':arrow_heading_down:', []),
         ('1f500'                 , 1, 2024,  'symbols', 1, '🔀', ['shuffle', 'twisted arrows', 'rightwards'], ['shuffle', 'twisted arrows', 'rightwards'], ':twisted_rightwards_arrows:', []),
