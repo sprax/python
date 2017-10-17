@@ -53,7 +53,7 @@ def second(obj):
         return obj
 
 def third(obj):
-    '''second: returns second item from an indexible, or failing that, just the object'''
+    '''third: returns third item from an indexible, or failing that, just the object'''
     try:
         return obj.__getitem__(2)
     except TypeError:
@@ -75,7 +75,7 @@ def sim_weighted_qas(one_quanda, other_quanda, get_question=second, get_answer=t
         if ans_1 and ans_2:
             try:
                 a_sim = sim_func(ans_1, ans_2)
-                return (q_sim - a_sim) * q_weight - a_sim
+                return (q_sim - a_sim) * q_weight + a_sim
             except ValueError as vex:
                 print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
                 raise vex
@@ -115,7 +115,7 @@ def cosine_sim_qas_2(one_quanda, other_quanda, get_question=second, get_answer=t
         tfidf = vectorizer.fit_transform([qst_1, qst_2, ans_1, ans_2])
         q_sim = ((tfidf * tfidf.T).A)[0, 1]
         a_sim = ((tfidf * tfidf.T).A)[2, 3]
-        return (q_sim - a_sim) * q_weight - a_sim
+        return (q_sim - a_sim) * q_weight + a_sim
     except ValueError as vex:
         print("Error, probably on answers (%s|%s): %s" % (ans_1, ans_2, vex))
     return 0.0
