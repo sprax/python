@@ -59,9 +59,9 @@ def third(obj):
     except TypeError:
         return obj
 
-def cosine_sim_txt(txt_obj_1, txt_obj_2, get_text=ident, vectorizer=VECTORIZER):
+def cosine_sim_txt(txt_1, txt_2, vectorizer=VECTORIZER):
     '''dot-product (projection) similarity'''
-    tfidf = vectorizer.fit_transform([get_text(txt_obj_1), get_text(txt_obj_2)])
+    tfidf = vectorizer.fit_transform([txt_1), txt_2)])
     return ((tfidf * tfidf.T).A)[0, 1]
 
 def sim_weighted_qas(one_quanda, other_quanda, get_question=second, get_answer=third, q_weight=0.5,
@@ -75,7 +75,7 @@ def sim_weighted_qas(one_quanda, other_quanda, get_question=second, get_answer=t
         if ans_1 and ans_2:
             try:
                 a_sim = sim_func(ans_1, ans_2)
-                return (q_sim - a_sim) * q_weight + a_sim
+                return (q_sim - a_sim) * q_weight - a_sim
             except ValueError as vex:
                 print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
                 raise vex
@@ -83,19 +83,19 @@ def sim_weighted_qas(one_quanda, other_quanda, get_question=second, get_answer=t
 
 def cosine_sim_qas(one_quanda, other_quanda, get_question=second, get_answer=third, q_weight=0.5, vectorizer=VECTORIZER):
     '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
-    assert 0.0 < q_weight and q_weight <= 1.0
+    assert 0 < q_weight and q_weight <= 1
+    q_sim = cosine_sim_txt(get_question(one_quanda), get_question(other_quanda), vectorizer)
     if q_weight >= 1.0:
-        return cosine_sim_txt(one_quanda, other_quanda, get_question, vectorizer)
-    q_sim = cosine_sim_txt(one_quanda, other_quanda, get_question, vectorizer)
-    if q_weight < 1.0:
-        ans_1 = get_answer(one_quanda)
-        ans_2 = get_answer(other_quanda)
-        if ans_1 and ans_2:
-            try:
-                a_sim = cosine_sim_txt(one_quanda, other_quanda, get_answer, vectorizer)
-                return (q_sim - a_sim) * q_weight - a_sim
-            except ValueError as vex:
-                print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
+        return q_sim
+
+    ans_1 = get_answer(one_quanda)
+    ans_2 = get_answer(other_quanda)
+    if ans_1 and ans_2:
+        try:
+            a_sim = cosine_sim_txt(ans_1, ans_2, vectorizer)
+            return (q_sim - a_sim) * q_weight + a_sim
+        except ValueError as vex:
+            print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
     return q_sim
 
 def cosine_sim_qas_2(one_quanda, other_quanda, get_question=second, get_answer=third,
@@ -105,7 +105,7 @@ def cosine_sim_qas_2(one_quanda, other_quanda, get_question=second, get_answer=t
     assert 0.0 < q_weight and q_weight <= 1.0
     if q_weight >= 1.0:
         print("Degenerate q_weight: ", q_weight)
-        return cosine_sim_txt(one_quanda, other_quanda, get_question, vectorizer)
+        return cosine_sim_txt(get_question(one_quanda), get_question(other_quanda), vectorizer)
     # print("DBG CSQ:  Q(%s)  A(%s)" % (get_question(other_quanda), get_answer(other_quanda)))
     qst_1 = get_question(one_quanda)
     qst_2 = get_question(other_quanda)
