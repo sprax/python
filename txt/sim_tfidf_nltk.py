@@ -81,7 +81,7 @@ def sim_weighted_qas(one_quanda, other_quanda, get_question=second, get_answer=t
                 raise vex
     return q_sim
 
-def cosine_sim_qas(one_quanda, other_quanda, get_question=second, get_answer=third, q_weight=0.5, vectorizer=VECTORIZER):
+def cosine_sim_quanda(one_quanda, other_quanda, get_question=second, get_answer=third, q_weight=0.5, vectorizer=VECTORIZER):
     '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
     assert 0 < q_weight and q_weight <= 1
     q_sim = cosine_sim_txt(get_question(one_quanda), get_question(other_quanda), vectorizer)
@@ -98,7 +98,7 @@ def cosine_sim_qas(one_quanda, other_quanda, get_question=second, get_answer=thi
             print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
     return q_sim
 
-def cosine_sim_qas_2(one_quanda, other_quanda, get_question=second, get_answer=third,
+def cosine_sim_quanda_2(one_quanda, other_quanda, get_question=second, get_answer=third,
                      q_weight=0.5, vectorizer=VECT_NO_STOPS):
     '''dot-product (projection) similarity combining similarities of questions
     and, if available, answers'''
@@ -120,10 +120,10 @@ def cosine_sim_qas_2(one_quanda, other_quanda, get_question=second, get_answer=t
         print("Error, probably on answers (%s|%s): %s" % (ans_1, ans_2, vex))
     return 0.0
 
-def cosine_sim_qas_ms(one_quanda, other_quanda, get_question=second, get_answer=third,
+def cosine_sim_quanda_ms(one_quanda, other_quanda, get_question=second, get_answer=third,
                       q_weight=0.5, vectorizer=VECT_MOST_STOPS):
     '''Returns weighted Q & A similarity between two question-answer pairs'''
-    return cosine_sim_qas_2(one_quanda, other_quanda, get_question, get_answer,
+    return cosine_sim_quanda_2(one_quanda, other_quanda, get_question, get_answer,
                             q_weight, vectorizer)
 
 

@@ -53,59 +53,57 @@ def second(obj):
         return obj
 
 def third(obj):
-    '''second: returns second item from an indexible, or failing that, just the object'''
+    '''third: returns third item from an indexible, or failing that, just the object'''
     try:
         return obj.__getitem__(2)
     except TypeError:
         return obj
 
-def cosine_sim_txt(txt_obj_1, txt_obj_2, get_text=ident, vectorizer=VECTORIZER):
+def cosine_sim_txt(txt_1, txt_2, vectorizer=VECTORIZER):
     '''dot-product (projection) similarity'''
-    tfidf = vectorizer.fit_transform([get_text(txt_obj_1), get_text(txt_obj_2)])
+    tfidf = vectorizer.fit_transform([txt_1), txt_2)])
     return ((tfidf * tfidf.T).A)[0, 1]
 
-def sim_weighted_qas(one_quanda, other_quanda, get_question=second, get_answer=third, q_weight=0.5,
+def sim_weighted_qas(qst_1, ans_1, qst_2, ans_2, q_weight=0.5,
                      sim_func=cosine_sim_txt):
     '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
     assert 0.0 < q_weight and q_weight <= 1.0
-    q_sim = sim_func(get_question(one_quanda), get_question(other_quanda))
+    q_sim = sim_func(qst_1, qst_2)
     if q_weight < 1.0:
-        ans_1 = get_answer(one_quanda)
-        ans_2 = get_answer(other_quanda)
         if ans_1 and ans_2:
             try:
                 a_sim = sim_func(ans_1, ans_2)
-                return (q_sim - a_sim) * q_weight - a_sim
+                return (q_sim - a_sim) * q_weight + a_sim
             except ValueError as vex:
                 print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
                 raise vex
     return q_sim
 
-def cosine_sim_qas(one_quanda, other_quanda, get_question=second, get_answer=third, q_weight=0.5, vectorizer=VECTORIZER):
+def cosine_sim_quanda(one_quanda, other_quanda, get_question=second, get_answer=third, q_weight=0.5, vectorizer=VECTORIZER):
     '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
-    assert 0.0 < q_weight and q_weight <= 1.0
+    assert 0 < q_weight and q_weight <= 1
+    q_sim = cosine_sim_txt(get_question(one_quanda), get_question(other_quanda), vectorizer)
     if q_weight >= 1.0:
-        return cosine_sim_txt(one_quanda, other_quanda, get_question, vectorizer)
-    q_sim = cosine_sim_txt(one_quanda, other_quanda, get_question, vectorizer)
-    if q_weight < 1.0:
-        ans_1 = get_answer(one_quanda)
-        ans_2 = get_answer(other_quanda)
-        if ans_1 and ans_2:
-            try:
-                a_sim = cosine_sim_txt(one_quanda, other_quanda, get_answer, vectorizer)
-                return (q_sim - a_sim) * q_weight - a_sim
-            except ValueError as vex:
-                print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
+        return q_sim
+
+    ans_1 = get_answer(one_quanda)
+    ans_2 = get_answer(other_quanda)
+    if ans_1 and ans_2:
+        try:
+            a_sim = cosine_sim_txt(ans_1, ans_2, vectorizer)
+            return (q_sim - a_sim) * q_weight + a_sim
+        except ValueError as vex:
+            print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
     return q_sim
 
-def cosine_sim_qas_2(one_quanda, other_quanda, get_question=second, get_answer=third,
+def cosine_sim_quanda_2(one_quanda, other_quanda, get_question=second, get_answer=third,
                      q_weight=0.5, vectorizer=VECT_NO_STOPS):
     '''dot-product (projection) similarity combining similarities of questions
     and, if available, answers'''
     assert 0.0 < q_weight and q_weight <= 1.0
     if q_weight >= 1.0:
         print("Degenerate q_weight: ", q_weight)
-        return cosine_sim_txt(one_quanda, other_quanda, get_question, vectorizer)
+        return cosine_sim_txt(get_question(one_quanda), get_question(other_quanda), vectorizer)
     # print("DBG CSQ:  Q(%s)  A(%s)" % (get_question(other_quanda), get_answer(other_quanda)))
     qst_1 = get_question(one_quanda)
     qst_2 = get_question(other_quanda)
@@ -115,15 +113,15 @@ def cosine_sim_qas_2(one_quanda, other_quanda, get_question=second, get_answer=t
         tfidf = vectorizer.fit_transform([qst_1, qst_2, ans_1, ans_2])
         q_sim = ((tfidf * tfidf.T).A)[0, 1]
         a_sim = ((tfidf * tfidf.T).A)[2, 3]
-        return (q_sim - a_sim) * q_weight - a_sim
+        return (q_sim - a_sim) * q_weight + a_sim
     except ValueError as vex:
         print("Error, probably on answers (%s|%s): %s" % (ans_1, ans_2, vex))
     return 0.0
 
-def cosine_sim_qas_ms(one_quanda, other_quanda, get_question=second, get_answer=third,
+def cosine_sim_quanda_ms(one_quanda, other_quanda, get_question=second, get_answer=third,
                       q_weight=0.5, vectorizer=VECT_MOST_STOPS):
     '''Returns weighted Q & A similarity between two question-answer pairs'''
-    return cosine_sim_qas_2(one_quanda, other_quanda, get_question, get_answer,
+    return cosine_sim_quanda_2(one_quanda, other_quanda, get_question, get_answer,
                             q_weight, vectorizer)
 
 
@@ -189,10 +187,10 @@ def show_nearest_neighbors(texts, nearest_indexes=None):
         print("  %3d.  T  %s\n  %3d.  O  %s\n" % (idx, txt, nearest_idx, nearest_txt))
 
 ###############################################################################
-def similarity_dict(quandas, one_quanda, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt,
-                    min_sim_val=0.0, max_sim_val=1):
+def similarity_dict(all_quandas, question, answer=None, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt,
+                    min_sim_val=0, max_sim_val=1):
     '''
-    Returns a dict mapping all_texts' indexes to their similarity with this_text,
+    Returns a dict mapping all_quandas' indexes to their similarity with this_text,
         provide their similarity value >= min_sim_val
         similarity_func:    function returning the similariy between two texts (as in sentences)
         min_sim_val:        similarity threshold
@@ -200,11 +198,11 @@ def similarity_dict(quandas, one_quanda, excludes=None, q_weight=1.0, sim_func=c
     if excludes is None:
         excludes = []
     sim_dict = {}
-    for idx, other_quanda in enumerate(quandas):
+    for idx, quanda in enumerate(all_quandas):
         if idx in excludes:
             continue
         try:
-            sim = sim_weighted_qas(one_quanda, other_quanda, q_weight=q_weight, sim_func=sim_func)
+            sim = sim_weighted_qas(question, answer, quanda[1], quanda[2], q_weight=q_weight, sim_func=sim_func)
             if  sim >= min_sim_val:
                 if sim > max_sim_val:
                     sim = max_sim_val
@@ -225,12 +223,13 @@ def nlargest_values(dict_with_comparable_values, count=10):
     '''Returns a list of the greatest values in descending order.  Duplicates permitted.'''
     return heapq.nlargest(count, dict_with_comparable_values.values())
 
-def find_nearest_peers(all_texts, this_text, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5, min_sim_val=0.0):
+def find_nearest_quandas(all_quandas, question, answer=None, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5, min_sim_val=0, max_sim_val=1):
     '''
     Find the N most similar texts to this_text and return a list of (index, similarity) pairs in
     descending order of similarity.
-        all_texts:          the sentences or question-answer-tuples or whatever is to be compared.
-        this_text:          the one to compare against the rest
+        all_quandas:        the sentences or question-answer-tuples or whatever is to be compared.
+        question:           a plain text question
+        answer:             a plain text answer (default None)
         excludes:           list of IDs to exclude from the comparison; e.g. this_text.id if excluding self comparison.
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
@@ -238,11 +237,11 @@ def find_nearest_peers(all_texts, this_text, excludes=None, q_weight=1.0, sim_fu
         max_sim_val:        the initial value of max, or the maximum similariy found so far.
     '''
     assert q_weight >= 0.0
-    sim_dict = similarity_dict(all_texts, this_text, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
+    sim_dict = similarity_dict(all_quandas, question, answer, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val, max_sim_val=max_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
-def find_nearest_peer_lists(quandas, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5,
-    min_sim_val=0.0, id_eq_index=False):
+def find_nearest_qas_lists(quandas, find_nearest_qas=find_nearest_quandas, q_weight=1.0, max_count=5,
+                            min_sim_val=0.0, id_eq_index=False):
     '''
     For each question-and-answer tuple in quandas, find a list of indexes of the most similar Q and A's.
     Returns list of lists of items as in: [[(index, similariy), ...], ...]
@@ -260,18 +259,16 @@ def find_nearest_peer_lists(quandas, q_weight=1.0, sim_func=cosine_sim_txt, max_
             if idx > 0 and idx + 100 != idn:
                 print("ERROR:", (idx + 100), "!=", quanda[0], "at", quanda)
                 raise IndexError
-        nearests[idx] = find_nearest_peers(quandas, quanda, [idx], q_weight=q_weight,
-                                                sim_func=sim_func, max_count=max_count,
-                                                min_sim_val=min_sim_val)
+        nearests[idx] = find_nearest_qas(quandas, quanda, [idx], q_weight=q_weight,
+                                         max_count=max_count, min_sim_val=min_sim_val)
     return nearests
 
-def find_ranked_qa_lists_inclusive(quandas, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5,
+def find_ranked_qa_lists_inclusive(quandas, find_nearest_qas=find_nearest_quandas, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5,
     min_sim_val=0.0, id_eq_index=False):
-    return [find_nearest_peers(quandas, quanda, None, q_weight, sim_func,
-                               max_count, min_sim_val) for quanda in quandas]
+    return [find_nearest_qas(quandas, quanda, None, q_weight, sim_func,
+                             max_count, min_sim_val) for quanda in quandas]
 
-def find_ranked_qa_lists_verbose(quandas, exclude_self=True, q_weight=1.0, sim_func=cosine_sim_txt,
-                                 max_count=6, min_sim_val=0.15):
+def find_ranked_qa_lists_verbose(quandas, find_nearest_qas=find_nearest_quandas, q_weight=1.0, max_count=6, min_sim_val=1.0/6):
     '''
     Returns list of most similar lists.  For each object in quandas, compute the similarity with all
     (other) objects in quandas, and save at most max_count indices and similarity measures in descending
@@ -280,11 +277,7 @@ def find_ranked_qa_lists_verbose(quandas, exclude_self=True, q_weight=1.0, sim_f
     '''
     ranked_lists = None
     beg_time = time.time()
-    if exclude_self:
-        ranked_lists = find_nearest_peer_lists(quandas, q_weight, sim_func, max_count, min_sim_val, id_eq_index=True)
-    else:
-        ranked_lists = find_ranked_qa_lists_inclusive(quandas, q_weight, sim_func, max_count, min_sim_val, id_eq_index=True)
-
+    ranked_lists = find_nearest_qas_lists(quandas, find_nearest_qas, q_weight, max_count, min_sim_val, id_eq_index=True)
     seconds = time.time() - beg_time
     print("Finding all similarity lists (size=%d, count=%d) took %.1f seconds" % (len(quandas), max_count, seconds))
     return ranked_lists
@@ -292,7 +285,7 @@ def find_ranked_qa_lists_verbose(quandas, exclude_self=True, q_weight=1.0, sim_f
 def show_most_sim_texts_list(texts, most_sim_lists=None):
     '''print already-found similarity lists'''
     if most_sim_lists is None:
-        most_sim_lists = find_ranked_qa_lists_verbose(texts)     # use defaults
+        most_sim_lists = find_ranked_qa_lists_verbose(texts, find_nearest_qas=find_nearest_quandas)     # use defaults
     for idx, txt in enumerate(texts):
         most_sim_list = most_sim_lists[idx]
         print("  %3d.  %s" % (idx, txt))
@@ -415,14 +408,14 @@ def save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=0.15, 
 # VECT_MOST_STOPS (DEFAULT-QUERY_WORDS): (size=201, count=6) took 96.3 seconds; score 0.6635
 # TODO: Why do the query words make the score worse?
 # TEST: >>> sim_score_save(fair, sim_func=sim_wosc_nltk.sentence_similarity)
-def sim_score_save(quandas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_txt, max_count=6, min_sim_val=0.15, sort_most_sim=True):
+def sim_score_save(quandas, path="simlists.tsv", find_nearest_qas=find_nearest_quandas,
+                   q_weight=1.0, max_count=6, min_sim_val=0.15, sort_most_sim=True):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''
     beg_time = time.time()
-    most_sim_lists = find_ranked_qa_lists_verbose(quandas, exclude_self=True, q_weight=q_weight,
-                                                    sim_func=sim_func, max_count=max_count,
-                                                    min_sim_val=min_sim_val)
+    most_sim_lists = find_ranked_qa_lists_verbose(quandas, find_nearest_qas, q_weight=q_weight,
+                                                  max_count=max_count, min_sim_val=min_sim_val)
     score = score_most_sim_lists(quandas, most_sim_lists)
     save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=min_sim_val, sort_most_sim=True)
     seconds = time.time() - beg_time
