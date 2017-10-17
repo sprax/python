@@ -75,7 +75,7 @@ def sim_weighted_qas(one_quanda, other_quanda, get_question=second, get_answer=t
         if ans_1 and ans_2:
             try:
                 a_sim = sim_func(ans_1, ans_2)
-                return (q_sim - a_sim) * q_weight - a_sim
+                return (q_sim - a_sim) * q_weight + a_sim
             except ValueError as vex:
                 print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
                 raise vex
