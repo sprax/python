@@ -424,7 +424,7 @@ def sim_score_save(quandas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_s
                                                     sim_func=sim_func, max_count=max_count,
                                                     min_sim_val=min_sim_val)
     score = score_most_sim_lists(quandas, most_sim_lists)
-    save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=min_sim_val, sort_most_sim=False)
+    save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=min_sim_val, sort_most_sim=True)
     seconds = time.time() - beg_time
     print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (len(quandas), max_count,
                                                                                seconds, score))
