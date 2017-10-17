@@ -6,6 +6,7 @@ import string
 import time
 import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
+import pdb
 import qa_csv
 import text_fio
 
@@ -30,7 +31,7 @@ VECT_NO_STOPS = TfidfVectorizer(tokenizer=normalize)
 VECT_MOST_STOPS = TfidfVectorizer(tokenizer=normalize, stop_words=MOST_STOPS)
 
 def remove_stop_words(tokens, stop_words=STOP_WORDS):
-    '''filter out stip words'''
+    '''filter out stop words'''
     return [tok for tok in tokens if tok not in stop_words]
 
 def ident(obj):
@@ -189,7 +190,7 @@ def show_nearest_neighbors(texts, nearest_indexes=None):
 
 ###############################################################################
 def similarity_dict(quandas, one_quanda, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt,
-                    min_sim_val=0.0):
+                    min_sim_val=0.0, max_sim_val=1):
     '''
     Returns a dict mapping all_texts' indexes to their similarity with this_text,
         provide their similarity value >= min_sim_val
@@ -205,6 +206,8 @@ def similarity_dict(quandas, one_quanda, excludes=None, q_weight=1.0, sim_func=c
         try:
             sim = sim_weighted_qas(one_quanda, other_quanda, q_weight=q_weight, sim_func=sim_func)
             if  sim >= min_sim_val:
+                if sim > max_sim_val:
+                    sim = max_sim_val
                 sim_dict[idx] = sim
         except ValueError as ex:
             print("Continuing past error at idx: %d  (%s)" % (idx, ex))
@@ -222,7 +225,7 @@ def nlargest_values(dict_with_comparable_values, count=10):
     '''Returns a list of the greatest values in descending order.  Duplicates permitted.'''
     return heapq.nlargest(count, dict_with_comparable_values.values())
 
-def most_similar_items_list(all_texts, this_text, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5, min_sim_val=0.0):
+def find_nearest_peers(all_texts, this_text, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5, min_sim_val=0.0):
     '''
     Find the N most similar texts to this_text and return a list of (index, similarity) pairs in
     descending order of similarity.
@@ -238,7 +241,7 @@ def most_similar_items_list(all_texts, this_text, excludes=None, q_weight=1.0, s
     sim_dict = similarity_dict(all_texts, this_text, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
-def list_most_sim_qas_list(quandas, exclude_self=True, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5,
+def find_nearest_peer_lists(quandas, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5,
     min_sim_val=0.0, id_eq_index=False):
     '''
     For each question-and-answer tuple in quandas, find a list of indexes of the most similar Q and A's.
@@ -246,44 +249,50 @@ def list_most_sim_qas_list(quandas, exclude_self=True, q_weight=1.0, sim_func=co
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
     '''
-    assert q_weight >= 1.0
-    # similarity_func=cosine_sim_txt
-    if exclude_self:
-        nearests = len(quandas)*[None]
-        for idx, txt in enumerate(quandas):
-            # consistency check:
-            idn = txt[0]
-            assert isinstance(idn, int)
-            if id_eq_index:
-                # print("DBG LMSTL: ", txt)
-                if idx > 0 and idx + 100 != idn:
-                    print("ERROR:", (idx + 100), "!=", txt[0], "at", txt)
-                    raise IndexError
-            nearests[idx] = most_similar_items_list(quandas, txt, [idx], q_weight=q_weight,
-                                                    sim_func=sim_func, max_count=max_count,
-                                                    min_sim_val=min_sim_val)
-        return nearests
-    return [most_similar_items_list(quandas, txt, None, q_weight, sim_func,
-                                    max_count, min_sim_val) for txt in quandas]
+    assert q_weight >= 0.0
+    nearests = len(quandas)*[None]
+    for idx, quanda in enumerate(quandas):
+        # consistency check:
+        idn = quanda[0]
+        assert isinstance(idn, int)
+        if id_eq_index:
+            # print("DBG LMSTL: ", quanda)
+            if idx > 0 and idx + 100 != idn:
+                print("ERROR:", (idx + 100), "!=", quanda[0], "at", quanda)
+                raise IndexError
+        nearests[idx] = find_nearest_peers(quandas, quanda, [idx], q_weight=q_weight,
+                                                sim_func=sim_func, max_count=max_count,
+                                                min_sim_val=min_sim_val)
+    return nearests
 
-def list_most_sim_qas_list_verbose(quandas, exclude_self=True, q_weight=1.0, sim_func=cosine_sim_txt,
-                                   max_count=6, min_sim_val=0.15):
+def find_ranked_qa_lists_inclusive(quandas, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5,
+    min_sim_val=0.0, id_eq_index=False):
+    return [find_nearest_peers(quandas, quanda, None, q_weight, sim_func,
+                               max_count, min_sim_val) for quanda in quandas]
+
+def find_ranked_qa_lists_verbose(quandas, exclude_self=True, q_weight=1.0, sim_func=cosine_sim_txt,
+                                 max_count=6, min_sim_val=0.15):
     '''
     Returns list of most similar lists.  For each object in quandas, compute the similarity with all
     (other) objects in quandas, and save at most max_count indices and similarity measures in descending
     order of similarity, where similiary >= min_sim_val.  If exclude_self is false, compare each object
     with itself as well as the others (sanity check)
     '''
+    ranked_lists = None
     beg_time = time.time()
-    most_sim_list = list_most_sim_qas_list(quandas, exclude_self, q_weight, sim_func, max_count, min_sim_val, id_eq_index=True)
+    if exclude_self:
+        ranked_lists = find_nearest_peer_lists(quandas, q_weight, sim_func, max_count, min_sim_val, id_eq_index=True)
+    else:
+        ranked_lists = find_ranked_qa_lists_inclusive(quandas, q_weight, sim_func, max_count, min_sim_val, id_eq_index=True)
+
     seconds = time.time() - beg_time
     print("Finding all similarity lists (size=%d, count=%d) took %.1f seconds" % (len(quandas), max_count, seconds))
-    return most_sim_list
+    return ranked_lists
 
 def show_most_sim_texts_list(texts, most_sim_lists=None):
     '''print already-found similarity lists'''
     if most_sim_lists is None:
-        most_sim_lists = list_most_sim_qas_list_verbose(texts)     # use defaults
+        most_sim_lists = find_ranked_qa_lists_verbose(texts)     # use defaults
     for idx, txt in enumerate(texts):
         most_sim_list = most_sim_lists[idx]
         print("  %3d.  %s" % (idx, txt))
@@ -353,8 +362,8 @@ def score_most_sim_lists(quandas, most_sim_lists, weights=None):
 def save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=0.15, sort_most_sim=True):
     '''Save ranked most-similar lists to TSV file'''
     isorted = None
+    sim_oix = []
     if sort_most_sim:
-        sim_oix = []
         # TODO: replace with zip
         for idx, sim_list in enumerate(most_sim_lists):
             max_oix = sim_list[0][0]
@@ -365,6 +374,8 @@ def save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=0.15, 
         isorted = [-tup[2] for tup in sorted(sim_oix, reverse=True)]
     else:
         isorted = range(len(quandas))
+
+    print("ISORTED ", len(isorted), ": ", isorted)
 
     out = text_fio.open_out_file(path)
     mix = 0
@@ -380,17 +391,21 @@ def save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=0.15, 
             gold = qax[3] if lqax > 3 else None
         print(idn, qax[1], ansr, gold, sep="\t", file=out)
         for oix, sim in most_sim_list:  # Note: oix = other index, i.e., the index of the gold standard other QAS
-            if sim >= min_sim_val:
+            if sim > min_sim_val:
                 try:
                     # print("IDX: ", idx, " OIX: ", oix, " SIM: ", sim)
-                    sidn = quandas[oix][0]
-                    stxt = quandas[oix][1]
-                    sans = quandas[oix][2] if len(quandas[oix]) > 2 else 'N/A'
-                    sgld = quandas[oix][3] if len(quandas[oix]) > 3 else None
-                    print("\t%3d\t%.5f\t%s\t%s\t%s\t" % (sidn, sim, stxt, sans, sgld), file=out)
+                    quox = quandas[oix]
+                    sidn = quox[0]
+                    stxt = quox[1]
+                    sans = quox[2] if len(quox) > 2 else 'N/A'
+                    sgld = quox[3] if len(quox) > 3 else None
+                    print("\t%3d\t%.5f\t%s\t%s\t%s" % (sidn, sim, stxt, sans, sgld), file=out)
                 except Exception as ex:
                     print("ERROR AT MIX {}: idx {}  qax {},  err: {}\n".format(mix, idx, qax, ex))
-                    raise IndexError
+
+                    pass    # raise IndexError
+        if sort_most_sim:
+            print("TUP {:3}:\t {}".format(mix, sim_oix[idx]))
         print(file=out)
         mix += 1
     if path != '-':
@@ -400,12 +415,12 @@ def save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=0.15, 
 # VECT_MOST_STOPS (DEFAULT-QUERY_WORDS): (size=201, count=6) took 96.3 seconds; score 0.6635
 # TODO: Why do the query words make the score worse?
 # TEST: >>> sim_score_save(fair, sim_func=sim_wosc_nltk.sentence_similarity)
-def sim_score_save(quandas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_txt, max_count=6, min_sim_val=0.15):
+def sim_score_save(quandas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_txt, max_count=6, min_sim_val=0.15, sort_most_sim=True):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''
     beg_time = time.time()
-    most_sim_lists = list_most_sim_qas_list_verbose(quandas, exclude_self=True, q_weight=q_weight,
+    most_sim_lists = find_ranked_qa_lists_verbose(quandas, exclude_self=True, q_weight=q_weight,
                                                     sim_func=sim_func, max_count=max_count,
                                                     min_sim_val=min_sim_val)
     score = score_most_sim_lists(quandas, most_sim_lists)
