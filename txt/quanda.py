@@ -11,7 +11,9 @@ import nltk
 import text_ops
 from utf_print import utf_print
 from xdv import xdv, set_xdv_verbosity
+from collections import namedtuple
 
+Quat = namedtuple("Quat", "id question answer label")
 
 class PosFilter:
     '''Filter out some parts of speech, such as adverbs'''

@@ -61,7 +61,7 @@ def third(obj):
 
 def cosine_sim_txt(txt_1, txt_2, vectorizer=VECTORIZER):
     '''dot-product (projection) similarity'''
-    tfidf = vectorizer.fit_transform([txt_1), txt_2)])
+    tfidf = vectorizer.fit_transform([txt_1, txt_2])
     return ((tfidf * tfidf.T).A)[0, 1]
 
 def sim_weighted_qas(one_quanda, other_quanda, get_question=second, get_answer=third, q_weight=0.5,

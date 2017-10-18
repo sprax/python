@@ -61,13 +61,13 @@ def third(obj):
 
 def cosine_sim_txt(txt_1, txt_2, vectorizer=VECTORIZER):
     '''dot-product (projection) similarity'''
-    tfidf = vectorizer.fit_transform([txt_1), txt_2)])
+    tfidf = vectorizer.fit_transform([txt_1, txt_2])
     return ((tfidf * tfidf.T).A)[0, 1]
 
-def sim_weighted_qas(qst_1, ans_1, qst_2, ans_2, q_weight=0.5,
-                     sim_func=cosine_sim_txt):
+def sim_weighted_qas(qst_1, ans_1, qst_2, ans_2, q_weight=0.5, sim_func=cosine_sim_txt):
     '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
     assert 0.0 < q_weight and q_weight <= 1.0
+    # print("SIM_WEIGHTED_QAS(", qst_1, ans_1, qst_2, ans_2, q_weight, sim_func, ")")
     q_sim = sim_func(qst_1, qst_2)
     if q_weight < 1.0:
         if ans_1 and ans_2:
@@ -202,13 +202,15 @@ def similarity_dict(all_quandas, question, answer=None, excludes=None, q_weight=
         if idx in excludes:
             continue
         try:
+            # print("SIM_WEIGHTED_QAS(", question, answer, quanda[1], quanda[2], q_weight, sim_func, ")")
+            # # pdb.set_trace()
             sim = sim_weighted_qas(question, answer, quanda[1], quanda[2], q_weight=q_weight, sim_func=sim_func)
             if  sim >= min_sim_val:
                 if sim > max_sim_val:
                     sim = max_sim_val
                 sim_dict[idx] = sim
         except ValueError as ex:
-            print("Continuing past error at idx: %d  (%s)" % (idx, ex))
+            print("Continuing past error at idx: {}  ({})  ({})".format(idx, ex, all_quandas[idx]))
     return  sim_dict
 
 def nlargest_items_by_value(dict_with_comparable_values, count=10):
@@ -259,7 +261,7 @@ def find_nearest_qas_lists(quandas, find_nearest_qas=find_nearest_quandas, q_wei
             if idx > 0 and idx + 100 != idn:
                 print("ERROR:", (idx + 100), "!=", quanda[0], "at", quanda)
                 raise IndexError
-        nearests[idx] = find_nearest_qas(quandas, quanda, [idx], q_weight=q_weight,
+        nearests[idx] = find_nearest_qas(quandas, quanda[1], quanda[2], [idx], q_weight=q_weight,
                                          max_count=max_count, min_sim_val=min_sim_val)
     return nearests
 

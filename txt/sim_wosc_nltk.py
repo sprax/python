@@ -334,3 +334,8 @@ def smoke_test():
                                                  sentence_similarity(sent_pair[0], sent_pair[1], True),
                                                  sent_pair[2], sent_pair[0], ' '*(spacing - len(sent_pair[0])),
                                                  sent_pair[1]))
+
+
+###############################################################################
+if __name__ == '__main__':
+    smoke_test()
