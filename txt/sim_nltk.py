@@ -369,8 +369,7 @@ def save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=0.15, 
         isorted = [-tup[2] for tup in sorted(sim_oix, reverse=True)]
     else:
         isorted = range(len(quandas))
-
-    print("ISORTED ", len(isorted), ": ", isorted)
+    # print("ISORTED ", len(isorted), ": ", isorted)
 
     out = text_fio.open_out_file(path)
     mix = 0
@@ -399,8 +398,8 @@ def save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=0.15, 
                     print("ERROR AT MIX {}: idx {}  qax {},  err: {}\n".format(mix, idx, qax, ex))
 
                     pass    # raise IndexError
-        if sort_most_sim:
-            print("TUP {:3}:\t {}".format(mix, sim_oix[idx]))
+        # if sort_most_sim:
+        #     print("TUP {:3}:\t {}".format(mix, sim_oix[idx]))
         print(file=out)
         mix += 1
     if path != '-':
