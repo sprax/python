@@ -42,7 +42,7 @@ def csv_read_qa(path, newline=None, delimiter=',', quotechar='"'):
                 quat = Quat(*row)
                 quats.append(quat)
     except Exception as ex:
-        print("csv_read_qa failed to read Quats from ({}) with error: {}".format(path, ex))
+        print("csv_read_qa failed to read Quats from ({}) with error: ({})".format(path, ex))
     return quats
 
 def csv_write_qa(quats, path, newline=None, delimiter=',', quotechar='"'):
