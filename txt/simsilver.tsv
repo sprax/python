@@ -85,7 +85,7 @@
 187	What is the name of the ship in the story?	The Pequod.	439
 188	What is the ship that rescues Ishmael at the end of the novel?	Rachel.	290
 189	What is the source of Ahab's fatal flaw?	The damage he's suffered.	440
-190	What is the study of whales called?	Cetology.	174
+190	What is the study of whales called?	Cetology.	441
 191	What is the term for a whale that has already been harpooned or marked by the crew of a specific ship?	Fast-fish.	398
 192	What keeps Ishmael afloat after the Pequod sinks?	A coffin.	228
 193	What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford.	222
@@ -93,7 +93,7 @@
 195	What religion are the owners of the ship?	Quakers.	264
 196	What religious sect do Peleg and Bildad belong to?	Quakers.	296
 197	What shape does the ship's carpenter make Quequeeq's coffin?	A canoe.	400
-198	What type of whale are they hunting?	Sperm whales.	112
+198	What type of whale are they hunting?	Sperm whales.	442
 199	What was Ahab using to attack Moby Dick when he lost his leg?	A knife.	367
 200	What was Queequeg on his home island?	A prince.	253
 201	What was the name of the whaling ship on which Melville spent 18 months between 1841 and 1842?	Achusnet.	399
@@ -184,7 +184,6 @@
 286	Who wears a whale-penis pelt while slicing pieces of blubber for the pots?	The mincer.	161
 287	What is the world capital of whaling?	Nantucket.	271
 288	To whom did Melville dedicate Moby Dick?	Nathaniel Hawthorne.	223
-289	What is the scientific study of whales called?	Cetology.	190
 290	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	188
 291	What flavor permeates all others on Nantucket?	Fish.	160
 292	Where is Ahab's scar that resembles a lightning bolt?	On Ahab's cheek.	162
@@ -323,6 +322,7 @@
 426	What about Steel Kit?	He is a popular sailor who leads a mutiny onboard the Town-Ho. He secretly plans to kill Radney, the most hated mate on the Town-Ho.	256
 
 334	What was meant by the term 'specksynder'?	The chief harpooner and sometime captain.	134
+441	What is the term for the scientific study of whales?	Cetology.	190
 
 427	What is Fedallah's turban made of?	His own hair.	127
 428	Pip describes the doubloon on the mast as the ship's what?	Navel.	145
@@ -338,3 +338,4 @@
 438	Who is Stubb?	Second mate of the Pequod, from Cape Cod.	257
 439	What is the name of the ship in the story?	The Pequod.	187
 440	What is the source of Ahab's fatal flaw?	The damage he's suffered.	189
+442	What type of whale are they hunting?	Sperm whales.	198
