@@ -361,8 +361,11 @@ def save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=0.15, 
     if sort_most_sim:
         # TODO: replace with zip
         for idx, sim_list in enumerate(most_sim_lists):
-            max_oix = sim_list[0][0]
-            max_sim = sim_list[0][1]
+            # print("QUAT:", idx, quandas[idx])
+            # print("SIM_LIST:", sim_list)
+            len_lst = len(sim_list)
+            max_oix = sim_list[0][0] if len_lst > 0 else -1
+            max_sim = sim_list[0][1] if len_lst > 1 else 0
             sum_sim = sum([y[1] for y in sim_list])
             sim_oix.append((max_sim, sum_sim, -idx, -max_oix))
         # TODO: sorted with 2 keys?? FIXME: should sort on all keys!!
@@ -410,7 +413,7 @@ def save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=0.15, 
 # TODO: Why do the query words make the score worse?
 # TEST: >>> sim_score_save(fair, sim_func=sim_wosc_nltk.sentence_similarity)
 def sim_score_save(quandas, path="simlists.tsv", find_nearest_qas=find_nearest_quandas,
-                   q_weight=1.0, max_count=6, min_sim_val=0.15, sort_most_sim=True):
+                   q_weight=1.0, max_count=6, min_sim_val=0.15, sort_most_sim=False):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''
@@ -418,7 +421,7 @@ def sim_score_save(quandas, path="simlists.tsv", find_nearest_qas=find_nearest_q
     most_sim_lists = find_ranked_qa_lists_verbose(quandas, find_nearest_qas, q_weight=q_weight,
                                                   max_count=max_count, min_sim_val=min_sim_val)
     score = score_most_sim_lists(quandas, most_sim_lists)
-    save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=min_sim_val, sort_most_sim=True)
+    save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
     print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (len(quandas), max_count,
                                                                                seconds, score))
