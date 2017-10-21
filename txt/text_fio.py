@@ -54,6 +54,41 @@ def read_text_lines(file_spec, charset='utf8'):
             if line:
                 yield line
 
+def sort_numbered_lines_with_blanks(inpath, outpath, charset='utf8'):
+    '''read numbered lines and output them in sorted order, with blanks for skipped numbers.'''
+    lines = sorted(read_text_lines(inpath, charset=charset))
+    prev = int(lines[0].split()[0]) - 1
+    with open(outpath, "w") as outfile:
+        for line in lines:
+            toks = line.split()
+            lnum = int(tok[0])
+            rnum = int(tok[-1])
+            prev += 1
+            if lnum != prev:
+                print("LNUM != PREV:", lnum, prev, "AT: ", line)
+                print(file=outfile)
+            print(line, file=outfile)
+            prev = lnum
+
+
+def renumber_lines_with_ids(inpath, outpath, charset='utf8'):
+    '''read numbered lines and output them in sorted order, with blanks for skipped numbers.'''
+    lines = sorted(read_text_lines(inpath, charset=charset))
+    prev = int(lines[0].split()[0]) - 1
+    with open(outpath, "w") as outfile:
+        for line in lines:
+            toks = line.split()
+            lnum = int(tok[0])
+            rnum = int(tok[-1])
+            prev += 1
+            if lnum != prev:
+                print("LNUM != PREV:", lnum, prev, "AT: ", line)
+                print(file=outfile)
+            print(line, file=outfile)
+            prev = lnum
+
+
+
 def pickle_file(in_path, out_path, data_struct, data_adder, charset='utf8'):
     '''read in_file into data_struct via data_adder then save to out_path'''
     lines_in = 0
