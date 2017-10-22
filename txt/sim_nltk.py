@@ -279,6 +279,7 @@ def find_ranked_qa_lists_verbose(quandas, find_nearest_qas=find_nearest_quandas,
     '''
     ranked_lists = None
     beg_time = time.time()
+    import pdb; pdb.set_trace()
     ranked_lists = find_nearest_qas_lists(quandas, find_nearest_qas, q_weight, max_count, min_sim_val, id_eq_index=False)
     seconds = time.time() - beg_time
     print("Finding all similarity lists (size=%d, count=%d) took %.1f seconds" % (len(quandas), max_count, seconds))
