@@ -54,38 +54,48 @@ def read_text_lines(file_spec, charset='utf8'):
             if line:
                 yield line
 
-def sort_numbered_lines_with_blanks(inpath, outpath, charset='utf8'):
+def sort_numbered_lines_with_blanks(inpath, outpath, verbose=True, charset='utf8'):
     '''read numbered lines and output them in sorted order, with blanks for skipped numbers.'''
     lines = sorted(read_text_lines(inpath, charset=charset))
     prev = int(lines[0].split()[0]) - 1
     with open(outpath, "w") as outfile:
         for line in lines:
             toks = line.split()
-            lnum = int(tok[0])
-            rnum = int(tok[-1])
+            lnum = int(toks[0])
+            rnum = int(toks[-1])
             prev += 1
             if lnum != prev:
-                print("LNUM != PREV:", lnum, prev, "AT: ", line)
+                if verbose:
+                    print("LNUM != PREV:", lnum, prev, "AT: ", line)
                 print(file=outfile)
             print(line, file=outfile)
             prev = lnum
 
 
-def renumber_lines_with_ids(inpath, outpath, charset='utf8'):
+def renumber_lines_and_ids(inpath, outpath, offset=100, verbose=True, sep="\t", charset='utf8'):
     '''read numbered lines and output them in sorted order, with blanks for skipped numbers.'''
-    lines = sorted(read_text_lines(inpath, charset=charset))
-    prev = int(lines[0].split()[0]) - 1
+    lines, tran = [], {}
+    for idx, line in enumerate(read_text_lines(inpath, charset=charset)):
+        toks = line.split()
+        lnum = int(toks[0])
+        rnum = int(toks[-1])
+        onum = idx + offset
+        if lnum != onum:
+            if verbose:
+                print("LNUM != ONUM:", lnum, onum, "AT: ", line)
+            if lnum in tran:
+                raise Exception("ERROR: lnum %d already encountered!" % lnum)
+            tran[lnum] = onum
+        toks[0] = onum
+        toks[-1] = rnum
+        lines.append((line, toks))
     with open(outpath, "w") as outfile:
-        for line in lines:
-            toks = line.split()
-            lnum = int(tok[0])
-            rnum = int(tok[-1])
-            prev += 1
-            if lnum != prev:
-                print("LNUM != PREV:", lnum, prev, "AT: ", line)
-                print(file=outfile)
-            print(line, file=outfile)
-            prev = lnum
+        for line, toks in lines:
+            lnum = toks[0]
+            rnum = toks[-1]
+            if rnum in tran:
+                rnum = tran[rnum]
+            print(lnum, line[4:-4], rnum, sep=sep, file=outfile)
 
 
 
