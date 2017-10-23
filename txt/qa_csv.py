@@ -48,7 +48,7 @@ def csv_read_qa(path, maxrows=0, newline=None, delimiter=',', quotechar='"'):
                 else:
                     maxrows -= 1
     except IOError as ex:
-            print("csv_read_qa failed to read Quats from ({}) with error: ({})".format(path, ex))
+        print("csv_read_qa failed to read Quats from ({}) with error: ({})".format(path, ex))
     return quats
 
 def csv_write_qa(quats, path, newline=None, delimiter=',', quotechar='"'):
