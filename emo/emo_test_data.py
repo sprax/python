@@ -71,3 +71,12 @@ SENTENCES = [
     # "The mountain biking woman biked from the upper left arrow to the lower right arrow."
     "Yeah right and oh thanks, Obama! "
 ]
+
+EMOJI_SENTENCES = {
+    "⛏🔼 @ 🕛❔":    "Pick up at noon?"
+}
+
+
+SYMBOL_SENTENCES = [
+    ":pick: :arrow_up: @ :clock12: ?",
+]
