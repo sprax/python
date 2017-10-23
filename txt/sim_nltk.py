@@ -4,9 +4,10 @@
 import heapq
 import string
 import time
+# import pdb
+
 import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
-import pdb
 import qa_csv
 import text_fio
 
@@ -66,7 +67,7 @@ def cosine_sim_txt(txt_1, txt_2, vectorizer=VECTORIZER):
 
 def sim_weighted_qas(qst_1, ans_1, qst_2, ans_2, q_weight=0.5, sim_func=cosine_sim_txt):
     '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
-    assert 0.0 < q_weight and q_weight <= 1.0
+    assert q_weight > 0.0 and q_weight <= 1.0
     # print("SIM_WEIGHTED_QAS(", qst_1, ans_1, qst_2, ans_2, q_weight, sim_func, ")")
     q_sim = sim_func(qst_1, qst_2)
     if q_weight < 1.0:
@@ -81,7 +82,7 @@ def sim_weighted_qas(qst_1, ans_1, qst_2, ans_2, q_weight=0.5, sim_func=cosine_s
 
 def cosine_sim_quanda(one_quanda, other_quanda, get_question=second, get_answer=third, q_weight=0.5, vectorizer=VECTORIZER):
     '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
-    assert 0 < q_weight and q_weight <= 1
+    assert q_weight > 0 and q_weight <= 1
     q_sim = cosine_sim_txt(get_question(one_quanda), get_question(other_quanda), vectorizer)
     if q_weight >= 1.0:
         return q_sim
@@ -97,10 +98,10 @@ def cosine_sim_quanda(one_quanda, other_quanda, get_question=second, get_answer=
     return q_sim
 
 def cosine_sim_quanda_2(one_quanda, other_quanda, get_question=second, get_answer=third,
-                     q_weight=0.5, vectorizer=VECT_NO_STOPS):
+                        q_weight=0.5, vectorizer=VECT_NO_STOPS):
     '''dot-product (projection) similarity combining similarities of questions
     and, if available, answers'''
-    assert 0.0 < q_weight and q_weight <= 1.0
+    assert q_weight > 0.0 and q_weight <= 1.0
     if q_weight >= 1.0:
         print("Degenerate q_weight: ", q_weight)
         return cosine_sim_txt(get_question(one_quanda), get_question(other_quanda), vectorizer)
@@ -119,11 +120,10 @@ def cosine_sim_quanda_2(one_quanda, other_quanda, get_question=second, get_answe
     return 0.0
 
 def cosine_sim_quanda_ms(one_quanda, other_quanda, get_question=second, get_answer=third,
-                      q_weight=0.5, vectorizer=VECT_MOST_STOPS):
+                         q_weight=0.5, vectorizer=VECT_MOST_STOPS):
     '''Returns weighted Q & A similarity between two question-answer pairs'''
     return cosine_sim_quanda_2(one_quanda, other_quanda, get_question, get_answer,
-                            q_weight, vectorizer)
-
+                               q_weight, vectorizer)
 
 def smoke_test():
     '''Tests that basic sentence similarity functionality works, or at least does not blow-up'''
@@ -243,7 +243,7 @@ def find_nearest_quandas(all_quandas, question, answer=None, excludes=None, q_we
     return nlargest_items_by_value(sim_dict, max_count)
 
 def find_nearest_qas_lists(quandas, find_nearest_qas=find_nearest_quandas, q_weight=1.0, max_count=5,
-                            min_sim_val=0.0, id_eq_index=False):
+                           min_sim_val=0.0, id_eq_index=False):
     '''
     For each question-and-answer tuple in quandas, find a list of indexes of the most similar Q and A's.
     Returns list of lists of items as in: [[(index, similariy), ...], ...]
@@ -266,7 +266,7 @@ def find_nearest_qas_lists(quandas, find_nearest_qas=find_nearest_quandas, q_wei
     return nearests
 
 def find_ranked_qa_lists_inclusive(quandas, find_nearest_qas=find_nearest_quandas, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5,
-    min_sim_val=0.0, id_eq_index=False):
+                                   min_sim_val=0.0):
     return [find_nearest_qas(quandas, quanda, None, q_weight, sim_func,
                              max_count, min_sim_val) for quanda in quandas]
 
