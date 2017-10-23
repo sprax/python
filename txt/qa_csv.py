@@ -64,10 +64,10 @@ def csv_write_qa(quats, path, newline=None, delimiter=',', quotechar='"'):
     except IOError as ex:
         print("csv_write_qa failed to write Quats to ({}) with error: {}".format(path, ex))
 
-def add_offset(inpath, outpath, offset=100, newline=None, delimiter=',', quotechar='"'):
+def add_offset(inpath, outpath, offset=100, delimiter=',', quotechar='"'):
     '''Add a fixed offset to the indices in all QuandA rows.'''
-    quats = csv_read_qa(inpath, newline=newline, delimiter=delimiter, quotechar=quotechar)
+    quats = csv_read_qa(inpath, delimiter=delimiter, quotechar=quotechar)
     for qax in quats:
         qax[0] = int(qax[0]) + offset
         qax[3] = int(qax[3]) + offset
-    csv_write_qa(quats, outpath, newline=newline, delimiter=delimiter, quotechar=quotechar)
+    csv_write_qa(quats, outpath, delimiter=delimiter, quotechar=quotechar)
