@@ -430,7 +430,7 @@ def sim_score_save(train_quats, trial_quats, path="simlists.tsv", find_nearest_q
                                                                                seconds, score))
     return score, most_sim_lists
 
-def sim_test_to_trained(all_quats, n_train, path="simlists.tsv", find_nearest_qas=find_nearest_quats,
+def match_trials_to_trained(all_quats, n_train, path="simlists.tsv", find_nearest_qas=find_nearest_quats,
                    q_weight=1.0, max_count=6, min_sim_val=0.15, sort_most_sim=False):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
