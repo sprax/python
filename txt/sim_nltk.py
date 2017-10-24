@@ -372,13 +372,13 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, most_sim_lists, m
         # TODO: sorted with 2 keys?? FIXME: should sort on all keys!!
         isorted = [-tup[2] for tup in sorted(sim_oix, reverse=True)]
     else:
-        isorted = range(len(quats))
+        isorted = range(len(trial_quats))
     # print("ISORTED ", len(isorted), ": ", isorted)
 
     out = text_fio.open_out_file(path)
     mix = 0
     for idx in isorted:
-        qax = quats[idx]
+        qax = trial_quats[idx]
         idn = qax[0]
         most_sim_list = most_sim_lists[idx]
         lqax, ansr = len(qax), 'N/A'
@@ -392,7 +392,7 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, most_sim_lists, m
             if sim > min_sim_val:
                 try:
                     # print("IDX: ", idx, " OIX: ", oix, " SIM: ", sim)
-                    quox = quats[oix]
+                    quox = train_quats[oix]
                     sidn = quox[0]
                     stxt = quox[1]
                     sans = quox[2] if len(quox) > 2 else 'N/A'
@@ -413,16 +413,18 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, most_sim_lists, m
 # VECT_MOST_STOPS (DEFAULT-QUERY_WORDS): (size=201, count=6) took 96.3 seconds; score 0.6635
 # TODO: Why do the query words make the score worse?
 # TEST: >>> sim_score_save(fair, sim_func=sim_wosc_nltk.sentence_similarity)
-def sim_score_save(all_quats, path="simlists.tsv", find_nearest_qas=find_nearest_quats,
+def sim_score_save(train_quats, trial_quats, path="simlists.tsv", find_nearest_qas=find_nearest_quats,
                    q_weight=1.0, max_count=6, min_sim_val=0.15, sort_most_sim=False):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''
     beg_time = time.time()
+    train_quats = all_quats[:n_train]
+    trial_quats = all_quats[n_train:]
     most_sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, q_weight=q_weight,
                                           max_count=max_count, min_sim_val=min_sim_val)
     score = score_most_sim_lists(train_quats, trial_quats, most_sim_lists)
-    save_most_sim_qa_lists_tsv(all_quats, path, most_sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, most_sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
     print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (len(all_quats), max_count,
                                                                                seconds, score))
@@ -439,9 +441,9 @@ def sim_test_to_trained(all_quats, n_train, path="simlists.tsv", find_nearest_qa
     most_sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, q_weight=q_weight,
                                           max_count=max_count, min_sim_val=min_sim_val)
     score = score_most_sim_lists(train_quats, trial_quats, most_sim_lists)
-    save_most_sim_qa_lists_tsv(all_quats, path, most_sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, most_sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
-    print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (len(quats), max_count,
+    print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (len(all_quats), max_count,
                                                                                seconds, score))
     return score, most_sim_lists
 
