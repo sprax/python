@@ -25,7 +25,7 @@ def csv_write(rows, path, newline=None, delimiter=',', quotechar='"'):
     except IOError as ex:
         print("csv_write_qa failed to write rows to ({}) with error: {}".format(path, ex))
 
-def csv_read_qa(path, maxrows=0, newline=None, delimiter=',', quotechar='"'):
+def csv_read_qa(path, maxrows=0, newline=None, delimiter='\t', quotechar='"'):
     ''' Returns a list of quats (question-answer tuples) read from a CSV file. '''
     quats = []
     try:
@@ -51,7 +51,7 @@ def csv_read_qa(path, maxrows=0, newline=None, delimiter=',', quotechar='"'):
         print("csv_read_qa failed to read Quats from ({}) with error: ({})".format(path, ex))
     return quats
 
-def csv_write_qa(quats, path, newline=None, delimiter=',', quotechar='"'):
+def csv_write_qa(quats, path, newline=None, delimiter='\t', quotechar='"'):
     ''' Write a list of (question, answer)-tuples to a CSV file. '''
     try:
         with open(path, "w", newline=newline) as csv_file:

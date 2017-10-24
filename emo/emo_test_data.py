@@ -79,4 +79,5 @@ EMOJI_SENTENCES = {
 
 SYMBOL_SENTENCES = [
     ":pick: :arrow_up: @ :clock12: ?",
+    ":expressionless: :arrow_right: :coffee: :grimacing: :arrow_right: :coffin: (edited)",
 ]
