@@ -72,17 +72,18 @@ def reorder_lines_and_ids(inpath, outpath, offset=200, verbose=True, sep="\t", c
                 print("RNUM != ONUM:", rnum, onum, "AT: ", line)
             if rnum in tran:
                 raise Exception("ERROR: rnum %d already encountered!" % rnum)
-        tran[rnum] = onum
-        toks[0] = onum
+            tran[rnum] = onum
+            rnum = onum
+        toks[0] = lnum
         toks[-1] = rnum
         lines.append((line, toks))
 
     with open(outpath, "w") as outfile:
-        for line, toks in lines:
+        for idx, line, toks in enumerate(lines):
             lnum = toks[0]
             rnum = toks[-1]
-            if idx < offset and rnum in tran:
-                rnum = tran[rnum]
-            elif lnum in tran:
+            # if idx < offset and rnum in tran:
+            #     rnum = tran[rnum]
+            if idx >= offset and lnum in tran:
                 lnum = tran[lnum]
             print(lnum, line[4:-4], rnum, sep=sep, file=outfile)
