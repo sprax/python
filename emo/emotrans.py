@@ -71,7 +71,7 @@ import emotuples as ET
 import inflection
 import text_fio
 import text_regex
-from emo_data import SENTENCES
+from emodata import SENTENCES
 # import sylcount
 
 DEFAULT_SENTENCE = '"Rocks and waves may rock the boat," she said, "but only you can tip the crew!!"'
