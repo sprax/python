@@ -431,19 +431,20 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, sim_lists, min_si
 # VECT_MOST_STOPS (DEFAULT-QUERY_WORDS): (size=201, count=6) took 96.3 seconds; score 0.6635
 # TODO: Why do the query words make the score worse?
 # TEST: >>> sim_score_save(fair, sim_func=sim_wosc_nltk.sentence_similarity)
-def sim_score_save(train_quats, trial_quats, path="simlists.tsv", find_nearest_qas=find_nearest_quats,
-                   q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False):
+def sim_score_save(all_quats, path="simlists.tsv", find_nearest_qas=find_nearest_quats,
+                   q_weight=1.0, max_count=6, min_sim_val=0.15, sort_most_sim=False):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''
+    size = len(all_quats)
     beg_time = time.time()
     sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, q_weight=q_weight,
-                                          max_count=max_count, min_sim_val=min_sim_val)
+                                     max_count=max_count, min_sim_val=min_sim_val)
     score = score_most_sim_lists(train_quats, trial_quats, sim_lists)
-    save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    save_most_sim_qa_lists_tsv(all_quats, path, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
-    print("sim_score_save(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f" % (
-        len(train_quats), len(trial_quats), max_count, seconds, score))
+    print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (size, max_count,
+                                                                               seconds, score))
     return score, sim_lists
 
 def match_trials_to_trained(train_quats, trial_quats, path="simlists.tsv", find_nearest_qas=find_nearest_quats,
