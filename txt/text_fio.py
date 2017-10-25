@@ -72,8 +72,8 @@ def sort_numbered_lines_with_blanks(inpath, outpath, verbose=True, charset='utf8
             prev = lnum
 
 
-def renumber_lines_and_ids(inpath, outpath, offset=100, verbose=True, sep="\t", charset='utf8'):
-    '''read numbered lines and output them in sorted order, with blanks for skipped numbers.'''
+def pack_lines_and_ids(inpath, outpath, offset=100, verbose=True, sep="\t", charset='utf8'):
+    '''Renumber lines to fill in any gaps and output them in sorted order.'''
     lines, tran = [], {}
     for idx, line in enumerate(read_text_lines(inpath, charset=charset)):
         toks = line.split()
@@ -96,7 +96,6 @@ def renumber_lines_and_ids(inpath, outpath, offset=100, verbose=True, sep="\t", 
             if rnum in tran:
                 rnum = tran[rnum]
             print(lnum, line[4:-4], rnum, sep=sep, file=outfile)
-
 
 
 def pickle_file(in_path, out_path, data_struct, data_adder, charset='utf8'):
