@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Sprax Lines       2016.12.27
-'''Filter POS-tagged text'''
+'''QUAT = Question Und Answer Tuple'''
 
 from collections import namedtuple
 

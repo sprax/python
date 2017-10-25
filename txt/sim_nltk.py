@@ -206,7 +206,7 @@ def show_nearest_neighbors(texts, nearest_indexes=None):
 
 ###############################################################################
 def similarity_dict(train_quats, question, answer=None, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt,
-                    min_sim_val=0, max_sim_val=1):
+                    min_sim_val=0):
     '''
     Returns a dict mapping train_quats' indexes to their similarity with this_text,
         provide their similarity value >= min_sim_val
@@ -224,8 +224,8 @@ def similarity_dict(train_quats, question, answer=None, excludes=None, q_weight=
             # # pdb.set_trace()
             sim = sim_weighted_qas(question, answer, quat[1], quat[2], q_weight=q_weight, sim_func=sim_func)
             if  sim >= min_sim_val:
-                if sim > max_sim_val:
-                    sim = max_sim_val
+                if sim > 1:
+                    sim = 1
                 sim_dict[idx] = sim
         except ValueError as ex:
             print("Continuing past error at idx: {}  ({})  ({})".format(idx, ex, all_quats[idx]))
@@ -447,7 +447,7 @@ def sim_score_save(all_quats, path="simlists.tsv", find_nearest_qas=find_nearest
                                                                                seconds, score))
     return score, sim_lists
 
-def match_trials_to_trained(train_quats, trial_quats, path="simlists.tsv", find_nearest_qas=find_nearest_quats,
+def match_trials_to_trained(train_quats, trial_quats, path="matched_ttt.tsv", find_nearest_qas=find_nearest_quats,
                             q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
@@ -461,6 +461,26 @@ def match_trials_to_trained(train_quats, trial_quats, path="simlists.tsv", find_
     print("match_trials_to_trained(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f" % (
         len(train_quats), len(trial_quats), max_count, seconds, score))
     return score, sim_lists
+
+
+# TODO: use kwargs for a bag of parameters.
+def match_quats_to_model(model, trial_quats, path="matched_qtm.tsv", q_weight=1.0, max_count=6, min_sim_val=0):
+    '''Compute similar Q&A's using a model, score them against a gold standard, and save
+    the list of best matches to text file for further work.  The model object must implement:
+        find_nearest_quats(quat, q_weight, max_count)
+        get_dev_quat(index)
+        get_all_quats()
+    assumed, and the score is returned, not saved.'''
+    beg_time = time.time()
+    sim_lists = find_ranked_qa_lists(model, trial_quats, q_weight=q_weight, max_count=max_count, min_sim_val=min_sim_val)
+    train_quats = model.get_all_quats()
+    score = score_most_sim_lists(train_quats, trial_quats, sim_lists)
+    save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    seconds = time.time() - beg_time
+    print("match_trials_to_trained(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f" % (
+        len(train_quats), len(trial_quats), max_count, seconds, score))
+    return score, sim_lists
+
 
 ###############################################################################
 # >>> quats = sc.csv_read_qa("simsilver.tsv", delimiter="\t")
