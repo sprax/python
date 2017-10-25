@@ -125,6 +125,24 @@ def cosine_sim_quanda_ms(one_quanda, other_quanda, get_question=second, get_answ
     return cosine_sim_quanda_2(one_quanda, other_quanda, get_question, get_answer,
                                q_weight, vectorizer)
 
+def unit_clip(value):
+    ''' Clip value to [0, 1] '''
+    if value > 1:
+        return 1
+    if value < 0:
+        return 0
+    return value
+
+def unit_clip_verbose(value):
+    ''' Verbosely clip value to [0, 1] '''
+    if value > 1:
+        print("unit_clip_verbose: {} -> 1".format(value))
+        return 1
+    if value < 0:
+        print("unit_clip_verbose: {} -> 0".format(value))
+        return 0
+    return value
+
 def smoke_test():
     '''Tests that basic sentence similarity functionality works, or at least does not blow-up'''
     sent_1 = 'a little bird'
@@ -285,19 +303,19 @@ def find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas=find_nearest
     print("Finding all similarity lists (train %d, trial %d, nears %d) took %.1f seconds" % (len(train_quats), len(trial_quats), max_count, seconds))
     return ranked_lists
 
-def show_most_sim_texts_list(texts, most_sim_lists=None):
+def show_most_sim_texts_list(texts, sim_lists=None):
     '''print already-found similarity lists'''
-    if most_sim_lists is None:
-        most_sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas=find_nearest_quats)     # use defaults
+    if sim_lists is None:
+        sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas=find_nearest_quats)     # use defaults
     for idx, txt in enumerate(texts):
-        most_sim_list = most_sim_lists[idx]
+        most_sim_list = sim_lists[idx]
         print("  %3d.  %s" % (idx, txt))
         for oix, sim in most_sim_list:
             print("        %3d   %.5f   %s" % (oix, sim, texts[oix]))
         print()
-    return most_sim_lists
+    return sim_lists
 
-def distance_counts(train_quats, trial_quats, most_sim_lists, max_dist):
+def distance_counts(train_quats, trial_quats, sim_lists, max_dist):
     '''
     Returns a list of miss-distance counts: how many missed the gold standard by 0 (exact match),
     how many missed it by one (as in the gold standard got the second highest similarity score)
@@ -306,7 +324,7 @@ def distance_counts(train_quats, trial_quats, most_sim_lists, max_dist):
     '''
     dist_counts = (max_dist + 1) * [0]
     gold_scored = 0
-    for trial_quat, sim_list in zip(trial_quats, most_sim_lists):
+    for trial_quat, sim_list in zip(trial_quats, sim_lists):
         if len(trial_quat) > 3 and trial_quat[3]:
             try:
                 gold = int(trial_quat[3])
@@ -337,31 +355,31 @@ def score_distance_counts(dist_counts, weights):
     assert len(weights) > 0 and weights[0] == 1.0
     assert len(weights) < len(dist_counts)
     gold_scored = dist_counts[-1]
-    # print("DBG SDC DCS:", dist_counts)
-    # print("DBG SDC WTS:", weights)
+    print("DBG SDC DCS:", dist_counts)
+    print("DBG SDC WTS:", weights)
     assert gold_scored > 0
     score = dist_counts[0]                  # number of exact matches
     for idx, weight in enumerate(weights[1:], 1):
         assert weight <= weights[idx - 1]
-        # print("DBG SDC LOOP:", idx, dist_counts[idx])
+        print("DBG SDC LOOP:", idx, dist_counts[idx])
         score += weight * dist_counts[idx]
-    # print("DBG_SDC: score(%.4f) / %d == %f" % (score, gold_scored, score/gold_scored))
+    print("DBG_SDC: score(%.4f) / %d == %f" % (score, gold_scored, score/gold_scored))
     return score / gold_scored
 
-def score_most_sim_lists(train_quats, trial_quats, most_sim_lists, weights=None):
+def score_most_sim_lists(train_quats, trial_quats, sim_lists, weights=None):
     '''Sum up gold-standard accuracy score'''
     if weights is None:
         weights = [1.0, 0.8, 0.6, 0.4, 0.2, 0.1]
-    dist_counts = distance_counts(train_quats, trial_quats, most_sim_lists, len(weights))
+    dist_counts = distance_counts(train_quats, trial_quats, sim_lists, len(weights))
     return score_distance_counts(dist_counts, weights)
 
-def save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, most_sim_lists, min_sim_val=0.15, sort_most_sim=True):
+def save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, sim_lists, min_sim_val=0, sort_most_sim=True):
     '''Save ranked most-similar lists to TSV file'''
     isorted = None
     sim_oix = []
     if sort_most_sim:
         # TODO: replace with zip
-        for idx, sim_list in enumerate(most_sim_lists):
+        for idx, sim_list in enumerate(sim_lists):
             # print("QUAT:", idx, quats[idx])
             # print("SIM_LIST:", sim_list)
             len_lst = len(sim_list)
@@ -380,7 +398,7 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, most_sim_lists, m
     for idx in isorted:
         qax = trial_quats[idx]
         idn = qax[0]
-        most_sim_list = most_sim_lists[idx]
+        most_sim_list = sim_lists[idx]
         lqax, ansr = len(qax), 'N/A'
         if lqax < 3:
             print("MISSING ANSWER at:", idx, qax[0], qax[1], "ANSWER:", ansr, sep="\t")
@@ -389,7 +407,7 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, most_sim_lists, m
             gold = qax[3] if lqax > 3 else None
         print(idn, qax[1], ansr, gold, sep="\t", file=out)
         for oix, sim in most_sim_list:  # Note: oix = other index, i.e., the index of the gold standard other QAS
-            if sim > min_sim_val:
+            if sim >= min_sim_val:
                 try:
                     # print("IDX: ", idx, " OIX: ", oix, " SIM: ", sim)
                     quox = train_quats[oix]
@@ -414,38 +432,34 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, most_sim_lists, m
 # TODO: Why do the query words make the score worse?
 # TEST: >>> sim_score_save(fair, sim_func=sim_wosc_nltk.sentence_similarity)
 def sim_score_save(train_quats, trial_quats, path="simlists.tsv", find_nearest_qas=find_nearest_quats,
-                   q_weight=1.0, max_count=6, min_sim_val=0.15, sort_most_sim=False):
+                   q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''
     beg_time = time.time()
-    train_quats = all_quats[:n_train]
-    trial_quats = all_quats[n_train:]
-    most_sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, q_weight=q_weight,
+    sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, q_weight=q_weight,
                                           max_count=max_count, min_sim_val=min_sim_val)
-    score = score_most_sim_lists(train_quats, trial_quats, most_sim_lists)
-    save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, most_sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    score = score_most_sim_lists(train_quats, trial_quats, sim_lists)
+    save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
-    print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (len(all_quats), max_count,
-                                                                               seconds, score))
-    return score, most_sim_lists
+    print("sim_score_save(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f" % (
+        len(train_quats), len(trial_quats), max_count, seconds, score))
+    return score, sim_lists
 
-def match_trials_to_trained(all_quats, n_train, path="simlists.tsv", find_nearest_qas=find_nearest_quats,
-                   q_weight=1.0, max_count=6, min_sim_val=0.15, sort_most_sim=False):
+def match_trials_to_trained(train_quats, trial_quats, path="simlists.tsv", find_nearest_qas=find_nearest_quats,
+                            q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''
     beg_time = time.time()
-    train_quats = all_quats[:n_train]
-    trial_quats = all_quats[n_train:]
-    most_sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, q_weight=q_weight,
-                                          max_count=max_count, min_sim_val=min_sim_val)
-    score = score_most_sim_lists(train_quats, trial_quats, most_sim_lists)
-    save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, most_sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, q_weight=q_weight,
+                                     max_count=max_count, min_sim_val=min_sim_val)
+    score = score_most_sim_lists(train_quats, trial_quats, sim_lists)
+    save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
-    print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (len(all_quats), max_count,
-                                                                               seconds, score))
-    return score, most_sim_lists
+    print("match_trials_to_trained(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f" % (
+        len(train_quats), len(trial_quats), max_count, seconds, score))
+    return score, sim_lists
 
 ###############################################################################
 # >>> quats = sc.csv_read_qa("simsilver.tsv", delimiter="\t")
