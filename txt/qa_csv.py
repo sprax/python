@@ -25,14 +25,15 @@ def csv_write(rows, path, newline=None, delimiter=',', quotechar='"'):
     except IOError as ex:
         print("csv_write_qa failed to write rows to ({}) with error: {}".format(path, ex))
 
-def csv_read_qa(path, maxrows=0, newline=None, delimiter='\t', quotechar='"'):
+def csv_read_qa(path, maxrows=0, newline=None, delimiter='\t', quotechar='"', verbose=False):
     ''' Returns a list of quats (question-answer tuples) read from a CSV file. '''
     quats = []
     try:
         with open(path, 'rt', newline=newline) as in_file:
             reader = csv.reader(in_file, delimiter=delimiter, quotechar=quotechar)
-            for row in reader:
-                # print("ROW:", row)
+            for idx, row in enumerate(reader):
+                if verbose:
+                    print("ROW %3d: " % idx, row)
                 lenrow = len(row)
                 assert lenrow > 1
                 row[0] = int(row[0])

@@ -65,10 +65,10 @@ def pack_lines_and_ids(inpath, outpath, offset=100, verbose=True, sep="\t", char
             rnum = toks[-1]
             if rnum in tran:
                 rnum = tran[rnum]
-            print(lnum, line[4:-4], rnum, sep=sep, file=outfile)
+            print(lnum, rnum, line[4:-4], sep=sep, file=outfile)
 
 
-def reorder_lines_and_ids(inpath, outpath, devlen=194, offset=200, verbose=False, sep="\t", charset='utf8'):
+def reorder_lines_and_ids(inpath, outpath, devlen=200, offset=200, verbose=False, sep="\t", charset='utf8'):
     '''Renumber lines to give a constant offset between ID and refID (first and last fields as int).'''
     lines, tran, lnums = [], {}, set()
     for idx, line in enumerate(text_fio.read_text_lines(inpath, charset=charset)):
@@ -83,7 +83,9 @@ def reorder_lines_and_ids(inpath, outpath, devlen=194, offset=200, verbose=False
                 if verbose:
                     print("RNUM != ONUM:", rnum, onum, "AT: ", line)
                 if rnum in tran:
-                    raise Exception("ERROR: rnum %d already encountered!" % rnum)
+                    # raise Exception("ERROR: rnum %d already encountered!" % rnum)
+                    print("WARNING: rnum %d already encountered!" % rnum)
+                    rnum += 1
             tran[rnum] = onum
             toks[0] = lnum
             toks[-1] = onum

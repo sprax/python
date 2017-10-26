@@ -257,7 +257,7 @@ def find_nearest_quats(train_quats, question, answer=None, excludes=None, q_weig
         max_sim_val:        the initial value of max, or the maximum similariy found so far.
     '''
     assert q_weight >= 0.0
-    sim_dict = similarity_dict(train_quats, question, answer, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val, max_sim_val=max_sim_val)
+    sim_dict = similarity_dict(train_quats, question, answer, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
 def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas=find_nearest_quats, q_weight=1.0, max_count=5,
@@ -431,17 +431,17 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, sim_lists, min_si
 # VECT_MOST_STOPS (DEFAULT-QUERY_WORDS): (size=201, count=6) took 96.3 seconds; score 0.6635
 # TODO: Why do the query words make the score worse?
 # TEST: >>> sim_score_save(fair, sim_func=sim_wosc_nltk.sentence_similarity)
-def sim_score_save(all_quats, path="simlists.tsv", find_nearest_qas=find_nearest_quats,
+def sim_score_save(all_quats, ntrain=200, path="simlists.tsv", find_nearest_qas=find_nearest_quats,
                    q_weight=1.0, max_count=6, min_sim_val=0.15, sort_most_sim=False):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''
     size = len(all_quats)
     beg_time = time.time()
-    sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, q_weight=q_weight,
+    sim_lists = find_ranked_qa_lists(all_quats, all_quats, find_nearest_qas, q_weight=q_weight,
                                      max_count=max_count, min_sim_val=min_sim_val)
-    score = score_most_sim_lists(train_quats, trial_quats, sim_lists)
-    save_most_sim_qa_lists_tsv(all_quats, path, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    score = score_most_sim_lists(all_quats, all_quats, sim_lists)
+    save_most_sim_qa_lists_tsv(all_quats, all_quats, path, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
     print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (size, max_count,
                                                                                seconds, score))
