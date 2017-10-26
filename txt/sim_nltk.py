@@ -222,7 +222,7 @@ def similarity_dict(train_quats, question, answer=None, excludes=None, q_weight=
         try:
             # print("SIM_WEIGHTED_QAS(", question, answer, quat[1], quat[2], q_weight, sim_func, ")")
             # # pdb.set_trace()
-            sim = sim_weighted_qas(question, answer, quat[1], quat[2], q_weight=q_weight, sim_func=sim_func)
+            sim = sim_weighted_qas(question, answer, quat.question, quat.answer, q_weight=q_weight, sim_func=sim_func)
             if  sim >= min_sim_val:
                 if sim > 1:
                     sim = 1
@@ -272,14 +272,14 @@ def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas=find_neare
     nearests = len(trial_quats)*[None]
     for idx, trial_quat in enumerate(trial_quats):
         # consistency check:
-        idn = trial_quat[0]
+        idn = trial_quat.id
         assert isinstance(idn, int)
         if id_eq_index:
             # print("DBG LMSTL: ", trial_quat)
             if idx > 0 and idx + 100 != idn:
-                print("ERROR:", (idx + 100), "!=", trial_quat[0], "at", trial_quat)
+                print("ERROR:", (idx + 100), "!=", trial_quat.id, "at", trial_quat)
                 raise IndexError
-        nearests[idx] = find_nearest_qas(train_quats, trial_quat[1], trial_quat[2], [idx], q_weight=q_weight,
+        nearests[idx] = find_nearest_qas(train_quats, trial_quat.question, trial_quat.answer, [idx], q_weight=q_weight,
                                          max_count=max_count, min_sim_val=min_sim_val)
     return nearests
 
@@ -431,7 +431,7 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, sim_lists, min_si
 # VECT_MOST_STOPS (DEFAULT-QUERY_WORDS): (size=201, count=6) took 96.3 seconds; score 0.6635
 # TODO: Why do the query words make the score worse?
 # TEST: >>> sim_score_save(fair, sim_func=sim_wosc_nltk.sentence_similarity)
-def sim_score_save(all_quats, ntrain=200, path="simlists.tsv", find_nearest_qas=find_nearest_quats,
+def sim_score_save(all_quats, ntrain=200, outpath="simlists.tsv", find_nearest_qas=find_nearest_quats,
                    q_weight=1.0, max_count=6, min_sim_val=0.15, sort_most_sim=False):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
@@ -447,7 +447,7 @@ def sim_score_save(all_quats, ntrain=200, path="simlists.tsv", find_nearest_qas=
                                                                                seconds, score))
     return score, sim_lists
 
-def match_trials_to_trained(train_quats, trial_quats, path="matched_ttt.tsv", find_nearest_qas=find_nearest_quats,
+def match_trials_to_trained(train_quats, trial_quats, outpath="matched_ttt.tsv", find_nearest_qas=find_nearest_quats,
                             q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
@@ -464,7 +464,7 @@ def match_trials_to_trained(train_quats, trial_quats, path="matched_ttt.tsv", fi
 
 
 # TODO: use kwargs for a bag of parameters.
-def match_quats_to_model(model, trial_quats, path="matched_qtm.tsv", q_weight=1.0, max_count=6, min_sim_val=0):
+def match_quats_to_model(model, trial_quats, outpath="matched_qtm.tsv", q_weight=1.0, max_count=6, min_sim_val=0):
     '''Compute similar Q&A's using a model, score them against a gold standard, and save
     the list of best matches to text file for further work.  The model object must implement:
         find_nearest_quats(quat, q_weight, max_count)
