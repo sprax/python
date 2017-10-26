@@ -35,14 +35,21 @@ def csv_read_qa(path, maxrows=0, newline=None, delimiter='\t', quotechar='"', ve
                 if verbose:
                     print("ROW %3d: " % idx, row)
                 lenrow = len(row)
-                assert lenrow > 1
-                row[0] = int(row[0])
-                # row[1] = str(row[1])
-                if lenrow < 3:
-                    row[2] = row[3] = None
-                else:
-                    row[3] = int(row[3]) if len(row) > 3 else None
-                quat = Quat(*row)
+                assert lenrow > 2
+                id_num = int(row[0])
+                try:
+                    label = int(row[1])
+                    question = row[2]
+                    answer = row[3] if lenrow > 3 else None
+                except ValueError as vex:
+                    try:
+                        label = int(row[3])
+                        question = row[1]
+                        answer = row[2]
+                    except Exception as oex:
+                        raise ValueError("No label found at row {}:  {}  [{}]\n".format(idx, row, oex))
+
+                quat = Quat(id=id_num, label=label, question=question, answer=answer)
                 quats.append(quat)
                 if maxrows == 1:
                     break
