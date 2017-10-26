@@ -397,24 +397,24 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, sim_lists, min_si
     mix = 0
     for idx in isorted:
         qax = trial_quats[idx]
-        idn = qax[0]
+        idn = qax.id
         most_sim_list = sim_lists[idx]
         lqax, ansr = len(qax), 'N/A'
         if lqax < 3:
-            print("MISSING ANSWER at:", idx, qax[0], qax[1], "ANSWER:", ansr, sep="\t")
+            print("MISSING ANSWER at:", idx, qax.id, qax.question, "ANSWER:", ansr, sep="\t")
         else:
-            ansr = qax[2]
-            gold = qax[3] if lqax > 3 else None
-        print(idn, qax[1], ansr, gold, sep="\t", file=out)
+            ansr = qax.answer
+            gold = qax.label
+        print(idn, gold, qax.question, ansr, sep="\t", file=out)
         for oix, sim in most_sim_list:  # Note: oix = other index, i.e., the index of the gold standard other QAS
             if sim >= min_sim_val:
                 try:
                     # print("IDX: ", idx, " OIX: ", oix, " SIM: ", sim)
                     quox = train_quats[oix]
-                    sidn = quox[0]
-                    stxt = quox[1]
-                    sans = quox[2] if len(quox) > 2 else 'N/A'
-                    sgld = quox[3] if len(quox) > 3 else None
+                    sidn = quox.id
+                    sgld = quox.label
+                    stxt = quox.question
+                    sans = quox.answer
                     print("\t%3d\t%.5f\t%s\t%s\t%s" % (sidn, sim, stxt, sans, sgld), file=out)
                 except Exception as ex:
                     print("ERROR AT MIX {}: idx {}  qax {},  err: {}\n".format(mix, idx, qax, ex))
