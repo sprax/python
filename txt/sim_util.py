@@ -24,6 +24,11 @@ def sort_numbered_lines_with_blanks(inpath, outpath, verbose=True, charset='utf8
             toks = line.split()
             lnum = int(toks[0])
             rnum = int(toks[-1])
+            if lnum == prev:
+                if verbose:
+                    print("LNUM == PREV:", lnum, prev, "AT: ", line)
+                print(file=outfile)
+                print(file=outfile)
             prev += 1
             if lnum != prev:
                 if verbose:
@@ -45,7 +50,11 @@ def pack_lines_and_ids(inpath, outpath, offset=100, verbose=True, sep="\t", char
             if verbose:
                 print("LNUM != ONUM:", lnum, onum, "AT: ", line)
             if lnum in tran:
-                raise Exception("ERROR: lnum %d already encountered!" % lnum)
+                print("WARNING: lnum %d already encountered!" % lnum)
+                while lnum in tran:
+                    lnum += 1
+                    onum += 1
+                    # rnum += 1
             tran[lnum] = onum
         toks[0] = onum
         toks[-1] = rnum
