@@ -23,7 +23,7 @@ def get_vectorizer():
     return CountVectorizer(tokenizer=spacy_tokenize_)
 
 # resume_dataset = pd.read_csv("resumes_text.csv")
-def get_resumes_dataset():
+def get_resume_dataset():
     '''get the resume dataset'''
     return pd.read_csv("resumes_text.csv")
 

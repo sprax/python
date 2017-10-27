@@ -355,16 +355,16 @@ def score_distance_counts(dist_counts, weights):
     assert len(weights) > 0 and weights[0] == 1.0
     assert len(weights) < len(dist_counts)
     gold_scored = dist_counts[-1]
-    print("DBG SDC DCS:", dist_counts)
-    print("DBG SDC WTS:", weights)
+    # print("DBG SDC DCS:", dist_counts)
+    # print("DBG SDC WTS:", weights)
     assert gold_scored > 0
     score = dist_counts[0]                  # number of exact matches
     for idx, weight in enumerate(weights[1:], 1):
         assert weight <= weights[idx - 1]
         print("DBG SDC LOOP:", idx, dist_counts[idx])
         score += weight * dist_counts[idx]
-    print("DBG_SDC: score(%.4f) / %d == %f" % (score, gold_scored, score/gold_scored))
-    return score / gold_scored
+    # print("DBG_SDC: score(%.4f) / %d == %f" % (score, gold_scored, score/gold_scored))
+    return 100 * score / gold_scored
 
 def score_most_sim_lists(train_quats, trial_quats, sim_lists, weights=None):
     '''Sum up gold-standard accuracy score'''
