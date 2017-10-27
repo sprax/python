@@ -23,7 +23,6 @@ def sort_numbered_lines_with_blanks(inpath, outpath, verbose=True, charset='utf8
         for line in lines:
             toks = line.split()
             lnum = int(toks[0])
-            rnum = int(toks[-1])
             if lnum == prev:
                 if verbose:
                     print("LNUM == PREV:", lnum, prev, "AT: ", line)

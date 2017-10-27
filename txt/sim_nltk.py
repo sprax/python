@@ -361,7 +361,7 @@ def score_distance_counts(dist_counts, weights):
     score = dist_counts[0]                  # number of exact matches
     for idx, weight in enumerate(weights[1:], 1):
         assert weight <= weights[idx - 1]
-        print("DBG SDC LOOP:", idx, dist_counts[idx])
+        # print("DBG SDC LOOP:", idx, dist_counts[idx])
         score += weight * dist_counts[idx]
     # print("DBG_SDC: score(%.4f) / %d == %f" % (score, gold_scored, score/gold_scored))
     return 100 * score / gold_scored
@@ -373,7 +373,7 @@ def score_most_sim_lists(train_quats, trial_quats, sim_lists, weights=None):
     dist_counts = distance_counts(train_quats, trial_quats, sim_lists, len(weights))
     return score_distance_counts(dist_counts, weights)
 
-def save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, sim_lists, min_sim_val=0, sort_most_sim=True):
+def save_most_sim_qa_lists_tsv(train_quats, trial_quats, outpath, sim_lists, min_sim_val=0, sort_most_sim=True):
     '''Save ranked most-similar lists to TSV file'''
     isorted = None
     sim_oix = []
@@ -393,7 +393,7 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, sim_lists, min_si
         isorted = range(len(trial_quats))
     # print("ISORTED ", len(isorted), ": ", isorted)
 
-    out = text_fio.open_out_file(path)
+    out = text_fio.open_out_file(outpath)
     mix = 0
     for idx in isorted:
         qax = trial_quats[idx]
@@ -424,7 +424,7 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, sim_lists, min_si
         #     print("TUP {:3}:\t {}".format(mix, sim_oix[idx]))
         print(file=out)
         mix += 1
-    if path != '-':
+    if outpath != '-':
         out.close()
 
 # VECTORIZER (default):                  (size=201, count=6) took 96.1 seconds; score 0.8583
@@ -441,7 +441,7 @@ def sim_score_save(all_quats, ntrain=200, outpath="simlists.tsv", find_nearest_q
     sim_lists = find_ranked_qa_lists(all_quats, all_quats, find_nearest_qas, q_weight=q_weight,
                                      max_count=max_count, min_sim_val=min_sim_val)
     score = score_most_sim_lists(all_quats, all_quats, sim_lists)
-    save_most_sim_qa_lists_tsv(all_quats, all_quats, path, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    save_most_sim_qa_lists_tsv(all_quats, all_quats, outpath, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
     print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (size, max_count,
                                                                                seconds, score))
@@ -456,7 +456,7 @@ def match_trials_to_trained(train_quats, trial_quats, outpath="matched_ttt.tsv",
     sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, q_weight=q_weight,
                                      max_count=max_count, min_sim_val=min_sim_val)
     score = score_most_sim_lists(train_quats, trial_quats, sim_lists)
-    save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    save_most_sim_qa_lists_tsv(train_quats, trial_quats, outpath, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
     print("match_trials_to_trained(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f" % (
         len(train_quats), len(trial_quats), max_count, seconds, score))
@@ -475,7 +475,7 @@ def match_quats_to_model(model, trial_quats, outpath="matched_qtm.tsv", q_weight
     sim_lists = find_ranked_qa_lists(model, trial_quats, q_weight=q_weight, max_count=max_count, min_sim_val=min_sim_val)
     train_quats = model.get_all_quats()
     score = score_most_sim_lists(train_quats, trial_quats, sim_lists)
-    save_most_sim_qa_lists_tsv(train_quats, trial_quats, path, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    save_most_sim_qa_lists_tsv(train_quats, trial_quats, outpath, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
     print("match_trials_to_trained(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f" % (
         len(train_quats), len(trial_quats), max_count, seconds, score))
