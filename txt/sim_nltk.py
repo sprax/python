@@ -228,7 +228,7 @@ def similarity_dict(train_quats, question, answer=None, excludes=None, q_weight=
                     sim = 1
                 sim_dict[idx] = sim
         except ValueError as ex:
-            print("Continuing past error at idx: {}  ({})  ({})".format(idx, ex, all_quats[idx]))
+            print("Continuing past error at idx: {}  ({})  ({})".format(idx, ex, train_quats[idx]))
     return  sim_dict
 
 def nlargest_items_by_value(dict_with_comparable_values, count=10):
@@ -243,7 +243,7 @@ def nlargest_values(dict_with_comparable_values, count=10):
     '''Returns a list of the greatest values in descending order.  Duplicates permitted.'''
     return heapq.nlargest(count, dict_with_comparable_values.values())
 
-def find_nearest_quats(train_quats, question, answer=None, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5, min_sim_val=0, max_sim_val=1):
+def find_nearest_quats(train_quats, question, answer=None, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5, min_sim_val=0):
     '''
     Find the N most similar texts to this_text and return a list of (index, similarity) pairs in
     descending order of similarity.
@@ -254,7 +254,6 @@ def find_nearest_quats(train_quats, question, answer=None, excludes=None, q_weig
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
         max_count           maximum size of returned dict
-        max_sim_val:        the initial value of max, or the maximum similariy found so far.
     '''
     assert q_weight >= 0.0
     sim_dict = similarity_dict(train_quats, question, answer, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
@@ -283,8 +282,9 @@ def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas=find_neare
                                          max_count=max_count, min_sim_val=min_sim_val)
     return nearests
 
-def find_ranked_qa_lists_inclusive(train_quats, trial_quats, find_nearest_qas=find_nearest_quats, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5,
-                                   min_sim_val=0.0):
+def find_ranked_qa_lists_inclusive(train_quats, trial_quats, find_nearest_qas=find_nearest_quats, q_weight=1.0,
+                                   sim_func=cosine_sim_txt, max_count=5, min_sim_val=0.0):
+    '''Find similars including self.'''
     return [find_nearest_qas(train_quats, trial_quat, None, q_weight, sim_func,
                              max_count, min_sim_val) for trial_quat in trial_quats]
 
@@ -303,15 +303,15 @@ def find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas=find_nearest
     print("Finding all similarity lists (train %d, trial %d, nears %d) took %.1f seconds" % (len(train_quats), len(trial_quats), max_count, seconds))
     return ranked_lists
 
-def show_most_sim_texts_list(texts, sim_lists=None):
+def show_most_sim_texts_list(quats, sim_lists=None):
     '''print already-found similarity lists'''
     if sim_lists is None:
-        sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas=find_nearest_quats)     # use defaults
-    for idx, txt in enumerate(texts):
+        sim_lists = find_ranked_qa_lists(quats, quats, find_nearest_qas=find_nearest_quats)     # use defaults
+    for idx, txt in enumerate(quats):
         most_sim_list = sim_lists[idx]
         print("  %3d.  %s" % (idx, txt))
         for oix, sim in most_sim_list:
-            print("        %3d   %.5f   %s" % (oix, sim, texts[oix]))
+            print("        %3d   %.5f   %s" % (oix, sim, quats[oix]))
         print()
     return sim_lists
 
@@ -418,8 +418,8 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, outpath, sim_lists, min
                     print("\t%3d\t%.5f\t%s\t%s\t%s" % (sidn, sim, stxt, sans, sgld), file=out)
                 except Exception as ex:
                     print("ERROR AT MIX {}: idx {}  qax {},  err: {}\n".format(mix, idx, qax, ex))
+                    # raise IndexError
 
-                    pass    # raise IndexError
         # if sort_most_sim:
         #     print("TUP {:3}:\t {}".format(mix, sim_oix[idx]))
         print(file=out)
@@ -447,13 +447,16 @@ def sim_score_save(all_quats, outpath="simlists.tsv", find_nearest_qas=find_near
                                                                                seconds, score))
     return score, sim_lists
 
+# >>> scorem, mslm = sn.moby_sss() # Fri Oct 27 01:03:09 EDT 2017
+# Finding all similarity lists (train 418, trial 418, nears 6) took 399.6 seconds
+# sim_score_save(size=418, count=6) took 399.6 seconds; score 82.8708
 def moby_sss(quats=None, nproto=200, ntest=0, inpath="simsilver.tsv", outpath="moby_simlists.txt",
              find_qas=find_nearest_quats, reload=False):
     '''Test sim_score_save no moby_dick or other specified quats.'''
     if quats is None or reload:
         quats = qa_csv.csv_read_qa(inpath)
     if ntest > 0:
-        test_quats = quats[0:ntest] + quats[nproto:nproto+test]
+        test_quats = quats[0:ntest] + quats[nproto:nproto+ntest]
         return sim_score_save(test_quats, outpath, find_nearest_qas=find_qas)
     return sim_score_save(quats, outpath, find_nearest_qas=find_qas)
 
@@ -486,7 +489,7 @@ def match_quats_to_model(model, trial_quats, outpath="matched_qtm.tsv", q_weight
     sim_lists = find_ranked_qa_lists(model, trial_quats, q_weight=q_weight, max_count=max_count, min_sim_val=min_sim_val)
     train_quats = model.get_all_quats()
     score = score_most_sim_lists(train_quats, trial_quats, sim_lists)
-    save_most_sim_qa_lists_tsv(train_quats, trial_quats, outpath, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    save_most_sim_qa_lists_tsv(train_quats, trial_quats, outpath, sim_lists, min_sim_val=min_sim_val)
     seconds = time.time() - beg_time
     print("match_trials_to_trained(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f" % (
         len(train_quats), len(trial_quats), max_count, seconds, score))
