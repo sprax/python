@@ -431,8 +431,8 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, outpath, sim_lists, min
 # VECT_MOST_STOPS (DEFAULT-QUERY_WORDS): (size=201, count=6) took 96.3 seconds; score 0.6635
 # TODO: Why do the query words make the score worse?
 # TEST: >>> sim_score_save(fair, sim_func=sim_wosc_nltk.sentence_similarity)
-def sim_score_save(all_quats, ntrain=200, outpath="simlists.tsv", find_nearest_qas=find_nearest_quats,
-                   q_weight=1.0, max_count=6, min_sim_val=0.15, sort_most_sim=False):
+def sim_score_save(all_quats, outpath="simlists.tsv", find_nearest_qas=find_nearest_quats,
+                   q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''
@@ -446,6 +446,17 @@ def sim_score_save(all_quats, ntrain=200, outpath="simlists.tsv", find_nearest_q
     print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (size, max_count,
                                                                                seconds, score))
     return score, sim_lists
+
+def moby_sss(quats=None, nproto=200, ntest=0, inpath="simsilver.tsv", outpath="moby_simlists.txt",
+             find_qas=find_nearest_quats, reload=False):
+    '''Test sim_score_save no moby_dick or other specified quats.'''
+    if quats is None or reload:
+        quats = qa_csv.csv_read_qa(inpath)
+    if ntest > 0:
+        test_quats = quats[0:ntest] + quats[nproto:nproto+test]
+        return sim_score_save(test_quats, outpath, find_nearest_qas=find_qas)
+    return sim_score_save(quats, outpath, find_nearest_qas=find_qas)
+
 
 def match_trials_to_trained(train_quats, trial_quats, outpath="matched_ttt.tsv", find_nearest_qas=find_nearest_quats,
                             q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False):
