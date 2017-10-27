@@ -43,7 +43,7 @@ def pack_lines_and_ids(inpath, outpath, offset=100, verbose=True, sep="\t", char
     for idx, line in enumerate(text_fio.read_text_lines(inpath, charset=charset)):
         toks = line.split()
         lnum = int(toks[0])
-        rnum = int(toks[-1])
+        rnum = int(toks[1])
         onum = idx + offset
         if lnum != onum:
             if verbose:
@@ -56,15 +56,15 @@ def pack_lines_and_ids(inpath, outpath, offset=100, verbose=True, sep="\t", char
                     # rnum += 1
             tran[lnum] = onum
         toks[0] = onum
-        toks[-1] = rnum
+        toks[1] = rnum
         lines.append((line, toks))
     with open(outpath, "w") as outfile:
         for line, toks in lines:
             lnum = toks[0]
-            rnum = toks[-1]
+            rnum = toks[1]
             if rnum in tran:
                 rnum = tran[rnum]
-            print(lnum, rnum, line[4:-4], sep=sep, file=outfile)
+            print(lnum, rnum, line[8:], sep=sep, file=outfile)
 
 
 def reorder_lines_and_ids(inpath, outpath, devlen=200, offset=200, verbose=False, sep="\t", charset='utf8'):
