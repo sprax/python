@@ -25,7 +25,7 @@ ALPHA = 0.2
 BETA = 0.45
 ETA = 0.4
 PHI = 0.2
-DELTA = 0.85
+DELTA = 0.8
 
 BROWN_FREQS = dict()
 N = 0
