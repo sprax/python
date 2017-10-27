@@ -1,15 +1,7 @@
 #!/usr/bin/env python3
 # Sprax Lines       2016.07.12      Written with Python 3.5
 '''read text file, print regex-split words.'''
-import argparse
-import errno
-import os.path
-import pickle
-import random
-import re
-import sys
-from utf_print import utf_print
-import text_ops
+
 import text_fio
 
 ########################################################
@@ -101,7 +93,7 @@ def reorder_lines_and_ids(inpath, outpath, devlen=200, offset=200, verbose=False
             toks[1] = rnum
             lines.append((line, toks))
 
-    lines.sort(key = lambda item: item[1])
+    lines.sort(key=lambda item: item[1])
     with open(outpath, "w") as outfile:
         for line, toks in lines:
             lnum = toks[0]
