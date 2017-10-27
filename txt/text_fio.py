@@ -2,6 +2,7 @@
 # Sprax Lines       2016.07.12      Written with Python 3.5
 '''read text file, print regex-split words.'''
 import argparse
+import csv
 import errno
 import os.path
 import pickle
@@ -53,49 +54,6 @@ def read_text_lines(file_spec, charset='utf8'):
             line = line.strip()
             if line:
                 yield line
-
-def sort_numbered_lines_with_blanks(inpath, outpath, verbose=True, charset='utf8'):
-    '''read numbered lines and output them in sorted order, with blanks for skipped numbers.'''
-    lines = sorted(read_text_lines(inpath, charset=charset))
-    prev = int(lines[0].split()[0]) - 1
-    with open(outpath, "w") as outfile:
-        for line in lines:
-            toks = line.split()
-            lnum = int(toks[0])
-            rnum = int(toks[-1])
-            prev += 1
-            if lnum != prev:
-                if verbose:
-                    print("LNUM != PREV:", lnum, prev, "AT: ", line)
-                print(file=outfile)
-            print(line, file=outfile)
-            prev = lnum
-
-
-def pack_lines_and_ids(inpath, outpath, offset=100, verbose=True, sep="\t", charset='utf8'):
-    '''Renumber lines to fill in any gaps and output them in sorted order.'''
-    lines, tran = [], {}
-    for idx, line in enumerate(read_text_lines(inpath, charset=charset)):
-        toks = line.split()
-        lnum = int(toks[0])
-        rnum = int(toks[-1])
-        onum = idx + offset
-        if lnum != onum:
-            if verbose:
-                print("LNUM != ONUM:", lnum, onum, "AT: ", line)
-            if lnum in tran:
-                raise Exception("ERROR: lnum %d already encountered!" % lnum)
-            tran[lnum] = onum
-        toks[0] = onum
-        toks[-1] = rnum
-        lines.append((line, toks))
-    with open(outpath, "w") as outfile:
-        for line, toks in lines:
-            lnum = toks[0]
-            rnum = toks[-1]
-            if rnum in tran:
-                rnum = tran[rnum]
-            print(lnum, line[4:-4], rnum, sep=sep, file=outfile)
 
 
 def pickle_file(in_path, out_path, data_struct, data_adder, charset='utf8'):
@@ -201,7 +159,7 @@ def csv_read(path, newline=None, delimiter=',', quotechar='"'):
             reader = csv.reader(in_file, delimiter=delimiter, quotechar=quotechar)
             for row in reader:
                 tuples.append(row)
-    except Exception as ex:
+    except IOError as ex:
         print("csv_read failed to read from ({}) with error: {}".format(path, ex))
     return tuples
 
@@ -212,7 +170,7 @@ def csv_write(tuples, path, newline=None, delimiter=',', quotechar='"'):
             writer = csv.writer(csv_file, delimiter=delimiter, quotechar=quotechar)
             for tup in tuples:
                 writer.writerow(tup)
-    except Exception as ex:
+    except IOError as ex:
         print("csv_write_qa failed to write tuples to ({}) with error: {}".format(path, ex))
 
 ########################################################
@@ -288,7 +246,7 @@ def main():
     if args.pickle_set_of_text_lines:
         lines_in, words_out = pickle_word_list(args.text_file, args.out_file)
         print("Pickled %d words from %d lines in %s into %s:" % (
-                words_out, lines_in, args.text_file, args.out_file))
+            words_out, lines_in, args.text_file, args.out_file))
         with open(args.out_file, 'rb') as pick:
             word_set = pickle.load(pick)
         if words_out <= args.number:
