@@ -73,7 +73,7 @@ def reorder_lines_and_ids(inpath, outpath, devlen=200, offset=200, verbose=False
     for idx, line in enumerate(text_fio.read_text_lines(inpath, charset=charset)):
         toks = line.split()
         lnum = int(toks[0])
-        rnum = int(toks[-1])
+        rnum = int(toks[1])
         if idx < devlen:
             # change ref number to constant offset from id number (offset number)
             lnums.add(lnum)
@@ -87,7 +87,7 @@ def reorder_lines_and_ids(inpath, outpath, devlen=200, offset=200, verbose=False
                     rnum += 1
             tran[rnum] = onum
             toks[0] = lnum
-            toks[-1] = onum
+            toks[1] = onum
             lines.append((line, toks))
         else:
             # change id number to matched changed ref number (offset number)
@@ -98,12 +98,12 @@ def reorder_lines_and_ids(inpath, outpath, devlen=200, offset=200, verbose=False
             else:
                 raise Exception("ERROR: unknown lnum %d after index %d!" % (rnum, devlen))
 
-            toks[-1] = rnum
+            toks[1] = rnum
             lines.append((line, toks))
 
     lines.sort(key = lambda item: item[1])
     with open(outpath, "w") as outfile:
         for line, toks in lines:
             lnum = toks[0]
-            rnum = toks[-1]
-            print(lnum, line[4:-4], rnum, sep=sep, file=outfile)
+            rnum = toks[1]
+            print(lnum, rnum, line[8:], sep=sep, file=outfile)
