@@ -126,12 +126,21 @@ def cosine_sim_quanda_ms(one_quanda, other_quanda, get_question=second, get_answ
     return cosine_sim_quanda_2(one_quanda, other_quanda, get_question, get_answer,
                                q_weight, vectorizer)
 
+
+def clip(value, lo=0, hi=1):
+    ''' Clip value to [lo, hi] '''
+    if value < lo:
+        return lo
+    if value > hi:
+        return hi
+    return value
+
 def unit_clip(value):
     ''' Clip value to [0, 1] '''
-    if value > 1:
-        return 1
     if value < 0:
         return 0
+    if value > 1:
+        return 1
     return value
 
 def unit_clip_verbose(value):
@@ -158,13 +167,13 @@ def smoke_test():
         print("remove_stop_words(normalize(%s)) -> " % qst, remove_stop_words(normalize(qst)))
 
 
-def nearest_known(saved_texts, input_text, similarity_func, threshold):
-    '''find text in saved_texts most similar to input_text, if similarity >= threshold'''
-    idx, sim = nearest_other_idx(saved_texts, input_text, similarity_func, threshold)
+def nearest_known(known_texts, input_text, similarity_func, threshold):
+    '''find text in known_texts most similar to input_text, if similarity >= threshold'''
+    idx, sim = nearest_other_idx(known_texts, input_text, similarity_func, threshold)
     if idx < 0:
         print("No saved text found more similar than %f" % threshold)
     else:
-        print("Nearest at %f (%d) %s" % (sim, idx, saved_texts[idx]))
+        print("Nearest at %f (%d) %s" % (sim, idx, known_texts[idx]))
 
 def nearest_other_idx(other_texts, this_text, similarity_func, max_sim_val):
     '''
@@ -206,7 +215,7 @@ def show_nearest_neighbors(texts, nearest_indexes=None):
         print("  %3d.  T  %s\n  %3d.  O  %s\n" % (idx, txt, nearest_idx, nearest_txt))
 
 ###############################################################################
-def similarity_dict(train_quats, question, answer=None, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt,
+def similarity_dict(train_quats, trial_question, answer=None, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt,
                     min_sim_val=0):
     '''
     Returns a dict mapping train_quats' indexes to their similarity with this_text,
@@ -217,15 +226,15 @@ def similarity_dict(train_quats, question, answer=None, excludes=None, q_weight=
     if excludes is None:
         excludes = []
     sim_dict = {}
-    for idx, quat in enumerate(train_quats):
+    for idx, train_quat in enumerate(train_quats):
         if idx in excludes:
             continue
         try:
-            # print("SIM_WEIGHTED_QAS(", question, answer, quat.question, quat.answer, q_weight, sim_func, ")")
-            # # pdb.set_trace()
-            sim = sim_weighted_qas(question, answer, quat.question, quat.answer, q_weight=q_weight, sim_func=sim_func)
+            sim = sim_weighted_qas(train_quat.question, train_quat.answer, trial_question, answer, q_weight=q_weight, sim_func=sim_func)
+            # sim = unit_clip_verbose(sim)
             if  sim >= min_sim_val:
                 if sim > 1:
+                    print("SIM > 1 for ({}) x ({})".format(train_quat, trial_question))
                     sim = 1
                 sim_dict[idx] = sim
         except ValueError as ex:
@@ -244,12 +253,12 @@ def nlargest_values(dict_with_comparable_values, count=10):
     '''Returns a list of the greatest values in descending order.  Duplicates permitted.'''
     return heapq.nlargest(count, dict_with_comparable_values.values())
 
-def find_nearest_quats(train_quats, question, answer=None, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5, min_sim_val=0):
+def find_nearest_quats(train_quats, trial_question, answer=None, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5, min_sim_val=0):
     '''
     Find the N most similar texts to this_text and return a list of (index, similarity) pairs in
     descending order of similarity.
         train_quats:        The training sentences or question-answer-tuples or whatever is to be compared.
-        question:           a plain text question
+        trial_question:           a plain text question
         answer:             a plain text answer (default None)
         excludes:           list of IDs to exclude from the comparison; e.g. this_text.id if excluding self comparison.
         similarity_func:    function returning the similariy between two texts (as in sentences)
@@ -257,13 +266,13 @@ def find_nearest_quats(train_quats, question, answer=None, excludes=None, q_weig
         max_count           maximum size of returned dict
     '''
     assert q_weight >= 0.0
-    sim_dict = similarity_dict(train_quats, question, answer, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
+    sim_dict = similarity_dict(train_quats, trial_question, answer, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
 def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas=find_nearest_quats, q_weight=1.0, max_count=5,
                            min_sim_val=0.0, id_eq_index=False):
     '''
-    For each question-and-answer tuple in quats, find a list of indexes of the most similar Q and A's.
+    For each question-and-answer tuple in trial_quats, find a list of indexes of the most similar Q and A's in train_quats.
     Returns list of lists of items as in: [[(index, similariy), ...], ...]
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
@@ -374,12 +383,12 @@ def score_most_sim_lists(train_quats, trial_quats, sim_lists, weights=None):
     dist_counts = distance_counts(train_quats, trial_quats, sim_lists, len(weights))
     return score_distance_counts(dist_counts, weights)
 
-def save_most_sim_qa_lists_tsv(train_quats, trial_quats, outpath, sim_lists, min_sim_val=0, sort_most_sim=True):
+def save_most_sim_qa_lists_tsv(train_quats, trial_quats, sim_lists, ntrain=None,
+                               outpath="simlists.tsv", min_sim_val=0, sort_most_sim=True):
     '''Save ranked most-similar lists to TSV file'''
-    isorted = None
-    sim_oix = []
     if sort_most_sim:
-        # TODO: replace with zip
+        sim_oix = []
+        len_train = ntrain if ntrain else len(train_quats)
         for idx, sim_list in enumerate(sim_lists):
             # print("QUAT:", idx, quats[idx])
             # print("SIM_LIST:", sim_list)
@@ -387,9 +396,16 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, outpath, sim_lists, min
             max_oix = sim_list[0][0] if len_lst > 0 else -1
             max_sim = sim_list[0][1] if len_lst > 1 else 0
             sum_sim = sum([y[1] for y in sim_list])
-            sim_oix.append((max_sim, sum_sim, -idx, -max_oix))
-        # TODO: sorted with 2 keys?? FIXME: should sort on all keys!!
+            sim_oix.append((max_sim, sum_sim, -idx))
+        # Sort on tuple keys
         isorted = [-tup[2] for tup in sorted(sim_oix, reverse=True)]
+        print("BEFORE: ", isorted)
+        print("LEN_TRAIN",  len_train,   "LEN(sim_list)",  len(sim_lists), "\n\n")
+        # Partition train from trial indices
+        sort_lo = [idx for idx in isorted if idx < len_train]
+        sort_hi = [idx for idx in isorted if idx >= len_train]
+        isorted = sort_lo + sort_hi
+        print("AFTER:  ", isorted)
     else:
         isorted = range(len(trial_quats))
     # print("ISORTED ", len(isorted), ": ", isorted)
@@ -432,7 +448,7 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, outpath, sim_lists, min
 # VECT_MOST_STOPS (DEFAULT-QUERY_WORDS): (size=201, count=6) took 96.3 seconds; score 0.6635
 # TODO: Why do the query words make the score worse?
 # TEST: >>> sim_score_save(fair, sim_func=sim_wosc_nltk.sentence_similarity)
-def sim_score_save(all_quats, outpath="simlists.tsv", find_nearest_qas=find_nearest_quats,
+def sim_score_save(all_quats, ntrain=None, outpath="simlists.tsv", find_nearest_qas=find_nearest_quats,
                    q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
@@ -442,7 +458,8 @@ def sim_score_save(all_quats, outpath="simlists.tsv", find_nearest_qas=find_near
     sim_lists = find_ranked_qa_lists(all_quats, all_quats, find_nearest_qas, q_weight=q_weight,
                                      max_count=max_count, min_sim_val=min_sim_val)
     score = score_most_sim_lists(all_quats, all_quats, sim_lists)
-    save_most_sim_qa_lists_tsv(all_quats, all_quats, outpath, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    save_most_sim_qa_lists_tsv(all_quats, all_quats, sim_lists, ntrain=ntrain,
+                               outpath=outpath, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
     print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (size, max_count,
                                                                                seconds, score))
@@ -457,12 +474,12 @@ def moby_sss(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
     if quats is None or reload:
         quats = qa_csv.csv_read_qa(inpath)
     if ntrain > 0:
-        all_quats = quats[0:ntrain] + quats[nproto:nproto+ntrain]
+        used_quats = quats[0:ntrain] + quats[nproto:nproto+ntrain]
     else:
-        all_quats = quats
-    score, slists = sim_score_save(all_quats, outpath, find_nearest_qas=find_qas, max_count=max_count,
-                                   min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
-    return score, slists, all_quats
+        used_quats = quats
+    score, slists = sim_score_save(used_quats, ntrain=ntrain, outpath=outpath, find_nearest_qas=find_qas,
+                                   max_count=max_count, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    return score, slists, used_quats
 
 
 def match_trials_to_trained(train_quats, trial_quats, outpath="matched_ttt.tsv", find_nearest_qas=find_nearest_quats,
@@ -477,7 +494,8 @@ def match_trials_to_trained(train_quats, trial_quats, outpath="matched_ttt.tsv",
     sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, q_weight=q_weight,
                                      max_count=max_count, min_sim_val=min_sim_val)
     score = score_most_sim_lists(train_quats, trial_quats, sim_lists)
-    save_most_sim_qa_lists_tsv(train_quats, trial_quats, outpath, sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    save_most_sim_qa_lists_tsv(train_quats, trial_quats, sim_lists,
+                               outpath=outpath, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
     print("match_trials_to_trained(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f" % (
         len(train_quats), len(trial_quats), max_count, seconds, score))
@@ -510,7 +528,8 @@ def match_quats_to_model(model, trial_quats, outpath="matched_qtm.tsv", q_weight
     sim_lists = find_ranked_qa_lists(model, trial_quats, q_weight=q_weight, max_count=max_count, min_sim_val=min_sim_val)
     train_quats = model.get_all_quats()
     score = score_most_sim_lists(train_quats, trial_quats, sim_lists)
-    save_most_sim_qa_lists_tsv(train_quats, trial_quats, outpath, sim_lists, min_sim_val=min_sim_val)
+    save_most_sim_qa_lists_tsv(train_quats, trial_quats, sim_lists,
+                               outpath=outpath, min_sim_val=min_sim_val)
     seconds = time.time() - beg_time
     print("match_trials_to_trained(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f" % (
         len(train_quats), len(trial_quats), max_count, seconds, score))
