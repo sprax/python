@@ -250,7 +250,7 @@ def similarity_dict(train_quats, trial_quat, excludes=None, q_weight=1.0, sim_fu
             sim = sim_weighted_qas(train_quat.question, train_quat.answer,
                                    trial_quat.question, trial_quat.answer, q_weight=q_weight, sim_func=sim_func)
             # sim = unit_clip_verbose(sim)
-            sim = prob_clip_verbose(sim, where="  (%d x %d)" % (train_quat.id, trial_quat.id))
+            sim = prob_clip_verbose(sim, where="(%d x %d)" % (train_quat.id, trial_quat.id))
             if  sim >= min_sim_val:
                 sim_dict[idx] = sim
         except ValueError as ex:
@@ -488,8 +488,9 @@ def moby_sss(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
     return score, slists, used_quats
 
 
-def match_trials_to_trained(train_quats, trial_quats, outpath="matched_ttt.tsv", find_nearest_qas=find_nearest_quats,
-                            sim_func=None, q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False):
+def match_trials_to_trained(train_quats, trial_quats, outpath="matched_ttt.tsv",
+                            find_nearest_qas=find_nearest_quats, sim_func=None,
+                            q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''
@@ -508,7 +509,8 @@ def match_trials_to_trained(train_quats, trial_quats, outpath="matched_ttt.tsv",
     return score, sim_lists
 
 def moby_ttt(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="moby_matched.txt",
-             find_qas=find_nearest_quats, reload=False):
+             find_qas=find_nearest_quats, sim_func=None,
+             q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False, reload=False):
     '''Test sim_score_save no moby_dick or other specified quats.'''
     if quats is None or reload:
         quats = qa_csv.csv_read_qa(inpath)
@@ -518,7 +520,10 @@ def moby_ttt(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
     else:
         train_quats = quats[:nproto]
         trial_quats = quats[nproto:]
-    score, ms_lists = match_trials_to_trained(train_quats, trial_quats, outpath, find_nearest_qas=find_qas)
+    score, ms_lists = match_trials_to_trained(train_quats, trial_quats, outpath,
+                                              find_nearest_qas=find_qas, sim_func=sim_func,
+                                              q_weight=q_weight, max_count=max_count,
+                                              min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     return score, ms_lists, train_quats, trial_quats
 
 
