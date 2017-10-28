@@ -418,8 +418,8 @@ def save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=0, sor
 # VECTORIZER (default):                  (size=201, count=6) took 96.1 seconds; score 0.8583
 # VECT_MOST_STOPS (DEFAULT-QUERY_WORDS): (size=201, count=6) took 96.3 seconds; score 0.6635
 # TODO: Why do the query words make the score worse?
-# TEST: >>> sim_score_save(fair, sim_func=sim_wosc_nltk.sentence_similarity)
-def sim_score_save(quandas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_txt,
+# TEST: >>> match_tat(fair, sim_func=sim_wosc_nltk.sentence_similarity)
+def match_tat(quandas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_sim_txt,
                    max_count=6, min_sim_val=0, sort_most_sim=False):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
@@ -431,21 +431,21 @@ def sim_score_save(quandas, path="simlists.tsv", q_weight=1.0, sim_func=cosine_s
     score = score_most_sim_lists(quandas, most_sim_lists)
     save_most_sim_qa_lists_tsv(quandas, path, most_sim_lists, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
-    print("sim_score_save(size=%d, count=%d) took %.1f seconds; score %.4f" % (len(quandas), max_count,
+    print("match_tat(size=%d, count=%d) took %.1f seconds; score %.4f" % (len(quandas), max_count,
                                                                                seconds, score))
     return score, most_sim_lists
 
 ###############################################################################
 # >>> quandas = sc.csv_read_qa("simsilver.tsv", delimiter="\t")
-# >>> score, msl = sn.sim_score_save(quandas, "simlists_sort.tsv", min_sim_val=0.00)
+# >>> score, msl = sn.match_tat(quandas, "simlists_sort.tsv", min_sim_val=0.00)
 # Finding all similarity lists (size=309, count=6) took 218.1 seconds
-# sim_score_save(size=309, count=6) took 218.1 seconds; score 0.5941
+# match_tat(size=309, count=6) took 218.1 seconds; score 0.5941
 ###############################################################################
 def test_fair():
     '''test similariy of QA pairs containing many stop words, including "fair"'''
     fair = qa_csv.csv_read_qa('fair.txt', delimiter='\t')
-    score = sim_score_save(fair)
-    print("sim_score_save(fair) => %.3f" % score)
+    score = match_tat(fair)
+    print("match_tat(fair) => %.3f" % score)
 
 if __name__ == '__main__':
     test_fair()
