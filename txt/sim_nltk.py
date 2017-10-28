@@ -128,30 +128,47 @@ def cosine_sim_quanda_ms(one_quanda, other_quanda, get_question=second, get_answ
 
 
 def clip(value, lo=0, hi=1):
-    ''' Clip value to [lo, hi] '''
+    ''' Clip value to [lo, hi], no frills. '''
     if value < lo:
         return lo
     if value > hi:
         return hi
     return value
 
+def clip_verbose(value, lo=0, hi=1):
+    ''' Verbosely clip value to [lo, hi] '''
+    if value < lo:
+        print("clip_verbose: {} -> {}".format(value, lo))
+        return lo
+    if value > hi:
+        print("clip_verbose: {} -> {}".format(value, hi))
+        return hi
+    return value
+
+def prob_clip_verbose(value, where="prob_clip_verbose", lo=0.000001, hi=0.99999):
+    ''' Verbosely clip value to [lo, hi] '''
+    if value != 0 and value < lo:
+        print("{} -> 0 \t\t at: {}".format(value, where))
+        return 0
+    if value != 1 and value > hi:
+        print("{} -> {} \t at: {}".format(value, hi, where))
+        return hi
+    return value
+
 def unit_clip(value):
-    ''' Clip value to [0, 1] '''
+    '''
+    Clip value to [0, 1], redundant with clip.
+    TODO: Make semantics comply with naive assumptions/"ordinary language"?
+    '''
     if value < 0:
         return 0
     if value > 1:
         return 1
     return value
 
-def unit_clip_verbose(value):
-    ''' Verbosely clip value to [0, 1] '''
-    if value > 1:
-        print("unit_clip_verbose: {} -> 1".format(value))
-        return 1
-    if value < 0:
-        print("unit_clip_verbose: {} -> 0".format(value))
-        return 0
-    return value
+
+
+
 
 def smoke_test():
     '''Tests that basic sentence similarity functionality works, or at least does not blow-up'''
@@ -215,7 +232,7 @@ def show_nearest_neighbors(texts, nearest_indexes=None):
         print("  %3d.  T  %s\n  %3d.  O  %s\n" % (idx, txt, nearest_idx, nearest_txt))
 
 ###############################################################################
-def similarity_dict(train_quats, trial_question, answer=None, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt,
+def similarity_dict(train_quats, trial_quat, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt,
                     min_sim_val=0):
     '''
     Returns a dict mapping train_quats' indexes to their similarity with this_text,
@@ -230,12 +247,11 @@ def similarity_dict(train_quats, trial_question, answer=None, excludes=None, q_w
         if idx in excludes:
             continue
         try:
-            sim = sim_weighted_qas(train_quat.question, train_quat.answer, trial_question, answer, q_weight=q_weight, sim_func=sim_func)
+            sim = sim_weighted_qas(train_quat.question, train_quat.answer,
+                                   trial_quat.question, trial_quat.answer, q_weight=q_weight, sim_func=sim_func)
             # sim = unit_clip_verbose(sim)
+            sim = prob_clip_verbose(sim, where="  (%d x %d)" % (train_quat.id, trial_quat.id))
             if  sim >= min_sim_val:
-                if sim > 1:
-                    print("SIM > 1 for ({}) x ({})".format(train_quat, trial_question))
-                    sim = 1
                 sim_dict[idx] = sim
         except ValueError as ex:
             print("Continuing past error at idx: {}  ({})  ({})".format(idx, ex, train_quats[idx]))
@@ -253,12 +269,12 @@ def nlargest_values(dict_with_comparable_values, count=10):
     '''Returns a list of the greatest values in descending order.  Duplicates permitted.'''
     return heapq.nlargest(count, dict_with_comparable_values.values())
 
-def find_nearest_quats(train_quats, trial_question, answer=None, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5, min_sim_val=0):
+def find_nearest_quats(train_quats, trial_quat, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5, min_sim_val=0):
     '''
     Find the N most similar texts to this_text and return a list of (index, similarity) pairs in
     descending order of similarity.
         train_quats:        The training sentences or question-answer-tuples or whatever is to be compared.
-        trial_question:           a plain text question
+        trial_quat:         The trial object to be compared with the training objects; must have at least a .question attribute.
         answer:             a plain text answer (default None)
         excludes:           list of IDs to exclude from the comparison; e.g. this_text.id if excluding self comparison.
         similarity_func:    function returning the similariy between two texts (as in sentences)
@@ -266,7 +282,7 @@ def find_nearest_quats(train_quats, trial_question, answer=None, excludes=None, 
         max_count           maximum size of returned dict
     '''
     assert q_weight >= 0.0
-    sim_dict = similarity_dict(train_quats, trial_question, answer, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
+    sim_dict = similarity_dict(train_quats, trial_quat, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
 def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas=find_nearest_quats, q_weight=1.0, max_count=5,
@@ -288,7 +304,7 @@ def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas=find_neare
             if idx > 0 and idx + 100 != idn:
                 print("ERROR:", (idx + 100), "!=", trial_quat.id, "at", trial_quat)
                 raise IndexError
-        nearests[idx] = find_nearest_qas(train_quats, trial_quat.question, trial_quat.answer, [idx], q_weight=q_weight,
+        nearests[idx] = find_nearest_qas(train_quats, trial_quat, [idx], q_weight=q_weight,
                                          max_count=max_count, min_sim_val=min_sim_val)
     return nearests
 
@@ -313,17 +329,6 @@ def find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas=find_nearest
     print("Finding all similarity lists (train %d, trial %d, nears %d) took %.1f seconds" % (len(train_quats), len(trial_quats), max_count, seconds))
     return ranked_lists
 
-def show_most_sim_texts_list(quats, sim_lists=None):
-    '''print already-found similarity lists'''
-    if sim_lists is None:
-        sim_lists = find_ranked_qa_lists(quats, quats, find_nearest_qas=find_nearest_quats)     # use defaults
-    for idx, txt in enumerate(quats):
-        most_sim_list = sim_lists[idx]
-        print("  %3d.  %s" % (idx, txt))
-        for oix, sim in most_sim_list:
-            print("        %3d   %.5f   %s" % (oix, sim, quats[oix]))
-        print()
-    return sim_lists
 
 def distance_counts(train_quats, trial_quats, sim_lists, max_dist):
     '''
@@ -399,13 +404,14 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, sim_lists, ntrain=None,
             sim_oix.append((max_sim, sum_sim, -idx))
         # Sort on tuple keys
         isorted = [-tup[2] for tup in sorted(sim_oix, reverse=True)]
-        print("BEFORE: ", isorted)
-        print("LEN_TRAIN",  len_train,   "LEN(sim_list)",  len(sim_lists), "\n\n")
+        print("LEN_TRAIN",  len_train,   "LEN(sim_list)",  len(sim_lists), "\n")
+        print("BEFORE:   ", isorted, "\n")
         # Partition train from trial indices
         sort_lo = [idx for idx in isorted if idx < len_train]
+        print("AFTER LO: ", sort_lo, "\n")
         sort_hi = [idx for idx in isorted if idx >= len_train]
+        print("AFTER HI: ", sort_hi, "\n")
         isorted = sort_lo + sort_hi
-        print("AFTER:  ", isorted)
     else:
         isorted = range(len(trial_quats))
     # print("ISORTED ", len(isorted), ": ", isorted)
@@ -520,7 +526,7 @@ def moby_ttt(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
 def match_quats_to_model(model, trial_quats, outpath="matched_qtm.tsv", q_weight=1.0, max_count=6, min_sim_val=0):
     '''Compute similar Q&A's using a model, score them against a gold standard, and save
     the list of best matches to text file for further work.  The model object must implement:
-        find_nearest_quats(quat, q_weight, max_count)
+        find_nearest_quats(trial_quat, q_weight, max_count)
         get_dev_quat(index)
         get_all_quats()
     assumed, and the score is returned, not saved.'''
