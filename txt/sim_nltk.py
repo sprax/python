@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 '''Text similarity (between words, phrases, or short sentences) using NLTK'''
 
+import functools
 import heapq
 import string
 import time
@@ -346,6 +347,7 @@ def distance_counts(train_quats, trial_quats, sim_lists, max_dist):
                 dist_counts[idx] += 1
                 break
     # save the number of gold standard matches as the last count in the list
+    assert gold_scored > 0
     dist_counts[max_dist] = gold_scored
     return dist_counts
 
@@ -368,7 +370,7 @@ def score_distance_counts(dist_counts, weights):
 def score_most_sim_lists(train_quats, trial_quats, sim_lists, weights=None):
     '''Sum up gold-standard accuracy score'''
     if weights is None:
-        weights = [1.0, 0.8, 0.6, 0.4, 0.2, 0.1]
+        weights = [1.0, 0.6667, 0.5, 0.375, 0.25, 0.1667]
     dist_counts = distance_counts(train_quats, trial_quats, sim_lists, len(weights))
     return score_distance_counts(dist_counts, weights)
 
@@ -458,16 +460,19 @@ def moby_sss(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
         all_quats = quats[0:ntrain] + quats[nproto:nproto+ntrain]
     else:
         all_quats = quats
-    score, slists = sim_score_save(all_quats, outpath, find_nearest_qas=find_qas), all_quats
+    score, slists = sim_score_save(all_quats, outpath, find_nearest_qas=find_qas)
     return score, slists, all_quats
 
 
 def match_trials_to_trained(train_quats, trial_quats, outpath="matched_ttt.tsv", find_nearest_qas=find_nearest_quats,
-                            q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False):
+                            sim_func=None, q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False):
     '''Compute similarities using sim_func, score them against gold standard, and save
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''
     beg_time = time.time()
+    if sim_func is not None:
+        import pdb; pdb.set_trace()
+        find_nearest_qas = functools.partial(find_nearest_qas, sim_func=sim_func)
     sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, q_weight=q_weight,
                                      max_count=max_count, min_sim_val=min_sim_val)
     score = score_most_sim_lists(train_quats, trial_quats, sim_lists)
