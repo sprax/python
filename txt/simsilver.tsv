@@ -4,8 +4,8 @@
 103	303	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.
 104	304	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, Flask.
 105	305	Who is the Pequod's Second Mate?	Stubb.
-106	306	Who is the second mate on the Pequod?	Stubb.
-107	307	What was the name of the Second Mate?	Stubb.
+106	306	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.
+107	307	What is a group of whales that swim together called?	A pod.
 108	308	Which crewmembers survive the Pequod's sinking?	Only Ishmael.
 109	309	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.
 110	310	For what were whales primarily hunted?	Oil.
@@ -204,8 +204,8 @@
 303	103	How many of crewmembers of the Pequod survive their meeting with Moby Dick?	Exactly one.
 304	104	What are all the mates' names on the Pequod?	Starbuck, Stubb, Flask.
 305	105	Who was the Second Mate on the Pequod?	Stubb.
-306	106	Who was the Pequod's second mate?	Stubb.
-307	107	What is the Second Mate's name?	Stubb.
+306	106	What are the names of the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.
+307	107	What do you call a group of whales swimming together?	A pod.
 308	108	What member of the crew survives when the Pequod sinks?	Only Ishmael.
 309	109	Does the white whale survive the events narrated in Moby Dick?	Yes.
 310	110	Why did whalers hunt their quarry?	For oil.
@@ -416,3 +416,5 @@
 515	282	What befell the whaling ship named The Essex?	It was rammed by a sperm whale and sank, leaving a single survivor to float at sea.
 516	109	Is the white whale dead or alive at the end of the novel?	Alive.
 517	108	Who among the Pequod's crew survives their encounter with Moby Dick?	Ishmael.
+518	105	What was the name of the Second Mate?	Stubb.
+519 105	Who is the second mate on the Pequod?	Stubb.
