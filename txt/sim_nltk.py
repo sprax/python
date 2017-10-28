@@ -452,7 +452,7 @@ def sim_score_save(all_quats, outpath="simlists.tsv", find_nearest_qas=find_near
 # Finding all similarity lists (train 418, trial 418, nears 6) took 399.6 seconds
 # sim_score_save(size=418, count=6) took 399.6 seconds; score 82.8708
 def moby_sss(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="moby_simlists.txt",
-             find_qas=find_nearest_quats, reload=False):
+             find_qas=find_nearest_quats, max_count=6, min_sim_val=0, sort_most_sim=False, reload=False):
     '''Test sim_score_save no moby_dick or other specified quats.'''
     if quats is None or reload:
         quats = qa_csv.csv_read_qa(inpath)
@@ -460,7 +460,8 @@ def moby_sss(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
         all_quats = quats[0:ntrain] + quats[nproto:nproto+ntrain]
     else:
         all_quats = quats
-    score, slists = sim_score_save(all_quats, outpath, find_nearest_qas=find_qas)
+    score, slists = sim_score_save(all_quats, outpath, find_nearest_qas=find_qas, max_count=max_count,
+                                   min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     return score, slists, all_quats
 
 
