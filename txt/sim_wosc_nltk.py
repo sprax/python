@@ -19,6 +19,8 @@ from nltk.corpus import wordnet as wn
 from nltk.corpus import brown
 import numpy as np
 
+import sim_nltk as sim_base
+
 # Parameters to the algorithm. Currently set to values that was reported
 # in the paper to produce "best" results.
 ALPHA = 0.2
@@ -334,6 +336,23 @@ def smoke_test():
                                                  sentence_similarity(sent_pair[0], sent_pair[1], True),
                                                  sent_pair[2], sent_pair[0], ' '*(spacing - len(sent_pair[0])),
                                                  sent_pair[1]))
+
+def find_nearest_quats(train_quats, question, answer=None, excludes=None, q_weight=1.0,
+                       sim_func=sim_base.cosine_sim_txt, max_count=6, min_sim_val=0):
+    '''
+    Find the N most similar texts to this_text and return a list of (index, similarity) pairs in
+    descending order of similarity.
+        train_quats:        The training sentences or question-answer-tuples or whatever is to be compared.
+        question:           a plain text question
+        answer:             a plain text answer (default None)
+        excludes:           list of IDs to exclude from the comparison; e.g. this_text.id if excluding self comparison.
+        similarity_func:    function returning the similariy between two texts (as in sentences)
+        vocab:              the set of all known words
+        max_count           maximum size of returned dict
+    '''
+    assert q_weight >= 0.0
+    sim_dict = similarity_dict(train_quats, question, answer, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
+    return nlargest_items_by_value(sim_dict, max_count)
 
 
 ###############################################################################

@@ -220,7 +220,7 @@ def similarity_dict(train_quats, question, answer=None, excludes=None, q_weight=
         if idx in excludes:
             continue
         try:
-            # print("SIM_WEIGHTED_QAS(", question, answer, quat[1], quat[2], q_weight, sim_func, ")")
+            # print("SIM_WEIGHTED_QAS(", question, answer, quat.question, quat.answer, q_weight, sim_func, ")")
             # # pdb.set_trace()
             sim = sim_weighted_qas(question, answer, quat.question, quat.answer, q_weight=q_weight, sim_func=sim_func)
             if  sim >= min_sim_val:
@@ -325,27 +325,26 @@ def distance_counts(train_quats, trial_quats, sim_lists, max_dist):
     dist_counts = (max_dist + 1) * [0]
     gold_scored = 0
     for trial_quat, sim_list in zip(trial_quats, sim_lists):
-        if len(trial_quat) > 3 and trial_quat[3]:
-            try:
-                gold = int(trial_quat[3])
-                assert isinstance(gold, int)
-            except ValueError as ex:
-                print("ERROR on: ", trial_quat, ex)
-                continue
-            gold_scored += 1
-            # ms = sim_list[0]
-            # msi = ms[0]
-            # sim = ms[1]
-            # print("DBG_F: Q_%d <==> Q_%d (%s <==> %s) first, %.4f (%s : %s)" % (int(qax[0]), msi, qax[1],
-            #       trial_quats[msi][1], sim, remove_stop_words(normalize(qax[1])), remove_stop_words(normalize(trial_quats[msi][1]))))
-            for idx, item in enumerate(sim_list):
-                # print("DC: %d  item(%d, %f)" % (idx, item[0], item[1]))
-                train_quat = train_quats[item[0]]
-                if gold == train_quat[0]:      # compare idn to idn (not idx)
-                    # print("DBG_G: Q_%d <==> Q_%d (%s <==> %s) at %d, %.4f (%s : %s)\n" % (int(qax[0]), item[0], qax[1], quats[item[0]][1],
-                    #       idx, item[1], remove_stop_words(normalize(qax[1])), remove_stop_words(normalize(quats[item[0]][1]))))
-                    dist_counts[idx] += 1
-                    break
+        try:
+            gold = int(trial_quat.label)
+            assert isinstance(gold, int)
+        except ValueError as ex:
+            print("ERROR on: ", trial_quat, ex)
+            continue
+        gold_scored += 1
+        # ms = sim_list[0]
+        # msi = ms[0]
+        # sim = ms[1]
+        # print("DBG_F: Q_%d <==> Q_%d (%s <==> %s) first, %.4f (%s : %s)" % (int(qax.id), msi, qax.question,
+        #       trial_quats[msi][1], sim, remove_stop_words(normalize(qax.question)), remove_stop_words(normalize(trial_quats[msi][1]))))
+        for idx, item in enumerate(sim_list):
+            # print("DC: %d  item(%d, %f)" % (idx, item.id, item[1]))
+            train_quat = train_quats[item[0]]
+            if gold == train_quat.id:      # compare idn to idn (not idx)
+                # print("DBG_G: Q_%d <==> Q_%d (%s <==> %s) at %d, %.4f (%s : %s)\n" % (int(qax.id), item[0], qax.question, quats[item[0]][1],
+                #       idx, item[1], remove_stop_words(normalize(qax.question)), remove_stop_words(normalize(quats[item[0]][1]))))
+                dist_counts[idx] += 1
+                break
     # save the number of gold standard matches as the last count in the list
     dist_counts[max_dist] = gold_scored
     return dist_counts
@@ -450,15 +449,17 @@ def sim_score_save(all_quats, outpath="simlists.tsv", find_nearest_qas=find_near
 # >>> scorem, mslm = sn.moby_sss() # Fri Oct 27 01:03:09 EDT 2017
 # Finding all similarity lists (train 418, trial 418, nears 6) took 399.6 seconds
 # sim_score_save(size=418, count=6) took 399.6 seconds; score 82.8708
-def moby_sss(quats=None, nproto=200, ntest=0, inpath="simsilver.tsv", outpath="moby_simlists.txt",
+def moby_sss(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="moby_simlists.txt",
              find_qas=find_nearest_quats, reload=False):
     '''Test sim_score_save no moby_dick or other specified quats.'''
     if quats is None or reload:
         quats = qa_csv.csv_read_qa(inpath)
-    if ntest > 0:
-        test_quats = quats[0:ntest] + quats[nproto:nproto+ntest]
-        return sim_score_save(test_quats, outpath, find_nearest_qas=find_qas)
-    return sim_score_save(quats, outpath, find_nearest_qas=find_qas)
+    if ntrain > 0:
+        all_quats = quats[0:ntrain] + quats[nproto:nproto+ntrain]
+    else:
+        all_quats = quats
+    score, slists = sim_score_save(all_quats, outpath, find_nearest_qas=find_qas), all_quats
+    return score, slists, all_quats
 
 
 def match_trials_to_trained(train_quats, trial_quats, outpath="matched_ttt.tsv", find_nearest_qas=find_nearest_quats,
@@ -475,6 +476,20 @@ def match_trials_to_trained(train_quats, trial_quats, outpath="matched_ttt.tsv",
     print("match_trials_to_trained(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f" % (
         len(train_quats), len(trial_quats), max_count, seconds, score))
     return score, sim_lists
+
+def moby_ttt(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="moby_matched.txt",
+             find_qas=find_nearest_quats, reload=False):
+    '''Test sim_score_save no moby_dick or other specified quats.'''
+    if quats is None or reload:
+        quats = qa_csv.csv_read_qa(inpath)
+    if ntrain > 0:
+        train_quats = quats[:ntrain]
+        trial_quats = quats[nproto:nproto + ntrain]
+    else:
+        train_quats = quats[:nproto]
+        trial_quats = quats[nproto:]
+    score, ms_lists = match_trials_to_trained(train_quats, trial_quats, outpath, find_nearest_qas=find_qas)
+    return score, ms_lists, train_quats, trial_quats
 
 
 # TODO: use kwargs for a bag of parameters.
