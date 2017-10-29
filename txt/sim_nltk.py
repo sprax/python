@@ -464,6 +464,9 @@ def match_tat(all_quats, ntrain=None, outpath="simlists.tsv",
     Many default values are assumed, and the score is returned, not saved.'''
     size = len(all_quats)
     beg_time = time.time()
+    if sim_func is not None:
+        # import pdb; pdb.set_trace()
+        find_nearest_qas = functools.partial(find_nearest_qas, sim_func=sim_func)
     sim_lists = find_ranked_qa_lists(all_quats, all_quats, find_nearest_qas, sim_func,
                                      q_weight=q_weight, max_count=max_count, min_sim_val=min_sim_val)
     score = score_most_sim_lists(all_quats, all_quats, sim_lists)
@@ -501,7 +504,7 @@ def match_ttt(train_quats, trial_quats, outpath="matched_ttt.tsv",
     assumed, and the score is returned, not saved.'''
     beg_time = time.time()
     if sim_func is not None:
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         find_nearest_qas = functools.partial(find_nearest_qas, sim_func=sim_func)
     # import pdb; pdb.set_trace()
     sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
