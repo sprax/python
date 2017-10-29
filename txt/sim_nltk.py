@@ -145,15 +145,27 @@ def clip_verbose(value, lo=0, hi=1):
         return hi
     return value
 
-def prob_clip_verbose(value, where="prob_clip_verbose", lo=0.000001, hi=0.99999):
+def prob_clip_verbose(value, where="prob_clip_verbose", lo=0.000001, hi=0.99999, verbose=False):
     ''' Verbosely clip value to [lo, hi] '''
     if value != 0 and value < lo:
-        print("{} -> 0 \t\t at: {}".format(value, where))
+        if verbose:
+            print("{} -> 0 \t\t at: {}".format(value, where))
         return 0
     if value != 1 and value > hi:
-        print("{} -> {} \t at: {}".format(value, hi, where))
+        if verbose:
+            print("{} -> {} \t at: {}".format(value, hi, where))
         return hi
     return value
+
+
+def prob_clip(value, lo=0.000001, hi=0.99999):
+    ''' clip value to probability based on [lo, hi] '''
+    if value != 0 and value < lo:
+        return 0
+    if value != 1 and value > hi:
+        return hi
+    return value
+
 
 def unit_clip(value):
     '''
@@ -248,7 +260,7 @@ def similarity_dict(train_quats, trial_quat, q_weight=1.0, sim_func=cosine_sim_t
             sim = sim_weighted_qas(train_quat.question, train_quat.answer,
                                    trial_quat.question, trial_quat.answer, q_weight=q_weight, sim_func=sim_func)
             # sim = unit_clip_verbose(sim)
-            sim = prob_clip_verbose(sim, where="(%d x %d)" % (train_quat.id, trial_quat.id))
+            sim = prob_clip_verbose(sim, where="(%d x %d)" % (train_quat.id, trial_quat.id), verbose=False)
             if  sim >= min_sim_val:
                 sim_dict[idx] = sim
         except ValueError as ex:
@@ -291,18 +303,28 @@ def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
         vocab:              the set of all known words
     '''
     assert q_weight >= 0.0
-    nearests = len(trial_quats)*[None]
+    ntrain, ntrial = len(train_quats), len(trial_quats)
+    nearests = ntrial*[None]
+    beg_time = prv_time = time.time()
     for idx, trial_quat in enumerate(trial_quats):
-        # consistency check:
-        idn = trial_quat.id
-        assert isinstance(idn, int)
-        if id_eq_index:
-            # print("DBG LMSTL: ", trial_quat)
-            if idx > 0 and idx + 100 != idn:
-                print("ERROR:", (idx + 100), "!=", trial_quat.id, "at", trial_quat)
-                raise IndexError
-        nearests[idx] = find_nearest_qas(train_quats, trial_quat, q_weight=q_weight,
-                                         max_count=max_count, min_sim_val=min_sim_val)
+        try:
+            # consistency check:
+            idn = trial_quat.id
+            assert isinstance(idn, int)
+            if id_eq_index:
+                # print("DBG LMSTL: ", trial_quat)
+                if idx > 0 and idx + 100 != idn:
+                    print("ERROR:", (idx + 100), "!=", trial_quat.id, "at", trial_quat)
+                    raise IndexError
+            nearests[idx] = find_nearest_qas(train_quats, trial_quat, q_weight=q_weight,
+                                             max_count=max_count, min_sim_val=min_sim_val)
+        except KeyboardInterrupt:
+            int_time = time.time()
+            print("KeyboardInterrupt in find_nearest_qas_lists at %d/%d trials on %d train_quats after %d seconds." % (idx, ntrial, ntrain, int_time - beg_time))
+            if int_time - prv_time < 2:
+                print("That's 2 interrupts in less than 2 seconds -- breaking out of loop in find_nearest_qas_lists!")
+                break;
+            prv_time = int_time
     return nearests
 
 def find_nearest_qas_lists_inclusive(train_quats, trial_quats, find_nearest_qas,
@@ -481,7 +503,7 @@ def match_tat(all_quats, ntrain=None, outpath="simlists.tsv",
 # Finding all similarity lists (train 418, trial 418, nears 6) took 399.6 seconds
 # match_tat(size=418, count=6) took 399.6 seconds; score 82.8708
 def moby_tat(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="moby_simlists.txt",
-             find_qas=find_nearest_quats, sim_func=None,
+             find_qas=find_nearest_quats, sim_func=None, q_weight=1.0,
              max_count=6, min_sim_val=0, sort_most_sim=False, reload=False):
     '''Test match_tat on moby_dick or other specified quats.'''
     if quats is None or reload:
@@ -490,8 +512,10 @@ def moby_tat(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
         used_quats = quats[0:ntrain] + quats[nproto:nproto+ntrain]
     else:
         used_quats = quats
-    score, slists = match_tat(used_quats, ntrain=ntrain, outpath=outpath, find_nearest_qas=find_qas,
-                              max_count=max_count, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    score, slists = match_tat(used_quats, ntrain=ntrain, outpath=outpath,
+                              find_nearest_qas=find_qas, sim_func=sim_func,
+                              q_weight=q_weight, max_count=max_count,
+                              min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     return score, slists, used_quats
 
 
@@ -509,7 +533,6 @@ def match_ttt(train_quats, trial_quats, outpath="matched_ttt.tsv",
     # import pdb; pdb.set_trace()
     sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
                                      q_weight=q_weight, max_count=max_count, min_sim_val=min_sim_val)
-    print("SIMLISTS:", sim_lists)
     score = score_most_sim_lists(train_quats, trial_quats, sim_lists)
     save_most_sim_qa_lists_tsv(train_quats, trial_quats, sim_lists,
                                outpath=outpath, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
@@ -533,8 +556,6 @@ def moby_ttt(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
         trial_quats = quats[nproto:]
     if swap:
         train_quats, trial_quats = trial_quats, train_quats
-    print(train_quats, "\n\n")
-    print(trial_quats, "\n\n")
     score, ms_lists = match_ttt(train_quats, trial_quats, outpath=outpath,
                                 find_nearest_qas=find_qas, sim_func=sim_func,
                                 q_weight=q_weight, max_count=max_count,
