@@ -1,3 +1,6 @@
+# Finding all similarity lists (train 160, trial 160, nears 6) took 35265.2 seconds (9.8 hours)
+# match_ttt(n_train=160, n_trial=160, count=6) took 35265.2 seconds; score 80.1044
+
 300	100	Who are the Pequod's owners?	Bildad and Peleg.
 	106	0.66200	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
 	105	0.65808	Who is the Pequod's Second Mate?	Stubb.	305
