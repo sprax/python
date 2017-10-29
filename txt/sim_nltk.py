@@ -232,7 +232,7 @@ def show_nearest_neighbors(texts, nearest_indexes=None):
         print("  %3d.  T  %s\n  %3d.  O  %s\n" % (idx, txt, nearest_idx, nearest_txt))
 
 ###############################################################################
-def similarity_dict(train_quats, trial_quat, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt,
+def similarity_dict(train_quats, trial_quat, q_weight=1.0, sim_func=cosine_sim_txt,
                     min_sim_val=0):
     '''
     Returns a dict mapping train_quats' indexes to their similarity with this_text,
@@ -240,11 +240,9 @@ def similarity_dict(train_quats, trial_quat, excludes=None, q_weight=1.0, sim_fu
         similarity_func:    function returning the similariy between two texts (as in sentences)
         min_sim_val:        similarity threshold
     '''
-    if excludes is None:
-        excludes = []
     sim_dict = {}
     for idx, train_quat in enumerate(train_quats):
-        if idx in excludes:
+        if train_quat is trial_quat:
             continue
         try:
             sim = sim_weighted_qas(train_quat.question, train_quat.answer,
@@ -269,20 +267,19 @@ def nlargest_values(dict_with_comparable_values, count=10):
     '''Returns a list of the greatest values in descending order.  Duplicates permitted.'''
     return heapq.nlargest(count, dict_with_comparable_values.values())
 
-def find_nearest_quats(train_quats, trial_quat, excludes=None, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5, min_sim_val=0):
+def find_nearest_quats(train_quats, trial_quat, q_weight=1.0, sim_func=cosine_sim_txt, max_count=5, min_sim_val=0):
     '''
     Find the N most similar texts to this_text and return a list of (index, similarity) pairs in
     descending order of similarity.
         train_quats:        The training sentences or question-answer-tuples or whatever is to be compared.
         trial_quat:         The trial object to be compared with the training objects; must have at least a .question attribute.
         answer:             a plain text answer (default None)
-        excludes:           list of IDs to exclude from the comparison; e.g. this_text.id if excluding self comparison.
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
         max_count           maximum size of returned dict
     '''
     assert q_weight >= 0.0
-    sim_dict = similarity_dict(train_quats, trial_quat, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
+    sim_dict = similarity_dict(train_quats, trial_quat, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
 def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
@@ -304,14 +301,14 @@ def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
             if idx > 0 and idx + 100 != idn:
                 print("ERROR:", (idx + 100), "!=", trial_quat.id, "at", trial_quat)
                 raise IndexError
-        nearests[idx] = find_nearest_qas(train_quats, trial_quat, [idx], q_weight=q_weight,
+        nearests[idx] = find_nearest_qas(train_quats, trial_quat, q_weight=q_weight,
                                          max_count=max_count, min_sim_val=min_sim_val)
     return nearests
 
 def find_nearest_qas_lists_inclusive(train_quats, trial_quats, find_nearest_qas,
                                      sim_func=cosine_sim_txt, q_weight=1.0, max_count=5, min_sim_val=0.0):
     '''Find similars including self.'''
-    return [find_nearest_qas(train_quats, trial_quat, None, q_weight, sim_func,
+    return [find_nearest_qas(train_quats, trial_quat, q_weight, sim_func,
                              max_count, min_sim_val) for trial_quat in trial_quats]
 
 def find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, sim_func, q_weight=1.0, max_count=6, min_sim_val=1.0/6):
@@ -473,7 +470,7 @@ def match_tat(all_quats, ntrain=None, outpath="simlists.tsv",
     save_most_sim_qa_lists_tsv(all_quats, all_quats, sim_lists, ntrain=ntrain,
                                outpath=outpath, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
-    print("match_tat(size=%d, count=%d) took %.1f seconds; score %.4f" % (size, max_count,
+    print("match_tat(size=%d, count=%d) took %.1f seconds; score %.4f\n" % (size, max_count,
                                                                                seconds, score))
     return score, sim_lists
 
@@ -483,7 +480,7 @@ def match_tat(all_quats, ntrain=None, outpath="simlists.tsv",
 def moby_tat(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="moby_simlists.txt",
              find_qas=find_nearest_quats, sim_func=None,
              max_count=6, min_sim_val=0, sort_most_sim=False, reload=False):
-    '''Test match_tat no moby_dick or other specified quats.'''
+    '''Test match_tat on moby_dick or other specified quats.'''
     if quats is None or reload:
         quats = qa_csv.csv_read_qa(inpath)
     if ntrain > 0:
@@ -506,13 +503,15 @@ def match_ttt(train_quats, trial_quats, outpath="matched_ttt.tsv",
     if sim_func is not None:
         import pdb; pdb.set_trace()
         find_nearest_qas = functools.partial(find_nearest_qas, sim_func=sim_func)
+    # import pdb; pdb.set_trace()
     sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
                                      q_weight=q_weight, max_count=max_count, min_sim_val=min_sim_val)
+    print("SIMLISTS:", sim_lists)
     score = score_most_sim_lists(train_quats, trial_quats, sim_lists)
     save_most_sim_qa_lists_tsv(train_quats, trial_quats, sim_lists,
                                outpath=outpath, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
-    print("match_ttt(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f" % (
+    print("match_ttt(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f\n" % (
         len(train_quats), len(trial_quats), max_count, seconds, score))
     return score, sim_lists
 
@@ -520,7 +519,7 @@ def moby_ttt(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
              find_qas=find_nearest_quats, sim_func=None,
              q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False,
              reload=False, swap=False):
-    '''Test match_tat no moby_dick or other specified quats.'''
+    '''Test match_tat on moby_dick or other specified quats.'''
     if quats is None or reload:
         quats = qa_csv.csv_read_qa(inpath)
     if ntrain > 0:
@@ -531,7 +530,9 @@ def moby_ttt(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
         trial_quats = quats[nproto:]
     if swap:
         train_quats, trial_quats = trial_quats, train_quats
-    score, ms_lists = match_ttt(train_quats, trial_quats, outpath,
+    print(train_quats, "\n\n")
+    print(trial_quats, "\n\n")
+    score, ms_lists = match_ttt(train_quats, trial_quats, outpath=outpath,
                                 find_nearest_qas=find_qas, sim_func=sim_func,
                                 q_weight=q_weight, max_count=max_count,
                                 min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
@@ -554,7 +555,7 @@ def match_quats_to_model(model, trial_quats, outpath="matched_qtm.tsv", q_weight
     save_most_sim_qa_lists_tsv(train_quats, trial_quats, sim_lists,
                                outpath=outpath, min_sim_val=min_sim_val)
     seconds = time.time() - beg_time
-    print("match_ttt(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f" % (
+    print("match_ttt(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f\n" % (
         len(train_quats), len(trial_quats), max_count, seconds, score))
     return score, sim_lists
 
