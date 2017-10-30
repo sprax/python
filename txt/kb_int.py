@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+'''Functions for catching and handling KeyboardInterrupts.'''
+
 import time
 
 def handle_kbint(start_time, prev_kbint_time, message, location=None, inspect=True):
@@ -22,7 +24,7 @@ def handle_kbint(start_time, prev_kbint_time, message, location=None, inspect=Tr
         else:
             location = ''
     print("\nKeyboardInterrupt at %d seconds, %d since prior: %s: %s" % (
-          sec_since_start, sec_since_kbint, location, message))
+        sec_since_start, sec_since_kbint, location, message))
     return sec_since_kbint
 
 
@@ -39,8 +41,8 @@ def test_handle_kbint():
             time.sleep(1)
             odd = even + 1
         except KeyboardInterrupt:
-            sec_since_kbint = handle_kbint(start_time, prev_kbint,
-                "Count %d,  Even %d,  Odd %d." % (count, even, odd))
+            sec_since_kbint = handle_kbint(start_time, prev_kbint, "Count %d,  Even %d,  Odd %d." % (
+                count, even, odd))
             if sec_since_kbint < 1:
                 print("Caught 2 interrupts in less than a second -- breaking out of loop in test_handle_kbint!")
                 break
