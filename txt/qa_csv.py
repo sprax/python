@@ -35,6 +35,8 @@ def csv_read_qa(path, maxrows=0, delimiter='\t', quotechar='"', verbose=False):
                 if verbose:
                     print("ROW %3d: " % idx, row)
                 lenrow = len(row)
+                if lenrow < 1 or row[0] and row[0][0] == '#':
+                    continue
                 assert lenrow > 2
                 id_num = int(row[0])
                 try:
