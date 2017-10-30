@@ -48,3 +48,7 @@ def test_handle_kbint():
                 break
             prev_kbint += sec_since_kbint
     print("kbint END", count)
+
+###############################################################################
+if __name__ == '__main__':
+    test_handle_kbint()
