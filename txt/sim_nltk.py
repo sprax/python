@@ -285,7 +285,6 @@ def find_nearest_quats(train_quats, trial_quat, q_weight=1.0, sim_func=cosine_si
     descending order of similarity.
         train_quats:        The training sentences or question-answer-tuples or whatever is to be compared.
         trial_quat:         The trial object to be compared with the training objects; must have at least a .question attribute.
-        answer:             a plain text answer (default None)
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
         max_count           maximum size of returned dict

@@ -19,7 +19,7 @@ from nltk.corpus import wordnet as wn
 from nltk.corpus import brown
 import numpy as np
 
-import sim_nltk as sim_base
+import sim_nltk
 
 # Parameters to the algorithm. Currently set to values that was reported
 # in the paper to produce "best" results.
@@ -337,22 +337,58 @@ def smoke_test():
                                                  sent_pair[2], sent_pair[0], ' '*(spacing - len(sent_pair[0])),
                                                  sent_pair[1]))
 
-def find_nearest_quats(train_quats, question, answer=None, excludes=None, q_weight=1.0,
-                       sim_func=sim_base.cosine_sim_txt, max_count=6, min_sim_val=0):
+def sim_weighted_qas(qst_1, ans_1, qst_2, ans_2, q_weight=0.5, sim_func=sentence_similarity):
+    '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
+    assert q_weight > 0.0 and q_weight <= 1.0
+    # print("SIM_WEIGHTED_QAS(", qst_1, ans_1, qst_2, ans_2, q_weight, sim_func, ")")
+    q_sim = sim_func(qst_1, qst_2)
+    if q_weight < 1.0:
+        if ans_1 and ans_2:
+            try:
+                a_sim = sim_func(ans_1, ans_2)
+                return (q_sim - a_sim) * q_weight + a_sim
+            except ValueError as vex:
+                print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
+                raise vex
+    return q_sim
+
+def similarity_dict(train_quats, trial_quat, q_weight=1.0, sim_func=sentence_similarity,
+                    min_sim_val=0):
+    '''
+    Returns a dict mapping train_quats' indexes to their similarity with this_text,
+        provide their similarity value >= min_sim_val
+        similarity_func:    function returning the similariy between two texts (as in sentences)
+        min_sim_val:        similarity threshold
+    '''
+    sim_dict = {}
+    for idx, train_quat in enumerate(train_quats):
+        if train_quat is trial_quat:
+            continue
+        try:
+            sim = sim_weighted_qas(train_quat.question, train_quat.answer,
+                                   trial_quat.question, trial_quat.answer, q_weight=q_weight, sim_func=sim_func)
+            # sim = unit_clip_verbose(sim)
+            sim = sim_nltk.prob_clip_verbose(sim, where="(%d x %d)" % (train_quat.id, trial_quat.id), verbose=False)
+            if  sim >= min_sim_val:
+                sim_dict[idx] = sim
+        except ValueError as ex:
+            print("Continuing past error at idx: {}  ({})  ({})".format(idx, ex, train_quats[idx]))
+    return  sim_dict
+
+
+def find_nearest_quats(train_quats, trial_quat, q_weight=1.0, sim_func=sentence_similarity, max_count=5, min_sim_val=0):
     '''
     Find the N most similar texts to this_text and return a list of (index, similarity) pairs in
     descending order of similarity.
         train_quats:        The training sentences or question-answer-tuples or whatever is to be compared.
-        question:           a plain text question
-        answer:             a plain text answer (default None)
-        excludes:           list of IDs to exclude from the comparison; e.g. this_text.id if excluding self comparison.
+        trial_quat:         The trial object to be compared with the training objects; must have at least a .question attribute.
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
         max_count           maximum size of returned dict
     '''
     assert q_weight >= 0.0
-    sim_dict = similarity_dict(train_quats, question, answer, excludes, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
-    return nlargest_items_by_value(sim_dict, max_count)
+    sim_dict = similarity_dict(train_quats, trial_quat, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
+    return sim_nltk.nlargest_items_by_value(sim_dict, max_count)
 
 
 ###############################################################################
