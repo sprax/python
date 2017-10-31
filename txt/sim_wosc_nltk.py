@@ -210,7 +210,7 @@ def semantic_similarity(sentence_1, sentence_2, use_content_norm=False):
 
 ######################### word order similarity ##########################
 
-def word_order_vector(word_lst, word_set, joint_word_set):
+def word_order_vector(word_lst, word_dct, joint_word_set):
     """
     Computes the word order vector for a sentence. The sentence is passed
     in as a collection of words. The size of the word order vector is the
@@ -221,18 +221,17 @@ def word_order_vector(word_lst, word_set, joint_word_set):
     position of the most similar word in the sentence as long as the similarity
     is above the threshold ETA.
     """
-    # windex = {word: idx for idx, word in enumerate(joint_word_set)}
     wovec = np.zeros(len(joint_word_set))
     for idx, joint_word in enumerate(joint_word_set):
-        if joint_word in word_set:
+        if joint_word in word_dct:
             # word in joint_words found in sentence, just populate the index
-            wovec[idx] = word_lst.index(joint_word)
+            wovec[idx] = word_dct[joint_word]
         else:
             # word not in joint_words, find most similar word and populate
             # word_vector with the thresholded similarity
-            sim_word, max_sim = most_similar_word(joint_word, word_set)
+            sim_word, max_sim = most_similar_word(joint_word, word_dct.keys())
             if max_sim > ETA:
-                wovec[idx] = word_lst.index(sim_word)
+                wovec[idx] = word_dct[sim_word]
             else:
                 wovec[idx] = 0
     return wovec
@@ -242,14 +241,16 @@ def word_order_similarity(sentence_1, sentence_2):
     Computes the word-order similarity between two sentences as the normalized
     difference of word order between the two sentences.
     """
+    # NOTE: These dicts record only the *last* occurence of each word
     word_lst_1 = nltk.word_tokenize(sentence_1)
+    word_dct_1 = {word: idx for idx, word in enumerate(word_lst_1)}
     word_lst_2 = nltk.word_tokenize(sentence_2)
-    word_set_1 = set(word_lst_1)
-    word_set_2 = set(word_lst_2)
+    word_dct_2 = {word: idx for idx, word in enumerate(word_lst_2)}
+
     # TODO: Don't neet to make this a list -- the enumerate order is constant.
-    joint_words = list(word_set_1.union(word_set_2))
-    wov_1 = word_order_vector(word_lst_1, word_set_1, joint_words)
-    wov_2 = word_order_vector(word_lst_2, word_set_2, joint_words)
+    joint_words = set(word_dct_1.keys()).union(word_dct_2.keys())
+    wov_1 = word_order_vector(word_lst_1, word_dct_1, joint_words)
+    wov_2 = word_order_vector(word_lst_2, word_dct_2, joint_words)
     return 1.0 - (np.linalg.norm(wov_1 - wov_2) / np.linalg.norm(wov_1 + wov_2))
 
 ######################### overall similarity ##########################

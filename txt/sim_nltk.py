@@ -568,7 +568,7 @@ def moby_ttt(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
     pro.disable()
     sio = io.StringIO()
     pst = pstats.Stats(pro, stream=sio).sort_stats('cumulative')
-    pst.print_stats(16)
+    pst.print_stats(18)
     print(sio.getvalue())
     return score, ms_lists, train_quats, trial_quats
 
