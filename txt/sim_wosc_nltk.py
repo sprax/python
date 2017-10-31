@@ -254,15 +254,39 @@ def word_order_similarity(sentence_1, sentence_2):
     return 1.0 - (np.linalg.norm(wov_1 - wov_2) / np.linalg.norm(wov_1 + wov_2))
 
 ######################### overall similarity ##########################
-
 def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
     """
     Calculate the semantic similarity between two sentences. The last
     parameter is True or False depending on whether information content
     normalization is desired or not.
     """
-    return delta * semantic_similarity(sentence_1, sentence_2, use_content_norm) + \
-        (1.0 - delta) * word_order_similarity(sentence_1, sentence_2)
+    words_1 = nltk.word_tokenize(sentence_1)
+    words_2 = nltk.word_tokenize(sentence_2)
+    joint_words = set(words_1).union(set(words_2))
+    vec_1 = semantic_vector(words_1, joint_words, use_content_norm)
+    vec_2 = semantic_vector(words_2, joint_words, use_content_norm)
+    semantic_sim = np.dot(vec_1, vec_2.T) / (np.linalg.norm(vec_1) * np.linalg.norm(vec_2))
+
+    words_1 = nltk.word_tokenize(sentence_1)
+    words_2 = nltk.word_tokenize(sentence_2)
+    joint_words = list(set(words_1).union(set(words_2)))
+    windex = {x[1]: x[0] for x in enumerate(joint_words)}
+    wov_1 = word_order_vector(words_1, joint_words, windex)
+    wov_2 = word_order_vector(words_2, joint_words, windex)
+    word_ord_sim = 1.0 - (np.linalg.norm(wov_1 - wov_2) / np.linalg.norm(wov_1 + wov_2))
+
+    return delta * semantic_sim + (1.0 - delta) * word_ord_sim
+
+
+def sentence_similarity_slow(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
+    """
+    Calculate the semantic similarity between two sentences. The last
+    parameter is True or False depending on whether information content
+    normalization is desired or not.
+    """
+    semantic_sim = semantic_similarity(sentence_1, sentence_2, use_content_norm)
+    word_ord_sim = word_order_similarity(sentence_1, sentence_2)
+    return delta * semantic_sim + (1.0 - delta) * word_ord_sim
 
 ######################### main / test ##########################
 
