@@ -171,7 +171,7 @@ def info_content(lookup_word):
 
 ######################### semantic similarity ##########################
 
-def semantic_vector(sent_set, joint_words, use_content_norm=False):
+def semantic_vector(sent_set, joint_word_set, use_content_norm=False):
     """
     Computes the semantic vector of a sentence. The sentence is passed in as
     a collection of words. The size of the semantic vector is the same as the
@@ -181,22 +181,22 @@ def semantic_vector(sent_set, joint_words, use_content_norm=False):
     further normalized by the word's (and similar word's) information content
     if use_content_norm is True.
     """
-    semvec = np.zeros(len(joint_words))
+    sem_vec = np.zeros(len(joint_word_set))
     i = 0
-    for joint_word in joint_words:
+    for joint_word in joint_word_set:
         if joint_word in sent_set:
             # if word in union exists in the sentence, s(i) = 1 (unnormalized)
-            semvec[i] = 1.0
+            sem_vec[i] = 1.0
             if use_content_norm:
-                semvec[i] = semvec[i] * math.pow(info_content(joint_word), 2)
+                sem_vec[i] = sem_vec[i] * math.pow(info_content(joint_word), 2)
         else:
             # find the most similar word in the joint set and set the sim value
             sim_word, max_sim = most_similar_word(joint_word, sent_set)
-            semvec[i] = PHI if max_sim > PHI else 0.0
+            sem_vec[i] = PHI if max_sim > PHI else 0.0
             if use_content_norm:
-                semvec[i] = semvec[i] * info_content(joint_word) * info_content(sim_word)
+                sem_vec[i] = sem_vec[i] * info_content(joint_word) * info_content(sim_word)
         i = i + 1
-    return semvec
+    return sem_vec
 
 ######################### word order similarity ##########################
 
@@ -211,26 +211,26 @@ def semantic_and_word_order_vectors(word_dct, joint_word_set, use_content_norm=F
     position of the most similar word in the sentence as long as the similarity
     is above the threshold ETA.
     """
-    length = len(joint_word_set)
-    semvec = np.zeros(length)
-    ordvec = np.zeros(length)
+    vec_len = len(joint_word_set)
+    sem_vec = np.zeros(vec_len)
+    ord_vec = np.zeros(vec_len)
     for idx, joint_word in enumerate(joint_word_set):
         try:    # TODO: shouldn't try/except KeyError be faster than checking 'in'??
-            # word in joint_words found in sentence, just populate the index
-            ordvec[idx] = word_dct[joint_word]
-            semvec[idx] = 1.0
+            # word in joint_word_set found in sentence, just populate the index
+            ord_vec[idx] = word_dct[joint_word]
+            sem_vec[idx] = 1.0
             if use_content_norm:
                 info_cont = info_content(joint_word)
-                semvec[idx] *= math.pow(info_content(joint_word), 2)
+                sem_vec[idx] *= math.pow(info_content(joint_word), 2)
         except KeyError:
-            # word not in joint_words, find most similar word and populate
+            # word not in joint_word_set, find most similar word and populate
             # word_vector with the thresholded similarity
             sim_word, max_sim = most_similar_word(joint_word, word_dct.keys())
-            ordvec[idx] = word_dct[sim_word] if max_sim > ETA else 0
-            semvec[idx] = max_sim if max_sim > PHI else 0.0
+            ord_vec[idx] = word_dct[sim_word] if max_sim > ETA else 0
+            sem_vec[idx] = max_sim if max_sim > PHI else 0.0
             if use_content_norm:
-                semvec[idx] = semvec[idx] * info_content(joint_word) * info_content(sim_word)
-    return semvec, ordvec
+                sem_vec[idx] = sem_vec[idx] * info_content(joint_word) * info_content(sim_word)
+    return sem_vec, ord_vec
 
 ######################### vector cosine similarities ##########################
 
@@ -241,9 +241,9 @@ def semantic_similarity(sentence_1, sentence_2, use_content_norm=False):
     """
     word_set_1 = set(nltk.word_tokenize(sentence_1))
     word_set_2 = set(nltk.word_tokenize(sentence_2))
-    joint_words = word_set_1.union(word_set_2)
-    vec_1 = semantic_vector(word_set_1, joint_words, use_content_norm)
-    vec_2 = semantic_vector(word_set_2, joint_words, use_content_norm)
+    joint_word_set = word_set_1.union(word_set_2)
+    vec_1 = semantic_vector(word_set_1, joint_word_set, use_content_norm)
+    vec_2 = semantic_vector(word_set_2, joint_word_set, use_content_norm)
     return np.dot(vec_1, vec_2.T) / (np.linalg.norm(vec_1) * np.linalg.norm(vec_2))
 
 def word_order_vector(word_dct, joint_word_set):
@@ -257,20 +257,20 @@ def word_order_vector(word_dct, joint_word_set):
     position of the most similar word in the sentence as long as the similarity
     is above the threshold ETA.
     """
-    ordvec = np.zeros(len(joint_word_set))
+    ord_vec = np.zeros(len(joint_word_set))
     for idx, joint_word in enumerate(joint_word_set):
         try:    # TODO: shouldn't try/except KeyError be faster than checking 'in'??
-            # word in joint_words found in sentence, just populate the index
-            ordvec[idx] = word_dct[joint_word]
+            # word in joint_word_set found in sentence, just populate the index
+            ord_vec[idx] = word_dct[joint_word]
         except KeyError:
-            # word not in joint_words, find most similar word and populate
+            # word not in joint_word_set, find most similar word and populate
             # word_vector with the thresholded similarity
             sim_word, max_sim = most_similar_word(joint_word, word_dct.keys())
             if max_sim > ETA:
-                ordvec[idx] = word_dct[sim_word]
+                ord_vec[idx] = word_dct[sim_word]
             else:
-                ordvec[idx] = 0
-    return ordvec
+                ord_vec[idx] = 0
+    return ord_vec
 
 def word_order_similarity(sentence_1, sentence_2):
     """
@@ -284,9 +284,9 @@ def word_order_similarity(sentence_1, sentence_2):
     word_dct_2 = {word: idx for idx, word in enumerate(word_lst_2)}
 
     # TODO: Don't neet to make this a list -- the enumerate order is constant.
-    joint_words_set = set(word_dct_1.keys()).union(word_dct_2.keys())
-    wov_1 = word_order_vector(word_dct_1, joint_words_set)
-    wov_2 = word_order_vector(word_dct_2, joint_words_set)
+    joint_word_set = set(word_dct_1.keys()).union(word_dct_2.keys())
+    wov_1 = word_order_vector(word_dct_1, joint_word_set)
+    wov_2 = word_order_vector(word_dct_2, joint_word_set)
     return 1.0 - (np.linalg.norm(wov_1 - wov_2) / np.linalg.norm(wov_1 + wov_2))
 
 ######################### overall similarity ##########################
