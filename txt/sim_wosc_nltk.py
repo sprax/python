@@ -169,7 +169,7 @@ def info_content(lookup_word):
     count = 0 if not lookup_word in BROWN_FREQS else BROWN_FREQS[lookup_word]
     return 1.0 - (math.log(count + 1) / math.log(N + 1))
 
-def semantic_vector(words, joint_words, use_content_norm=False):
+def semantic_vector(sent_set, joint_words, use_content_norm=False):
     """
     Computes the semantic vector of a sentence. The sentence is passed in as
     a collection of words. The size of the semantic vector is the same as the
@@ -179,7 +179,6 @@ def semantic_vector(words, joint_words, use_content_norm=False):
     further normalized by the word's (and similar word's) information content
     if use_content_norm is True.
     """
-    sent_set = set(words)
     semvec = np.zeros(len(joint_words))
     i = 0
     for joint_word in joint_words:
@@ -202,16 +201,16 @@ def semantic_similarity(sentence_1, sentence_2, use_content_norm=False):
     Computes the semantic similarity between two sentences as the cosine
     similarity between the semantic vectors computed for each sentence.
     """
-    words_1 = nltk.word_tokenize(sentence_1)
-    words_2 = nltk.word_tokenize(sentence_2)
-    joint_words = set(words_1).union(set(words_2))
-    vec_1 = semantic_vector(words_1, joint_words, use_content_norm)
-    vec_2 = semantic_vector(words_2, joint_words, use_content_norm)
+    word_set_1 = set(nltk.word_tokenize(sentence_1))
+    word_set_2 = set(nltk.word_tokenize(sentence_2))
+    joint_words = word_set_1.union(word_set_2)
+    vec_1 = semantic_vector(word_set_1, joint_words, use_content_norm)
+    vec_2 = semantic_vector(word_set_2, joint_words, use_content_norm)
     return np.dot(vec_1, vec_2.T) / (np.linalg.norm(vec_1) * np.linalg.norm(vec_2))
 
 ######################### word order similarity ##########################
 
-def word_order_vector(words, joint_words, windex):
+def word_order_vector(word_lst, word_set, joint_word_set):
     """
     Computes the word order vector for a sentence. The sentence is passed
     in as a collection of words. The size of the word order vector is the
@@ -222,22 +221,20 @@ def word_order_vector(words, joint_words, windex):
     position of the most similar word in the sentence as long as the similarity
     is above the threshold ETA.
     """
-    wovec = np.zeros(len(joint_words))
-    i = 0
-    wordset = set(words)
-    for joint_word in joint_words:
-        if joint_word in wordset:
+    # windex = {word: idx for idx, word in enumerate(joint_word_set)}
+    wovec = np.zeros(len(joint_word_set))
+    for idx, joint_word in enumerate(joint_word_set):
+        if joint_word in word_set:
             # word in joint_words found in sentence, just populate the index
-            wovec[i] = windex[joint_word]
+            wovec[idx] = word_lst.index(joint_word)
         else:
             # word not in joint_words, find most similar word and populate
             # word_vector with the thresholded similarity
-            sim_word, max_sim = most_similar_word(joint_word, wordset)
+            sim_word, max_sim = most_similar_word(joint_word, word_set)
             if max_sim > ETA:
-                wovec[i] = windex[sim_word]
+                wovec[idx] = word_lst.index(sim_word)
             else:
-                wovec[i] = 0
-        i = i + 1
+                wovec[idx] = 0
     return wovec
 
 def word_order_similarity(sentence_1, sentence_2):
@@ -245,40 +242,43 @@ def word_order_similarity(sentence_1, sentence_2):
     Computes the word-order similarity between two sentences as the normalized
     difference of word order between the two sentences.
     """
-    words_1 = nltk.word_tokenize(sentence_1)
-    words_2 = nltk.word_tokenize(sentence_2)
-    joint_words = list(set(words_1).union(set(words_2)))
-    windex = {x[1]: x[0] for x in enumerate(joint_words)}
-    wov_1 = word_order_vector(words_1, joint_words, windex)
-    wov_2 = word_order_vector(words_2, joint_words, windex)
+    word_lst_1 = nltk.word_tokenize(sentence_1)
+    word_lst_2 = nltk.word_tokenize(sentence_2)
+    word_set_1 = set(word_lst_1)
+    word_set_2 = set(word_lst_2)
+    # TODO: Don't neet to make this a list -- the enumerate order is constant.
+    joint_words = list(word_set_1.union(word_set_2))
+    wov_1 = word_order_vector(word_lst_1, word_set_1, joint_words)
+    wov_2 = word_order_vector(word_lst_2, word_set_2, joint_words)
     return 1.0 - (np.linalg.norm(wov_1 - wov_2) / np.linalg.norm(wov_1 + wov_2))
 
 ######################### overall similarity ##########################
-def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
+def sentence_similarity_opt(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
     """
     Calculate the semantic similarity between two sentences. The last
     parameter is True or False depending on whether information content
     normalization is desired or not.
     """
-    words_1 = nltk.word_tokenize(sentence_1)
-    words_2 = nltk.word_tokenize(sentence_2)
-    joint_words = set(words_1).union(set(words_2))
-    vec_1 = semantic_vector(words_1, joint_words, use_content_norm)
-    vec_2 = semantic_vector(words_2, joint_words, use_content_norm)
+    word_set_1 = set(nltk.word_tokenize(sentence_1))
+    word_set_2 = set(nltk.word_tokenize(sentence_2))
+    word_set_1 = word_set_1
+    word_set_2 = word_set_2
+    joint_words_set = word_set_1.union(word_set_2)
+    vec_1 = semantic_vector(word_set_1, joint_words_set, use_content_norm)
+    vec_2 = semantic_vector(word_set_2, joint_words_set, use_content_norm)
     semantic_sim = np.dot(vec_1, vec_2.T) / (np.linalg.norm(vec_1) * np.linalg.norm(vec_2))
 
-    words_1 = nltk.word_tokenize(sentence_1)
-    words_2 = nltk.word_tokenize(sentence_2)
-    joint_words = list(set(words_1).union(set(words_2)))
-    windex = {x[1]: x[0] for x in enumerate(joint_words)}
-    wov_1 = word_order_vector(words_1, joint_words, windex)
-    wov_2 = word_order_vector(words_2, joint_words, windex)
+    # TODO: probably not necessary to convert to list
+    joint_words_lst = list(joint_words_set)
+    windex = {x[1]: x[0] for x in enumerate(joint_words_lst)}
+    wov_1 = word_order_vector(word_set_1, joint_words_lst, windex)
+    wov_2 = word_order_vector(word_set_2, joint_words_lst, windex)
     word_ord_sim = 1.0 - (np.linalg.norm(wov_1 - wov_2) / np.linalg.norm(wov_1 + wov_2))
 
     return delta * semantic_sim + (1.0 - delta) * word_ord_sim
 
 
-def sentence_similarity_slow(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
+def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
     """
     Calculate the semantic similarity between two sentences. The last
     parameter is True or False depending on whether information content
