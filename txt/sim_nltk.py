@@ -517,7 +517,7 @@ def moby_tat(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
                               min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     return score, slists, used_quats
 
-
+###############################################################################
 def match_ttt(train_quats, trial_quats, outpath="matched_ttt.tsv",
               find_nearest_qas=find_nearest_quats, sim_func=None,
               q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False):
@@ -540,6 +540,9 @@ def match_ttt(train_quats, trial_quats, outpath="matched_ttt.tsv",
         len(train_quats), len(trial_quats), max_count, seconds, score))
     return score, sim_lists
 
+
+import cProfile, pstats, io
+
 def moby_ttt(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="moby_matched.txt",
              find_qas=find_nearest_quats, sim_func=None,
              q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False,
@@ -555,10 +558,18 @@ def moby_ttt(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
         trial_quats = quats[nproto:]
     if swap:
         train_quats, trial_quats = trial_quats, train_quats
+
+    pro = cProfile.Profile()
+    pro.enable()
     score, ms_lists = match_ttt(train_quats, trial_quats, outpath=outpath,
                                 find_nearest_qas=find_qas, sim_func=sim_func,
                                 q_weight=q_weight, max_count=max_count,
                                 min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
+    pro.disable()
+    sio = io.StringIO()
+    pst = pstats.Stats(pro, stream=sio).sort_stats('cumulative')
+    pst.print_stats(16)
+    print(sio.getvalue())
     return score, ms_lists, train_quats, trial_quats
 
 
