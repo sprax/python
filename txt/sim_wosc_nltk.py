@@ -292,7 +292,7 @@ def pos_tag_sem_ord_word_vectors(first_word, sent_word_dct, joint_wordpos_set, u
         except KeyError:
             # word not in joint_wordpos_set, find most similar word and populate
             # word_vector with the thresholded similarity
-            pdb.set_trace()
+            # pdb.set_trace()
             sim_word, max_sim = most_similar_pos_word(sent_word_dct, joint_word, joint_wtag)
             ord_vec[idx] = sent_word_dct[sim_word][0] if max_sim > ETA else 0
             sem_vec[idx] = max_sim if max_sim > PHI else 0.0
