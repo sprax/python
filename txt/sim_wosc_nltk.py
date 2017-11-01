@@ -13,6 +13,7 @@ described in the paper and how I implemented it.
 '''
 from __future__ import division
 import math
+import pdb
 import sys
 import nltk
 from nltk.corpus import wordnet as wn
@@ -34,36 +35,41 @@ N = 0
 
 ######################### word similarity ##########################
 
-def get_best_synset_pair(word_1, word_2):
+def get_best_synset_pair(word_1, word_2, word_tag_1=None, word_tag_2=None):
     """
     Choose the pair with highest path similarity among all pairs.
     Mimics pattern-seeking behavior of humans.
     """
     max_sim = -1.0
-    synsets_1 = wn.synsets(word_1)
-    synsets_2 = wn.synsets(word_2)
-
+    synsets_1 = wn.synsets(word_1, word_tag_1)
     if synsets_1 is None:
         # print("synset(%s) is None" % word_1)
         return None, None
-    elif synsets_2 is None:
+
+    synsets_2 = wn.synsets(word_2, word_tag_2)
+    if synsets_2 is None:
         # print("synset(%s) is None" % word_2)
         return None, None
-    elif len(synsets_1) == 0 or len(synsets_2) == 0:
+
+    if len(synsets_1) == 0 or len(synsets_2) == 0:
         return None, None
-    else:
-        max_sim = -1.0
-        best_pair = None, None
-        for synset_1 in synsets_1:
-            for synset_2 in synsets_2:
-                sim = wn.path_similarity(synset_1, synset_2)
-                if sim is None:
-                    # print("path_similarity from (%s, %s) is None" % (word_1, word_2))
+
+    fixme_count = 0
+
+    max_sim = -1.0
+    best_pair = None, None
+    for synset_1 in synsets_1:
+        for synset_2 in synsets_2:
+            sim = wn.path_similarity(synset_1, synset_2)
+            if sim is None:
+                if fixme_count == 0:
+                    # print("path_similarity from (%s, %s) is None (fixme_count %d)" % (word_1, word_2, fixme_count))
                     return None, None
-                if sim > max_sim:
-                    max_sim = sim
-                    best_pair = synset_1, synset_2
-        return best_pair
+            elif sim > max_sim:
+                max_sim = sim
+                best_pair = synset_1, synset_2
+            fixme_count += 1
+    return best_pair
 
 def length_dist(synset_1, synset_2):
     """
@@ -125,15 +131,16 @@ def hierarchy_dist(synset_1, synset_2):
     return ((math.exp(BETA * h_dist) - math.exp(-BETA * h_dist)) /
             (math.exp(BETA * h_dist) + math.exp(-BETA * h_dist)))
 
-def word_similarity(word_1, word_2):
+def word_similarity(word_1, word_2, word_tag_1=None, word_tag_2=None):
     '''synset distance between two words'''
-    synset_pair = get_best_synset_pair(word_1, word_2)
+    synset_pair = get_best_synset_pair(word_1, word_2, word_tag_1, word_tag_2)
     return (length_dist(synset_pair[0], synset_pair[1]) *
             hierarchy_dist(synset_pair[0], synset_pair[1]))
 
+
 ######################### sentence similarity ##########################
 
-def most_similar_word(word, word_set):
+def most_similar_word(word, sent_word_set):
     """
     Find the word in the joint word set that is most similar to the word
     passed in. We use the algorithm above to compute word similarity between
@@ -142,12 +149,39 @@ def most_similar_word(word, word_set):
     """
     max_sim = -1.0
     sim_word = ""
-    for ref_word in word_set:
-        sim = word_similarity(word, ref_word)
+    for sent_word in sent_word_set:
+        sim = word_similarity(word, sent_word)
         if sim > max_sim:
             max_sim = sim
-            sim_word = ref_word
+            sim_word = sent_word
     return sim_word, max_sim
+
+
+NON_SIM_WORDS = { 'a', 'the', 'in', 'on', 'to' }
+
+def most_similar_pos_word(sent_word_dct, union_word, union_wtag=None):
+    """
+    Find the word in the joint word set that is most similar to the word
+    passed in. We use the algorithm above to compute word similarity between
+    the word and each word in the joint word set, and return the most similar
+    word and the actual similarity value.
+    """
+    max_sim = -1.0
+    sim_word = ""
+    if union_word not in NON_SIM_WORDS:
+        for sent_word in sent_word_dct:
+            sim = word_similarity(union_word, sent_word, word_tag_1=union_wtag,
+                                  word_tag_2=sent_word_dct[sent_word][1])
+            if sim > max_sim:
+                max_sim = sim
+                sim_word = sent_word
+    return sim_word, max_sim
+
+
+
+
+
+
 
 def info_content(lookup_word):
     """
@@ -200,7 +234,7 @@ def semantic_vector(sent_set, joint_word_set, use_content_norm=False):
 
 ######################### word order similarity ##########################
 
-def semantic_and_word_order_vectors(word_dct, joint_word_set, use_content_norm=False):
+def semantic_and_word_order_vectors(first_word, sent_word_dct, joint_word_set, use_content_norm=False):
     """
     Computes the word order vector for a sentence. The sentence is passed
     in as a collection of words. The size of the word order vector is the
@@ -217,7 +251,7 @@ def semantic_and_word_order_vectors(word_dct, joint_word_set, use_content_norm=F
     for idx, joint_word in enumerate(joint_word_set):
         try:    # TODO: shouldn't try/except KeyError be faster than checking 'in'??
             # word in joint_word_set found in sentence, just populate the index
-            ord_vec[idx] = word_dct[joint_word]
+            ord_vec[idx] = sent_word_dct[joint_word]
             sem_vec[idx] = 1.0
             if use_content_norm:
                 info_cont = info_content(joint_word)
@@ -225,8 +259,42 @@ def semantic_and_word_order_vectors(word_dct, joint_word_set, use_content_norm=F
         except KeyError:
             # word not in joint_word_set, find most similar word and populate
             # word_vector with the thresholded similarity
-            sim_word, max_sim = most_similar_word(joint_word, word_dct.keys())
-            ord_vec[idx] = word_dct[sim_word] if max_sim > ETA else 0
+            sim_word, max_sim = most_similar_word(joint_word, sent_word_dct.keys())
+            ord_vec[idx] = sent_word_dct[sim_word] if max_sim > ETA else 0
+            sem_vec[idx] = max_sim if max_sim > PHI else 0.0
+            if use_content_norm:
+                sem_vec[idx] = sem_vec[idx] * info_content(joint_word) * info_content(sim_word)
+    return sem_vec, ord_vec
+
+def pos_tag_sem_ord_word_vectors(first_word, sent_word_dct, joint_wordpos_set, use_content_norm=False):
+    """
+    Computes the word order vector for a sentence. The sentence is passed
+    in as a collection of words. The size of the word order vector is the
+    same as the size of the joint word set. The elements of the word order
+    vector are the position mapping (from the windex dictionary) of the
+    word in the joint set if the word exists in the sentence. If the word
+    does not exist in the sentence, then the value of the element is the
+    position of the most similar word in the sentence as long as the similarity
+    is above the threshold ETA.
+    """
+    vec_len = len(joint_wordpos_set)
+    sem_vec = np.zeros(vec_len)
+    ord_vec = np.zeros(vec_len)
+    for idx, joint_wordpos in enumerate(joint_wordpos_set):
+        joint_word = joint_wordpos[0]
+        joint_wtag = joint_wordpos[1]
+        try:
+            ord_vec[idx] = sent_word_dct[joint_word][0]
+            sem_vec[idx] = 1.0
+            if use_content_norm:
+                info_cont = info_content(joint_word)
+                sem_vec[idx] *= math.pow(info_content(joint_word), 2)
+        except KeyError:
+            # word not in joint_wordpos_set, find most similar word and populate
+            # word_vector with the thresholded similarity
+            pdb.set_trace()
+            sim_word, max_sim = most_similar_pos_word(sent_word_dct, joint_word, joint_wtag)
+            ord_vec[idx] = sent_word_dct[sim_word][0] if max_sim > ETA else 0
             sem_vec[idx] = max_sim if max_sim > PHI else 0.0
             if use_content_norm:
                 sem_vec[idx] = sem_vec[idx] * info_content(joint_word) * info_content(sim_word)
@@ -246,7 +314,7 @@ def semantic_similarity(sentence_1, sentence_2, use_content_norm=False):
     vec_2 = semantic_vector(word_set_2, joint_word_set, use_content_norm)
     return np.dot(vec_1, vec_2.T) / (np.linalg.norm(vec_1) * np.linalg.norm(vec_2))
 
-def word_order_vector(word_dct, joint_word_set):
+def word_order_vector(sent_word_dct, joint_word_set):
     """
     Computes the word order vector for a sentence. The sentence is passed
     in as a collection of words. The size of the word order vector is the
@@ -261,13 +329,13 @@ def word_order_vector(word_dct, joint_word_set):
     for idx, joint_word in enumerate(joint_word_set):
         try:    # TODO: shouldn't try/except KeyError be faster than checking 'in'??
             # word in joint_word_set found in sentence, just populate the index
-            ord_vec[idx] = word_dct[joint_word]
+            ord_vec[idx] = sent_word_dct[joint_word]
         except KeyError:
             # word not in joint_word_set, find most similar word and populate
             # word_vector with the thresholded similarity
-            sim_word, max_sim = most_similar_word(joint_word, word_dct.keys())
+            sim_word, max_sim = most_similar_word(joint_word, sent_word_dct.keys())
             if max_sim > ETA:
-                ord_vec[idx] = word_dct[sim_word]
+                ord_vec[idx] = sent_word_dct[sim_word]
             else:
                 ord_vec[idx] = 0
     return ord_vec
@@ -290,6 +358,15 @@ def word_order_similarity(sentence_1, sentence_2):
     return 1.0 - (np.linalg.norm(wov_1 - wov_2) / np.linalg.norm(wov_1 + wov_2))
 
 ######################### overall similarity ##########################
+
+NLTK_POS_TAG_TO_WORDNET_KEY = { 'A': 'a', 'N': 'n', 'R': 'r', 'V': 'v', 'S': 's'}
+
+def pos_wnk(tag):
+    try:
+        return NLTK_POS_TAG_TO_WORDNET_KEY[tag[0]]
+    except KeyError:
+        return None
+
 def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
     """
     Calculate the semantic similarity between two sentences. The last
@@ -298,17 +375,23 @@ def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DE
     """
     # NOTE: These dicts record only the *last* occurence of each word
     word_lst_1 = nltk.word_tokenize(sentence_1)
-    word_dct_1 = {word: idx for idx, word in enumerate(word_lst_1)}
+    first_wd_1 = word_lst_1[0]
+    pos_tags_1 = nltk.pos_tag(word_lst_1)
+    word_dct_1 = {wordpos[0]: (idx, pos_wnk(wordpos[1])) for idx, wordpos in enumerate(pos_tags_1)}
     word_set_1 = set(word_dct_1.keys())
 
     word_lst_2 = nltk.word_tokenize(sentence_2)
-    word_dct_2 = {word: idx for idx, word in enumerate(word_lst_2)}
+    first_wd_2 = word_lst_2[0]
+    pos_tags_2 = nltk.pos_tag(word_lst_2)
+    word_dct_2 = {wordpos[0]: (idx, pos_wnk(wordpos[1])) for idx, wordpos in enumerate(pos_tags_2)}
     word_set_2 = set(word_dct_2.keys())
 
+    # pdb.set_trace()
     joint_word_set = word_set_1.union(word_set_2)
+    joint_wordpos_set = { (word, word_dct_2[word][1] if word in word_dct_2 else word_dct_1[word][1]) for word in joint_word_set}
 
-    semvec_1, ordvec_1 = semantic_and_word_order_vectors(word_dct_1, joint_word_set, use_content_norm)
-    semvec_2, ordvec_2 = semantic_and_word_order_vectors(word_dct_2, joint_word_set, use_content_norm)
+    semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(first_wd_1, word_dct_1, joint_wordpos_set, use_content_norm)
+    semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(first_wd_2, word_dct_2, joint_wordpos_set, use_content_norm)
     semantic_sim = np.dot(semvec_1, semvec_2.T) / (np.linalg.norm(semvec_1) * np.linalg.norm(semvec_2))
     word_ord_sim = 1.0 - (np.linalg.norm(ordvec_1 - ordvec_2) / np.linalg.norm(ordvec_1 + ordvec_2))
     return delta * semantic_sim + (1.0 - delta) * word_ord_sim
@@ -432,6 +515,7 @@ def similarity_dict(train_quats, trial_quat, q_weight=1.0, min_sim_val=0):
                 sim_dict[idx] = sim
         except ValueError as ex:
             print("Continuing past error at idx: {}  ({})  ({})".format(idx, ex, train_quats[idx]))
+            raise ex
     return  sim_dict
 
 

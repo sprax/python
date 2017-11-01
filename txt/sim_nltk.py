@@ -265,6 +265,7 @@ def similarity_dict(train_quats, trial_quat, q_weight=1.0, sim_func=cosine_sim_t
                 sim_dict[idx] = sim
         except ValueError as ex:
             print("Continuing past error at idx: {}  ({})  ({})".format(idx, ex, train_quats[idx]))
+            raise ex
     return  sim_dict
 
 def nlargest_items_by_value(dict_with_comparable_values, count=10):
@@ -568,7 +569,7 @@ def moby_ttt(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
     pro.disable()
     sio = io.StringIO()
     pst = pstats.Stats(pro, stream=sio).sort_stats('cumulative')
-    pst.print_stats(18)
+    pst.print_stats(30)
     print(sio.getvalue())
     return score, ms_lists, train_quats, trial_quats
 

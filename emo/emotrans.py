@@ -533,7 +533,6 @@ class EmoTrans:
         mixed in with lower case words.  You may want to filter out the capitalized
         "synonyms", if you can even call them that.
         '''
-
         # FIXME: reject synonyms that merely singularize or pluralize the source word.
         rejects = []
         lwrd = word.lower()
