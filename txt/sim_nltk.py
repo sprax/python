@@ -317,7 +317,8 @@ def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
                     print("ERROR:", (idx + 100), "!=", trial_quat.id, "at", trial_quat)
                     raise IndexError
             nearests[idx] = find_nearest_qas(train_quats, trial_quat, q_weight=q_weight,
-                                             max_count=max_count, min_sim_val=min_sim_val)
+                                             max_count=max_count, min_sim_val=min_sim_val,
+                                             sim_func=sim_func)
         except KeyboardInterrupt:
             int_time = time.time()
             print("KeyboardInterrupt in find_nearest_qas_lists at %d/%d trials on %d train_quats after %d seconds." % (idx, ntrial, ntrain, int_time - beg_time))
@@ -527,9 +528,9 @@ def match_ttt(train_quats, trial_quats, outpath="matched_ttt.tsv",
     the list of similarity lists to TSV for further work.  Many default values are
     assumed, and the score is returned, not saved.'''
     beg_time = time.time()
-    if sim_func is not None:
-        # import pdb; pdb.set_trace()
-        find_nearest_qas = functools.partial(find_nearest_qas, sim_func=sim_func)
+    # if sim_func is not None:
+    #     # import pdb; pdb.set_trace()
+    #     find_nearest_qas = functools.partial(find_nearest_qas, sim_func=sim_func)
     # import pdb; pdb.set_trace()
     sim_lists = find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
                                      q_weight=q_weight, max_count=max_count, min_sim_val=min_sim_val)

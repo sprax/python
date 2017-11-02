@@ -157,7 +157,7 @@ def most_similar_word(word, sent_word_set):
     return sim_word, max_sim
 
 
-NON_SIM_WORDS = { 'a', 'the', 'in', 'on', 'to' }
+NON_SIM_WORDS = {} # { 'a', 'the', 'in', 'on', 'to' }
 
 def most_similar_pos_word(sent_word_dct, union_word, union_wtag=None):
     """
@@ -166,21 +166,25 @@ def most_similar_pos_word(sent_word_dct, union_word, union_wtag=None):
     the word and each word in the joint word set, and return the most similar
     word and the actual similarity value.
     """
+
+
+    return most_similar_word(union_word, sent_word_dct.keys())
+
+    # FIXME ! ! ! ! ! ! ! ! ! ! !
+
     max_sim = -1.0
     sim_word = ""
     if union_word not in NON_SIM_WORDS:
-        for sent_word in sent_word_dct:
-            sim = word_similarity(union_word, sent_word, word_tag_1=union_wtag,
-                                  word_tag_2=sent_word_dct[sent_word][1])
-            if sim > max_sim:
-                max_sim = sim
-                sim_word = sent_word
+        for item in sent_word_dct.items():
+            sent_wtag = item[1][1]
+            if True or sent_wtag and sent_wtag == union_wtag:
+                sent_word = item[0]
+                # FIXME USE THIS: sim = word_similarity(union_word, sent_word, union_wtag, sent_wtag)
+                sim = word_similarity(union_word, sent_word)
+                if sim > max_sim:
+                    max_sim = sim
+                    sim_word = sent_word
     return sim_word, max_sim
-
-
-
-
-
 
 
 def info_content(lookup_word):
@@ -203,34 +207,6 @@ def info_content(lookup_word):
     count = 0 if not lookup_word in BROWN_FREQS else BROWN_FREQS[lookup_word]
     return 1.0 - (math.log(count + 1) / math.log(N + 1))
 
-######################### semantic similarity ##########################
-
-def semantic_vector(sent_set, joint_word_set, use_content_norm=False):
-    """
-    Computes the semantic vector of a sentence. The sentence is passed in as
-    a collection of words. The size of the semantic vector is the same as the
-    size of the joint word set. The elements are 1 if a word in the sentence
-    already exists in the joint word set, or the similarity of the word to the
-    most similar word in the joint word set if it doesn't. Both values are
-    further normalized by the word's (and similar word's) information content
-    if use_content_norm is True.
-    """
-    sem_vec = np.zeros(len(joint_word_set))
-    i = 0
-    for joint_word in joint_word_set:
-        if joint_word in sent_set:
-            # if word in union exists in the sentence, s(i) = 1 (unnormalized)
-            sem_vec[i] = 1.0
-            if use_content_norm:
-                sem_vec[i] = sem_vec[i] * math.pow(info_content(joint_word), 2)
-        else:
-            # find the most similar word in the joint set and set the sim value
-            sim_word, max_sim = most_similar_word(joint_word, sent_set)
-            sem_vec[i] = PHI if max_sim > PHI else 0.0
-            if use_content_norm:
-                sem_vec[i] = sem_vec[i] * info_content(joint_word) * info_content(sim_word)
-        i = i + 1
-    return sem_vec
 
 ######################### word order similarity ##########################
 
@@ -266,7 +242,39 @@ def semantic_and_word_order_vectors(first_word, sent_word_dct, joint_word_set, u
                 sem_vec[idx] = sem_vec[idx] * info_content(joint_word) * info_content(sim_word)
     return sem_vec, ord_vec
 
-def pos_tag_sem_ord_word_vectors(first_word, sent_word_dct, joint_wordpos_set, use_content_norm=False):
+######################### semantic similarity ##########################
+
+def semantic_vector(sent_set, joint_word_set, use_content_norm=False):
+    """
+    Computes the semantic vector of a sentence. The sentence is passed in as
+    a collection of words. The size of the semantic vector is the same as the
+    size of the joint word set. The elements are 1 if a word in the sentence
+    already exists in the joint word set, or the similarity of the word to the
+    most similar word in the joint word set if it doesn't. Both values are
+    further normalized by the word's (and similar word's) information content
+    if use_content_norm is True.
+    """
+    sem_vec = np.zeros(len(joint_word_set))
+    i = 0
+    print("SV:", end=' ')
+    for joint_word in joint_word_set:
+        print(joint_word, end=' ')
+        if joint_word in sent_set:
+            # if word in union exists in the sentence, s(i) = 1 (unnormalized)
+            sem_vec[i] = 1.0
+            if use_content_norm:
+                sem_vec[i] = sem_vec[i] * math.pow(info_content(joint_word), 2)
+        else:
+            # find the most similar word in the joint set and set the sim value
+            sim_word, max_sim = most_similar_word(joint_word, sent_set)
+            sem_vec[i] = PHI if max_sim > PHI else 0.0
+            if use_content_norm:
+                sem_vec[i] = sem_vec[i] * info_content(joint_word) * info_content(sim_word)
+        i = i + 1
+    print()
+    return sem_vec
+
+def pos_tag_sem_ord_word_vectors(sent_word_set, sent_word_dct, joint_wordpos_set, use_content_norm=False):
     """
     Computes the word order vector for a sentence. The sentence is passed
     in as a collection of words. The size of the word order vector is the
@@ -280,9 +288,11 @@ def pos_tag_sem_ord_word_vectors(first_word, sent_word_dct, joint_wordpos_set, u
     vec_len = len(joint_wordpos_set)
     sem_vec = np.zeros(vec_len)
     ord_vec = np.zeros(vec_len)
+    print("PT", end=' ')
     for idx, joint_wordpos in enumerate(joint_wordpos_set):
         joint_word = joint_wordpos[0]
         joint_wtag = joint_wordpos[1]
+        print(joint_word, end=' ')
         try:
             ord_vec[idx] = sent_word_dct[joint_word][0]
             sem_vec[idx] = 1.0
@@ -293,11 +303,16 @@ def pos_tag_sem_ord_word_vectors(first_word, sent_word_dct, joint_wordpos_set, u
             # word not in joint_wordpos_set, find most similar word and populate
             # word_vector with the thresholded similarity
             # pdb.set_trace()
-            sim_word, max_sim = most_similar_pos_word(sent_word_dct, joint_word, joint_wtag)
+            DBG = 1
+            if DBG:
+                sim_word, max_sim = most_similar_word(joint_word, sent_word_set)
+            else:
+                sim_word, max_sim = most_similar_pos_word(sent_word_dct, joint_word, joint_wtag)
             ord_vec[idx] = sent_word_dct[sim_word][0] if max_sim > ETA else 0
             sem_vec[idx] = max_sim if max_sim > PHI else 0.0
             if use_content_norm:
                 sem_vec[idx] = sem_vec[idx] * info_content(joint_word) * info_content(sim_word)
+    print()
     return sem_vec, ord_vec
 
 ######################### vector cosine similarities ##########################
@@ -329,15 +344,15 @@ def word_order_vector(sent_word_dct, joint_word_set):
     for idx, joint_word in enumerate(joint_word_set):
         try:    # TODO: shouldn't try/except KeyError be faster than checking 'in'??
             # word in joint_word_set found in sentence, just populate the index
-            ord_vec[idx] = sent_word_dct[joint_word]
+            ord_vec[idx] = sent_word_dct[joint_word][0]
         except KeyError:
             # word not in joint_word_set, find most similar word and populate
             # word_vector with the thresholded similarity
             sim_word, max_sim = most_similar_word(joint_word, sent_word_dct.keys())
             if max_sim > ETA:
-                ord_vec[idx] = sent_word_dct[sim_word]
+                ord_vec[idx] = sent_word_dct[sim_word][0]
             else:
-                ord_vec[idx] = 0
+                ord_vec[idx] = 0    # FIXME: 0 is a legit values; make this -1 or None?
     return ord_vec
 
 def word_order_similarity(sentence_1, sentence_2):
@@ -367,7 +382,7 @@ def pos_wnk(tag):
     except KeyError:
         return None
 
-def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
+def sentence_similarity_pos(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
     """
     Calculate the semantic similarity between two sentences. The last
     parameter is True or False depending on whether information content
@@ -390,14 +405,29 @@ def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DE
     joint_word_set = word_set_1.union(word_set_2)
     joint_wordpos_set = { (word, word_dct_2[word][1] if word in word_dct_2 else word_dct_1[word][1]) for word in joint_word_set}
 
-    semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(first_wd_1, word_dct_1, joint_wordpos_set, use_content_norm)
-    semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(first_wd_2, word_dct_2, joint_wordpos_set, use_content_norm)
+    DBG = 1
+    if DBG:
+        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(word_dct_1.keys(), word_dct_1, joint_wordpos_set, use_content_norm)
+        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(word_dct_2.keys(), word_dct_2, joint_wordpos_set, use_content_norm)
+        semvec_A = semantic_vector(word_dct_1.keys(), joint_word_set, use_content_norm)
+        semvec_B = semantic_vector(word_dct_2.keys(), joint_word_set, use_content_norm)
+        print(sentence_1, sentence_2)
+        # print("semvec_1 - semvec_A = ", semvec_1 - semvec_A)
+        # print("semvec_2 - semvec_B = ", semvec_2 - semvec_B)
+        print()
+        # pdb.set_trace()
+        # ordvec_1 = word_order_vector(word_dct_1, joint_word_set)
+        # ordvec_2 = word_order_vector(word_dct_2, joint_word_set)
+    else:
+        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(first_wd_1, word_dct_1, joint_wordpos_set, use_content_norm)
+        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(first_wd_2, word_dct_2, joint_wordpos_set, use_content_norm)
+
     semantic_sim = np.dot(semvec_1, semvec_2.T) / (np.linalg.norm(semvec_1) * np.linalg.norm(semvec_2))
     word_ord_sim = 1.0 - (np.linalg.norm(ordvec_1 - ordvec_2) / np.linalg.norm(ordvec_1 + ordvec_2))
     return delta * semantic_sim + (1.0 - delta) * word_ord_sim
 
 
-def sentence_similarity_slow(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
+def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
     """
     Calculate the semantic similarity between two sentences. The last
     parameter is True or False depending on whether information content
@@ -480,59 +510,13 @@ def smoke_test():
                                                  sent_pair[2], sent_pair[0], ' '*(spacing - len(sent_pair[0])),
                                                  sent_pair[1]))
 
-def sim_weighted_qas(qst_1, ans_1, qst_2, ans_2, q_weight=0.5):
-    '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
-    assert q_weight > 0.0 and q_weight <= 1.0
-    # print("SIM_WEIGHTED_QAS(", qst_1, ans_1, qst_2, ans_2, q_weight, sim_func, ")")
-    q_sim = sentence_similarity(qst_1, qst_2)
-    if q_weight < 1.0:
-        if ans_1 and ans_2:
-            try:
-                a_sim = sentence_similarity(ans_1, ans_2)
-                return (q_sim - a_sim) * q_weight + a_sim
-            except ValueError as vex:
-                print("Error on answers (%s|%s): %s" % (ans_1, ans_2, vex))
-                raise vex
-    return q_sim
-
-def similarity_dict(train_quats, trial_quat, q_weight=1.0, min_sim_val=0):
-    '''
-    Returns a dict mapping train_quats' indexes to their similarity with this_text,
-        provide their similarity value >= min_sim_val
-        similarity_func:    function returning the similariy between two texts (as in sentences)
-        min_sim_val:        similarity threshold
-    '''
-    sim_dict = {}
-    for idx, train_quat in enumerate(train_quats):
-        if train_quat is trial_quat:
-            continue
-        try:
-            sim = sim_weighted_qas(train_quat.question, train_quat.answer,
-                                   trial_quat.question, trial_quat.answer, q_weight=q_weight)
-            # sim = unit_clip_verbose(sim)
-            sim = sim_nltk.prob_clip_verbose(sim, where="(%d x %d)" % (train_quat.id, trial_quat.id), verbose=False)
-            if  sim >= min_sim_val:
-                sim_dict[idx] = sim
-        except ValueError as ex:
-            print("Continuing past error at idx: {}  ({})  ({})".format(idx, ex, train_quats[idx]))
-            raise ex
-    return  sim_dict
-
-
-def find_nearest_quats(train_quats, trial_quat, q_weight=1.0, max_count=5, min_sim_val=0):
-    '''
-    Find the N most similar texts to this_text and return a list of (index, similarity) pairs in
-    descending order of similarity.
-        train_quats:        The training sentences or question-answer-tuples or whatever is to be compared.
-        trial_quat:         The trial object to be compared with the training objects; must have at least a .question attribute.
-        similarity_func:    function returning the similariy between two texts (as in sentences)
-        vocab:              the set of all known words
-        max_count           maximum size of returned dict
-    '''
-    assert q_weight >= 0.0
-    sim_dict = similarity_dict(train_quats, trial_quat, q_weight=q_weight, min_sim_val=min_sim_val)
-    return sim_nltk.nlargest_items_by_value(sim_dict, max_count)
-
+def moby(mquats, pos=True, ntry=8):
+    out_path = "moby_ttt_pos.txt" if pos else "moby_ttt_slo.txt"
+    sim_func = sentence_similarity_pos if pos else sentence_similarity
+    scr, msl, trn, trl = sim_nltk.moby_ttt(mquats, 200, ntry, outpath=out_path,
+                                           find_qas=sim_nltk.find_nearest_quats,
+                                           sim_func=sim_func)
+    return (scr, msl, trn, trl)
 
 ###############################################################################
 if __name__ == '__main__':
