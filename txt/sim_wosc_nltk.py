@@ -242,6 +242,49 @@ def semantic_and_word_order_vectors(first_word, sent_word_dct, joint_word_set, u
                 sem_vec[idx] = sem_vec[idx] * info_content(joint_word) * info_content(sim_word)
     return sem_vec, ord_vec
 
+
+def postagsemordwordvectors_old(sent_word_set, sent_word_dct, joint_wordpos_dct, use_content_norm=False):
+    """
+    Computes the word order vector for a sentence. The sentence is passed
+    in as a collection of words. The size of the word order vector is the
+    same as the size of the joint word set. The elements of the word order
+    vector are the position mapping (from the windex dictionary) of the
+    word in the joint set if the word exists in the sentence. If the word
+    does not exist in the sentence, then the value of the element is the
+    position of the most similar word in the sentence as long as the similarity
+    is above the threshold ETA.
+    """
+    vec_len = len(joint_wordpos_dct)
+    sem_vec = np.zeros(vec_len)
+    ord_vec = np.zeros(vec_len)
+    print("PT:", end=' ')
+    for idx, joint_wordpos in enumerate(joint_wordpos_dct.items()):
+        joint_word = joint_wordpos[0]
+        joint_wtag = joint_wordpos[1]
+        print(joint_word, end=' ')
+        try:
+            ord_vec[idx] = sent_word_dct[joint_word][0]
+            sem_vec[idx] = 1.0
+            if use_content_norm:
+                info_cont = info_content(joint_word)
+                sem_vec[idx] *= math.pow(info_content(joint_word), 2)
+        except KeyError:
+            # word not in joint_wordpos_set, find most similar word and populate
+            # word_vector with the thresholded similarity
+            # pdb.set_trace()
+            DBG = 1
+            if DBG:
+                sim_word, max_sim = most_similar_word(joint_word, sent_word_set)
+            else:
+                sim_word, max_sim = most_similar_pos_word(sent_word_dct, joint_word, joint_wtag)
+            ord_vec[idx] = sent_word_dct[sim_word][0] if max_sim > ETA else 0
+            sem_vec[idx] = max_sim if max_sim > PHI else 0.0
+            if use_content_norm:
+                sem_vec[idx] = sem_vec[idx] * info_content(joint_word) * info_content(sim_word)
+    print()
+    return sem_vec, ord_vec
+
+
 ######################### semantic similarity ##########################
 
 def semantic_vector(sent_set, joint_word_set, use_content_norm=False):
@@ -274,7 +317,10 @@ def semantic_vector(sent_set, joint_word_set, use_content_norm=False):
     print()
     return sem_vec
 
-def pos_tag_sem_ord_word_vectors(sent_word_set, sent_word_dct, joint_wordpos_set, use_content_norm=False):
+
+
+
+def pos_tag_sem_ord_word_vectors(sent_word_set, joint_word_set, sent_word_dct, joint_wordpos_dct, use_content_norm=False):
     """
     Computes the word order vector for a sentence. The sentence is passed
     in as a collection of words. The size of the word order vector is the
@@ -285,13 +331,11 @@ def pos_tag_sem_ord_word_vectors(sent_word_set, sent_word_dct, joint_wordpos_set
     position of the most similar word in the sentence as long as the similarity
     is above the threshold ETA.
     """
-    vec_len = len(joint_wordpos_set)
+    vec_len = len(joint_wordpos_dct)
     sem_vec = np.zeros(vec_len)
     ord_vec = np.zeros(vec_len)
-    print("PT", end=' ')
-    for idx, joint_wordpos in enumerate(joint_wordpos_set):
-        joint_word = joint_wordpos[0]
-        joint_wtag = joint_wordpos[1]
+    print("PT:", end=' ')
+    for idx, joint_word in enumerate(joint_word_set):
         print(joint_word, end=' ')
         try:
             ord_vec[idx] = sent_word_dct[joint_word][0]
@@ -344,13 +388,13 @@ def word_order_vector(sent_word_dct, joint_word_set):
     for idx, joint_word in enumerate(joint_word_set):
         try:    # TODO: shouldn't try/except KeyError be faster than checking 'in'??
             # word in joint_word_set found in sentence, just populate the index
-            ord_vec[idx] = sent_word_dct[joint_word][0]
+            ord_vec[idx] = sent_word_dct[joint_word]
         except KeyError:
             # word not in joint_word_set, find most similar word and populate
             # word_vector with the thresholded similarity
             sim_word, max_sim = most_similar_word(joint_word, sent_word_dct.keys())
             if max_sim > ETA:
-                ord_vec[idx] = sent_word_dct[sim_word][0]
+                ord_vec[idx] = sent_word_dct[sim_word]
             else:
                 ord_vec[idx] = 0    # FIXME: 0 is a legit values; make this -1 or None?
     return ord_vec
@@ -403,12 +447,12 @@ def sentence_similarity_pos(sentence_1, sentence_2, use_content_norm=False, delt
 
     # pdb.set_trace()
     joint_word_set = word_set_1.union(word_set_2)
-    joint_wordpos_set = { (word, word_dct_2[word][1] if word in word_dct_2 else word_dct_1[word][1]) for word in joint_word_set}
+    joint_wordpos_dct = { word: word_dct_2[word][1] if word in word_dct_2 else word_dct_1[word][1] for word in joint_word_set}
 
     DBG = 1
     if DBG:
-        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(word_dct_1.keys(), word_dct_1, joint_wordpos_set, use_content_norm)
-        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(word_dct_2.keys(), word_dct_2, joint_wordpos_set, use_content_norm)
+        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(word_dct_1.keys(), joint_word_set, word_dct_1, joint_wordpos_dct, use_content_norm)
+        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(word_dct_2.keys(), joint_word_set, word_dct_2, joint_wordpos_dct, use_content_norm)
         semvec_A = semantic_vector(word_dct_1.keys(), joint_word_set, use_content_norm)
         semvec_B = semantic_vector(word_dct_2.keys(), joint_word_set, use_content_norm)
         print(sentence_1, sentence_2)
@@ -419,8 +463,8 @@ def sentence_similarity_pos(sentence_1, sentence_2, use_content_norm=False, delt
         # ordvec_1 = word_order_vector(word_dct_1, joint_word_set)
         # ordvec_2 = word_order_vector(word_dct_2, joint_word_set)
     else:
-        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(first_wd_1, word_dct_1, joint_wordpos_set, use_content_norm)
-        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(first_wd_2, word_dct_2, joint_wordpos_set, use_content_norm)
+        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(word_dct_1.keys(), word_dct_1, joint_word_set, joint_wordpos_set, use_content_norm)
+        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(word_dct_2.keys(), word_dct_2, joint_word_set, joint_wordpos_set, use_content_norm)
 
     semantic_sim = np.dot(semvec_1, semvec_2.T) / (np.linalg.norm(semvec_1) * np.linalg.norm(semvec_2))
     word_ord_sim = 1.0 - (np.linalg.norm(ordvec_1 - ordvec_2) / np.linalg.norm(ordvec_1 + ordvec_2))
