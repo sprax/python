@@ -316,6 +316,7 @@ def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
                 if idx > 0 and idx + 100 != idn:
                     print("ERROR:", (idx + 100), "!=", trial_quat.id, "at", trial_quat)
                     raise IndexError
+            print("FNQL: ", trial_quat.id, trial_quat.label, trial_quat.question)
             nearests[idx] = find_nearest_qas(train_quats, trial_quat, q_weight=q_weight,
                                              max_count=max_count, min_sim_val=min_sim_val,
                                              sim_func=sim_func)
