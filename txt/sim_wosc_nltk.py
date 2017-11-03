@@ -131,18 +131,22 @@ def hierarchy_dist(synset_1, synset_2):
     return ((math.exp(BETA * h_dist) - math.exp(-BETA * h_dist)) /
             (math.exp(BETA * h_dist) + math.exp(-BETA * h_dist)))
 
-def word_similarity(word_1, word_2, word_tag_1=None, word_tag_2=None):
-    '''Nominally, this is the synset similarity between two words, with
+def word_similarity(src_word, try_word, word_tag_1=None, word_tag_2=None):
+    '''Nominally, this is a synset-based similarity between two words, with
     some important caveats:
-    This "similarity" is NOT symmetric:   sim(A, B) != sim(B, A).
-    This "similarity" is NOT reflexive:   sim(A, A) != 1.0.  Often it just less than 1.
-    Thus it does not yield a well-defined distance metric in 1 - similarity.
-    While it approximates a metric, it violates the triangle rule in small ways.
-    Out of vocabulary words always get a result of 0, even when compared to
+    *  This "similarity" is NOT symmetric:   sim(A, B) != sim(B, A).
+    *  This "similarity" is NOT reflexive:   sim(A, A) != 1.0.  Often it just less than 1.
+    *  Thus it does not yield a well-defined distance metric in 1 - similarity.
+       While it approximates a metric, it violates the triangle rule in small ways.
+    *  Out of vocabulary words always get a result of 0, even when compared to
     themselves.  Some examples: sim(yes, yes) is .999, sim(yes, not) is 0.0, but
     sim(yes, no) is .074, and sim(yes, duh) is 0.0 but so is sim(duh, duh).
+    *  The arguments are named src_word and try_word to suggest that the first
+    word is more important and less variable.  It's the known or fixed word,
+    whereas the try_word is variable, one of many in a search set of, say, possible
+    synonyms.  Maybe it's from an intersection, rather than a union.
     '''
-    synset_pair = get_best_synset_pair(word_1, word_2, word_tag_1, word_tag_2)
+    synset_pair = get_best_synset_pair(src_word, try_word, word_tag_1, word_tag_2)
     return (length_dist(synset_pair[0], synset_pair[1]) *
             hierarchy_dist(synset_pair[0], synset_pair[1]))
 
