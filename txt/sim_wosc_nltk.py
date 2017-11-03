@@ -10,6 +10,11 @@ on Semantic Nets and Corpus Statistics" by Li, et al.
 Results achieved are NOT identical to that reported in the paper, but
 this is very likely due to the differences in the way the algorithm was
 described in the paper and how I implemented it.
+
+FIXME: word order vectors should index words as 1-based, saving 0 as a sentinel
+indicating that no match was found.  As it is now, with 0-based indexing,
+first words and missing words both get mapped to the 0 index.  It is causing
+errors, that is, wrong sentence similarity scores that break the rankings.
 '''
 from __future__ import division
 import math
@@ -328,7 +333,7 @@ def semantic_vector(sent_word_set, joint_word_set, use_content_norm=False):
                 sem_vec[i] = sem_vec[i] * info_content(joint_word) * info_content(sim_word)
         i = i + 1
     # print()
-    print("SV:", sem_vec)
+    # print("SV:", sem_vec)
     return sem_vec
 
 def pos_tag_sem_ord_word_vectors(sent_word_set, joint_word_set, sent_word_dct, joint_wordpos_dct, use_content_norm=False):
@@ -376,7 +381,7 @@ def pos_tag_sem_ord_word_vectors(sent_word_set, joint_word_set, sent_word_dct, j
             if use_content_norm:
                 sem_vec[idx] = sem_vec[idx] * info_content(joint_word) * info_content(sim_word)
     # print()
-    print("PT:", sem_vec)
+    # print("PT:", sem_vec)
     # print(ord_vec)
     # print()
     return sem_vec, ord_vec
@@ -473,11 +478,11 @@ def sentence_similarity_pos(sentence_1, sentence_2, use_content_norm=False, delt
 
     DBG = 1
     if DBG:
-        print("\n======== COMPARE:", sentence_1, sentence_2)
+        # print("\n======== COMPARE:", sentence_1, sentence_2)
         semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(word_dct_1.keys(), joint_word_set, word_dct_1, joint_wordpos_dct, use_content_norm)
         semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(word_dct_2.keys(), joint_word_set, word_dct_2, joint_wordpos_dct, use_content_norm)
-        semvec_A = semantic_vector(word_dct_1.keys(), joint_word_set, use_content_norm)
-        semvec_B = semantic_vector(word_dct_2.keys(), joint_word_set, use_content_norm)
+        # semvec_A = semantic_vector(word_dct_1.keys(), joint_word_set, use_content_norm)
+        # semvec_B = semantic_vector(word_dct_2.keys(), joint_word_set, use_content_norm)
 
         # print("semvec_1 - semvec_A = ", semvec_1 - semvec_A)
         # print("semvec_2 - semvec_B = ", semvec_2 - semvec_B)
