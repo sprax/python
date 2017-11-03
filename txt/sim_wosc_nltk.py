@@ -270,11 +270,11 @@ def postagsemordwordvectors_old(sent_word_set, sent_word_dct, joint_wordpos_dct,
     vec_len = len(joint_wordpos_dct)
     sem_vec = np.zeros(vec_len)
     ord_vec = np.zeros(vec_len)
-    print("PT:", end=' ')
+    # print("PT:", end=' ')
     for idx, joint_wordpos in enumerate(joint_wordpos_dct.items()):
         joint_word = joint_wordpos[0]
         joint_wtag = joint_wordpos[1]
-        print(joint_word, end=' ')
+        # print(joint_word, end=' ')
         try:
             ord_vec[idx] = sent_word_dct[joint_word][0]
             sem_vec[idx] = 1.0
@@ -294,7 +294,7 @@ def postagsemordwordvectors_old(sent_word_set, sent_word_dct, joint_wordpos_dct,
             sem_vec[idx] = max_sim if max_sim > PHI else 0.0
             if use_content_norm:
                 sem_vec[idx] = sem_vec[idx] * info_content(joint_word) * info_content(sim_word)
-    print()
+    # print()
     return sem_vec, ord_vec
 
 
@@ -312,9 +312,9 @@ def semantic_vector(sent_word_set, joint_word_set, use_content_norm=False):
     """
     sem_vec = np.zeros(len(joint_word_set))
     i = 0
-    print("SV:", end=' ')
+    # print("SV:", end=' ')
     for joint_word in joint_word_set:
-        print(joint_word, end=' ')
+        # print(joint_word, end=' ')
         if joint_word in sent_word_set:
             # if word in union exists in the sentence, s(i) = 1 (unnormalized)
             sem_vec[i] = 1.0
@@ -327,8 +327,8 @@ def semantic_vector(sent_word_set, joint_word_set, use_content_norm=False):
             if use_content_norm:
                 sem_vec[i] = sem_vec[i] * info_content(joint_word) * info_content(sim_word)
         i = i + 1
-    print()
-    print(sem_vec)
+    # print()
+    print("SV:", sem_vec)
     return sem_vec
 
 def pos_tag_sem_ord_word_vectors(sent_word_set, joint_word_set, sent_word_dct, joint_wordpos_dct, use_content_norm=False):
@@ -345,10 +345,10 @@ def pos_tag_sem_ord_word_vectors(sent_word_set, joint_word_set, sent_word_dct, j
     vec_len = len(joint_wordpos_dct)
     sem_vec = np.zeros(vec_len)
     ord_vec = np.zeros(vec_len)
-    print("PT:", end=' ')
+    # print("PT:", end=' ')
     # TODO TRY to restore by using loop var and if then else...
     for idx, joint_word in enumerate(joint_word_set):
-        print(joint_word, end=' ')
+        # print(joint_word, end=' ')
         if joint_word in sent_word_set:
             sem_vec[idx] = 1.0
             ord_vec[idx] = sent_word_dct[joint_word][0]
@@ -370,15 +370,15 @@ def pos_tag_sem_ord_word_vectors(sent_word_set, joint_word_set, sent_word_dct, j
             # sem_vec[idx] = max_sim if max_sim > PHI else 0.0
             if max_sim > PHI:
                 sem_vec[idx] = max_sim
-                print("=>%s(%.3f)" % (sim_word, max_sim), end=' ')
+                # print("=>%s(%.3f)" % (sim_word, max_sim), end=' ')
             else:
                 sem_vec[idx] = 0.0
             if use_content_norm:
                 sem_vec[idx] = sem_vec[idx] * info_content(joint_word) * info_content(sim_word)
-    print()
-    print(sem_vec)
-    print(ord_vec)
-    print()
+    # print()
+    print("PT:", sem_vec)
+    # print(ord_vec)
+    # print()
     return sem_vec, ord_vec
 
 ######################### vector cosine similarities ##########################
