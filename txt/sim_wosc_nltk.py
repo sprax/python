@@ -153,17 +153,17 @@ def word_similarity(src_word, try_word, word_tag_1=None, word_tag_2=None):
 
 ######################### sentence similarity ##########################
 
-def most_similar_word(word, sent_word_set):
+def most_similar_word(sent_word_set, src_word):
     """
-    Find the word in the joint word set that is most similar to the word
-    passed in. We use the algorithm above to compute word similarity between
-    the word and each word in the joint word set, and return the most similar
+    Find the word in the sentence word set that is most similar to the source word
+    (from the joint word set). We use the algorithm above to compute word similarity
+    between the word and each word in the joint word set, and return the most similar
     word and the actual similarity value.
     """
     max_sim = -1.0
     sim_word = ""
     for sent_word in sent_word_set:
-        sim = word_similarity(word, sent_word)
+        sim = word_similarity(src_word, sent_word)
         if sim > max_sim:
             max_sim = sim
             sim_word = sent_word
@@ -181,7 +181,7 @@ def most_similar_pos_word(sent_word_dct, union_word, union_wtag=None):
     """
 
 
-    return most_similar_word(union_word, sent_word_dct.keys())
+    return most_similar_word(sent_word_dct.keys(), union_word)
 
     # FIXME ! ! ! ! ! ! ! ! ! ! !
 
@@ -248,7 +248,7 @@ def semantic_and_word_order_vectors(first_word, sent_word_dct, joint_word_set, u
         except KeyError:
             # word not in joint_word_set, find most similar word and populate
             # word_vector with the thresholded similarity
-            sim_word, max_sim = most_similar_word(joint_word, sent_word_dct.keys())
+            sim_word, max_sim = most_similar_word(sent_word_dct.keys(), joint_word)
             ord_vec[idx] = sent_word_dct[sim_word] if max_sim > ETA else 0
             sem_vec[idx] = max_sim if max_sim > PHI else 0.0
             if use_content_norm:
@@ -287,7 +287,7 @@ def postagsemordwordvectors_old(sent_word_set, sent_word_dct, joint_wordpos_dct,
             # pdb.set_trace()
             DBG = 1
             if DBG:
-                sim_word, max_sim = most_similar_word(joint_word, sent_word_set)
+                sim_word, max_sim = most_similar_word(sent_word_set, joint_word)
             else:
                 sim_word, max_sim = most_similar_pos_word(sent_word_dct, joint_word, joint_wtag)
             ord_vec[idx] = sent_word_dct[sim_word][0] if max_sim > ETA else 0
@@ -322,7 +322,7 @@ def semantic_vector(sent_word_set, joint_word_set, use_content_norm=False):
                 sem_vec[i] = sem_vec[i] * math.pow(info_content(joint_word), 2)
         else:
             # find the most similar word in the joint set and set the sim value
-            sim_word, max_sim = most_similar_word(joint_word, sent_word_set)
+            sim_word, max_sim = most_similar_word(sent_word_set, joint_word)
             sem_vec[i] = PHI if max_sim > PHI else 0.0
             if use_content_norm:
                 sem_vec[i] = sem_vec[i] * info_content(joint_word) * info_content(sim_word)
@@ -360,7 +360,7 @@ def pos_tag_sem_ord_word_vectors(sent_word_set, joint_word_set, sent_word_dct, j
             # pdb.set_trace()
             DBG = 1
             if DBG:
-                sim_word, max_sim = most_similar_word(joint_word, sent_word_set)
+                sim_word, max_sim = most_similar_word(sent_word_set, joint_word)
             else:
                 sim_word, max_sim = most_similar_pos_word(sent_word_dct, joint_word, joint_wtag)
 
@@ -413,7 +413,7 @@ def word_order_vector(sent_word_dct, joint_word_set):
         except KeyError:
             # word not in joint_word_set, find most similar word and populate
             # word_vector with the thresholded similarity
-            sim_word, max_sim = most_similar_word(joint_word, sent_word_dct.keys())
+            sim_word, max_sim = most_similar_word(sent_word_dct.keys(), joint_word)
             if max_sim > ETA:
                 ord_vec[idx] = sent_word_dct[sim_word]
             else:
