@@ -132,7 +132,16 @@ def hierarchy_dist(synset_1, synset_2):
             (math.exp(BETA * h_dist) + math.exp(-BETA * h_dist)))
 
 def word_similarity(word_1, word_2, word_tag_1=None, word_tag_2=None):
-    '''synset distance between two words'''
+    '''Nominally, this is the synset similarity between two words, with
+    some important caveats:
+    This "similarity" is NOT symmetric:   sim(A, B) != sim(B, A).
+    This "similarity" is NOT reflexive:   sim(A, A) != 1.0.  Often it just less than 1.
+    Thus it does not yield a well-defined distance metric in 1 - similarity.
+    While it approximates a metric, it violates the triangle rule in small ways.
+    Out of vocabulary words always get a result of 0, even when compared to
+    themselves.  Some examples: sim(yes, yes) is .999, sim(yes, not) is 0.0, but
+    sim(yes, no) is .074, and sim(yes, duh) is 0.0 but so is sim(duh, duh).
+    '''
     synset_pair = get_best_synset_pair(word_1, word_2, word_tag_1, word_tag_2)
     return (length_dist(synset_pair[0], synset_pair[1]) *
             hierarchy_dist(synset_pair[0], synset_pair[1]))
@@ -350,10 +359,20 @@ def pos_tag_sem_ord_word_vectors(sent_word_set, joint_word_set, sent_word_dct, j
                 sim_word, max_sim = most_similar_word(joint_word, sent_word_set)
             else:
                 sim_word, max_sim = most_similar_pos_word(sent_word_dct, joint_word, joint_wtag)
+
             ord_vec[idx] = sent_word_dct[sim_word][0] if max_sim > ETA else 0
-            sem_vec[idx] = max_sim if max_sim > PHI else 0.0
+
+            # sem_vec[idx] = max_sim if max_sim > PHI else 0.0
+            if max_sim > PHI:
+                sem_vec[idx] = max_sim
+                print("=>%s(%.3f)" % (sim_word, max_sim), end=' ')
+            else:
+                sem_vec[idx] = 0.0
             if use_content_norm:
                 sem_vec[idx] = sem_vec[idx] * info_content(joint_word) * info_content(sim_word)
+    print()
+    print(sem_vec)
+    print(ord_vec)
     print()
     return sem_vec, ord_vec
 
@@ -449,15 +468,15 @@ def sentence_similarity_pos(sentence_1, sentence_2, use_content_norm=False, delt
 
     DBG = 1
     if DBG:
+        print("\n======== COMPARE:", sentence_1, sentence_2)
         semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(word_dct_1.keys(), joint_word_set, word_dct_1, joint_wordpos_dct, use_content_norm)
         semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(word_dct_2.keys(), joint_word_set, word_dct_2, joint_wordpos_dct, use_content_norm)
         semvec_A = semantic_vector(word_dct_1.keys(), joint_word_set, use_content_norm)
         semvec_B = semantic_vector(word_dct_2.keys(), joint_word_set, use_content_norm)
 
-        print(sentence_1, sentence_2)
-        print("semvec_1 - semvec_A = ", semvec_1 - semvec_A)
-        print("semvec_2 - semvec_B = ", semvec_2 - semvec_B)
-        print()
+        # print("semvec_1 - semvec_A = ", semvec_1 - semvec_A)
+        # print("semvec_2 - semvec_B = ", semvec_2 - semvec_B)
+        # print()
         # pdb.set_trace()
         # ordvec_1 = word_order_vector(word_dct_1, joint_word_set)
         # ordvec_2 = word_order_vector(word_dct_2, joint_word_set)
@@ -565,33 +584,33 @@ def moby(mquats, pos=True, ntry=8):
 
 ###############################################################################
 if __name__ == '__main__':
-'''
-Finding all similarity lists (train 40, trial 40, nears 6) took 4137.7 seconds
-match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
+    '''
+    Finding all similarity lists (train 40, trial 40, nears 6) took 4137.7 seconds
+    match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
 
-         1946348335 function calls (1944927287 primitive calls) in 4137.690 seconds
+             1946348335 function calls (1944927287 primitive calls) in 4137.690 seconds
 
-   Ordered by: cumulative time
-   List reduced from 181 to 30 due to restriction <30>
+       Ordered by: cumulative time
+       List reduced from 181 to 30 due to restriction <30>
 
-   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.000    0.000 4137.690 4137.690 /Users/sprax/asdf/spryt/txt/sim_nltk.py:523(match_ttt)
-        1    0.000    0.000 4137.686 4137.686 /Users/sprax/asdf/spryt/txt/sim_nltk.py:337(find_ranked_qa_lists)
-        1    0.000    0.000 4137.686 4137.686 /Users/sprax/asdf/spryt/txt/sim_nltk.py:297(find_nearest_qas_lists)
-       40    0.000    0.000 4137.686  103.442 /Users/sprax/asdf/spryt/txt/sim_nltk.py:283(find_nearest_quats)
-       40    0.015    0.000 4137.683  103.442 /Users/sprax/asdf/spryt/txt/sim_nltk.py:247(similarity_dict)
-     1600    0.004    0.000 4137.661    2.586 /Users/sprax/asdf/spryt/txt/sim_nltk.py:69(sim_weighted_qas)
-     1600    0.017    0.000 4137.658    2.586 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:475(sentence_similarity)
-    45200    0.294    0.000 4135.730    0.091 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:143(most_similar_word)
-   409046    0.925    0.000 4135.436    0.010 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:134(word_similarity)
-   409046    7.404    0.000 4104.408    0.010 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:38(get_best_synset_pair)
-  8557466    4.848    0.000 3819.285    0.000 /Users/sprax/miniconda3/lib/python3.5/site-packages/nltk/corpus/reader/wordnet.py:1680(path_similarity)
-  8557466   19.730    0.000 3814.436    0.000 /Users/sprax/miniconda3/lib/python3.5/site-packages/nltk/corpus/reader/wordnet.py:772(path_similarity)
-  8667920  207.487    0.000 3289.453    0.000 /Users/sprax/miniconda3/lib/python3.5/site-packages/nltk/corpus/reader/wordnet.py:702(shortest_path_distance)
- 17311096  551.115    0.000 2856.207    0.000 /Users/sprax/miniconda3/lib/python3.5/site-packages/nltk/corpus/reader/wordnet.py:678(_shortest_hypernym_paths)
-     1600    0.052    0.000 2491.709    1.557 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:400(word_order_similarity)
-     3200    0.115    0.000 2490.852    0.778 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:374(word_order_vector)
-     1600    0.042    0.000 1645.931    1.029 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:362(semantic_similarity)
-     3200    0.075    0.000 1645.103    0.514 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:290(semantic_vector)
-'''
+       ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+            1    0.000    0.000 4137.690 4137.690 /Users/sprax/asdf/spryt/txt/sim_nltk.py:523(match_ttt)
+            1    0.000    0.000 4137.686 4137.686 /Users/sprax/asdf/spryt/txt/sim_nltk.py:337(find_ranked_qa_lists)
+            1    0.000    0.000 4137.686 4137.686 /Users/sprax/asdf/spryt/txt/sim_nltk.py:297(find_nearest_qas_lists)
+           40    0.000    0.000 4137.686  103.442 /Users/sprax/asdf/spryt/txt/sim_nltk.py:283(find_nearest_quats)
+           40    0.015    0.000 4137.683  103.442 /Users/sprax/asdf/spryt/txt/sim_nltk.py:247(similarity_dict)
+         1600    0.004    0.000 4137.661    2.586 /Users/sprax/asdf/spryt/txt/sim_nltk.py:69(sim_weighted_qas)
+         1600    0.017    0.000 4137.658    2.586 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:475(sentence_similarity)
+        45200    0.294    0.000 4135.730    0.091 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:143(most_similar_word)
+       409046    0.925    0.000 4135.436    0.010 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:134(word_similarity)
+       409046    7.404    0.000 4104.408    0.010 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:38(get_best_synset_pair)
+      8557466    4.848    0.000 3819.285    0.000 /Users/sprax/miniconda3/lib/python3.5/site-packages/nltk/corpus/reader/wordnet.py:1680(path_similarity)
+      8557466   19.730    0.000 3814.436    0.000 /Users/sprax/miniconda3/lib/python3.5/site-packages/nltk/corpus/reader/wordnet.py:772(path_similarity)
+      8667920  207.487    0.000 3289.453    0.000 /Users/sprax/miniconda3/lib/python3.5/site-packages/nltk/corpus/reader/wordnet.py:702(shortest_path_distance)
+     17311096  551.115    0.000 2856.207    0.000 /Users/sprax/miniconda3/lib/python3.5/site-packages/nltk/corpus/reader/wordnet.py:678(_shortest_hypernym_paths)
+         1600    0.052    0.000 2491.709    1.557 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:400(word_order_similarity)
+         3200    0.115    0.000 2490.852    0.778 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:374(word_order_vector)
+         1600    0.042    0.000 1645.931    1.029 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:362(semantic_similarity)
+         3200    0.075    0.000 1645.103    0.514 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:290(semantic_vector)
+    '''
     smoke_test()
