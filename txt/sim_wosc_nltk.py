@@ -323,11 +323,12 @@ def semantic_vector(sent_word_set, joint_word_set, use_content_norm=False):
         else:
             # find the most similar word in the joint set and set the sim value
             sim_word, max_sim = most_similar_word(sent_word_set, joint_word)
-            sem_vec[i] = PHI if max_sim > PHI else 0.0
+            sem_vec[i] = max_sim if max_sim > PHI else 0.0
             if use_content_norm:
                 sem_vec[i] = sem_vec[i] * info_content(joint_word) * info_content(sim_word)
         i = i + 1
     print()
+    print(sem_vec)
     return sem_vec
 
 def pos_tag_sem_ord_word_vectors(sent_word_set, joint_word_set, sent_word_dct, joint_wordpos_dct, use_content_norm=False):
