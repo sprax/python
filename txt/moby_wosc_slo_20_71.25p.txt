@@ -1,0 +1,160 @@
+300	100	Who are the Pequod's owners?	Bildad and Peleg.
+	105	0.81155	Who is the Pequod's Second Mate?	Stubb.	305
+	106	0.75869	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+	104	0.72962	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, Flask.	304
+	100	0.64271	Who owns the Pequod?	Bildad and Peleg.	300
+	108	0.54239	Which crewmembers survive the Pequod's sinking?	Only Ishmael.	308
+	119	0.53694	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+
+301	101	Who is the First Mate?	Starbuck.
+	105	0.82408	Who is the Pequod's Second Mate?	Stubb.	305
+	119	0.72999	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	101	0.71260	The name of the First Mate is?	Starbuck.	301
+	102	0.70567	What is the name of the Third Mate?	Flask.	302
+	104	0.68862	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, Flask.	304
+	116	0.61783	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+
+302	102	Who is the Third Mate?	Flask.
+	105	0.82435	Who is the Pequod's Second Mate?	Stubb.	305
+	119	0.72999	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	101	0.71694	The name of the First Mate is?	Starbuck.	301
+	102	0.70363	What is the name of the Third Mate?	Flask.	302
+	104	0.68701	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, Flask.	304
+	113	0.61626	Who wins the doubloon from the mast?	Ahab.	313
+
+303	103	How many of crewmembers of the Pequod survive their meeting with Moby Dick?	Exactly one.
+	103	0.91809	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+	109	0.50757	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	116	0.46522	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	108	0.44674	Which crewmembers survive the Pequod's sinking?	Only Ishmael.	308
+	118	0.39045	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	100	0.37855	Who owns the Pequod?	Bildad and Peleg.	300
+
+304	104	What are all the mates' names on the Pequod?	Starbuck, Stubb, Flask.
+	106	0.71375	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+	102	0.63291	What is the name of the Third Mate?	Flask.	302
+	101	0.54027	The name of the First Mate is?	Starbuck.	301
+	116	0.52330	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	105	0.51230	Who is the Pequod's Second Mate?	Stubb.	305
+	104	0.49139	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, Flask.	304
+
+305	105	Who was the Second Mate on the Pequod?	Stubb.
+	106	0.79898	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+	105	0.72492	Who is the Pequod's Second Mate?	Stubb.	305
+	104	0.70171	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, Flask.	304
+	100	0.60056	Who owns the Pequod?	Bildad and Peleg.	300
+	109	0.55350	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	113	0.53981	Who wins the doubloon from the mast?	Ahab.	313
+
+306	106	What are the names of the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.
+	106	0.79957	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+	102	0.69548	What is the name of the Third Mate?	Flask.	302
+	101	0.60173	The name of the First Mate is?	Starbuck.	301
+	116	0.59999	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	112	0.59130	What type of whale are they hunting?	Sperm whales.	312
+	115	0.53408	What is the biblical subject of Father Mapple's sermon at the Whaleman's Chapel?	Jonah and the whale.	315
+
+307	107	What do you call a group of whales swimming together?	A pod.
+	107	0.83388	What is a group of whales that swim together called?	A pod.	307
+	112	0.73801	What type of whale are they hunting?	Sperm whales.	312
+	102	0.61859	What is the name of the Third Mate?	Flask.	302
+	115	0.55269	What is the biblical subject of Father Mapple's sermon at the Whaleman's Chapel?	Jonah and the whale.	315
+	111	0.54886	What do whales eat?	Plankton and other brit.	311
+	101	0.54716	The name of the First Mate is?	Starbuck.	301
+
+308	108	What member of the crew survives when the Pequod sinks?	Only Ishmael.
+	102	0.63244	What is the name of the Third Mate?	Flask.	302
+	116	0.61305	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	105	0.55931	Who is the Pequod's Second Mate?	Stubb.	305
+	101	0.54694	The name of the First Mate is?	Starbuck.	301
+	106	0.54023	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+	100	0.53265	Who owns the Pequod?	Bildad and Peleg.	300
+
+309	109	Does the white whale survive the events narrated in Moby Dick?	Yes.
+	109	0.65582	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	116	0.59441	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	107	0.55915	What is a group of whales that swim together called?	A pod.	307
+	105	0.55323	Who is the Pequod's Second Mate?	Stubb.	305
+	103	0.54484	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+	112	0.53630	What type of whale are they hunting?	Sperm whales.	312
+
+310	110	Why did whalers hunt their quarry?	For oil.
+	112	0.55249	What type of whale are they hunting?	Sperm whales.	312
+	105	0.52718	Who is the Pequod's Second Mate?	Stubb.	305
+	101	0.51624	The name of the First Mate is?	Starbuck.	301
+	119	0.50611	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	102	0.49532	What is the name of the Third Mate?	Flask.	302
+	110	0.49216	For what were whales primarily hunted?	Oil.	310
+
+311	111	What do sperm whales live on?	Plankton and krill.
+	111	0.65230	What do whales eat?	Plankton and other brit.	311
+	112	0.61391	What type of whale are they hunting?	Sperm whales.	312
+	102	0.44775	What is the name of the Third Mate?	Flask.	302
+	107	0.43301	What is a group of whales that swim together called?	A pod.	307
+	110	0.42534	For what were whales primarily hunted?	Oil.	310
+	116	0.40002	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+
+312	112	What kind of whales does the crew hunt?	Sperm whales.
+	112	0.79112	What type of whale are they hunting?	Sperm whales.	312
+	102	0.68301	What is the name of the Third Mate?	Flask.	302
+	107	0.62551	What is a group of whales that swim together called?	A pod.	307
+	116	0.62080	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	115	0.60301	What is the biblical subject of Father Mapple's sermon at the Whaleman's Chapel?	Jonah and the whale.	315
+	101	0.57984	The name of the First Mate is?	Starbuck.	301
+
+313	113	Who wins the doubloon that Pip calls the ship's navel from the main the mast?	Ahab.
+	113	0.70774	Who wins the doubloon from the mast?	Ahab.	313
+	105	0.51171	Who is the Pequod's Second Mate?	Stubb.	305
+	104	0.47528	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, Flask.	304
+	107	0.46653	What is a group of whales that swim together called?	A pod.	307
+	102	0.46540	What is the name of the Third Mate?	Flask.	302
+	101	0.45088	The name of the First Mate is?	Starbuck.	301
+
+314	114	What does Ahab destroy piece by piece throughout the voyage?	The navigation equipment.
+	102	0.54737	What is the name of the Third Mate?	Flask.	302
+	111	0.51249	What do whales eat?	Plankton and other brit.	311
+	114	0.50745	Over the course of the voyage, Ahab destroys all of what?	The navigation equipment.	314
+	105	0.50605	Who is the Pequod's Second Mate?	Stubb.	305
+	109	0.47319	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	116	0.45675	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+
+315	115	Which biblical figure is the focus of Father Mapple's sermon?	Jonah.
+	115	0.74130	What is the biblical subject of Father Mapple's sermon at the Whaleman's Chapel?	Jonah and the whale.	315
+	102	0.64358	What is the name of the Third Mate?	Flask.	302
+	101	0.63736	The name of the First Mate is?	Starbuck.	301
+	105	0.61771	Who is the Pequod's Second Mate?	Stubb.	305
+	116	0.55932	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	104	0.54457	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, Flask.	304
+
+316	116	What's the very first line in Moby Dick?	'Call me Ishmael.'
+	116	0.77107	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	109	0.70887	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	102	0.65008	What is the name of the Third Mate?	Flask.	302
+	105	0.64343	Who is the Pequod's Second Mate?	Stubb.	305
+	104	0.62452	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, Flask.	304
+	101	0.59543	The name of the First Mate is?	Starbuck.	301
+
+317	117	What essential flaw determines Ahab's fate?	Hubris.
+	117	0.68206	What is Ahab's single fatal flaw?	Hubris.	317
+	111	0.62056	What do whales eat?	Plankton and other brit.	311
+	102	0.56800	What is the name of the Third Mate?	Flask.	302
+	115	0.52670	What is the biblical subject of Father Mapple's sermon at the Whaleman's Chapel?	Jonah and the whale.	315
+	105	0.50141	Who is the Pequod's Second Mate?	Stubb.	305
+	112	0.48428	What type of whale are they hunting?	Sperm whales.	312
+
+318	118	What about Moby Dick?	Moby Dick is a giant and elusive white sperm whale who serves as Captain Ahab's antagonist in the novel. Ahab's sworn purpose in life is to kill Moby Dick.
+	118	0.65396	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	116	0.53243	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	111	0.47116	What do whales eat?	Plankton and other brit.	311
+	112	0.38406	What type of whale are they hunting?	Sperm whales.	312
+	109	0.37674	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	102	0.35177	What is the name of the Third Mate?	Flask.	302
+
+319	119	What about that Ishmael?	He is the novel's narrator and the only sailor to survive from Captain Ahab's whaling ship, the Pequod.
+	111	0.57303	What do whales eat?	Plankton and other brit.	311
+	107	0.49540	What is a group of whales that swim together called?	A pod.	307
+	119	0.49453	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	102	0.48149	What is the name of the Third Mate?	Flask.	302
+	112	0.47973	What type of whale are they hunting?	Sperm whales.	312
+	115	0.38962	What is the biblical subject of Father Mapple's sermon at the Whaleman's Chapel?	Jonah and the whale.	315
+
