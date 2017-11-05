@@ -258,49 +258,6 @@ def semantic_and_word_order_vectors(sent_word_dct, joint_word_set, use_content_n
                 sem_vec[idx] = sem_vec[idx] * info_content(joint_word) * info_content(sim_word)
     return sem_vec, ord_vec
 
-
-def postagsemordwordvectors_old(sent_word_set, sent_word_dct, joint_wordpos_dct, use_content_norm=False):
-    """
-    Computes the word order vector for a sentence. The sentence is passed
-    in as a collection of words. The size of the word order vector is the
-    same as the size of the joint word set. The elements of the word order
-    vector are the position mapping (from the windex dictionary) of the
-    word in the joint set if the word exists in the sentence. If the word
-    does not exist in the sentence, then the value of the element is the
-    position of the most similar word in the sentence as long as the similarity
-    is above the threshold ETA.
-    """
-    vec_len = len(joint_wordpos_dct)
-    sem_vec = np.zeros(vec_len)
-    ord_vec = np.zeros(vec_len)
-    # print("PT:", end=' ')
-    for idx, joint_wordpos in enumerate(joint_wordpos_dct.items()):
-        joint_word = joint_wordpos[0]
-        joint_wtag = joint_wordpos[1]
-        # print(joint_word, end=' ')
-        try:
-            ord_vec[idx] = sent_word_dct[joint_word][0]
-            sem_vec[idx] = 1.0
-            if use_content_norm:
-                info_cont = info_content(joint_word)
-                sem_vec[idx] *= info_cont * info_cont
-        except KeyError:
-            # word not in joint_wordpos_set, find most similar word and populate
-            # word_vector with the thresholded similarity
-            # pdb.set_trace()
-            debug = 1
-            if debug:
-                sim_word, max_sim = most_similar_word(sent_word_set, joint_word)
-            else:
-                sim_word, max_sim = most_similar_pos_word(sent_word_dct, joint_word, joint_wtag)
-            ord_vec[idx] = sent_word_dct[sim_word][0] if max_sim > ETA else 0
-            sem_vec[idx] = max_sim if max_sim > PHI else 0.0
-            if use_content_norm:
-                sem_vec[idx] = sem_vec[idx] * info_content(joint_word) * info_content(sim_word)
-    # print()
-    return sem_vec, ord_vec
-
-
 ######################### semantic similarity ##########################
 
 def semantic_vector(sent_word_set, joint_word_set, use_content_norm=False):
