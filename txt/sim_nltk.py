@@ -5,8 +5,8 @@ import functools
 import heapq
 import string
 import time
+import cProfile, pstats, io
 # import pdb
-
 import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 import qa_csv
@@ -295,7 +295,8 @@ def find_nearest_quats(train_quats, trial_quat, q_weight=1.0, sim_func=cosine_si
     return nlargest_items_by_value(sim_dict, max_count)
 
 def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
-                           q_weight=1.0, max_count=5, min_sim_val=0.0, id_eq_index=False):
+                           q_weight=1.0, max_count=5, min_sim_val=0.0, id_eq_index=False,
+                           verbose=True):
     '''
     For each question-and-answer tuple in trial_quats, find a list of indexes of the most similar Q and A's in train_quats.
     Returns list of lists of items as in: [[(index, similariy), ...], ...]
@@ -316,8 +317,6 @@ def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
                 if idx > 0 and idx + 100 != idn:
                     print("ERROR:", (idx + 100), "!=", trial_quat.id, "at", trial_quat)
                     raise IndexError
-
-            verbose = 1
             nearests[idx] = find_nearest_qas(train_quats, trial_quat, q_weight=q_weight,
                                              max_count=max_count, min_sim_val=min_sim_val,
                                              sim_func=sim_func)
@@ -549,12 +548,10 @@ def match_ttt(train_quats, trial_quats, outpath="matched_ttt.tsv",
     return score, sim_lists
 
 
-import cProfile, pstats, io
-
 def moby_ttt(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="moby_matched.txt",
              find_qas=find_nearest_quats, sim_func=None,
              q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False,
-             reload=False, swap=False):
+             reload=False, swap=False, profile=False):
     '''Test match_tat on moby_dick or other specified quats.'''
     if quats is None or reload:
         quats = qa_csv.csv_read_qa(inpath)
@@ -567,17 +564,19 @@ def moby_ttt(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
     if swap:
         train_quats, trial_quats = trial_quats, train_quats
 
-    pro = cProfile.Profile()
-    pro.enable()
+    if profile:
+        pro = cProfile.Profile()
+        pro.enable()
     score, ms_lists = match_ttt(train_quats, trial_quats, outpath=outpath,
                                 find_nearest_qas=find_qas, sim_func=sim_func,
                                 q_weight=q_weight, max_count=max_count,
                                 min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
-    pro.disable()
-    sio = io.StringIO()
-    pst = pstats.Stats(pro, stream=sio).sort_stats('cumulative')
-    pst.print_stats(30)
-    print(sio.getvalue())
+    if profile:
+        pro.disable()
+        sio = io.StringIO()
+        pst = pstats.Stats(pro, stream=sio).sort_stats('cumulative')
+        pst.print_stats(30)
+        print(sio.getvalue())
     return score, ms_lists, train_quats, trial_quats
 
 

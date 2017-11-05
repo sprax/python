@@ -354,7 +354,7 @@ def pos_tag_sem_ord_word_vectors(sent_word_set, joint_word_set, sent_word_dct, j
     # TODO TRY to restore by using loop var and if then else...
     for idx, joint_word in enumerate(joint_word_set):
         # print(joint_word, end=' ')
-        if joint_word in sent_word_set:
+        if joint_word in sent_word_dct.keys():
             sem_vec[idx] = 1.0
             ord_vec[idx] = sent_word_dct[joint_word][0]
             if use_content_norm:
@@ -366,7 +366,7 @@ def pos_tag_sem_ord_word_vectors(sent_word_set, joint_word_set, sent_word_dct, j
             # pdb.set_trace()
             DBG = 1
             if DBG:
-                sim_word, max_sim = most_similar_word(sent_word_set, joint_word)
+                sim_word, max_sim = most_similar_word(sent_word_dct.keys(), joint_word)
             else:
                 sim_word, max_sim = most_similar_pos_word(sent_word_dct, joint_word, joint_wtag)
 
