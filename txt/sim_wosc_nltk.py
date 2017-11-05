@@ -367,7 +367,8 @@ def pos_tag_sem_ord_word_vectors(sent_first_word, joint_word_set, sent_word_dct,
             DBG = 1
             if DBG:
                 sim_word, max_sim = most_similar_word(sent_word_dct.keys(), joint_word)
-            else:
+            else
+                joint_wtag = joint_wordpos_dct[joint_word]
                 sim_word, max_sim = most_similar_pos_word(sent_word_dct, joint_word, joint_wtag)
 
             ord_vec[idx] = sent_word_dct[sim_word][0] if max_sim > ETA else 0
@@ -475,7 +476,8 @@ def sentence_similarity_pos(sentence_1, sentence_2, use_content_norm=False, delt
 
     # pdb.set_trace()
     joint_word_set = word_set_1.union(word_set_2)
-    joint_wordpos_dct = { word: word_dct_2[word][1] if word in word_dct_2 else word_dct_1[word][1] for word in joint_word_set}
+    joint_wordpos_dct = {word: word_dct_2[word][1] if word in word_dct_2 else word_dct_1[word][1]
+                         for word in joint_word_set}
 
     DBG = 1
     if DBG:
