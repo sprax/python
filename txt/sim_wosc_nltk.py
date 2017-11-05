@@ -311,7 +311,7 @@ def pos_tag_sem_ord_word_vectors(sent_word_dct, joint_wordpos_dct, use_content_n
         # print(joint_word, end=' ')
         if joint_word in sent_word_dct.keys():
             sem_vec[idx] = 1.0
-            ord_vec[idx] = sent_word_dct[joint_word][0]
+            ord_vec[idx] = sent_word_dct[joint_word][0] if use_pos else sent_word_dct[joint_word]
             if use_content_norm:
                 info_cont = info_content(joint_word)
                 sem_vec[idx] *= info_cont * info_cont
@@ -325,14 +325,13 @@ def pos_tag_sem_ord_word_vectors(sent_word_dct, joint_wordpos_dct, use_content_n
             else:
                 sim_word, max_sim = most_similar_word(sent_word_dct.keys(), joint_word)
 
-            ord_vec[idx] = sent_word_dct[sim_word][0] if max_sim > ETA else 0
-
-            # sem_vec[idx] = max_sim if max_sim > PHI else 0.0
-            if max_sim > PHI:
-                sem_vec[idx] = max_sim
-                # print("=>%s(%.3f)" % (sim_word, max_sim), end=' ')
+            if max_sim > ETA:
+                ord_vec[idx] = sent_word_dct[sim_word][0] if use_pos else sent_word_dct[sim_word]
             else:
-                sem_vec[idx] = 0.0
+                ord_vec[idx] = 0
+
+            sem_vec[idx] = max_sim if max_sim > PHI else 0.0
+
             if use_content_norm:
                 sem_vec[idx] = sem_vec[idx] * info_content(joint_word) * info_content(sim_word)
     # print()
@@ -450,13 +449,42 @@ def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DE
     parameter is True or False depending on whether information content
     normalization is desired or not.
     """
+    # NOTE: These dicts record only the *last* occurence of each word
+    # TODO: Use up_words for proper noun detection
+    sent_tok_1 = nltk.word_tokenize(sentence_1)
+    sent_dct_1 = {tok: idx for idx, tok in enumerate(sent_tok_1)}
+    word_set_1 = set(sent_dct_1.keys())
+
+    sent_tok_2 = nltk.word_tokenize(sentence_2)
+    sent_dct_2 = {tok: idx for idx, tok in enumerate(sent_tok_2)}
+    word_set_2 = set(sent_dct_2.keys())
+
+    # pdb.set_trace()
+    joint_word_set = word_set_1.union(word_set_2)
+
+    print("\n======== COMPARE:", sentence_1, sentence_2)
+    semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(sent_dct_1, joint_word_set, use_content_norm, False)
+    semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(sent_dct_2, joint_word_set, use_content_norm, False)
+
+    semantic_sim = np.dot(semvec_1, semvec_2.T) / (np.linalg.norm(semvec_1) * np.linalg.norm(semvec_2))
+    word_ord_sim = 1.0 - (np.linalg.norm(ordvec_1 - ordvec_2) / np.linalg.norm(ordvec_1 + ordvec_2))
+    return delta * semantic_sim + (1.0 - delta) * word_ord_sim
+
+
+
+def sentence_similarity_slow(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
+    """
+    Calculate the semantic similarity between two sentences. The last
+    parameter is True or False depending on whether information content
+    normalization is desired or not.
+    """
     semantic_sim = semantic_similarity(sentence_1, sentence_2, use_content_norm)
     word_ord_sim = word_order_similarity(sentence_1, sentence_2)
     return delta * semantic_sim + (1.0 - delta) * word_ord_sim
 
 ######################### main / test ##########################
 
-def smoke_test():
+def test_word_similarity():
     '''The results of the algorithm are largely dependent on the results of
     the word similarities, so we should test that first...'''
     print("\n\t Word Similarity:")
@@ -498,6 +526,7 @@ def smoke_test():
         print(" %.2f \t %.2f \t %s %s %s" % (word_similarity(word_pair[0], word_pair[1]), word_pair[2],
                                              word_pair[0], ' '*(14 - len(word_pair[0])), word_pair[1]))
 
+def test_sentence_similarity():
     print("\n\t Sentence Similarity:")
     sentence_pairs = [
         ["I like that bachelor.", "I like that unmarried man.", 0.561],
@@ -526,6 +555,10 @@ def smoke_test():
                                                  sentence_similarity(sent_pair[0], sent_pair[1], True),
                                                  sent_pair[2], sent_pair[0], ' '*(spacing - len(sent_pair[0])),
                                                  sent_pair[1]))
+
+def smoke_test():
+    test_word_similarity()
+    test_sentence_similarity()
 
 def moby(mquats, pos=True, ntry=8):
     '''
@@ -558,6 +591,7 @@ match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
      3200    0.075    0.000 1645.103    0.514 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:290(semantic_vector)
     '''
     out_path = "moby_ttt_pos.txt" if pos else "moby_ttt_slo.txt"
+    # sim_func = sentence_similarity_pos if pos else sentence_similarity_slow
     sim_func = sentence_similarity_pos if pos else sentence_similarity
     scr, msl, trn, trl = sim_nltk.moby_ttt(mquats, 200, ntry, outpath=out_path,
                                            find_qas=sim_nltk.find_nearest_quats,
