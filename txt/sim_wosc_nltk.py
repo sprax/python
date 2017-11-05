@@ -38,6 +38,9 @@ DELTA = 0.8
 
 BROWN_FREQS = dict()
 B_N = 0
+SYNSETS_SUM = 0
+SYNSETS_NUM = 0
+WORDSYM_NUM = 0
 
 ######################### word similarity ##########################
 
@@ -59,6 +62,11 @@ def get_best_synset_pair(src_word, try_word, src_tag=None, try_tag=None):
 
     if len(synsets_1) == 0 or len(synsets_2) == 0:
         return None, None
+
+    global SYNSETS_NUM, SYNSETS_SUM
+
+    SYNSETS_NUM += 2
+    SYNSETS_SUM += len(synsets_1) + len(synsets_2)
 
     fixme_count = 0
 
@@ -152,6 +160,8 @@ def word_similarity(src_word, try_word, src_tag=None, try_tag=None):
     whereas the try_word is variable, one of many in a search set of, say, possible
     synonyms.  Maybe it's from an intersection, rather than a union.
     '''
+    global WORDSYM_NUM
+    WORDSYM_NUM += 1
     synset_pair = get_best_synset_pair(src_word, try_word, src_tag, try_tag)
     return (length_dist(synset_pair[0], synset_pair[1]) *
             hierarchy_dist(synset_pair[0], synset_pair[1]))
@@ -188,15 +198,15 @@ def most_similar_pos_word(sent_word_dct, union_word, union_wtag=None):
     """
     max_sim = 0.0
     sim_word = ""
-    if union_word not in NON_SIM_WORDS:
-        for item in sent_word_dct.items():
-            sent_wtag = item[1][1]
-            if True or sent_wtag and sent_wtag == union_wtag:  # FIXME all pos tags for now
-                sent_word = item[0]
-                sim = word_similarity(union_word, sent_word, union_wtag, sent_wtag)
-                if sim > max_sim:
-                    max_sim = sim
-                    sim_word = sent_word
+    # if union_word not in NON_SIM_WORDS:
+    for item in sent_word_dct.items():
+        sent_wtag = item[1][1]
+        if True or sent_wtag and sent_wtag == union_wtag:  # FIXME all pos tags for now
+            sent_word = item[0]
+            sim = word_similarity(union_word, sent_word, union_wtag, sent_wtag)
+            if sim > max_sim:
+                max_sim = sim
+                sim_word = sent_word
     return sim_word, max_sim
 
 
@@ -251,6 +261,7 @@ def semantic_and_word_order_vectors(sent_word_dct, joint_word_set, use_content_n
             # word not in joint_word_set, find most similar word and populate
             # word_vector with the thresholded similarity
             sim_word, max_sim = most_similar_word(sent_word_dct.keys(), joint_word)
+            pdb.set_trace()
             ord_vec[idx] = sent_word_dct[sim_word] if max_sim > ETA else 0
             sem_vec[idx] = max_sim if max_sim > PHI else 0.0
             if use_content_norm:
@@ -596,6 +607,11 @@ match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
     scr, msl, trn, trl = sim_nltk.moby_ttt(mquats, 200, ntry, outpath=out_path,
                                            find_qas=sim_nltk.find_nearest_quats,
                                            sim_func=sim_func)
+
+    global SYNSETS_NUM, SYNSETS_SUM
+
+    print("WORDSYM_NUM: ", WORDSYM_NUM)
+    print("SYNSETS_SUM/SYNSETS_NUM:  %d / %d  =  %.3f" % (SYNSETS_SUM, SYNSETS_NUM, SYNSETS_SUM / SYNSETS_NUM))
     return (scr, msl, trn, trl)
 
 ###############################################################################
