@@ -4,7 +4,10 @@
 
 from collections import namedtuple
 
-Quat = namedtuple("Quat", "id question answer label")
+class Quat(namedtuple("Quat", "id label question answer")):
+    __slots__ = ()
+    def __str__(self):
+        return "%s  %s  %s  %s" % (self.id, self.label, self.question, self.answer)
 
 def test():
     '''Test Quat, a 4-tuple: (id, label, question, answer)'''
