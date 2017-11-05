@@ -166,7 +166,8 @@ def most_similar_word(sent_word_set, src_word):
     between the word and each word in the joint word set, and return the most similar
     word and the actual similarity value.
     """
-    max_sim = -1.0
+    max_sim = 0.0 # This was -1.0, which meant that the first word compared would become the max,
+    # and it would remain the max if no other word were more similar, even if the similarity was 0.
     sim_word = ""
     for sent_word in sent_word_set:
         sim = word_similarity(src_word, sent_word)
@@ -185,18 +186,12 @@ def most_similar_pos_word(sent_word_dct, union_word, union_wtag=None):
     the word and each word in the joint word set, and return the most similar
     word and the actual similarity value.
     """
-
-
-    return most_similar_word(sent_word_dct.keys(), union_word)
-
-    # FIXME ! ! ! ! ! ! ! ! ! ! !
-
-    max_sim = -1.0
+    max_sim = 0.0
     sim_word = ""
     if union_word not in NON_SIM_WORDS:
         for item in sent_word_dct.items():
             sent_wtag = item[1][1]
-            if True or sent_wtag and sent_wtag == union_wtag:
+            if True or sent_wtag and sent_wtag == union_wtag:  # FIXME all pos tags for now
                 sent_word = item[0]
                 # FIXME USE THIS: sim = word_similarity(union_word, sent_word, union_wtag, sent_wtag)
                 sim = word_similarity(union_word, sent_word)
@@ -339,7 +334,7 @@ def semantic_vector(sent_word_set, joint_word_set, use_content_norm=False):
     # print("SV:", sem_vec)
     return sem_vec
 
-def pos_tag_sem_ord_word_vectors(sent_word_dct, joint_wordpos_dct, use_content_norm=False):
+def pos_tag_sem_ord_word_vectors(sent_word_dct, joint_wordpos_dct, use_content_norm=False, use_pos=False):
     """
     Computes the word order vector for a sentence. The sentence is passed
     in as a collection of words. The size of the word order vector is the
@@ -367,12 +362,11 @@ def pos_tag_sem_ord_word_vectors(sent_word_dct, joint_wordpos_dct, use_content_n
             # word not in joint_wordpos_set, find most similar word and populate
             # word_vector with the thresholded similarity
             # pdb.set_trace()
-            debug = 1
-            if debug:
-                sim_word, max_sim = most_similar_word(sent_word_dct.keys(), joint_word)
-            else:
+            if use_pos:
                 joint_wtag = joint_wordpos_dct[joint_word]
                 sim_word, max_sim = most_similar_pos_word(sent_word_dct, joint_word, joint_wtag)
+            else:
+                sim_word, max_sim = most_similar_word(sent_word_dct.keys(), joint_word)
 
             ord_vec[idx] = sent_word_dct[sim_word][0] if max_sim > ETA else 0
 
@@ -458,7 +452,7 @@ def pos_wnk(tag):
     except KeyError:
         return None
 
-def sentence_similarity_pos(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
+def sentence_similarity_pos(sentence_1, sentence_2, use_content_norm=False, use_pos=True, delta=DELTA):
     """
     Calculate the semantic similarity between two sentences. The last
     parameter is True or False depending on whether information content
@@ -480,28 +474,13 @@ def sentence_similarity_pos(sentence_1, sentence_2, use_content_norm=False, delt
 
     # pdb.set_trace()
     joint_word_set = word_set_1.union(word_set_2)
+    # NOTE: Prioritizing sentence_2 for POS, because it's expected to be the trial sentence.
     joint_wordpos_dct = {word: sent_dct_2[word][1] if word in sent_dct_2 else sent_dct_1[word][1]
                          for word in joint_word_set}
 
-    debug = 1
-    if debug:
-        # print("\n======== COMPARE:", sentence_1, sentence_2)
-        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(sent_dct_1, joint_wordpos_dct, use_content_norm)
-        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(sent_dct_2, joint_wordpos_dct, use_content_norm)
-        # semvec_A = semantic_vector(sent_dct_1.keys(), joint_word_set, use_content_norm)
-        # semvec_B = semantic_vector(sent_dct_2.keys(), joint_word_set, use_content_norm)
-
-        # print("semvec_1 - semvec_A = ", semvec_1 - semvec_A)
-        # print("semvec_2 - semvec_B = ", semvec_2 - semvec_B)
-        # print()
-        # pdb.set_trace()
-        # ordvec_1 = word_order_vector(sent_dct_1, joint_word_set)
-        # ordvec_2 = word_order_vector(sent_dct_2, joint_word_set)
-        # semvec_1 = semvec_A
-        # semvec_2 = semvec_B
-    else:
-        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(sent_dct_1, joint_wordpos_dct, use_content_norm)
-        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(sent_dct_2, joint_wordpos_dct, use_content_norm)
+    # print("\n======== COMPARE:", sentence_1, sentence_2)
+    semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(sent_dct_1, joint_wordpos_dct, use_content_norm, use_pos)
+    semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(sent_dct_2, joint_wordpos_dct, use_content_norm, use_pos)
 
     semantic_sim = np.dot(semvec_1, semvec_2.T) / (np.linalg.norm(semvec_1) * np.linalg.norm(semvec_2))
     word_ord_sim = 1.0 - (np.linalg.norm(ordvec_1 - ordvec_2) / np.linalg.norm(ordvec_1 + ordvec_2))
