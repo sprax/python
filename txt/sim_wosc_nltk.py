@@ -336,7 +336,7 @@ def semantic_vector(sent_word_set, joint_word_set, use_content_norm=False):
     # print("SV:", sem_vec)
     return sem_vec
 
-def pos_tag_sem_ord_word_vectors(sent_word_set, joint_word_set, sent_word_dct, joint_wordpos_dct, use_content_norm=False):
+def pos_tag_sem_ord_word_vectors(sent_first_word, joint_word_set, sent_word_dct, joint_wordpos_dct, use_content_norm=False):
     """
     Computes the word order vector for a sentence. The sentence is passed
     in as a collection of words. The size of the word order vector is the
@@ -479,8 +479,8 @@ def sentence_similarity_pos(sentence_1, sentence_2, use_content_norm=False, delt
     DBG = 1
     if DBG:
         # print("\n======== COMPARE:", sentence_1, sentence_2)
-        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(word_dct_1.keys(), joint_word_set, word_dct_1, joint_wordpos_dct, use_content_norm)
-        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(word_dct_2.keys(), joint_word_set, word_dct_2, joint_wordpos_dct, use_content_norm)
+        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(first_wd_1, joint_word_set, word_dct_1, joint_wordpos_dct, use_content_norm)
+        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(first_wd_2, joint_word_set, word_dct_2, joint_wordpos_dct, use_content_norm)
         # semvec_A = semantic_vector(word_dct_1.keys(), joint_word_set, use_content_norm)
         # semvec_B = semantic_vector(word_dct_2.keys(), joint_word_set, use_content_norm)
 
@@ -493,8 +493,8 @@ def sentence_similarity_pos(sentence_1, sentence_2, use_content_norm=False, delt
         # semvec_1 = semvec_A
         # semvec_2 = semvec_B
     else:
-        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(word_dct_1.keys(), word_dct_1, joint_word_set, joint_wordpos_set, use_content_norm)
-        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(word_dct_2.keys(), word_dct_2, joint_word_set, joint_wordpos_set, use_content_norm)
+        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(first_wd_1, word_dct_1, joint_word_set, joint_wordpos_set, use_content_norm)
+        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(first_wd_2, word_dct_2, joint_word_set, joint_wordpos_set, use_content_norm)
 
     semantic_sim = np.dot(semvec_1, semvec_2.T) / (np.linalg.norm(semvec_1) * np.linalg.norm(semvec_2))
     word_ord_sim = 1.0 - (np.linalg.norm(ordvec_1 - ordvec_2) / np.linalg.norm(ordvec_1 + ordvec_2))
