@@ -448,6 +448,7 @@ def word_order_similarity(sentence_1, sentence_2):
 NLTK_POS_TAG_TO_WORDNET_KEY = { 'A': 'a', 'N': 'n', 'R': 'r', 'V': 'v', 'S': 's'}
 
 def pos_wnk(tag):
+    '''translate NLTK token POS to Wordnet Synset key'''
     try:
         return NLTK_POS_TAG_TO_WORDNET_KEY[tag[0]]
     except KeyError:
@@ -493,8 +494,8 @@ def sentence_similarity_pos(sentence_1, sentence_2, use_content_norm=False, delt
         # semvec_1 = semvec_A
         # semvec_2 = semvec_B
     else:
-        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(first_wd_1, word_dct_1, joint_word_set, joint_wordpos_set, use_content_norm)
-        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(first_wd_2, word_dct_2, joint_word_set, joint_wordpos_set, use_content_norm)
+        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(first_wd_1, word_dct_1, joint_word_set, joint_wordpos_dct, use_content_norm)
+        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(first_wd_2, word_dct_2, joint_word_set, joint_wordpos_dct, use_content_norm)
 
     semantic_sim = np.dot(semvec_1, semvec_2.T) / (np.linalg.norm(semvec_1) * np.linalg.norm(semvec_2))
     word_ord_sim = 1.0 - (np.linalg.norm(ordvec_1 - ordvec_2) / np.linalg.norm(ordvec_1 + ordvec_2))
@@ -585,15 +586,6 @@ def smoke_test():
                                                  sent_pair[1]))
 
 def moby(mquats, pos=True, ntry=8):
-    out_path = "moby_ttt_pos.txt" if pos else "moby_ttt_slo.txt"
-    sim_func = sentence_similarity_pos if pos else sentence_similarity
-    scr, msl, trn, trl = sim_nltk.moby_ttt(mquats, 200, ntry, outpath=out_path,
-                                           find_qas=sim_nltk.find_nearest_quats,
-                                           sim_func=sim_func)
-    return (scr, msl, trn, trl)
-
-###############################################################################
-if __name__ == '__main__':
     '''
     Finding all similarity lists (train 40, trial 40, nears 6) took 4137.7 seconds
     match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
@@ -623,4 +615,13 @@ if __name__ == '__main__':
          1600    0.042    0.000 1645.931    1.029 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:362(semantic_similarity)
          3200    0.075    0.000 1645.103    0.514 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:290(semantic_vector)
     '''
+    out_path = "moby_ttt_pos.txt" if pos else "moby_ttt_slo.txt"
+    sim_func = sentence_similarity_pos if pos else sentence_similarity
+    scr, msl, trn, trl = sim_nltk.moby_ttt(mquats, 200, ntry, outpath=out_path,
+                                           find_qas=sim_nltk.find_nearest_quats,
+                                           sim_func=sim_func)
+    return (scr, msl, trn, trl)
+
+###############################################################################
+if __name__ == '__main__':
     smoke_test()
