@@ -339,8 +339,7 @@ def semantic_vector(sent_word_set, joint_word_set, use_content_norm=False):
     # print("SV:", sem_vec)
     return sem_vec
 
-def pos_tag_sem_ord_word_vectors(joint_word_set, sent_word_dct,
-                                 joint_wordpos_dct, use_content_norm=False):
+def pos_tag_sem_ord_word_vectors(sent_word_dct, joint_wordpos_dct, use_content_norm=False):
     """
     Computes the word order vector for a sentence. The sentence is passed
     in as a collection of words. The size of the word order vector is the
@@ -356,7 +355,7 @@ def pos_tag_sem_ord_word_vectors(joint_word_set, sent_word_dct,
     ord_vec = np.zeros(vec_len)
     # print("PT:", end=' ')
     # TODO TRY to restore by using loop var and if then else...
-    for idx, joint_word in enumerate(joint_word_set):
+    for idx, joint_word in enumerate(joint_wordpos_dct):
         # print(joint_word, end=' ')
         if joint_word in sent_word_dct.keys():
             sem_vec[idx] = 1.0
@@ -437,15 +436,15 @@ def word_order_similarity(sentence_1, sentence_2):
     difference of word order between the two sentences.
     """
     # NOTE: These dicts record only the *last* occurence of each word
-    word_lst_1 = nltk.word_tokenize(sentence_1)
-    word_dct_1 = {word: idx for idx, word in enumerate(word_lst_1)}
-    word_lst_2 = nltk.word_tokenize(sentence_2)
-    word_dct_2 = {word: idx for idx, word in enumerate(word_lst_2)}
+    sent_tok_1 = nltk.word_tokenize(sentence_1)
+    sent_dct_1 = {word: idx for idx, word in enumerate(sent_tok_1)}
+    sent_tok_2 = nltk.word_tokenize(sentence_2)
+    sent_dct_2 = {word: idx for idx, word in enumerate(sent_tok_2)}
 
     # TODO: Don't neet to make this a list -- the enumerate order is constant.
-    joint_word_set = set(word_dct_1.keys()).union(word_dct_2.keys())
-    wov_1 = word_order_vector(word_dct_1, joint_word_set)
-    wov_2 = word_order_vector(word_dct_2, joint_word_set)
+    joint_word_set = set(sent_dct_1.keys()).union(sent_dct_2.keys())
+    wov_1 = word_order_vector(sent_dct_1, joint_word_set)
+    wov_2 = word_order_vector(sent_dct_2, joint_word_set)
     return 1.0 - (np.linalg.norm(wov_1 - wov_2) / np.linalg.norm(wov_1 + wov_2))
 
 ######################### overall similarity ##########################
@@ -467,42 +466,42 @@ def sentence_similarity_pos(sentence_1, sentence_2, use_content_norm=False, delt
     """
     # NOTE: These dicts record only the *last* occurence of each word
     # TODO: Use up_words for proper noun detection
-    word_lst_1 = nltk.word_tokenize(sentence_1)
-    up_words_1 = [word for word in word_lst_1 if word[0].isupper()]
-    pos_tags_1 = nltk.pos_tag(word_lst_1)
-    word_dct_1 = {wordpos[0]: (idx, pos_wnk(wordpos[1])) for idx, wordpos in enumerate(pos_tags_1)}
-    word_set_1 = set(word_dct_1.keys())
+    sent_tok_1 = nltk.word_tokenize(sentence_1)
+    up_words_1 = [word for word in sent_tok_1 if word[0].isupper()]
+    pos_tags_1 = nltk.pos_tag(sent_tok_1)
+    sent_dct_1 = {wordpos[0]: (idx, pos_wnk(wordpos[1])) for idx, wordpos in enumerate(pos_tags_1)}
+    word_set_1 = set(sent_dct_1.keys())
 
-    word_lst_2 = nltk.word_tokenize(sentence_2)
-    up_words_2 = [word for word in word_lst_2 if word[0].isupper()]
-    pos_tags_2 = nltk.pos_tag(word_lst_2)
-    word_dct_2 = {wordpos[0]: (idx, pos_wnk(wordpos[1])) for idx, wordpos in enumerate(pos_tags_2)}
-    word_set_2 = set(word_dct_2.keys())
+    sent_tok_2 = nltk.word_tokenize(sentence_2)
+    up_words_2 = [word for word in sent_tok_2 if word[0].isupper()]
+    pos_tags_2 = nltk.pos_tag(sent_tok_2)
+    sent_dct_2 = {wordpos[0]: (idx, pos_wnk(wordpos[1])) for idx, wordpos in enumerate(pos_tags_2)}
+    word_set_2 = set(sent_dct_2.keys())
 
     # pdb.set_trace()
     joint_word_set = word_set_1.union(word_set_2)
-    joint_wordpos_dct = {word: word_dct_2[word][1] if word in word_dct_2 else word_dct_1[word][1]
+    joint_wordpos_dct = {word: sent_dct_2[word][1] if word in sent_dct_2 else sent_dct_1[word][1]
                          for word in joint_word_set}
 
     debug = 1
     if debug:
         # print("\n======== COMPARE:", sentence_1, sentence_2)
-        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(joint_word_set, word_dct_1, joint_wordpos_dct, use_content_norm)
-        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(joint_word_set, word_dct_2, joint_wordpos_dct, use_content_norm)
-        # semvec_A = semantic_vector(word_dct_1.keys(), joint_word_set, use_content_norm)
-        # semvec_B = semantic_vector(word_dct_2.keys(), joint_word_set, use_content_norm)
+        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(sent_dct_1, joint_wordpos_dct, use_content_norm)
+        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(sent_dct_2, joint_wordpos_dct, use_content_norm)
+        # semvec_A = semantic_vector(sent_dct_1.keys(), joint_word_set, use_content_norm)
+        # semvec_B = semantic_vector(sent_dct_2.keys(), joint_word_set, use_content_norm)
 
         # print("semvec_1 - semvec_A = ", semvec_1 - semvec_A)
         # print("semvec_2 - semvec_B = ", semvec_2 - semvec_B)
         # print()
         # pdb.set_trace()
-        # ordvec_1 = word_order_vector(word_dct_1, joint_word_set)
-        # ordvec_2 = word_order_vector(word_dct_2, joint_word_set)
+        # ordvec_1 = word_order_vector(sent_dct_1, joint_word_set)
+        # ordvec_2 = word_order_vector(sent_dct_2, joint_word_set)
         # semvec_1 = semvec_A
         # semvec_2 = semvec_B
     else:
-        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(word_dct_1, joint_word_set, joint_wordpos_dct, use_content_norm)
-        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(word_dct_2, joint_word_set, joint_wordpos_dct, use_content_norm)
+        semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(sent_dct_1, joint_wordpos_dct, use_content_norm)
+        semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(sent_dct_2, joint_wordpos_dct, use_content_norm)
 
     semantic_sim = np.dot(semvec_1, semvec_2.T) / (np.linalg.norm(semvec_1) * np.linalg.norm(semvec_2))
     word_ord_sim = 1.0 - (np.linalg.norm(ordvec_1 - ordvec_2) / np.linalg.norm(ordvec_1 + ordvec_2))
