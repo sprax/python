@@ -41,6 +41,9 @@ B_N = 0
 SYNSETS_SUM = 0
 SYNSETS_NUM = 0
 WORDSYM_NUM = 0
+MOSTSPW_NUM = 0
+MOSTSIM_NUM = 0
+
 
 ######################### word similarity ##########################
 
@@ -176,6 +179,8 @@ def most_similar_word(sent_word_set, src_word):
     between the word and each word in the joint word set, and return the most similar
     word and the actual similarity value.
     """
+    global MOSTSIM_NUM
+    MOSTSIM_NUM += 1
     max_sim = 0.0 # This was -1.0, which meant that the first word compared would become the max,
     # and it would remain the max if no other word were more similar, even if the similarity was 0.
     sim_word = ""
@@ -196,6 +201,8 @@ def most_similar_pos_word(sent_word_dct, union_word, union_wtag=None):
     the word and each word in the joint word set, and return the most similar
     word and the actual similarity value.
     """
+    global MOSTSPW_NUM
+    MOSTSPW_NUM += 1
     max_sim = 0.0
     sim_word = ""
     # if union_word not in NON_SIM_WORDS:
@@ -608,9 +615,9 @@ match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
                                            find_qas=sim_nltk.find_nearest_quats,
                                            sim_func=sim_func)
 
-    global SYNSETS_NUM, SYNSETS_SUM
+    global SYNSETS_NUM, SYNSETS_SUM, WORDSYM_NUM, MOSTSIM_NUM, MOSTSPW_NUM
 
-    print("WORDSYM_NUM: ", WORDSYM_NUM)
+    print("WORDSYM_NUM, MOSTSPW_NUM, MOSTSIM_NUM: ", WORDSYM_NUM, MOSTSPW_NUM, MOSTSIM_NUM)
     print("SYNSETS_SUM/SYNSETS_NUM:  %d / %d  =  %.3f" % (SYNSETS_SUM, SYNSETS_NUM, SYNSETS_SUM / SYNSETS_NUM))
     return (scr, msl, trn, trl)
 
