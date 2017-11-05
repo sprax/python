@@ -323,7 +323,11 @@ def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
             if verbose:
                 time_gone = time.time() - beg_time
                 time_left = time_gone * (ntrial/(idx + 1) - 1)
-                print("(Time & ETR %4.1f %4.1f)" % (time_gone, time_left), trial_quat.id, trial_quat.label, trial_quat.question)
+                sim_tuple = nearests[idx][0]
+                max_squat = train_quats[sim_tuple[0]]
+                max_simil = sim_tuple[1]
+                print("(Time & ETR %4.1f %4.1f)  %d  %d -> %d  %s -> %s" % (time_gone, time_left,
+                      trial_quat.id, trial_quat.label, max_squat.id, trial_quat.question, max_squat.question))
         except KeyboardInterrupt:
             int_time = time.time()
             print("KeyboardInterrupt in find_nearest_qas_lists at %d/%d trials on %d train_quats after %d seconds." % (idx, ntrial, ntrain, int_time - beg_time))

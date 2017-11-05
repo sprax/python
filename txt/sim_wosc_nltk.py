@@ -40,10 +40,6 @@ BROWN_FREQS = dict()
 B_N = 0
 SYNSETS_SUM = 0
 SYNSETS_NUM = 0
-WORDSYM_NUM = 0
-MOSTSPW_NUM = 0
-MOSTSIM_NUM = 0
-
 
 ######################### word similarity ##########################
 
@@ -179,8 +175,6 @@ def most_similar_word(sent_word_set, src_word):
     between the word and each word in the joint word set, and return the most similar
     word and the actual similarity value.
     """
-    global MOSTSIM_NUM
-    MOSTSIM_NUM += 1
     max_sim = 0.0 # This was -1.0, which meant that the first word compared would become the max,
     # and it would remain the max if no other word were more similar, even if the similarity was 0.
     sim_word = ""
@@ -194,26 +188,25 @@ def most_similar_word(sent_word_set, src_word):
 
 NON_SIM_WORDS = {} # { 'a', 'the', 'in', 'on', 'to' }
 
-def most_similar_pos_word(sent_word_dct, union_word, union_wtag=None):
+def most_similar_pos_word(sent_word_dct, union_word, union_wtag):
     """
     Find the word in the joint word set that is most similar to the word
     passed in. We use the algorithm above to compute word similarity between
     the word and each word in the joint word set, and return the most similar
     word and the actual similarity value.
     """
-    global MOSTSPW_NUM
-    MOSTSPW_NUM += 1
     max_sim = 0.0
     sim_word = ""
     # if union_word not in NON_SIM_WORDS:
-    for item in sent_word_dct.items():
-        sent_wtag = item[1][1]
-        if True or sent_wtag and sent_wtag == union_wtag:  # FIXME all pos tags for now
-            sent_word = item[0]
-            sim = word_similarity(union_word, sent_word, union_wtag, sent_wtag)
-            if sim > max_sim:
-                max_sim = sim
-                sim_word = sent_word
+    if union_wtag is not None:
+        for item in sent_word_dct.items():
+            sent_wtag = item[1][1]
+            if sent_wtag == union_wtag:  # FIXME all pos tags for now
+                sent_word = item[0]
+                sim = word_similarity(union_word, sent_word, union_wtag, sent_wtag)
+                if sim > max_sim:
+                    max_sim = sim
+                    sim_word = sent_word
     return sim_word, max_sim
 
 
@@ -615,9 +608,7 @@ match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
                                            find_qas=sim_nltk.find_nearest_quats,
                                            sim_func=sim_func)
 
-    global SYNSETS_NUM, SYNSETS_SUM, WORDSYM_NUM, MOSTSIM_NUM, MOSTSPW_NUM
-
-    print("WORDSYM_NUM, MOSTSPW_NUM, MOSTSIM_NUM: ", WORDSYM_NUM, MOSTSPW_NUM, MOSTSIM_NUM)
+    global SYNSETS_SUM,SYNSETS_NUM
     print("SYNSETS_SUM/SYNSETS_NUM:  %d / %d  =  %.3f" % (SYNSETS_SUM, SYNSETS_NUM, SYNSETS_SUM / SYNSETS_NUM))
     return (scr, msl, trn, trl)
 
