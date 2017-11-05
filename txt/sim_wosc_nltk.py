@@ -41,20 +41,20 @@ B_N = 0
 
 ######################### word similarity ##########################
 
-def get_best_synset_pair(word_1, word_2, word_tag_1=None, word_tag_2=None):
+def get_best_synset_pair(src_word, try_word, src_tag=None, try_tag=None):
     """
     Choose the pair with highest path similarity among all pairs.
     Mimics pattern-seeking behavior of humans.
     """
     max_sim = -1.0
-    synsets_1 = wn.synsets(word_1, word_tag_1)
+    synsets_1 = wn.synsets(src_word, src_tag)
     if synsets_1 is None:
-        # print("synset(%s) is None" % word_1)
+        # print("synset(%s) is None" % src_word)
         return None, None
 
-    synsets_2 = wn.synsets(word_2, word_tag_2)
+    synsets_2 = wn.synsets(try_word, try_tag)
     if synsets_2 is None:
-        # print("synset(%s) is None" % word_2)
+        # print("synset(%s) is None" % try_word)
         return None, None
 
     if len(synsets_1) == 0 or len(synsets_2) == 0:
@@ -69,7 +69,7 @@ def get_best_synset_pair(word_1, word_2, word_tag_1=None, word_tag_2=None):
             sim = wn.path_similarity(synset_1, synset_2)
             if sim is None:
                 if fixme_count == 0:
-                    # print("path_similarity from (%s, %s) is None (fixme_count %d)" % (word_1, word_2, fixme_count))
+                    # print("path_similarity from (%s, %s) is None (fixme_count %d)" % (src_word, try_word, fixme_count))
                     return None, None
             elif sim > max_sim:
                 max_sim = sim
@@ -137,7 +137,7 @@ def hierarchy_dist(synset_1, synset_2):
     return ((math.exp(BETA * h_dist) - math.exp(-BETA * h_dist)) /
             (math.exp(BETA * h_dist) + math.exp(-BETA * h_dist)))
 
-def word_similarity(src_word, try_word, word_tag_1=None, word_tag_2=None):
+def word_similarity(src_word, try_word, src_tag=None, try_tag=None):
     '''Nominally, this is a synset-based similarity between two words, with
     some important caveats:
     *  This "similarity" is NOT symmetric:   sim(A, B) != sim(B, A).
@@ -152,7 +152,7 @@ def word_similarity(src_word, try_word, word_tag_1=None, word_tag_2=None):
     whereas the try_word is variable, one of many in a search set of, say, possible
     synonyms.  Maybe it's from an intersection, rather than a union.
     '''
-    synset_pair = get_best_synset_pair(src_word, try_word, word_tag_1, word_tag_2)
+    synset_pair = get_best_synset_pair(src_word, try_word, src_tag, try_tag)
     return (length_dist(synset_pair[0], synset_pair[1]) *
             hierarchy_dist(synset_pair[0], synset_pair[1]))
 
@@ -193,8 +193,7 @@ def most_similar_pos_word(sent_word_dct, union_word, union_wtag=None):
             sent_wtag = item[1][1]
             if True or sent_wtag and sent_wtag == union_wtag:  # FIXME all pos tags for now
                 sent_word = item[0]
-                # FIXME USE THIS: sim = word_similarity(union_word, sent_word, union_wtag, sent_wtag)
-                sim = word_similarity(union_word, sent_word)
+                sim = word_similarity(union_word, sent_word, union_wtag, sent_wtag)
                 if sim > max_sim:
                     max_sim = sim
                     sim_word = sent_word
@@ -434,7 +433,8 @@ def sentence_similarity_pos(sentence_1, sentence_2, use_content_norm=False, use_
     joint_wordpos_dct = {word: sent_dct_2[word][1] if word in sent_dct_2 else sent_dct_1[word][1]
                          for word in joint_word_set}
 
-    # print("\n======== COMPARE:", sentence_1, sentence_2)
+    #print("\n======== SSP COMPARE:", sentence_1, sentence_2)
+    # print("JWPD: ", joint_wordpos_dct)
     semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(sent_dct_1, joint_wordpos_dct, use_content_norm, use_pos)
     semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(sent_dct_2, joint_wordpos_dct, use_content_norm, use_pos)
 
@@ -462,7 +462,7 @@ def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DE
     # pdb.set_trace()
     joint_word_set = word_set_1.union(word_set_2)
 
-    print("\n======== COMPARE:", sentence_1, sentence_2)
+    #print("\n======== SS COMPARE:", sentence_1, sentence_2)
     semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(sent_dct_1, joint_word_set, use_content_norm, False)
     semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(sent_dct_2, joint_word_set, use_content_norm, False)
 
@@ -520,8 +520,8 @@ def test_word_similarity():
         ["oracle", "sage", 0.43],
         ["serf", "slave", 0.39]
     ]
-    print("W-Sim \t Paper \t word_1 \t word_2")
-    print("----- \t ----- \t ------ \t ------")
+    print("W-Sim \t Paper \t src_word \t try_word")
+    print("----- \t ----- \t -------- \t --------")
     for word_pair in word_pairs:
         print(" %.2f \t %.2f \t %s %s %s" % (word_similarity(word_pair[0], word_pair[1]), word_pair[2],
                                              word_pair[0], ' '*(14 - len(word_pair[0])), word_pair[1]))
