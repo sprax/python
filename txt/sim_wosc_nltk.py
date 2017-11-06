@@ -33,7 +33,7 @@ import sim_nltk
 # in the paper to produce "best" results.
 
 
-ETA = 0.4
+
 PHI = 0.2
 
 NLTK_POS_TAG_TO_WORDNET_KEY = {'A': 'a', 'N': 'n', 'R': 'r', 'V': 'v', 'S': 's'}
@@ -231,8 +231,6 @@ class WordSimilarity:
                         sim_word = sent_word
         return sim_word, max_sim
 
-
-
 ############################# sentence similarity #############################
 
 class SentSimilarity:
@@ -245,6 +243,7 @@ class SentSimilarity:
         self._brown_freq_count = 0
         self._brown_freqs = dict()
         self._delta = 0.8
+        self._min_word_sim_order = 0.4  # formerly known as ETA
         self._use_propers = use_propers
 
 
@@ -282,7 +281,7 @@ class SentSimilarity:
         word in the joint set if the word exists in the sentence. If the word
         does not exist in the sentence, then the value of the element is the
         position of the most similar word in the sentence as long as the similarity
-        is above the threshold ETA.
+        is above the threshold self._min_word_sim_order.
         """
         vec_len = len(joint_word_set)
         sem_vec = np.zeros(vec_len)
@@ -300,7 +299,7 @@ class SentSimilarity:
                 # word_vector with the thresholded similarity
                 sim_word, max_sim = self.wordsim.most_similar_word(sent_word_dct.keys(), joint_word)
                 pdb.set_trace()
-                ord_vec[idx] = sent_word_dct[sim_word] if max_sim > ETA else 0
+                ord_vec[idx] = sent_word_dct[sim_word] if max_sim > self._min_word_sim_order else 0
                 sem_vec[idx] = max_sim if max_sim > PHI else 0.0
                 if use_content_norm:
                     sem_vec[idx] = sem_vec[idx] * self.info_content(joint_word) * self.info_content(sim_word)
@@ -349,7 +348,7 @@ class SentSimilarity:
         word in the joint set if the word exists in the sentence. If the word
         does not exist in the sentence, then the value of the element is the
         position of the most similar word in the sentence as long as the similarity
-        is above the threshold ETA.
+        is above the threshold self._min_word_sim_order.
         """
         vec_len = len(joint_wordpos_dct)
         sem_vec = np.zeros(vec_len)
@@ -374,7 +373,7 @@ class SentSimilarity:
                 else:
                     sim_word, max_sim = self.wordsim.most_similar_word(sent_word_dct.keys(), joint_word)
 
-                if max_sim > ETA:
+                if max_sim > self._min_word_sim_order:
                     ord_vec[idx] = sent_word_dct[sim_word][0] if use_pos else sent_word_dct[sim_word]
                 else:
                     ord_vec[idx] = 0
@@ -412,7 +411,7 @@ class SentSimilarity:
         word in the joint set if the word exists in the sentence. If the word
         does not exist in the sentence, then the value of the element is the
         position of the most similar word in the sentence as long as the similarity
-        is above the threshold ETA.
+        is above the threshold self._min_word_sim_order.
         """
         ord_vec = np.zeros(len(joint_word_set))
         for idx, joint_word in enumerate(joint_word_set):
@@ -423,7 +422,7 @@ class SentSimilarity:
                 # word not in joint_word_set, find most similar word and populate
                 # word_vector with the thresholded similarity
                 sim_word, max_sim = self.wordsim.most_similar_word(sent_word_dct.keys(), joint_word)
-                if max_sim > ETA:
+                if max_sim > self._min_word_sim_order:
                     ord_vec[idx] = sent_word_dct[sim_word]
                 else:
                     # FIXME: Should index from 1 because 0 is a legit word index value
