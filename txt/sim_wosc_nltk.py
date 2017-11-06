@@ -198,7 +198,7 @@ class WordSimilarity:
                 sim_word = sent_word
         return sim_word, max_sim
 
-    def most_similar_pos_word(self, sent_word_dct, union_word, union_wtag):
+    def most_similar_word_pos(self, sent_word_dct, union_word, union_wtag, use_propers=False):
         """
         Find the word in the joint word set that is most similar to the word
         passed in. We use the algorithm above to compute word similarity between
@@ -214,6 +214,7 @@ class WordSimilarity:
                 # or sent_wtag == 'a' and union_wtag == 'r'
                 # or sent_wtag == 'r' and union_wtag == 'a':
                     sent_word = item[0]
+                    
                     sim = self.word_similarity(union_word, sent_word, union_wtag, sent_wtag)
                     if sim > max_sim:
                         max_sim = sim
@@ -315,7 +316,8 @@ def semantic_vector(wordsim, sent_word_set, joint_word_set, use_content_norm=Fal
     # print("SV:", sem_vec)
     return sem_vec
 
-def pos_tag_sem_ord_word_vectors(wordsim, sent_word_dct, joint_wordpos_dct, use_content_norm=False, use_pos=False):
+def sem_and_wo_vectors_pos(wordsim, sent_word_dct, joint_wordpos_dct, use_content_norm=False,
+                           use_pos=False, use_propers=False):
     """
     Computes the word order vector for a sentence. The sentence is passed
     in as a collection of words. The size of the word order vector is the
@@ -344,7 +346,8 @@ def pos_tag_sem_ord_word_vectors(wordsim, sent_word_dct, joint_wordpos_dct, use_
             # pdb.set_trace()
             if use_pos:
                 joint_wtag = joint_wordpos_dct[joint_word]
-                sim_word, max_sim = wordsim.most_similar_pos_word(sent_word_dct, joint_word, joint_wtag)
+                sim_word, max_sim = wordsim.most_similar_word_pos(sent_word_dct, joint_word,
+                                                                  joint_wtag, use_propers)
             else:
                 sim_word, max_sim = wordsim.most_similar_word(sent_word_dct.keys(), joint_word)
 
@@ -446,15 +449,12 @@ def sentence_similarity_pos(wordsim, sentence_1, sentence_2, use_content_norm=Fa
     normalization is desired or not.
     """
     # NOTE: These dicts record only the *last* occurence of each word
-    # TODO: Use up_words for proper noun detection
     sent_tok_1 = nltk.word_tokenize(sentence_1)
-    up_words_1 = [word for word in sent_tok_1 if word[0].isupper()]
     pos_tags_1 = nltk.pos_tag(sent_tok_1)
     sent_dct_1 = {wordpos[0]: (idx, pos_wnk(wordpos[1])) for idx, wordpos in enumerate(pos_tags_1)}
     word_set_1 = set(sent_dct_1.keys())
 
     sent_tok_2 = nltk.word_tokenize(sentence_2)
-    up_words_2 = [word for word in sent_tok_2 if word[0].isupper()]
     pos_tags_2 = nltk.pos_tag(sent_tok_2)
     sent_dct_2 = {wordpos[0]: (idx, pos_wnk(wordpos[1])) for idx, wordpos in enumerate(pos_tags_2)}
     word_set_2 = set(sent_dct_2.keys())
@@ -462,13 +462,15 @@ def sentence_similarity_pos(wordsim, sentence_1, sentence_2, use_content_norm=Fa
     # pdb.set_trace()
     joint_word_set = word_set_1.union(word_set_2)
     # NOTE: Prioritizing sentence_2 for POS, because it's expected to be the trial sentence.
-    wordpos_dct = {word: sent_dct_2[word][1] if word in sent_dct_2 else sent_dct_1[word][1]
-                   for word in joint_word_set}
+    joint_wordpos_dct = {word: sent_dct_2[word][1] if word in sent_dct_2 else sent_dct_1[word][1]
+                         for word in joint_word_set}
 
     #print("\n======== SSP COMPARE:", sentence_1, sentence_2)
     # print("JWPD: ", wordpos_dct)
-    semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(wordsim, sent_dct_1, wordpos_dct, use_content_norm, use_pos)
-    semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(wordsim, sent_dct_2, wordpos_dct, use_content_norm, use_pos)
+    semvec_1, ordvec_1 = sem_and_wo_vectors_pos(wordsim, sent_dct_1, joint_wordpos_dct,
+                                                use_content_norm, use_pos)
+    semvec_2, ordvec_2 = sem_and_wo_vectors_pos(wordsim, sent_dct_2, joint_wordpos_dct,
+                                                use_content_norm, use_pos)
     return compute_similarity(semvec_1, semvec_2, ordvec_1, ordvec_2, delta=delta)
 
 
@@ -479,7 +481,6 @@ def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DE
     normalization is desired or not.
     """
     # NOTE: These dicts record only the *last* occurence of each word
-    # TODO: Use up_words for proper noun detection
     sent_tok_1 = nltk.word_tokenize(sentence_1)
     sent_dct_1 = {tok: idx for idx, tok in enumerate(sent_tok_1)}
     word_set_1 = set(sent_dct_1.keys())
@@ -492,8 +493,8 @@ def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DE
     joint_word_set = word_set_1.union(word_set_2)
 
     #print("\n======== SS COMPARE:", sentence_1, sentence_2)
-    semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(sent_dct_1, joint_word_set, use_content_norm, False)
-    semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(sent_dct_2, joint_word_set, use_content_norm, False)
+    semvec_1, ordvec_1 = sem_and_wo_vectors_pos(sent_dct_1, joint_word_set, use_content_norm, False)
+    semvec_2, ordvec_2 = sem_and_wo_vectors_pos(sent_dct_2, joint_word_set, use_content_norm, False)
     return compute_similarity(semvec_1, semvec_2, ordvec_1, ordvec_2, delta=delta)
 
 def sentence_similarity_slow(wordsim, sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
