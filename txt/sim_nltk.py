@@ -298,6 +298,31 @@ def find_nearest_quats(train_quats, trial_quat, q_weight=1.0, sim_func=cosine_si
                                min_sim_val=min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
+
+def time_str(seconds):
+    '''convert seconds (as a float) to a single decimal number and unit time label.'''
+    if seconds < 60:
+        return "%4.1fs" % seconds
+    if seconds < 3600:
+        return "%4.1fm" % (seconds / 60)
+    if seconds < 3600 * 24:
+        return "%4.1fh" % (seconds / 3600)
+    if seconds < 3600 * 24 * 365.25:
+        return "%4.1fd" % (seconds / 3600)
+    return "%4.1fy" % (seconds / (3600 * 24 * 365.25))
+
+def show_progress(train_quats, trial_quats, nearests, idx, beg_time):
+    secs_gone = time.time() - beg_time
+    secs_proj = secs_gone * len(trial_quats)/(idx + 1)
+    secs_left = secs_proj - secs_gone
+    sim_tuple = nearests[idx][0]
+    max_simil = sim_tuple[1]
+    trial_quat = trial_quats[idx]
+    train_quat = train_quats[sim_tuple[0]]
+    print("(Time & ETR %s %s)  %d  %d -> %d (%.3f) %s -> %s" \
+          % (time_str(secs_gone), time_str(secs_left), trial_quat.id, trial_quat.label, train_quat.id,
+             max_simil, trial_quat.question, train_quat.question))
+
 def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
                            q_weight=1.0, max_count=5, min_sim_val=0.0, id_eq_index=False,
                            verbose=True):
@@ -326,14 +351,7 @@ def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
                                              max_count=max_count, min_sim_val=min_sim_val,
                                              sim_func=sim_func)
             if verbose:
-                time_gone = time.time() - beg_time
-                time_left = time_gone * (ntrial/(idx + 1) - 1)
-                sim_tuple = nearests[idx][0]
-                max_squat = train_quats[sim_tuple[0]]
-                max_simil = sim_tuple[1]
-                print("(Time & ETR %4.1f %4.1f)  %d  %d -> %d (%.3f) %s -> %s" \
-                      % (time_gone, time_left, trial_quat.id, trial_quat.label, max_squat.id,
-                         max_simil, trial_quat.question, max_squat.question))
+                show_progress(train_quats, trial_quats, nearests, idx, beg_time)
         except KeyboardInterrupt:
             int_time = time.time()
             print("KeyboardInterrupt in find_nearest_qas_lists at %d/%d trials on %d train_quats after %d seconds." \
