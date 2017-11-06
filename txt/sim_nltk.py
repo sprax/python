@@ -302,7 +302,8 @@ def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
                            q_weight=1.0, max_count=5, min_sim_val=0.0, id_eq_index=False,
                            verbose=True):
     '''
-    For each question-and-answer tuple in trial_quats, find a list of indexes of the most similar Q and A's in train_quats.
+    For each question-and-answer tuple in trial_quats, find a list of indexes of the most similar
+    Q and A's in train_quats.
     Returns list of lists of items as in: [[(index, similariy), ...], ...]
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
@@ -330,15 +331,16 @@ def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
                 sim_tuple = nearests[idx][0]
                 max_squat = train_quats[sim_tuple[0]]
                 max_simil = sim_tuple[1]
-                print("(Time & ETR %4.1f %4.1f)  %d  %d -> %d (%.3f) %s -> %s" % (time_gone, time_left,
-                      trial_quat.id, trial_quat.label, max_squat.id, max_simil, trial_quat.question,
-                      max_squat.question))
+                print("(Time & ETR %4.1f %4.1f)  %d  %d -> %d (%.3f) %s -> %s" \
+                      % (time_gone, time_left, trial_quat.id, trial_quat.label, max_squat.id,
+                         max_simil, trial_quat.question, max_squat.question))
         except KeyboardInterrupt:
             int_time = time.time()
-            print("KeyboardInterrupt in find_nearest_qas_lists at %d/%d trials on %d train_quats after %d seconds." % (idx, ntrial, ntrain, int_time - beg_time))
+            print("KeyboardInterrupt in find_nearest_qas_lists at %d/%d trials on %d train_quats after %d seconds." \
+                  % (idx, ntrial, ntrain, int_time - beg_time))
             if int_time - prv_time < 2:
-                print("That's 2 interrupts in less than 2 seconds -- breaking out of loop in find_nearest_qas_lists!")
-                break;
+                print("That's 2 interrupts in < 2 seconds -- breaking out of loop in find_nearest_qas_lists!")
+                break
             prv_time = int_time
     return nearests
 
@@ -348,7 +350,8 @@ def find_nearest_qas_lists_self(train_quats, trial_quats, find_nearest_qas,
     return [find_nearest_qas(train_quats, trial_quat, q_weight, sim_func,
                              max_count, min_sim_val) for trial_quat in trial_quats]
 
-def find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, sim_func, q_weight=1.0, max_count=6, min_sim_val=1.0/6):
+def find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, sim_func, q_weight=1.0,
+                         max_count=6, min_sim_val=1.0/6):
     '''
     Returns list of most similar lists.  For each object in quats, compute the similarity with all
     (other) objects in quats, and save at most max_count indices and similarity measures in descending
@@ -362,7 +365,8 @@ def find_ranked_qa_lists(train_quats, trial_quats, find_nearest_qas, sim_func, q
                                           q_weight=q_weight, max_count=max_count, min_sim_val=min_sim_val,
                                           id_eq_index=False)
     seconds = time.time() - beg_time
-    print("Finding all similarity lists (train %d, trial %d, nears %d) took %.1f seconds" % (len(train_quats), len(trial_quats), max_count, seconds))
+    print("Finding all similarity lists (train %d, trial %d, nears %d) took %.1f seconds" % \
+          (len(train_quats), len(trial_quats), max_count, seconds))
     return ranked_lists
 
 
@@ -387,7 +391,8 @@ def distance_counts(train_quats, trial_quats, sim_lists, max_dist):
         # msi = ms[0]
         # sim = ms[1]
         # print("DBG_F: Q_%d <==> Q_%d (%s <==> %s) first, %.4f (%s : %s)" % (int(qax.id), msi, qax.question,
-        #       trial_quats[msi][1], sim, remove_stop_words(normalize(qax.question)), remove_stop_words(normalize(trial_quats[msi][1]))))
+        #       trial_quats[msi][1], sim, remove_stop_words(normalize(qax.question)),
+        #       remove_stop_words(normalize(trial_quats[msi][1]))))
         for idx, item in enumerate(sim_list):
             # print("DC: %d  item(%d, %f)" % (idx, item.id, item[1]))
             train_quat = train_quats[item[0]]
@@ -601,7 +606,8 @@ def match_quats_to_model(model, trial_quats, outpath="matched_qtm.tsv", q_weight
         get_all_quats()
     assumed, and the score is returned, not saved.'''
     beg_time = time.time()
-    sim_lists = model.rank_qa_lists(model, trial_quats, q_weight=q_weight, max_count=max_count, min_sim_val=min_sim_val)
+    sim_lists = model.rank_qa_lists(model, trial_quats, q_weight=q_weight, max_count=max_count,
+                                    min_sim_val=min_sim_val)
     train_quats = model.get_all_quats()
     score = score_most_sim_lists(train_quats, trial_quats, sim_lists)
     save_most_sim_qa_lists_tsv(train_quats, trial_quats, sim_lists,
