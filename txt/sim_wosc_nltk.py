@@ -215,9 +215,9 @@ class WordSimilarity:
                 # or sent_wtag == 'r' and union_wtag == 'a':
                     sent_word = item[0]
                     if use_propers and sent_wtag == 'n' and sent_word[0].isupper() and item[1][0] > 0:   # FIXME: index from 1
-                        # sent_word is likely to be a proper noun
-                        sim = 1.0 if sent_word == union_word else 0.0 # TODO: allow small variations
-                        pdb.set_trace()
+                        # sent_word is likely to be a proper noun.  If we only
+                        # allow exact matches on proper nouns, then here we should
+                        # just continue, because we checked for equality upstream.
                         continue
                     sim = self.word_similarity(union_word, sent_word, union_wtag, sent_wtag)
                     if sim > max_sim:
@@ -446,7 +446,8 @@ def pos_wnk(tag):
     except KeyError:
         return None
 
-def sentence_similarity_pos(wordsim, sentence_1, sentence_2, use_content_norm=False, use_pos=True, delta=DELTA):
+def sentence_similarity_pos(wordsim, sentence_1, sentence_2, use_content_norm=False,
+                            use_pos=True, use_propers=True, delta=DELTA):
     """
     Calculate the semantic similarity between two sentences. The last
     parameter is True or False depending on whether information content
@@ -472,9 +473,9 @@ def sentence_similarity_pos(wordsim, sentence_1, sentence_2, use_content_norm=Fa
     #print("\n======== SSP COMPARE:", sentence_1, sentence_2)
     # print("JWPD: ", wordpos_dct)
     semvec_1, ordvec_1 = sem_and_wo_vectors_pos(wordsim, sent_dct_1, joint_wordpos_dct,
-                                                use_content_norm, use_pos)
+                                                use_content_norm, use_pos, use_propers)
     semvec_2, ordvec_2 = sem_and_wo_vectors_pos(wordsim, sent_dct_2, joint_wordpos_dct,
-                                                use_content_norm, use_pos)
+                                                use_content_norm, use_pos, use_propers)
     return compute_similarity(semvec_1, semvec_2, ordvec_1, ordvec_2, delta=delta)
 
 
