@@ -5,7 +5,9 @@ import functools
 import heapq
 import string
 import time
-import cProfile, pstats, io
+import cProfile
+import pstats
+import io
 # import pdb
 import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -339,8 +341,8 @@ def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
             prv_time = int_time
     return nearests
 
-def find_nearest_qas_lists_inclusive(train_quats, trial_quats, find_nearest_qas,
-                                     sim_func=cosine_sim_txt, q_weight=1.0, max_count=5, min_sim_val=0.0):
+def find_nearest_qas_lists_self(train_quats, trial_quats, find_nearest_qas,
+                                sim_func=cosine_sim_txt, q_weight=1.0, max_count=5, min_sim_val=0.0):
     '''Find similars including self.'''
     return [find_nearest_qas(train_quats, trial_quat, q_weight, sim_func,
                              max_count, min_sim_val) for trial_quat in trial_quats]
@@ -442,7 +444,7 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, sim_lists, ntrain=None,
         # HACK for separating training and test data if they were mixed.
         if ntrain:
             # Partition training from trial indices
-            print("LEN_TRAIN",  ntrain,   "LEN(sim_list)",  len(sim_lists), "\n")
+            print("LEN_TRAIN ", ntrain, "LEN(sim_list)",  len(sim_lists), "\n")
             print("BEFORE:   ", isorted, "\n")
             sort_lo = [idx for idx in isorted if idx < ntrain]
             print("AFTER LO: ", sort_lo, "\n")
@@ -510,7 +512,7 @@ def match_tat(all_quats, ntrain=None, outpath="simlists.tsv",
                                outpath=outpath, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
     print("match_tat(size=%d, count=%d) took %.1f seconds; score %.4f\n" % (size, max_count,
-                                                                               seconds, score))
+                                                                            seconds, score))
     return score, sim_lists
 
 # >>> scorem, mslm = sn.moby_tat() # Fri Oct 27 01:03:09 EDT 2017
