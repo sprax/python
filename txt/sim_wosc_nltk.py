@@ -76,7 +76,8 @@ def get_best_synset_pair(src_word, try_word, src_tag=None, try_tag=None):
             sim = wn.path_similarity(synset_1, synset_2)
             if sim is None:
                 if fixme_count == 0:
-                    # print("path_similarity from (%s, %s) is None (fixme_count %d)" % (src_word, try_word, fixme_count))
+                    # print("path_similarity from (%s, %s) is None (fixme_count %d)" % (
+                    #       src_word, try_word, fixme_count))
                     return None, None
             elif sim > max_sim:
                 max_sim = sim
@@ -159,8 +160,6 @@ def word_similarity(src_word, try_word, src_tag=None, try_tag=None):
     whereas the try_word is variable, one of many in a search set of, say, possible
     synonyms.  Maybe it's from an intersection, rather than a union.
     '''
-    global WORDSYM_NUM
-    WORDSYM_NUM += 1
     synset_pair = get_best_synset_pair(src_word, try_word, src_tag, try_tag)
     return (length_dist(synset_pair[0], synset_pair[1]) *
             hierarchy_dist(synset_pair[0], synset_pair[1]))
@@ -186,7 +185,7 @@ def most_similar_word(sent_word_set, src_word):
     return sim_word, max_sim
 
 
-NON_SIM_WORDS = {} # { 'a', 'the', 'in', 'on', 'to' }
+NON_SIM_WORDS = {'a', 'the', 'in', 'on', 'to'}
 
 def most_similar_pos_word(sent_word_dct, union_word, union_wtag):
     """
@@ -197,11 +196,12 @@ def most_similar_pos_word(sent_word_dct, union_word, union_wtag):
     """
     max_sim = 0.0
     sim_word = ""
-    # if union_word not in NON_SIM_WORDS:
-    if union_wtag is not None:
+    if union_wtag is not None and union_word not in NON_SIM_WORDS:
         for item in sent_word_dct.items():
             sent_wtag = item[1][1]
-            if sent_wtag == union_wtag:  # FIXME all pos tags for now
+            if sent_wtag == union_wtag:
+            # or sent_wtag == 'a' and union_wtag == 'r'
+            # or sent_wtag == 'r' and union_wtag == 'a':
                 sent_word = item[0]
                 sim = word_similarity(union_word, sent_word, union_wtag, sent_wtag)
                 if sim > max_sim:
@@ -250,7 +250,7 @@ def semantic_and_word_order_vectors(sent_word_dct, joint_word_set, use_content_n
     sem_vec = np.zeros(vec_len)
     ord_vec = np.zeros(vec_len)
     for idx, joint_word in enumerate(joint_word_set):
-        try:    # TODO: shouldn't try/except KeyError be faster than checking 'in'??
+        try:
             # word in joint_word_set found in sentence, just populate the index
             ord_vec[idx] = sent_word_dct[joint_word]
             sem_vec[idx] = 1.0
@@ -316,7 +316,6 @@ def pos_tag_sem_ord_word_vectors(sent_word_dct, joint_wordpos_dct, use_content_n
     sem_vec = np.zeros(vec_len)
     ord_vec = np.zeros(vec_len)
     # print("PT:", end=' ')
-    # TODO TRY to restore by using loop var and if then else...
     for idx, joint_word in enumerate(joint_wordpos_dct):
         # print(joint_word, end=' ')
         if joint_word in sent_word_dct.keys():
@@ -377,7 +376,7 @@ def word_order_vector(sent_word_dct, joint_word_set):
     """
     ord_vec = np.zeros(len(joint_word_set))
     for idx, joint_word in enumerate(joint_word_set):
-        try:    # TODO: shouldn't try/except KeyError be faster than checking 'in'??
+        try:
             # word in joint_word_set found in sentence, just populate the index
             ord_vec[idx] = sent_word_dct[joint_word]
         except KeyError:
@@ -401,14 +400,22 @@ def word_order_similarity(sentence_1, sentence_2):
     sent_tok_2 = nltk.word_tokenize(sentence_2)
     sent_dct_2 = {word: idx for idx, word in enumerate(sent_tok_2)}
 
-    # TODO: Don't neet to make this a list -- the enumerate order is constant.
+    # Don't neet to make this a list -- the enumerate order is constant (in cPython)
     joint_word_set = set(sent_dct_1.keys()).union(sent_dct_2.keys())
     wov_1 = word_order_vector(sent_dct_1, joint_word_set)
     wov_2 = word_order_vector(sent_dct_2, joint_word_set)
     return 1.0 - (np.linalg.norm(wov_1 - wov_2) / np.linalg.norm(wov_1 + wov_2))
 
-######################### overall similarity ##########################
+######################### overall similarity ##################################
 
+def compute_similarity(semvec_1, semvec_2, ordvec_1, ordvec_2, delta=DELTA):
+    '''compute and interpolate between semantic and word-order (structural) similarities.'''
+    semantic_sim = np.dot(semvec_1, semvec_2.T) / (np.linalg.norm(semvec_1) * np.linalg.norm(semvec_2))
+    word_ord_sim = 1.0 - (np.linalg.norm(ordvec_1 - ordvec_2) / np.linalg.norm(ordvec_1 + ordvec_2))
+    # return delta * semantic_sim + (1.0 - delta) * word_ord_sim
+    return delta * (semantic_sim - word_ord_sim) + word_ord_sim
+
+###############################################################################
 NLTK_POS_TAG_TO_WORDNET_KEY = {'A': 'a', 'N': 'n', 'R': 'r', 'V': 'v', 'S': 's'}
 
 def pos_wnk(tag):
@@ -448,10 +455,7 @@ def sentence_similarity_pos(sentence_1, sentence_2, use_content_norm=False, use_
     # print("JWPD: ", joint_wordpos_dct)
     semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(sent_dct_1, joint_wordpos_dct, use_content_norm, use_pos)
     semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(sent_dct_2, joint_wordpos_dct, use_content_norm, use_pos)
-
-    semantic_sim = np.dot(semvec_1, semvec_2.T) / (np.linalg.norm(semvec_1) * np.linalg.norm(semvec_2))
-    word_ord_sim = 1.0 - (np.linalg.norm(ordvec_1 - ordvec_2) / np.linalg.norm(ordvec_1 + ordvec_2))
-    return delta * semantic_sim + (1.0 - delta) * word_ord_sim
+    return compute_similarity(semvec_1, semvec_2, ordvec_1, ordvec_2, delta=delta)
 
 
 def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
@@ -476,12 +480,7 @@ def sentence_similarity(sentence_1, sentence_2, use_content_norm=False, delta=DE
     #print("\n======== SS COMPARE:", sentence_1, sentence_2)
     semvec_1, ordvec_1 = pos_tag_sem_ord_word_vectors(sent_dct_1, joint_word_set, use_content_norm, False)
     semvec_2, ordvec_2 = pos_tag_sem_ord_word_vectors(sent_dct_2, joint_word_set, use_content_norm, False)
-
-    semantic_sim = np.dot(semvec_1, semvec_2.T) / (np.linalg.norm(semvec_1) * np.linalg.norm(semvec_2))
-    word_ord_sim = 1.0 - (np.linalg.norm(ordvec_1 - ordvec_2) / np.linalg.norm(ordvec_1 + ordvec_2))
-    return delta * semantic_sim + (1.0 - delta) * word_ord_sim
-
-
+    return compute_similarity(semvec_1, semvec_2, ordvec_1, ordvec_2, delta=delta)
 
 def sentence_similarity_slow(sentence_1, sentence_2, use_content_norm=False, delta=DELTA):
     """
@@ -491,7 +490,7 @@ def sentence_similarity_slow(sentence_1, sentence_2, use_content_norm=False, del
     """
     semantic_sim = semantic_similarity(sentence_1, sentence_2, use_content_norm)
     word_ord_sim = word_order_similarity(sentence_1, sentence_2)
-    return delta * semantic_sim + (1.0 - delta) * word_ord_sim
+    return delta * (semantic_sim - word_ord_sim) + word_ord_sim
 
 ######################### main / test ##########################
 
@@ -538,6 +537,7 @@ def test_word_similarity():
                                              word_pair[0], ' '*(14 - len(word_pair[0])), word_pair[1]))
 
 def test_sentence_similarity():
+    '''test semantic and word-order similarity of sentence pairs.'''
     print("\n\t Sentence Similarity:")
     sentence_pairs = [
         ["I like that bachelor.", "I like that unmarried man.", 0.561],
@@ -568,6 +568,7 @@ def test_sentence_similarity():
                                                  sent_pair[1]))
 
 def smoke_test():
+    '''test very basic functionality'''
     test_word_similarity()
     test_sentence_similarity()
 
@@ -592,10 +593,10 @@ match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
     45200    0.294    0.000 4135.730    0.091 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:143(most_similar_word)
    409046    0.925    0.000 4135.436    0.010 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:134(word_similarity)
    409046    7.404    0.000 4104.408    0.010 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:38(get_best_synset_pair)
-  8557466    4.848    0.000 3819.285    0.000 /Users/sprax/miniconda3/lib/python3.5/site-packages/nltk/corpus/reader/wordnet.py:1680(path_similarity)
-  8557466   19.730    0.000 3814.436    0.000 /Users/sprax/miniconda3/lib/python3.5/site-packages/nltk/corpus/reader/wordnet.py:772(path_similarity)
-  8667920  207.487    0.000 3289.453    0.000 /Users/sprax/miniconda3/lib/python3.5/site-packages/nltk/corpus/reader/wordnet.py:702(shortest_path_distance)
- 17311096  551.115    0.000 2856.207    0.000 /Users/sprax/miniconda3/lib/python3.5/site-packages/nltk/corpus/reader/wordnet.py:678(_shortest_hypernym_paths)
+  8557466    4.848    0.000 3819.285    0.000 .../wordnet.py:1680(path_similarity)
+  8557466   19.730    0.000 3814.436    0.000 .../nltk/corpus/reader/wordnet.py:772(path_similarity)
+  8667920  207.487    0.000 3289.453    0.000 .../wordnet.py:702(shortest_path_distance)
+ 17311096  551.115    0.000 2856.207    0.000 .../wordnet.py:678(_shortest_hypernym_paths)
      1600    0.052    0.000 2491.709    1.557 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:400(word_order_similarity)
      3200    0.115    0.000 2490.852    0.778 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:374(word_order_vector)
      1600    0.042    0.000 1645.931    1.029 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:362(semantic_similarity)
@@ -608,7 +609,6 @@ match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
                                            find_qas=sim_nltk.find_nearest_quats,
                                            sim_func=sim_func)
 
-    global SYNSETS_SUM,SYNSETS_NUM
     print("SYNSETS_SUM/SYNSETS_NUM:  %d / %d  =  %.3f" % (SYNSETS_SUM, SYNSETS_NUM, SYNSETS_SUM / SYNSETS_NUM))
     return (scr, msl, trn, trl)
 
