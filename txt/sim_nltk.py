@@ -547,7 +547,7 @@ def match_ttt(train_quats, trial_quats, outpath="matched_ttt.tsv",
     save_most_sim_qa_lists_tsv(train_quats, trial_quats, sim_lists,
                                outpath=outpath, min_sim_val=min_sim_val, sort_most_sim=sort_most_sim)
     seconds = time.time() - beg_time
-    print("match_ttt(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f\n" % (
+    print("match_ttt(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f" % (
         len(train_quats), len(trial_quats), max_count, seconds, score))
     return score, sim_lists
 
