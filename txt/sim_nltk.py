@@ -288,7 +288,7 @@ def find_nearest_quats(train_quats, trial_quat, q_weight=1.0, sim_func=cosine_si
     Find the N most similar texts to this_text and return a list of (index, similarity) pairs in
     descending order of similarity.
         train_quats:        The training sentences or question-answer-tuples or whatever is to be compared.
-        trial_quat:         The trial object to be compared with the training objects; must have a .question attribute.
+        trial_quat:         The trial object to be compared with the training objects; must have .question attribute.
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
         max_count           maximum size of returned dict
@@ -331,7 +331,8 @@ def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
                 max_squat = train_quats[sim_tuple[0]]
                 max_simil = sim_tuple[1]
                 print("(Time & ETR %4.1f %4.1f)  %d  %d -> %d (%.3f) %s -> %s" % (time_gone, time_left,
-                      trial_quat.id, trial_quat.label, max_squat.id, max_simil, trial_quat.question, max_squat.question))
+                      trial_quat.id, trial_quat.label, max_squat.id, max_simil, trial_quat.question,
+                      max_squat.question))
         except KeyboardInterrupt:
             int_time = time.time()
             print("KeyboardInterrupt in find_nearest_qas_lists at %d/%d trials on %d train_quats after %d seconds." % (idx, ntrial, ntrain, int_time - beg_time))
@@ -444,7 +445,7 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, sim_lists, ntrain=None,
         # HACK for separating training and test data if they were mixed.
         if ntrain:
             # Partition training from trial indices
-            print("LEN_TRAIN ", ntrain, "LEN(sim_list)",  len(sim_lists), "\n")
+            print("LEN_TRAIN ", ntrain, "LEN(sim_list)", len(sim_lists), "\n")
             print("BEFORE:   ", isorted, "\n")
             sort_lo = [idx for idx in isorted if idx < ntrain]
             print("AFTER LO: ", sort_lo, "\n")
