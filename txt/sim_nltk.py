@@ -300,7 +300,10 @@ def find_nearest_quats(train_quats, trial_quat, q_weight=1.0, sim_func=cosine_si
 
 
 def time_str(seconds):
-    '''convert seconds (as a float) to a single decimal number and unit time label.'''
+    '''
+    Convert seconds (as a float) to a single decimal number and unit of time label.
+    The units are seconds, minutes, hours, days, or years (smhdy).
+    '''
     if seconds < 60:
         return "%4.1fs" % seconds
     if seconds < 3600:
@@ -312,14 +315,15 @@ def time_str(seconds):
     return "%4.1fy" % (seconds / (3600 * 24 * 365.25))
 
 def show_progress(train_quats, trial_quats, nearests, idx, beg_time):
+    '''Show Elapsed Real Time (ERT) and Estimated Time Remaining (ETR) along with latest results.'''
     secs_gone = time.time() - beg_time
     secs_proj = secs_gone * len(trial_quats)/(idx + 1)
     secs_left = secs_proj - secs_gone
     sim_tuple = nearests[idx][0]
-    max_simil = sim_tuple[1]
+    max_simil = sim_tuple[1] * 100.0
     trial_quat = trial_quats[idx]
     train_quat = train_quats[sim_tuple[0]]
-    print("(Time & ETR %s %s)  %d  %d -> %d (%.3f) %s -> %s" \
+    print("(ERT/ETR %s %s)  %d  %d -> %d (%.3f) %s -> %s" \
           % (time_str(secs_gone), time_str(secs_left), trial_quat.id, trial_quat.label, train_quat.id,
              max_simil, trial_quat.question, train_quat.question))
 
