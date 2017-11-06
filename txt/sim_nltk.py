@@ -128,43 +128,43 @@ def cosine_sim_quanda_ms(one_quanda, other_quanda, get_question=second, get_answ
                                q_weight, vectorizer)
 
 
-def clip(value, lo=0, hi=1):
-    ''' Clip value to [lo, hi], no frills. '''
-    if value < lo:
-        return lo
-    if value > hi:
-        return hi
+def clip(value, loval=0, hival=1):
+    ''' Clip value to [loval, hival], no frills. '''
+    if value < loval:
+        return loval
+    if value > hival:
+        return hival
     return value
 
-def clip_verbose(value, lo=0, hi=1):
-    ''' Verbosely clip value to [lo, hi] '''
-    if value < lo:
-        print("clip_verbose: {} -> {}".format(value, lo))
-        return lo
-    if value > hi:
-        print("clip_verbose: {} -> {}".format(value, hi))
-        return hi
+def clip_verbose(value, loval=0, hival=1):
+    ''' Verbosely clip value to [loval, hival] '''
+    if value < loval:
+        print("clip_verbose: {} -> {}".format(value, loval))
+        return loval
+    if value > hival:
+        print("clip_verbose: {} -> {}".format(value, hival))
+        return hival
     return value
 
-def prob_clip_verbose(value, where="prob_clip_verbose", lo=0.000001, hi=0.99999, verbose=False):
-    ''' Verbosely clip value to [lo, hi] '''
-    if value != 0 and value < lo:
+def prob_clip_verbose(value, where="prob_clip_verbose", loval=0.000001, hival=0.99999, verbose=False):
+    ''' Verbosely clip value to [loval, hival] '''
+    if value != 0 and value < loval:
         if verbose:
             print("{} -> 0 \t\t at: {}".format(value, where))
         return 0
-    if value != 1 and value > hi:
+    if value != 1 and value > hival:
         if verbose:
-            print("{} -> {} \t at: {}".format(value, hi, where))
-        return hi
+            print("{} -> {} \t at: {}".format(value, hival, where))
+        return hival
     return value
 
 
-def prob_clip(value, lo=0.000001, hi=0.99999):
-    ''' clip value to probability based on [lo, hi] '''
-    if value != 0 and value < lo:
+def prob_clip(value, loval=0.000001, hival=0.99999):
+    ''' clip value to probability based on [loval, hival] '''
+    if value != 0 and value < loval:
         return 0
-    if value != 1 and value > hi:
-        return hi
+    if value != 1 and value > hival:
+        return hival
     return value
 
 
