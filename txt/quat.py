@@ -5,6 +5,7 @@
 from collections import namedtuple
 
 class Quat(namedtuple("Quat", "id label question answer")):
+    '''Minimal class for counted and labeled QA, based on namedtuple.'''
     __slots__ = ()
     def __str__(self):
         return "%s  %s  %s  %s" % (self.id, self.label, self.question, self.answer)
