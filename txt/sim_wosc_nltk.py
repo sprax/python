@@ -214,7 +214,11 @@ class WordSimilarity:
                 # or sent_wtag == 'a' and union_wtag == 'r'
                 # or sent_wtag == 'r' and union_wtag == 'a':
                     sent_word = item[0]
-                    
+                    if use_propers and sent_wtag == 'n' and sent_word[0].isupper() and item[1][0] > 0:   # FIXME: index from 1
+                        # sent_word is likely to be a proper noun
+                        sim = 1.0 if sent_word == union_word else 0.0 # TODO: allow small variations
+                        pdb.set_trace()
+                        continue
                     sim = self.word_similarity(union_word, sent_word, union_wtag, sent_wtag)
                     if sim > max_sim:
                         max_sim = sim
