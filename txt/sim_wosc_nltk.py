@@ -34,8 +34,6 @@ import sim_nltk
 
 
 
-PHI = 0.2
-
 NLTK_POS_TAG_TO_WORDNET_KEY = {'A': 'a', 'N': 'n', 'R': 'r', 'V': 'v', 'S': 's'}
 
 def pos_wnk(tag):
@@ -243,7 +241,8 @@ class SentSimilarity:
         self._brown_freq_count = 0
         self._brown_freqs = dict()
         self._delta = 0.8
-        self._min_word_sim_order = 0.4  # formerly known as ETA
+        self._min_word_sim_semantic = 0.2   # formerly known as PHI
+        self._min_word_sim_order = 0.4      # formerly known as ETA
         self._use_propers = use_propers
 
 
@@ -300,7 +299,7 @@ class SentSimilarity:
                 sim_word, max_sim = self.wordsim.most_similar_word(sent_word_dct.keys(), joint_word)
                 pdb.set_trace()
                 ord_vec[idx] = sent_word_dct[sim_word] if max_sim > self._min_word_sim_order else 0
-                sem_vec[idx] = max_sim if max_sim > PHI else 0.0
+                sem_vec[idx] = max_sim if max_sim > self._min_word_sim_semantic else 0.0
                 if use_content_norm:
                     sem_vec[idx] = sem_vec[idx] * self.info_content(joint_word) * self.info_content(sim_word)
         return sem_vec, ord_vec
@@ -330,7 +329,7 @@ class SentSimilarity:
             else:
                 # find the most similar word in the joint set and set the sim value
                 sim_word, max_sim = self.wordsim.most_similar_word(sent_word_set, joint_word)
-                sem_vec[i] = max_sim if max_sim > PHI else 0.0
+                sem_vec[i] = max_sim if max_sim > self._min_word_sim_semantic else 0.0
                 if use_content_norm:
                     sem_vec[i] = sem_vec[i] * self.info_content(joint_word) * self.info_content(sim_word)
             i = i + 1
@@ -378,7 +377,7 @@ class SentSimilarity:
                 else:
                     ord_vec[idx] = 0
 
-                sem_vec[idx] = max_sim if max_sim > PHI else 0.0
+                sem_vec[idx] = max_sim if max_sim > self._min_word_sim_semantic else 0.0
 
                 if use_content_norm:
                     sem_vec[idx] = sem_vec[idx] * self.info_content(joint_word) * self.info_content(sim_word)
