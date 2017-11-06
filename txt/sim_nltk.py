@@ -81,7 +81,8 @@ def sim_weighted_qas(qst_1, ans_1, qst_2, ans_2, q_weight=0.5, sim_func=cosine_s
                 raise vex
     return q_sim
 
-def cosine_sim_quanda(one_quanda, other_quanda, get_question=second, get_answer=third, q_weight=0.5, vectorizer=VECTORIZER):
+def cosine_sim_quanda(one_quanda, other_quanda, get_question=second, get_answer=third,
+                      q_weight=0.5, vectorizer=VECTORIZER):
     '''dot-product (projection) similarity combining similarities of questions and, if available, answers'''
     assert q_weight > 0 and q_weight <= 1
     q_sim = cosine_sim_txt(get_question(one_quanda), get_question(other_quanda), vectorizer)
@@ -285,13 +286,14 @@ def find_nearest_quats(train_quats, trial_quat, q_weight=1.0, sim_func=cosine_si
     Find the N most similar texts to this_text and return a list of (index, similarity) pairs in
     descending order of similarity.
         train_quats:        The training sentences or question-answer-tuples or whatever is to be compared.
-        trial_quat:         The trial object to be compared with the training objects; must have at least a .question attribute.
+        trial_quat:         The trial object to be compared with the training objects; must have a .question attribute.
         similarity_func:    function returning the similariy between two texts (as in sentences)
         vocab:              the set of all known words
         max_count           maximum size of returned dict
     '''
     assert q_weight >= 0.0
-    sim_dict = similarity_dict(train_quats, trial_quat, q_weight=q_weight, sim_func=sim_func, min_sim_val=min_sim_val)
+    sim_dict = similarity_dict(train_quats, trial_quat, q_weight=q_weight, sim_func=sim_func,
+                               min_sim_val=min_sim_val)
     return nlargest_items_by_value(sim_dict, max_count)
 
 def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
@@ -326,8 +328,8 @@ def find_nearest_qas_lists(train_quats, trial_quats, find_nearest_qas, sim_func,
                 sim_tuple = nearests[idx][0]
                 max_squat = train_quats[sim_tuple[0]]
                 max_simil = sim_tuple[1]
-                print("(Time & ETR %4.1f %4.1f)  %d  %d -> %d  %s -> %s" % (time_gone, time_left,
-                      trial_quat.id, trial_quat.label, max_squat.id, trial_quat.question, max_squat.question))
+                print("(Time & ETR %4.1f %4.1f)  %d  %d -> %d (%.3f) %s -> %s" % (time_gone, time_left,
+                      trial_quat.id, trial_quat.label, max_squat.id, max_simil, trial_quat.question, max_squat.question))
         except KeyboardInterrupt:
             int_time = time.time()
             print("KeyboardInterrupt in find_nearest_qas_lists at %d/%d trials on %d train_quats after %d seconds." % (idx, ntrial, ntrain, int_time - beg_time))
@@ -387,8 +389,10 @@ def distance_counts(train_quats, trial_quats, sim_lists, max_dist):
             # print("DC: %d  item(%d, %f)" % (idx, item.id, item[1]))
             train_quat = train_quats[item[0]]
             if gold == train_quat.id:      # compare idn to idn (not idx)
-                # print("DBG_G: Q_%d <==> Q_%d (%s <==> %s) at %d, %.4f (%s : %s)\n" % (int(qax.id), item[0], qax.question, quats[item[0]][1],
-                #       idx, item[1], remove_stop_words(normalize(qax.question)), remove_stop_words(normalize(quats[item[0]][1]))))
+                # print("DBG_G: Q_%d <==> Q_%d (%s <==> %s) at %d, %.4f (%s : %s)\n" % (
+                #                              int(qax.id), item[0], qax.question, quats[item[0]][1],
+                #       idx, item[1], remove_stop_words(normalize(qax.question)),
+                # remove_stop_words(normalize(quats[item[0]][1]))))
                 dist_counts[idx] += 1
                 break
     # save the number of gold standard matches as the last count in the list
@@ -428,7 +432,7 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, sim_lists, ntrain=None,
             # print("QUAT:", idx, quats[idx])
             # print("SIM_LIST:", sim_list)
             len_lst = len(sim_list)
-            max_oix = sim_list[0][0] if len_lst > 0 else -1
+            # max_oix = sim_list[0][0] if len_lst > 0 else -1
             max_sim = sim_list[0][1] if len_lst > 1 else 0
             sum_sim = sum([y[1] for y in sim_list])
             sim_oix.append((max_sim, sum_sim, -idx))
@@ -437,12 +441,12 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, sim_lists, ntrain=None,
 
         # HACK for separating training and test data if they were mixed.
         if ntrain:
-            # Partition train from trial indices
-            print("LEN_TRAIN",  len_train,   "LEN(sim_list)",  len(sim_lists), "\n")
+            # Partition training from trial indices
+            print("LEN_TRAIN",  ntrain,   "LEN(sim_list)",  len(sim_lists), "\n")
             print("BEFORE:   ", isorted, "\n")
-            sort_lo = [idx for idx in isorted if idx < len_train]
+            sort_lo = [idx for idx in isorted if idx < ntrain]
             print("AFTER LO: ", sort_lo, "\n")
-            sort_hi = [idx for idx in isorted if idx >= len_train]
+            sort_hi = [idx for idx in isorted if idx >= ntrain]
             print("AFTER HI: ", sort_hi, "\n")
             isorted = sort_lo + sort_hi
     else:
@@ -472,7 +476,7 @@ def save_most_sim_qa_lists_tsv(train_quats, trial_quats, sim_lists, ntrain=None,
                     stxt = quox.question
                     sans = quox.answer
                     print("\t%3d\t%.5f\t%s\t%s\t%s" % (sidn, sim, stxt, sans, sgld), file=out)
-                except Exception as ex:
+                except IndexError as ex:
                     print("ERROR AT MIX {}: idx {}  qax {},  err: {}\n".format(mix, idx, qax, ex))
                     # raise IndexError
 

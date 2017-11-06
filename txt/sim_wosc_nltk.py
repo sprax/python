@@ -214,7 +214,8 @@ class WordSimilarity:
                 # or sent_wtag == 'a' and union_wtag == 'r'
                 # or sent_wtag == 'r' and union_wtag == 'a':
                     sent_word = item[0]
-                    if use_propers and sent_wtag == 'n' and sent_word[0].isupper() and item[1][0] > 0:   # FIXME: index from 1
+                    # FIXME: index from 1
+                    if use_propers and sent_wtag == 'n' and sent_word[0].isupper() and item[1][0] > 0:
                         # sent_word is likely to be a proper noun.  If we only
                         # allow exact matches on proper nouns, then here we should
                         # just continue, because we checked for equality upstream.
@@ -407,7 +408,8 @@ def word_order_vector(wordsim, sent_word_dct, joint_word_set):
             if max_sim > ETA:
                 ord_vec[idx] = sent_word_dct[sim_word]
             else:
-                ord_vec[idx] = 0    # FIXME: 0 is a legit word index value; make this -1 or None?
+                # FIXME: Should index from 1 because 0 is a legit word index value
+                ord_vec[idx] = 0
     return ord_vec
 
 def word_order_similarity(wordsim, sentence_1, sentence_2):
@@ -625,7 +627,6 @@ match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
      3200    0.075    0.000 1645.103    0.514 /Users/sprax/asdf/spryt/txt/sim_wosc_nltk.py:290(semantic_vector)
     '''
     out_path = "moby_ttt_pos.txt" if pos else "moby_ttt_slo.txt"
-    # sim_func = sentence_similarity_pos if pos else sentence_similarity_slow
     wordsim = WordSimilarity()
     if pos:
         sim_func = functools.partial(sentence_similarity_pos, wordsim)
