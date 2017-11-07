@@ -28,6 +28,7 @@ from nltk.corpus import brown
 import numpy as np
 
 import sim_nltk
+import text_regex
 
 # Parameters to the algorithm. Currently set to values that was reported
 # in the paper to produce "best" results.
@@ -297,7 +298,6 @@ class SentSimilarity:
                 # word not in joint_word_set, find most similar word and populate
                 # word_vector with the thresholded similarity
                 sim_word, max_sim = self.wordsim.most_similar_word(sent_word_dct.keys(), joint_word)
-                pdb.set_trace()
                 ord_vec[idx] = sent_word_dct[sim_word] if max_sim > self._min_word_sim_order else 0
                 sem_vec[idx] = max_sim if max_sim > self._min_word_sim_semantic else 0.0
                 if use_content_norm:
@@ -364,7 +364,6 @@ class SentSimilarity:
             else:
                 # word not in joint_wordpos_set, find most similar word and populate
                 # word_vector with the thresholded similarity
-                # pdb.set_trace()
                 if use_pos:
                     joint_wtag = joint_wordpos_dct[joint_word]
                     sim_word, max_sim = self.wordsim.most_similar_word_pos(sent_word_dct, joint_word,
@@ -457,24 +456,26 @@ class SentSimilarity:
     ###########################################################################
 
     def sentence_similarity_pos(self, sentence_1, sentence_2, use_content_norm=False,
-                                use_pos=True):
+                                use_pos=True, word_tokenizer=None):
         """
         Calculate the semantic similarity between two sentences.  The last
         parameter is True or False depending on whether information content
         normalization is desired or not.
         """
+        if word_tokenizer is None:
+            word_tokenizer = nltk.word_tokenize
         # NOTE: These dicts record only the *last* occurence of each word
-        sent_tok_1 = nltk.word_tokenize(sentence_1)
+        sent_tok_1 = word_tokenizer(sentence_1)
+        # pdb.set_trace()
         pos_tags_1 = nltk.pos_tag(sent_tok_1)
         sent_dct_1 = {wordpos[0]: (idx, pos_wnk(wordpos[1])) for idx, wordpos in enumerate(pos_tags_1)}
         word_set_1 = set(sent_dct_1.keys())
 
-        sent_tok_2 = nltk.word_tokenize(sentence_2)
+        sent_tok_2 = word_tokenizer(sentence_2)
         pos_tags_2 = nltk.pos_tag(sent_tok_2)
         sent_dct_2 = {wordpos[0]: (idx, pos_wnk(wordpos[1])) for idx, wordpos in enumerate(pos_tags_2)}
         word_set_2 = set(sent_dct_2.keys())
 
-        # pdb.set_trace()
         joint_word_set = word_set_1.union(word_set_2)
         # NOTE: Prioritizing sentence_2 for POS, because it's expected to be the trial sentence.
         joint_wordpos_dct = {word: sent_dct_2[word][1] if word in sent_dct_2 else sent_dct_1[word][1]
@@ -504,7 +505,6 @@ class SentSimilarity:
         sent_dct_2 = {tok: idx for idx, tok in enumerate(sent_tok_2)}
         word_set_2 = set(sent_dct_2.keys())
 
-        # pdb.set_trace()
         joint_word_set = word_set_1.union(word_set_2)
 
         #print("\n======== SS COMPARE:", sentence_1, sentence_2)
@@ -606,7 +606,7 @@ def smoke_test():
     test_word_similarity(wordsim)
     test_sentence_similarity(sentsim)
 
-def moby(mquats, pos=True, ntry=8):
+def moby(mquats, tok=False, pos=True, ntry=8):
     '''
 Finding all similarity lists (train 40, trial 40, nears 6) took 4137.7 seconds
 match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
@@ -640,7 +640,11 @@ match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
     wordsim = WordSimilarity()
     sentsim = SentSimilarity(wordsim)
     if pos:
-        sim_func = sentsim.sentence_similarity_pos
+        if tok:
+            sim_func = functools.partial(sentsim.sentence_similarity_pos,
+                                         word_tokenizer=text_regex.notnonword_tokens)
+        else:
+            sim_func = sentsim.sentence_similarity_pos
     else:
         sim_func = sentsim.sentence_similarity
 
