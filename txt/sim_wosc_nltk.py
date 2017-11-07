@@ -641,6 +641,9 @@ match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
     sentsim = SentSimilarity(wordsim)
     if pos:
         if tok:
+            # NOTE: The notnonword tokenizer gives "Pequod's" instead of "Pequod" and "'s'".
+            # TODO: Therefore the treatment of proper nouns needs to see "Pequod" and "Pequod's"
+            # as variants of the same word.
             sim_func = functools.partial(sentsim.sentence_similarity_pos,
                                          word_tokenizer=text_regex.notnonword_tokens)
         else:
