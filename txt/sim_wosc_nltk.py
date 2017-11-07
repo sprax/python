@@ -11,10 +11,20 @@ Results achieved are NOT identical to that reported in the paper, but
 this is very likely due to the differences in the way the algorithm was
 described in the paper and how I implemented it.
 
+See the paper above for parameters values reported to produce the "best" results
+on their data sets.
+
 FIXME: word order vectors should index words as 1-based, saving 0 as a sentinel
 indicating that no match was found.  As it is now, with 0-based indexing,
 first words and missing words both get mapped to the 0 index.  It is causing
 errors, that is, wrong sentence similarity scores that break the rankings.
+
+FIXME: word_similarity is way too dependent on the particulars of Wordnet Synsets.
+Those particulars need to be wrapped and filtered.  For instance, WN gives 0.0
+as the similarity of "the" to any other word, including "this", "a", and "one",
+whereas "a" has the same maximum similarity to any other single-letter word.
+Words that don't get POS tags starting with 'a', 'n', 'r', or 'v' are ignored,
+so the article "the" gets nothing, but "a" can be tagged as a noun, etc.
 '''
 from __future__ import division
 # import functools
@@ -30,10 +40,22 @@ import numpy as np
 import sim_nltk
 import text_regex
 
-# Parameters to the algorithm. Currently set to values that was reported
-# in the paper to produce "best" results.
+def possessive_en(noun):
+    if noun.endswith('s'):
+        return noun + "'"
+    else:
+        return noun + "'s"
 
-
+def is_one_noun_possessive_of_other_en(noun_a, noun_b):
+    '''Returns True if one of the argument strings is the possessive form of
+    the other one in English; otherwise False.  Could be made more efficient.'''
+    len_a = len(noun_a)
+    len_b = len(noun_b)
+    if len_a < len_b:
+        return possessive_en(noun_a) == noun_b
+    elif len_a > len_b:
+        return noun_a == possessive_en(noun_b)
+    return False
 
 NLTK_POS_TAG_TO_WORDNET_KEY = {'A': 'a', 'N': 'n', 'R': 'r', 'V': 'v', 'S': 's'}
 
@@ -57,6 +79,8 @@ class WordSimilarity:
         self._ignore_synsets_words = {'a', 'the', 'in', 'on', 'to'}
         self._alpha = 0.2
         self._beta = 0.45
+        self._sim_possessive_proper_noun = 0.95   # TODO: rationalize this value?
+
 
     def print_stats(self):
         '''Show statistics since init.'''
@@ -219,12 +243,18 @@ class WordSimilarity:
                 # or sent_wtag == 'r' and union_wtag == 'a':
                     sent_word = item[0]
                     # FIXME: index from 1
+                    # FIXME: Use NNP tag instead of guessing from capitalization and first word!
                     if use_propers and sent_wtag == 'n' and sent_word[0].isupper() and item[1][0] > 0:
                         # sent_word is likely to be a proper noun.  If we only
                         # allow exact matches on proper nouns, then here we should
                         # just continue, because we checked for equality upstream.
-                        continue
-                    sim = self.word_similarity(union_word, sent_word, union_wtag, sent_wtag)
+                        if is_one_noun_possessive_of_other_en(union_word, sent_word):
+                            # pdb.set_trace()
+                            sim = self._sim_possessive_proper_noun
+                        else:
+                            sim = 0.0
+                    else:
+                        sim = self.word_similarity(union_word, sent_word, union_wtag, sent_wtag)
                     if sim > max_sim:
                         max_sim = sim
                         sim_word = sent_word
