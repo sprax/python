@@ -564,7 +564,7 @@ def moby_tat(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
 
 ###############################################################################
 def match_ttt(train_quats, trial_quats, outpath="matched_ttt.tsv",
-              find_nearest_qas=find_nearest_quats, sim_func=None,
+              find_nearest_qas=find_nearest_quats, sim_func=cosine_sim_txt,
               q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False):
     '''       Match Trial To Training Quats.
     Compute similarities using sim_func, score them against gold standard, and save
@@ -587,7 +587,7 @@ def match_ttt(train_quats, trial_quats, outpath="matched_ttt.tsv",
 
 
 def moby_ttt(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="moby_matched.txt",
-             find_qas=find_nearest_quats, sim_func=None,
+             find_qas=find_nearest_quats, sim_func=cosine_sim_txt,
              q_weight=1.0, max_count=6, min_sim_val=0, sort_most_sim=False,
              reload=False, swap=False, profile=False):
     '''Test match_tat on moby_dick or other specified quats.'''
@@ -617,6 +617,11 @@ def moby_ttt(quats=None, nproto=200, ntrain=0, inpath="simsilver.tsv", outpath="
         print(sio.getvalue())
     return score, ms_lists, train_quats, trial_quats
 
+def mobydef(mquats, ntry=10):
+    '''Call moby_ttt with defaults'''
+    scr, msl, trn, trl = moby_ttt(mquats, 200, ntry, outpath="moby_ttt_def.txt")
+    return (scr, msl, trn, trl)
+
 
 # TODO: use kwargs for a bag of parameters.
 def match_quats_to_model(model, trial_quats, outpath="matched_qtm.tsv", q_weight=1.0, max_count=6, min_sim_val=0):
@@ -638,6 +643,8 @@ def match_quats_to_model(model, trial_quats, outpath="matched_qtm.tsv", q_weight
     print("match_ttt(n_train=%d, n_trial=%d, count=%d) took %.1f seconds; score %.4f\n" % (
         len(train_quats), len(trial_quats), max_count, seconds, score))
     return score, sim_lists
+
+
 
 
 ###############################################################################
