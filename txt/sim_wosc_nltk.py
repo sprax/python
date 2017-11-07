@@ -196,7 +196,7 @@ class WordSimilarity:
         *  This "similarity" is NOT reflexive:   sim(A, A) != 1.0.  Often it just less than 1.
         *  Thus it does not yield a well-defined distance metric in 1 - similarity.
            While it approximates a metric, it violates the triangle rule in small ways.
-        *  Out of vocabulary words always get a result of 0, even when compared to
+        *  Out-of-vocabulary words (OOVs) always get a result of 0, even when compared to
         themselves.  Some examples: sim(yes, yes) is .999, sim(yes, not) is 0.0, but
         sim(yes, no) is .074, and sim(yes, duh) is 0.0 but so is sim(duh, duh).
         *  The arguments are named src_word and try_word to suggest that the first
@@ -233,6 +233,8 @@ class WordSimilarity:
         the word and each word in the joint word set, and return the most similar
         word and the actual similarity value.
         """
+        assert union_wtag is None or len(union_wtag) > 1 # FIXME: breaking change!
+
         max_sim = 0.0
         sim_word = ""
         if union_wtag is not None and union_word not in self._ignore_synsets_words:
