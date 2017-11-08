@@ -51,7 +51,8 @@ class Warnt(namedtuple("Warnt", "tok pos wnt cap")):
     def __str__(self):
         return "%s  %s  %s  %s" % (self.tok, self.pos, self.wnt, self.cap)
 
-Ntags = namedtuple("Ntags", "idx pos wnt")
+NTags = namedtuple("NTags", "idx pos wnt")
+NTags.__doc__ = "NLTK tags tuple.  Not for general use."
 
 
 def plural_en(noun):
@@ -252,7 +253,7 @@ class WordSimilarity:
                 sim_word = sent_word
         return sim_word, max_sim
 
-    def most_similar_word_pos(self, sent_word_dct, union_word, union_wpos, use_propers=False):
+    def most_similar_word_pos(self, sent_word_dct, union_word, union_ntags, use_propers=False):
         """
         Find the word in the joint word set that is most similar to the word
         passed in. We use the algorithm above to compute word similarity between
@@ -260,14 +261,15 @@ class WordSimilarity:
         word and the actual similarity value.
         """
         # print("%d  %3s  %s  %s" % (len(union_wpos), union_wpos, union_wtag, union_word))
+        union_wpos = union_ntags.pos
+        union_wtag = union_ntags.wnt
         assert union_wpos is None or len(union_wpos) > 1 # FIXME: breaking change!
-        union_wtag = pos_wnk(union_wpos)
 
         max_sim = 0.0
         sim_word = ""
         if union_wtag is not None and union_word not in self._ignore_synsets_words:
             for item in sent_word_dct.items():
-                sent_wtag = pos_wnk(item[1][1])
+                sent_wtag = item[1].wnt
                 if sent_wtag == union_wtag:
                 # or sent_wtag == 'a' and union_wtag == 'r'
                 # or sent_wtag == 'r' and union_wtag == 'a':
@@ -425,9 +427,9 @@ class SentSimilarity:
                 # word not in joint_wordpos_set, find most similar word and populate
                 # word_vector with the thresholded similarity
                 if use_pos:
-                    joint_wtag = joint_wordpos_dct[joint_word]
+                    joint_ntags = joint_wordpos_dct[joint_word]
                     sim_word, max_sim = self.wordsim.most_similar_word_pos(sent_word_dct, joint_word,
-                                                                           joint_wtag, self._use_propers)
+                                                                           joint_ntags, self._use_propers)
                 else:
                     sim_word, max_sim = self.wordsim.most_similar_word(sent_word_dct.keys(), joint_word)
 
@@ -528,17 +530,17 @@ class SentSimilarity:
         sent_tok_1 = word_tokenizer(sentence_1)
         # pdb.set_trace()
         pos_tags_1 = nltk.pos_tag(sent_tok_1)
-        sent_dct_1 = {wpos[0]: Ntags(idx, wpos[1], pos_wnk(wpos[1])) for idx, wpos in enumerate(pos_tags_1)}
+        sent_dct_1 = {wpos[0]: NTags(idx, wpos[1], pos_wnk(wpos[1])) for idx, wpos in enumerate(pos_tags_1)}
         word_set_1 = set(sent_dct_1.keys())
 
         sent_tok_2 = word_tokenizer(sentence_2)
         pos_tags_2 = nltk.pos_tag(sent_tok_2)
-        sent_dct_2 = {wpos[0]: Ntags(idx, wpos[1], pos_wnk(wpos[1])) for idx, wpos in enumerate(pos_tags_2)}
+        sent_dct_2 = {wpos[0]: NTags(idx, wpos[1], pos_wnk(wpos[1])) for idx, wpos in enumerate(pos_tags_2)}
         word_set_2 = set(sent_dct_2.keys())
 
         joint_word_set = word_set_1.union(word_set_2)
         # NOTE: Prioritizing sentence_2 for POS, because it's expected to be the trial sentence.
-        joint_wordpos_dct = {word: sent_dct_2[word][1] if word in sent_dct_2 else sent_dct_1[word][1]
+        joint_wordpos_dct = {word: sent_dct_2[word] if word in sent_dct_2 else sent_dct_1[word]
                              for word in joint_word_set}
 
         #print("\n======== SSP COMPARE:", sentence_1, sentence_2)
