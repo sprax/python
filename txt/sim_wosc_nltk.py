@@ -57,7 +57,7 @@ def is_one_noun_possessive_of_other_en(noun_a, noun_b):
         return noun_a == possessive_en(noun_b)
     return False
 
-NLTK_POS_TAG_TO_WORDNET_KEY = {'A': 'a', 'N': 'n', 'R': 'r', 'V': 'v', 'S': 's'}
+NLTK_POS_TAG_TO_WORDNET_KEY = {'J': 'a', 'N': 'n', 'R': 'r', 'V': 'v', 'S': 's'}
 
 def pos_wnk(tag):
     '''translate NLTK token POS to Wordnet Synset key'''
@@ -226,20 +226,22 @@ class WordSimilarity:
                 sim_word = sent_word
         return sim_word, max_sim
 
-    def most_similar_word_pos(self, sent_word_dct, union_word, union_wtag, use_propers=False):
+    def most_similar_word_pos(self, sent_word_dct, union_word, union_wpos, use_propers=False):
         """
         Find the word in the joint word set that is most similar to the word
         passed in. We use the algorithm above to compute word similarity between
         the word and each word in the joint word set, and return the most similar
         word and the actual similarity value.
         """
-        assert union_wtag is None or len(union_wtag) > 1 # FIXME: breaking change!
+        # print("%d  %3s  %s  %s" % (len(union_wpos), union_wpos, union_wtag, union_word))
+        assert union_wpos is None or len(union_wpos) > 1 # FIXME: breaking change!
+        union_wtag = pos_wnk(union_wpos)
 
         max_sim = 0.0
         sim_word = ""
         if union_wtag is not None and union_word not in self._ignore_synsets_words:
             for item in sent_word_dct.items():
-                sent_wtag = item[1][1]
+                sent_wtag = pos_wnk(item[1][1])
                 if sent_wtag == union_wtag:
                 # or sent_wtag == 'a' and union_wtag == 'r'
                 # or sent_wtag == 'r' and union_wtag == 'a':
@@ -500,12 +502,12 @@ class SentSimilarity:
         sent_tok_1 = word_tokenizer(sentence_1)
         # pdb.set_trace()
         pos_tags_1 = nltk.pos_tag(sent_tok_1)
-        sent_dct_1 = {wordpos[0]: (idx, pos_wnk(wordpos[1])) for idx, wordpos in enumerate(pos_tags_1)}
+        sent_dct_1 = {wordpos[0]: (idx, wordpos[1]) for idx, wordpos in enumerate(pos_tags_1)}
         word_set_1 = set(sent_dct_1.keys())
 
         sent_tok_2 = word_tokenizer(sentence_2)
         pos_tags_2 = nltk.pos_tag(sent_tok_2)
-        sent_dct_2 = {wordpos[0]: (idx, pos_wnk(wordpos[1])) for idx, wordpos in enumerate(pos_tags_2)}
+        sent_dct_2 = {wordpos[0]: (idx, wordpos[1]) for idx, wordpos in enumerate(pos_tags_2)}
         word_set_2 = set(sent_dct_2.keys())
 
         joint_word_set = word_set_1.union(word_set_2)
