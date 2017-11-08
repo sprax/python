@@ -32,6 +32,7 @@ import math
 import pdb
 import sys
 import time
+import inflection
 import nltk
 from collections import namedtuple
 from nltk.corpus import wordnet as wn
@@ -51,6 +52,18 @@ class Warnt(namedtuple("Warnt", "tok pos wnt cap")):
         return "%s  %s  %s  %s" % (self.tok, self.pos, self.wnt, self.cap)
 
 Ntags = namedtuple("Ntags", "idx pos wnt")
+
+
+def plural_en(noun):
+    '''
+    Return the plural form of the argument string, assuming that it is an English
+    noun.  Some results come from lookup tables, but most come from rules, and
+    thus may be wrong, especially for loaner words, OOVs, etc.
+    BUGS: inflection's rules sometimes go awry, e.g. (safe <-> saves)
+    '''
+    if word.lower()[-3:] == 'afe':
+        return word + 's'
+    return inflection.pluralize(word)
 
 
 def possessive_en(noun):
