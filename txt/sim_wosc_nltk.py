@@ -33,12 +33,25 @@ import pdb
 import sys
 import time
 import nltk
+from collections import namedtuple
 from nltk.corpus import wordnet as wn
 from nltk.corpus import brown
 import numpy as np
 
 import sim_nltk
 import text_regex
+
+
+class Warnt(namedtuple("Warnt", "tok pos wnt cap")):
+    ''' Minimal class for WARNT: Word And Refined NLTK Tags.
+        tok = token, pos = NLTK POS, wnt = WordNet Synset key, cap = capitalized.
+    '''
+    __slots__ = ()
+    def __str__(self):
+        return "%s  %s  %s  %s" % (self.tok, self.pos, self.wnt, self.cap)
+
+Ntags = namedtuple("Ntags", "idx pos wnt")
+
 
 def possessive_en(noun):
     if noun.endswith('s'):
@@ -502,12 +515,12 @@ class SentSimilarity:
         sent_tok_1 = word_tokenizer(sentence_1)
         # pdb.set_trace()
         pos_tags_1 = nltk.pos_tag(sent_tok_1)
-        sent_dct_1 = {wordpos[0]: (idx, wordpos[1]) for idx, wordpos in enumerate(pos_tags_1)}
+        sent_dct_1 = {wpos[0]: Ntags(idx, wpos[1], pos_wnk(wpos[1])) for idx, wpos in enumerate(pos_tags_1)}
         word_set_1 = set(sent_dct_1.keys())
 
         sent_tok_2 = word_tokenizer(sentence_2)
         pos_tags_2 = nltk.pos_tag(sent_tok_2)
-        sent_dct_2 = {wordpos[0]: (idx, wordpos[1]) for idx, wordpos in enumerate(pos_tags_2)}
+        sent_dct_2 = {wpos[0]: Ntags(idx, wpos[1], pos_wnk(wpos[1])) for idx, wpos in enumerate(pos_tags_2)}
         word_set_2 = set(sent_dct_2.keys())
 
         joint_word_set = word_set_1.union(word_set_2)
