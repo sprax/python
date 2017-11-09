@@ -62,9 +62,20 @@ def plural_en(noun):
     thus may be wrong, especially for loaner words, OOVs, etc.
     BUGS: inflection's rules sometimes go awry, e.g. (safe <-> saves)
     '''
-    if word.lower()[-3:] == 'afe':
-        return word + 's'
-    return inflection.pluralize(word)
+    if noun.lower()[-3:] == 'afe':
+        return noun + 's'
+    return inflection.pluralize(noun)
+
+
+def is_one_noun_plural_of_other_en(noun_a, noun_b):
+    '''Returns True if one of the argument strings is the possessive form of
+    the other one in English; otherwise False.  Could be made more efficient.'''
+    len_a = len(noun_a)
+    len_b = len(noun_b)
+    if len_a < len_b:
+        return plural_en(noun_a) == noun_b
+    else:
+        return noun_a == plural_en(noun_b)
 
 
 def possessive_en(noun):
@@ -106,6 +117,7 @@ class WordSimilarity:
         self._ignore_synsets_words = {'a', 'the', 'in', 'on', 'to'}
         self._alpha = 0.2
         self._beta = 0.45
+        self._sim_plural_proper_noun = 0.667   # TODO: rationalize this value?
         self._sim_possessive_proper_noun = 0.95   # TODO: rationalize this value?
 
 
@@ -253,7 +265,7 @@ class WordSimilarity:
                 sim_word = sent_word
         return sim_word, max_sim
 
-    def most_similar_word_pos(self, sent_word_dct, union_word, union_ntags, use_propers=False):
+    def most_similar_word_pos(self, sent_word_dct, union_word, union_ntags, use_propers=True):
         """
         Find the word in the joint word set that is most similar to the word
         passed in. We use the algorithm above to compute word similarity between
@@ -281,8 +293,9 @@ class WordSimilarity:
                         # allow exact matches on proper nouns, then here we should
                         # just continue, because we checked for equality upstream.
                         if is_one_noun_possessive_of_other_en(union_word, sent_word):
-                            # pdb.set_trace()
                             sim = self._sim_possessive_proper_noun
+                        elif is_one_noun_plural_of_other_en(union_word, sent_word):
+                            sim = self._sim_plural_proper_noun
                         else:
                             sim = 0.0
                     else:
