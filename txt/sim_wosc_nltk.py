@@ -27,14 +27,14 @@ Words that don't get POS tags starting with 'a', 'n', 'r', or 'v' are ignored,
 so the article "the" gets nothing, but "a" can be tagged as a noun, etc.
 '''
 from __future__ import division
-# import functools
+import functools
 import math
 import pdb
 import sys
 import time
+from collections import namedtuple
 import inflection
 import nltk
-from collections import namedtuple
 from nltk.corpus import wordnet as wn
 from nltk.corpus import brown
 import numpy as np
