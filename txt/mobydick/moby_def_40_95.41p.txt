@@ -1,0 +1,323 @@
+# Finding all similarity lists (train 40, trial 40, nears 6) took 3.5 seconds
+# match_ttt(n_train=40, n_trial=40, count=6) took 3.5 seconds; score 95.4170
+
+300	100	What are all the mates' names on the Pequod?	Starbuck and Stubb and Flask.
+	100	0.70930	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	105	0.70930	Who is the Pequod's Second Mate?	Stubb.	305
+	101	0.57974	The name of the First Mate is?	Starbuck.	301
+	102	0.57974	What is the name of the Third Mate?	Flask.	302
+	104	0.57974	Who owns the Pequod?	Bildad and Peleg.	304
+	106	0.33610	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+
+301	101	Who is the First Mate?	Starbuck.
+	101	1.00000	The name of the First Mate is?	Starbuck.	301
+	102	1.00000	What is the name of the Third Mate?	Flask.	302
+	100	0.44944	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	105	0.44944	Who is the Pequod's Second Mate?	Stubb.	305
+	103	0.00000	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+	104	0.00000	Who owns the Pequod?	Bildad and Peleg.	304
+
+302	102	Who is the Third Mate?	Flask.
+	101	1.00000	The name of the First Mate is?	Starbuck.	301
+	102	1.00000	What is the name of the Third Mate?	Flask.	302
+	100	0.44944	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	105	0.44944	Who is the Pequod's Second Mate?	Stubb.	305
+	103	0.00000	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+	104	0.00000	Who owns the Pequod?	Bildad and Peleg.	304
+
+303	103	How many of crewmembers of the Pequod survive their meeting with Moby Dick?	Exactly one.
+	103	0.55862	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+	118	0.41036	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	108	0.40735	Which crewmembers survive the Pequod's sinking?	Only Ishmael.	308
+	109	0.31103	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	104	0.27894	Who owns the Pequod?	Bildad and Peleg.	304
+	116	0.23790	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+
+304	104	Who are the Pequod's owners?	Bildad and Peleg.
+	104	0.57974	Who owns the Pequod?	Bildad and Peleg.	304
+	106	0.33610	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+	120	0.33610	How is the Pequod decorated?	With whale bones.	320
+	100	0.26056	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	105	0.26056	Who is the Pequod's Second Mate?	Stubb.	305
+	108	0.22029	Which crewmembers survive the Pequod's sinking?	Only Ishmael.	308
+
+305	105	Who was the Second Mate on the Pequod?	Stubb.
+	100	0.77651	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	105	0.77651	Who is the Pequod's Second Mate?	Stubb.	305
+	101	0.37998	The name of the First Mate is?	Starbuck.	301
+	102	0.37998	What is the name of the Third Mate?	Flask.	302
+	104	0.37998	Who owns the Pequod?	Bildad and Peleg.	304
+	106	0.22029	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+
+306	106	What are the names of the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.
+	106	0.99999	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+	104	0.57974	Who owns the Pequod?	Bildad and Peleg.	304
+	120	0.33610	How is the Pequod decorated?	With whale bones.	320
+	100	0.26056	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	105	0.26056	Who is the Pequod's Second Mate?	Stubb.	305
+	108	0.22029	Which crewmembers survive the Pequod's sinking?	Only Ishmael.	308
+
+307	107	What do you call a group of whales swimming together?	A pod.
+	107	1.00000	What is a group of whales that swim together called?	A pod.	307
+	111	0.22029	What do whales eat?	Plankton and other brit.	311
+	124	0.22029	How dangerous is whaling?	Whaling was one of the most dangerous occupations of the 19th century.	324
+	110	0.17078	For what were whales primarily hunted?	Oil.	310
+	112	0.17078	What type of whale are they hunting?	Sperm whales.	312
+	123	0.14438	Where, according to Ishmael, are whales hunted?	All around the world.	323
+
+308	108	What member of the crew survives when the Pequod sinks?	Only Ishmael.
+	108	0.51015	Which crewmembers survive the Pequod's sinking?	Only Ishmael.	308
+	103	0.34464	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+	104	0.33518	Who owns the Pequod?	Bildad and Peleg.	304
+	106	0.19431	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+	120	0.19431	How is the Pequod decorated?	With whale bones.	320
+	100	0.15064	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+
+309	109	Does the white whale survive the events narrated in Moby Dick?	Yes.
+	118	0.37998	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	136	0.31711	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+	109	0.28800	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	103	0.25321	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+	135	0.25321	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+	116	0.22029	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+
+310	110	Why did whalers hunt their quarry?	For oil.
+	110	0.15064	For what were whales primarily hunted?	Oil.	310
+	112	0.15064	What type of whale are they hunting?	Sperm whales.	312
+	123	0.12736	Where, according to Ishmael, are whales hunted?	All around the world.	323
+	137	0.09349	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will.	337
+	100	0.00000	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	101	0.00000	The name of the First Mate is?	Starbuck.	301
+
+311	111	What do sperm whales live on?	Plankton and krill.
+	111	0.26056	What do whales eat?	Plankton and other brit.	311
+	124	0.26056	How dangerous is whaling?	Whaling was one of the most dangerous occupations of the 19th century.	324
+	110	0.20199	For what were whales primarily hunted?	Oil.	310
+	112	0.20199	What type of whale are they hunting?	Sperm whales.	312
+	107	0.17078	What is a group of whales that swim together called?	A pod.	307
+	123	0.17078	Where, according to Ishmael, are whales hunted?	All around the world.	323
+
+312	112	What kind of whales does the crew hunt?	Sperm whales.
+	110	0.35630	For what were whales primarily hunted?	Oil.	310
+	112	0.35630	What type of whale are they hunting?	Sperm whales.	312
+	137	0.34464	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will.	337
+	123	0.29122	Where, according to Ishmael, are whales hunted?	All around the world.	323
+	111	0.19431	What do whales eat?	Plankton and other brit.	311
+	124	0.19431	How dangerous is whaling?	Whaling was one of the most dangerous occupations of the 19th century.	324
+
+313	113	Who wins the doubloon that Pip calls the ship's navel from the main the mast?	Ahab.
+	113	0.52459	Who wins the doubloon from the mast?	Ahab.	313
+	138	0.16840	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+	100	0.00000	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	101	0.00000	The name of the First Mate is?	Starbuck.	301
+	102	0.00000	What is the name of the Third Mate?	Flask.	302
+	103	0.00000	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+
+314	114	What does Ahab destroy piece by piece throughout the voyage?	The navigation equipment.
+	114	0.37481	Over the course of the voyage, Ahab destroys all of what?	The navigation equipment.	314
+	132	0.26336	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+	136	0.19087	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+	134	0.17673	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes.	334
+	133	0.16171	Who wears a whale-penis pelt while slicing pieces of blubber for the pots?	The mincer.	333
+	135	0.15593	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+
+315	115	Which biblical figure is the focus of Father Mapple's sermon?	Jonah.
+	115	0.45027	What is the biblical subject of Father Mapple's sermon at the Whaleman's Chapel?	Jonah and the whale.	315
+	127	0.44944	Who is Father Mapple?	The chaplain (in New Bedford) who gives a moving sermon based on the Biblical story of Jonah and the whale in the Whalemen's chapel.	327
+	100	0.00000	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	101	0.00000	The name of the First Mate is?	Starbuck.	301
+	102	0.00000	What is the name of the Third Mate?	Flask.	302
+	103	0.00000	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+
+316	116	What's the very first line in Moby Dick?	'Call me Ishmael.'
+	116	0.60297	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	118	0.57974	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	109	0.43940	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	125	0.33610	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	126	0.33610	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+	136	0.29122	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+
+317	117	What essential flaw determines Ahab's fate?	Hubris.
+	117	0.29122	What is Ahab's single fatal flaw?	Hubris.	317
+	122	0.19431	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the the whaling ship Pequod.  He wants to find and kill Moby Dick, the whale that caused him to lose his leg.	322
+	134	0.14365	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes.	334
+	114	0.12736	Over the course of the voyage, Ahab destroys all of what?	The navigation equipment.	314
+	136	0.11234	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+	135	0.09349	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+
+318	118	What about Moby Dick?	Moby Dick is a giant and elusive white sperm whale who serves as Captain Ahab's antagonist in the novel. Ahab's sworn purpose in life is to kill Moby Dick.
+	118	0.99999	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	109	0.75793	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	116	0.57974	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	125	0.57974	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	126	0.57974	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+	136	0.50233	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+
+319	119	What about that Ishmael?	He is the novel's narrator and the only sailor to survive from Captain Ahab's whaling ship, the Pequod.
+	119	1.00000	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	123	0.37998	Where, according to Ishmael, are whales hunted?	All around the world.	323
+	125	0.37998	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	139	0.33518	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg.	339
+	137	0.27894	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will.	337
+	100	0.00000	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+
+320	120	What decorates the Pequod?	Whale bones.
+	120	0.99999	How is the Pequod decorated?	With whale bones.	320
+	104	0.57974	Who owns the Pequod?	Bildad and Peleg.	304
+	106	0.33610	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+	100	0.26056	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	105	0.26056	Who is the Pequod's Second Mate?	Stubb.	305
+	108	0.22029	Which crewmembers survive the Pequod's sinking?	Only Ishmael.	308
+
+321	121	What about the one named Queequeg?	He is a native of Kokovoko in the Fiji islands and an expert harpooner, and despite his religion and customs, he is develops a bond with Ishmael.
+	121	1.00000	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner, who becomes Ishmael's friend and crewmate. Queequeg dies when the ship sinks.	321
+	100	0.00000	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	101	0.00000	The name of the First Mate is?	Starbuck.	301
+	102	0.00000	What is the name of the Third Mate?	Flask.	302
+	103	0.00000	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+	104	0.00000	Who owns the Pequod?	Bildad and Peleg.	304
+
+322	122	What about Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod. He is obsessed with finding and killing Moby Dick.
+	122	0.99999	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the the whaling ship Pequod.  He wants to find and kill Moby Dick, the whale that caused him to lose his leg.	322
+	134	0.24846	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes.	334
+	114	0.22029	Over the course of the voyage, Ahab destroys all of what?	The navigation equipment.	314
+	117	0.22029	What is Ahab's single fatal flaw?	Hubris.	317
+	136	0.19431	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+	135	0.16171	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+
+323	123	Where does Ishmael say that whales are hunted?	All around the world.
+	137	0.51939	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will.	337
+	123	0.51015	Where, according to Ishmael, are whales hunted?	All around the world.	323
+	110	0.35630	For what were whales primarily hunted?	Oil.	310
+	112	0.35630	What type of whale are they hunting?	Sperm whales.	312
+	119	0.33518	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	139	0.25233	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg.	339
+
+324	124	How dangerous is it to go whaling?	Whaling was one of the most dangerous occupations of the 19th century.
+	124	0.99999	How dangerous is whaling?	Whaling was one of the most dangerous occupations of the 19th century.	324
+	137	0.41036	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will.	337
+	111	0.33610	What do whales eat?	Plankton and other brit.	311
+	110	0.26056	For what were whales primarily hunted?	Oil.	310
+	112	0.26056	What type of whale are they hunting?	Sperm whales.	312
+	107	0.22029	What is a group of whales that swim together called?	A pod.	307
+
+325	125	What is it about Moby Dick that frightens Ishmael the most?	That whale's peculiar whiteness.
+	125	1.00000	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	118	0.57974	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	109	0.43940	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	119	0.37998	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	116	0.33610	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	126	0.33610	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+
+326	126	Which characters in Moby Dick are Quakers?	Starbuck, Peleg, and Bildad.
+	126	1.00000	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+	118	0.57974	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	109	0.43940	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	116	0.33610	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	125	0.33610	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	136	0.29122	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+
+327	127	Who is Father Mapple?	The chaplain (in New Bedford) who gives a moving sermon based on the Biblical story of Jonah and the whale in the Whalemen's chapel.
+	127	0.99999	Who is Father Mapple?	The chaplain (in New Bedford) who gives a moving sermon based on the Biblical story of Jonah and the whale in the Whalemen's chapel.	327
+	115	0.41036	What is the biblical subject of Father Mapple's sermon at the Whaleman's Chapel?	Jonah and the whale.	315
+	100	0.00000	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	101	0.00000	The name of the First Mate is?	Starbuck.	301
+	102	0.00000	What is the name of the Third Mate?	Flask.	302
+	103	0.00000	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+
+328	128	What about that Fedallah?	He is a strange, 'oriental' old Parsee; Ahab's harpooner and personal prophet.
+	128	1.00000	Who is Fedallah?	Strange, 'oriental' old Parsee; Ahab's harpooner and personal prophet.	328
+	129	0.57974	Out of what is Fedallah's turban made?	His hair.	329
+	100	0.00000	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	101	0.00000	The name of the First Mate is?	Starbuck.	301
+	102	0.00000	What is the name of the Third Mate?	Flask.	302
+	103	0.00000	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+
+329	129	What is Fedallah's turban made of?	His own hair.
+	129	0.99999	Out of what is Fedallah's turban made?	His hair.	329
+	128	0.57974	Who is Fedallah?	Strange, 'oriental' old Parsee; Ahab's harpooner and personal prophet.	328
+	100	0.00000	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	101	0.00000	The name of the First Mate is?	Starbuck.	301
+	102	0.00000	What is the name of the Third Mate?	Flask.	302
+	103	0.00000	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+
+330	130	What is Flask's nickname?	King-Post.
+	130	0.99999	What is Flask's nickname?	King-Post.	330
+	131	0.57974	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard.	331
+	100	0.00000	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	101	0.00000	The name of the First Mate is?	Starbuck.	301
+	102	0.00000	What is the name of the Third Mate?	Flask.	302
+	103	0.00000	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+
+331	131	What about the one called Flask?	Flask is the third mate of the Pequod; from Martha's Vineyard.
+	131	1.00000	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard.	331
+	130	0.57974	What is Flask's nickname?	King-Post.	330
+	100	0.00000	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	101	0.00000	The name of the First Mate is?	Starbuck.	301
+	102	0.00000	What is the name of the Third Mate?	Flask.	302
+	103	0.00000	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+
+332	132	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.
+	132	0.99999	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+	133	0.55862	Who wears a whale-penis pelt while slicing pieces of blubber for the pots?	The mincer.	333
+	136	0.09349	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+	139	0.09349	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg.	339
+	135	0.07781	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+	137	0.07781	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will.	337
+
+333	133	Who wears a whale-penis pelt while slicing pieces of blubber for the pots?	The mincer.
+	133	0.99999	Who wears a whale-penis pelt while slicing pieces of blubber for the pots?	The mincer.	333
+	132	0.55862	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+	100	0.00000	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	101	0.00000	The name of the First Mate is?	Starbuck.	301
+	102	0.00000	What is the name of the Third Mate?	Flask.	302
+	103	0.00000	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+
+334	134	What material does Ahab give the blacksmith out of which to make a harpoon for Moby Dick?	Nails from racehorse shoes.
+	134	0.66913	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes.	334
+	136	0.47433	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+	118	0.37998	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	135	0.36802	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+	109	0.28800	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	116	0.22029	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+
+335	135	What does Ahab say when he realizes that Moby Dick is pursuing the Pequod?	That's bad.
+	135	0.67352	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+	136	0.47433	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+	118	0.37998	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	134	0.33381	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes.	334
+	109	0.28800	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	104	0.25970	Who owns the Pequod?	Bildad and Peleg.	304
+
+336	136	What Ocean is the one where Ahab again tracks down Moby Dick?	The Pacific.
+	136	0.66942	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+	118	0.50233	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	109	0.38073	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	135	0.34464	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+	134	0.34073	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes.	334
+	116	0.29122	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+
+337	137	After seeing how dangerous hunting whales can be, what does he decide he should do?	Update his will.
+	137	0.74741	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will.	337
+	124	0.50233	How dangerous is whaling?	Whaling was one of the most dangerous occupations of the 19th century.	324
+	110	0.35630	For what were whales primarily hunted?	Oil.	310
+	112	0.35630	What type of whale are they hunting?	Sperm whales.	312
+	123	0.29122	Where, according to Ishmael, are whales hunted?	All around the world.	323
+	111	0.19431	What do whales eat?	Plankton and other brit.	311
+
+338	138	What does Ahab see when he peers at the gold doubloon mounted on the mast?	His own reflection.
+	138	0.55862	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+	113	0.29107	Who wins the doubloon from the mast?	Ahab.	313
+	136	0.20614	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+	134	0.19086	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes.	334
+	135	0.16840	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+	122	0.16171	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the the whaling ship Pequod.  He wants to find and kill Moby Dick, the whale that caused him to lose his leg.	322
+
+339	139	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg.
+	139	0.99999	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg.	339
+	119	0.33518	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	137	0.20614	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will.	337
+	123	0.12736	Where, according to Ishmael, are whales hunted?	All around the world.	323
+	125	0.12736	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	136	0.11234	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+
