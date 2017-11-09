@@ -275,8 +275,6 @@ class WordSimilarity:
         # print("%d  %3s  %s  %s" % (len(union_wpos), union_wpos, union_wtag, union_word))
         union_wpos = union_ntags.pos
         union_wtag = union_ntags.wnt
-        assert union_wpos is None or len(union_wpos) > 1 # FIXME: breaking change!
-
         max_sim = 0.0
         sim_word = ""
         if union_wtag is not None and union_word not in self._ignore_synsets_words:
@@ -285,10 +283,11 @@ class WordSimilarity:
                 if sent_wtag == union_wtag:
                 # or sent_wtag == 'a' and union_wtag == 'r'
                 # or sent_wtag == 'r' and union_wtag == 'a':
+                    sent_wpos = item[1].pos
                     sent_word = item[0]
                     # FIXME: index from 1
                     # FIXME: Use NNP tag instead of guessing from capitalization and first word!
-                    if use_propers and sent_wtag == 'n' and sent_word[0].isupper() and item[1][0] > 0:
+                    if use_propers and sent_wpos == 'NNP' and union_wpos == 'NNP':
                         # sent_word is likely to be a proper noun.  If we only
                         # allow exact matches on proper nouns, then here we should
                         # just continue, because we checked for equality upstream.
