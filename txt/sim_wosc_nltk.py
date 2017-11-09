@@ -79,6 +79,7 @@ def is_one_noun_plural_of_other_en(noun_a, noun_b):
 
 
 def possessive_en(noun):
+    '''Returns possessive form of the argument string, assuming it is an English noun.'''
     if noun.endswith('s'):
         return noun + "'"
     else:
@@ -286,7 +287,6 @@ class WordSimilarity:
                     sent_wpos = item[1].pos
                     sent_word = item[0]
                     # FIXME: index from 1
-                    # FIXME: Use NNP tag instead of guessing from capitalization and first word!
                     if use_propers and sent_wpos == 'NNP' and union_wpos == 'NNP':
                         # sent_word is likely to be a proper noun.  If we only
                         # allow exact matches on proper nouns, then here we should
@@ -716,7 +716,7 @@ match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
     if pos:
         if tok:
             # NOTE: The notnonword tokenizer gives "Pequod's" instead of "Pequod" and "'s'".
-            # TODO: Therefore the treatment of proper nouns needs to see "Pequod" and "Pequod's"
+            # Therefore the treatment of proper nouns needs to see "Pequod" and "Pequod's"
             # as variants of the same word.
             sim_func = functools.partial(sentsim.sentence_similarity_pos,
                                          word_tokenizer=text_regex.notnonword_tokens)
