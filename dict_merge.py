@@ -25,10 +25,10 @@ Note: In 5, we’re focused on updates to the dictionary, not contained objects.
 
 So we want something like this:
 '''
->>> user = {'name': "Trey", 'website': "http://treyhunner.com"}
->>> defaults = {'name': "Anonymous User", 'page_name': "Profile Page"}
->>> context = merge_dicts(defaults, user)  # magical merge function
->>> context
+user = {'name': "Trey", 'website': "http://treyhunner.com"}
+defaults = {'name': "Anonymous User", 'page_name': "Profile Page"}
+context = merge_dicts(defaults, user)  # magical merge function
+context
 {'website': 'http://treyhunner.com', 'name': 'Trey', 'page_name': 'Profile Page'}
 
 '''
