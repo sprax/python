@@ -289,14 +289,61 @@ class WordSimilarity:
                         sim_word = sent_word
         return sim_word, max_sim
 
-############################# sentence similarity #############################
+#################################### tests  ####################################
+def test_word_similarity(wordsim):
+    '''The results of the algorithm are largely dependent on the results of
+    the word similarities, so we should test that first...'''
+    print("\n\t Word Similarity:")
+    word_pairs = [
+        ["asylum", "fruit", 0.21],
+        ["autograph", "shore", 0.29],
+        ["autograph", "signature", 0.55],
+        ["automobile", "car", 0.64],
+        ["bird", "woodland", 0.33],
+        ["boy", "rooster", 0.53],
+        ["boy", "lad", 0.66],
+        ["boy", "sage", 0.51],
+        ["cemetery", "graveyard", 0.73],
+        ["coast", "forest", 0.36],
+        ["coast", "shore", 0.76],
+        ["cock", "rooster", 1.00],
+        ["cord", "smile", 0.33],
+        ["cord", "string", 0.68],
+        ["cushion", "pillow", 0.66],
+        ["forest", "graveyard", 0.55],
+        ["forest", "woodland", 0.70],
+        ["furnace", "stove", 0.72],
+        ["glass", "tumbler", 0.65],
+        ["grin", "smile", 0.49],
+        ["gem", "jewel", 0.83],
+        ["hill", "woodland", 0.59],
+        ["hill", "mound", 0.74],
+        ["implement", "tool", 0.75],
+        ["journey", "voyage", 0.52],
+        ["magician", "oracle", 0.44],
+        ["magician", "wizard", 0.65],
+        ["midday", "noon", 1.0],
+        ["oracle", "sage", 0.43],
+        ["serf", "slave", 0.39]
+    ]
+    print("W-Sim \t Paper \t src_word \t try_word")
+    print("----- \t ----- \t -------- \t --------")
+    sum = 0.0
+    for word_pair in word_pairs:
+        sim = wordsim.word_similarity(word_pair[0], word_pair[1])
+        print(" %.2f \t %.2f \t %s %s %s" % (sim, word_pair[2], word_pair[0],
+                                             ' '*(14 - len(word_pair[0])), word_pair[1]))
+        sum += sim
+    avg_sim = sum / len(word_pairs)
+    wordsim.print_stats()
+    print("test_word_similarity: sum/num %.3f/%d = %.3f" % (sum, len(word_pairs), avg_sim))
+    return avg_sim
 
 def smoke_test():
     '''test very basic functionality'''
     wordsim = WordSimilarity(verbose=True)
-
-
-
+    avg_sim = test_word_similarity(wordsim)
+    return avg_sim
 
 ###############################################################################
 if __name__ == '__main__':
