@@ -393,8 +393,6 @@ class SentSimilarity:
         return delta * (semantic_sim - word_ord_sim) + word_ord_sim
 
 ######################### main / test ##########################
-
-
 def test_sentence_similarity(sentsim):
     '''test semantic and word-order similarity of sentence pairs.'''
     print("\n\t Sentence Similarity:")
@@ -438,12 +436,7 @@ def moby(mquats, tok=False, pos=True, ntry=8):
     '''
 Finding all similarity lists (train 40, trial 40, nears 6) took 4137.7 seconds
 match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
-
          1946348335 function calls (1944927287 primitive calls) in 4137.690 seconds
-
-   Ordered by: cumulative time
-   List reduced from 181 to 30 due to restriction <30>
-
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
         1    0.000    0.000 4137.690 4137.690 /Users/sprax/asdf/spryt/txt/sim_nltk.py:523(match_ttt)
         1    0.000    0.000 4137.686 4137.686 /Users/sprax/asdf/spryt/txt/sim_nltk.py:337(find_ranked_qa_lists)
