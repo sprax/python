@@ -10,7 +10,7 @@ class Quat(namedtuple("Quat", "id label question answer")):
     def __str__(self):
         return "%s  %s  %s  %s" % (self.id, self.label, self.question, self.answer)
 
-def test():
+def smoke_test():
     '''Test Quat, a 4-tuple: (id, label, question, answer)'''
 
     quat1 = Quat(1, 'salutation', "What's up?", "Nothing.")
@@ -19,4 +19,4 @@ def test():
     print("quat2: ", quat2)
 
 if __name__ == '__main__':
-    test()
+    smoke_test()
