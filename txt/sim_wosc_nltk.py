@@ -37,17 +37,8 @@ import sim_nltk
 import text_regex
 
 
-class Warnt(namedtuple("Warnt", "tok pos wnt cap")):
-    ''' Minimal class for WARNT: Word And Refined NLTK Tags.
-        tok = token, pos = NLTK POS, wnt = WordNet Synset key, cap = capitalized.
-    '''
-    __slots__ = ()
-    def __str__(self):
-        return "%s  %s  %s  %s" % (self.tok, self.pos, self.wnt, self.cap)
-
 NTags = namedtuple("NTags", "idx pos wnt")
 NTags.__doc__ = "NLTK tags tuple.  Not for general use."
-
 
 def plural_en(noun):
     '''
