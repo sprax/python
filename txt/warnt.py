@@ -35,23 +35,6 @@ def pos_wnk(tag):
     except KeyError:
         return None
 
-def make(token, pos_tag, wordnet_key=None, capitalized=None):
-    cap = token[0].isupper() if capitalized is None else capitalized
-    tok = token.lower()
-    pos = pos_tag
-    wnk = pos_wnk(pos_tag) if wordnet_key is None else wordnet_key
-    return Warnt(tok, pos, wnk, cap)
-
-
-
-def make_tuple(token, pos_tag, wordnet_key=None, capitalized=None):
-    cap = token[0].isupper() if capitalized is None else capitalized
-    tok = token.lower()
-    pos = pos_tag
-    wnk = pos_wnk(pos_tag) if wordnet_key is None else wordnet_key
-    return (tok, pos, wnk, cap)
-
-
 class Warnt(namedtuple("Warnt", "token pos_tag wnk cap")):
     ''' Minimal class for WARNT: Word And Reduced NLP Tags.
         token: tok
@@ -62,11 +45,11 @@ class Warnt(namedtuple("Warnt", "token pos_tag wnk cap")):
     __slots__ = ()
 
     def __new__(cls, token, pos_tag, wordnet_key=None, capitalized=None):
-        # cap = token[0].isupper() if capitalized is None else capitalized
-        # tok = token.lower()
-        # pos = pos_tag
-        # wnk = pos_wnk(pos_tag) if wordnet_key is None else wordnet_key
-        return super(Warnt, cls).__new__(cls, *make_tuple(token, pos_tag, wordnet_key, capitalized))
+        cap = token[0].isupper() if capitalized is None else capitalized
+        tok = token.lower()
+        pos = pos_tag
+        wnk = pos_wnk(pos_tag) if wordnet_key is None else wordnet_key
+        return super(Warnt, cls).__new__(cls, tok, pos, wnk, cap)
 
 NTags = namedtuple("NTags", "idx pos_tag wnk")
 NTags.__doc__ = "NLTK tags tuple.  Not for general use."
@@ -76,7 +59,7 @@ def smoke_test():
     '''Test Warnt, a word-tok and tags-tuple'''
     warnt1 = Warnt("fool", "NN", 'n', False)
     print("warnt1: ", warnt1)
-    warnt2 = make("Jester", "NN", 'n')
+    warnt2 = Warnt("Jester", "NN")
     print("warnt2: ", warnt2)
 
 ###############################################################################
