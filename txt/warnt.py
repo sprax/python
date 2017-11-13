@@ -21,10 +21,8 @@ errors, that is, wrong sentence similarity scores that break the rankings.
 '''
 # import pdb
 from collections import namedtuple
-import inflection
+# import inflection
 import nltk
-from nltk.corpus import wordnet as wn
-from nltk.corpus import brown
 
 NLTK_POS_TAG_TO_WORDNET_KEY = {'J': 'a', 'N': 'n', 'R': 'r', 'V': 'v', 'S': 's'}
 
@@ -44,10 +42,10 @@ class Warnt(namedtuple("Warnt", "token pos_tag wnk cap")):
     '''
     __slots__ = ()
 
-    def __new__(cls, token, pos_tag, wordnet_key=None, capitalized=None):
+    def __new__(cls, token, pos_tag=None, wordnet_key=None, capitalized=None):
         cap = token[0].isupper() if capitalized is None else capitalized
         tok = token.lower()
-        pos = pos_tag
+        pos = nltk.pos_tag(tok) if pos_tag is None else pos_tag
         wnk = pos_wnk(pos_tag) if wordnet_key is None else wordnet_key
         return super(Warnt, cls).__new__(cls, tok, pos, wnk, cap)
 
