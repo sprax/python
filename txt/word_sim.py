@@ -211,8 +211,9 @@ class WordSimilarity:
                 h_dist = max(lcs_dists)
             else:
                 h_dist = 0
-        return ((math.exp(self._beta * h_dist) - math.exp(-self._beta * h_dist)) /
-                (math.exp(self._beta * h_dist) + math.exp(-self._beta * h_dist)))
+        exp_pos_beta_h = math.exp(self._beta * h_dist)
+        exp_neg_beta_h = math.exp(-self._beta * h_dist)
+        return (exp_pos_beta_h - exp_neg_beta_h)/(exp_pos_beta_h + exp_neg_beta_h)
 
     def word_similarity(self, src_word, try_word, src_tag=None, try_tag=None):
         '''Nominally, this is a synset-based similarity between two words, with
