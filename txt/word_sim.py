@@ -232,9 +232,9 @@ class WordSimilarity:
         whereas the try_word is variable, one of many in a search set of, say, possible
         synonyms.  Maybe it's from an intersection, rather than a union.
         '''
-        synset_pair = self.get_best_synset_pair(src_word, try_word, src_tag, try_tag)
-        return (self.length_dist(synset_pair[0], synset_pair[1]) *
-                self.hierarchy_dist(synset_pair[0], synset_pair[1]))
+        pair = self.get_best_synset_pair(src_word, try_word, src_tag, try_tag)
+        print("word_similarity best_pair({}, {}) => ({}, {})".format(src_word, try_word, pair[0], pair[1]))
+        return self.length_dist(pair[0], pair[1]) * self.hierarchy_dist(pair[0], pair[1])
 
 
     def most_similar_word(self, sent_word_set, src_word):
