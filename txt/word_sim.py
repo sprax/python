@@ -174,8 +174,10 @@ class WordSimilarity:
                 l_dist = 1.0
             else:
                 # just compute the shortest path between the two
+                # pdb.set_trace()
                 l_dist = synset_1.shortest_path_distance(synset_2)
                 if l_dist is None:
+                    pdb.set_trace()
                     l_dist = 0.0
         # normalize path length to the range [0,1]
         return math.exp(-self._alpha * l_dist)
@@ -208,7 +210,7 @@ class WordSimilarity:
                     if lcs_candidate in hypernyms_2:
                         lcs_d2 = hypernyms_2[lcs_candidate]
                     lcs_dists.append(max([lcs_d1, lcs_d2]))
-                h_dist = max(lcs_dists)
+                h_dist = max(lcs_dists) # FIXME: max or min?
             else:
                 h_dist = 0
         exp_pos_beta_h = math.exp(self._beta * h_dist)
@@ -325,7 +327,8 @@ def test_word_similarity(wordsim):
         ["magician", "wizard", 0.65],
         ["midday", "noon", 1.0],
         ["oracle", "sage", 0.43],
-        ["serf", "slave", 0.39]
+        ["serf", "slave", 0.39],
+        ["floodle", "gronked", 0.0]
     ]
     print("W-Sim \t Paper \t src_word \t try_word")
     print("----- \t ----- \t -------- \t --------")
@@ -340,7 +343,7 @@ def test_word_similarity(wordsim):
     print("test_word_similarity: sum/num %.3f/%d = %.3f" % (sum, len(word_pairs), avg_sim))
     return avg_sim
 
-def smoke_test():
+def smoke_test(verbose=True):
     '''test very basic functionality'''
     wordsim = WordSimilarity(verbose=True)
     avg_sim = test_word_similarity(wordsim)
@@ -348,4 +351,6 @@ def smoke_test():
 
 ###############################################################################
 if __name__ == '__main__':
-    smoke_test()
+    argc = len(sys.argv)
+    arg1 = sys.argv[1] if argc > 1 else None
+    smoke_test(arg1)
