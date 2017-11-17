@@ -12,21 +12,12 @@ Words that don't get POS tags starting with 'a', 'n', 'r', or 'v' are ignored,
 so the article "the" gets nothing, but "a" can be tagged as a noun, etc.
 '''
 from __future__ import division
-import functools
 import math
 import pdb
 import sys
-import time
 from collections import namedtuple
 import inflection
-import nltk
 from nltk.corpus import wordnet as wn
-from nltk.corpus import brown
-import numpy as np
-
-import sim_nltk
-import text_regex
-
 
 class Warnt(namedtuple("Warnt", "tok pos wnt cap")):
     ''' Minimal class for WARNT: Word And Refined NLTK Tags.
@@ -52,32 +43,30 @@ def plural_en(noun):
     return inflection.pluralize(noun)
 
 
-def is_one_noun_plural_of_other_en(noun_a, noun_b):
+def is_one_noun_plural(noun_a, noun_b):
     '''Returns True if one of the argument strings is the possessive form of
     the other one in English; otherwise False.  Could be made more efficient.'''
     len_a = len(noun_a)
     len_b = len(noun_b)
     if len_a < len_b:
         return plural_en(noun_a) == noun_b
-    else:
-        return noun_a == plural_en(noun_b)
+    return noun_a == plural_en(noun_b)
 
 
 def possessive_en(noun):
     '''Returns possessive form of the argument string, assuming it is an English noun.'''
     if noun.endswith('s'):
         return noun + "'"
-    else:
-        return noun + "'s"
+    return noun + "'s"
 
-def is_one_noun_possessive_of_other_en(noun_a, noun_b):
+def is_one_noun_possessive(noun_a, noun_b):
     '''Returns True if one of the argument strings is the possessive form of
     the other one in English; otherwise False.  Could be made more efficient.'''
     len_a = len(noun_a)
     len_b = len(noun_b)
     if len_a < len_b:
         return possessive_en(noun_a) == noun_b
-    elif len_a > len_b:
+    if len_a > len_b:
         return noun_a == possessive_en(noun_b)
     return False
 
@@ -121,7 +110,7 @@ class WordSimilarity:
 
         synsets_1 = wn.synsets(src_word, src_tag)
         self._synsets_fetches += 1
-        if synsets_1 is None or len(synsets_1) == 0:
+        if not synsets_1:
             # print("synset(%s) is None" % src_word)
             return None, None
 
@@ -129,7 +118,7 @@ class WordSimilarity:
 
         self._synsets_fetches += 1
         synsets_2 = wn.synsets(try_word, try_tag)
-        if synsets_2 is None or len(synsets_2) == 0:
+        if not synsets_2:
             # print("synset(%s) is None" % try_word)
             return None, None
 
@@ -169,7 +158,7 @@ class WordSimilarity:
         else:
             wset_1 = set([str(x.name()) for x in synset_1.lemmas()])
             wset_2 = set([str(x.name()) for x in synset_2.lemmas()])
-            if len(wset_1.intersection(wset_2)) > 0:
+            if wset_1.intersection(wset_2):
                 # if synset_1 != synset_2 but there is word overlap, return 1.0
                 l_dist = 1.0
             else:
@@ -200,7 +189,7 @@ class WordSimilarity:
             hypernyms_2 = {x[0]:x[1] for x in synset_2.hypernym_distances()}
             lcs_candidates = set(hypernyms_1.keys()).intersection(
                 set(hypernyms_2.keys()))
-            if len(lcs_candidates) > 0:
+            if lcs_candidates:
                 lcs_dists = []
                 for lcs_candidate in lcs_candidates:
                     lcs_d1 = 0
@@ -279,9 +268,9 @@ class WordSimilarity:
                         # sent_word is likely to be a proper noun.  If we only
                         # allow exact matches on proper nouns, then here we should
                         # just continue, because we checked for equality upstream.
-                        if is_one_noun_possessive_of_other_en(union_word, sent_word):
+                        if is_one_noun_possessive(union_word, sent_word):
                             sim = self._sim_possessive_proper_noun
-                        elif is_one_noun_plural_of_other_en(union_word, sent_word):
+                        elif is_one_noun_plural(union_word, sent_word):
                             sim = self._sim_plural_proper_noun
                         else:
                             sim = 0.0
@@ -332,25 +321,29 @@ def test_word_similarity(wordsim):
     ]
     print("W-Sim \t Paper \t src_word \t try_word")
     print("----- \t ----- \t -------- \t --------")
-    sum = 0.0
+    total = 0.0
     for word_pair in word_pairs:
         sim = wordsim.word_similarity(word_pair[0], word_pair[1])
         print(" %.2f \t %.2f \t %s %s %s" % (sim, word_pair[2], word_pair[0],
                                              ' '*(14 - len(word_pair[0])), word_pair[1]))
-        sum += sim
-    avg_sim = sum / len(word_pairs)
+        total += sim
+    avg_sim = total / len(word_pairs)
     wordsim.print_stats()
-    print("test_word_similarity: sum/num %.3f/%d = %.3f" % (sum, len(word_pairs), avg_sim))
+    print("test_word_similarity: total/num %.3f/%d = %.3f" % (total, len(word_pairs), avg_sim))
     return avg_sim
 
 def smoke_test(verbose=True):
     '''test very basic functionality'''
-    wordsim = WordSimilarity(verbose=True)
+    wordsim = WordSimilarity(verbose)
     avg_sim = test_word_similarity(wordsim)
     return avg_sim
 
 ###############################################################################
-if __name__ == '__main__':
+def main():
+    '''test driver'''
     argc = len(sys.argv)
     arg1 = sys.argv[1] if argc > 1 else None
     smoke_test(arg1)
+
+if __name__ == '__main__':
+    main()
