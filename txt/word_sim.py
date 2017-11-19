@@ -153,21 +153,22 @@ class WordSimilarity:
         if synset_1 is None or synset_2 is None:
             return 0.0
         if synset_1 == synset_2:
-            # if synset_1 and synset_2 are the same synset return 0
-            l_dist = 0.0
+            # if synset_1 and synset_2 are the same synset, the distance is 0,
+            # so return exp(0) = 1
+            return 1.0
         else:
             wset_1 = set([str(x.name()) for x in synset_1.lemmas()])
             wset_2 = set([str(x.name()) for x in synset_2.lemmas()])
             if wset_1.intersection(wset_2):
-                # if synset_1 != synset_2 but there is word overlap, return 1.0
-                l_dist = 1.0
+                # if synset_1 != synset_2 but there is word overlap, let distance = 1
+                return math.exp(-self._alpha)
             else:
                 # just compute the shortest path between the two
                 # pdb.set_trace()
-                l_dist = synset_1.shortest_path_distance(synset_2)
+                l_dist = 1.0 + synset_1.shortest_path_distance(synset_2)
+                print("l_dist({}, {}) = {}\n".format(synset_1, synset_2, l_dist))
                 if l_dist is None:
-                    pdb.set_trace()
-                    l_dist = 0.0
+                    return 0.0
         # normalize path length to the range [0,1]
         return math.exp(-self._alpha * l_dist)
 
