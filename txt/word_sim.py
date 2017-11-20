@@ -264,7 +264,6 @@ class WordSimilarity:
                 # or sent_wtag == 'r' and union_wtag == 'a':
                     sent_wpos = item[1].pos
                     sent_word = item[0]
-                    # FIXME: index from 1
                     if use_propers and sent_wpos == 'NNP' and union_wpos == 'NNP':
                         # sent_word is likely to be a proper noun.  If we only
                         # allow exact matches on proper nouns, then here we should
