@@ -40,47 +40,6 @@ import text_regex
 NTags = namedtuple("NTags", "idx pos wnt")
 NTags.__doc__ = "NLTK tags tuple.  Not for general use."
 
-def plural_en(noun):
-    '''
-    Return the plural form of the argument string, assuming that it is an English
-    noun.  Some results come from lookup tables, but most come from rules, and
-    thus may be wrong, especially for loaner words, OOVs, etc.
-    BUGS: inflection's rules sometimes go awry, e.g. (safe <-> saves)
-    '''
-    if noun.lower()[-3:] == 'afe':
-        return noun + 's'
-    return inflection.pluralize(noun)
-
-
-def is_one_noun_plural_of_other_en(noun_a, noun_b):
-    '''Returns True if one of the argument strings is the possessive form of
-    the other one in English; otherwise False.  Could be made more efficient.'''
-    len_a = len(noun_a)
-    len_b = len(noun_b)
-    if len_a < len_b:
-        return plural_en(noun_a) == noun_b
-    else:
-        return noun_a == plural_en(noun_b)
-
-
-def possessive_en(noun):
-    '''Returns possessive form of the argument string, assuming it is an English noun.'''
-    if noun.endswith('s'):
-        return noun + "'"
-    else:
-        return noun + "'s"
-
-def is_one_noun_possessive_of_other_en(noun_a, noun_b):
-    '''Returns True if one of the argument strings is the possessive form of
-    the other one in English; otherwise False.  Could be made more efficient.'''
-    len_a = len(noun_a)
-    len_b = len(noun_b)
-    if len_a < len_b:
-        return possessive_en(noun_a) == noun_b
-    elif len_a > len_b:
-        return noun_a == possessive_en(noun_b)
-    return False
-
 NLTK_POS_TAG_TO_WORDNET_KEY = {'J': 'a', 'N': 'n', 'R': 'r', 'V': 'v', 'S': 's'}
 
 def pos_wnk(tag):

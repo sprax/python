@@ -94,7 +94,7 @@ class WordSimilarity:
         self._beta = 0.45
         self._sim_plural_proper_noun = 0.667   # TODO: rationalize this value?
         self._sim_possessive_proper_noun = 0.95   # TODO: rationalize this value?
-
+        self._max_word_dist = 20.0    # FIXME
 
     def print_stats(self):
         '''Show statistics since init.'''
@@ -165,10 +165,12 @@ class WordSimilarity:
             else:
                 # just compute the shortest path between the two
                 # pdb.set_trace()
-                l_dist = 1.0 + synset_1.shortest_path_distance(synset_2)
-                print("l_dist({}, {}) = {}\n".format(synset_1, synset_2, l_dist))
+                l_dist = synset_1.shortest_path_distance(synset_2)
+                if self.verbose > 2:
+                    print("l_dist({}, {}) = {}\n".format(synset_1, synset_2, l_dist))
                 if l_dist is None:
-                    return 0.0
+                    return self._max_word_dist
+                l_dist += 1.0
         # normalize path length to the range [0,1]
         return math.exp(-self._alpha * l_dist)
 
@@ -223,7 +225,8 @@ class WordSimilarity:
         synonyms.  Maybe it's from an intersection, rather than a union.
         '''
         pair = self.get_best_synset_pair(src_word, try_word, src_tag, try_tag)
-        print("word_similarity best_pair({}, {}) => ({}, {})".format(src_word, try_word, pair[0], pair[1]))
+        if self.verbose > 3:
+            print("word_similarity best_pair({}, {}) => ({}, {})".format(src_word, try_word, pair[0], pair[1]))
         return self.length_dist(pair[0], pair[1]) * self.hierarchy_dist(pair[0], pair[1])
 
 
@@ -342,7 +345,7 @@ def smoke_test(verbose=True):
 def main():
     '''test driver'''
     argc = len(sys.argv)
-    arg1 = sys.argv[1] if argc > 1 else None
+    arg1 = int(sys.argv[1]) if argc > 1 else 0
     smoke_test(arg1)
 
 if __name__ == '__main__':
