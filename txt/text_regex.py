@@ -161,6 +161,7 @@ def words_and_separaters(sentence_body):
     return [ss for ss in separated if len(ss) > 0]
 
 def gen_words_and_separaters(sentence_body):
+    '''generator for words and separators'''
     separated = RE_WORD_SEP_PATTERN.finditer(sentence_body)
     for ss in separated:
         if len(ss) > 0:
@@ -261,6 +262,7 @@ def main():
         print("SPLITS", len(swords), swords)
         nuwrds = notnonword_tokens(sentence)
         print("NOTUNS", len(nuwrds), nuwrds)
+        print("SYLABS", syllables)
         print()
 
 
