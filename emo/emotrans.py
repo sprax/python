@@ -265,10 +265,11 @@ class EmoTrans:
     TODO: Add lattice & scoring, probability weighting.
     '''
     def __init__(self, options=None):
-        self.options = self._init_options(options)
+        self.options = options
+        self._init_options()
         # print("EmoTrans: self.options: ", self.options)
         self.verbose = self.options.verbose
-        self.waflags  = self.options.waflags
+        self.waflags = self.options.waflags
         self.cmu_pro = cmudict.dict() # get the CMU Pronouncing Dict # TODO: wrap in sep class
         self.usables = self._gen_usables()
         if self.waflags & SHOW_USABLE_EMOJIS:
@@ -282,24 +283,23 @@ class EmoTrans:
         self.plural_nouns = set(text_fio.read_text_lines('en_plural_nouns_different_from_singular.txt'))
         # print("DBG self.plural_nouns:", self.plural_nouns)
 
-    def _init_options(self, options):
-        '''initialize options with default values'''
-        if options is None:
-            options = argparse.Namespace(
-                all_skin_tones = False,
-                arithmetic = False,
-                multiples = False,
-                no_articles = False,
-                phonetics = True,
-                pluralize = True,
-                random = False,
-                singularize = True,
-                uh_for_article_a = False,
-                verbose = 3,
-                waflags = 4,
-                tokenizer = TOKENIZER_WORD_EXTENDED,
+    def _init_options(self):
+        '''initialize missing options with default values'''
+        if self.options is None:
+            self.options = argparse.Namespace(
+                all_skin_tones=False,
+                arithmetic=False,
+                multiples=False,
+                no_articles=False,
+                phonetics=True,
+                pluralize=True,
+                random=False,
+                singularize=True,
+                uh_for_article_a=False,
+                verbose=3,
+                waflags=4,
+                tokenizer=TOKENIZER_WORD_EXTENDED,
             )
-        return options
 
     def get_opt(self, opt):
         '''get option value'''
@@ -1149,13 +1149,15 @@ def main():
     parser.add_argument('-extract_words', action='store_true',
                         help='extract words from emotuples')
     parser.add_argument('-enj', type=str, nargs='?', default=None,
-                        const=DEFAULT_SENTENCE, help='input an English sentence to translate to emoji (or use default)')
+                        const=DEFAULT_SENTENCE,
+                        help='input an English sentence to translate to emoji (or use default)')
     parser.add_argument('-emo_txt', action='store_true',
                         help='show the emoji-to-text mapping')
     parser.add_argument('-flags', action='store_true',
                         help='use flag emojis in translations of words not representing countries')
     parser.add_argument('-jen', type=str, nargs='?', default=None,
-                        const=DEFAULT_TRANSLAT, help='input an emoji sentence to translate to English (or use default)')
+                        const=DEFAULT_TRANSLAT,
+                        help='input an emoji sentence to translate to English (or use default)')
     parser.add_argument('-multiples', action='store_true',
                         help='use multiple emojis for words when needed (not only for presets)')
     parser.add_argument('-no_articles', '-noa', action='store_true',
