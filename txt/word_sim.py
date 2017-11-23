@@ -12,6 +12,7 @@ Words that don't get POS tags starting with 'a', 'n', 'r', or 'v' are ignored,
 so the article "the" gets nothing, but "a" can be tagged as a noun, etc.
 '''
 from __future__ import division
+import argparse
 import math
 import pdb
 import sys
@@ -335,7 +336,7 @@ def test_word_similarity(wordsim):
     print("test_word_similarity: total/num %.3f/%d = %.3f" % (total, len(word_pairs), avg_sim))
     return avg_sim
 
-def smoke_test(verbose=True):
+def smoke_test(verbose):
     '''test very basic functionality'''
     wordsim = WordSimilarity(verbose)
     avg_sim = test_word_similarity(wordsim)
@@ -343,10 +344,27 @@ def smoke_test(verbose=True):
 
 ###############################################################################
 def main():
-    '''test driver'''
-    argc = len(sys.argv)
-    arg1 = int(sys.argv[1]) if argc > 1 else 0
-    smoke_test(arg1)
+    '''test regex patterns for text: separate words'''
+    parser = argparse.ArgumentParser(description="test lexical similarity of words")
+    parser.add_argument('input_file', type=str, nargs='?', default='train_1000.label',
+                        help='file containing text to filter')
+    parser.add_argument('-charset', dest='charset', type=str, default='iso-8859-1',
+                        help='charset encoding of input text')
+    parser.add_argument('-dir', dest='text_dir', type=str, default='/Users/sprax/text',
+                        help='directory to search for input_file')
+    parser.add_argument('-extract_words', action='store_true',
+                        help='extract all lowercase words from a file')
+    parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
+                        help='output path for filtered text (default: - <stdout>)')
+    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
+                        help='verbosity of output (default: 1)')
+    parser.add_argument('-words_only', '-wrdo', action='store_true',
+                        help='extract only dictionary words')
+    parser.add_argument('-words_or_names', '-won', action='store_true',
+                        help='extract only dictionary words or proper names')
+    args = parser.parse_args()
+    smoke_test(args.verbose)
+
 
 if __name__ == '__main__':
     main()
