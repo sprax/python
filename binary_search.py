@@ -96,14 +96,14 @@ class BinarySearch:
         md = 0
         while lo <= hi:
             if (int_array[hi] == int_array[lo]
-                    ):      # value of int_array is const in [lo .. hi];
+                ):      # value of int_array is const in [lo .. hi];
                 # either this value == v, or v is not in int_array.
                 if int_array[lo] == val:
                     return lo          # So return the smallest index found,
                 break                # or return NotFound.
             else:
-                delta = (hi - lo) * (val - \
-                         int_array[lo]) / (double)(int_array[hi] - int_array[lo])
+                delta = (hi - lo) * (val -
+                                     int_array[lo]) / (double)(int_array[hi] - int_array[lo])
                 if delta > 1.0 or delta < -1.0:
                     md = lo + int(delta)
                 else:
@@ -249,7 +249,8 @@ class TestBinarySearch(unittest.TestCase):
         for val in self.testVals:
             res = func(self.int_array, val)
             if (res >= 0):
-                print("upper bound {} found for {} at index {}".format(self.int_array[res], val, res))
+                print(
+                    "upper bound {} found for {} at index {}".format(self.int_array[res], val, res))
             else:
                 print("upper bound for {} not found".format(val))
         print()
