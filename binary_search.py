@@ -7,8 +7,8 @@ class BinarySearch:
     def findEquals(self, A, val):
         """findEquals
         Numerical binary search
-        Do a binary search for an index of a value in a sorted array intArray, 
-        that is, return k s.t. value == intArray[k].  
+        Do a binary search for an index of a value in a sorted array intArray,
+        that is, return k s.t. value == intArray[k].
         If the specified value is not in intArray, return -1.
 
         @param intArray     sorted array
@@ -30,7 +30,7 @@ class BinarySearch:
 
     def find_lower_bound(self, A, val):
         """find_lower_bound
-        Return an index for the largest element v in intArray such that 
+        Return an index for the largest element v in intArray such that
         v <= specified value.
         If there is no such element in A, return -1
         """
@@ -43,10 +43,10 @@ class BinarySearch:
                 hi = md - 1
             else:
                 lo = md + 1
-    
+
         if (A[md] <= val):
             return md
-        
+
         md = md - 1
         if (md >= 0 and A[md] <= val):
             return md
@@ -67,22 +67,22 @@ class BinarySearch:
                 hi = md - 1
             else:
                 lo = md + 1
-    
+
         if (A[md] >= val):
             return md
-        
+
         md = md + 1
         if (md < len(A) and A[md] >= val):
             return md
         return -1
 
-  
+
 def etc():
-    """  /** 
+    """  /**
    * binary search for an index for the value v in a sorted array intArray,
    * that is, find k s.t. v == intArray[k].  Obviously, v must be the value
    * of an actual element in intArray.
-   * 
+   *
    * @param intArray     sorted array of int
    * @param val   value to be search for in intArray
    * @return      an index k s.t. v == intArray[k], or -1 (invalid index)
@@ -95,8 +95,8 @@ def etc():
     int lo = 0, hi = intArray.length-1;
     if (val < intArray[lo] || val > intArray[hi])
       return -1;
-    
-    for (int md = 0; lo <= hi; ) 
+
+    for (int md = 0; lo <= hi; )
     {
       if (intArray[hi] == intArray[lo]) {   // value of intArray is const in [lo .. hi];
         if (intArray[lo] == val)     // either this value == v, or v is not in intArray.
@@ -128,8 +128,8 @@ def etc():
     }
     return -1;
   }
-    
-  public static int test_binarySearch(int size) 
+
+  public static int test_binarySearch(int size)
   {
     int nRows = 2, nCols = 20;
     int minVal = 10, maxVal = 0;
@@ -145,7 +145,7 @@ def etc():
     int medVal = Medians.medianOfSortedArray(SS);
     int midVal = (minVal + maxVal) >> 1;
     int modVal = Integer.MIN_VALUE;
-    for (int v : SS) { 
+    for (int v : SS) {
       if (v >=  medVal) {
         modVal = v;       // mode val: first v in intArray s.t. v >= medVal
         break;
@@ -192,20 +192,20 @@ def etc():
     iL  = binarySearchUpperBound(SS, maxVal);
     Sx.print("upper bound:  ");
     System.out.format(" first mode median mid 2nd last  %2d  %2d  %2d  %2d  %2d  %2d\n", iF, iN, iD, iA, iM, iL);
-    
+
     return 0;
-  }  
-  
-  public static int unit_test(int level) 
+  }
+
+  public static int unit_test(int level)
   {
-    Sx.puts(BinarySearch.class.getName() + ".unit_test");   
-    int stat = 0;    
+    Sx.puts(BinarySearch.class.getName() + ".unit_test");
+    int stat = 0;
     if (level > 0) {
       stat += test_binarySearch(1);
     }
     return stat;
   }
-  
+
   public static void main(String[] args)
   {
     unit_test(1);
@@ -262,4 +262,3 @@ class TestBinarySearch(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
