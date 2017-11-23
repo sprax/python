@@ -249,15 +249,9 @@ class TestBinarySearch(unittest.TestCase):
         for val in self.testVals:
             res = func(self.int_array, val)
             if (res >= 0):
-                print(
-                    "upper bound",
-                    self.int_array[res],
-                    "found for",
-                    val,
-                    "at index",
-                    res)
+                print("upper bound {} found for {} at index {}".format(self.int_array[res], val, res))
             else:
-                print("upper bound for", val, "not found")
+                print("upper bound for {} not found".format(val))
         print()
 
 
