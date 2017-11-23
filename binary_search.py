@@ -7,13 +7,13 @@ class BinarySearch:
     def findEquals(self, A, val):
         """findEquals
         Numerical binary search
-        Do a binary search for an index of a value in a sorted array intArray,
-        that is, return k s.t. value == intArray[k].
-        If the specified value is not in intArray, return -1.
+        Do a binary search for an index of a value in a sorted array int_array,
+        that is, return k s.t. value == int_array[k].
+        If the specified value is not in int_array, return -1.
 
-        @param intArray     sorted array
-        @param val   value to be searched for in intArray
-        @return      an index k s.t. v == intArray[k], or -1 (invalid index)
+        @param int_array     sorted array
+        @param val   value to be searched for in int_array
+        @return      an index k s.t. v == int_array[k], or -1 (invalid index)
         """
         lo = 0
         hi = len(A) - 1
@@ -30,7 +30,7 @@ class BinarySearch:
 
     def find_lower_bound(self, A, val):
         """find_lower_bound
-        Return an index for the largest element v in intArray such that
+        Return an index for the largest element v in int_array such that
         v <= specified value.
         If there is no such element in A, return -1
         """
@@ -77,66 +77,67 @@ class BinarySearch:
         return -1
 
 
+    def interpolation_search_equals(int_array, val):
+        """  /**
+        binary search for an index for the value v in a sorted array int_array,
+        that is, find k s.t. v == int_array[k].  Obviously, v must be the value
+        of an actual element in int_array.
+
+        @param int_array     sorted array of int
+        @param val   value to be search for in int_array
+        @return      an index k s.t. v == int_array[k], or -1 (invalid index)
+        """
+        # Must do error checking before allowing interpolation
+        if not int_array:
+          return None
+        lo = 0
+        hi = len(int_array) - 1
+        if val < int_array[lo] or val > int_array[hi]:
+          return None
+
+        md = 0
+        while lo <= hi:
+          if (int_array[hi] == int_array[lo]):      # value of int_array is const in [lo .. hi];
+            if int_array[lo] == val:     # either this value == v, or v is not in int_array.
+              return lo;          # So return the smallest index found,
+            break;                # or return NotFound.
+          else:
+            delta = (hi - lo)*(val - int_array[lo])/(double)(int_array[hi] - int_array[lo]);
+            if delta > 1.0 or delta < -1.0:
+              md = lo + int(delta)
+            else:
+              md = (lo + hi) >> 1;
+
+
+    #        if (0.0 <= delta && delta <= 1.0)
+    #          md = lo + 1;
+    #        else if (-1.0 <= delta && delta < 0.0)
+    #          md = lo - 1;
+    #        else
+    #          md = lo + (int)delta;
+
+
+          if (int_array[md] == val):
+            return md;
+
+          if (int_array[md] >  val):
+            hi = md - 1;
+          else:
+            lo = md + 1;
+
+        return -1;
+
+
 def etc():
-    """  /**
-   * binary search for an index for the value v in a sorted array intArray,
-   * that is, find k s.t. v == intArray[k].  Obviously, v must be the value
-   * of an actual element in intArray.
-   *
-   * @param intArray     sorted array of int
-   * @param val   value to be search for in intArray
-   * @return      an index k s.t. v == intArray[k], or -1 (invalid index)
-   */
-  public static int interpolationSearchEquals(int intArray[], int val)
-  {
-    // Must do error checking before allowing interpolation
-    if (intArray == null || intArray.length < 1)
-      return -1;
-    int lo = 0, hi = intArray.length-1;
-    if (val < intArray[lo] || val > intArray[hi])
-      return -1;
-
-    for (int md = 0; lo <= hi; )
-    {
-      if (intArray[hi] == intArray[lo]) {   // value of intArray is const in [lo .. hi];
-        if (intArray[lo] == val)     // either this value == v, or v is not in intArray.
-          return lo;          // So return the smallest index found,
-        break;                // or return NotFound.
-      } else {
-        double delta = (hi - lo)*(val - intArray[lo])/(double)(intArray[hi] - intArray[lo]);
-        if (delta > 1.0 || delta < -1.0) {
-          md = lo + (int)delta;
-        } else {
-          md = (lo + hi) >> 1;
-        }
-
-//        if (0.0 <= delta && delta <= 1.0)
-//          md = lo + 1;
-//        else if (-1.0 <= delta && delta < 0.0)
-//          md = lo - 1;
-//        else
-//          md = lo + (int)delta;
-
-      }
-      if (intArray[md] == val)
-        return md;
-
-      if (intArray[md] >  val)
-        hi = md - 1;
-      else
-        lo = md + 1;
-    }
-    return -1;
-  }
-
+  """
   public static int test_binarySearch(int size)
   {
     int nRows = 2, nCols = 20;
     int minVal = 10, maxVal = 0;
     int maxInc = 9;
-    long  seed = 1; // System.currentTimeMillis();
+    long  seed = 1; # System.currentTimeMillis();
     int AA[][] = ArrayAlgo.makeRandomRowColSortedArray(nRows, nCols, minVal, maxInc, seed);
-  //int SS[] = AA[0];
+  #int SS[] = AA[0];
     int SS[] = { 10, 12, 14, 14, 14, 14, 14, 14, 15, 16, 17, 18, 36, 44, 55, 66};
     nCols   = SS.length;
     minVal  = SS[0];
@@ -147,7 +148,7 @@ def etc():
     int modVal = Integer.MIN_VALUE;
     for (int v : SS) {
       if (v >=  medVal) {
-        modVal = v;       // mode val: first v in intArray s.t. v >= medVal
+        modVal = v;       # mode val: first v in int_array s.t. v >= medVal
         break;
       }
     }
@@ -195,67 +196,50 @@ def etc():
 
     return 0;
   }
-
-  public static int unit_test(int level)
-  {
-    Sx.puts(BinarySearch.class.getName() + ".unit_test");
-    int stat = 0;
-    if (level > 0) {
-      stat += test_binarySearch(1);
-    }
-    return stat;
-  }
-
-  public static void main(String[] args)
-  {
-    unit_test(1);
-  }
-}
 """
-
 
 class TestBinarySearch(unittest.TestCase):
 
     def setUp(self):
-        self.intArray = [y for y in fibonaccis.fib_generate(20) ]
+        self.int_array = [y for y in fibonaccis.fib_generate(20) ]
         self.testVals = [-2, 0, 1, 2, 20, 21, 22, 8888]
         print(str(BinarySearch.__doc__))
         print(str(self.id()), '\n')
 
     def test_findEquals(self):
-        bs = BinarySearch()
-        fn = bs.findEquals;
-        print(str(fn.__doc__))
+        bins = BinarySearch()
+        func = bins.findEquals;
+        print(str(func.__doc__))
         for val in self.testVals:
-            r = fn(self.intArray, val)
-            if (r >= 0):
-                print("exact value", self.intArray[r], "found at index", r)
+            res = func(self.int_array, val)
+            if (res >= 0):
+                print("exact value", self.int_array[res], "found at index", res)
             else:
                 print("exact value", val, "not found")
         print()
 
     def test_find_lower_bound(self):
-        bs = BinarySearch()
-        fn = bs.find_lower_bound;
-        print(str(fn.__doc__))
-        print(self.intArray)
+        bins = BinarySearch()
+        func = bins.find_lower_bound;
+        print(str(func.__doc__))
+        print(self.int_array)
         for val in self.testVals:
-            r = fn(self.intArray, val)
-            if (r >= 0):
-                print("lower bound", self.intArray[r], "found for", val, "at index", r)
+            res = func(self.int_array, val)
+            if (res >= 0):
+                print("lower bound", self.int_array[res], "found for", val, "at index", res)
             else:
                 print("lower bound for", val, "not found")
         print()
 
     def test_find_upper_bound(self):
-        bs = BinarySearch()
-        fn = bs.find_upper_bound;
-        print(str(fn.__doc__))
-        print(self.intArray)
+        bins = BinarySearch()
+        func = bins.find_upper_bound;
+        print(str(func.__doc__))
+        print(self.int_array)
         for val in self.testVals:
-            r = fn(self.intArray, val)
-            if (r >= 0):
-                print("upper bound", self.intArray[r], "found for", val, "at index", r)
+            res = func(self.int_array, val)
+            if (res >= 0):
+                print("upper bound", self.int_array[res], "found for", val, "at index", res)
             else:
                 print("upper bound for", val, "not found")
         print()
