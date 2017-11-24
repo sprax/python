@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- encoding: <utf-8> -*-
-# Sprax Lines from sujitpal@github      2017.08.31      Ported to Python 3.5
+# Sprax Lines from sujitpal@github      2017.08.31
+# Ported to Python 3.5, corrected (use similarity, not threshold), and modified.
 '''
 word_sim.py - Semantic similarity of words, using NLTK tools.
 
@@ -17,7 +18,6 @@ import math
 import pdb
 import sys
 from collections import namedtuple
-import inflection
 from nltk.corpus import wordnet as wn
 import words_en
 
@@ -56,14 +56,14 @@ class WordSimilarity:
         self._beta = 0.45
         self._sim_plural_proper_noun = 0.667   # TODO: rationalize this value?
         self._sim_possessive_proper_noun = 0.95   # TODO: rationalize this value?
-        self._max_word_dist = 20.0    # FIXME
+        self._max_length_dist = 20.0    # TODO: find actual max
 
     def print_stats(self):
         '''Show statistics since init.'''
         print("Synsets fetched/fetches:  %d / %d  =  %.3f" % (self._synsets_fetched, self._synsets_fetches,
                                                               self._synsets_fetched / self._synsets_fetches))
 
-    def get_best_synset_pair(self, src_word, try_word, src_tag=None, try_tag=None):
+    def find_max_path_sim_synset_pair(self, src_word, try_word, src_tag=None, try_tag=None):
         """
         Choose the pair with highest path similarity among all pairs.
         Mimics pattern-seeking behavior of humans.
@@ -131,7 +131,7 @@ class WordSimilarity:
                 if self.verbose > 2:
                     print("l_dist({}, {}) = {}\n".format(synset_1, synset_2, l_dist))
                 if l_dist is None:
-                    return self._max_word_dist
+                    return self._max_length_dist
                 l_dist += 1.0
         # normalize path length to the range [0,1]
         return math.exp(-self._alpha * l_dist)
@@ -186,7 +186,7 @@ class WordSimilarity:
         whereas the try_word is variable, one of many in a search set of, say, possible
         synonyms.  Maybe it's from an intersection, rather than a union.
         '''
-        pair = self.get_best_synset_pair(src_word, try_word, src_tag, try_tag)
+        pair = self.find_max_path_sim_synset_pair(src_word, try_word, src_tag, try_tag)
         if self.verbose > 3:
             print("word_similarity best_pair({}, {}) => ({}, {})".format(src_word, try_word, pair[0], pair[1]))
         return self.length_dist(pair[0], pair[1]) * self.hierarchy_dist(pair[0], pair[1])
@@ -287,14 +287,21 @@ def test_word_similarity(wordsim):
     print("W-Sim \t Paper \t src_word \t try_word")
     print("----- \t ----- \t -------- \t --------")
     total = 0.0
+    max_sim, min_sim = 0.0, 100.0
     for word_pair in word_pairs:
         sim = wordsim.word_similarity(word_pair[0], word_pair[1])
         print(" %.2f \t %.2f \t %s %s %s" % (sim, word_pair[2], word_pair[0],
                                              ' '*(14 - len(word_pair[0])), word_pair[1]))
         total += sim
+        if max_sim < sim:
+            max_sim = sim
+        elif min_sim > sim:
+            min_sim = sim
+
     avg_sim = total / len(word_pairs)
     wordsim.print_stats()
-    print("test_word_similarity: total/num %.3f/%d = %.3f" % (total, len(word_pairs), avg_sim))
+    print("test_word_similarity: total/num %.3f/%d = %.3f   min & max: %.3f  %.2f"
+          % (total, len(word_pairs), avg_sim, min_sim, max_sim))
     return avg_sim
 
 def smoke_test(verbose):
