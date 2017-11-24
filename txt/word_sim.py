@@ -4,7 +4,7 @@
 # Ported to Python 3.5, corrected (use similarity, not threshold), and modified.
 '''
 word_sim.py - Semantic similarity of words, using NLTK tools.
-
+Based on work by Yuhua Li, David McLean, Zuhair Bandar, et al.
 FIXME: word_similarity is way too dependent on the particulars of Wordnet Synsets.
 Those particulars need to be wrapped and filtered.  For instance, WN gives 0.0
 as the similarity of "the" to any other word, including "this", "a", and "one",
@@ -247,43 +247,76 @@ class WordSimilarity:
         return sim_word, max_sim
 
 #################################### tests  ####################################
-def test_word_similarity(wordsim):
+
+# Yuhua Li, David McLean, Zuhair Bandar, et al
+WORD_PAIRS_LI = [
+    ["asylum", "fruit", 0.21],
+    ["autograph", "shore", 0.29],
+    ["autograph", "signature", 0.55],
+    ["automobile", "car", 0.64],
+    ["bird", "woodland", 0.33],
+    ["boy", "rooster", 0.53],
+    ["boy", "lad", 0.66],
+    ["boy", "sage", 0.51],
+    ["cemetery", "graveyard", 0.73],
+    ["coast", "forest", 0.36],
+    ["coast", "shore", 0.76],
+    ["cock", "rooster", 1.00],
+    ["cord", "smile", 0.33],
+    ["cord", "string", 0.68],
+    ["cushion", "pillow", 0.66],
+    ["forest", "graveyard", 0.55],
+    ["forest", "woodland", 0.70],
+    ["furnace", "stove", 0.72],
+    ["glass", "tumbler", 0.65],
+    ["grin", "smile", 0.49],
+    ["gem", "jewel", 0.83],
+    ["hill", "woodland", 0.59],
+    ["hill", "mound", 0.74],
+    ["implement", "tool", 0.75],
+    ["journey", "voyage", 0.52],
+    ["magician", "oracle", 0.44],
+    ["magician", "wizard", 0.65],
+    ["midday", "noon", 1.0],
+    ["oracle", "sage", 0.43],
+    ["serf", "slave", 0.39],
+    ["floodle", "gronked", 0.0]
+]
+
+WORD_PAIRS_ME = [
+    ["vegetable", "fruit", 0.5],
+    ["vegetable", "squash", 0.5],
+    ["vegetable", "bean", 0.5],
+    ["vegetable", "pea", 0.5],
+    ["vegetable", "potato", 0.5],
+    ["vegetable", "tuber", 0.5],
+    ["vegetable", "legume", 0.5],
+    ["tuber", "legume", 0.5],
+    ["legume", "tuber", 0.5],
+    ["legume", "potato", 0.5],
+    ["legume", "bean", 0.5],
+    ["legume", "pea", 0.5],
+    ["legume", "squash", 0.5],
+    ["legume", "pumpkin", 0.5],
+    ["squash", "pumpkin", 0.5],
+    ["canine", "dog", 0.5],
+    ["wolf", "dog", 0.5],
+    ["taxi", "cab", 0.5],
+    ["taxi", "uber", 0.5],
+    ["car", "automobile", 0.5],
+    ["street", "avenue", 0.5],
+    ["highway", "freeway", 0.5],
+    ["thought", "idea", 0.5],
+    ["thought", "notion", 0.5],
+
+    ["floodle", "gronked", 0.0]
+]
+
+
+def test_word_similarity(wordsim, word_pairs=WORD_PAIRS_ME):
     '''The results of the algorithm are largely dependent on the results of
     the word similarities, so we should test that first...'''
     print("\n\t Word Similarity:")
-    word_pairs = [
-        ["asylum", "fruit", 0.21],
-        ["autograph", "shore", 0.29],
-        ["autograph", "signature", 0.55],
-        ["automobile", "car", 0.64],
-        ["bird", "woodland", 0.33],
-        ["boy", "rooster", 0.53],
-        ["boy", "lad", 0.66],
-        ["boy", "sage", 0.51],
-        ["cemetery", "graveyard", 0.73],
-        ["coast", "forest", 0.36],
-        ["coast", "shore", 0.76],
-        ["cock", "rooster", 1.00],
-        ["cord", "smile", 0.33],
-        ["cord", "string", 0.68],
-        ["cushion", "pillow", 0.66],
-        ["forest", "graveyard", 0.55],
-        ["forest", "woodland", 0.70],
-        ["furnace", "stove", 0.72],
-        ["glass", "tumbler", 0.65],
-        ["grin", "smile", 0.49],
-        ["gem", "jewel", 0.83],
-        ["hill", "woodland", 0.59],
-        ["hill", "mound", 0.74],
-        ["implement", "tool", 0.75],
-        ["journey", "voyage", 0.52],
-        ["magician", "oracle", 0.44],
-        ["magician", "wizard", 0.65],
-        ["midday", "noon", 1.0],
-        ["oracle", "sage", 0.43],
-        ["serf", "slave", 0.39],
-        ["floodle", "gronked", 0.0]
-    ]
     print("W-Sim \t Paper \t src_word \t try_word")
     print("----- \t ----- \t -------- \t --------")
     total = 0.0
