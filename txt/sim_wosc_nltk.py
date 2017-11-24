@@ -431,4 +431,4 @@ match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
 ###############################################################################
 if __name__ == '__main__':
     smoke_test()
-    test_moby(ntry=20)
+    test_moby(ntry=0)

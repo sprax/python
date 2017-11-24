@@ -1,0 +1,1764 @@
+# Finding all similarity lists (train 200, trial 220, nears 6) took 2613.6 seconds
+# match_ttt(n_train=200, n_trial=220, count=6) took 2613.6 seconds; score 75.2844
+# Synsets fetched/fetches:  12446654 / 1959311  =  6.353
+
+300	100	What are all the mates' names on the Pequod?	Starbuck and Stubb and Flask.
+	106	0.64703	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+	102	0.62958	What is the name of the Third Mate?	Flask.	302
+	210	0.57045	What is the name of Ahab's wife?	She is nameless.	410
+	255	0.56663	What religion are the owners of the ship?	Quakers.	455
+	141	0.55569	Which mate on the Pequod was from Cape Cod?	Stubb, the Second Mate.	341
+	101	0.53685	The name of the First Mate is?	Starbuck.	301
+
+301	101	Who is the First Mate?	Starbuck.
+	145	0.75572	Who is the partner Captain Peleg?	Retired whaleman of Nantucket. Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man. Bildad and Peleg hire the crew.	345
+	101	0.74271	The name of the First Mate is?	Starbuck.	301
+	105	0.68626	Who is the Pequod's Second Mate?	Stubb.	305
+	146	0.61634	Who is the harpooner that Queequeq rescues?	Tashtego.	346
+	283	0.59961	Who is telling the story in the novel?	Ishmael.	483
+	102	0.59592	What is the name of the Third Mate?	Flask.	302
+
+302	102	Who is the Third Mate?	Flask.
+	145	0.75572	Who is the partner Captain Peleg?	Retired whaleman of Nantucket. Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man. Bildad and Peleg hire the crew.	345
+	102	0.73374	What is the name of the Third Mate?	Flask.	302
+	105	0.68626	Who is the Pequod's Second Mate?	Stubb.	305
+	146	0.61634	Who is the harpooner that Queequeq rescues?	Tashtego.	346
+	101	0.60673	The name of the First Mate is?	Starbuck.	301
+	283	0.59961	Who is telling the story in the novel?	Ishmael.	483
+
+303	103	How many of crewmembers of the Pequod survive their meeting with Moby Dick?	Exactly one.
+	103	0.91526	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+	116	0.49561	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	108	0.48986	Which crewmembers survive the Pequod's sinking?	Only Ishmael.	308
+	109	0.48574	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	246	0.45656	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target.	446
+	143	0.43568	How does the Pequod sink?	She is rammed by Moby Dick.	343
+
+304	104	Who are the Pequod's owners?	Bildad and Peleg.
+	105	0.76723	Who is the Pequod's Second Mate?	Stubb.	305
+	106	0.69639	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+	100	0.67281	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	104	0.64271	Who owns the Pequod?	Bildad and Peleg.	304
+	126	0.63584	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+	145	0.61492	Who is the partner Captain Peleg?	Retired whaleman of Nantucket. Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man. Bildad and Peleg hire the crew.	345
+
+305	105	Who was the Second Mate on the Pequod?	Stubb.
+	105	0.72492	Who is the Pequod's Second Mate?	Stubb.	305
+	106	0.70122	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+	141	0.65687	Which mate on the Pequod was from Cape Cod?	Stubb, the Second Mate.	341
+	104	0.60056	Who owns the Pequod?	Bildad and Peleg.	304
+	145	0.56069	Who is the partner Captain Peleg?	Retired whaleman of Nantucket. Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man. Bildad and Peleg hire the crew.	345
+	142	0.54377	Which of the Pequod's mates was a Quaker from Nantucket?	Starbuck, the first mate.	342
+
+306	106	What are the names of the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.
+	106	0.79586	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+	187	0.66878	What is the name of Ahab's harpooner?	Fedallah.	387
+	102	0.62457	What is the name of the Third Mate?	Flask.	302
+	255	0.61576	What religion are the owners of the ship?	Quakers.	455
+	210	0.58207	What is the name of Ahab's wife?	She is nameless.	410
+	236	0.57796	What is the name of the inn Ishmael stays at on the mainland before the voyage?	The Spouter Inn.	436
+
+307	107	What do you call a group of whales swimming together?	A pod.
+	107	0.81199	What is a group of whales that swim together called?	A pod.	307
+	185	0.64438	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	245	0.61816	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	174	0.61730	What is the study of whales called?	Cetology.	374
+	151	0.59338	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	112	0.58272	What type of whale are they hunting?	Sperm whales.	312
+
+308	108	What member of the crew survives when the Pequod sinks?	Only Ishmael.
+	132	0.61186	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+	168	0.59737	What keeps Ishmael afloat after the Pequod sinks?	A coffin.	368
+	255	0.57256	What religion are the owners of the ship?	Quakers.	455
+	102	0.56674	What is the name of the Third Mate?	Flask.	302
+	143	0.55651	How does the Pequod sink?	She is rammed by Moby Dick.	343
+	227	0.55254	What is the world capital of whaling?	Nantucket.	427
+
+309	109	Does the white whale survive the events narrated in Moby Dick?	Yes.
+	126	0.62601	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+	103	0.50599	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+	283	0.50514	Who is telling the story in the novel?	Ishmael.	483
+	116	0.50195	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	174	0.49884	What is the study of whales called?	Cetology.	374
+	206	0.49671	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin.	406
+
+310	110	Why did whalers hunt their quarry?	For oil.
+	208	0.55965	Why are whaling ships always well-lit?	Free access to oil.	408
+	167	0.46657	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket.	367
+	112	0.45213	What type of whale are they hunting?	Sperm whales.	312
+	123	0.44819	Where, according to Ishmael, are whales hunted?	All around the world.	323
+	110	0.44118	For what were whales primarily hunted?	Oil.	310
+	209	0.43146	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	409
+
+311	111	What do sperm whales live on?	Plankton and krill.
+	111	0.62734	What do whales eat?	Plankton and other brit.	311
+	202	0.49830	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses.	402
+	112	0.48988	What type of whale are they hunting?	Sperm whales.	312
+	200	0.47998	How do live whales smell, according to Ishmael?	Pleasantly musky.	400
+	201	0.46558	What was Queequeg on his home island?	A prince.	401
+	263	0.45758	What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex.	463
+
+312	112	What kind of whales does the crew hunt?	Sperm whales.
+	151	0.69681	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	185	0.69456	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	245	0.68296	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	255	0.65988	What religion are the owners of the ship?	Quakers.	455
+	174	0.63073	What is the study of whales called?	Cetology.	374
+	112	0.62486	What type of whale are they hunting?	Sperm whales.	312
+
+313	113	Who wins the doubloon that Pip calls the ship's navel from the main the mast?	Ahab.
+	113	0.67557	Who wins the doubloon from the mast?	Ahab.	313
+	140	0.54947	Pip describes the doubloon on the mast as the ship's what?	Navel.	340
+	138	0.43985	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+	283	0.42926	Who is telling the story in the novel?	Ishmael.	483
+	153	0.42401	What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford.	353
+	224	0.41081	What is the name of the main ship in the story?	The Pequod.	424
+
+314	114	What does Ahab destroy piece by piece throughout the voyage?	The navigation equipment.
+	223	0.59260	What does the Delight drop into the water as the Pequod passes by?	A dead body.	423
+	203	0.56358	What does the scar on Ahab's cheek resemble?	A lightning bolt.	403
+	176	0.54564	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+	132	0.52765	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+	138	0.51818	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+	151	0.51362	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+
+315	115	Which biblical figure is the focus of Father Mapple's sermon?	Jonah.
+	115	0.73574	What is the biblical subject of Father Mapple's sermon at the Whaleman's Chapel?	Jonah and the whale.	315
+	210	0.66445	What is the name of Ahab's wife?	She is nameless.	410
+	187	0.66083	What is the name of Ahab's harpooner?	Fedallah.	387
+	149	0.64202	What is the name of Ahab's ship?	The Pequod.	349
+	102	0.63090	What is the name of the Third Mate?	Flask.	302
+	101	0.62705	The name of the First Mate is?	Starbuck.	301
+
+316	116	What's the very first line in Moby Dick?	'Call me Ishmael.'
+	116	0.70074	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	126	0.65917	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+	206	0.60108	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin.	406
+	176	0.57359	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+	125	0.54091	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	224	0.54047	What is the name of the main ship in the story?	The Pequod.	424
+
+317	117	What essential flaw determines Ahab's fate?	Hubris.
+	243	0.64936	What causes Ahab's harpoon to flicker with fire?	Atmospheric static.	443
+	117	0.63169	What is Ahab's single fatal flaw?	Hubris.	317
+	244	0.60625	What is the source of Ahab's fatal flaw?	The damage he's suffered.	444
+	203	0.59616	What does the scar on Ahab's cheek resemble?	A lightning bolt.	403
+	235	0.59349	What experience catalyzed Pip and Ahab's close companionship?	Pip's near-drowning.	435
+	187	0.57445	What is the name of Ahab's harpooner?	Fedallah.	387
+
+318	118	What about Moby Dick?	Moby Dick is a giant and elusive white sperm whale who serves as Captain Ahab's antagonist in the novel. Ahab's sworn purpose in life is to kill Moby Dick.
+	125	0.69602	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	118	0.65396	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	116	0.53243	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	150	0.48877	To whom did Melville dedicate Moby Dick?	Nathaniel Hawthorne.	350
+	155	0.48017	Which body part has Ahab lost to Moby Dick?	His leg.	355
+	176	0.46802	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+
+319	119	What about that Ishmael?	He is the novel's narrator and the only sailor to survive from Captain Ahab's whaling ship, the Pequod.
+	125	0.54101	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	233	0.53068	What do male whales do that females don't, according to Ishmael?	Males abandon injured comrades.	433
+	111	0.51551	What do whales eat?	Plankton and other brit.	311
+	119	0.49453	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	217	0.48167	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+	216	0.46887	What is the ship that rescues Ishmael at the end of the novel?	Rachel.	416
+
+320	120	What decorates the Pequod?	Whale bones.
+	120	0.71329	How is the Pequod decorated?	With whale bones.	320
+	104	0.65396	Who owns the Pequod?	Bildad and Peleg.	304
+	188	0.59684	What happened when the Pequod neared Sunda?	Malaysian Pirates scared them away from the hunting grounds.	388
+	143	0.56723	How does the Pequod sink?	She is rammed by Moby Dick.	343
+	168	0.56353	What keeps Ishmael afloat after the Pequod sinks?	A coffin.	368
+	291	0.54237	What is cetology?	The study of whales.	491
+
+321	121	What about the one named Queequeg?	He is a native of Kokovoko in the Fiji islands and an expert harpooner, and despite his religion and customs, he is develops a bond with Ishmael.
+	174	0.59149	What is the study of whales called?	Cetology.	374
+	102	0.51683	What is the name of the Third Mate?	Flask.	302
+	125	0.47223	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	245	0.46405	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	162	0.46225	What covers Queequeg's skin?	Tattoos.	362
+	101	0.44520	The name of the First Mate is?	Starbuck.	301
+
+322	122	What about Captain Ahab?	The dark, brooding, peg-legged captain of the ship, the Pequod. He is obsessed with finding and killing Moby Dick.
+	122	0.65396	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the the whaling ship Pequod.  He wants to find and kill Moby Dick, the whale that caused him to lose his leg.	322
+	156	0.57012	What does Fedallah prophesize will kill Captain Ahab?	Hemp.	356
+	111	0.55121	What do whales eat?	Plankton and other brit.	311
+	187	0.53664	What is the name of Ahab's harpooner?	Fedallah.	387
+	210	0.52404	What is the name of Ahab's wife?	She is nameless.	410
+	149	0.49275	What is the name of Ahab's ship?	The Pequod.	349
+
+323	123	Where does Ishmael say that whales are hunted?	All around the world.
+	123	0.70617	Where, according to Ishmael, are whales hunted?	All around the world.	323
+	112	0.62721	What type of whale are they hunting?	Sperm whales.	312
+	183	0.54185	Why does Ishmael think whales are so mysterious?	They're always mostly hidden.	383
+	107	0.53196	What is a group of whales that swim together called?	A pod.	307
+	167	0.52951	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket.	367
+	252	0.50331	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirit-spout.	452
+
+324	124	How dangerous is it to go whaling?	Whaling was one of the most dangerous occupations of the 19th century.
+	124	0.76295	How dangerous is whaling?	Whaling was one of the most dangerous occupations of the 19th century.	324
+	200	0.52708	How do live whales smell, according to Ishmael?	Pleasantly musky.	400
+	161	0.47613	Why is the whale-line so dangerous once it is attached to a whale?	People can get tangled.	361
+	120	0.47284	How is the Pequod decorated?	With whale bones.	320
+	167	0.45737	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket.	367
+	123	0.44794	Where, according to Ishmael, are whales hunted?	All around the world.	323
+
+325	125	What is it about Moby Dick that frightens Ishmael the most?	That whale's peculiar whiteness.
+	125	0.81043	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	116	0.54579	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	151	0.53518	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	176	0.52405	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+	216	0.49747	What is the ship that rescues Ishmael at the end of the novel?	Rachel.	416
+	233	0.47398	What do male whales do that females don't, according to Ishmael?	Males abandon injured comrades.	433
+
+326	126	Which characters in Moby Dick are Quakers?	Starbuck, Peleg, and Bildad.
+	126	0.79163	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+	155	0.62366	Which body part has Ahab lost to Moby Dick?	His leg.	355
+	112	0.49948	What type of whale are they hunting?	Sperm whales.	312
+	286	0.49817	Which member of the crew is a religious Christian man?	Starbuck.	486
+	176	0.48173	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+	118	0.47035	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+
+327	127	Who is Father Mapple?	The chaplain (in New Bedford) who gives a moving sermon based on the Biblical story of Jonah and the whale in the Whalemen's chapel.
+	127	0.99999	Who is Father Mapple?	The chaplain (in New Bedford) who gives a moving sermon based on the Biblical story of Jonah and the whale in the Whalemen's chapel.	327
+	119	0.63524	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	121	0.63524	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner, who becomes Ishmael's friend and crewmate. Queequeg dies when the ship sinks.	321
+	128	0.63524	Who is Fedallah?	Strange, 'oriental' old Parsee; Ahab's harpooner and personal prophet.	328
+	131	0.63524	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard.	331
+	164	0.63524	Who is Gabriel?	The self-appointed prophet on the ship, Jeroboam. He believes himself to be the incarnation of the Shaker God and he warns all the crewmembers on board about Moby Dick, the White Whale.	364
+
+328	128	What about that Fedallah?	He is a strange, 'oriental' old Parsee; Ahab's harpooner and personal prophet.
+	128	0.49453	Who is Fedallah?	Strange, 'oriental' old Parsee; Ahab's harpooner and personal prophet.	328
+	291	0.44931	What is cetology?	The study of whales.	491
+	156	0.41499	What does Fedallah prophesize will kill Captain Ahab?	Hemp.	356
+	125	0.41362	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	111	0.40966	What do whales eat?	Plankton and other brit.	311
+	289	0.40966	What is 'brit'?	Tiny sea creatures that whales eat, a.k.a. krill.	489
+
+329	129	What is Fedallah's turban made of?	His own hair.
+	129	0.80398	Out of what is Fedallah's turban made?	His hair.	329
+	244	0.59995	What is the source of Ahab's fatal flaw?	The damage he's suffered.	444
+	149	0.59686	What is the name of Ahab's ship?	The Pequod.	349
+	187	0.59686	What is the name of Ahab's harpooner?	Fedallah.	387
+	210	0.59686	What is the name of Ahab's wife?	She is nameless.	410
+	227	0.59315	What is the world capital of whaling?	Nantucket.	427
+
+330	130	What is Flask's nickname?	King-Post.
+	130	0.99999	What is Flask's nickname?	King-Post.	330
+	162	0.66728	What covers Queequeg's skin?	Tattoos.	362
+	149	0.64422	What is the name of Ahab's ship?	The Pequod.	349
+	187	0.64422	What is the name of Ahab's harpooner?	Fedallah.	387
+	210	0.64422	What is the name of Ahab's wife?	She is nameless.	410
+	131	0.58674	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard.	331
+
+331	131	What about the one called Flask?	Flask is the third mate of the Pequod; from Martha's Vineyard.
+	174	0.56915	What is the study of whales called?	Cetology.	374
+	102	0.51683	What is the name of the Third Mate?	Flask.	302
+	125	0.47223	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	130	0.46225	What is Flask's nickname?	King-Post.	330
+	202	0.46112	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses.	402
+	227	0.45963	What is the world capital of whaling?	Nantucket.	427
+
+332	132	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.
+	132	0.99999	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+	133	0.68641	Who wears a whale-penis pelt while slicing pieces of blubber for the pots?	The mincer.	333
+	245	0.60706	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	151	0.57046	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	250	0.55473	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	227	0.55306	What is the world capital of whaling?	Nantucket.	427
+
+333	133	Who wears a whale-penis pelt while slicing pieces of blubber for the pots?	The mincer.
+	133	1.00000	Who wears a whale-penis pelt while slicing pieces of blubber for the pots?	The mincer.	333
+	132	0.68641	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+	245	0.54407	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	270	0.53985	Who wears a turban made of his own hair?	Fedallah.	470
+	286	0.51599	Which member of the crew is a religious Christian man?	Starbuck.	486
+	151	0.48902	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+
+334	134	What material does Ahab give the blacksmith out of which to make a harpoon for Moby Dick?	Nails from racehorse shoes.
+	134	0.66784	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes.	334
+	206	0.61153	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin.	406
+	176	0.60966	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+	185	0.60556	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	214	0.58692	What does Captain Boomer want to do since Moby Dick took his arm?	Avoid Moby Dick.	414
+	245	0.55223	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+
+335	135	What does Ahab say when he realizes that Moby Dick is pursuing the Pequod?	That's bad.
+	135	0.65068	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+	176	0.57682	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+	181	0.49276	What was Ahab using to attack Moby Dick when he lost his leg?	A knife.	381
+	188	0.48764	What happened when the Pequod neared Sunda?	Malaysian Pirates scared them away from the hunting grounds.	388
+	247	0.47857	What does Queequeg do when the bumpkin that was mocking him falls into the ocean?	Dives in after him.	447
+	138	0.47649	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+
+336	136	What Ocean is the one where Ahab again tracks down Moby Dick?	The Pacific.
+	136	0.56723	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+	116	0.56252	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	176	0.55929	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+	125	0.50817	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	244	0.48957	What is the source of Ahab's fatal flaw?	The damage he's suffered.	444
+	102	0.48142	What is the name of the Third Mate?	Flask.	302
+
+337	137	After seeing how dangerous hunting whales can be, what does he decide he should do?	Update his will.
+	137	0.65889	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will.	337
+	169	0.51144	When Queequeg falls ill, what does he do?	Have his coffin made.	369
+	179	0.50628	What does Ishmael think men and animals should be judged on, rather than their brains?	Their spines.	379
+	219	0.49074	When Starbuck sees a row of muskets, what does he consider doing?	Killing Ahab.	419
+	274	0.47879	After his father's death, where was thirteen-year-old Herman Melville forced to find work?	At a bank.	474
+	231	0.45311	When Queequeg decorates the coffin that he'd had made, what does he use for the decoration?	His own tattoos.	431
+
+338	138	What does Ahab see when he peers at the gold doubloon mounted on the mast?	His own reflection.
+	138	0.77693	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+	203	0.49879	What does the scar on Ahab's cheek resemble?	A lightning bolt.	403
+	195	0.48059	What color does Ishmael think is horrible, unnatural and threatening when on an animal?	White.	395
+	132	0.46853	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+	275	0.45821	What shape does the ship's carpenter make Quequeeq's coffin?	A canoe.	475
+	188	0.44866	What happened when the Pequod neared Sunda?	Malaysian Pirates scared them away from the hunting grounds.	388
+
+339	139	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg.
+	139	1.00000	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg.	339
+	151	0.58855	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	217	0.52652	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+	209	0.52214	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	409
+	216	0.50807	What is the ship that rescues Ishmael at the end of the novel?	Rachel.	416
+	143	0.48475	How does the Pequod sink?	She is rammed by Moby Dick.	343
+
+340	140	How does Pip describe the doubloon on the mast as being part of the ship?	As the ship's navel.
+	140	0.71137	Pip describes the doubloon on the mast as the ship's what?	Navel.	340
+	204	0.51938	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear.	404
+	132	0.50859	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+	223	0.50771	What does the Delight drop into the water as the Pequod passes by?	A dead body.	423
+	209	0.49846	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	409
+	282	0.49321	What was the fate of the whaler christianed The Essex?	It was attacked and sunk by a sperm whale, inspiring Melville's story.	482
+
+341	141	Which of the Pequod's mates is from Cape Cod?	Stubb, the Second Mate.
+	141	0.76525	Which mate on the Pequod was from Cape Cod?	Stubb, the Second Mate.	341
+	142	0.67831	Which of the Pequod's mates was a Quaker from Nantucket?	Starbuck, the first mate.	342
+	105	0.63313	Who is the Pequod's Second Mate?	Stubb.	305
+	286	0.62504	Which member of the crew is a religious Christian man?	Starbuck.	486
+	210	0.62094	What is the name of Ahab's wife?	She is nameless.	410
+	101	0.59321	The name of the First Mate is?	Starbuck.	301
+
+342	142	Of the three mates aboard the Pequod, which one was from Nantucket?	Starbuck the first mate was a Nantucket Quaker.
+	142	0.58580	Which of the Pequod's mates was a Quaker from Nantucket?	Starbuck, the first mate.	342
+	141	0.54802	Which mate on the Pequod was from Cape Cod?	Stubb, the Second Mate.	341
+	105	0.41105	Who is the Pequod's Second Mate?	Stubb.	305
+	145	0.39968	Who is the partner Captain Peleg?	Retired whaleman of Nantucket. Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man. Bildad and Peleg hire the crew.	345
+	153	0.39893	What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford.	353
+	246	0.39705	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target.	446
+
+343	143	when does the Pequod sink?	After Moby Dick rams her.
+	143	0.86667	How does the Pequod sink?	She is rammed by Moby Dick.	343
+	168	0.62273	What keeps Ishmael afloat after the Pequod sinks?	A coffin.	368
+	188	0.61948	What happened when the Pequod neared Sunda?	Malaysian Pirates scared them away from the hunting grounds.	388
+	104	0.56723	Who owns the Pequod?	Bildad and Peleg.	304
+	171	0.56590	On what holiday does the Pequod depart?	Christmas Day.	371
+	223	0.55504	What does the Delight drop into the water as the Pequod passes by?	A dead body.	423
+
+344	144	What does Queequeg sleep with in his bed?	His harpoon.
+	198	0.61724	What does Ahab carry in his pocket?	Vial of Nantucket sand.	398
+	201	0.54715	What was Queequeg on his home island?	A prince.	401
+	162	0.53018	What covers Queequeg's skin?	Tattoos.	362
+	144	0.51434	With what does Queequeg sleep?	His harpoon.	344
+	209	0.48535	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	409
+	215	0.47334	What does Ishmael have tattooed on his forearm?	The dimensions of a whale.	415
+
+345	145	What about Bildad's partner Captain Peleg?	He is a retired whaleman of Nantucket, former chief-mate and later co-owner of the ship Pequod.
+	145	0.58184	Who is the partner Captain Peleg?	Retired whaleman of Nantucket. Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man. Bildad and Peleg hire the crew.	345
+	210	0.57220	What is the name of Ahab's wife?	She is nameless.	410
+	187	0.50724	What is the name of Ahab's harpooner?	Fedallah.	387
+	102	0.50229	What is the name of the Third Mate?	Flask.	302
+	190	0.47885	Who is Captain Boomer?	One-armed English whaling captain; master of the Samuel Enderby.	390
+	217	0.47750	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+
+346	146	Who does that Queequeq rescue?	Tashtego.
+	146	0.74908	Who is the harpooner that Queequeq rescues?	Tashtego.	346
+	154	0.45350	How does Queequeg shave?	With a harpoon.	354
+	119	0.40107	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	121	0.40107	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner, who becomes Ishmael's friend and crewmate. Queequeg dies when the ship sinks.	321
+	128	0.40107	Who is Fedallah?	Strange, 'oriental' old Parsee; Ahab's harpooner and personal prophet.	328
+	131	0.40107	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard.	331
+
+347	147	Why does Ahab give his quarters to the deranged Pip?	Pip moves him.
+	138	0.57355	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+	242	0.56102	Why does Ishmael claim that Nantucket has the largest empire in the world?	It owns the seas.	442
+	155	0.55236	Which body part has Ahab lost to Moby Dick?	His leg.	355
+	185	0.53611	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	206	0.52687	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin.	406
+	176	0.52322	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+
+348	148	What is the Pequod named after?	A dead Indian nation in the Massachusetts Colony.
+	174	0.65475	What is the study of whales called?	Cetology.	374
+	120	0.62611	How is the Pequod decorated?	With whale bones.	320
+	168	0.61197	What keeps Ishmael afloat after the Pequod sinks?	A coffin.	368
+	291	0.51666	What is cetology?	The study of whales.	491
+	188	0.51515	What happened when the Pequod neared Sunda?	Malaysian Pirates scared them away from the hunting grounds.	388
+	105	0.50981	Who is the Pequod's Second Mate?	Stubb.	305
+
+349	149	What's the name of the whaling ship in Moby Dick?	The Pequod.
+	116	0.66370	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	149	0.66317	What is the name of Ahab's ship?	The Pequod.	349
+	224	0.65786	What is the name of the main ship in the story?	The Pequod.	424
+	126	0.62728	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+	209	0.60432	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	409
+	255	0.58782	What religion are the owners of the ship?	Quakers.	455
+
+350	150	Who did Melville dedicate Moby Dick to?	Nathaniel Hawthorne.
+	150	0.74305	To whom did Melville dedicate Moby Dick?	Nathaniel Hawthorne.	350
+	118	0.60596	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	155	0.55468	Which body part has Ahab lost to Moby Dick?	His leg.	355
+	126	0.54002	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+	175	0.53831	Which American literary figure, to whom Moby Dick was dedicated, influenced Melville's writing?	Nathaniel Hawthorne.	375
+	176	0.45300	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+
+351	151	What does Ishmael claim is the most famous part of a whale?	Its tail.
+	151	0.99999	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	245	0.71760	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	174	0.66901	What is the study of whales called?	Cetology.	374
+	185	0.65670	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	116	0.65581	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	102	0.64920	What is the name of the Third Mate?	Flask.	302
+
+352	152	What city does Ishmael leave behind to go to New Bedford?	Manhattan.
+	152	0.72911	From what city does Ishmael escape to New Bedford?	Manhattan.	352
+	233	0.54567	What do male whales do that females don't, according to Ishmael?	Males abandon injured comrades.	433
+	211	0.52777	According to Ishmael, what is the wealth of New Bedford built upon?	Whale oil.	411
+	214	0.52151	What does Captain Boomer want to do since Moby Dick took his arm?	Avoid Moby Dick.	414
+	185	0.50770	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	215	0.50081	What does Ishmael have tattooed on his forearm?	The dimensions of a whale.	415
+
+353	153	What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford.
+	153	1.00000	What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford.	353
+	275	0.53833	What shape does the ship's carpenter make Quequeeq's coffin?	A canoe.	475
+	209	0.53154	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	409
+	216	0.52190	What is the ship that rescues Ishmael at the end of the novel?	Rachel.	416
+	255	0.50570	What religion are the owners of the ship?	Quakers.	455
+	149	0.49420	What is the name of Ahab's ship?	The Pequod.	349
+
+354	154	With what does Queequeg shave?	With a harpoon.
+	144	0.85791	With what does Queequeg sleep?	His harpoon.	344
+	154	0.74942	How does Queequeg shave?	With a harpoon.	354
+	182	0.63025	In what state does Ishmael meet Queequeg?	Massachusetts.	382
+	169	0.62595	When Queequeg falls ill, what does he do?	Have his coffin made.	369
+	199	0.59511	With what does Starbuck consider killing Ahab?	Musket.	399
+	171	0.48878	On what holiday does the Pequod depart?	Christmas Day.	371
+
+355	155	What part of his body did Ahab lose to Moby Dick?	His leg.
+	155	0.64624	Which body part has Ahab lost to Moby Dick?	His leg.	355
+	206	0.62046	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin.	406
+	197	0.60191	What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off.	397
+	214	0.58723	What does Captain Boomer want to do since Moby Dick took his arm?	Avoid Moby Dick.	414
+	116	0.58211	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	176	0.57293	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+
+356	156	In Fedallah's prophecy, what will kill Captain Ahab?	Hemp.
+	156	0.62664	What does Fedallah prophesize will kill Captain Ahab?	Hemp.	356
+	148	0.45806	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts.	348
+	187	0.45476	What is the name of Ahab's harpooner?	Fedallah.	387
+	122	0.44928	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the the whaling ship Pequod.  He wants to find and kill Moby Dick, the whale that caused him to lose his leg.	322
+	210	0.44579	What is the name of Ahab's wife?	She is nameless.	410
+	114	0.44036	Over the course of the voyage, Ahab destroys all of what?	The navigation equipment.	314
+
+357	157	What is the name of Queequeg's native island?	Kokovoko.
+	210	0.72718	What is the name of Ahab's wife?	She is nameless.	410
+	187	0.71935	What is the name of Ahab's harpooner?	Fedallah.	387
+	149	0.70055	What is the name of Ahab's ship?	The Pequod.	349
+	157	0.68089	Queequeg is a native of what island?	Kokovoko.	357
+	102	0.67361	What is the name of the Third Mate?	Flask.	302
+	244	0.66422	What is the source of Ahab's fatal flaw?	The damage he's suffered.	444
+
+358	158	What about Queequeg's being a pagan does Ishmael decide he likes?	His lack of hollow Christian courtesies.
+	137	0.55015	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will.	337
+	158	0.52707	Ishmael decides he likes the fact that Queequeg is a pagan because Queequeg lacks a Christian's what?	Hollow courtesies.	358
+	217	0.50910	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+	250	0.47577	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	162	0.44748	What covers Queequeg's skin?	Tattoos.	362
+	219	0.44329	When Starbuck sees a row of muskets, what does he consider doing?	Killing Ahab.	419
+
+359	159	Who call Captain Ahab 'Old Thunder' when he warns Ishmael about him?	Elijah.
+	159	0.69277	Who warns Ishmael of Captain Ahab as 'Old Thunder'?	Elijah.	359
+	138	0.42325	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+	251	0.42017	Who rescues Tashtego when he falls overboard inside the whale's head?	Queequeg.	451
+	122	0.41108	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the the whaling ship Pequod.  He wants to find and kill Moby Dick, the whale that caused him to lose his leg.	322
+	135	0.40874	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+	160	0.40218	Who are the 'five dusky phantoms' that appear when the first whale hunt begins?	Ahab's secret whaling crew.	360
+
+360	160	Who are the 'five dusky phantoms' that show up for the first whale hunt?	Ahab's secret whaling crew.
+	160	0.80619	Who are the 'five dusky phantoms' that appear when the first whale hunt begins?	Ahab's secret whaling crew.	360
+	185	0.51983	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	177	0.48974	Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles.	377
+	228	0.45901	Who is the only crewmate who opposes Ahab's plan to devote the ship's mission to hunt the White Whale?	Starbuck.	428
+	240	0.44293	Why does Ishmael find it odd that the French have been most successful in representing whales in art?	France doesn't hunt whales.	440
+	146	0.42203	Who is the harpooner that Queequeq rescues?	Tashtego.	346
+
+361	161	What is so dangerous about the whale-line when it is attached to a whale?	People can get tangled.
+	161	0.81333	Why is the whale-line so dangerous once it is attached to a whale?	People can get tangled.	361
+	174	0.49621	What is the study of whales called?	Cetology.	374
+	185	0.49197	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	151	0.48806	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	218	0.48050	What is Ishmael constantly trying to pin down throughout the novel?	The essence of whales.	418
+	138	0.47248	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+
+362	162	Queequeg is covered with what?	Tattoos.
+	121	0.60975	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner, who becomes Ishmael's friend and crewmate. Queequeg dies when the ship sinks.	321
+	157	0.58809	Queequeg is a native of what island?	Kokovoko.	357
+	144	0.48873	With what does Queequeg sleep?	His harpoon.	344
+	182	0.47604	In what state does Ishmael meet Queequeg?	Massachusetts.	382
+	129	0.45750	Out of what is Fedallah's turban made?	His hair.	329
+	172	0.45144	From what is Ahab's false leg made?	A whale's jawbone.	372
+
+363	163	When the crew encounter the crazed prophet Gabriel, what does Gabriel prophesize as Ahab's fate?	Dead and down there.
+	163	1.00000	When the crew encounter the crazed prophet Gabriel, what does Gabriel prophesize as Ahab's fate?	Dead and down there.	363
+	257	0.57345	When Ahab bursts into fits of near-mad shrieking, what does Ishmael think is the cause?	His soul attempting escape.	457
+	213	0.54994	When the Pequod meets other ships, what is Ahab's only interest?	Information about Moby Dick.	413
+	178	0.49408	When the crew first hunt a whale, what nearly crushes Queequeg's boat?	The ship.	378
+	248	0.47757	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head.	448
+	222	0.47580	When Starbuck confronts Ahab about leaking oil barrels that are costing the crew profit, how does Ahab respond?	Ahab points a gun at Starbuck.	422
+
+364	164	What about Gabriel?	He is a self-styled prophet on the Jeroboam. Believing himself to be the Shaker God incarnate, he influences all on board with his warnings about the White Whale.
+	164	0.56151	Who is Gabriel?	The self-appointed prophet on the ship, Jeroboam. He believes himself to be the incarnation of the Shaker God and he warns all the crewmembers on board about Moby Dick, the White Whale.	364
+	291	0.50675	What is cetology?	The study of whales.	491
+	111	0.44931	What do whales eat?	Plankton and other brit.	311
+	289	0.44931	What is 'brit'?	Tiny sea creatures that whales eat, a.k.a. krill.	489
+	125	0.44772	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	255	0.40354	What religion are the owners of the ship?	Quakers.	455
+
+365	165	Where is Ahab's scar that is shaped like a lightning bolt?	On his cheek.
+	165	0.85545	Where is Ahab's scar that resembles a lightning bolt?	On Ahab's cheek.	365
+	172	0.50348	From what is Ahab's false leg made?	A whale's jawbone.	372
+	243	0.47455	What causes Ahab's harpoon to flicker with fire?	Atmospheric static.	443
+	158	0.47223	Ishmael decides he likes the fact that Queequeg is a pagan because Queequeg lacks a Christian's what?	Hollow courtesies.	358
+	170	0.46273	Where does Queequeg's hatchet end up?	In the mast.	370
+	107	0.44953	What is a group of whales that swim together called?	A pod.	307
+
+366	166	What does Ishmael's roommate Queequeg do for money in New Bedford?	He sells shrunken heads.
+	211	0.47943	According to Ishmael, what is the wealth of New Bedford built upon?	Whale oil.	411
+	209	0.47687	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	409
+	152	0.47287	From what city does Ishmael escape to New Bedford?	Manhattan.	352
+	250	0.45562	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	206	0.44460	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin.	406
+	198	0.44038	What does Ahab carry in his pocket?	Vial of Nantucket sand.	398
+
+367	167	Where does Ishmael actually to go to find a berth on a whaling ship?	New Bedford.
+	167	0.92455	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket.	367
+	123	0.56664	Where, according to Ishmael, are whales hunted?	All around the world.	323
+	204	0.51885	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear.	404
+	137	0.50965	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will.	337
+	232	0.48906	To what does Ishmael liken the experience of shipping aboard a whaler?	Committing suicide.	432
+	248	0.48860	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head.	448
+
+368	168	What keeps Ishmael afloat after the Pequod sinks?	A coffin.
+	168	1.00000	What keeps Ishmael afloat after the Pequod sinks?	A coffin.	368
+	143	0.62273	How does the Pequod sink?	She is rammed by Moby Dick.	343
+	223	0.51150	What does the Delight drop into the water as the Pequod passes by?	A dead body.	423
+	188	0.46972	What happened when the Pequod neared Sunda?	Malaysian Pirates scared them away from the hunting grounds.	388
+	255	0.46839	What religion are the owners of the ship?	Quakers.	455
+	236	0.46661	What is the name of the inn Ishmael stays at on the mainland before the voyage?	The Spouter Inn.	436
+
+369	169	What does Queequeg have made for him when he becomes ill?	His coffin.
+	247	0.52990	What does Queequeg do when the bumpkin that was mocking him falls into the ocean?	Dives in after him.	447
+	231	0.51413	When Queequeg decorates the coffin that he'd had made, what does he use for the decoration?	His own tattoos.	431
+	169	0.49934	When Queequeg falls ill, what does he do?	Have his coffin made.	369
+	154	0.47541	How does Queequeg shave?	With a harpoon.	354
+	134	0.43690	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes.	334
+	138	0.43330	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+
+370	170	Where does Queequeg's hatchet end up?	In the mast.
+	170	0.99999	Where does Queequeg's hatchet end up?	In the mast.	370
+	162	0.52715	What covers Queequeg's skin?	Tattoos.	362
+	182	0.51592	In what state does Ishmael meet Queequeg?	Massachusetts.	382
+	154	0.51022	How does Queequeg shave?	With a harpoon.	354
+	243	0.45304	What causes Ahab's harpoon to flicker with fire?	Atmospheric static.	443
+	209	0.43120	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	409
+
+371	171	Which holiday does the Pequod set sail on?	Christmas Day.
+	143	0.64137	How does the Pequod sink?	She is rammed by Moby Dick.	343
+	171	0.63621	On what holiday does the Pequod depart?	Christmas Day.	371
+	141	0.55319	Which mate on the Pequod was from Cape Cod?	Stubb, the Second Mate.	341
+	223	0.54669	What does the Delight drop into the water as the Pequod passes by?	A dead body.	423
+	246	0.53781	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target.	446
+	132	0.51522	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+
+372	172	What is Ahab's prosthetic made of?	A whale's jawbone.
+	187	0.70600	What is the name of Ahab's harpooner?	Fedallah.	387
+	210	0.70600	What is the name of Ahab's wife?	She is nameless.	410
+	149	0.68854	What is the name of Ahab's ship?	The Pequod.	349
+	244	0.64820	What is the source of Ahab's fatal flaw?	The damage he's suffered.	444
+	129	0.58227	Out of what is Fedallah's turban made?	His hair.	329
+	172	0.57855	From what is Ahab's false leg made?	A whale's jawbone.	372
+
+373	173	What is so dangerous about an unbalanced ship?	It can capsize.
+	173	0.61663	What can happen to an unbalanced ship?	It can capsize.	373
+	149	0.44916	What is the name of Ahab's ship?	The Pequod.	349
+	291	0.44165	What is cetology?	The study of whales.	491
+	124	0.41362	How dangerous is whaling?	Whaling was one of the most dangerous occupations of the 19th century.	324
+	289	0.40810	What is 'brit'?	Tiny sea creatures that whales eat, a.k.a. krill.	489
+	224	0.40720	What is the name of the main ship in the story?	The Pequod.	424
+
+374	174	What is the term for the scientific study of whales?	Cetology.
+	174	0.75956	What is the study of whales called?	Cetology.	374
+	245	0.74374	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	102	0.69765	What is the name of the Third Mate?	Flask.	302
+	151	0.67936	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	187	0.64749	What is the name of Ahab's harpooner?	Fedallah.	387
+	210	0.64749	What is the name of Ahab's wife?	She is nameless.	410
+
+375	175	Which American literary figure, to whom Moby Dick was dedicated, influenced Melville's writing?	Nathaniel Hawthorne.
+	175	1.00000	Which American literary figure, to whom Moby Dick was dedicated, influenced Melville's writing?	Nathaniel Hawthorne.	375
+	155	0.56167	Which body part has Ahab lost to Moby Dick?	His leg.	355
+	274	0.56020	After his father's death, where was thirteen-year-old Herman Melville forced to find work?	At a bank.	474
+	150	0.54604	To whom did Melville dedicate Moby Dick?	Nathaniel Hawthorne.	350
+	214	0.47359	What does Captain Boomer want to do since Moby Dick took his arm?	Avoid Moby Dick.	414
+	176	0.47064	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+
+376	176	What prize does Ahab offer to the first one to spy Moby Dick?	A gold doubloon.
+	176	0.80373	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+	116	0.60040	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	155	0.57754	Which body part has Ahab lost to Moby Dick?	His leg.	355
+	206	0.56821	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin.	406
+	136	0.51607	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+	138	0.50195	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+
+377	177	Ishmael likens traveling the world round to hunt whales as amounting to what?	Going around in circles.
+	177	0.76148	Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles.	377
+	232	0.57947	To what does Ishmael liken the experience of shipping aboard a whaler?	Committing suicide.	432
+	230	0.57601	Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher?	Platonic.	430
+	123	0.54774	Where, according to Ishmael, are whales hunted?	All around the world.	323
+	228	0.54561	Who is the only crewmate who opposes Ahab's plan to devote the ship's mission to hunt the White Whale?	Starbuck.	428
+	151	0.53998	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+
+378	178	What almost crushes Queequeg's boat during the first whale hunt?	The Pequod.
+	178	0.65016	When the crew first hunt a whale, what nearly crushes Queequeg's boat?	The ship.	378
+	149	0.54099	What is the name of Ahab's ship?	The Pequod.	349
+	255	0.53792	What religion are the owners of the ship?	Quakers.	455
+	241	0.52948	When preparing to process the first dead whale, how does Queequeg almost loose his hand?	A dead shark's teeth.	441
+	228	0.52412	Who is the only crewmate who opposes Ahab's plan to devote the ship's mission to hunt the White Whale?	Starbuck.	428
+	275	0.49839	What shape does the ship's carpenter make Quequeeq's coffin?	A canoe.	475
+
+379	179	On what does Ishmael think men and animals should be judged, rather than their smarts?	Their backbones.
+	179	0.83047	What does Ishmael think men and animals should be judged on, rather than their brains?	Their spines.	379
+	195	0.51758	What color does Ishmael think is horrible, unnatural and threatening when on an animal?	White.	395
+	257	0.46887	When Ahab bursts into fits of near-mad shrieking, what does Ishmael think is the cause?	His soul attempting escape.	457
+	186	0.45010	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool.	386
+	199	0.44262	With what does Starbuck consider killing Ahab?	Musket.	399
+	134	0.44085	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes.	334
+
+380	180	What happens to Ahab's hat when he climbs the mast to see Moby Dick?	A hawk takes it.
+	138	0.63892	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+	180	0.62691	When Ahab insists on climbing the mast to be the first to see Moby Dick, what happens to his hat?	A hawk steals it.	380
+	206	0.57905	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin.	406
+	197	0.57286	What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off.	397
+	181	0.56956	What was Ahab using to attack Moby Dick when he lost his leg?	A knife.	381
+	176	0.54334	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+
+381	181	When Ahab lost his leg attacking Moby Dick, what weapon was he using?	A knife.
+	181	0.71064	What was Ahab using to attack Moby Dick when he lost his leg?	A knife.	381
+	135	0.54860	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+	214	0.49726	What does Captain Boomer want to do since Moby Dick took his arm?	Avoid Moby Dick.	414
+	155	0.49363	Which body part has Ahab lost to Moby Dick?	His leg.	355
+	180	0.48992	When Ahab insists on climbing the mast to be the first to see Moby Dick, what happens to his hat?	A hawk steals it.	380
+	134	0.48371	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes.	334
+
+382	182	What's the name of the state where Ishmael met Queequeg?	Massachusetts, in New Bedford.
+	210	0.62990	What is the name of Ahab's wife?	She is nameless.	410
+	102	0.62793	What is the name of the Third Mate?	Flask.	302
+	187	0.62577	What is the name of Ahab's harpooner?	Fedallah.	387
+	244	0.61897	What is the source of Ahab's fatal flaw?	The damage he's suffered.	444
+	162	0.61062	What covers Queequeg's skin?	Tattoos.	362
+	149	0.60421	What is the name of Ahab's ship?	The Pequod.	349
+
+383	183	What about whales makes Ishmael think they are so mysterious?	They're always mostly hidden.
+	183	0.73457	Why does Ishmael think whales are so mysterious?	They're always mostly hidden.	383
+	112	0.64394	What type of whale are they hunting?	Sperm whales.	312
+	123	0.48165	Where, according to Ishmael, are whales hunted?	All around the world.	323
+	255	0.45718	What religion are the owners of the ship?	Quakers.	455
+	260	0.45467	Why does Ishmael believe that the natural dangers of the sea are so insidious?	So much is hidden.	460
+	202	0.45176	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses.	402
+
+384	184	When does Ahab see what he thinks is the 'first hearse' prophesied by Fedallah?	Fedallah lashed to Moby Dick.
+	184	0.56523	What does Ahab recognize as the 'first hearse' of Fedallah's prophecy?	Fedallah lashed to Moby Dick.	384
+	257	0.52457	When Ahab bursts into fits of near-mad shrieking, what does Ishmael think is the cause?	His soul attempting escape.	457
+	231	0.50535	When Queequeg decorates the coffin that he'd had made, what does he use for the decoration?	His own tattoos.	431
+	199	0.49151	With what does Starbuck consider killing Ahab?	Musket.	399
+	174	0.46942	What is the study of whales called?	Cetology.	374
+	219	0.46665	When Starbuck sees a row of muskets, what does he consider doing?	Killing Ahab.	419
+
+385	185	What does the crew look for as indications of a whale's presence?	Spouts.
+	185	0.79607	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	217	0.65617	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+	245	0.64723	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	151	0.63418	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	250	0.61550	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	286	0.56989	Which member of the crew is a religious Christian man?	Starbuck.	486
+
+386	186	When Starbuck and Ahab talk about their families, what does Ahab say about his relentless quest?	A pathetic fool.
+	186	0.81555	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool.	386
+	222	0.55470	When Starbuck confronts Ahab about leaking oil barrels that are costing the crew profit, how does Ahab respond?	Ahab points a gun at Starbuck.	422
+	219	0.49008	When Starbuck sees a row of muskets, what does he consider doing?	Killing Ahab.	419
+	241	0.48507	When preparing to process the first dead whale, how does Queequeg almost loose his hand?	A dead shark's teeth.	441
+	257	0.48313	When Ahab bursts into fits of near-mad shrieking, what does Ishmael think is the cause?	His soul attempting escape.	457
+	248	0.48219	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head.	448
+
+387	187	Who is Ahab's personal harpooner and spiritual guide?	Fedallah.
+	122	0.65179	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the the whaling ship Pequod.  He wants to find and kill Moby Dick, the whale that caused him to lose his leg.	322
+	190	0.59150	Who is Captain Boomer?	One-armed English whaling captain; master of the Samuel Enderby.	390
+	145	0.56118	Who is the partner Captain Peleg?	Retired whaleman of Nantucket. Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man. Bildad and Peleg hire the crew.	345
+	187	0.56100	What is the name of Ahab's harpooner?	Fedallah.	387
+	127	0.53466	Who is Father Mapple?	The chaplain (in New Bedford) who gives a moving sermon based on the Biblical story of Jonah and the whale in the Whalemen's chapel.	327
+	119	0.52765	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+
+388	188	What happened to the Pequod when it got close to Sunda? 	Malaysian Pirates scared them away from the hunting grounds.
+	188	0.68749	What happened when the Pequod neared Sunda?	Malaysian Pirates scared them away from the hunting grounds.	388
+	138	0.44073	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+	248	0.40843	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head.	448
+	185	0.39662	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	120	0.38576	How is the Pequod decorated?	With whale bones.	320
+	168	0.38438	What keeps Ishmael afloat after the Pequod sinks?	A coffin.	368
+
+389	189	What must the Pequod round to enter the Pacific Ocean?	Cape Horn.
+	189	0.63531	Around what must the Pequod pass to arrive in the Pacific?	Cape Horn.	389
+	223	0.58616	What does the Delight drop into the water as the Pequod passes by?	A dead body.	423
+	168	0.55598	What keeps Ishmael afloat after the Pequod sinks?	A coffin.	368
+	132	0.50457	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+	227	0.49707	What is the world capital of whaling?	Nantucket.	427
+	151	0.49164	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+
+390	190	What about Captain Boomer?	He is a one-armed English whaling captain; master of the Samuel Enderby.
+	190	0.65396	Who is Captain Boomer?	One-armed English whaling captain; master of the Samuel Enderby.	390
+	111	0.62283	What do whales eat?	Plankton and other brit.	311
+	174	0.53043	What is the study of whales called?	Cetology.	374
+	112	0.51992	What type of whale are they hunting?	Sperm whales.	312
+	145	0.51716	Who is the partner Captain Peleg?	Retired whaleman of Nantucket. Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man. Bildad and Peleg hire the crew.	345
+	217	0.50614	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+
+391	191	With whome does Ishmael share a bed in New Bedford?	Queequeg.
+	139	0.59262	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg.	339
+	152	0.53326	From what city does Ishmael escape to New Bedford?	Manhattan.	352
+	209	0.53107	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	409
+	217	0.52652	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+	151	0.51728	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	167	0.46928	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket.	367
+
+392	192	Inside of what does Tashtego nearly drown?	The head of a sperm whale.
+	144	0.42185	With what does Queequeg sleep?	His harpoon.	344
+	192	0.40362	When Tashtego nearly drowns, what is he trapped in?	A whale's head.	392
+	154	0.38981	How does Queequeg shave?	With a harpoon.	354
+	157	0.37682	Queequeg is a native of what island?	Kokovoko.	357
+	171	0.37351	On what holiday does the Pequod depart?	Christmas Day.	371
+	182	0.37351	In what state does Ishmael meet Queequeg?	Massachusetts.	382
+
+393	193	Who is Peleg's partner Bildad?	A co-owner of the Pequod.
+	145	0.73959	Who is the partner Captain Peleg?	Retired whaleman of Nantucket. Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man. Bildad and Peleg hire the crew.	345
+	193	0.69735	Who is Bildad?	The other co-owner of the ship Pequod. He is the exact opposite of Captain Peleg; he is cool in temperament, religious, and shrewd.	393
+	190	0.69291	Who is Captain Boomer?	One-armed English whaling captain; master of the Samuel Enderby.	390
+	105	0.68624	Who is the Pequod's Second Mate?	Stubb.	305
+	119	0.66043	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	122	0.64234	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the the whaling ship Pequod.  He wants to find and kill Moby Dick, the whale that caused him to lose his leg.	322
+
+394	194	When two or more whale ships meet at sea, what is that called?	A 'gam'.
+	194	0.71236	What is it called when two or more whale ships meet at sea?	A 'gam'.	394
+	148	0.49149	After what is Ahab's ship named?	An extinct Native American tribe in Massachusetts.	348
+	135	0.47919	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+	273	0.47589	Ishmael thinks Buckington is fated to die at sea, but that such a death will transform Buckington into what?	God.	473
+	216	0.44649	What is the ship that rescues Ishmael at the end of the novel?	Rachel.	416
+	213	0.43836	When the Pequod meets other ships, what is Ahab's only interest?	Information about Moby Dick.	413
+
+395	195	What does Ishmael think is abhorrent, unnatural and frightening when on an animal?	The color white.
+	195	0.84945	What color does Ishmael think is horrible, unnatural and threatening when on an animal?	White.	395
+	179	0.61667	What does Ishmael think men and animals should be judged on, rather than their brains?	Their spines.	379
+	233	0.45619	What do male whales do that females don't, according to Ishmael?	Males abandon injured comrades.	433
+	215	0.43693	What does Ishmael have tattooed on his forearm?	The dimensions of a whale.	415
+	186	0.43536	When Ahab and Starbuck talk about their families, how does Ahab see himself on his relentless quest?	A pathetic fool.	386
+	263	0.43380	What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex.	463
+
+396	196	When the crew cut open an blind, old, mishapen whale, what do they find?	A stone harpoon head.
+	196	0.66689	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head.	396
+	279	0.52997	During the first part of the voyage, what kind of sounds do the crew think they hear from the cargo hold?	Human beings.	479
+	177	0.49324	Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles.	377
+	178	0.46550	When the crew first hunt a whale, what nearly crushes Queequeg's boat?	The ship.	378
+	253	0.46208	The crew believes that they saw mermaids in the night, but Ahab says that there were actually what?	Seals.	453
+	248	0.46164	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head.	448
+
+397	197	When Ahab fights Moby Dick, what happens to his artificial fake leg?	It breaks off.
+	197	0.68549	What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off.	397
+	180	0.60998	When Ahab insists on climbing the mast to be the first to see Moby Dick, what happens to his hat?	A hawk steals it.	380
+	181	0.50011	What was Ahab using to attack Moby Dick when he lost his leg?	A knife.	381
+	155	0.49195	Which body part has Ahab lost to Moby Dick?	His leg.	355
+	214	0.48527	What does Captain Boomer want to do since Moby Dick took his arm?	Avoid Moby Dick.	414
+	175	0.45601	Which American literary figure, to whom Moby Dick was dedicated, influenced Melville's writing?	Nathaniel Hawthorne.	375
+
+398	198	What's in the vial in Ahab's pocket?	Nantucket sand.
+	198	0.63553	What does Ahab carry in his pocket?	Vial of Nantucket sand.	398
+	187	0.62761	What is the name of Ahab's harpooner?	Fedallah.	387
+	210	0.62761	What is the name of Ahab's wife?	She is nameless.	410
+	244	0.61520	What is the source of Ahab's fatal flaw?	The damage he's suffered.	444
+	149	0.60999	What is the name of Ahab's ship?	The Pequod.	349
+	203	0.59019	What does the scar on Ahab's cheek resemble?	A lightning bolt.	403
+
+399	199	How does Starbuck contemplate that he might kill Ahab?	With a musket.
+	199	0.53804	With what does Starbuck consider killing Ahab?	Musket.	399
+	156	0.44853	What does Fedallah prophesize will kill Captain Ahab?	Hemp.	356
+	154	0.43853	How does Queequeg shave?	With a harpoon.	354
+	147	0.43351	Is it because Pip's insane rantings move Ahab that he gives Pip his own quarters?	Yes, Ahab gives Pip the captain's quarters.	347
+	135	0.42199	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+	219	0.39724	When Starbuck sees a row of muskets, what does he consider doing?	Killing Ahab.	419
+
+400	200	What do whales smell like to Ishmael?	Musk.
+	200	0.66571	How do live whales smell, according to Ishmael?	Pleasantly musky.	400
+	111	0.61229	What do whales eat?	Plankton and other brit.	311
+	233	0.61160	What do male whales do that females don't, according to Ishmael?	Males abandon injured comrades.	433
+	112	0.48602	What type of whale are they hunting?	Sperm whales.	312
+	123	0.46892	Where, according to Ishmael, are whales hunted?	All around the world.	323
+	176	0.46876	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+
+401	201	What was Queequeg on his home island?	A prince.
+	201	0.99999	What was Queequeg on his home island?	A prince.	401
+	284	0.58471	What flavor permeates all others on Nantucket?	Fish.	484
+	162	0.56361	What covers Queequeg's skin?	Tattoos.	362
+	198	0.53092	What does Ahab carry in his pocket?	Vial of Nantucket sand.	398
+	215	0.52359	What does Ishmael have tattooed on his forearm?	The dimensions of a whale.	415
+	141	0.49811	Which mate on the Pequod was from Cape Cod?	Stubb, the Second Mate.	341
+
+402	202	For what uses was the sperm whale so highly valued?	Spermaceti and sperm oil, used as lamp oil, among other uses.
+	202	0.68523	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses.	402
+	174	0.51490	What is the study of whales called?	Cetology.	374
+	183	0.48506	Why does Ishmael think whales are so mysterious?	They're always mostly hidden.	383
+	110	0.47288	For what were whales primarily hunted?	Oil.	310
+	230	0.45439	Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher?	Platonic.	430
+	199	0.42700	With what does Starbuck consider killing Ahab?	Musket.	399
+
+403	203	What does the scar on Ahab's cheek resemble?	A lightning bolt.
+	203	0.99999	What does the scar on Ahab's cheek resemble?	A lightning bolt.	403
+	187	0.58633	What is the name of Ahab's harpooner?	Fedallah.	387
+	210	0.58633	What is the name of Ahab's wife?	She is nameless.	410
+	149	0.57053	What is the name of Ahab's ship?	The Pequod.	349
+	244	0.56784	What is the source of Ahab's fatal flaw?	The damage he's suffered.	444
+	209	0.54052	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	409
+
+404	204	What does Pip do when scared by a whale bumping the whaling boat he's in?	He jumps overboard.
+	204	0.62839	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear.	404
+	250	0.54235	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	263	0.51929	What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex.	463
+	275	0.50910	What shape does the ship's carpenter make Quequeeq's coffin?	A canoe.	475
+	206	0.48700	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin.	406
+	167	0.48265	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket.	367
+
+405	205	What age was Herman Melville when he went to sea as a merchant sailor?	Nineteen.
+	205	0.72707	How old was Herman Melville when he made his first sea voyage as a merchant sailor?	He was 19.	405
+	217	0.56150	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+	137	0.49933	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will.	337
+	265	0.49689	There once was a time when the 'specksynder' or chief harpooner served as what?	The captain of the vessel.	465
+	233	0.48787	What do male whales do that females don't, according to Ishmael?	Males abandon injured comrades.	433
+	181	0.48130	What was Ahab using to attack Moby Dick when he lost his leg?	A knife.	381
+
+406	206	What does Ahab nail to the ship's mast as motivation for his crew to find Moby Dick?	A gold doubloon.
+	206	0.84186	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin.	406
+	214	0.60652	What does Captain Boomer want to do since Moby Dick took his arm?	Avoid Moby Dick.	414
+	176	0.58723	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+	197	0.56220	What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off.	397
+	180	0.54892	When Ahab insists on climbing the mast to be the first to see Moby Dick, what happens to his hat?	A hawk steals it.	380
+	138	0.54573	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+
+407	207	Why does Fedallah say that you should hang a sperm whale's head on one side of a ship and a right whale's on the other?	So your boat won't capsize.
+	207	0.85152	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize.	407
+	230	0.55309	Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher?	Platonic.	430
+	250	0.52555	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	204	0.50367	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear.	404
+	252	0.48376	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirit-spout.	452
+	268	0.46914	What is the term for a whale that has already been harpooned or marked by the crew of a specific ship?	Fast-fish.	468
+
+408	208	Why do whaling ships burn a lot of lamps?	They have lots of whale oil.
+	167	0.56049	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket.	367
+	204	0.53195	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear.	404
+	255	0.52281	What religion are the owners of the ship?	Quakers.	455
+	245	0.50153	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	286	0.49527	Which member of the crew is a religious Christian man?	Starbuck.	486
+	157	0.48796	Queequeg is a native of what island?	Kokovoko.	357
+
+409	209	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.
+	209	1.00000	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	409
+	224	0.64219	What is the name of the main ship in the story?	The Pequod.	424
+	149	0.60901	What is the name of Ahab's ship?	The Pequod.	349
+	275	0.60445	What shape does the ship's carpenter make Quequeeq's coffin?	A canoe.	475
+	210	0.60118	What is the name of Ahab's wife?	She is nameless.	410
+	250	0.58304	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+
+410	210	What is Ahab's wife's name?	She isn't named.
+	210	0.84935	What is the name of Ahab's wife?	She is nameless.	410
+	187	0.77248	What is the name of Ahab's harpooner?	Fedallah.	387
+	130	0.75515	What is Flask's nickname?	King-Post.	330
+	149	0.75073	What is the name of Ahab's ship?	The Pequod.	349
+	102	0.68946	What is the name of the Third Mate?	Flask.	302
+	117	0.68044	What is Ahab's single fatal flaw?	Hubris.	317
+
+411	211	For what were the whales hunted?	Oil.
+	110	0.83024	For what were whales primarily hunted?	Oil.	310
+	112	0.55558	What type of whale are they hunting?	Sperm whales.	312
+	177	0.54814	Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles.	377
+	123	0.51470	Where, according to Ishmael, are whales hunted?	All around the world.	323
+	178	0.48803	When the crew first hunt a whale, what nearly crushes Queequeg's boat?	The ship.	378
+	227	0.48605	What is the world capital of whaling?	Nantucket.	427
+
+412	212	What about Starbuck?	He is a Nantucket Quaker serving as the first mate to the captain on the Pequod. He is intelligent and brave, and he lives according to Christian principles.
+	212	0.56151	Who is Starbuck?	A Quaker from Nantucket who serves as the first mate to the captain on the Pequod. An intelligent and brave officer, he lives his life by Christian principles.	412
+	291	0.50675	What is cetology?	The study of whales.	491
+	111	0.44931	What do whales eat?	Plankton and other brit.	311
+	289	0.44931	What is 'brit'?	Tiny sea creatures that whales eat, a.k.a. krill.	489
+	125	0.44772	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	130	0.40107	What is Flask's nickname?	King-Post.	330
+
+413	213	What is Ahab's only interest when the Pequod meets other ships?	Getting information about Moby Dick.
+	213	0.75664	When the Pequod meets other ships, what is Ahab's only interest?	Information about Moby Dick.	413
+	149	0.66690	What is the name of Ahab's ship?	The Pequod.	349
+	187	0.54888	What is the name of Ahab's harpooner?	Fedallah.	387
+	210	0.54888	What is the name of Ahab's wife?	She is nameless.	410
+	255	0.53837	What religion are the owners of the ship?	Quakers.	455
+	228	0.53650	Who is the only crewmate who opposes Ahab's plan to devote the ship's mission to hunt the White Whale?	Starbuck.	428
+
+414	214	How did Captain Boomer react to losing an arm to Moby Dick?	He avoids Moby Dick.
+	155	0.56104	Which body part has Ahab lost to Moby Dick?	His leg.	355
+	214	0.55837	What does Captain Boomer want to do since Moby Dick took his arm?	Avoid Moby Dick.	414
+	176	0.44350	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+	197	0.41739	What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off.	397
+	150	0.41546	To whom did Melville dedicate Moby Dick?	Nathaniel Hawthorne.	350
+	181	0.41222	What was Ahab using to attack Moby Dick when he lost his leg?	A knife.	381
+
+415	215	What is tattooed on Ishmael's forearm?	The dimensions of a whale.
+	215	0.71399	What does Ishmael have tattooed on his forearm?	The dimensions of a whale.	415
+	130	0.54996	What is Flask's nickname?	King-Post.	330
+	172	0.54495	From what is Ahab's false leg made?	A whale's jawbone.	372
+	210	0.54004	What is the name of Ahab's wife?	She is nameless.	410
+	187	0.54004	What is the name of Ahab's harpooner?	Fedallah.	387
+	191	0.52481	What is the name of Ishmael's unlikely roommate and bedfellow?	Queequeg.	391
+
+416	216	What is the ship that rescues Ishmael at the end of the novel?	Rachel.
+	216	0.99999	What is the ship that rescues Ishmael at the end of the novel?	Rachel.	416
+	224	0.68380	What is the name of the main ship in the story?	The Pequod.	424
+	245	0.64828	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	102	0.64108	What is the name of the Third Mate?	Flask.	302
+	255	0.62710	What religion are the owners of the ship?	Quakers.	455
+	174	0.61628	What is the study of whales called?	Cetology.	374
+
+417	217	What keeps Ishmael from drowning?	Queequeg's coffin.
+	168	0.51665	What keeps Ishmael afloat after the Pequod sinks?	A coffin.	368
+	119	0.50445	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	291	0.48657	What is cetology?	The study of whales.	491
+	111	0.46959	What do whales eat?	Plankton and other brit.	311
+	112	0.46867	What type of whale are they hunting?	Sperm whales.	312
+	162	0.46766	What covers Queequeg's skin?	Tattoos.	362
+
+418	218	What is Ishmael constantly trying to pin down throughout the novel?	The essence of whales.
+	218	0.99999	What is Ishmael constantly trying to pin down throughout the novel?	The essence of whales.	418
+	216	0.51792	What is the ship that rescues Ishmael at the end of the novel?	Rachel.	416
+	224	0.51443	What is the name of the main ship in the story?	The Pequod.	424
+	245	0.51117	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	174	0.47831	What is the study of whales called?	Cetology.	374
+	283	0.47169	Who is telling the story in the novel?	Ishmael.	483
+
+419	219	What does Starbuck ponder when he sees a row of muskets?	He weighs killing Ahab.
+	219	0.69826	When Starbuck sees a row of muskets, what does he consider doing?	Killing Ahab.	419
+	132	0.56827	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+	107	0.52605	What is a group of whales that swim together called?	A pod.	307
+	151	0.50418	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	245	0.49428	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	185	0.47361	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+
+420	220	Who is Tashtego?	Stubb's harpooner; craves rum.
+	220	1.00000	Who is Tashtego?	Stubb's harpooner; craves rum.	420
+	119	0.71835	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	121	0.71835	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner, who becomes Ishmael's friend and crewmate. Queequeg dies when the ship sinks.	321
+	128	0.71835	Who is Fedallah?	Strange, 'oriental' old Parsee; Ahab's harpooner and personal prophet.	328
+	131	0.71835	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard.	331
+	164	0.71835	Who is Gabriel?	The self-appointed prophet on the ship, Jeroboam. He believes himself to be the incarnation of the Shaker God and he warns all the crewmembers on board about Moby Dick, the White Whale.	364
+
+421	221	Who is Daggoo?	Third harpooner on the Pequod; described as 'a gigantic, coal-black negro-savage'.
+	221	1.00000	Who is Daggoo?	Third harpooner on the Pequod; described as 'a gigantic, coal-black negro-savage'.	421
+	119	0.71835	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	121	0.71835	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner, who becomes Ishmael's friend and crewmate. Queequeg dies when the ship sinks.	321
+	128	0.71835	Who is Fedallah?	Strange, 'oriental' old Parsee; Ahab's harpooner and personal prophet.	328
+	131	0.71835	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard.	331
+	164	0.71835	Who is Gabriel?	The self-appointed prophet on the ship, Jeroboam. He believes himself to be the incarnation of the Shaker God and he warns all the crewmembers on board about Moby Dick, the White Whale.	364
+
+422	222	What does Ahab do when Starbuck confronts him about leaking barrels of oil?	Ahab threatens Starbuck with a gun.
+	132	0.56572	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+	247	0.54648	What does Queequeg do when the bumpkin that was mocking him falls into the ocean?	Dives in after him.	447
+	222	0.51282	When Starbuck confronts Ahab about leaking oil barrels that are costing the crew profit, how does Ahab respond?	Ahab points a gun at Starbuck.	422
+	243	0.44747	What causes Ahab's harpoon to flicker with fire?	Atmospheric static.	443
+	185	0.42508	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	250	0.40888	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+
+423	223	When the Pequod passes by the Delight, what do the Delight's crew drop into the water?	A dead body.
+	223	0.63029	What does the Delight drop into the water as the Pequod passes by?	A dead body.	423
+	213	0.55344	When the Pequod meets other ships, what is Ahab's only interest?	Information about Moby Dick.	413
+	279	0.52872	During the first part of the voyage, what kind of sounds do the crew think they hear from the cargo hold?	Human beings.	479
+	163	0.52615	When the crew encounter the crazed prophet Gabriel, what does Gabriel prophesize as Ahab's fate?	Dead and down there.	363
+	189	0.51380	Around what must the Pequod pass to arrive in the Pacific?	Cape Horn.	389
+	257	0.49841	When Ahab bursts into fits of near-mad shrieking, what does Ishmael think is the cause?	His soul attempting escape.	457
+
+424	224	What is the ship's name in this tale?	The Pequod.
+	224	0.78298	What is the name of the main ship in the story?	The Pequod.	424
+	209	0.75043	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	409
+	149	0.72204	What is the name of Ahab's ship?	The Pequod.	349
+	210	0.65194	What is the name of Ahab's wife?	She is nameless.	410
+	187	0.64394	What is the name of Ahab's harpooner?	Fedallah.	387
+	283	0.62222	Who is telling the story in the novel?	Ishmael.	483
+
+425	225	What does Ahab do with his pipe after he realizes that smoking no longer soothes him?	He throws his pipe overboard.
+	225	0.70956	When Ahab realizes that smoking no longer soothes him, what does he do?	Throws his pipe overboard.	425
+	135	0.43682	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+	198	0.40664	What does Ahab carry in his pocket?	Vial of Nantucket sand.	398
+	247	0.39175	What does Queequeg do when the bumpkin that was mocking him falls into the ocean?	Dives in after him.	447
+	243	0.37617	What causes Ahab's harpoon to flicker with fire?	Atmospheric static.	443
+	147	0.37220	Is it because Pip's insane rantings move Ahab that he gives Pip his own quarters?	Yes, Ahab gives Pip the captain's quarters.	347
+
+426	226	What religion do Peleg, Bildad, and Starbuck share?	Quakerism.
+	226	0.76398	What religious sect do Starbuck, Peleg and Bildad belong to?	Quakers.	426
+	281	0.41995	Which character falls overboard and goes insane as a result?	Pip.	481
+	227	0.40444	What is the world capital of whaling?	Nantucket.	427
+	235	0.38723	What experience catalyzed Pip and Ahab's close companionship?	Pip's near-drowning.	435
+	196	0.38263	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head.	396
+	111	0.37790	What do whales eat?	Plankton and other brit.	311
+
+427	227	Where is the world's capital of whaling?	Nantucket.
+	227	0.82536	What is the world capital of whaling?	Nantucket.	427
+	244	0.63859	What is the source of Ahab's fatal flaw?	The damage he's suffered.	444
+	187	0.60056	What is the name of Ahab's harpooner?	Fedallah.	387
+	210	0.60056	What is the name of Ahab's wife?	She is nameless.	410
+	149	0.60056	What is the name of Ahab's ship?	The Pequod.	349
+	286	0.59678	Which member of the crew is a religious Christian man?	Starbuck.	486
+
+428	228	Who opposes Ahab's plan to pursue Moby Dick and nothing else?	Starbuck.
+	155	0.54032	Which body part has Ahab lost to Moby Dick?	His leg.	355
+	176	0.46563	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+	228	0.46412	Who is the only crewmate who opposes Ahab's plan to devote the ship's mission to hunt the White Whale?	Starbuck.	428
+	197	0.46095	What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off.	397
+	126	0.45916	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+	206	0.44606	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin.	406
+
+429	229	How does Ismael remember the dimensions he measured of a whale?	He has them tattooed on his arm.
+	151	0.65161	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	185	0.59949	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	229	0.57252	Where does Ishmael keep a record of whale dimensions that he measured from a skeleton in Tranque?	Tattooed on his arm.	429
+	245	0.55151	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	204	0.55073	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear.	404
+	286	0.54320	Which member of the crew is a religious Christian man?	Starbuck.	486
+
+430	230	Ishmael likens the sperm whale to a Platonic philosopher and the right whale to what other kind of philosopher?	Stoic.
+	230	0.93785	Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher?	Platonic.	430
+	250	0.60342	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	207	0.58402	According to Fedallah, why should you hang a sperm whale's head on one side of a ship and a right whale's on the other?	Your boat won't capsize.	407
+	232	0.54732	To what does Ishmael liken the experience of shipping aboard a whaler?	Committing suicide.	432
+	177	0.53906	Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles.	377
+	151	0.50600	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+
+431	231	How does Queequeg decorate his own coffin?	His own tattoos.
+	154	0.66850	How does Queequeg shave?	With a harpoon.	354
+	272	0.48302	Who is Peter Coffin?	The perhaps ironically named innkeeper of the Spouter Inn at New Bedford.	472
+	201	0.47442	What was Queequeg on his home island?	A prince.	401
+	143	0.45491	How does the Pequod sink?	She is rammed by Moby Dick.	343
+	270	0.44528	Who wears a turban made of his own hair?	Fedallah.	470
+	198	0.44070	What does Ahab carry in his pocket?	Vial of Nantucket sand.	398
+
+432	232	Ishmael compares shipping out on a whale ship to committing what?	Suicide
+	232	0.60485	To what does Ishmael liken the experience of shipping aboard a whaler?	Committing suicide.	432
+	167	0.57778	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket.	367
+	262	0.56815	Does Ishmael suggests that sailing out on a whaler is not so different from commiting suicide?	Yes.	462
+	230	0.52949	Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher?	Platonic.	430
+	177	0.49049	Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles.	377
+	239	0.46505	Which was the first team to kill a whale?	Stubb and Tashtego.	439
+
+433	233	What does Ishmael claim is the major difference between male and female whales?	Males abandon injured comrades.
+	151	0.66602	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	102	0.57674	What is the name of the Third Mate?	Flask.	302
+	245	0.57557	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	191	0.57430	What is the name of Ishmael's unlikely roommate and bedfellow?	Queequeg.	391
+	217	0.56029	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+	185	0.54693	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+
+434	234	What about Pip?	He is the Pequod's cabin boy, a nervous young Negro who loses his mind when he has been left in the sea awhile. He becomes half idiot-half prophet.
+	234	0.56151	Who is Pip?	The cabin boy on the Pequod. He is a young Negro who is nervous and quiet by temperament and suffers a mental breakdown when left in the ocean for awhile. He becomes half idiot-half prophet.	434
+	291	0.50675	What is cetology?	The study of whales.	491
+	112	0.44973	What type of whale are they hunting?	Sperm whales.	312
+	111	0.44931	What do whales eat?	Plankton and other brit.	311
+	289	0.44931	What is 'brit'?	Tiny sea creatures that whales eat, a.k.a. krill.	489
+	125	0.44772	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+
+435	235	What event led to Ahab and Pip's close relationship?	Pip's near-drowning.
+	235	0.83319	What experience catalyzed Pip and Ahab's close companionship?	Pip's near-drowning.	435
+	244	0.61030	What is the source of Ahab's fatal flaw?	The damage he's suffered.	444
+	117	0.59570	What is Ahab's single fatal flaw?	Hubris.	317
+	243	0.58315	What causes Ahab's harpoon to flicker with fire?	Atmospheric static.	443
+	170	0.53872	Where does Queequeg's hatchet end up?	In the mast.	370
+	187	0.53058	What is the name of Ahab's harpooner?	Fedallah.	387
+
+436	236	Where does Ishmael stay on the mainland before shipping out?	The Spouter Inn.
+	236	0.56045	What is the name of the inn Ishmael stays at on the mainland before the voyage?	The Spouter Inn.	436
+	153	0.49948	What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford.	353
+	141	0.47706	Which mate on the Pequod was from Cape Cod?	Stubb, the Second Mate.	341
+	167	0.47178	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket.	367
+	262	0.45831	Does Ishmael suggests that sailing out on a whaler is not so different from commiting suicide?	Yes.	462
+	151	0.45062	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+
+437	237	What stops Daggoo and a Spanish sailor from fighting?	A storm.
+	237	0.53588	When Daggoo and a Spanish sailor start to fight, what stops them?	A storm.	437
+	107	0.41152	What is a group of whales that swim together called?	A pod.	307
+	174	0.40748	What is the study of whales called?	Cetology.	374
+	217	0.39923	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+	142	0.39769	Which of the Pequod's mates was a Quaker from Nantucket?	Starbuck, the first mate.	342
+	263	0.38779	What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex.	463
+
+438	238	What was meant by the term 'specksynder'?	The chief harpooner and sometime captain.
+	238	0.59542	What is a 'specksynder'?	Chief Harpooner.	438
+	277	0.51245	What is the 'doubloon' offered for?	The first man to spot Moby Dick.	477
+	265	0.50461	There once was a time when the 'specksynder' or chief harpooner served as what?	The captain of the vessel.	465
+	289	0.49061	What is 'brit'?	Tiny sea creatures that whales eat, a.k.a. krill.	489
+	102	0.49056	What is the name of the Third Mate?	Flask.	302
+	224	0.48620	What is the name of the main ship in the story?	The Pequod.	424
+
+439	239	What whaling team killed the first whale?	Tashtego and Stubb.
+	227	0.63321	What is the world capital of whaling?	Nantucket.	427
+	174	0.62789	What is the study of whales called?	Cetology.	374
+	239	0.60417	Which was the first team to kill a whale?	Stubb and Tashtego.	439
+	255	0.60324	What religion are the owners of the ship?	Quakers.	455
+	112	0.59521	What type of whale are they hunting?	Sperm whales.	312
+	286	0.54448	Which member of the crew is a religious Christian man?	Starbuck.	486
+
+440	240	What to Ishmael is strange about the French being the most successful in artful representations of whales in art?	France doesn't hunt whales.
+	151	0.61324	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	250	0.58784	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	245	0.56863	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	224	0.55493	What is the name of the main ship in the story?	The Pequod.	424
+	174	0.55131	What is the study of whales called?	Cetology.	374
+	240	0.55046	Why does Ishmael find it odd that the French have been most successful in representing whales in art?	France doesn't hunt whales.	440
+
+441	241	How does Queequeg injure his hand?	A dead shark's teeth.
+	154	0.72418	How does Queequeg shave?	With a harpoon.	354
+	246	0.54724	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target.	446
+	143	0.52566	How does the Pequod sink?	She is rammed by Moby Dick.	343
+	241	0.52300	When preparing to process the first dead whale, how does Queequeg almost loose his hand?	A dead shark's teeth.	441
+	182	0.51658	In what state does Ishmael meet Queequeg?	Massachusetts.	382
+	170	0.51638	Where does Queequeg's hatchet end up?	In the mast.	370
+
+442	242	How does Ishmael justify his claim that Nantucket has the largest empire in the world?	He says it owns the seas.
+	242	0.86129	Why does Ishmael claim that Nantucket has the largest empire in the world?	It owns the seas.	442
+	209	0.55165	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	409
+	246	0.52369	How does Queequeg impress the men hiring the crew for the Pequod?	Harpooning a tiny target.	446
+	151	0.48442	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	177	0.47967	Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles.	377
+	241	0.47726	When preparing to process the first dead whale, how does Queequeg almost loose his hand?	A dead shark's teeth.	441
+
+443	243	Why does Ahab's harpoon to flicker and spark with fire-like electricity?	Atmospheric static.
+	243	0.73255	What causes Ahab's harpoon to flicker with fire?	Atmospheric static.	443
+	274	0.49283	After his father's death, where was thirteen-year-old Herman Melville forced to find work?	At a bank.	474
+	165	0.46630	Where is Ahab's scar that resembles a lightning bolt?	On Ahab's cheek.	365
+	250	0.46030	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	198	0.45747	What does Ahab carry in his pocket?	Vial of Nantucket sand.	398
+	235	0.45516	What experience catalyzed Pip and Ahab's close companionship?	Pip's near-drowning.	435
+
+444	244	What is the origin of Ahab's fatal flaw?	All the damage he's suffered.
+	244	0.99996	What is the source of Ahab's fatal flaw?	The damage he's suffered.	444
+	187	0.80431	What is the name of Ahab's harpooner?	Fedallah.	387
+	210	0.80431	What is the name of Ahab's wife?	She is nameless.	410
+	149	0.78921	What is the name of Ahab's ship?	The Pequod.	349
+	117	0.76388	What is Ahab's single fatal flaw?	Hubris.	317
+	102	0.66856	What is the name of the Third Mate?	Flask.	302
+
+445	245	What Biblical term for a whale is found the Book of Job?	Leviathan.
+	245	0.99999	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	151	0.71760	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	227	0.68844	What is the world capital of whaling?	Nantucket.	427
+	185	0.66170	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	174	0.66079	What is the study of whales called?	Cetology.	374
+	216	0.64828	What is the ship that rescues Ishmael at the end of the novel?	Rachel.	416
+
+446	246	Why does Queequeg harpoon a small target?	To impress the men hiring the crew for the Pequod.
+	217	0.56107	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+	170	0.53919	Where does Queequeg's hatchet end up?	In the mast.	370
+	157	0.53390	Queequeg is a native of what island?	Kokovoko.	357
+	182	0.51051	In what state does Ishmael meet Queequeg?	Massachusetts.	382
+	154	0.51022	How does Queequeg shave?	With a harpoon.	354
+	183	0.45678	Why does Ishmael think whales are so mysterious?	They're always mostly hidden.	383
+
+447	247	Where does Queequeg go when the tramp who was mocking him falls into the ocean?	Queequeg dives in after him.
+	247	0.80681	What does Queequeg do when the bumpkin that was mocking him falls into the ocean?	Dives in after him.	447
+	223	0.47003	What does the Delight drop into the water as the Pequod passes by?	A dead body.	423
+	132	0.46508	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+	252	0.46171	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirit-spout.	452
+	167	0.43358	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket.	367
+	260	0.42980	Why does Ishmael believe that the natural dangers of the sea are so insidious?	So much is hidden.	460
+
+448	248	Who does Ahab talk to on deck when the crew takes a break from whale-processing?	The whale's severed head.
+	248	0.78577	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head.	448
+	185	0.52542	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	138	0.50231	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+	167	0.49024	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket.	367
+	239	0.47861	Which was the first team to kill a whale?	Stubb and Tashtego.	439
+	286	0.46304	Which member of the crew is a religious Christian man?	Starbuck.	486
+
+449	249	When was Moby Dick repopularized and promoted to the canon of American literature?	The nineteen-twenties.
+	249	0.55016	In what decade did historians rediscover and promote the previously ignored Moby Dick as a seminal work of American literature?	The 1920's.	449
+	175	0.53306	Which American literary figure, to whom Moby Dick was dedicated, influenced Melville's writing?	Nathaniel Hawthorne.	375
+	116	0.52868	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	109	0.50310	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	245	0.46861	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	176	0.46025	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+
+450	250	To what does Ishmael compare the valuable oil in a sperm whale's head?	A massive wine barrel.
+	250	0.75519	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	232	0.62930	To what does Ishmael liken the experience of shipping aboard a whaler?	Committing suicide.	432
+	209	0.59496	How does the ship Rachel figure in Ishmael's story?	She rescues him in the end.	409
+	230	0.59045	Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher?	Platonic.	430
+	151	0.56081	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	163	0.50925	When the crew encounter the crazed prophet Gabriel, what does Gabriel prophesize as Ahab's fate?	Dead and down there.	363
+
+451	251	By whom is Tashtego rescued when he falls inside the whale's head?	Queequeg.
+	251	0.81641	Who rescues Tashtego when he falls overboard inside the whale's head?	Queequeg.	451
+	105	0.49428	Who is the Pequod's Second Mate?	Stubb.	305
+	174	0.49418	What is the study of whales called?	Cetology.	374
+	187	0.49153	What is the name of Ahab's harpooner?	Fedallah.	387
+	210	0.49153	What is the name of Ahab's wife?	She is nameless.	410
+	115	0.48496	What is the biblical subject of Father Mapple's sermon at the Whaleman's Chapel?	Jonah and the whale.	315
+
+452	252	What phenomenon in the water leads the crew on a chase, but never turns into a whale?	Spirit-spout.
+	252	0.77335	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirit-spout.	452
+	248	0.57590	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head.	448
+	151	0.54746	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	250	0.54594	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	273	0.52951	Ishmael thinks Buckington is fated to die at sea, but that such a death will transform Buckington into what?	God.	473
+	196	0.52711	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head.	396
+
+453	253	What did the crew see at night, that they thought were mermaids, but Ahab said were just animals?	Seals
+	253	0.67995	The crew believes that they saw mermaids in the night, but Ahab says that there were actually what?	Seals.	453
+	252	0.52981	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirit-spout.	452
+	107	0.46520	What is a group of whales that swim together called?	A pod.	307
+	196	0.44549	What do the crew find in an old, blind, growth-covered whale that they kill?	A stone harpoon head.	396
+	222	0.44524	When Starbuck confronts Ahab about leaking oil barrels that are costing the crew profit, how does Ahab respond?	Ahab points a gun at Starbuck.	422
+	273	0.44380	Ishmael thinks Buckington is fated to die at sea, but that such a death will transform Buckington into what?	God.	473
+
+454	254	What happens when a dead whale is abandoned?	Vultures and sharks come eat it.
+	174	0.53994	What is the study of whales called?	Cetology.	374
+	107	0.53288	What is a group of whales that swim together called?	A pod.	307
+	238	0.50477	What is a 'specksynder'?	Chief Harpooner.	438
+	290	0.50477	What is a 'gam'?	A social meeting of two, or more, whaling ships at sea.	490
+	151	0.49213	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	111	0.48133	What do whales eat?	Plankton and other brit.	311
+
+455	255	What religion are the owners of the ship?	Quakers.
+	255	0.99999	What religion are the owners of the ship?	Quakers.	455
+	149	0.67739	What is the name of Ahab's ship?	The Pequod.	349
+	174	0.65295	What is the study of whales called?	Cetology.	374
+	282	0.65043	What was the fate of the whaler christianed The Essex?	It was attacked and sunk by a sperm whale, inspiring Melville's story.	482
+	102	0.63172	What is the name of the Third Mate?	Flask.	302
+	216	0.62710	What is the ship that rescues Ishmael at the end of the novel?	Rachel.	416
+
+456	256	What state is New Bedford located in?	Massachusetts.
+	256	0.74305	In which state is New Bedford located?	Massachusetts.	456
+	227	0.52840	What is the world capital of whaling?	Nantucket.	427
+	224	0.50140	What is the name of the main ship in the story?	The Pequod.	424
+	130	0.48646	What is Flask's nickname?	King-Post.	330
+	291	0.47729	What is cetology?	The study of whales.	491
+	102	0.47134	What is the name of the Third Mate?	Flask.	302
+
+457	257	What does Ishmael think causes Ahab's bursts of mad shrieking?	His soul attempting escape.
+	257	0.59905	When Ahab bursts into fits of near-mad shrieking, what does Ishmael think is the cause?	His soul attempting escape.	457
+	243	0.58327	What causes Ahab's harpoon to flicker with fire?	Atmospheric static.	443
+	151	0.55710	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	250	0.54572	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	217	0.53931	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+	187	0.53464	What is the name of Ahab's harpooner?	Fedallah.	387
+
+458	258	Herman Melville spent a year and a half on what actual whaling ship?	Achusnet.
+	258	0.49944	What was the name of the whaling ship on which Melville spent 18 months between 1841 and 1842?	Achusnet.	458
+	204	0.48252	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear.	404
+	178	0.48241	When the crew first hunt a whale, what nearly crushes Queequeg's boat?	The ship.	378
+	167	0.47563	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket.	367
+	232	0.41837	To what does Ishmael liken the experience of shipping aboard a whaler?	Committing suicide.	432
+	177	0.40340	Ishmael reflects that traveling around the world to hunt whales really amounts to what?	Going in circles.	377
+
+459	259	What does Ishmail say about himself keeping watch?	He daydreams too much.
+	217	0.49211	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+	174	0.44682	What is the study of whales called?	Cetology.	374
+	275	0.43675	What shape does the ship's carpenter make Quequeeq's coffin?	A canoe.	475
+	215	0.42758	What does Ishmael have tattooed on his forearm?	The dimensions of a whale.	415
+	107	0.41607	What is a group of whales that swim together called?	A pod.	307
+	125	0.39868	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+
+460	260	What does Ishmael think is so insidious about the natural dangers of the ocean?	So much is hidden.
+	260	0.78192	Why does Ishmael believe that the natural dangers of the sea are so insidious?	So much is hidden.	460
+	151	0.61158	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	174	0.57428	What is the study of whales called?	Cetology.	374
+	257	0.55994	When Ahab bursts into fits of near-mad shrieking, what does Ishmael think is the cause?	His soul attempting escape.	457
+	102	0.55452	What is the name of the Third Mate?	Flask.	302
+	132	0.55286	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+
+461	261	What whales are most valuable?	Sperm whales.
+	112	0.61683	What type of whale are they hunting?	Sperm whales.	312
+	111	0.52543	What do whales eat?	Plankton and other brit.	311
+	202	0.52182	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses.	402
+	255	0.50446	What religion are the owners of the ship?	Quakers.	455
+	151	0.49099	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	123	0.46535	Where, according to Ishmael, are whales hunted?	All around the world.	323
+
+462	262	Does Ishmael opine that suicide is kind of like what shipping out on a whaler is like?	Yes, he does indeed.
+	262	0.68856	Does Ishmael suggests that sailing out on a whaler is not so different from commiting suicide?	Yes.	462
+	232	0.54926	To what does Ishmael liken the experience of shipping aboard a whaler?	Committing suicide.	432
+	157	0.52452	Queequeg is a native of what island?	Kokovoko.	357
+	107	0.50592	What is a group of whales that swim together called?	A pod.	307
+	230	0.48704	Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher?	Platonic.	430
+	151	0.48027	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+
+463	263	What actual whaler was sunk by a sperm whale and inspired Melville's Moby Dick?	The Essex.
+	263	0.71818	What real ship, attacked and sunk by a sperm whale, inspired Melville's story?	The Essex.	463
+	250	0.51697	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	176	0.50213	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+	175	0.48834	Which American literary figure, to whom Moby Dick was dedicated, influenced Melville's writing?	Nathaniel Hawthorne.	375
+	214	0.48347	What does Captain Boomer want to do since Moby Dick took his arm?	Avoid Moby Dick.	414
+	204	0.45842	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear.	404
+
+464	264	Who eats whale meat?	Stubb and the Eskimos.
+	234	0.53149	Who is Pip?	The cabin boy on the Pequod. He is a young Negro who is nervous and quiet by temperament and suffers a mental breakdown when left in the ocean for awhile. He becomes half idiot-half prophet.	434
+	164	0.53147	Who is Gabriel?	The self-appointed prophet on the ship, Jeroboam. He believes himself to be the incarnation of the Shaker God and he warns all the crewmembers on board about Moby Dick, the White Whale.	364
+	294	0.53083	Who is Fleece?	The old Negro cook on the ship. He has bad knees. Under Stubb's instructions, he preaches a sermon to the sharks hovering around the dead sperm whale which is tied to the ship's side.	494
+	124	0.50881	How dangerous is whaling?	Whaling was one of the most dangerous occupations of the 19th century.	324
+	227	0.50042	What is the world capital of whaling?	Nantucket.	427
+	272	0.48374	Who is Peter Coffin?	The perhaps ironically named innkeeper of the Spouter Inn at New Bedford.	472
+
+465	265	Besides being the chief harpooner, what else was a 'specksynder'?	The ship's captain.
+	265	0.59659	There once was a time when the 'specksynder' or chief harpooner served as what?	The captain of the vessel.	465
+	239	0.45157	Which was the first team to kill a whale?	Stubb and Tashtego.	439
+	238	0.43625	What is a 'specksynder'?	Chief Harpooner.	438
+	142	0.41256	Which of the Pequod's mates was a Quaker from Nantucket?	Starbuck, the first mate.	342
+	286	0.41247	Which member of the crew is a religious Christian man?	Starbuck.	486
+	250	0.41016	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+
+466	266	How does Ahab nearly get hurt before leaving Nantucket?	His pegleg twists back on him.
+	154	0.49611	How does Queequeg shave?	With a harpoon.	354
+	155	0.47321	Which body part has Ahab lost to Moby Dick?	His leg.	355
+	172	0.45121	From what is Ahab's false leg made?	A whale's jawbone.	372
+	242	0.44342	Why does Ishmael claim that Nantucket has the largest empire in the world?	It owns the seas.	442
+	248	0.43622	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head.	448
+	199	0.43515	With what does Starbuck consider killing Ahab?	Musket.	399
+
+467	267	What is Ahab's crime of usurpation?	Using the Pequod to chase Moby Dick, which was not what its owners intended.
+	187	0.70234	What is the name of Ahab's harpooner?	Fedallah.	387
+	210	0.70234	What is the name of Ahab's wife?	She is nameless.	410
+	149	0.68487	What is the name of Ahab's ship?	The Pequod.	349
+	244	0.64530	What is the source of Ahab's fatal flaw?	The damage he's suffered.	444
+	102	0.61419	What is the name of the Third Mate?	Flask.	302
+	174	0.59428	What is the study of whales called?	Cetology.	374
+
+468	268	What did they call a whale that was harpooned or marked before by a particular whaling ship?	Fast-fish.
+	268	0.54682	What is the term for a whale that has already been harpooned or marked by the crew of a specific ship?	Fast-fish.	468
+	107	0.49917	What is a group of whales that swim together called?	A pod.	307
+	194	0.44912	What is it called when two or more whale ships meet at sea?	A 'gam'.	394
+	204	0.42842	What does Pip do the first time he goes out whaling and a whale bumps the bottom of the boat?	Jumps out in fear.	404
+	252	0.41594	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirit-spout.	452
+	167	0.41292	Where does Ishmael want to go to find a berth on a whaling ship?	Nantucket.	367
+
+469	269	Why isn't the Pequod able to chase the 'Grand Armada' of sperm whales they find close to Sunda?	Malaysian Pirates appear.
+	269	0.75190	Why is the Pequod unable to pursue the 'Grand Armada' of sperm whales that they encounter near Sunda?	Malaysian Pirates appear.	469
+	250	0.46748	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	230	0.44600	Ishmael likens the right whale to a stoic philosopher and the sperm whale to what other kind of philosopher?	Platonic.	430
+	228	0.44560	Who is the only crewmate who opposes Ahab's plan to devote the ship's mission to hunt the White Whale?	Starbuck.	428
+	112	0.43590	What type of whale are they hunting?	Sperm whales.	312
+	151	0.42691	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+
+470	270	Which crewmember uses a turban made that is made from his own hair?	Fedallah.
+	270	0.63190	Who wears a turban made of his own hair?	Fedallah.	470
+	147	0.49399	Is it because Pip's insane rantings move Ahab that he gives Pip his own quarters?	Yes, Ahab gives Pip the captain's quarters.	347
+	229	0.45487	Where does Ishmael keep a record of whale dimensions that he measured from a skeleton in Tranque?	Tattooed on his arm.	429
+	262	0.43385	Does Ishmael suggests that sailing out on a whaler is not so different from commiting suicide?	Yes.	462
+	214	0.42964	What does Captain Boomer want to do since Moby Dick took his arm?	Avoid Moby Dick.	414
+	294	0.41798	Who is Fleece?	The old Negro cook on the ship. He has bad knees. Under Stubb's instructions, he preaches a sermon to the sharks hovering around the dead sperm whale which is tied to the ship's side.	494
+
+471	271	Who are the only two men on the Pequod who think about killing each the other using guns?	Ahab and Starbuck and Ahab.
+	271	0.58630	Which two characters consider shooting each the other with guns?	Ahab and Starbuck.	471
+	106	0.55937	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+	228	0.51322	Who is the only crewmate who opposes Ahab's plan to devote the ship's mission to hunt the White Whale?	Starbuck.	428
+	126	0.42872	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+	264	0.42409	According to Ishmael, who are the only people besides Stubb that still eat whale meat?	The Eskimos.	464
+	105	0.42176	Who is the Pequod's Second Mate?	Stubb.	305
+
+472	272	What about the one called Peter Coffin?	He is the deathly-named innkeeper of the Spouter Inn at New Bedford.
+	174	0.57575	What is the study of whales called?	Cetology.	374
+	102	0.52273	What is the name of the Third Mate?	Flask.	302
+	272	0.48877	Who is Peter Coffin?	The perhaps ironically named innkeeper of the Spouter Inn at New Bedford.	472
+	202	0.47567	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses.	402
+	275	0.47491	What shape does the ship's carpenter make Quequeeq's coffin?	A canoe.	475
+	255	0.47262	What religion are the owners of the ship?	Quakers.	455
+
+473	273	What does Ishmael think will be Buckington's destiny after he dies at sea?	God.
+	137	0.53711	What does Ishmael decide he needs to do after seeing how dangerous a whale hunt can be?	Rewrite his will.	337
+	273	0.51755	Ishmael thinks Buckington is fated to die at sea, but that such a death will transform Buckington into what?	God.	473
+	179	0.47185	What does Ishmael think men and animals should be judged on, rather than their brains?	Their spines.	379
+	275	0.46742	What shape does the ship's carpenter make Quequeeq's coffin?	A canoe.	475
+	250	0.46074	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	138	0.45210	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+
+474	274	What was Herman Melville's first job?	Working in a bank.
+	162	0.55115	What covers Queequeg's skin?	Tattoos.	362
+	274	0.54919	After his father's death, where was thirteen-year-old Herman Melville forced to find work?	At a bank.	474
+	244	0.51103	What is the source of Ahab's fatal flaw?	The damage he's suffered.	444
+	217	0.50940	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+	116	0.49950	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	191	0.48666	What is the name of Ishmael's unlikely roommate and bedfellow?	Queequeg.	391
+
+475	275	What is Quequeeq's coffin shaped like?	A canoe.
+	275	0.66037	What shape does the ship's carpenter make Quequeeq's coffin?	A canoe.	475
+	130	0.60307	What is Flask's nickname?	King-Post.	330
+	162	0.55849	What covers Queequeg's skin?	Tattoos.	362
+	272	0.52657	Who is Peter Coffin?	The perhaps ironically named innkeeper of the Spouter Inn at New Bedford.	472
+	172	0.51693	From what is Ahab's false leg made?	A whale's jawbone.	372
+	129	0.47767	Out of what is Fedallah's turban made?	His hair.	329
+
+476	276	Which character, an expert harpooner from Kokovoko in the Fiji islands is able to develop a bond with Ishmael, despite his religion and customs?	Queequeg.
+	276	0.91065	Which native of Kokovoko in the Fiji islands and an expert harpooner, despite his religion and customs, is able to develop a bond with Ishmael?	Queequeg.	476
+	286	0.47656	Which member of the crew is a religious Christian man?	Starbuck.	486
+	250	0.46216	What does Ishmael compare to the huge case of high-quality oil in a sperm whale's head?	A massive wine barrel.	450
+	248	0.44443	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head.	448
+	151	0.43435	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	271	0.43249	Which two characters consider shooting each the other with guns?	Ahab and Starbuck.	471
+
+477	277	To whom does Ahab promise a gold doubloon?	Whoever first spots Moby Dick.
+	107	0.48100	What is a group of whales that swim together called?	A pod.	307
+	139	0.44038	With whom does Ishmael share a bed at the Spouter-Inn?	Queequeg.	339
+	138	0.43817	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+	217	0.43410	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+	174	0.41440	What is the study of whales called?	Cetology.	374
+	151	0.40616	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+
+478	278	What in Moby Dick might be interpreted as an metaphor for God?	Moby Dick.
+	278	0.46919	Which character is often seen as an allegorical representation of God?	Moby Dick.	478
+	214	0.42509	What does Captain Boomer want to do since Moby Dick took his arm?	Avoid Moby Dick.	414
+	206	0.42193	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin.	406
+	185	0.41169	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	176	0.40663	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+	126	0.39284	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+
+479	279	What sounds do the crew hear coming from below decks?	Hidden people.
+	248	0.53150	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head.	448
+	279	0.53107	During the first part of the voyage, what kind of sounds do the crew think they hear from the cargo hold?	Human beings.	479
+	153	0.52385	What mainland city does Ishmael, the book's narrator, ship out from?	New Bedford.	353
+	275	0.49919	What shape does the ship's carpenter make Quequeeq's coffin?	A canoe.	475
+	224	0.49425	What is the name of the main ship in the story?	The Pequod.	424
+	227	0.49276	What is the world capital of whaling?	Nantucket.	427
+
+480	280	What does Ahab say keeps him going?	An iron path.
+	174	0.51547	What is the study of whales called?	Cetology.	374
+	247	0.49493	What does Queequeg do when the bumpkin that was mocking him falls into the ocean?	Dives in after him.	447
+	135	0.49488	When Ahab realizes that Moby Dick is now chasing him, what does he say?	That's bad.	335
+	198	0.49299	What does Ahab carry in his pocket?	Vial of Nantucket sand.	398
+	156	0.47306	What does Fedallah prophesize will kill Captain Ahab?	Hemp.	356
+	176	0.46892	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+
+481	281	Who goes insane after being left alone adrift at sea?	Pip.
+	131	0.41072	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard.	331
+	281	0.40006	Which character falls overboard and goes insane as a result?	Pip.	481
+	190	0.37929	Who is Captain Boomer?	One-armed English whaling captain; master of the Samuel Enderby.	390
+	119	0.37888	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	247	0.37647	What does Queequeg do when the bumpkin that was mocking him falls into the ocean?	Dives in after him.	447
+	283	0.37117	Who is telling the story in the novel?	Ishmael.	483
+
+482	282	What happened to the whaling ship called The Essex?	It was attacked and sunk by a sperm whale, inspiring Melville's story.
+	282	0.63425	What was the fate of the whaler christianed The Essex?	It was attacked and sunk by a sperm whale, inspiring Melville's story.	482
+	227	0.50845	What is the world capital of whaling?	Nantucket.	427
+	176	0.46760	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+	255	0.44551	What religion are the owners of the ship?	Quakers.	455
+	174	0.44140	What is the study of whales called?	Cetology.	374
+	173	0.43705	What can happen to an unbalanced ship?	It can capsize.	373
+
+483	283	What is the name of the story's narrator?	Ishmael.
+	210	0.80829	What is the name of Ahab's wife?	She is nameless.	410
+	187	0.80054	What is the name of Ahab's harpooner?	Fedallah.	387
+	149	0.78124	What is the name of Ahab's ship?	The Pequod.	349
+	102	0.74333	What is the name of the Third Mate?	Flask.	302
+	244	0.72810	What is the source of Ahab's fatal flaw?	The damage he's suffered.	444
+	224	0.70715	What is the name of the main ship in the story?	The Pequod.	424
+
+484	284	What flavor permeates all others on Nantucket?	Fish.
+	284	0.99999	What flavor permeates all others on Nantucket?	Fish.	484
+	201	0.58471	What was Queequeg on his home island?	A prince.	401
+	112	0.38006	What type of whale are they hunting?	Sperm whales.	312
+	162	0.36943	What covers Queequeg's skin?	Tattoos.	362
+	215	0.36290	What does Ishmael have tattooed on his forearm?	The dimensions of a whale.	415
+	179	0.35560	What does Ishmael think men and animals should be judged on, rather than their brains?	Their spines.	379
+
+485	285	Who pophesies to Ahab that, 'Though it come to the last, I shall still go before thee thy pilot,' and, 'Hemp only can kill thee.'	Fedallah.
+	285	0.81404	Who says the following: 'Though it come to the last, I shall still go before thee thy pilot . . . . Hemp only can kill thee.'	Fedallah.	485
+	264	0.35171	According to Ishmael, who are the only people besides Stubb that still eat whale meat?	The Eskimos.	464
+	287	0.33254	Who says the following: 'If man will strike, strike through the mask! . . . That inscrutable thing is chiefly what I hate.'	Ahab.	487
+	228	0.33031	Who is the only crewmate who opposes Ahab's plan to devote the ship's mission to hunt the White Whale?	Starbuck.	428
+	233	0.31426	What do male whales do that females don't, according to Ishmael?	Males abandon injured comrades.	433
+	248	0.31321	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head.	448
+
+486	286	Whom among the crew is a devout Christian?	Starbuck.
+	286	0.68721	Which member of the crew is a religious Christian man?	Starbuck.	486
+	239	0.53260	Which was the first team to kill a whale?	Stubb and Tashtego.	439
+	145	0.47592	Who is the partner Captain Peleg?	Retired whaleman of Nantucket. Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man. Bildad and Peleg hire the crew.	345
+	157	0.46982	Queequeg is a native of what island?	Kokovoko.	357
+	142	0.46207	Which of the Pequod's mates was a Quaker from Nantucket?	Starbuck, the first mate.	342
+	227	0.45065	What is the world capital of whaling?	Nantucket.	427
+
+487	287	Which character says that what he hates about men is that when they strike, they will hide behind masks.'	Ahab.
+	287	0.56230	Who says the following: 'If man will strike, strike through the mask! . . . That inscrutable thing is chiefly what I hate.'	Ahab.	487
+	166	0.43559	According to Peter Coffin, what is Queequeg out doing to make money when Ishmael learns that Queequeg will be his roommate?	Selling shrunken heads.	366
+	280	0.39027	Ahab claims that, 'The path to my fixed purpose is laid' with what?	Iron rails.	480
+	231	0.38387	When Queequeg decorates the coffin that he'd had made, what does he use for the decoration?	His own tattoos.	431
+	273	0.35089	Ishmael thinks Buckington is fated to die at sea, but that such a death will transform Buckington into what?	God.	473
+	267	0.34873	The fact that Ahab is using the Pequod for a different purpose than its owners intended means he could be charged with what?	Usurpation.	467
+
+488	288	Who avers that taking vengeance on a speechless animal, which acts on blind instinct, seems like madness and blasphemy?	Starbuck.
+	179	0.47426	What does Ishmael think men and animals should be judged on, rather than their brains?	Their spines.	379
+	288	0.43967	Who says the following: 'Vengeance on a dumb brute! That simply smote thee from blindest instinct! Madness! To be enraged with a dumb thing seems blasphemous.'	Starbuck.	488
+	248	0.43363	When the crew takes a break from whale-processing, who does Ahab go on deck to talk to?	The whale's severed head.	448
+	281	0.41305	Which character falls overboard and goes insane as a result?	Pip.	481
+	107	0.40329	What is a group of whales that swim together called?	A pod.	307
+	100	0.40259	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+
+489	289	What is krill?	Tiny sea creatures that whales eat, a.k.a. brit.
+	291	0.71835	What is cetology?	The study of whales.	491
+	289	0.63524	What is 'brit'?	Tiny sea creatures that whales eat, a.k.a. krill.	489
+	130	0.56885	What is Flask's nickname?	King-Post.	330
+	238	0.56885	What is a 'specksynder'?	Chief Harpooner.	438
+	290	0.56885	What is a 'gam'?	A social meeting of two, or more, whaling ships at sea.	490
+	119	0.51835	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+
+490	290	What is a 'gam'?	A social meeting of two, or more, whaling ships at sea.
+	290	0.99999	What is a 'gam'?	A social meeting of two, or more, whaling ships at sea.	490
+	238	0.80696	What is a 'specksynder'?	Chief Harpooner.	438
+	289	0.71329	What is 'brit'?	Tiny sea creatures that whales eat, a.k.a. krill.	489
+	291	0.56885	What is cetology?	The study of whales.	491
+	277	0.55154	What is the 'doubloon' offered for?	The first man to spot Moby Dick.	477
+	130	0.48033	What is Flask's nickname?	King-Post.	330
+
+491	291	What does a cetologist study?	Cetology is the study of whales.
+	217	0.62966	What does Ishmael use as a life buoy?	Queequeg's coffin.	417
+	151	0.52927	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	185	0.48941	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	238	0.48873	What is a 'specksynder'?	Chief Harpooner.	438
+	290	0.48873	What is a 'gam'?	A social meeting of two, or more, whaling ships at sea.	490
+	245	0.47761	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+
+492	292	What about Bulkington?	He is quiet but dangerous member of the crew, whom Ishmael sees for the first time in the Spouter Inn.
+	292	0.56151	Who is Bulkington?	A quiet but dangerous sailor, whom Ishmael sees for the first time in the Spouter Inn. Later, Bulkington is Ishmael's shipmate on the whaling voyage.	492
+	291	0.50675	What is cetology?	The study of whales.	491
+	111	0.44931	What do whales eat?	Plankton and other brit.	311
+	289	0.44931	What is 'brit'?	Tiny sea creatures that whales eat, a.k.a. krill.	489
+	125	0.44772	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	130	0.40107	What is Flask's nickname?	King-Post.	330
+
+493	293	Who is Elijah?	Shabbily dressed street prophet in New Bedford; warns of Captain Ahab as 'Old Thunder'.
+	293	1.00000	Who is Elijah?	Shabbily dressed street prophet in New Bedford; warns of Captain Ahab as 'Old Thunder'.	493
+	119	0.71835	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	121	0.71835	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner, who becomes Ishmael's friend and crewmate. Queequeg dies when the ship sinks.	321
+	128	0.71835	Who is Fedallah?	Strange, 'oriental' old Parsee; Ahab's harpooner and personal prophet.	328
+	131	0.71835	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard.	331
+	164	0.71835	Who is Gabriel?	The self-appointed prophet on the ship, Jeroboam. He believes himself to be the incarnation of the Shaker God and he warns all the crewmembers on board about Moby Dick, the White Whale.	364
+
+494	294	What about Fleece?	He is the old Negro cook on the ship. Under Stubb's instructions, he preaches a sermon to the sharks hovering around the dead sperm whale, tied to the ship's side.
+	294	0.56151	Who is Fleece?	The old Negro cook on the ship. He has bad knees. Under Stubb's instructions, he preaches a sermon to the sharks hovering around the dead sperm whale which is tied to the ship's side.	494
+	162	0.50851	What covers Queequeg's skin?	Tattoos.	362
+	291	0.50675	What is cetology?	The study of whales.	491
+	111	0.44931	What do whales eat?	Plankton and other brit.	311
+	289	0.44931	What is 'brit'?	Tiny sea creatures that whales eat, a.k.a. krill.	489
+	125	0.44772	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+
+495	295	What about Mayhew?	He is the captain of the Jeroboam, who had sighted and chased Moby Dick. Mayhew tells Ahab how the whale had killed his mate, Macey, during the chase.
+	295	0.56151	Who is Mayhew?	The captain of the Jeroboam, who had sighted and chased Moby Dick. Mayhew meets Ahab and tells him how the whale had killed his mate, Macey, during the chase.	495
+	291	0.50675	What is cetology?	The study of whales.	491
+	111	0.44931	What do whales eat?	Plankton and other brit.	311
+	289	0.44931	What is 'brit'?	Tiny sea creatures that whales eat, a.k.a. krill.	489
+	125	0.44772	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	130	0.40107	What is Flask's nickname?	King-Post.	330
+
+496	296	What about Mrs. Hosea Hussey?	She is the wife of the innkeeper at 'Try Pots' Inn, Nantucket, who runs the affairs of the inn efficiently when her husband is away.
+	296	0.71418	Who is Mrs. Hosea Hussey?	The irate wife of the innkeeper at 'Try Pots' in Nantucket. In the innkeeper's absence, she runs the affairs of the inn efficiently.	496
+	130	0.47860	What is Flask's nickname?	King-Post.	330
+	111	0.45361	What do whales eat?	Plankton and other brit.	311
+	187	0.42230	What is the name of Ahab's harpooner?	Fedallah.	387
+	210	0.42230	What is the name of Ahab's wife?	She is nameless.	410
+	102	0.41849	What is the name of the Third Mate?	Flask.	302
+
+497	297	What about Radney?	He is the wicked and unjust mate on the Town-Ho, punished as though by divine providence when Moby Dick kills him.
+	297	0.56151	Who is Radney?	The wicked and unjust mate on the Town-Ho. He is punished as though by divine providence when Moby Dick kills him.	497
+	291	0.50675	What is cetology?	The study of whales.	491
+	111	0.44931	What do whales eat?	Plankton and other brit.	311
+	289	0.44931	What is 'brit'?	Tiny sea creatures that whales eat, a.k.a. krill.	489
+	125	0.44772	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	130	0.40107	What is Flask's nickname?	King-Post.	330
+
+498	298	What about Steel Kit?	He is a popular sailor who leads a mutiny onboard the Town-Ho. He secretly plans to kill Radney, the most hated mate on the Town-Ho.
+	298	0.65396	Who is Steel Kit?	The popular sailor on Town-Ho who leads a mutiny on board. He makes secret plans to kill Radney, the most hated mate on the Town-Ho.	498
+	162	0.50256	What covers Queequeg's skin?	Tattoos.	362
+	132	0.47136	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+	111	0.47113	What do whales eat?	Plankton and other brit.	311
+	291	0.44931	What is cetology?	The study of whales.	491
+	130	0.42801	What is Flask's nickname?	King-Post.	330
+
+499	299	What about the one named Stubb?	He was the second mate of the Pequod, from Cape Cod.
+	174	0.59149	What is the study of whales called?	Cetology.	374
+	102	0.51683	What is the name of the Third Mate?	Flask.	302
+	125	0.47223	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	245	0.46405	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	101	0.44520	The name of the First Mate is?	Starbuck.	301
+	255	0.43400	What religion are the owners of the ship?	Quakers.	455
+
+500	146	Who does it that Queequeq rescues?	Tashtego.
+	146	0.68874	Who is the harpooner that Queequeq rescues?	Tashtego.	346
+	154	0.41254	How does Queequeg shave?	With a harpoon.	354
+	119	0.36246	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	121	0.36246	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner, who becomes Ishmael's friend and crewmate. Queequeg dies when the ship sinks.	321
+	128	0.36246	Who is Fedallah?	Strange, 'oriental' old Parsee; Ahab's harpooner and personal prophet.	328
+	131	0.36246	Who is Flask?	Third mate of the Pequod; from Martha's Vineyard.	331
+
+501	148	What was the Pequod named for?	An extinct Massachusetts Indian tribe.
+	202	0.56672	What was the sperm whale most highly prized for?	Spermaceti and sperm oil, used as lamp oil, among other uses.	402
+	174	0.55358	What is the study of whales called?	Cetology.	374
+	277	0.53678	What is the 'doubloon' offered for?	The first man to spot Moby Dick.	477
+	120	0.53306	How is the Pequod decorated?	With whale bones.	320
+	188	0.51515	What happened when the Pequod neared Sunda?	Malaysian Pirates scared them away from the hunting grounds.	388
+	104	0.50749	Who owns the Pequod?	Bildad and Peleg.	304
+
+502	104	Who are the first, second, and third mates?	Starbuck, Stubb, Flask.
+	100	0.89701	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	145	0.54945	Who is the partner Captain Peleg?	Retired whaleman of Nantucket. Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man. Bildad and Peleg hire the crew.	345
+	105	0.49912	Who is the Pequod's Second Mate?	Stubb.	305
+	126	0.47394	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+	160	0.46687	Who are the 'five dusky phantoms' that appear when the first whale hunt begins?	Ahab's secret whaling crew.	360
+	106	0.46504	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+
+503	104	What are the names of the first, second, and third mates' aboard the Pequod?	Starbuck, Stubb, Flask.
+	100	0.72235	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	102	0.57162	What is the name of the Third Mate?	Flask.	302
+	191	0.53162	What is the name of Ishmael's unlikely roommate and bedfellow?	Queequeg.	391
+	210	0.52155	What is the name of Ahab's wife?	She is nameless.	410
+	255	0.52016	What religion are the owners of the ship?	Quakers.	455
+	101	0.49495	The name of the First Mate is?	Starbuck.	301
+
+504	113	Who ends up winning the doubloon nailed to the mast?	Ahab.
+	113	0.64451	Who wins the doubloon from the mast?	Ahab.	313
+	138	0.55720	What does Ahab see when he studies the gold doubloon nailed to the mast?	Ahab himself.	338
+	234	0.46801	Who is Pip?	The cabin boy on the Pequod. He is a young Negro who is nervous and quiet by temperament and suffers a mental breakdown when left in the ocean for awhile. He becomes half idiot-half prophet.	434
+	105	0.43446	Who is the Pequod's Second Mate?	Stubb.	305
+	283	0.42768	Who is telling the story in the novel?	Ishmael.	483
+	140	0.41629	Pip describes the doubloon on the mast as the ship's what?	Navel.	340
+
+505	114	What does Ahab keep destroying, one piece at a time, over the course of the voyage?	The navigation equipment.
+	151	0.57676	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	245	0.56589	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	185	0.55497	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+	132	0.55361	What does the mincer wear when slicing pieces of blubber for the pots?	A whale-penis pelt.	332
+	236	0.55244	What is the name of the inn Ishmael stays at on the mainland before the voyage?	The Spouter Inn.	436
+	252	0.54259	What does Ishmael call the mysterious spout of water that leads the crew onward, but never turns into a whale?	Spirit-spout.	452
+
+506	115	Who is the subject of Father Mapple's sermon?	Jonah.
+	115	0.70592	What is the biblical subject of Father Mapple's sermon at the Whaleman's Chapel?	Jonah and the whale.	315
+	127	0.68041	Who is Father Mapple?	The chaplain (in New Bedford) who gives a moving sermon based on the Biblical story of Jonah and the whale in the Whalemen's chapel.	327
+	187	0.66700	What is the name of Ahab's harpooner?	Fedallah.	387
+	210	0.66700	What is the name of Ahab's wife?	She is nameless.	410
+	149	0.64074	What is the name of Ahab's ship?	The Pequod.	349
+	102	0.62685	What is the name of the Third Mate?	Flask.	302
+
+507	116	What is the most famous sentence in Moby Dick?	Call me Ishmael.
+	116	0.72534	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	125	0.63368	What frightens Ishmael the most about Moby Dick?	The whiteness of the whale.	325
+	126	0.59939	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+	151	0.55088	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	118	0.53341	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	176	0.51838	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+
+508	104	Who are Ahab's mates first to third?	Starbuck, Stubb, Flask.
+	100	0.65743	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	122	0.53982	Who is Captain Ahab?	The dark, brooding, peg-legged captain of the the whaling ship Pequod.  He wants to find and kill Moby Dick, the whale that caused him to lose his leg.	322
+	105	0.51943	Who is the Pequod's Second Mate?	Stubb.	305
+	145	0.51308	Who is the partner Captain Peleg?	Retired whaleman of Nantucket. Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man. Bildad and Peleg hire the crew.	345
+	210	0.49480	What is the name of Ahab's wife?	She is nameless.	410
+	190	0.47559	Who is Captain Boomer?	One-armed English whaling captain; master of the Samuel Enderby.	390
+
+509	120	With what is the Pequod adorned?	Sperm whale teeth.
+	120	0.75428	How is the Pequod decorated?	With whale bones.	320
+	105	0.54578	Who is the Pequod's Second Mate?	Stubb.	305
+	171	0.53540	On what holiday does the Pequod depart?	Christmas Day.	371
+	104	0.52071	Who owns the Pequod?	Bildad and Peleg.	304
+	277	0.48726	What is the 'doubloon' offered for?	The first man to spot Moby Dick.	477
+	106	0.48440	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+
+510	172	What is Captain Ahab's artificial leg made of?	Ivory.
+	187	0.70529	What is the name of Ahab's harpooner?	Fedallah.	387
+	210	0.69694	What is the name of Ahab's wife?	She is nameless.	410
+	244	0.68121	What is the source of Ahab's fatal flaw?	The damage he's suffered.	444
+	149	0.67470	What is the name of Ahab's ship?	The Pequod.	349
+	172	0.63081	From what is Ahab's false leg made?	A whale's jawbone.	372
+	174	0.58143	What is the study of whales called?	Cetology.	374
+
+511	119	Who is the character Ishmael?	He is the novel's narrator and the only sailor to survive from Captain Ahab's whaling ship, the Pequod.
+	119	0.81664	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	145	0.79247	Who is the partner Captain Peleg?	Retired whaleman of Nantucket. Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man. Bildad and Peleg hire the crew.	345
+	190	0.71970	Who is Captain Boomer?	One-armed English whaling captain; master of the Samuel Enderby.	390
+	234	0.67152	Who is Pip?	The cabin boy on the Pequod. He is a young Negro who is nervous and quiet by temperament and suffers a mental breakdown when left in the ocean for awhile. He becomes half idiot-half prophet.	434
+	293	0.65603	Who is Elijah?	Shabbily dressed street prophet in New Bedford; warns of Captain Ahab as 'Old Thunder'.	493
+	146	0.65114	Who is the harpooner that Queequeq rescues?	Tashtego.	346
+
+512	115	Who does Father Mapple sermonize about?	Jonah and the whale.
+	127	0.64271	Who is Father Mapple?	The chaplain (in New Bedford) who gives a moving sermon based on the Biblical story of Jonah and the whale in the Whalemen's chapel.	327
+	154	0.41254	How does Queequeg shave?	With a harpoon.	354
+	145	0.40503	Who is the partner Captain Peleg?	Retired whaleman of Nantucket. Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man. Bildad and Peleg hire the crew.	345
+	143	0.36760	How does the Pequod sink?	She is rammed by Moby Dick.	343
+	119	0.36246	Who is Ishmael?	The narrator of the novel and the only sailor to survive from the Pequod. He tells the entire story and actively participates in the drama that unfolds on Captain Ahab's whaling ship.	319
+	121	0.36246	Who is Queequeg?	A native of Kokovoko in the Fiji islands and an expert harpooner, who becomes Ishmael's friend and crewmate. Queequeg dies when the ship sinks.	321
+
+513	134	what does Ahab give the blacksmith to use for the metal in a harpoon meant especially for Moby Dick?	Nails from racehorse shoes.
+	134	0.72555	When Ahab has the blacksmith make a special harpoon for Moby Dick, what does Ahab give him for the metal?	Nails from racehorse shoes.	334
+	206	0.57708	What does Ahab nail to the ship's mast to motivate his crew in his quest for Moby Dick?	A gold coin.	406
+	155	0.53178	Which body part has Ahab lost to Moby Dick?	His leg.	355
+	176	0.52809	What does Ahab promise to the first man who spots Moby Dick?	A gold doubloon.	376
+	231	0.47350	When Queequeg decorates the coffin that he'd had made, what does he use for the decoration?	His own tattoos.	431
+	185	0.46347	What does the crew look for to indicate the presence of a whale?	Spouts.	385
+
+514	116	With what line does Moby Dick begin?	'Call me Ishmael.'
+	118	0.54523	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	126	0.54058	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+	144	0.53573	With what does Queequeg sleep?	His harpoon.	344
+	116	0.51477	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+	155	0.50826	Which body part has Ahab lost to Moby Dick?	His leg.	355
+	136	0.49968	In which Ocean does Ahab find Moby Dick again?	The Pacific.	336
+
+515	282	What befell the whaling ship named The Essex?	It was rammed by a sperm whale and sank, leaving a single survivor to float at sea.
+	282	0.65548	What was the fate of the whaler christianed The Essex?	It was attacked and sunk by a sperm whale, inspiring Melville's story.	482
+	227	0.53392	What is the world capital of whaling?	Nantucket.	427
+	174	0.49289	What is the study of whales called?	Cetology.	374
+	275	0.48667	What shape does the ship's carpenter make Quequeeq's coffin?	A canoe.	475
+	255	0.46493	What religion are the owners of the ship?	Quakers.	455
+	208	0.44035	Why are whaling ships always well-lit?	Free access to oil.	408
+
+516	109	Is the white whale dead or alive at the end of the novel?	Alive.
+	109	0.76219	Is Moby Dick alive or dead at the end of Moby Dick?	Alive.	309
+	216	0.56277	What is the ship that rescues Ishmael at the end of the novel?	Rachel.	416
+	245	0.55095	What Biblical term for a whale is found the Book of Job?	Leviathan.	445
+	151	0.47382	What does Ishmael claim is the most famous part of a whale?	Its tail.	351
+	102	0.45715	What is the name of the Third Mate?	Flask.	302
+	224	0.44485	What is the name of the main ship in the story?	The Pequod.	424
+
+517	108	Who among the Pequod's crew survives their encounter with Moby Dick?	Ishmael.
+	103	0.75526	How many of the Pequod's crew survive their encounter with Moby Dick?	Exactly one.	303
+	197	0.51097	What happens to Ahab's fake leg during his fight with Moby Dick?	It's snapped off.	397
+	126	0.51008	Who are the Quaker characters in Moby Dick?	Starbuck, Peleg, and Bildad.	326
+	118	0.44968	Who is Moby Dick?	A giant and elusive white sperm whale. He serves as Captain Ahab's antagonist in the novel. Ahab's goal in life is to kill Moby Dick for having bitten off his leg.	318
+	105	0.44322	Who is the Pequod's Second Mate?	Stubb.	305
+	116	0.43600	What is the famous first line of Moby Dick?	Call me Ishmael.	316
+
+518	105	What was the name of the Second Mate?	Stubb.
+	102	0.78051	What is the name of the Third Mate?	Flask.	302
+	210	0.73476	What is the name of Ahab's wife?	She is nameless.	410
+	282	0.69266	What was the fate of the whaler christianed The Essex?	It was attacked and sunk by a sperm whale, inspiring Melville's story.	482
+	101	0.65917	The name of the First Mate is?	Starbuck.	301
+	255	0.65795	What religion are the owners of the ship?	Quakers.	455
+	187	0.64829	What is the name of Ahab's harpooner?	Fedallah.	387
+
+519	105	Who is the second mate on the Pequod?	Stubb.
+	105	0.73888	Who is the Pequod's Second Mate?	Stubb.	305
+	145	0.70860	Who is the partner Captain Peleg?	Retired whaleman of Nantucket. Former chief-mate and later co-owner of the ship Pequod. He is an imposing, short- tempered, and foul-mouthed man. Bildad and Peleg hire the crew.	345
+	106	0.70122	Who are the four harpooners on the Pequod?	Queequeg, Tashtego.  Daggoo, and Fedallah.	306
+	190	0.61980	Who is Captain Boomer?	One-armed English whaling captain; master of the Samuel Enderby.	390
+	100	0.60233	Who are the Pequod's first, second, and third mates?	Starbuck, Stubb, and Flask.	300
+	104	0.60056	Who owns the Pequod?	Bildad and Peleg.	304
+
