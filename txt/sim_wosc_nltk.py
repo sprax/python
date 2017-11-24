@@ -382,7 +382,7 @@ def smoke_test():
     word_sim.test_word_similarity(wordsim)
     test_sentence_similarity(sentsim)
 
-def moby(mquats, tok=False, pos=True, ntry=8):
+def test_moby(mquats=None, tok=False, pos=True, ntry=8):
     '''
 Finding all similarity lists (train 40, trial 40, nears 6) took 4137.7 seconds
 match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
@@ -431,3 +431,4 @@ match_ttt(n_train=40, n_trial=40, count=6) took 4137.7 seconds; score 78.5422
 ###############################################################################
 if __name__ == '__main__':
     smoke_test()
+    test_moby(ntry=20)

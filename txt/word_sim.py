@@ -19,6 +19,7 @@ import sys
 from collections import namedtuple
 import inflection
 from nltk.corpus import wordnet as wn
+import words_en
 
 class Warnt(namedtuple("Warnt", "tok pos wnt cap")):
     ''' Minimal class for WARNT: Word And Refined NLTK Tags.
@@ -30,46 +31,6 @@ class Warnt(namedtuple("Warnt", "tok pos wnt cap")):
 
 NTags = namedtuple("NTags", "idx pos wnt")
 NTags.__doc__ = "NLTK tags tuple.  Not for general use."
-
-
-def plural_en(noun):
-    '''
-    Return the plural form of the argument string, assuming that it is an English
-    noun.  Some results come from lookup tables, but most come from rules, and
-    thus may be wrong, especially for loaner words, OOVs, etc.
-    BUGS: inflection's rules sometimes go awry, e.g. (safe <-> saves)
-    '''
-    if noun.lower()[-3:] == 'afe':
-        return noun + 's'
-    return inflection.pluralize(noun)
-
-
-def is_one_noun_plural(noun_a, noun_b):
-    '''Returns True if one of the argument strings is the possessive form of
-    the other one in English; otherwise False.  Could be made more efficient.'''
-    len_a = len(noun_a)
-    len_b = len(noun_b)
-    if len_a < len_b:
-        return plural_en(noun_a) == noun_b
-    return noun_a == plural_en(noun_b)
-
-
-def possessive_en(noun):
-    '''Returns possessive form of the argument string, assuming it is an English noun.'''
-    if noun.endswith('s'):
-        return noun + "'"
-    return noun + "'s"
-
-def is_one_noun_possessive(noun_a, noun_b):
-    '''Returns True if one of the argument strings is the possessive form of
-    the other one in English; otherwise False.  Could be made more efficient.'''
-    len_a = len(noun_a)
-    len_b = len(noun_b)
-    if len_a < len_b:
-        return possessive_en(noun_a) == noun_b
-    if len_a > len_b:
-        return noun_a == possessive_en(noun_b)
-    return False
 
 NLTK_POS_TAG_TO_WORDNET_KEY = {'J': 'a', 'N': 'n', 'R': 'r', 'V': 'v', 'S': 's'}
 
@@ -272,9 +233,9 @@ class WordSimilarity:
                         # sent_word is likely to be a proper noun.  If we only
                         # allow exact matches on proper nouns, then here we should
                         # just continue, because we checked for equality upstream.
-                        if is_one_noun_possessive(union_word, sent_word):
+                        if words_en.is_one_noun_possessive(union_word, sent_word):
                             sim = self._sim_possessive_proper_noun
-                        elif is_one_noun_plural(union_word, sent_word):
+                        elif words_en.is_one_noun_plural(union_word, sent_word):
                             sim = self._sim_plural_proper_noun
                         else:
                             sim = 0.0
