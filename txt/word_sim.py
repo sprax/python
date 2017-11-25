@@ -236,6 +236,7 @@ class WordSimilarity:
                         if words_en.is_one_noun_possessive(union_word, sent_word):
                             sim = self._sim_possessive_proper_noun
                         elif words_en.is_one_noun_plural(union_word, sent_word):
+                            pdb.set_trace()
                             sim = self._sim_plural_proper_noun
                         else:
                             sim = 0.0
@@ -310,6 +311,13 @@ WORD_PAIRS_ME = [
     ["respect", "esteem", 0.5],
     ["respect", "reverence", 0.5],
     ["respect", "honor", 0.5],
+    ["respect", "admire", 0.5],
+    ["respect", "admire", 0.5],
+    ["respect", "admire", 0.5],
+    ["respect", "admire", 0.5],
+
+
+
     ["floodle", "gronked", 0.0]
 ]
 
