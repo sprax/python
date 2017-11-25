@@ -312,9 +312,9 @@ WORD_PAIRS_ME = [
     ["respect", "reverence", 0.5],
     ["respect", "honor", 0.5],
     ["respect", "admire", 0.5],
-    ["respect", "admire", 0.5],
-    ["respect", "admire", 0.5],
-    ["respect", "admire", 0.5],
+    ["respect", "lionize", 0.5],
+    ["respect", "adore", 0.5],
+    ["respect", "fear", 0.5],
 
 
 
