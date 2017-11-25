@@ -307,8 +307,9 @@ WORD_PAIRS_ME = [
     ["street", "avenue", 0.5],
     ["highway", "freeway", 0.5],
     ["thought", "idea", 0.5],
-    ["thought", "notion", 0.5],
-
+    ["respect", "esteem", 0.5],
+    ["respect", "reverence", 0.5],
+    ["respect", "honor", 0.5],
     ["floodle", "gronked", 0.0]
 ]
 
