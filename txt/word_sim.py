@@ -105,11 +105,12 @@ class WordSimilarity:
                 fixme_count += 1
         return best_pair
 
-    def length_dist(self, synset_1, synset_2):
+    def path_similarity(self, synset_1, synset_2):
         """
-        Return a measure of the length of the shortest path in the semantic
-        ontology (Wordnet in our case as well as the paper's) between two
-        synsets.
+        Return a similarity measure based on the length of the shortest path in the
+        semantic ontology (Wordnet in our case as well as the paper's) between two
+        synsets.  Returns 1.0 for maximum similarity, 0.0 for minimal similarity,
+        and exp(-alpha*distance) for non-zero semantic distance.
         """
         l_dist = float("inf")
         if synset_1 is None or synset_2 is None:
@@ -136,11 +137,12 @@ class WordSimilarity:
         # normalize path length to the range [0,1]
         return math.exp(-self._alpha * l_dist)
 
-    def hierarchy_dist(self, synset_1, synset_2):
+    def depth_similarity(self, synset_1, synset_2):
         """
-        Return a measure of depth in the ontology to model the fact that
-        nodes closer to the root are broader and have less semantic similarity
-        than nodes further away from the root.
+        Return a measure of depth in the ontology to model the fact that nodes
+        closer to the root are broader and therefore do not indicate as much
+        shared information or semantic similarity as do nearby nodes farther
+        away from the root.
         """
         h_dist = sys.maxsize
         if synset_1 is None or synset_2 is None:
@@ -189,7 +191,7 @@ class WordSimilarity:
         pair = self.find_max_path_sim_synset_pair(src_word, try_word, src_tag, try_tag)
         if self.verbose > 3:
             print("word_similarity best_pair({}, {}) => ({}, {})".format(src_word, try_word, pair[0], pair[1]))
-        return self.length_dist(pair[0], pair[1]) * self.hierarchy_dist(pair[0], pair[1])
+        return self.path_similarity(pair[0], pair[1]) * self.depth_similarity(pair[0], pair[1])
 
 
     def most_similar_word(self, sent_word_set, src_word):
@@ -315,6 +317,9 @@ WORD_PAIRS_ME = [
     ["respect", "lionize", 0.5],
     ["respect", "adore", 0.5],
     ["respect", "fear", 0.5],
+    ["rough", "crude", 0.5],
+    ["rough", "abrasive", 0.5],
+    ["rough", "adverse", 0.5],
 
 
 
