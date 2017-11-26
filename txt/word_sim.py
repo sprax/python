@@ -63,7 +63,7 @@ class WordSimilarity:
 
     def print_stats(self):
         '''Show statistics since init.'''
-        print("Synsets fetched/fetches:  %d / %d  =  %.3f     max_length, max_depth:  %d  %d" 
+        print("Synsets fetched/fetches:  %d / %d  =  %.3f     max_length, max_depth:  %d  %d"
               % (self._synsets_fetched, self._synsets_fetches, self._synsets_fetched / self._synsets_fetches,
                  self._max_path_length, self._max_depth_delta))
 
@@ -462,6 +462,12 @@ pacesetters
 pacesetting
 '''.split()
 
+def test_word_list(wordsim, words=WORDS):
+    pairs = []    # preallocate list instead?
+    for worda in words:
+        for wordb in words:
+            pairs.append([worda, wordb, 0.5])
+    test_word_similarity(wordsim, pairs)
 
 def test_word_similarity(wordsim, word_pairs=WORD_PAIRS_ME):
     '''The results of the algorithm are largely dependent on the results of
@@ -491,6 +497,7 @@ def smoke_test(verbose):
     '''test very basic functionality'''
     wordsim = WordSimilarity(verbose)
     avg_sim = test_word_similarity(wordsim)
+    test_word_list(wordsim)
     return avg_sim
 
 ###############################################################################
