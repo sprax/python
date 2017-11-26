@@ -6,7 +6,7 @@ sim_wosc_nltk.py - Semantic similarity of words, and word-order similarity of se
 using NLTK tools. (word-order + semantic content = wosc)
 Python/NLTK implementation of algorithm to detect similarity between
 short sentences described in the paper - "Sentence Similarity based
-on Semantic Nets and Corpus Statistics" by Li, et al.
+on Semantic Nets and Corpus Statistics" by  Yuhua Li, David McLean, Zuhair Bandar, et al.
 Results achieved are NOT identical to that reported in the paper, but
 this is very likely due to the differences in the way the algorithm was
 described in the paper and how I implemented it.

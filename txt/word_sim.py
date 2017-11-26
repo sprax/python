@@ -51,6 +51,9 @@ class WordSimilarity:
         self.verbose = verbose
         self._synsets_fetches = 0
         self._synsets_fetched = 0
+        self._max_path_length = 0
+        self._max_depth_delta = 0
+
         self._ignore_synsets_words = {'a', 'the', 'in', 'on', 'to'}
         self._alpha = 0.2
         self._beta = 0.45
@@ -60,8 +63,9 @@ class WordSimilarity:
 
     def print_stats(self):
         '''Show statistics since init.'''
-        print("Synsets fetched/fetches:  %d / %d  =  %.3f" % (self._synsets_fetched, self._synsets_fetches,
-                                                              self._synsets_fetched / self._synsets_fetches))
+        print("Synsets fetched/fetches:  %d / %d  =  %.3f     max_length, max_depth:  %d  %d" 
+              % (self._synsets_fetched, self._synsets_fetches, self._synsets_fetched / self._synsets_fetches,
+                 self._max_path_length, self._max_depth_delta))
 
     def find_max_path_sim_synset_pair(self, src_word, try_word, src_tag=None, try_tag=None):
         """
@@ -320,11 +324,143 @@ WORD_PAIRS_ME = [
     ["rough", "crude", 0.5],
     ["rough", "abrasive", 0.5],
     ["rough", "adverse", 0.5],
-
-
-
     ["floodle", "gronked", 0.0]
 ]
+
+WORDS = '''
+hypoxanthine
+hypoxanthines
+hypoxemia
+hypoxemias
+hypoxemic
+hypoxia
+hypoxias
+hypoxic
+hyps
+hypsometer
+hypsometers
+hypsometric
+hyraces
+hyracoid
+hyracoids
+hyrax
+hyraxes
+hyson
+hysons
+hyssop
+hyssops
+hysterectomies
+hysterectomized
+hysterectomy
+hystereses
+hysteresis
+hysteretic
+hysteria
+hysterias
+hysteric
+hysterical
+hysterically
+hysterics
+hysteroid
+hysterotomies
+hysterotomy
+hyte
+iamb
+iambi
+iambic
+iambics
+iambs
+iambus
+iambuses
+iatric
+iatrical
+iatrogenic
+iatrogenically
+ibex
+ibexes
+ibices
+ibidem
+ibis
+ibises
+ibogaine
+ibogaines
+ibuprofen
+ibuprofens
+ice
+iceberg
+icebergs
+iceblink
+iceblinks
+iceboat
+iceboater
+iceboaters
+iceboating
+iceboatings
+iceboats
+icebound
+icebox
+iceboxes
+icebreaker
+icebreakers
+icecap
+icecaps
+iced
+icefall
+icefalls
+icehouse
+icehouses
+icekhana
+icekhanas
+iceless
+icelike
+icemaker
+icemakers
+iceman
+icemen
+ices
+ich
+ozone
+ozones
+ozonic
+ozonide
+ozonides
+ozonise
+ozonised
+ozonises
+ozonising
+ozonization
+ozonizations
+ozonize
+ozonized
+ozonizer
+ozonizers
+ozonizes
+ozonizing
+ozonosphere
+ozonospheres
+ozonous
+pa
+pablum
+pablums
+pabular
+pabulum
+pabulums
+pac
+paca
+pacas
+pace
+paced
+pacemaker
+pacemakers
+pacemaking
+pacemakings
+pacer
+pacers
+paces
+pacesetter
+pacesetters
+pacesetting
+'''.split()
 
 
 def test_word_similarity(wordsim, word_pairs=WORD_PAIRS_ME):
