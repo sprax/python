@@ -54,9 +54,7 @@ def gen_words_only(tokens, verbose=0):
     '''generator that keeps only DICTIONARY words'''
     if not DICTIONARY:
         load_dictionary('../words.txt', verbose)
-    for token in tokens:
-        if is_word(token):
-            yield token
+    return (token for token in tokens if is_word(token))
 
 
 def gen_words_or_names(tokens, verbose=0):
@@ -157,15 +155,15 @@ def words_split_out(sentence_body):
 
 def words_and_separaters(sentence_body):
     '''returns list of words and their separators'''
-    separated = RE_WORD_SEP_PATTERN.findall(sentence_body)
+    separated = RE_WORD_SEPARATOR.findall(sentence_body)
     return [ss for ss in separated if len(ss) > 0]
 
 def gen_words_and_separaters(sentence_body):
     '''generator for words and separators'''
-    separated = RE_WORD_SEP_PATTERN.finditer(sentence_body)
-    for ss in separated:
-        if len(ss) > 0:
-            yield ss
+    separated = RE_WORD_SEPARATOR.finditer(sentence_body)
+    for sep in separated:
+        if len(sep) > 0:
+            yield sep
 
 
 ###############################################################################
@@ -188,6 +186,7 @@ RE_WORD_EXT = re.compile(r"((?:{}?[\w]+[{}]*)[\w]+{}?|{}?\w{}?)".format(
     WORD_EXT_BEG, WORD_SEP_INTERIOR, WORD_EXT_END, WORD_EXT_BEG, WORD_EXT_END))
 
 def replace_words_extended(rep_func, text_phrase):
+    '''replace words as matching the extended pattern'''
     return RE_WORD_EXT.sub(rep_func, text_phrase)
 
 ###############################################################################
@@ -195,7 +194,8 @@ REGEX_PUNCTUATION = re.compile("[{}]".format(string.punctuation))
 REGEX_NON_ALPHA = re.compile(r'(?:\W|[0-9])+')
 ###############################################################################
 
-def extract_words_from_file(path, extractor):
+def extract_word_set_from_file(path, extractor):
+    '''extract set of words from file'''
     words = set()
     with open(path, "r") as text:
         for line in text:
@@ -204,6 +204,7 @@ def extract_words_from_file(path, extractor):
     return words
 
 def extract_lower_words_from_file(path, extractor):
+    '''get only the lower-case words from the file at path'''
     words = set()
     with open(path, "r") as text:
         for line in text:
@@ -212,6 +213,7 @@ def extract_lower_words_from_file(path, extractor):
     return words
 
 def print_sorted(iterable, end=' '):
+    '''print as list'''
     for item in sorted(list(iterable)):
         print(item, end=end)
 
@@ -239,12 +241,11 @@ def main():
     args = parser.parse_args()
     # test_misc()
 
-
     if args.extract_words:
         # print_sorted(extract_lower_words_from_file(args.input_file, notnonword_tokens))
-        # print_sorted(extract_words_from_file(args.input_file, letter_word_tokens))
-        # print_sorted(extract_words_from_file(args.input_file, lower_word_tokens))
-        words = extract_words_from_file(args.input_file, gen_normal_word_tokens)
+        # print_sorted(extract_word_set_from_file(args.input_file, letter_word_tokens))
+        # print_sorted(extract_word_set_from_file(args.input_file, lower_word_tokens))
+        words = extract_word_set_from_file(args.input_file, gen_normal_word_tokens)
         if args.words_or_names:
             words = gen_words_or_names(words, args.verbose)
         elif args.words_only:
