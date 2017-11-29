@@ -145,7 +145,7 @@ def test_string2words():
         all_parses = []
         string2words_from_beg_all(string, "", all_parses)
         num_parses = len(all_parses)
-        print("string2words_from_beg_all got", str(num_parses),  all_parses)
+        print("string2words_from_beg_all got", str(num_parses), all_parses)
 
 if __name__ == '__main__':
     test_string2words()
