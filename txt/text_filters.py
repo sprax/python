@@ -242,11 +242,13 @@ def singularize(word):
     return inflection.singularize(word)
 
 def plural_if_diff(word):
+    '''return the plural form of word if different from the singular, else None'''
     plur = pluralize(word)
     sing = singularize(word)
     return plur if plur != sing else None
 
 def singular_if_diff(word):
+    '''return the singular form of word if different from the plural, else None'''
     plur = pluralize(word)
     sing = singularize(word)
     return sing if plur != sing else None
