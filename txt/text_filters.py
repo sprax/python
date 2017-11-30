@@ -8,7 +8,6 @@
 
 import argparse
 import heapq
-import inflection
 import os.path
 import re
 import math
@@ -16,6 +15,7 @@ import string
 import sys
 import text_ops
 from utf_print import utf_print
+import inflection
 
 ###############################################################################
 TRANS_NO_WHAT = str.maketrans(u"\u2018\u2019\u201c\u201d", "\'\'\"\"")
@@ -69,8 +69,6 @@ class IsoToAscii:
     def translate(self, in_str):
         '''Translate non-ASCII characters to ASCII or nothing'''
         return in_str.translate(self.translation)
-    # def translate(self, in_str):
-    #     return translate_iso_to_ascii(in_str)
 
 class NoSpaceBeforePunct:
     '''Eliminate spaces before punctuation'''
