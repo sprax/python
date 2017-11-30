@@ -68,7 +68,11 @@ class IsoToAscii:
     translation = ISO_TO_ASCII
     def translate(self, in_str):
         '''Translate non-ASCII characters to ASCII or nothing'''
-        return in_str.translate(self.translation)
+        try:
+            return in_str.encode('ascii')
+        except UnicodeEncodeError:
+            out = in_str.translate(self.translation)
+            return ''.join([asc for asc in out if ord(asc) < 128])
 
 class NoSpaceBeforePunct:
     '''Eliminate spaces before punctuation'''
