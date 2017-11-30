@@ -24,21 +24,21 @@ TRANS_NO_PUNCT = str.maketrans('', '', string.punctuation)
 TRANS_NO_DIGITS = str.maketrans('', '', string.digits)
 
 UNICODE_TO_ASCII = str.maketrans({
-u"\u2018" : "'",
-u"\u2019" : "'",
-u"\u201c" : '"',
-u"\u201d" : '"',
-})
+    u"\u2018" : "'",
+    u"\u2019" : "'",
+    u"\u201c" : '"',
+    u"\u201d" : '"',
+    })
 
 ISO_TO_ASCII = str.maketrans({
-"`" : "'",
-u"\x91" : "'",
-u"\x92" : "'",
-u"\x93" : '"',
-u"\x94" : '"',
-u"\x97" : '--',
-u"\xf0" : '-',
-})
+    "`" : "'",
+    u"\x91" : "'",
+    u"\x92" : "'",
+    u"\x93" : '"',
+    u"\x94" : '"',
+    u"\x97" : '--',
+    u"\xf0" : '-',
+    })
 
 def translate_smart_quotes(in_str, table=TRANS_NO_SMART):
     '''Replace curly quotes with straight ones.'''
@@ -261,14 +261,6 @@ def abs_path(dir_spec, file_spec):
 
 REP_WEBSTER = r'\n([A-Z-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s)([^.]+)?'
 REC_WEBSTER = re.compile(REP_WEBSTER)
-
-# def printa(aa):
-#     for a in aa:
-#         print(a)
-#
-# mm = re.findall(r'\n([A-Z-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s+)?((?:[^.]+.\s+)*)', ddt, re.DOTALL)
-# printa(mm)
-
 
 def filter_text_file():
     '''Filter lines or sentences in a text file.'''
