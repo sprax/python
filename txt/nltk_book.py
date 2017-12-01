@@ -16,7 +16,8 @@ from nltk.book import text1 as MobyDick
 from xdv import xdv
 
 # closure alternative to global NLTK_VERBOSITY
-def set_verbosity(verbosity):
+DEFAULT_VERBOSITY = 1
+def set_verbosity(verbosity=DEFAULT_VERBOSITY):
     '''enclosing function'''
     def verbosity_func():
         '''nested closure'''
