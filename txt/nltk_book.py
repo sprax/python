@@ -15,6 +15,15 @@ from nltk.book import text1 as MobyDick
 # import nltk.book
 from xdv import xdv
 
+# closure alternative to global NLTK_VERBOSITY
+def set_verbosity(verbosity):
+    '''enclosing function'''
+    def verbosity_func():
+        '''nested closure'''
+        return verbosity
+    return verbosity_func
+
+
 NLTK_VERBOSITY = 1
 
 def set_nltk_verbosity(verbosity):
@@ -172,8 +181,8 @@ def reject_non_alpha(tokenized):
 def join_tokenized(tokens):
     '''Join tokens into a sentence; partial inverse of word_tokenize.'''
     return "".join([" "+i if not i.startswith("'") and i not in string.punctuation
-        and i not in ["n't"]
-        else i for i in tokens]).strip()
+                    and i not in ["n't"]
+                    else i for i in tokens]).strip()
 
 def generate_cfd_max(cfdist, word, length=15):
     '''Generate sequence of up to length words,
