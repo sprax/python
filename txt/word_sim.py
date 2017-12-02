@@ -43,7 +43,7 @@ def pos_wnk(tag):
 
 ######################### word similarity ##########################
 
-class WordSimilarity:
+class WordNetSimilarity:
     '''Word similarity using NLTK WordNet Synsets.'''
 
     def __init__(self, verbose=False):
@@ -96,17 +96,19 @@ class WordSimilarity:
         best_pair = None, None
         for synset_1 in synsets_1:
             for synset_2 in synsets_2:
-                sim = wn.path_similarity(synset_1, synset_2)
-                if sim is None:
-                    if fixme_count == 0:
-                        # FIXME: when does this short-circut happen?
-                        # print("path_similarity from (%s, %s) is None (fixme_count %d)" % (
-                        #       src_word, try_word, fixme_count))
-                        return None, None
-                elif sim > max_sim:
-                    max_sim = sim
-                    best_pair = synset_1, synset_2
-                fixme_count += 1
+                if synset_1._pos == synset_2._pos:
+                    sim = wn.path_similarity(synset_1, synset_2)
+                    if sim is None:
+                        if fixme_count == 0:
+                            # FIXME: when does this short-circut happen?
+                            # print("path_similarity from (%s, %s) is None (fixme_count %d)" % (
+                            #       src_word, try_word, fixme_count))
+                            pdb.set_trace()
+                            return None, None
+                    elif sim > max_sim:
+                        max_sim = sim
+                        best_pair = synset_1, synset_2
+                    fixme_count += 1
         return best_pair
 
     def path_similarity(self, synset_1, synset_2):
@@ -495,7 +497,7 @@ def test_word_similarity(wordsim, word_pairs=WORD_PAIRS_ME):
 
 def smoke_test(verbose):
     '''test very basic functionality'''
-    wordsim = WordSimilarity(verbose)
+    wordsim = WordNetSimilarity(verbose)
     avg_sim = test_word_similarity(wordsim)
     test_word_list(wordsim)
     return avg_sim
