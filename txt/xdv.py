@@ -8,11 +8,17 @@ XDV_VERBOSITY = None
 XDV_DEFAULT = 0
 
 def set_xdv_verbosity(verbosity):
-    '''Set the modul-global variable XDV_VERBOSITY'''
+    '''Set the module-global variable XDV_VERBOSITY'''
     global XDV_VERBOSITY
     if XDV_VERBOSITY != verbosity:
-        print("Setting XDV_VERBOSITY = {}".format(verbosity))
+        print("Setting XDV_VERBOSITY = %d" % verbosity)
         XDV_VERBOSITY = verbosity
+
+def get_xdv_verbosity():
+    '''get the current verbosity'''
+    if XDV_VERBOSITY is None:
+        set_xdv_verbosity()
+    return XDV_VERBOSITY
 
 def xdv(level, *args, **kwargs):
     '''Conditional output: eXpress Depending on Verbosity'''
@@ -21,8 +27,20 @@ def xdv(level, *args, **kwargs):
             print(*args, **kwargs)
     except TypeError:
         print("WARNING: XDV_VERBOSITY was None (in {}); setting it to {}"
-                .format(__name__, XDV_DEFAULT))
-        set_xdv_verbosity(0)
+              .format(__name__, XDV_DEFAULT))
+        set_xdv_verbosity(XDV_DEFAULT)
+        xdv(level, *args, **kwargs)
+
+def xdvr(level, *args, **kwargs):
+    '''Conditional output: eXpress Depending on Verbosity'''
+    try:
+        if level <= xdvr_verbosity():
+            print(*args, **kwargs)
+    except TypeError:
+        print("WARNING: XDV_VERBOSITY was None (in {}); setting it to {}"
+              .format(__name__, XDV_DEFAULT))
+        def xdvr_verbosity():
+            return xdvr
         xdv(level, *args, **kwargs)
 
 def try_xdv():
@@ -45,4 +63,3 @@ def test_xdv():
 
 if __name__ == '__main__':
     test_xdv()
-

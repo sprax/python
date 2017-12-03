@@ -3,7 +3,7 @@
 
 def set_counter(count=0):
     '''(re)set counter that increments whenver called'''
-    _count = count - 1
+    _count = count
     def _increment_counter():
         '''inner incrementer function'''
         nonlocal _count
