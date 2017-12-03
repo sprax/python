@@ -96,7 +96,7 @@ class WordNetSimilarity:
         best_pair = None, None
         for synset_1 in synsets_1:
             for synset_2 in synsets_2:
-                if synset_1._pos == synset_2._pos:
+                if synset_1._pos != 's' and synset_1._pos == synset_2._pos:
                     sim = wn.path_similarity(synset_1, synset_2)
                     if sim is None:
                         if fixme_count == 0:
