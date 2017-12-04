@@ -1,10 +1,11 @@
 
+''' try out editdistance '''
 import editdistance
 
-
-def edit_dist(seqA, seqB):
-    dist = editdistance.eval(seqA, seqB)
-    print("{:>5} = editdistance({}, {})".format(dist, seqA, seqB))
+def edit_dist(seq_a, seq_b):
+    '''try editdistance function'''
+    dist = editdistance.eval(seq_a, seq_b)
+    print("{:>5} = editdistance({}, {})".format(dist, seq_a, seq_b))
 
 def main():
     '''Compute edit distances between strings and other sequences'''
