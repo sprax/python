@@ -34,6 +34,7 @@ def print_dates(out_format, start_date, offset_days, num_days, per_day, verbose)
         date += datetime.timedelta(days=1)
 
 def day_locs(wday):
+    '''usual locations'''
     ans = 'Home'
     if wday < 5:
         ans += '/Talla'
@@ -118,9 +119,9 @@ def reformat_paragraph(paragraph, in_formats, out_format, verbose):
         print("WARNING: paragraph is empty!")
         return ()
     (date, wday, locs, head, body) = extract_date_head_body(paragraph, verbose)
-    # if date:
-        # refd = reformat_date(date, in_formats, out_format, verbose)
-        # print("\t reformatted date:\t", refd)
+    if date:
+        refd = reformat_date(date, in_formats, out_format, verbose)
+        print("\t reformatted date:\t", refd)
     if head:
         head = head.replace('’', "'")
     if body:
