@@ -17,19 +17,19 @@ class pcn:
         """ Constructor """
         # Set up network size
         if np.ndim(inputs)>1:
-            self.__init__nIn = np.shape(inputs)[1]
+            self.nIn = np.shape(inputs)[1]
         else:
-            self.__init__nIn = 1
+            self.nIn = 1
 
         if np.ndim(targets)>1:
-            self.__init__nOut = np.shape(targets)[1]
+            self.nOut = np.shape(targets)[1]
         else:
-            self.__init__nOut = 1
+            self.nOut = 1
 
-        self.__init__nData = np.shape(inputs)[0]
+        self.nData = np.shape(inputs)[0]
 
         # Initialise network
-        self.__init__weights = np.random.rand(self.__init__nIn+1,self.__init__nOut)*0.1-0.05
+        self.weights = np.random.rand(self.nIn+1,self.nOut)*0.1-0.05
 
     def pcntrain(self,inputs,targets,eta,nIterations):
         """ Train the thing """
@@ -82,8 +82,8 @@ class pcn:
             for j in range(nClasses):
                 cm[i,j] = np.sum(np.where(outputs==i,1,0)*np.where(targets==j,1,0))
 
-        print cm
-        print np.trace(cm)/np.sum(cm)
+        print(cm)
+        print(np.trace(cm)/np.sum(cm))
 
 def logic():
     import pcn
