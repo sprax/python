@@ -10,7 +10,7 @@ def load_json_file(path, key='rules'):
     with open(path) as fh:
         return json.load(fh)[key]
 
-def match_rules(body):
+def match_rules(rules, body):
     for rule in rules:
         match = rule['re'].match(body)
         if match:
@@ -24,6 +24,7 @@ def compile(rules):
         rule['re'] = re.compile(rule['pattern'], re.IGNORECASE)
 
 def load_rules(path='social_graces_regex.json'):
+    '''read rules from JSON file'''
     rules = load_json_file(path, 'rules')
     compile(rules)
     return rules
