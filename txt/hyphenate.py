@@ -19,7 +19,7 @@
     where the numbers embedded in the patterns become the parameters.  Training
     the network as an exercise in supervised learning could be done using
     syllable-boundary data from a dictionary.  Many more patterns can be added
-    and tested, if useless or error-causing patterns can be jettisoned. 
+    and tested, if useless or error-causing patterns can be jettisoned.
 
     >>> HYPHENATOR.syllab_points("hyphenation")
     [0, 0, 0, 3, 0, 0, 2, 5, 4, 2, 0, 2, 0, 0]

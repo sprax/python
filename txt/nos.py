@@ -3,11 +3,7 @@
 '''How many ways have writers written "No"?'''
 
 import argparse
-import heapq
-import itertools
 import re
-import sys
-from collections import defaultdict
 from collections import Counter
 
 import text_filters
@@ -85,7 +81,7 @@ def paragraphs_re(fileobj, separator='\n'):
         else:
             line = line.rstrip().replace('’', "'")
             if line:
-               lines.append(line)
+                lines.append(line)
     yield ' '.join(lines)
 
 
@@ -171,22 +167,10 @@ def find_quoted_replies(path, verbose):
             ##    print("ppp: ", ppp)
     return reply_counter, denial_counter
 
+QUESTION_WORDS = set(['what', 'when', 'where', 'why', 'who', 'how', 'whence'])
 def is_question_word(word):
-    if word == "what":
-        return True
-    if word == "when":
-        return True
-    if word == "where":
-        return True
-    if word == "why":
-        return True
-    if word == "who":
-        return True
-    if word == "how":
-        return True
-    if word == "whence":
-        return True
-    return False
+    '''who, what, where, etc.'''
+    return word in QUESTION_WORDS
 
 def count_chars_from_words(word_counter):
     '''Count chars from all words times their counts'''
@@ -210,17 +194,17 @@ def main():
     find_quoted_no_phrases.'''
 
     parser = argparse.ArgumentParser(
-            # usage='%(prog)s [options]',
-            description="Count some quoted ways of saying 'No'",
-            )
+        # usage='%(prog)s [options]',
+        description="Count some quoted ways of saying 'No'",
+        )
     parser.add_argument('-dir', dest='text_dir', type=str, default='/Users/sprax/Text',
                         help='directory to search for in_path')
     parser.add_argument('adverb_file', type=str, nargs='?', default='adverb.txt',
-            help='text file containing counted adverbs')
+                        help='text file containing counted adverbs')
     parser.add_argument('corpus_file', type=str, nargs='?', default='corpus.txt',
-            help='text file containing quoted dialogue')
+                        help='text file containing quoted dialogue')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=2,
-            help='verbosity of output (default: 1)')
+                        help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
     if (args.verbose > 2):
