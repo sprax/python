@@ -7,6 +7,7 @@ import re
 from collections import Counter
 
 import text_filters
+import text_fio
 import utf_print
 
 class GetNo:
@@ -168,6 +169,7 @@ def find_quoted_replies(path, verbose):
     return reply_counter, denial_counter
 
 QUESTION_WORDS = set(['what', 'when', 'where', 'why', 'who', 'how', 'whence'])
+
 def is_question_word(word):
     '''who, what, where, etc.'''
     return word in QUESTION_WORDS
@@ -211,7 +213,7 @@ def main():
         print("args:", args)
         print(__doc__)
 
-    adverb_file = text_filters.get_abs_path(args.text_dir, args.adverb_file)
+    adverb_file = text_fio.get_abs_path(args.text_dir, args.adverb_file)
     find_quoted_no_phrases(adverb_file, args.corpus_file, args.verbose)
 
 

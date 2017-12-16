@@ -19,6 +19,17 @@ def cwd():
     '''current working directory'''
     return os.path.dirname(os.path.realpath('.'))
 
+def get_abs_path(path):
+    '''Convert the specified path to an absolute path (if it isn't already one).
+    Returns the corresponding absolute path.'''
+    return os.path.abspath(path)
+
+def make_abs_path(dirpath, filepath):
+    '''Given a directory path and a filename or relative file path,
+    get the absolute path for the specified file under that directory.
+    Returns this absolute path as a string suitable as an argument to open().'''
+    return os.path.abspath(os.path.join(dirpath, filepath))
+
 def print_stdout_stderr(text):
     '''print text to stdout and stderr'''
     print("sys.stdout: ", text, file=sys.stdout)
