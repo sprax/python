@@ -199,9 +199,9 @@ def main():
         # usage='%(prog)s [options]',
         description="Count some quoted ways of saying 'No'",
         )
-    parser.add_argument('-dir', dest='text_dir', type=str, default='/Users/sprax/Text',
+    parser.add_argument('-dir', dest='text_dir', type=str, default='/Users/sprax/Text/Lex/Enu/Adverbs',
                         help='directory to search for in_path')
-    parser.add_argument('adverb_file', type=str, nargs='?', default='adverb.txt',
+    parser.add_argument('adverb_file', type=str, nargs='?', default='enuAdverbs.txt',
                         help='text file containing counted adverbs')
     parser.add_argument('corpus_file', type=str, nargs='?', default='corpus.txt',
                         help='text file containing quoted dialogue')
@@ -213,7 +213,7 @@ def main():
         print("args:", args)
         print(__doc__)
 
-    adverb_file = text_fio.get_abs_path(args.text_dir, args.adverb_file)
+    adverb_file = text_fio.make_abs_path(args.text_dir, args.adverb_file)
     find_quoted_no_phrases(adverb_file, args.corpus_file, args.verbose)
 
 
