@@ -18,13 +18,16 @@ class CopyCtor:
         else:
             if args:
                 # import pdb; pdb.set_trace()
-                # print("WARNING: %s.%s:  ignoring args: " % (type(self).__name__, sys._getframe().f_code.co_name), *args)
-                print("WARNING: %s.%s:  ignoring args: " % (type(self).__name__, self.__init__.__name__), *args)
+                # print("WARNING: %s.%s:  ignoring args: "
+                #     % (type(self).__name__, sys._getframe().f_code.co_name), *args)
+                print("WARNING: %s.%s:  ignoring args: "
+                      % (type(self).__name__, self.__init__.__name__), *args)
             self.__dict__ = kwargs
 
 
-class BothCopyCtor():
+class BothCopyCtor:
     '''init can be used as a simple copy-constructor.'''
+
     def __init__(self, *args, **kwargs):
         if len(args) > 0 and isinstance(args[0], type(self)):
             # Copy Constructor
@@ -36,11 +39,26 @@ class BothCopyCtor():
         else:
             if args:
                 # import pdb; pdb.set_trace()
-                # print("WARNING: %s.%s:  ignoring args: " % (type(self).__name__, sys._getframe().f_code.co_name), *args)
-                print("WARNING: %s.%s:  ignoring args: " % (type(self).__name__, self.__init__.__name__), *args)
+                # print("WARNING: %s.%s:  ignoring args: "
+                #       % (type(self).__name__, sys._getframe().f_code.co_name), *args)
+                print("WARNING: %s.%s:  ignoring args: "
+                      % (type(self).__name__, self.__init__.__name__), *args)
             self.__dict__ = kwargs
 
+
+class KwargsOnly:
+    '''init can be used as a simple copy-constructor.'''
+
+    def __init__(self, **kwargs):
+        valid_kwargs = ['name', 'kind', 'text']
+        for key, val in kwargs.items():
+            if key not in valid_kwargs:
+                raise TypeError("Invalid keyword argument %s" % key)
+            setattr(self, key, val)
+
+
 def test_kwargs(*args):
+    '''Test the class constructors'''
     orig = CopyCtor(*args, foo="FOO", bar="BAR")
     print("orig:", orig.__dict__)
     copy = CopyCtor(orig)
@@ -51,8 +69,16 @@ def test_kwargs(*args):
     print("both:", both.__dict__)
     diff = BothCopyCtor(both, bar="Beer", baz="Bazaar")
     print("diff:", diff.__dict__)
+    print()
 
+    try:
+        bust = KwargsOnly(name='myKwargsOnly', kind='checked', test='Four square')
+        print("bust:", bust.__dict__)
+    except TypeError as ex:
+        print("Caught expected TypeError from KwargsOnly(...test=...):", ex)
 
+    only = KwargsOnly(name='myKwargsOnly', kind='checked', text='Four score')
+    print("only:", only.__dict__)
 
 if __name__ == '__main__':
     test_kwargs(sys.argv)
