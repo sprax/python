@@ -2,10 +2,9 @@
 # Sprax Lines       2017.12      Written for Python 3.5
 '''Print (re)formatted XML'''
 
-import argparse
-import pprint
+# import argparse
+# import pprint
 import re
-
 import xml.dom.minidom
 
 REC_BLANK_ROWS = re.compile(r"\n\s*\n")
@@ -37,6 +36,7 @@ XML_EXAMPLE_FMT = '''
 '''
 
 def main():
+    '''test pretty_print_xml'''
     pretty_print_xml(XML_EXAMPLE_RAW)
 
 if __name__ == '__main__':
