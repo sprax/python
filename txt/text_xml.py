@@ -35,6 +35,35 @@ XML_EXAMPLE_FMT = '''
 </note>
 '''
 
+XML_CATALOG = '''
+<CATALOG>
+<CD>
+<TITLE>Romanza</TITLE>
+<ARTIST>Andrea Bocelli</ARTIST>
+<COUNTRY>EU</COUNTRY>
+<COMPANY>Polydor</COMPANY>
+<PRICE>10.80</PRICE>
+<YEAR>1996</YEAR>
+</CD>
+<CD>
+<TITLE>The dock of the bay</TITLE>
+<ARTIST>Otis Redding</ARTIST>
+<COUNTRY>USA</COUNTRY>
+<COMPANY>Stax Records</COMPANY>
+<PRICE>7.90</PRICE>
+<YEAR>1968</YEAR>
+</CD>
+<CD>
+<TITLE>Unchain my heart</TITLE>
+<ARTIST>Joe Cocker</ARTIST>
+<COUNTRY>USA</COUNTRY>
+<COMPANY>EMI</COMPANY>
+<PRICE>8.20</PRICE>
+<YEAR>1987</YEAR>
+</CD>
+</CATALOG>
+'''
+
 def main():
     '''test pretty_print_xml'''
     pretty_print_xml(XML_EXAMPLE_RAW)
