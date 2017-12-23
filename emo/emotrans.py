@@ -215,6 +215,7 @@ def _add_txt_emo_multiples(preset_dict):
         "eye'd"  : ["👁 '🇩"],
         "I'd"    : ["👁 '🇩"],
         'wife'   : ['👉 💑', '👉 💏', '➡ 👩❤👨'],
+        'board'   : ['🎹 ➖ 🔑 ', '⌨ ➖ 🗝'],
     })
 
 def print_tagged(tagged):

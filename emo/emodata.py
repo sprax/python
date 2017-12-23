@@ -69,7 +69,8 @@ SENTENCES = [
     # "A bird in hand is no substitute for two hands of Wild Turkey.",
     # "Whenever there are four Irish together there's bound to be a fifth.",
     # "The mountain biking woman biked from the upper left arrow to the lower right arrow."
-    "Yeah right and oh thanks, Obama! "
+    "Yeah right and oh thanks, Obama! ",
+    "Ok, I too will board the band wagon and work at home to finish the sprint! "
 ]
 
 EMOJI_SENTENCES = {
