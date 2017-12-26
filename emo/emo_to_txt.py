@@ -4,7 +4,7 @@
 # # # coding: iso-8859-15
 '''
 TODO: Add the set of all synonyms to emo_words
-TODO: Divide EmoTrans parent class TransEmo which holds a TxtEmo(En) and an EmoTxt(En).
+TODO: Divide EmoToTxt parent class TransEmo which holds a TxtEmo(En) and an EmoTxt(En).
         Keep TxtEmo as a calc or substitute translator
         Make EmoTxt a probabilistic translater by giving it a trainable model of En-sentences.
 
@@ -256,9 +256,9 @@ SHOW_USABLE_EMOJIS = 4096
 SHOW_SYNONYM_LISTS = 8192
 SHOW_PHONETICS_KEX = 16384
 
-class EmoTrans:
+class EmoToTxt:
     '''
-    Translate text to emojis, emojis to text.
+    Translate emojis to text.
     TODO: disallow 'uh' for 'a', etc.
     TODO: finish gen* -> _gen*
     TODO: simple anaphora: 'Neil is an astronaut.  He[astronaut] went to the moon.'  Beware dog syllogisms.
@@ -268,7 +268,7 @@ class EmoTrans:
     def __init__(self, options=None):
 
         self.options = self._init_options(options)
-        # print("EmoTrans: self.options: ", self.options)
+        # print("EmoToTxt: self.options: ", self.options)
         self.verbose = self.options.verbose
         self.waflags = self.options.waflags
         self.cmu_pro = cmudict.dict() # get the CMU Pronouncing Dict # TODO: wrap in sep class
@@ -309,7 +309,7 @@ class EmoTrans:
             return self.options.__getattribute__(opt)
         except AttributeError as aex:
             if self.options.verbose > 1:
-                print("EmoTrans option not set: ", aex)
+                print("EmoToTxt option not set: ", aex)
             return None
 
     def count_emo_chrs(self):
@@ -1104,7 +1104,7 @@ def shuffled_list(seq):
 
 def test_translate_sentences(options):
     '''Test translation from Enlish to emojis and back.'''
-    emotrans = EmoTrans(options)
+    emotrans = EmoToTxt(options)
     txt_emo = emotrans.txt_emo
     emo_txt = emotrans.emo_txt
     if options.txt_emo:
