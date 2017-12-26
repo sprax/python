@@ -8,7 +8,7 @@ Used by: find_topics.py
 import argparse
 from collections import defaultdict
 import nltk
-# import text_fio
+import text_fio
 
 PROMPT = '> %s\n\t'
 
@@ -44,7 +44,7 @@ def constant_factory(value):
     return lambda: value
 
 def ask_yes_no(prompt, retries=3, complaint='Yes or no, please!',
-        default_function=constant_factory(False)):
+               default_function=constant_factory(False)):
     '''prompt for and take in y/n response'''
     while True:
         answer = input(prompt)
@@ -85,11 +85,13 @@ class InputText(object):
 class CliInputText(InputText):
     '''Command-line input text: derived, concrete, and NOT generic'''
     def __init__(self, prompt='> %s\n\t', farewell="Thanks for playing."):
+        '''create CLI prompter/reader'''
         super().__init__()
         self.prompt = prompt
         self.farewell = farewell
 
     def read_next(self, in_prompt):
+        '''Get next input line'''
         input_text = input(self.prompt % in_prompt)
         if not input_text:
             print(self.farewell)
@@ -175,9 +177,11 @@ class PartsOfSpeechInterface(object):
         raise NotImplementedError
 
     def get_word_tag_pairs(self, verbose=0):
+        '''placeholder for POS tagger'''
         raise NotImplementedError
 
     def get_word_tokens(self, verbose=0):
+        '''placeholder for word tokenizer'''
         raise NotImplementedError
 
 
@@ -217,7 +221,8 @@ def find_topics(verbose=0):
             print("The topic is {}, and you said:\n\t{}".format(topic, input_text))
         input_text = cli.read_next(prompt)
 
-class GenericFindTopics(ConfiguredInputText): #, generic_topic_finder, config):
+class GenericFindTopics(ConfiguredInputText):
+    '''generic_topic_finder, config):'''
     pass
     # input_text = configured_input_text.create(config)
     # topics = find_topic()
