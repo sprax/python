@@ -60,7 +60,7 @@ class PosFilter:
 def join_tokenized(tokens):
     '''Join tokens into a sentence; partial inverse of word_tokenize.'''
     return "".join([" "+i if not i.startswith("'") and i not in string.punctuation and i not in ["n't"]
-        else i for i in tokens]).strip()
+                    else i for i in tokens]).strip()
 
 ###############################################################################
 

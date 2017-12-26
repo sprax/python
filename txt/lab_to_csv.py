@@ -22,22 +22,22 @@ TRANS_NO_SMART = str.maketrans("\x91\x92\x93\x94", "''\"\"")
 TRANS_NO_PUNCT = str.maketrans('', '', string.punctuation)
 
 UNICODE_TO_ASCII = str.maketrans({
-u"\u2018" : "'",
-u"\u2019" : "'",
-u"\u201c" : '"',
-u"\u201d" : '"',
-})
+    u"\u2018" : "'",
+    u"\u2019" : "'",
+    u"\u201c" : '"',
+    u"\u201d" : '"',
+    })
 
 
 ISO_TO_ASCII = str.maketrans({
-"`" : "'",
-u"\x91" : "'",
-u"\x92" : "'",
-u"\x93" : '"',
-u"\x94" : '"',
-u"\x97" : '--',
-u"\xf0" : '-',
-})
+    "`" : "'",
+    u"\x91" : "'",
+    u"\x92" : "'",
+    u"\x93" : '"',
+    u"\x94" : '"',
+    u"\x97" : '--',
+    u"\xf0" : '-',
+    })
 
 def translate_iso_to_ascii(in_str):
     '''Replace curly quotes with straight ones, etc.'''
