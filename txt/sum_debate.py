@@ -39,7 +39,7 @@ def main():
     for turn in debate.all_turns[:args.num_turns]:
         print(turn.speaker)
         for para in turn.text:
-            paragraphs.print_paragraph_regex_count(para, args.max_words)
+            text_ops.print_paragraph_regex_count(para, args.max_words)
         print()
     # now summarize it...
 
@@ -73,6 +73,7 @@ class Debate:
                 continue
             (speaker, date, body) = extract_speaker_date_body(para, verbose)
             if date:
+                refd = reformat_date(date, in_formats, out_format, verbose)
                 print("\t  date:\t", refd)
             else:
                 refd = None
@@ -92,7 +93,7 @@ class Debate:
 def reformat_paragraphs(path, charset='utf8'):
     '''Just get the paragraphs.'''
     with open(path, 'r', encoding=charset) as text:
-        for para in paragraphs.paragraph_iter(text):
+        for para in text_ops.paragraph_iter(text):
             yield para
 
 def is_comment(string):
