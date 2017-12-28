@@ -76,7 +76,7 @@ def reformat_all_paragraphs(path, in_formats, out_format, verbose, charset='utf8
     '''Parses paragraphs into leading date, first sentence, and body.
     Reformats the date, if present.'''
     with open(path, 'r', encoding=charset) as text:
-        for idx, para in enumerate(paragraphs.paragraph_iter(text)):
+        for idx, para in enumerate(text_ops.paragraph_iter(text)):
             if verbose > 3:
                 print("    Paragraph {}:".format(idx))
                 utf_print(para)
@@ -88,9 +88,9 @@ def reformat_paragraph(paragraph, in_formats, out_format, verbose):
         print("WARNING: paragraph is empty!")
         return ()
     (date, wday, locs, head, body) = extract_date_head_body(paragraph, verbose)
-    if date:
-        refd = reformat_date(date, in_formats, out_format, verbose)
-        # print("\t reformatted date:\t", refd)
+    # if date:
+    #     refd = reformat_date(date, in_formats, out_format, verbose)
+    #     print("\t reformatted date:\t", refd)
     if head:
         head = head.replace('’', "'")
     if body:
