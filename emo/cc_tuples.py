@@ -1,4 +1,5 @@
-emots = [
+
+EMOS = [
     ('1f1e6-1f1eb', 2120, 2, 1, '🇦🇫', ['AF', 'AFG'], ':flag_af:', [':af:'], ['Afghanistan'], 'flags'),
     ('1f1e6-1f1fd', 2121, 2, 1, '🇦🇽', ['AX'], ':flag_ax:', [':ax:'], ['AXI', 'Åland Islands'], 'flags'),
     ('1f1e6-1f1f1', 2122, 2, 1, '🇦🇱', ['ALB', 'AL'], ':flag_al:', [':al:'], ['Albania'], 'flags'),

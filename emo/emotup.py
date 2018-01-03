@@ -1,4 +1,6 @@
-col_to_idx: ['order', 'flags', 'len', 'chr', 'monosyls', 'shortname', 'alternates', 'polysyls', 'category']
+'''old version'''
+
+COL_TO_IDX = ['order', 'flags', 'len', 'chr', 'monosyls', 'shortname', 'alternates', 'polysyls', 'category']
 EMO_TUPLES = [
     ('1f600', 1, 1, 1, '😀', [], ':grinning:', [], ['grinning', 'smirking'], 'people'),
     ('1f603', 2, 1, 1, '😃', [], ':smiley:', [], ['smiley', 'smile ee'], 'people'),
