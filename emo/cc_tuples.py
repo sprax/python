@@ -1,3 +1,4 @@
+emots = [
     ('1f1e6-1f1eb', 2120, 2, 1, '🇦🇫', ['AF', 'AFG'], ':flag_af:', [':af:'], ['Afghanistan'], 'flags'),
     ('1f1e6-1f1fd', 2121, 2, 1, '🇦🇽', ['AX'], ':flag_ax:', [':ax:'], ['AXI', 'Åland Islands'], 'flags'),
     ('1f1e6-1f1f1', 2122, 2, 1, '🇦🇱', ['ALB', 'AL'], ':flag_al:', [':al:'], ['Albania'], 'flags'),
@@ -255,4 +256,4 @@
     ('1f1e8-1f1f5', 2375, 2, 1, '🇨🇵', [], ':flag_cp:', [':cp:'], ['Clipperton Island', 'CP'], 'flags'),
     ('1f1e9-1f1ec', 2376, 2, 1, '🇩🇬', [], ':flag_dg:', [':dg:'], ['Diego Garcia', 'DG'], 'flags'),
     ('1f1f2-1f1eb', 2377, 2, 1, '🇲🇫', ['MAF'], ':flag_mf:', [':mf:'], ['Saint Martin (French part)', 'MF'], 'flags'),
-
+]
