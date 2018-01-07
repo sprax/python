@@ -23,53 +23,53 @@ def dicDir(dirpath, dirSuffix, patterns, verbose):
     """ Make dictionary mapping file modification dates to file names """
     # get all entries in the directory w/ stats
 
-    print
-    print "DirPath: ", dirpath
-    print "Patterns: ", patterns
+    print()
+    print("DirPath: ", dirpath)
+    print("Patterns: ", patterns)
 
-    print
-    print "Directories: "
+    print()
+    print("Directories: ")
     out_dirs = filter(os.path.isdir, os.listdir(dirpath))
     if verbose > 2:
-        print out_dirs
-        print "len(patterns): ", len(patterns)
+        print(out_dirs)
+        print("len(patterns): ", len(patterns))
         # exit(0)
     for dp in sorted(out_dirs):
         dn = os.path.basename(dp)
         try:
             ts = time.strptime(dn, "%b %d, %Y")
-            # print "time.ts: ", ts
+            # print("time.ts: ", ts)
             dates = time.strftime("%Y.%m.%d_%a", ts)
-            print "dirName ==> dated :: %s ==> %s" % (dn, dates)
+            print("dirName ==> dated :: %s ==> %s" % (dn, dates))
             canonDateDirName = getUniqueDirName(out_dirs, dates)
             if verbose > 1:
-                print "unique cannonical dir name: ", canonDateDirName
-            print "Moving ", dn, " to ", canonDateDirName
+                print("unique cannonical dir name: ", canonDateDirName)
+            print("Moving ", dn, " to ", canonDateDirName)
             shutil.move(dn, canonDateDirName)
             out_dirs.append(canonDateDirName)
         except:
             if verbose > 0:
-                print "dirName (%s) did not parse as a date" % dn
+                print("dirName (%s) did not parse as a date" % dn)
 
-    print
-    print "Files: "
+    print()
+    print("Files: ")
     files = []
     for pattern in patterns:
-        print "globbing pattern: ", pattern
+        print("globbing pattern: ", pattern)
         files.extend(filter(os.path.isfile, glob.glob(dirpath + "/" + pattern)))
     pairs = ((os.stat(fn), fn) for fn in files)
     if verbose > 1:
-        print files
+        print(files)
         # exit(0)
 
-    print
-    print "Dictionary: "
+    print()
+    print("Dictionary: ")
     date2files = make_date_to_files_dic(pairs, dirSuffix)
     for key in sorted(date2files.keys()):
-        print key
+        print(key)
         dfiles = sorted(date2files[key])
         for fn in dfiles:
-            print "\t\t" + fn
+            print("\t\t" + fn)
     return out_dirs, date2files
 
 
@@ -84,8 +84,8 @@ def make_date_to_files_dic(pairs, dirSuffix):
         datestr = time.strftime("%Y.%m.%d_%a", tstruct)
         if len(dirSuffix) > 0:
             datestr = datestr + "_" + dirSuffix
-        print modtime, datestr, os.path.basename(path)
-        print time.ctime(modtime), os.path.basename(path)
+        print(modtime, datestr, os.path.basename(path))
+        print(time.ctime(modtime), os.path.basename(path))
         date2files[datestr].append(path)
     return date2files
 
@@ -105,17 +105,17 @@ def mvFilesToDateDirs(dirs, date2files):
     Usage: python canonize.py templateFile outputFile] summaryFile(s)
     NB:  the outputFile name will have '.csv' appended"""
 
-    print "mvFilesToDateDirs"
-    print dirs
+    print("mvFilesToDateDirs")
+    print(dirs)
     for key in sorted(date2files.keys()):
         # Get unique directory name
         uniqDirName = getUniqueDirName(dirs, key)
         if not os.path.exists(uniqDirName):
-            print "Making directory: ", uniqDirName
+            print("Making directory: ", uniqDirName)
             os.makedirs(uniqDirName)
         dfiles = date2files[key]
         for fn in dfiles:
-            print "Moving ", fn, " to ", uniqDirName
+            print("Moving ", fn, " to ", uniqDirName)
             shutil.move(fn, uniqDirName)
 
 
@@ -126,11 +126,11 @@ def main():
     # simple, inflexible arg parsing:
     numArgs = len(sys.argv)
 
-    print "numArgs: ", numArgs
+    print("numArgs: ", numArgs)
 
     if numArgs > 44:
-        print sys.argv[0]
-        print dicDir.__doc__
+        print(sys.argv[0])
+        print(dicDir.__doc__)
 
     # path to the directory (relative or absolute)
     # dirpath = sys.argv[1] if len(sys.argv) == 2 else r'.'
@@ -144,7 +144,7 @@ def main():
     if numArgs > 3 and re.match("--s", sys.argv[2]):
         dirSuffix = sys.argv[3]
         if verbose > 0:
-            print "Suffix: ", dirSuffix
+            print("Suffix: ", dirSuffix)
         begPatArgs = 4
     else:
         dirSuffix = ''
@@ -159,8 +159,7 @@ def main():
     if len(date2files.keys()) > 0:
         mvFilesToDateDirs(dirs, date2files)
     else:
-        print "The date2files dict is empty."
+        print("The date2files dict is empty.")
 
 if __name__ == '__main__':
     main()
-

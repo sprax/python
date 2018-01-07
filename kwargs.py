@@ -6,6 +6,7 @@
 '''Example classes with args and kwargs in __init__'''
 
 import sys
+from pdb import set_trace
 
 class CopyCtor:
     '''init can be used as a simple copy-constructor.'''

@@ -9,6 +9,7 @@ import argparse
 from collections import defaultdict
 import nltk
 import text_fio
+import pdb
 
 PROMPT = '> %s\n\t'
 
