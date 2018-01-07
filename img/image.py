@@ -1,3 +1,4 @@
+'''image processing with PIL'''
 # ArrayAlgo.py from ArrayAlgo.java       Author: Sprax LInes   2011.11
 
 import numpy as np
@@ -13,8 +14,8 @@ from PIL import Image as pm
 imt = pm.open("TaranakiA.jpg")
 #im.rotate(45).show()
 img = imt.convert('L')      # convert to grayscale
-ima = np.asarray(img)       
-imb = np.fft.rfft2(ima);
+ima = np.asarray(img)
+imb = np.fft.rfft2(ima)
 imc = np.fft.irfft2(imb)
 imd = pm.fromarray(imc.astype(np.uint8))
 #imd.show("inverse")
@@ -35,4 +36,3 @@ a = np.zeros(1000)
 a[:100] = 1
 b = sp.fft(a)
 mpp.plot(a)
-
