@@ -21,12 +21,12 @@ class Derived(Base):
         print("Hello, I'm %s!" % self.name)
 
 class PrefixMixin(object):
+    pass
 
 
 
 
 def main():
-    verbose = 1
     base = Base("joe")
     base.hi()
     derv = Derived("jerry", "hall")
