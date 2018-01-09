@@ -14,20 +14,23 @@ On the second line, output the number of occurrences for each distinct
 word according to their appearance in the input.
 '''
 
-count = int(input().strip())
-words = []
-dd = {}
-for j in range(count):
-    wd = input().strip()
-    ct = dd.get(wd)
-    if ct:
-        dd[wd] = ct+1
-    else:
-        dd[wd] = 1
-        words.append(wd)
+def main():
+    '''main'''
+    count = int(input().strip())
+    words = []
+    dd = {}
+    for j in range(count):
+        wd = input().strip()
+        ct = dd.get(wd)
+        if ct:
+            dd[wd] = ct+1
+        else:
+            dd[wd] = 1
+            words.append(wd)
 
-print(len(dd))
-for wd in words:
-    print(dd.get(wd), '', end='')
-print()
+    print(len(dd))
+    for wd in words:
+        print(dd.get(wd), '', end='')
+    print()
 
+main()
