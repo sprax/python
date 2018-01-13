@@ -9,13 +9,20 @@ import sys
 from pdb import set_trace
 
 class CopyCtor:
-    '''init can be used as a simple copy-constructor.'''
+    ''' init can be used as a simple copy-constructor.
+        When args[0] is an instance, it is copied and kwargs are ignored.
+        Otherwise, the kwargs are used and args is ignored.
+    '''
+
     def __init__(self, *args, **kwargs):
         if len(args) == 1 and isinstance(args[0], type(self)) and not kwargs:
             # Copy Constructor
             other = args[0]
             # copy all the other's attributes:
             self.__dict__ = dict(other.__dict__)
+            if kwargs:
+                print("WARNING: %s.%s:  ignoring kwargs: "
+                      % (type(self).__name__, self.__init__.__name__), **kwargs)
         else:
             if args:
                 # import pdb; pdb.set_trace()
@@ -27,7 +34,10 @@ class CopyCtor:
 
 
 class BothCopyCtor:
-    '''init can be used as a simple copy-constructor.'''
+    ''' init can be used as a copy-constructor with updates (differences from original).
+        If args[0] is an instance, it is copied and the kwargs are used to update the new object.
+        Otherwise, the kwargs are used and args is ignored.
+    '''
 
     def __init__(self, *args, **kwargs):
         if len(args) > 0 and isinstance(args[0], type(self)):
@@ -48,7 +58,7 @@ class BothCopyCtor:
 
 
 class KwargsOnly:
-    '''init can be used as a simple copy-constructor.'''
+    '''init takes kwargs only, and uses only the kwargs that are listed as valid.'''
 
     def __init__(self, **kwargs):
         valid_kwargs = ['name', 'kind', 'text']
