@@ -13,7 +13,7 @@ import argparse
 import re
 from collections import namedtuple
 from nltk.corpus import cmudict
-import emo_tuples as ET
+import emo_named as ET
 import text_regex as tregex
 
 def syl_count_cmu(pron):

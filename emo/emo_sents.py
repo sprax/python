@@ -1,5 +1,5 @@
 
-
+''' constant sentences for emo scripts '''
 SENTENCES = [
     # "Wind and waves may rock the boat, but only you can tip the crew.",
     # "I love you",

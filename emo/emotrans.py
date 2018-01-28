@@ -67,7 +67,7 @@ import nltk
 from nltk.corpus import wordnet
 from nltk.corpus import cmudict
 
-import emo_tuples as ET
+import emo_named as ET
 import inflection
 import text_fio
 import text_regex
