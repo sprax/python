@@ -33,7 +33,23 @@ Plans:
     Images:
         Emojis' meanings may be represent using other emojis or images in general.
         Images may translate directly to emojis with no intermediary text or word semantics.
-        
+
+EMO_HELPERS = {
+    'code'  : "hyphenated hexcodes",
+    'len'   : "how many hexcodes",
+    'order' : "ordinal sequence number",
+    'category'  : "emoji category (Apple)",
+    'flags' : "for usage filters",
+    'chr'   : "emoji as a character",
+    'shortname' : "emoji shortname",
+    'alternates': "also know as/list of other names"
+    'texts' : "TODO: value in dict keyed by code",
+    'syllables' : "TODO: value in a dict keyed by words in text values",
+    'images': "TODO: resource IDs (for files or DB rows)",
+    'img_features': "TODO: visual syllabary",
+    'sounds': "TODO: sounds need not be only pronounced words",
+    'emotions': "TODO: reduced palette of emotional contents",
+}
 '''
 
 import argparse
