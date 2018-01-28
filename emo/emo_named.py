@@ -3,11 +3,37 @@
 #
 # # # coding: iso-8859-15
 '''
-Plan:
-    Words|phrases -> words >= [phonetic syllables reprs]
-    Emojis >= [phontic syllable reprs]
-    Text => <syllabic repr> => <emoji>
-    TODO: ':person_Xing_Y' => ['person Xing Y', 'Y player'] with male/female variants
+Plans:
+    Tuple data:
+        Generate the data in emo_tuples as one list of tuples, whose elements refer
+            to one or more dicts, keyed on primary unicodes.  (Expect augmented unicodes,
+            or unicode pairs, to share the words, say, of the primary unicode/emoji).
+
+    Phonetics:
+        Use CMU for now.  Keep it virtual?  Or look up all prons when generating the
+            tuple data?  Probably the latter.
+        Yes, the latter, and create an "additional prons list" that gets added in,
+            optionally, after CMU if not already included.
+
+    Syllabary:
+        Words|phrases -> words >= [phonetic syllables reprs]
+        Emojis >= [phonetic syllable reprs]
+        Text => <syllabic repr> => <emoji>
+
+    Words:
+        Dicts and supplemental dicts, but all with POS.  The non POS version should
+            just be the set of POS-annotated words stripped of POS.
+
+    Phrases:
+        TODO
+
+    Verbs/activities:
+        ':person_Xing_Y' => ['person Xing Y', 'Y player'] with male/female variants
+
+    Images:
+        Emojis' meanings may be represent using other emojis or images in general.
+        Images may translate directly to emojis with no intermediary text or word semantics.
+        
 '''
 
 import argparse
