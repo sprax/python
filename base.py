@@ -13,9 +13,9 @@ class Base(object):
         print("Hi, I'm %s!" % self.name)
 
 class Derived(Base):
-    def __init__(self, name, epi):
-        super().__init__(name)
-        self.name += " " + epi
+    def __init__(self, name1, name2):
+        super().__init__(name1)
+        self.name += " " + name2
 
     def hi(self):
         print("Hello, I'm %s!" % self.name)
