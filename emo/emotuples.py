@@ -263,14 +263,14 @@ def gen_emo_tuples():
         ('1f91a-1f3ff'           , 2,  223,   'hands', 1, '🤚🏿', ['hand'], ['hand'], ':raised_back_of_hand_tone5:', [':back_of_hand_tone5:']),
         ]
     texts = ['splayed hand',  'five fingers',    'five', 'five-finger',    'splayed']
-    sylls = ['SPLEYD HHAEND', 'FAYV FIHNG GERS', 'FAYV', 'FAYV FIHNG GER', 'SPLEYD']
+    slbls = ['SPLEYD HHAEND', 'FAYV FIHNG GERS', 'FAYV', 'FAYV FIHNG GER', 'SPLEYD']
     emo_tuples += [
-        ('1f590'                 , 1,  224,   'hands', 1, '🖐', texts, sylls, ':hand_splayed:', [':raised_hand_with_fingers_splayed:']),
-        ('1f590-1f3fb'           , 2,  225,   'hands', 1, '🖐🏻', texts, sylls, ':hand_splayed_tone1:', [':raised_hand_with_fingers_splayed_tone1:']),
-        ('1f590-1f3fc'           , 2,  226,   'hands', 1, '🖐🏼', texts, sylls, ':hand_splayed_tone2:', [':raised_hand_with_fingers_splayed_tone2:']),
-        ('1f590-1f3fd'           , 2,  227,   'hands', 1, '🖐🏽', texts, sylls, ':hand_splayed_tone3:', [':raised_hand_with_fingers_splayed_tone3:']),
-        ('1f590-1f3fe'           , 2,  228,   'hands', 1, '🖐🏾', texts, sylls, ':hand_splayed_tone4:', [':raised_hand_with_fingers_splayed_tone4:']),
-        ('1f590-1f3ff'           , 2,  229,   'hands', 1, '🖐🏿', texts, sylls, ':hand_splayed_tone5:', [':raised_hand_with_fingers_splayed_tone5:']),
+        ('1f590'                 , 1,  224,   'hands', 1, '🖐', texts, slbls, ':hand_splayed:', [':raised_hand_with_fingers_splayed:']),
+        ('1f590-1f3fb'           , 2,  225,   'hands', 1, '🖐🏻', texts, slbls, ':hand_splayed_tone1:', [':raised_hand_with_fingers_splayed_tone1:']),
+        ('1f590-1f3fc'           , 2,  226,   'hands', 1, '🖐🏼', texts, slbls, ':hand_splayed_tone2:', [':raised_hand_with_fingers_splayed_tone2:']),
+        ('1f590-1f3fd'           , 2,  227,   'hands', 1, '🖐🏽', texts, slbls, ':hand_splayed_tone3:', [':raised_hand_with_fingers_splayed_tone3:']),
+        ('1f590-1f3fe'           , 2,  228,   'hands', 1, '🖐🏾', texts, slbls, ':hand_splayed_tone4:', [':raised_hand_with_fingers_splayed_tone4:']),
+        ('1f590-1f3ff'           , 2,  229,   'hands', 1, '🖐🏿', texts, slbls, ':hand_splayed_tone5:', [':raised_hand_with_fingers_splayed_tone5:']),
         ('1f596'                 , 1,  230,   'hands', 1, '🖖', ['spock', 'vulcan'], ['spock', 'vulcan'], ':vulcan:', [':raised_hand_with_part_between_middle_and_ring_fingers:']),
         ('1f596-1f3fb'           , 2,  231,   'hands', 1, '🖖🏻', ['spock', 'vulcan'], ['spock', 'vulcan'], ':vulcan_tone1:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone1:']),
         ('1f596-1f3fc'           , 2,  232,   'hands', 1, '🖖🏼', ['spock', 'vulcan'], ['spock', 'vulcan'], ':vulcan_tone2:', [':raised_hand_with_part_between_middle_and_ring_fingers_tone2:']),

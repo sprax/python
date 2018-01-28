@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Sprax Lines       2016.07.12      Written with Python 3.5
 '''
-inheritance and MRO
+inheritance and MRO -- TODO: spell it out
 '''
 
 
