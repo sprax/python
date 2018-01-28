@@ -14,7 +14,7 @@ import emoji
 import re
 import sys
 from collections import defaultdict
-import emotuples as ET
+import emo_tuples as ET
 import emotrans as et
 import sylcount as sylc
 import text_regex
