@@ -17,21 +17,24 @@ def tfidf_doc_list(doc_list):
                 doxfreq[idx] += 1
     for doc in doc_list:
         for idx, count in enumerate(doc):
-            doc[idx] /= doxfreq[idx]
+            if doxfreq[idx] > 0:
+                doc[idx] /= doxfreq[idx]
     return doc_list
 
 
-def test_tfidf_doc_list_1(ntokens=5):
+def test_tfidf_doc_list_1(ntokens=5, show=False):
     '''test that tfidf_doc_list gives the correct output for "idendity matrix" input'''
     doc_list = []
     for idx in range(ntokens):
         lst = [0] * ntokens
-        lst[idx] = 1
+        lst[idx] = idx
         doc_list.append(lst)
+    if show:
+        print(doc_list)
 
     expect = doc_list.copy()
     result = tfidf_doc_list(doc_list)
     assert result == expect
 
 
-test_tfidf_doc_list_1(6)
+test_tfidf_doc_list_1(6, show=True)
