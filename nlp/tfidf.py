@@ -6,7 +6,7 @@
 
 def tfidf_doc_list(doc_list):
     ''' Input: list of term-frequency vectors representing documents.
-        Ouput: list of TF-IDF vectors representing compared documents
+        Output: list of TF-IDF vectors representing compared documents
         (same dimensions as input)
     '''
     ntokens = len(doc_list[0])  # count of all unique tokens
@@ -29,8 +29,8 @@ def test_tfidf_doc_list_1(ntokens=5):
         lst[idx] = 1
         doc_list.append(lst)
 
+    expect = doc_list.copy()
     result = tfidf_doc_list(doc_list)
-    expect = doc_list
     assert result == expect
 
 
