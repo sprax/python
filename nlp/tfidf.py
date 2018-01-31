@@ -83,9 +83,7 @@ class TestTfidf(unittest.TestCase):
     def test_tfidf_same(self):
         '''test that tfidf_doc_list and tfidf_np give the same output for self.inputs'''
         result_np = tfidf_np(self.inputs)
-        doc_list = [x.tolist() for x in self.inputs]
-        self.assertTrue(isinstance(doc_list, list))
-        result_dl = tfidf_doc_list(doc_list)
+        result_dl = tfidf_doc_list(self.inputs)
         self.assertTrue(np.array_equal(result_np, result_dl))
 
 
