@@ -1,8 +1,9 @@
-
 #!/usr/bin/env python3
-# Sprax Lines       2018.01      Python 3.5
-'''Compute TFIDF matrix on a list of vectorized documents'''
-
+'''
+Compute TFIDF matrix on a list of vectorized documents
+Sprax Lines       2018.01      Python 3.5
+'''
+import unittest
 import numpy as np
 
 
@@ -30,52 +31,63 @@ def tfidf_np(mat):
         (same dimensions as input).
     '''
     result = mat.copy()
-    ndocs, ntoks = mat.shape
+    # ndocs, ntoks = mat.shape
     doxfreq = np.sum(mat > 0, axis=0)
     doxfreq[doxfreq == 0] = 1
     result /= doxfreq
     return result
 
 
-def test_tfidf_doc_list_1(ntokens=5, show=False):
-    '''test that tfidf_doc_list gives the correct output for "diagonal==index" matrix input'''
-    doc_list = []
-    for idx in range(ntokens):
-        lst = [0] * ntokens
-        lst[idx] = idx
-        doc_list.append(lst)
-    if show:
-        print(doc_list)
+class TestTfidf(unittest.TestCase):
+    '''tests the toy TFIDF functions above'''
 
-    expect = doc_list.copy()
-    result = tfidf_doc_list(doc_list)
-    assert result == expect
-
-
-def test_tfidf_np_1(show=False):
-    '''test that tfidf_np gives the correct output for "diagonal==index" matrix input'''
-    inputs = np.array([
-        [ 1.,  2.,  3.,  4.,  3.,  0.,  0.,  1.,  0.],
-        [ 0.,  0.,  3.,  2.,  6.,  6.,  0.,  0.,  0.],
-        [ 0.,  0.,  6.,  6.,  0.,  3.,  2.,  0.,  0.],
-        [ 0.,  2.,  9.,  6.,  6.,  6.,  0.,  2.,  0.]])
-    expect = np.array([
-        [ 1.  ,  1.  ,  0.75,  1.  ,  1.  ,  0.  ,  0.  ,  0.5 ,  0.  ],
-        [ 0.  ,  0.  ,  0.75,  0.5 ,  2.  ,  2.  ,  0.  ,  0.  ,  0.  ],
-        [ 0.  ,  0.  ,  1.5 ,  1.5 ,  0.  ,  1.  ,  2.  ,  0.  ,  0.  ],
-        [ 0.  ,  1.  ,  2.25,  1.5 ,  2.  ,  2.  ,  0.  ,  1.  ,  0.  ]])
-    if show:
-        print(inputs)
-        print(expect)
-    result = tfidf_np(inputs)
-    assert np.array_equal(result, expect)
+    def setUp(self):
+        # create minimal instances for testing
+        self.show = 1
+        self.inputs = np.array([
+            [1.0, 2.0, 3.0, 4.0, 3.0, 0.0, 0.0, 1.0, 0.0],
+            [0.0, 0.0, 3.0, 2.0, 6.0, 6.0, 0.0, 0.0, 0.0],
+            [0.0, 0.0, 6.0, 6.0, 0.0, 3.0, 2.0, 0.0, 0.0],
+            [0.0, 2.0, 9.0, 6.0, 6.0, 6.0, 0.0, 2.0, 0.0]])
+        self.expect = np.array([
+            [1.0, 1.0, 0.75, 1.0, 1.0, 0.0, 0.0, 0.5, 0.0],
+            [0.0, 0.0, 0.75, 0.5, 2.0, 2.0, 0.0, 0.0, 0.0],
+            [0.0, 0.0, 1.50, 1.5, 0.0, 1.0, 2.0, 0.0, 0.0],
+            [0.0, 1.0, 2.25, 1.5, 2.0, 2.0, 0.0, 1.0, 0.0]])
 
 
-def tests(show=False):
-    test_tfidf_doc_list_1(6, show=show)
-    test_tfidf_np_1(show=False)
+    def test_tfidf_doc_list_1(self, ntokens=5):
+        '''test that tfidf_doc_list gives the correct output for "diagonal==index" matrix input'''
+        doc_list = []
+        for idx in range(ntokens):
+            lst = [0] * ntokens
+            lst[idx] = idx
+            doc_list.append(lst)
+        if self.show:
+            print(doc_list)
 
+        expect = doc_list.copy()
+        result = tfidf_doc_list(doc_list)
+        self.assertEqual(result, expect)
+
+
+    def test_tfidf_np_1(self):
+        '''test that tfidf_np gives the expected output for self.inputs'''
+        if self.show:
+            print(self.inputs)
+            print(self.expect)
+        result = tfidf_np(self.inputs)
+        self.assertTrue(np.array_equal(result, self.expect))
+
+
+    def test_tfidf_same(self):
+        '''test that tfidf_doc_list and tfidf_np give the same output for self.inputs'''
+        result_np = tfidf_np(self.inputs)
+        doc_list = [x.tolist() for x in self.inputs]
+        self.assertTrue(isinstance(doc_list, list))
+        result_dl = tfidf_doc_list(doc_list)
+        self.assertTrue(np.array_equal(result_np, result_dl))
 
 
 if __name__ == '__main__':
-    tests(show=True)
+    unittest.main()
