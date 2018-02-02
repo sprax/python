@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+'''validate parentheticals'''
 import argparse
 
 OPENERS_TO_CLOSERS = {
@@ -30,10 +31,11 @@ def is_valid_parens(code):
 
 
 def main():
-    '''Extract questions from text?'''
+    '''drives is_valid_parens'''
     parser = argparse.ArgumentParser(description="Validate balance and order of "
                                      "parentheses, braces, and brackets (), {}, []")
-    parser.add_argument('text', type=str, nargs='?', default='What set { of bracketed [ (multi) (parentheticals) ] } is this ??',
+    parser.add_argument('text', type=str, nargs='?', default='What set { of bracketed '
+                        '[ (multi) (parentheticals) ] } is this ??',
                         help='text to validate')
     args = parser.parse_args()
 
