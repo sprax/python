@@ -2,6 +2,7 @@
 '''
 Can the space requirements specified by bits be packed into the specified bins?
 '''
+import pdb
 from pdb import set_trace
 import sys
 from time import time
@@ -60,8 +61,11 @@ def canPackRecursive(bins, num_usable, bits, num_unpacked, usableSpace, neededSp
                     if diff_k_j < bins[q]:
                         bins[q + 1] = bins[q]
                     else:
+                        bins[q + 1] = diff_k_j
                         break
-                bins[q + 1] = diff_k_j
+                else:
+                    # set_trace()
+                    bins[0] = diff_k_j
 
             # Exhaustive recursion: check all remaining solutions that start with item[j] packed in bin[q]
             if canPackRecursive(bins, num_usable, bits, j, usableSpace, neededSpace):
@@ -112,11 +116,6 @@ def canPack(bins, bits):
     return canPackTrack(bins, bits)
 
 
-def main():
-    bins = [1, 1, 4]
-    bits = [2, 3]
-    print("canPack(:, :) ? :".format(bins, bits, canPack(bins, bits)))
-
 def canPackNaive(bins, bits):
     packed = [False] * len(bits)
     return canPackNaiveRec(bins, bits, packed)
@@ -149,121 +148,136 @@ def canPackNaiveRec(bins, bits, packed):
 
 
 class BinPackTest:
-    def test_canPack(packer, bins, bits, verbose, name, number, expected):
-        result = False
-        excess = excessSpace(bins, bits)
+    pass
+
+
+def show_wrong(result, expected):
+    if result == expected:
+        return 0
+    print("Wrong result %s, expected %s\n" % (result, expected))
+    return 1
+
+
+def test_canPack(can_pack, bins, bits, verbose, name, number, expected):
+    result = False
+    excess = excessSpace(bins, bits)
+    if verbose > 0:
+        print("\n\t  Test canPack:  %s: %d\n" % (name, number))
+        print("bin space before: ", bins)
+        print("bits to pack:    ")
+        # # TODO Sx.printFolded(bits, 24)
+        binTot = sum(bins)
+        itemTot = sum(bits)
+        diff = binTot - itemTot
+        assert(diff == excess)
+        print("Total bin space - bits space: %d - %d = %d\n" % (binTot, itemTot, diff))
+
+    if excess < 0:
+        print("Insufficient total bin space.")
+    else:
+        # Test the interface function:
+        begTime = time()
+        result = can_pack(bins, bits)
+        runTime = time() - begTime
         if verbose > 0:
-            print("\n\t  Test canPack:  %s: %d\n" % (name, number))
-            printArray("bin space before: ", bins)
-            print("bits to pack:    ")
-            Sx.printArrayFolded(bits, 24)
-            binTot = IntStream.of(bins).sum()
-            itemTot = IntStream.of(bits).sum()
-            diff = binTot - itemTot
-            assert(diff == excess)
-            print("Total bin space - bits space: %d - %d = %d\n" % (binTot, itemTot, diff))
+            print("Pack bits in bins? %s\n", result)
+            print("Bin space after:  ", bins)
 
-        if excess < 0:
-            print("Insufficient total bin space.")
-        else:
-            # Test the interface function:
-            begTime = time()
-            result = packer.canPack(bins, bits)
-            runTime = time() - begTime
-            if verbose > 0:
-                print("Pack bits in bins? %s\n", result)
-                printArray("Bin space after:  ", bins)
+        print("Run time millis:    %d\n", runTime)
+        if result:
+            assert sum(bins) == excess
 
-            print("Run time millis:    %d\n", runTime)
-            if result:
-                assert Arrays.stream(bins).sum() == excess
+    return show_wrong(result, expected)
 
 
-        return Sz.showWrong(result, expected)
+def passFail(numWrong):
+        return "PASS" if numWrong == 0 else "FAIL"
 
+def test_packer(packer, packer_name, level):
+    testName = type(BinPack).__name__ + ".test_packer(" + packer_name + ")"
+    numWrong = 0
+    testNum = 0
 
-    def test_packer(packer, packer_name, level):
-        testName = type(BinPack).__name__ + ".test_packer(" + packer_name + ")"
-        Sz.begin(testName)
-        numWrong = 0, testNum = 0
-        #IBinPack binPacker = new BinPackRec()
+    seas = [2, 2, 37]
+    holes = [4, 37]
+    numWrong += test_canPack(packer, seas, holes, 1, testName, ++testNum, False)
 
+    servers = [8, 16, 8, 32]
+    tasks = [18, 4, 8, 4, 6, 6, 8, 8]
+    print("%s:\t%d\n", testName, ++testNum)
+    numWrong += test_canPack(packer, servers, tasks, 1, testName, ++testNum, True)
 
-        seas = [2, 2, 37]
-        holes = [4, 37]
-        numWrong += test_canPack(packer, seas, holes, 1, testName, ++testNum, False)
+    limits = [1, 3]
+    needs = [4]
+    print("%s:\t%d\n", testName, ++testNum)
+    numWrong += test_canPack(packer, limits, needs, 1, testName, ++testNum, False)
 
-        servers = [8, 16, 8, 32]
-        tasks = [18, 4, 8, 4, 6, 6, 8, 8]
+    duffels = [2, 5, 2, 2, 6]
+    bags = [3, 3, 5]
+    print("%s:\t%d\n", testName, ++testNum)
+    numWrong += test_canPack(packer, duffels, bags, 1, testName, ++testNum, True)
+
+    sashes = [1, 2, 3, 4, 5, 6, 8, 9]
+    badges = [1, 4, 6, 6, 8, 8]
+    print("%s:\t%d\n", testName, ++testNum)
+    numWrong += test_canPack(packer, sashes, badges, 1, testName, ++testNum, False)
+
+    if level > 1:
         print("%s:\t%d\n", testName, ++testNum)
-        numWrong += test_canPack(packer, servers, tasks, 1, testName, ++testNum, True)
 
-        limits = [1, 3]
-        needs = [4]
-        print("%s:\t%d\n", testName, ++testNum)
-        numWrong += test_canPack(packer, limits, needs, 1, testName, ++testNum, False)
+        fibs = FibonacciInt32.fib32Range(0, 12)
+        mems = Primes.primesInRangeIntArray(2, 47)
+        numWrong += test_canPack(packer, fibs, mems, 1, testName, ++testNum, True)
 
-        duffels = [2, 5, 2, 2, 6]
-        bags = [3, 3, 5]
-        print("%s:\t%d\n", testName, ++testNum)
-        numWrong += test_canPack(packer, duffels, bags, 1, testName, ++testNum, True)
+        crates = FibonacciInt32.fib32Range(0, 9)
+        boxes = Primes.primesInRangeIntArray(2, 25)
+        numWrong += test_canPack(packer, crates, boxes, 1, testName, ++testNum, False)
 
-        sashes = [1, 2, 3, 4, 5, 6, 8, 9]
-        badges = [1, 4, 6, 6, 8, 8]
-        print("%s:\t%d\n", testName, ++testNum)
-        numWrong += test_canPack(packer, sashes, badges, 1, testName, ++testNum, False)
+        if level > 2:    # A naive algorithm may take a very long time...
+            frames = FibonacciInt32.fib32Range(0, 13)
+            photos = Primes.primesInRangeIntArray(2, 70)
+            numWrong += test_canPack(packer, frames, photos, 1, testName, ++testNum, False)
+            blocks = FibonacciInt32.fib32Range(0, 14)
+            allocs = Primes.primesInRangeIntArray(2, 90)
+            numWrong += test_canPack(packer, blocks, allocs, 1, testName, ++testNum, False)
 
-        if level > 1:
-            print("%s:\t%d\n", testName, ++testNum)
+            frames = FibonacciInt32.fib32Range(0, 15)
+            photos = Primes.primesInRangeIntArray(2, 125)
+            numWrong += test_canPack(packer, frames, photos, 1, testName, ++testNum, False)
 
-            fibs = FibonacciInt32.fib32Range(0, 12)
-            mems = Primes.primesInRangeIntArray(2, 47)
-            numWrong += test_canPack(packer, fibs, mems, 1, testName, ++testNum, True)
+            frames = FibonacciInt32.fib32Range(0, 15)
+            photos[0] = 4
+            numWrong += test_canPack(packer, frames, photos, 1, testName, ++testNum, False)
 
-            crates = FibonacciInt32.fib32Range(0, 9)
-            boxes = Primes.primesInRangeIntArray(2, 25)
-            numWrong += test_canPack(packer, crates, boxes, 1, testName, ++testNum, False)
+            frames = FibonacciInt32.fib32Range(0, 36)
+            photos = Primes.primesInRangeIntArray(2, 27650)
+            for j in range(min(1500, len(photos))):
+                photos[j] += 1
 
-            if level > 2:    # A naive algorithm may take a very long time...
-                frames = FibonacciInt32.fib32Range(0, 13)
-                photos = Primes.primesInRangeIntArray(2, 70)
-                numWrong += test_canPack(packer, frames, photos, 1, testName, ++testNum, False)
-                            blocks = FibonacciInt32.fib32Range(0, 14)
-                allocs = Primes.primesInRangeIntArray(2, 90)
-                numWrong += test_canPack(packer, blocks, allocs, 1, testName, ++testNum, False)
+            numWrong += test_canPack(packer, frames, photos, 1, testName, ++testNum, False)
 
-                frames = FibonacciInt32.fib32Range(0, 15)
-                photos = Primes.primesInRangeIntArray(2, 125)
-                numWrong += test_canPack(packer, frames, photos, 1, testName, ++testNum, False)
-
-                frames = FibonacciInt32.fib32Range(0, 15)
-                photos[0] = 4
-                numWrong += test_canPack(packer, frames, photos, 1, testName, ++testNum, False)
-
-                frames = FibonacciInt32.fib32Range(0, 36)
-                photos = Primes.primesInRangeIntArray(2, 27650)
-                for (j = 1 j < 1500 && j < photos.length j++:
-                    photos[j] += 1
-
-                numWrong += test_canPack(packer, frames, photos, 1, testName, ++testNum, False)
-        Sz.end(testName, numWrong)
-        return numWrong
+    print("\nEND   %s,  wrong %d,  %s\n\n", testName, numWrong, passFail(numWrong));
+    return numWrong
 
 
-    def unit_test(level):
-        testName = BinPack.class.getName() + ".unit_test"
-        Sz.begin(testName)
-        numWrong = 0
+def unit_test(level):
+    testName = "BinPack.unit_test"
+    print("BEGIN:", testName)
+    numWrong = 0
 
-        numWrong += test_packer(BinPack::canPackTrack, "canPackTrack", level + 2)
-        numWrong += test_packer(BinPack::canPackNaive, "canPackNaive", level)
+    bins = [1, 1, 4]
+    bits = [2, 3]
+    print("canPack(:, :) ? :".format(bins, bits, canPack(bins, bits)))
 
-        Sz.end(testName, numWrong)
-        return numWrong
+    numWrong += test_packer(canPackTrack, "canPackTrack", level + 2)
+    numWrong += test_packer(canPackNaive, "canPackNaive", level)
+
+    print("END: ", testName, numWrong)
+    return numWrong
 
 
-    def main():
-        unit_test(2)
+def main():
+    unit_test(2)
 
 if __name__ == '__main__':
     main()
