@@ -112,6 +112,11 @@ def canPack(bins, bits):
     return canPackTrack(bins, bits)
 
 
+def main():
+    bins = [1, 1, 4]
+    bits = [2, 3]
+    print("canPack({}, {}) ? {}".format(bins, bits, canPack(bins, bits)))
+
 
 if __name__ == '__main__':
-    print("canPack([1, 1, 4], [2, 3]) ? ", canPack([1, 1, 4], [2, 3]))
+    main()
