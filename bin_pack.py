@@ -2,10 +2,14 @@
 '''
 Can the space requirements specified by bits be packed into the specified bins?
 '''
+from itertools import islice
 import pdb
 from pdb import set_trace
 import sys
 from time import time
+
+from num import fibonaccis
+from num import prime_gen as pg
 
 class BinPack:
     '''
@@ -225,31 +229,32 @@ def test_packer(packer, packer_name, level):
     if level > 1:
         print("%s:\t%d\n", testName, ++testNum)
 
-        fibs = FibonacciInt32.fib32Range(0, 12)
-        mems = Primes.primesInRangeIntArray(2, 47)
+        fibs = fibonaccis.fib_generate(12)
+        mems = list(islice(pg.sieve(), 47))
+        # mems = Primes.primesInRangeIntArray(2, 47)
         numWrong += test_canPack(packer, fibs, mems, 1, testName, ++testNum, True)
 
-        crates = FibonacciInt32.fib32Range(0, 9)
+        crates = fibonaccis.fib_generate(9)
         boxes = Primes.primesInRangeIntArray(2, 25)
         numWrong += test_canPack(packer, crates, boxes, 1, testName, ++testNum, False)
 
         if level > 2:    # A naive algorithm may take a very long time...
-            frames = FibonacciInt32.fib32Range(0, 13)
+            frames = fibonaccis.fib_generate(13)
             photos = Primes.primesInRangeIntArray(2, 70)
             numWrong += test_canPack(packer, frames, photos, 1, testName, ++testNum, False)
-            blocks = FibonacciInt32.fib32Range(0, 14)
+            blocks = fibonaccis.fib_generate(14)
             allocs = Primes.primesInRangeIntArray(2, 90)
             numWrong += test_canPack(packer, blocks, allocs, 1, testName, ++testNum, False)
 
-            frames = FibonacciInt32.fib32Range(0, 15)
+            frames = fibonaccis.fib_generate(15)
             photos = Primes.primesInRangeIntArray(2, 125)
             numWrong += test_canPack(packer, frames, photos, 1, testName, ++testNum, False)
 
-            frames = FibonacciInt32.fib32Range(0, 15)
+            frames = fibonaccis.fib_generate(15)
             photos[0] = 4
             numWrong += test_canPack(packer, frames, photos, 1, testName, ++testNum, False)
 
-            frames = FibonacciInt32.fib32Range(0, 36)
+            frames = fibonaccis.fib_generate(36)
             photos = Primes.primesInRangeIntArray(2, 27650)
             for j in range(min(1500, len(photos))):
                 photos[j] += 1
