@@ -24,14 +24,14 @@ def fib_iterate(n):
     for _ in range(n):
         a, b = b, a + b
     return a
-    
+
 # Binet's formula (only good for n < 70)
 PHI = (1 + 5**0.5) / 2
 
 def fib_binet(n):
     '''Binet's Fibonacci formula'''
     return int(round((PHI**n - (1-PHI)**n) / 5**0.5))
-    
+
 def fib_binet_inverse(f):
     '''Binet's Fibonacci inverse formula: fibonacci number to sequence number'''
     if f < 2:
@@ -41,7 +41,7 @@ def fib_binet_inverse(f):
 def mul(A, B):
     '''matrix multiply, expanded out?
     a  b     d   e        a*d + b*e   a*e + b*f
-          X           =   
+          X           =
     c  0     f   0        b*d + c*e   b*e + c*f
     '''
     a, b, c = A
@@ -61,13 +61,13 @@ def fib_matrix(n):
     return power((1,1,0), n-1)[0]
 
 
-def fib_generate(n):
+def fib_generate(n, start=0):
     '''fibonacci generator'''
-    a, b, x = 0, 1, 0
+    a, b, x = start, 1, 0
     while x < n:
         yield a
         a, b = b, a + b
-        x = x+1
+        x = x + 1
 
 
 def fib_generate_recip(n):
