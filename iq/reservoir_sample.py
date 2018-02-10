@@ -2,10 +2,12 @@
 import argparse
 import random
 SAMPLE_COUNT = 10
+DEFAULT_SEED = 12345
 
-def sample_wiki_titles(count=SAMPLE_COUNT):
+def sample_wiki_titles(text_file, count=SAMPLE_COUNT, seed=DEFAULT_SEED, verbose=1):
     ''' Force the value of the seed so the results are repeatable '''
-    random.seed(12345)
+    random.seed(seed)
+    print("samples, count=", count)
     sample_titles = []
     for index, line in enumerate(open("../words.txt")):
             # Generate the reservoir
@@ -22,18 +24,21 @@ def sample_wiki_titles(count=SAMPLE_COUNT):
 
 def main():
     '''Extract questions from text?'''
+    default_file = '../words.txt'
     parser = argparse.ArgumentParser(description="Validate balance and order of "
                                      "parentheses, braces, and brackets (), {}, []")
-    parser.add_argument('text', type=str, nargs='?', default='What set { of bracketed [ (multi) (parentheticals) ] } is this ??',
-                        help='text to validate')
     parser.add_argument('count', type=int, nargs='?', const=16, default=10,
                         help='Count of randomly sampled titles (const: 16, default: 10)')
+    parser.add_argument('file', type=str, nargs='?', default=default_file,
+                        help="Text file, one item per line (default: %s)" % default_file)
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-    sample_wiki_titles(args.count)
-    # print('is_valid("%s") = %s' % (args.text, valid))
+    print("args.count:", args.count)
+
+    sample_wiki_titles(args.file, args.count)
+
 
 if __name__ == '__main__':
     main()
