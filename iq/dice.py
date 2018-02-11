@@ -15,8 +15,8 @@
    36
 '''
 import argparse
-import itertools
-import random
+from itertools import islice
+from random import randint, seed
 DEFAULT_SEED = 12345
 
 PAIR_SUMS = [
@@ -26,7 +26,7 @@ PAIR_SUMS = [
 
 def dice_pair_sum():
     ''' Sum value from the one throw of a pair of dice '''
-    rdx = random.randint(0, 35)
+    rdx = randint(0, 35)
     return PAIR_SUMS[rdx]
 
 
@@ -34,6 +34,10 @@ def dice_pair_sum_gen():
     ''' generator on dice_pair_sum '''
     while True:
         yield dice_pair_sum()
+
+def dice_pair():
+    ''' returns random values for one throw of a pair of dice '''
+    return (randint(1, 6), randint(1, 6))
 
 
 def main():
@@ -52,17 +56,19 @@ def main():
     print("args.count:", args.count)
 
     if args.seed:
-        random.seed(args.seed)                   # repeatability
+        seed(args.seed)                   # repeatability
 
     if args.islice:
         if args.verbose > 0:
             print("Using itertools.islice:")
-        sums = list(itertools.islice(dice_pair_sum_gen(), 0, args.count, 1))
+        sums = list(islice(dice_pair_sum_gen(), 0, args.count, 1))
     else:
         if args.verbose > 0:
             print("Using list comprehension:")
         sums = [next(dice_pair_sum_gen()) for _ in range(args.count)]
+
     print("Sums:", sums)
+    print("Pair:", dice_pair())
 
 
 if __name__ == '__main__':
