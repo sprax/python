@@ -6,7 +6,7 @@ DEFAULT_SEED = 12345
 
 def sample_line_items(text_file, count=SAMPLE_COUNT, seed=DEFAULT_SEED, verbose=1):
     ''' extracts uniformly random sample of count lines from the text file '''
-    random.seed(seed)                   # for repeatability
+    random.seed(seed)                   # repeatability
     reservoir = []
     for index, line in enumerate(open(text_file)):
         # Generate the reservoir
