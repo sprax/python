@@ -6,9 +6,19 @@ DEFAULT_SEED = 12345
 
 def sample_line_items(text_file, count=SAMPLE_COUNT, seed=DEFAULT_SEED, verbose=1):
     ''' extracts uniformly random sample of count lines from the text file '''
+    reservoir = []
+    with open(text_file) as text:
+        reservoir = reservoir_sample(text, count, seed, verbose)
+        if verbose:
+            print(reservoir)
+    return reservoir
+
+
+def reservoir_sample(iterable, count=SAMPLE_COUNT, seed=DEFAULT_SEED, verbose=1):
+    ''' extracts uniformly random sample from the iterable '''
     random.seed(seed)                   # repeatability
     reservoir = []
-    for index, line in enumerate(open(text_file)):
+    for index, line in enumerate(iterable):
         # Generate the reservoir
         if index < count:
             reservoir.append(line.rstrip())
@@ -19,7 +29,7 @@ def sample_line_items(text_file, count=SAMPLE_COUNT, seed=DEFAULT_SEED, verbose=
             rdx = random.randint(0, index)
             if rdx < count:
                 reservoir[rdx] = line.rstrip()
-    print(reservoir)
+    return reservoir
 
 
 def main():
