@@ -3,7 +3,7 @@
 
 import argparse
 import math
-
+# from pdb import set_trace
 
 class Polar:
     '''2D point in polar coords'''
@@ -12,30 +12,41 @@ class Polar:
         ''' initialize radial and angular coordinates '''
         self.rho = rho
         self.phi = phi
-        self.xcc = None     # X cartesian coordinate
-        self.ycc = None     # Y cartesian coordinate
+        self.xcc = None     # X Cartesian coordinate
+        self.ycc = None     # Y Cartesian coordinate
 
     def __str__(self):
         return "(%.4f %.4f)" % (self.rho, self.phi)
 
+
     def xcoord(self):
-        ''' returns memoized X cartesian coordinate '''
+        ''' returns memoized X Cartesian coordinate '''
         if self.xcc is None:
             self.xcc = self.rho * math.cos(self.phi)
         return self.xcc
 
     def ycoord(self):
-        ''' returns memoized Y cartesian coordinate '''
-        if self.xcc is None:
-            self.xcc = self.rho * math.sin(self.phi)
-        return self.xcc
+        ''' returns memoized Y Cartesian coordinate '''
+        if self.ycc is None:
+            self.ycc = self.rho * math.sin(self.phi)
+        return self.ycc
+
+
+def from_xy(xcc, ycc):
+    '''returns a Polar instance initialized from Cartesian coords'''
+    rho = math.sqrt(xcc * xcc + ycc * ycc)
+    phi = math.atan2(ycc, xcc)
+    pol = Polar(rho, phi)
+    pol.xcc = xcc
+    pol.ycc = ycc
+    return pol
 
 
 def distance_cart(pol_a, pol_b):
     '''
     returns the Euclidean distance between two points represented by
     polar coordinates, computed after converting them to a difference
-    vector in cartesian coordinates.
+    vector in Cartesian coordinates.
     '''
     x_diff = pol_a.xcoord() - pol_b.xcoord()
     y_diff = pol_a.ycoord() - pol_b.ycoord()
@@ -63,10 +74,14 @@ def main():
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-    polar_a = Polar(1, 1*math.pi/6)
-    polar_b = Polar(1, 2*math.pi/6)
-    print("Cartesian vec distance({}, {}): {}".format(polar_a, polar_b, distance_cart(polar_a, polar_b)))
-    print("Trigonometric distance({}, {}): {}".format(polar_a, polar_b, distance_trig(polar_a, polar_b)))
+    pol_a = Polar(1, 1*math.pi/6)
+    pol_b = Polar(1, 2*math.pi/6)
+    print("Cartesian vec distance AB({}, {}): {}".format(pol_a, pol_b, distance_cart(pol_a, pol_b)))
+    print("Trigonometric distance AB({}, {}): {}".format(pol_a, pol_b, distance_trig(pol_a, pol_b)))
+
+    pol_c = from_xy(pol_a.xcoord(), pol_a.ycoord())
+    print("Cartesian vec distance AC({}, {}): {}".format(pol_a, pol_c, distance_cart(pol_a, pol_c)))
+    print("Trigonometric distance AC({}, {}): {}".format(pol_a, pol_c, distance_trig(pol_a, pol_c)))
 
 
 if __name__ == '__main__':
