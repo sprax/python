@@ -24,18 +24,19 @@ def postponed_sieve(): # postponed sieve, by Will Ness, ideone.com/WFv4f
     while True:
         s = D.pop(c, 0)
         if s:
-            add(D,c + s,s)
+            add(D, c + s, s)
         else:
             if c < q:
                 yield c
             else:
-                add(D,c + 2*p,2*p)
+                add(D, c + 2*p, 2*p)
                 p=ps.next()
                 q=p*p
         c += 2
 
 def add(D,x,s):
-    while x in D: x += s
+    while x in D:
+        x += s
     D[x] = s
 
 def main():
