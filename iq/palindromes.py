@@ -17,13 +17,13 @@ def test_is_palindrome(expect, string, verbose=0):
     ''' tests is_palindrome and returns the number of wrong answers, that is,
     0 if is_palindrome matches expect, 1 if it does not. '''
     is_pal = is_palindrome(string)
-    failed = is_pal != expect
-    if verbose > failed:
-        print("%s: %s palindrome: %s %s" % ("FAIL" if failed else "PASS",
+    passed = is_pal == expect
+    if verbose > passed:
+        print("%s: %s palindrome: %s %s" % ("PASS" if passed else "FAIL",
                                             "Yes" if expect else "Not",
                                             " "*(24 - len(string)),
                                             " ".join(string)))
-    return failed
+    return not passed
 
 
 def unit_test(args):
@@ -33,6 +33,7 @@ def unit_test(args):
     num_wrong += test_is_palindrome(0, "volvo", verbose)
     num_wrong += test_is_palindrome(1, "volvovlov", verbose)
     num_wrong += test_is_palindrome(1, "XX", verbose)
+    num_wrong += test_is_palindrome(0, "XOX", verbose)
     print("END palindromes.unit_test:  num_wrong: %d" % num_wrong)
 
 
