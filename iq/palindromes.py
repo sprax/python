@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-import argparse
+'''tests for various palindromes'''
 
+import argparse
+import pdb
+from pdb import set_trace
 
 
 def is_palindrome_range(string):
     '''true IFF palindrome'''
     half_len = len(string) // 2
     for j in range(half_len):
-        if  string[j] != string[-j-1]:
+        if string[j] != string[-j-1]:
             return False
     return True
 
@@ -15,17 +18,32 @@ def is_palindrome_range(string):
 def is_palindrome_slice(string):
     '''true IFF palindrome'''
     half_len = len(string) // 2
-    for lef, rig in zip(string[0:half_len], string[-1:half_len:-1]):
-        if  lef != rig:
+    for lef, rig in zip(string[0:half_len+1], string[-1:half_len-1:-1]):
+        if lef != rig:
             return False
     return True
 
-def is_span_palindrome(string):
-    '''true IFF palindrome'''
+def is_chunky_palindrome(string):
+    '''
+    true IFF palindrome in chunks, as in:
+    volvo -> (vo)l(vo)
+    oliverelivo -> (o)(liv)(e)(r)(e)(liv)(o)
+    Greedy algorithm should succeed.
+    '''
     half_len = len(string) // 2
-    for j in range(half_len):
-        if  string[j] != string[-j-1]:
-            return False
+    beg = 0
+    while beg < half_len:
+        end = -1 - beg
+        if string[beg] != string[end]:
+            end = None if end == -1 else end + 1
+            for med in range(beg+2, half_len+1):
+                if string[beg:med] == string[-med:end]:
+                    beg = med
+                    break
+            else:
+                return False
+        else:
+            beg += 1
     return True
 
 
@@ -48,21 +66,29 @@ def test_one_string(is_palindrome, expect, verbose, string):
     return not passed
 
 
-def test_is_palindrome(is_palindrome, verbose=0):
+def test_is_palindrome(is_palindrome, expect_string_pairs, verbose=0):
     ''' tests an is_palindrome function and returns the number of wrong answers'''
     num_wrong = 0
-    num_wrong += test_one_string(is_palindrome, 0, verbose, "volvo")
-    num_wrong += test_one_string(is_palindrome, 1, verbose, "volvovlov")
-    num_wrong += test_one_string(is_palindrome, 1, verbose, "ZZ")
-    num_wrong += test_one_string(is_palindrome, 1, verbose, "XOX")
+    for expect, string in expect_string_pairs:
+        num_wrong += test_one_string(is_palindrome, expect, verbose, string)
     return num_wrong
 
 def unit_test(args):
     ''' test palindromes and others '''
     verbose = args.verbose
+    expect_string_pairs = [
+        [0, "volvo"],
+        [0, "oliverelivo"],
+        [1, "volvovlov"],
+        [0, "XO"],
+        [1, "ZZ"],
+        [1, "XOX"],
+    ]
     num_wrong = 0
-    num_wrong += test_is_palindrome(is_palindrome_range, verbose)
-    num_wrong += test_is_palindrome(is_palindrome_slice, verbose)
+    num_wrong += test_is_palindrome(is_palindrome_range, expect_string_pairs, verbose)
+    num_wrong += test_is_palindrome(is_palindrome_slice, expect_string_pairs, verbose)
+    expect_string_pairs[1][0] = expect_string_pairs[0][0] = 1
+    num_wrong += test_is_palindrome(is_chunky_palindrome, expect_string_pairs, verbose)
     print("END palindromes.unit_test:  num_wrong: %d" % num_wrong)
 
 
