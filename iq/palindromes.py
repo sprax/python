@@ -74,7 +74,7 @@ def test_is_palindrome(is_palindrome, expect_string_pairs, verbose=0):
     return num_wrong
 
 def unit_test(args):
-    ''' test palindromes and others '''
+    ''' test different (kinds of) palindrome detectors '''
     verbose = args.verbose
     expect_string_pairs = [
         [0, "volvo"],
@@ -94,8 +94,7 @@ def unit_test(args):
 
 def main():
     '''Extract questions from text?'''
-    parser = argparse.ArgumentParser(description="Validate balance and order of "
-                                     "parentheses, braces, and brackets (), {}, []")
+    parser = argparse.ArgumentParser(description=unit_test.__doc__)
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
