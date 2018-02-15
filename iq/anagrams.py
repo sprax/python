@@ -3,8 +3,8 @@
 
 import argparse
 from collections import Counter
-import pdb
-from pdb import set_trace
+# import pdb
+# from pdb import set_trace
 
 
 def is_anagram_in_text(string, text):
@@ -54,9 +54,9 @@ def test_predicate(predicate, verbose, expect, string, text):
     result = predicate(string, text)
     passed = result == expect
     if verbose > passed:
-        print("%s %s: expected %s: %s %s" % (predicate.__name__,
-                                             "PASS" if passed else "FAIL",
-                                             expect, string, text))
+        print("%s %s: expected %s:  %s  %s" % (predicate.__name__,
+                                               "PASS" if passed else "FAIL",
+                                               expect, string, text))
     return not passed
 
 
@@ -67,7 +67,8 @@ def unit_test(args):
         [0, "oo", "volvo"],
         [1, "lo", "volvo"],
         [1, "xyz", "volvoyyxzx"],
-        [1, "xyxz", "volvoyyxzx"],
+        [1, "xyxz", "volxyzvxoyyxzx"],
+        [0, "xyxzz", "volxyzvxoyyxzx"],
     ]
     num_wrong = 0
     for sample in samples:

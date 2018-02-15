@@ -2,8 +2,8 @@
 '''tests for various palindromes'''
 
 import argparse
-import pdb
-from pdb import set_trace
+# import pdb
+# from pdb import set_trace
 
 
 def is_palindrome_range(string):

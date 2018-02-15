@@ -3,6 +3,7 @@
 
 import argparse
 import math
+import random
 # from pdb import set_trace
 
 class Polar:
@@ -83,6 +84,12 @@ def main():
     print("Cartesian vec distance AC({}, {}): {}".format(pol_a, pol_c, distance_cart(pol_a, pol_c)))
     print("Trigonometric distance AC({}, {}): {}".format(pol_a, pol_c, distance_trig(pol_a, pol_c)))
 
+    if args.seed:
+        random.seed(args.seed)
+
+    pol_d = Polar(1.0 + random.random(), random.random() * math.pi)
+    print("Cartesian vec distance AD({}, {}): {}".format(pol_a, pol_d, distance_cart(pol_a, pol_d)))
+    print("Trigonometric distance CD({}, {}): {}".format(pol_c, pol_d, distance_trig(pol_c, pol_d)))
 
 if __name__ == '__main__':
     main()
