@@ -9,8 +9,8 @@ Examples:
 3) given "11121114" then return []
 '''
 import argparse
-import pdb
-from pdb import set_trace
+# import pdb
+# from pdb import set_trace
 
 def printv(level, verbose, *args, **kwargs):
     '''print args with kwargs if level < verbose'''
@@ -51,7 +51,8 @@ def str_part_sum_rec(sod, size, num_list, min_num_digits, verbose=1):
     for end_3 in range(1, size + 1):
         int_3 = int(sod[0:end_3])
         is_sum = int_1 + int_2 == int_3
-        printv(1, verbose, "\t\tend_3: %2d =>\t%2d + %2d %s= %3d" % (end_3, int_1, int_2, '=' if is_sum else '!', int_3))
+        printv(1, verbose, "\t\tend_3: %2d =>\t%2d + %2d %s= %3d"
+               % (end_3, int_1, int_2, '=' if is_sum else '!', int_3))
         if is_sum:
             num_list.append(int_3)
             new_list = str_part_sum_rec(sod[end_3:], size - end_3, num_list, max(min_num_digits, end_3), verbose)
@@ -79,11 +80,14 @@ def unit_test(verbose):
     num_wrong += test_str_part_sum("12324", [1, 23, 24], verbose)
     num_wrong += test_str_part_sum("1111213", [11, 1, 12, 13], verbose)
     num_wrong += test_str_part_sum("1111223", [1, 11, 12, 23], verbose)
+
+    num_wrong += test_str_part_sum("01123581321345589144233377610987",
+                                   [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987], verbose)
     print("unit_test for str_part_sum: num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
 
 def main():
     '''Extract questions from text?'''
-    const_sod = "123581321345589144"
+    const_sod = "01123581321345589144233377610987"
     parser = argparse.ArgumentParser(description=str_part_sum.__doc__)
     parser.add_argument('-digits', type=str, nargs='?', const=const_sod,
                         help="string of digits to test, instead of running unit_test "
