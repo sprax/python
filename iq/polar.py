@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-''' Polar cooridinate formalae '''
+'''Polar cooridinate formalae & functions for 2D points as polar coordinates'''
 
 import argparse
 import math
@@ -66,7 +66,7 @@ def distance_trig(pol_a, pol_b):
 
 def main():
     ''' driver for dice_pair_sum_gen'''
-    parser = argparse.ArgumentParser(description="functions for 2D points as polar coordinates")
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-islice', action='store_true',
                         help='use itertools.islice instead of list comprehension')
     parser.add_argument('-seed', type=int, nargs='?', const=1, default=12345,
