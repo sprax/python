@@ -63,10 +63,10 @@ def str_part_sum_rec(sod, size, num_list, min_num_digits, verbose=1):
 
 def test_str_part_sum(sod, expect, verbose=1):
     '''test is_str_part_sum(sod)'''
-    print("___________ is_str_part_sum(%s) ? Expect: %s" % (sod, expect))
+    print("___________ is_str_part_sum(%s) ?? Expect: %s" % (sod, expect))
     result = str_part_sum(sod, verbose)
     failed = result != expect
-    print("___________ is_str_part_sum(%s)   Result: %s  --  %s\n" % (sod, result, "FAIL" if failed else "PASS"))
+    print("___________ is_str_part_sum(%s) -> Result: %s  --  %s\n" % (sod, result, "FAIL" if failed else "PASS"))
     return failed
 
 def unit_test(verbose):
@@ -80,7 +80,6 @@ def unit_test(verbose):
     num_wrong += test_str_part_sum("12324", [1, 23, 24], verbose)
     num_wrong += test_str_part_sum("1111213", [11, 1, 12, 13], verbose)
     num_wrong += test_str_part_sum("1111223", [1, 11, 12, 23], verbose)
-
     num_wrong += test_str_part_sum("01123581321345589144233377610987",
                                    [0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987], verbose)
     print("unit_test for str_part_sum: num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
