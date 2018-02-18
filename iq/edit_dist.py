@@ -24,7 +24,7 @@ def _is_subs_dist_1_eq_len(s_a, s_b, start_dist):
     return 1 == dist
 
 
-def is_subs_dist_1_eq_len(s_a, s_b):
+def is_subs_dist_1(s_a, s_b):
     '''
     returns True IFF 1 == substitution-only distance between s_a and s_b,
     where any difference in length also adds to substitution count.
@@ -75,19 +75,28 @@ def unit_test(args):
     ]
     num_wrong = 0
     for sample in samples:
-        num_wrong += test_predicate(is_subs_dist_1_eq_len, verbose, *sample)
-    print("unit_test for is_subs_dist_1_eq_len:  num_tests:", len(samples),
+        num_wrong += test_predicate(is_subs_dist_1, verbose, *sample)
+    print("unit_test for is_subs_dist_1:  num_tests:", len(samples),
           " num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
 
 
-
 def main():
-    '''Extract questions from text?'''
-    parser = argparse.ArgumentParser(description=is_subs_dist_1_eq_len.__doc__)
+    '''driver for unit_test'''
+    const_a = "abcdefgh"
+    const_b = "abc_efgh"
+    parser = argparse.ArgumentParser(description=is_subs_dist_1.__doc__)
+    parser.add_argument('-a', type=str, nargs='?', const=const_a,
+                        help="str_a to test against str_b (const: %s)" % const_a)
+    parser.add_argument('-b', type=str, nargs='?', const=const_b,
+                        help="str_b to test against str_a (const: %s)" % const_b)
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
-    unit_test(args)
+    if  args.a and args.b:
+        print("is_subs_dist_1(%s, %s) ? " % (args.a, args.b), end='')
+        print(is_subs_dist_1(args.a, args.b))
+    else:
+        unit_test(args)
 
 
 if __name__ == '__main__':
