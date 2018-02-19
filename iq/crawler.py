@@ -16,16 +16,17 @@ TEST_PAIRS = [
     # ('http://drake.mit.edu/bazel.html',
     # ('http://drake.mit.edu/mac.html',
     # ('https://www.csail.mit.edu/',
-    # ('https://www.csail.mit.edu/person/berthold-horn',
+    ('https://www.csail.mit.edu/person/berthold-horn', ['https:', 'www.csail.mit.edu', 'person', 'berthold-horn']),
     ('https://www.csail.mit.edu/people?person%5B0%5D=role%3A299', ['https:', 'www.csail.mit.edu', 'people'])
 ]
 
+# TODO: splint on '.' as well?   [www, mit, edu] is OK, but [index] vs. [index, htm] vs. [index, html] ??
 REC_URL_SPLITTER = re.compile(r'[/]+')
 
 def url_parts(url):
     '''
-    returns list of strings:
-    parts of url as split on / and excluding any query string
+    returns list of non-empty strings, namely,
+    the parts of url as split on "/" and excluding any query string.
     '''
     query_idx = url.find('?')
     if query_idx > 0:
