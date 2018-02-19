@@ -31,7 +31,7 @@ def is_subscriptable(vit):
 
 
 def sum_nested_iter_rec(vitlist, tot):
-    '''Sum all values in a list or typle of nested iterables.
+    '''Sum all values in a list or tuple of nested iterables.
     Relatively efficient, because it only makes one recursive call to itself
     per nested iterable, but its first argument must be a list, not a scalar.'''
     for vit in vitlist:
@@ -130,7 +130,7 @@ def test_sum_nested_iter_on_scalar():
     num = 6
     print("Number:", num)
     try:
-        tot = sum_nested_iter_rec(num, 0) 
+        tot = sum_nested_iter_rec(num, 0)
     except TypeError as ex:
         print("sum_nested_iter_rec got a TypeError exception, because this")
         print("\t recursive function assumes an iterable argument, thus:\n\t ", ex)
