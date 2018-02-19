@@ -20,7 +20,7 @@ TEST_PAIRS = [
     ('https://www.csail.mit.edu/people?person%5B0%5D=role%3A299', ['https:', 'www.csail.mit.edu', 'people'])
 ]
 
-# TODO: splint on '.' as well?   [www, mit, edu] is OK, but [index] vs. [index, htm] vs. [index, html] ??
+# TODO: split on '.' as well?   [www, mit, edu] is OK, but [index] vs. [index, htm] vs. [index, html] ??
 REC_URL_SPLITTER = re.compile(r'[/]+')
 
 def url_parts(url):
@@ -101,21 +101,16 @@ def unit_test(verbose):
 
 def main():
     '''Extract questions from text?'''
-    const_sod = "01123581321345589144233377610987"
-    parser = argparse.ArgumentParser(description=url_parts.__doc__)
-    parser.add_argument('-digits', type=str, nargs='?', const=const_sod,
-                        help="string of digits to test, instead of running unit_test "
-                        "(const: %s)" % const_sod)
+    const_url = TEST_PAIRS[-1][0]
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('-url', type=str, nargs='?', const=const_url,
+                        help="URL to use in testing (const: %s)" % const_url)
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
     verbose = args.verbose
 
-    if args.digits:
-        nums = str_part_sum(args.digits, verbose)
-        print("{} -> {}".format(args.digits, nums))
-    else:
-        unit_test(verbose)
+    unit_test(verbose)
 
 if __name__ == '__main__':
     main()
