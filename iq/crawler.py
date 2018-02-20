@@ -16,8 +16,8 @@ TEST_PAIRS = [
     ('https://www.csail.mit.edu/', ['https:', 'www.csail.mit.edu']),
     ('https://www.csail.mit.edu/people?person%5B0%5D=role%3A299', ['https:', 'www.csail.mit.edu', 'people']),
     ('https://www.csail.mit.edu/person/russ-tedrake', ['https:', 'www.csail.mit.edu', 'person', 'russ-tedrake']),
-    ('http://drake.mit.edu/index.html',  ['http:', 'drake.mit.edu', 'index.html']),
-    ('http://drake.mit.edu/from_source.html',  ['http:', 'drake.mit.edu', 'from_source.html']),
+    ('http://drake.mit.edu/index.html', ['http:', 'drake.mit.edu', 'index.html']),
+    ('http://drake.mit.edu/from_source.html', ['http:', 'drake.mit.edu', 'from_source.html']),
     ('http://drake.mit.edu/bazel.html', ['http:', 'drake.mit.edu', 'bazel.html']),
     ('http://drake.mit.edu/mac.html', ['http:', 'drake.mit.edu', 'mac.html']),
 ]
@@ -56,18 +56,23 @@ def url_parts(url):
 
 def test_url_parts(url, expect, verbose=1):
     '''test url_parts(url)'''
-    print("_______ url_parts(%s) ?? Expect: %s" % (url, expect))
+    if verbose:
+        print("_______ url_parts(%s) ?? Expect: %s" % (url, expect))
     result = url_parts(url)
     failed = result != expect
-    print("_______ url_parts(%s) -> Result: %s  --  %s\n" % (url, result, "FAIL" if failed else "PASS"))
+    if verbose:
+        print("_______ url_parts(%s) -> Result: %s  --  %s\n" % (url, result, "FAIL" if failed else "PASS"))
     return failed
 
 
 # space-hog version
 def print_links_once(url):
+    '''prints each crawled link once'''
     print_links_once_rec(url, set())
 
+
 def print_links_once_rec(url, visited):
+    '''recursively crawls links and prints each one once, no space-savings'''
     if url in visited:
         return
     visited.add(url)
@@ -85,8 +90,8 @@ class UrlCrawler:
         self.root = dict()          # tree of dicts
         self.size = 0               # number of unique URLs added/printed
 
-    def _add_url(self, url):
-        '''returs True IFF url was added (not already in self.root); False otherwise'''
+    def add_url(self, url):
+        '''returns True IFF url was added (not already in self.root); False otherwise'''
         parts = url_parts(url)
         tree = self.root
         # Traverse non-leaf nodes, adding branches as needed
@@ -99,13 +104,13 @@ class UrlCrawler:
         if last in tree:
             tree[last][last] += 1           # increment found count
             return False
-        tree[last] = { last : 1 }           # add leaf with found count = 1
+        tree[last] = {last : 1}           # add leaf with found count = 1
         self.size += 1
         return True
 
     def print_links_once_rec(self, url):
         '''traverses tree depth-first, printing each URL/link once'''
-        if self._add_url(url):
+        if self.add_url(url):
             print(url)
             links = links_from_url(url)
             for link in links:
@@ -128,13 +133,13 @@ def unit_test(verbose):
     '''test examples'''
     num_wrong = 0
     for pair in TEST_PAIRS:
-        num_wrong += test_url_parts(pair[0], pair[1])
+        num_wrong += test_url_parts(pair[0], pair[1], verbose)
     size = print_links_once_crawler(TEST_URLS[0], verbose)
     num_wrong += size != len(TEST_URLS)
     print("unit_test for str_part_sum: num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
 
 def main():
-    '''Extract questions from text?'''
+    '''driver for unit_test'''
     const_url = TEST_PAIRS[-1][0]
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-url', type=str, nargs='?', const=const_url,
@@ -145,6 +150,7 @@ def main():
     verbose = args.verbose
 
     unit_test(verbose)
+
 
 if __name__ == '__main__':
     main()
