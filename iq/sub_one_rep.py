@@ -9,7 +9,7 @@ from pdb import set_trace
 
 def has_one_repeated(string):
     '''returns True IFF string contains exactly one repeated character.'''
-    set_trace()
+    # set_trace()
     return True if len(string) - 1 == len(set(string)) else False
 
 def num_repeat_1_subs_slow(string, sublen):
@@ -17,7 +17,7 @@ def num_repeat_1_subs_slow(string, sublen):
     that contain exactly one repeated character.
     '''
     num = 0
-    for k in range(len(string) - sublen):
+    for k in range(len(string) + 1 - sublen):
         num += has_one_repeated(string[k:k + sublen])
     return num
 
@@ -32,9 +32,9 @@ def test_func_2(func_2, pair, expect, verbose):
     result = func_2(*pair)
     passed = result == expect
     if verbose > passed:
-        print("%s %s: expected %s:  %s  %s" % (predicate.__name__,
+        print("%s(%s, %d)  %s: expected: %s, but got: %s" % (func_2.__name__, *pair,
                                                "PASS" if passed else "FAIL",
-                                               expect, str_a, text))
+                                               expect, result))
     return not passed
 
 
@@ -45,6 +45,7 @@ def unit_test(args):
         [["abcd", 4], 0],
         [["abab", 2], 0],
         [["abac", 3], 1],
+        [["abacadede", 3], 4],
     ]
     num_wrong = 0
     for sample in samples:
