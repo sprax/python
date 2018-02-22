@@ -7,34 +7,29 @@ import argparse
 import pdb
 from pdb import set_trace
 
-def has_one_repeated(sstr, slen):
+def has_one_repeated(string):
+    '''returns True IFF string contains exactly one repeated character.'''
+    set_trace()
+    return True if len(string) - 1 == len(set(string)) else False
+
+def num_repeat_1_subs_slow(string, sublen):
+    '''returns the number of substrings of string, of length sublen,
+    that contain exactly one repeated character.
     '''
-    returns True IFF the string sstr contains exactly one repeated character.
-    '''
-    len_a = len(s_a)
-    len_b = len(s_b)
-    dif_a_b = len_a - len_b
-    if  dif_a_b == 0:
-        return _is_subs_dist_1_eq_len(s_a, s_b, 0)
-    if  dif_a_b == -1:
-        dif_a_b = 1
-        s_a, s_b = s_b, s_a         # swap
-    if  dif_a_b == 1:              # s_a is one character longer than s_b
-        if s_a[0] == s_b[0]:
-            return _is_subs_dist_1_eq_len(s_a[0:-1], s_b, 1)
-        if s_a[1] == s_b[0]:
-            return _is_subs_dist_1_eq_len(s_a[1:], s_b, 1)
-    return False
+    num = 0
+    for k in range(len(string) - sublen):
+        num += has_one_repeated(string[k:k + sublen])
+    return num
 
 
-def test_predicate(predicate, verbose, expect, str_a, text):
+def test_func_2(func_2, pair, expect, verbose):
     '''
-    tests the predicate function on one str_a.
+    tests the result of func_2 applied to the pair of arguments against expect.
     Returns the number of wrong answers, that is,
-    0 if predicate matches expect,
-    1 if it does not.
+    0 if result == expect,
+    1 if not.
     '''
-    result = predicate(str_a, text)
+    result = func_2(*pair)
     passed = result == expect
     if verbose > passed:
         print("%s %s: expected %s:  %s  %s" % (predicate.__name__,
@@ -47,17 +42,13 @@ def unit_test(args):
     ''' test different (kinds of) predicate detectors '''
     verbose = args.verbose
     samples = [
-        [0, "abc", "abc"],
-        [1, "abc", "abcd"],
-        [1, "abcd", "bcd"],
-        [1, "pqrs", "pors"],
-        [0, "pqrs", "pqsr"],
-        [0, "pqrs", "pqst"],
-        [0, "pqrs", "pqrstu"],
+        [["abcd", 4], 0],
+        [["abab", 2], 0],
+        [["abac", 3], 1],
     ]
     num_wrong = 0
     for sample in samples:
-        num_wrong += test_predicate(has_one_repeated, verbose, *sample)
+        num_wrong += test_func_2(num_repeat_1_subs_slow, *sample, verbose)
     print("unit_test for has_one_repeated:  num_tests:", len(samples),
           " num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
 
