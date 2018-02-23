@@ -16,10 +16,10 @@ def num_repeat_1_subs_slow(string, sublen):
     '''returns the number of substrings of string, of length sublen,
     that contain exactly one repeated character.
     '''
-    num = 0
+    result = 0
     for k in range(len(string) + 1 - sublen):
-        num += has_one_repeated(string[k:k + sublen])
-    return num
+        result += has_one_repeated(string[k:k + sublen])
+    return result
 
 
 def num_repeat_1_subs_counter(string, sublen):
@@ -30,22 +30,25 @@ def num_repeat_1_subs_counter(string, sublen):
     if sublen > totlen:
         return 0
 
+    # Initialize container representing the sliding window
     counter = Counter(string[0:sublen])
     sublen_m1 = sublen - 1
-    num = 0
+    result = 0
 
     for k in range(len(string) - sublen):
         if len(counter) == sublen_m1:
-            num += 1
+            result += 1
         char = string[k]
         if counter.get(char) == 1:
             counter.pop(char)
         else:
             counter.subtract(char)
         counter.update(string[k + sublen])
+
+    # Check the last window position after the loop ends
     if len(counter) == sublen_m1:
-        num += 1
-    return num
+        result += 1
+    return result
 
 
 
@@ -70,9 +73,9 @@ def unit_test(args):
     ''' test different (kinds of) predicate detectors '''
     verbose = args.verbose
     samples = [
-        # [["abcd", 4], 0],
-        # [["abab", 2], 0],
-        # [["abac", 3], 1],
+        [["abcd", 4], 0],
+        [["abab", 2], 0],
+        [["abac", 3], 1],
         [["abacadede", 3], 4],
     ]
     num_wrong = 0
