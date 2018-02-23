@@ -4,6 +4,7 @@ template for simple code testing
 '''
 
 import argparse
+from collections import Counter
 import pdb
 from pdb import set_trace
 
@@ -22,6 +23,29 @@ def num_repeat_1_subs_slow(string, sublen):
     return num
 
 
+def num_repeat_1_subs_fast(string, sublen):
+    '''returns the number of substrings of string, of length sublen,
+    that contain exactly one repeated character.
+    '''
+    totlen = len(string)
+    if sublen > totlen:
+        return 0
+
+    counter = Counter(string[0:sublen])
+    sublen_m1 = sublen - 1
+    num = 0
+
+    # set_trace()
+    for k in range(len(string) - sublen):
+        if len(counter) == sublen_m1:
+            num += 1
+        counter.subtract(string[k])
+        counter.update(string[k + sublen])
+    return num
+
+
+
+
 def test_func_2(func_2, pair, expect, verbose):
     '''
     tests the result of func_2 applied to the pair of arguments against expect.
@@ -32,9 +56,9 @@ def test_func_2(func_2, pair, expect, verbose):
     result = func_2(*pair)
     passed = result == expect
     if verbose > passed:
-        print("%s(%s, %d)  %s: expected: %s, but got: %s" % (func_2.__name__, *pair,
-                                               "PASS" if passed else "FAIL",
-                                               expect, result))
+        print("%s(%s, %d)  %s: expected: %s, result: %s"
+              % (func_2.__name__, pair[0], pair[1], "PASS" if passed else "FAIL",
+                 expect, result))
     return not passed
 
 
@@ -50,6 +74,8 @@ def unit_test(args):
     num_wrong = 0
     for sample in samples:
         num_wrong += test_func_2(num_repeat_1_subs_slow, *sample, verbose)
+    for sample in samples:
+        num_wrong += test_func_2(num_repeat_1_subs_fast, *sample, verbose)
     print("unit_test for has_one_repeated:  num_tests:", len(samples),
           " num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
 
@@ -68,7 +94,7 @@ def main():
     args = parser.parse_args()
     if  args.a and args.b:
         print("has_one_repeated(%s, %s) ? " % (args.a, args.b), end='')
-        print(has_one_repeated(args.a, args.b))
+        print(has_one_repeated(args.a))
     else:
         unit_test(args)
 
