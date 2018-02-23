@@ -10,7 +10,6 @@ from pdb import set_trace
 
 def has_one_repeated(string):
     '''returns True IFF string contains exactly one repeated character.'''
-    # set_trace()
     return True if len(string) - 1 == len(set(string)) else False
 
 def num_repeat_1_subs_slow(string, sublen):
@@ -23,7 +22,7 @@ def num_repeat_1_subs_slow(string, sublen):
     return num
 
 
-def num_repeat_1_subs_fast(string, sublen):
+def num_repeat_1_subs_counter(string, sublen):
     '''returns the number of substrings of string, of length sublen,
     that contain exactly one repeated character.
     '''
@@ -35,12 +34,17 @@ def num_repeat_1_subs_fast(string, sublen):
     sublen_m1 = sublen - 1
     num = 0
 
-    # set_trace()
     for k in range(len(string) - sublen):
         if len(counter) == sublen_m1:
             num += 1
-        counter.subtract(string[k])
+        char = string[k]
+        if counter.get(char) == 1:
+            counter.pop(char)
+        else:
+            counter.subtract(char)
         counter.update(string[k + sublen])
+    if len(counter) == sublen_m1:
+        num += 1
     return num
 
 
@@ -56,7 +60,7 @@ def test_func_2(func_2, pair, expect, verbose):
     result = func_2(*pair)
     passed = result == expect
     if verbose > passed:
-        print("%s(%s, %d)  %s: expected: %s, result: %s"
+        print("%s(%s, %d)  %s: expect: %s, result: %s"
               % (func_2.__name__, pair[0], pair[1], "PASS" if passed else "FAIL",
                  expect, result))
     return not passed
@@ -66,16 +70,16 @@ def unit_test(args):
     ''' test different (kinds of) predicate detectors '''
     verbose = args.verbose
     samples = [
-        [["abcd", 4], 0],
-        [["abab", 2], 0],
-        [["abac", 3], 1],
+        # [["abcd", 4], 0],
+        # [["abab", 2], 0],
+        # [["abac", 3], 1],
         [["abacadede", 3], 4],
     ]
     num_wrong = 0
     for sample in samples:
         num_wrong += test_func_2(num_repeat_1_subs_slow, *sample, verbose)
     for sample in samples:
-        num_wrong += test_func_2(num_repeat_1_subs_fast, *sample, verbose)
+        num_wrong += test_func_2(num_repeat_1_subs_counter, *sample, verbose)
     print("unit_test for has_one_repeated:  num_tests:", len(samples),
           " num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
 
