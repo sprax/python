@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''
-template for simple code testing
+find sub-lists with one repeated element
 '''
 
 import argparse

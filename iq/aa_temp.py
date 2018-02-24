@@ -31,9 +31,9 @@ def test_func_2(func_2, pair, expect, verbose):
     result = func_2(*pair)
     passed = result == expect
     if verbose > passed:
-        print("%s %s: expected %s:  %s  %s" % (predicate.__name__,
+        print("%s %s: expected %s:  %s  %s" % (func_2.__name__,
                                                "PASS" if passed else "FAIL",
-                                               expect, str_a, text))
+                                               expect, pair[0], pair[1]))
     return not passed
 
 
@@ -56,13 +56,13 @@ def main():
     '''driver for unit_test'''
     const_a = "abcdefgh"
     const_b = "abc_efgh"
-    parser = argparse.ArgumentParser(description=has_one_repeated.__doc__)
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-a', type=str, nargs='?', const=const_a,
                         help="str_a to test against str_b (const: %s)" % const_a)
     parser.add_argument('-b', type=str, nargs='?', const=const_b,
                         help="str_b to test against str_a (const: %s)" % const_b)
-    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
-                        help='verbosity of output (default: 1)')
+    parser.add_argument('-verbose', type=int, nargs='?', const=2, default=1,
+                        help='verbosity of output (const=2, default: 1)')
     args = parser.parse_args()
     if  args.a and args.b:
         print("has_one_repeated(%s, %s) ? " % (args.a, args.b), end='')
