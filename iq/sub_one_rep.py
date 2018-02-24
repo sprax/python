@@ -96,8 +96,8 @@ def main():
                         help="str_a to test against str_b (const: %s)" % const_a)
     parser.add_argument('-b', type=str, nargs='?', const=const_b,
                         help="str_b to test against str_a (const: %s)" % const_b)
-    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
-                        help='verbosity of output (default: 1)')
+    parser.add_argument('-verbose', type=int, nargs='?', const=2, default=1,
+                        help='verbosity of output (const: 2, default: 1)')
     args = parser.parse_args()
     if  args.a and args.b:
         print("has_one_repeated(%s, %s) ? " % (args.a, args.b), end='')
