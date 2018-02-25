@@ -12,7 +12,7 @@ class BinTreeNode:
     ''' binary tree node with parent, left, right,
     key (for placement) and value (for payload)'''
 
-   def __init__(self, key, val, left=None, right=None, parent=None):
+    def __init__(self, key, val, left=None, right=None, parent=None):
         self.key = key
         self.val = val
         self.left = left
@@ -74,7 +74,26 @@ class BinSearchTree:
     def __iter__(self):
         return self.root.__iter__()
 
+    def put(self, key, val):
+        if self.root:
+            self._put(key, val, self.root)
+        else:
+            self.root = BinTreeNode(key, val)
+        self.size += 1
 
+    def _put(self, key, val, node):
+        if key < node.key:
+            if node.has_left():
+               self._put(key, val, node.left)
+            else:
+                node.left = BinTreeNode(key, val, parent=node)
+        elif key > node.key:
+            set_trace()
+            if node.has_right():
+                self._put(key, val, node.right)
+            else:
+                node.right = BinTreeNode(key, val, parent=node)
+        # if key == node.key, ignore it (no duplicate keys)
 
 
 def test_func_2(func_2, pair, expect, verbose):
