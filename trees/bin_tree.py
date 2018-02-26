@@ -66,6 +66,7 @@ class BinSearchTree:
         self.size = 0
 
     def length(self):
+        '''returns the number of nodes in the tree'''
         return self.size
 
     def __len__(self):
@@ -122,10 +123,9 @@ def unit_test(args):
         [["abacadede", 3], 4],
     ]
     num_wrong = 0
-    for sample in samples:
-        num_wrong += test_func_2(num_repeat_1_subs_slow, *sample, verbose)
-    for sample in samples:
-        num_wrong += test_func_2(num_repeat_1_subs_counter, *sample, verbose)
+    # for sample in samples:
+    #     num_wrong += test_func_2(num_repeat_1_subs_slow, *sample, verbose)
+    #
     print("unit_test for has_one_repeated:  num_tests:", len(samples),
           " num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
 
@@ -134,7 +134,7 @@ def main():
     '''driver for unit_test'''
     const_a = "abcdefgh"
     const_b = "abc_efgh"
-    parser = argparse.ArgumentParser(description=has_one_repeated.__doc__)
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-a', type=str, nargs='?', const=const_a,
                         help="str_a to test against str_b (const: %s)" % const_a)
     parser.add_argument('-b', type=str, nargs='?', const=const_b,
@@ -142,11 +142,9 @@ def main():
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
-    if  args.a and args.b:
-        print("has_one_repeated(%s, %s) ? " % (args.a, args.b), end='')
-        print(has_one_repeated(args.a))
-    else:
-        unit_test(args)
+
+
+    unit_test(args)
 
 
 if __name__ == '__main__':
