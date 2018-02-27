@@ -85,7 +85,7 @@ class BinSearchTree:
     def _put(self, key, val, node):
         if key < node.key:
             if node.has_left():
-               self._put(key, val, node.left)
+                self._put(key, val, node.left)
             else:
                 node.left = BinTreeNode(key, val, parent=node)
         elif key > node.key:
@@ -94,7 +94,42 @@ class BinSearchTree:
                 self._put(key, val, node.right)
             else:
                 node.right = BinTreeNode(key, val, parent=node)
-        # if key == node.key, ignore it (no duplicate keys)
+        else:   # if key == node.key, replace the value (no duplicate keys)
+            node.val = val
+
+    def get(self, key, default=None):
+        '''returns val for found key, else default'''
+        if self.root:
+            node = self._get(key, self.root)
+            return node.val if node else default
+        return default
+
+    def _get(self, key, node):
+        if not node:
+            return None
+        if key < node.key:
+            return self._get(key, node.left)
+        if key > node.key:
+            return self._get(key, node.right)
+        assert node.key == key
+        return node
+
+
+    def __getitem__(self, key):
+        '''
+        overloads the [] operator for retrieval, using the get method,
+        to mimic dict subscripting
+        '''
+        return self.get(key)
+
+
+    def __setitem__(self, key, val):
+        '''
+        overloads the [] operator for assignment, using the put method,
+        to mimic dict assignment
+        '''
+        self.put(key, val)
+
 
 
 def test_func_2(func_2, pair, expect, verbose):
