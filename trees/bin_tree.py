@@ -131,6 +131,12 @@ class BinSearchTree:
         self.put(key, val)
 
 
+    def __contains__(self, key):
+        '''implements the "in" operator'''
+        if self._get(key, self.root):
+            return True
+        return False
+
 
 def test_func_2(func_2, pair, expect, verbose):
     '''
