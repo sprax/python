@@ -20,15 +20,19 @@ class BinTreeNode:
         self.parent = parent
 
     def has_left(self):
+        '''unnecessary convenience method'''
         return self.left
 
     def has_right(self):
+        '''unnecessary convenience method'''
         return self.right
 
     def is_left(self):
+        '''True IFF this is the left child of its parent'''
         return self.parent and self.parent.left == self
 
     def is_right(self):
+        '''True IFF this is the right child of its parent'''
         return self.parent and self.parent.right == self
 
     def is_root(self):
