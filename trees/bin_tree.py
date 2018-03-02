@@ -36,17 +36,19 @@ class BinTreeNode:
         return self.parent and self.parent.right == self
 
     def is_root(self):
+        '''True IFF this node has no parent'''
         return not self.parent
 
     def is_leaf(self):
+        '''True IFF this node has no child'''
         return not (self.right or self.left)
 
-    def has_left_or_right(self):
-        # TODO: why?
+    def is_parent(self):
+        '''True IFF this node is a parent, that is, has a child'''
         return self.left or self.right
 
-    def has_left_and_right(self):
-        # TODO: why?
+    def is_full(self):
+        '''True IFF this node is a double parent, that is, has both a left and a right child'''
         return self.left and self.right
 
     def set_node_data(self, key, val, left, right):
@@ -80,6 +82,7 @@ class BinSearchTree:
         return self.root.__iter__()
 
     def put(self, key, val):
+        '''replace tree's val for key, if present, or add new key-val node if not.'''
         if self.root:
             self._put(key, val, self.root)
         else:
@@ -87,6 +90,7 @@ class BinSearchTree:
         self.size += 1
 
     def _put(self, key, val, node):
+        '''recursive implemnetation for put'''
         if key < node.key:
             if node.has_left():
                 self._put(key, val, node.left)
@@ -109,6 +113,7 @@ class BinSearchTree:
         return default
 
     def _get(self, key, node):
+        '''recursive implemnetation for get'''
         if not node:
             return None
         if key < node.key:
