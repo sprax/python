@@ -7,6 +7,22 @@ import argparse
 # import pdb
 # from pdb import set_trace
 
+def is_bst(tree):
+    '''True IFF binary tree is in a valid BST order (left.val <= parent.val <= right.val)'''
+    if tree is None:
+        return True
+    is_bst_left = is_bst_right = True
+    if tree.left:
+        if tree.left.key >= tree.key:
+            return False
+        is_bst_left = is_bst(tree.left)
+    if tree.right:
+        if tree.right.key <= tree.key:
+            return False
+        is_bst_right = is_bst(tree.right)
+    return is_bst_left and is_bst_right
+
+
 class BinTreeNode(object):
     ''' binary tree node with parent, left, right,
     key (for placement) and value (for payload)'''
@@ -61,14 +77,18 @@ class BinTreeNode(object):
         if right:
             right.parent = self
 
+    def is_bst(self):
+        '''True IFF binary tree is in a valid BST order (left.val <= parent.val <= right.val)'''
+        return is_bst(self)
+
 
 class BinSearchTree(object):
     ''' basic binary search tree '''
 
-    def __init__(self):
+    def __init__(self, root=None):
         ''' null root; if present, root counts in size '''
-        self.root = None
-        self.size = 0
+        self.root = root
+        self.size = 1 if root else 0
 
     def length(self):
         '''returns the number of nodes in the tree'''
@@ -145,23 +165,28 @@ class BinSearchTree(object):
         return False
 
 
+    def is_bst(self):
+        '''True IFF binary tree is in a valid BST order (left.val <= parent.val <= right.val)'''
+        return is_bst(self.root)
+
+
 def mirror_shaped_trees(ltree, rtree):
     '''True IFF binary trees ltree and rtree morror each other in shape'''
     if not ltree and not rtree:
         return True
-    if ltree or rtree:
+    if not ltree or not rtree:
         return False
     return mirror_shaped_trees(ltree.left, rtree.right) and mirror_shaped_trees(ltree.right, rtree.left)
 
-def is_shape_symmetric(tree):
+def is_shape_symmetric(node):
     '''True IFF binary tree is symmetric in shape (presence/absence of nodes)'''
-    return True if not tree else mirror_shaped_trees(tree.left, tree.right)
+    return True if not node else mirror_shaped_trees(node.left, node.right)
 
 def mirror_valued_trees(ltree, rtree):
     '''True IFF binary trees ltree and rtree morror each other in shape and values'''
     if not ltree and not rtree:
         return True
-    if ltree or rtree:
+    if not ltree or not rtree:
         return False
     return (ltree.val == rtree.val and
             mirror_valued_trees(ltree.left, rtree.right) and
@@ -206,19 +231,20 @@ def test_predicate(verbose, predicate, subject, expect):
 
 def unit_test(args):
     ''' test different (kinds of) predicate detectors '''
-    tree = BinSearchTree()
     root = BinTreeNode(8, "eight")
     left = BinTreeNode(5, "seven", parent=root)
     right = BinTreeNode(11, "seven", parent=root)
     root.left = left
     root.right = right
+    tree = BinSearchTree(root)
     pairs = [
-        [tree, True],
+        [tree.root, True],
     ]
     num_wrong = 0
     for pair in pairs:
         num_wrong += test_predicate(args.verbose, is_shape_symmetric, *pair)
         num_wrong += test_predicate(args.verbose, is_value_symmetric, *pair)
+        num_wrong += test_predicate(args.verbose, BinTreeNode.is_bst, *pair)
     print("unit_test:  num_tests:", len(pairs),
           " num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
 
