@@ -4,9 +4,8 @@ template for simple code testing
 '''
 
 import argparse
-from collections import Counter
-import pdb
-from pdb import set_trace
+# import pdb
+# from pdb import set_trace
 
 class BinTreeNode:
     ''' binary tree node with parent, left, right,
@@ -97,7 +96,6 @@ class BinSearchTree:
             else:
                 node.left = BinTreeNode(key, val, parent=node)
         elif key > node.key:
-            set_trace()
             if node.has_right():
                 self._put(key, val, node.right)
             else:
@@ -147,6 +145,15 @@ class BinSearchTree:
         return False
 
 
+def mirror_trees(t1, t2):
+    '''True IFF binary trees t1 and t2 morror each other'''
+    if not t1 and not t2:
+        return True
+    if t1 or t2:
+        return False
+    return mirror_trees(t1.left, t2.right) and mirror_trees(t1.right, t2.left)
+
+
 def test_func_2(func_2, pair, expect, verbose):
     '''
     tests the result of func_2 applied to the pair of arguments against expect.
@@ -165,7 +172,6 @@ def test_func_2(func_2, pair, expect, verbose):
 
 def unit_test(args):
     ''' test different (kinds of) predicate detectors '''
-    verbose = args.verbose
     samples = [
         [["abcd", 4], 0],
         [["abab", 2], 0],
