@@ -7,7 +7,7 @@ import argparse
 # import pdb
 # from pdb import set_trace
 
-class BinTreeNode:
+class BinTreeNode(object):
     ''' binary tree node with parent, left, right,
     key (for placement) and value (for payload)'''
 
@@ -62,7 +62,7 @@ class BinTreeNode:
             right.parent = self
 
 
-class BinSearchTree:
+class BinSearchTree(object):
     ''' basic binary search tree '''
 
     def __init__(self):
@@ -145,13 +145,32 @@ class BinSearchTree:
         return False
 
 
-def mirror_trees(t1, t2):
-    '''True IFF binary trees t1 and t2 morror each other'''
-    if not t1 and not t2:
+def mirror_shaped_trees(ltree, rtree):
+    '''True IFF binary trees ltree and rtree morror each other in shape'''
+    if not ltree and not rtree:
         return True
-    if t1 or t2:
+    if ltree or rtree:
         return False
-    return mirror_trees(t1.left, t2.right) and mirror_trees(t1.right, t2.left)
+    return mirror_shaped_trees(ltree.left, rtree.right) and mirror_shaped_trees(ltree.right, rtree.left)
+
+def is_shape_symmetric(tree):
+    '''True IFF binary tree is symmetric in shape (presence/absence of nodes)'''
+    return True if not tree else mirror_shaped_trees(tree.left, tree.right)
+
+def mirror_valued_trees(ltree, rtree):
+    '''True IFF binary trees ltree and rtree morror each other in shape and values'''
+    if not ltree and not rtree:
+        return True
+    if ltree or rtree:
+        return False
+    return (ltree.val == rtree.val and
+            mirror_valued_trees(ltree.left, rtree.right) and
+            mirror_valued_trees(ltree.right, rtree.left))
+
+def is_value_symmetric(tree):
+    '''True IFF binary tree is symmetric in shape and value (present and values of nodes)'''
+    return True if not tree else mirror_valued_trees(tree.left, tree.right)
+
 
 
 def test_func_2(func_2, pair, expect, verbose):
@@ -170,19 +189,37 @@ def test_func_2(func_2, pair, expect, verbose):
     return not passed
 
 
+def test_predicate(verbose, predicate, subject, expect):
+    '''
+    tests if the predicate function, applied to subject, gives the expected answer.
+    Returns the number of wrong answers, that is,
+    0 if predicate(subject) == expect,
+    1 otherwise.
+    '''
+    result = predicate(subject)
+    passed = result == expect
+    if verbose > passed:
+        print("%s %s: expected %s for %s"
+              % (predicate.__name__, "PASS" if passed else "FAIL", expect, subject))
+    return not passed
+
+
 def unit_test(args):
     ''' test different (kinds of) predicate detectors '''
-    samples = [
-        [["abcd", 4], 0],
-        [["abab", 2], 0],
-        [["abac", 3], 1],
-        [["abacadede", 3], 4],
+    tree = BinSearchTree()
+    root = BinTreeNode(8, "eight")
+    left = BinTreeNode(5, "seven", parent=root)
+    right = BinTreeNode(11, "seven", parent=root)
+    root.left = left
+    root.right = right
+    pairs = [
+        [tree, True],
     ]
     num_wrong = 0
-    # for sample in samples:
-    #     num_wrong += test_func_2(num_repeat_1_subs_slow, *sample, verbose)
-    #
-    print("unit_test for has_one_repeated:  num_tests:", len(samples),
+    for pair in pairs:
+        num_wrong += test_predicate(args.verbose, is_shape_symmetric, *pair)
+        num_wrong += test_predicate(args.verbose, is_value_symmetric, *pair)
+    print("unit_test:  num_tests:", len(pairs),
           " num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
 
 
