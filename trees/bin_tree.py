@@ -23,6 +23,76 @@ def is_bst(tree):
     return is_bst_left and is_bst_right
 
 
+def remove(node):
+    '''removes node from whatever tree it is in, but does not adjust size'''
+    if not node.parent:
+        return
+    if node.is_leaf():
+        if node == node.parent.left:
+            node.parent.left = None
+        else:
+            node.parent.right = None
+    elif node.left and node.right:
+        succ = node.successor()
+        succ.splice_out()
+        node.key = succ.key
+        node.val = succ.val
+    else: # this node has one child
+        if node.has_left():
+            if node.is_left():
+                node.left.parent = node.parent
+                node.parent.left = node.left
+            elif node.is_right():
+                node.left.parent = node.parent
+                node.parent.right = node.left
+            else:
+                node.set_node_data(node.left.key,
+                                   node.left.payload,
+                                   node.left.left,
+                                   node.left.right)
+        else:
+            if node.is_left():
+                node.right.parent = node.parent
+                node.parent.left = node.right
+            elif node.is_right():
+                node.right.parent = node.parent
+                node.parent.right = node.right
+            else:
+                node.set_node_data(node.right.key,
+                                   node.right.payload,
+                                   node.right.left,
+                                   node.right.right)
+
+
+
+
+def mirror_shaped_trees(ltree, rtree):
+    '''True IFF binary trees ltree and rtree morror each other in shape'''
+    if not ltree and not rtree:
+        return True
+    if not ltree or not rtree:
+        return False
+    return mirror_shaped_trees(ltree.left, rtree.right) and mirror_shaped_trees(ltree.right, rtree.left)
+
+def is_shape_symmetric(node):
+    '''True IFF binary tree is symmetric in shape (presence/absence of nodes)'''
+    return True if not node else mirror_shaped_trees(node.left, node.right)
+
+def mirror_valued_trees(ltree, rtree):
+    '''True IFF binary trees ltree and rtree morror each other in shape and values'''
+    if not ltree and not rtree:
+        return True
+    if not ltree or not rtree:
+        return False
+    return (ltree.val == rtree.val and
+            mirror_valued_trees(ltree.left, rtree.right) and
+            mirror_valued_trees(ltree.right, rtree.left))
+
+def is_value_symmetric(tree):
+    '''True IFF binary tree is symmetric in shape and value (present and values of nodes)'''
+    return True if not tree else mirror_valued_trees(tree.left, tree.right)
+
+
 class BinTreeNode(object):
     ''' binary tree node with parent, left, right,
     key (for placement) and value (for payload)'''
@@ -56,7 +126,7 @@ class BinTreeNode(object):
 
     def is_leaf(self):
         '''True IFF this node has no child'''
-        return not (self.right or self.left)
+        return not self.right and not self.left
 
     def is_parent(self):
         '''True IFF this node is a parent, that is, has a child'''
@@ -65,6 +135,43 @@ class BinTreeNode(object):
     def is_full(self):
         '''True IFF this node is a double parent, that is, has both a left and a right child'''
         return self.left and self.right
+
+    def successor(self):
+        '''next node == node with minimal key > self.key'''
+        succ = None
+        if self.has_right():
+            succ = self.right.find_min()
+        else:
+            if self.parent:
+                if self.parent.left == self:
+                    succ = self.parent
+                else:
+                    self.parent.right = None
+                    succ = self.parent.successor()
+                    self.parent.right = self
+                    return succ
+
+
+    def __iter__(self):
+        '''in-order iterator'''
+        if self:
+            if self.left:
+                for elem in self.left:
+                    yield elem
+                    yield self.key
+                    if self.right:
+                        for elem in self.right:
+                            yield elem
+
+
+    def find_min(self):
+        '''returns the descendent node with minimum key'''
+        node = self
+        while node.has_left():
+            node = node.left
+            return node
+
+
 
     def set_node_data(self, key, val, left, right):
         ''' (re)sets all node data and re-parents child nodes '''
@@ -76,6 +183,28 @@ class BinTreeNode(object):
             left.parent = self
         if right:
             right.parent = self
+
+    def splice_out(self):
+        '''removes self from tree and patches it up'''
+        if self.is_leaf():
+            if self.is_left():
+                self.parent.left = None
+            else:
+                self.parent.right = None
+        elif self.is_parent():
+            if self.has_left():
+                if self.is_left():
+                    self.parent.left = self.left
+                else:
+                    self.parent.right = self.left
+                    self.left.parent = self.parent
+            else:
+                if self.is_left():
+                    self.parent.left = self.right
+        else:
+            self.parent.right = self.right
+            self.right.parent = self.parent
+
 
     def is_bst(self):
         '''True IFF binary tree is in a valid BST order (left.val <= parent.val <= right.val)'''
@@ -95,6 +224,7 @@ class BinSearchTree(object):
         return self.size
 
     def __len__(self):
+        '''returns number of nodes including self and all descendents'''
         return self.size
 
     def __iter__(self):
@@ -157,44 +287,38 @@ class BinSearchTree(object):
         '''
         self.put(key, val)
 
-
     def __contains__(self, key):
         '''implements the "in" operator'''
         if self._get(key, self.root):
             return True
         return False
 
-
     def is_bst(self):
         '''True IFF binary tree is in a valid BST order (left.val <= parent.val <= right.val)'''
         return is_bst(self.root)
 
+    def delete(self, key):
+        '''deletes node by key'''
+        if self.size > 1:
+            node = self._get(key, self.root)
+            if node:
+                remove(node)
+                self.size = self.size - 1
+            else:
+                raise KeyError('Error, key not in tree')
+        elif self.size == 1 and self.root.key == key:
+            self.root = None
+            self.size = self.size - 1
+        else:
+            raise KeyError('Error, key not in tree')
 
-def mirror_shaped_trees(ltree, rtree):
-    '''True IFF binary trees ltree and rtree morror each other in shape'''
-    if not ltree and not rtree:
-        return True
-    if not ltree or not rtree:
-        return False
-    return mirror_shaped_trees(ltree.left, rtree.right) and mirror_shaped_trees(ltree.right, rtree.left)
 
-def is_shape_symmetric(node):
-    '''True IFF binary tree is symmetric in shape (presence/absence of nodes)'''
-    return True if not node else mirror_shaped_trees(node.left, node.right)
+    def __delitem__(self, key):
+        self.delete(key)
 
-def mirror_valued_trees(ltree, rtree):
-    '''True IFF binary trees ltree and rtree morror each other in shape and values'''
-    if not ltree and not rtree:
-        return True
-    if not ltree or not rtree:
-        return False
-    return (ltree.val == rtree.val and
-            mirror_valued_trees(ltree.left, rtree.right) and
-            mirror_valued_trees(ltree.right, rtree.left))
 
-def is_value_symmetric(tree):
-    '''True IFF binary tree is symmetric in shape and value (present and values of nodes)'''
-    return True if not tree else mirror_valued_trees(tree.left, tree.right)
+
+
 
 
 
@@ -231,6 +355,16 @@ def test_predicate(verbose, predicate, subject, expect):
 
 def unit_test(args):
     ''' test different (kinds of) predicate detectors '''
+
+    mytree = BinSearchTree()
+    mytree[3] = "red"
+    mytree[4] = "blue"
+    mytree[6] = "yellow"
+    mytree[2] = "at"
+
+    print(mytree[6])
+    print(mytree[2])
+
     root = BinTreeNode(8, "eight")
     left = BinTreeNode(5, "seven", parent=root)
     right = BinTreeNode(11, "seven", parent=root)
