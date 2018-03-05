@@ -317,27 +317,6 @@ class BinSearchTree(object):
         self.delete(key)
 
 
-
-
-
-
-
-def test_func_2(func_2, pair, expect, verbose):
-    '''
-    tests the result of func_2 applied to the pair of arguments against expect.
-    Returns the number of wrong answers, that is,
-    0 if result == expect,
-    1 if not.
-    '''
-    result = func_2(*pair)
-    passed = result == expect
-    if verbose > passed:
-        print("%s(%s, %d)  %s: expect: %s, result: %s"
-              % (func_2.__name__, pair[0], pair[1], "PASS" if passed else "FAIL",
-                 expect, result))
-    return not passed
-
-
 def test_predicate(verbose, predicate, subject, expect):
     '''
     tests if the predicate function, applied to subject, gives the expected answer.
