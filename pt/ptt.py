@@ -13,24 +13,26 @@ import torch
 def unit_test(args):
     ''' test different (kinds of) predicate detectors '''
     print("Torch uninitialized 5x3 matrix:")
-    x = torch.Tensor(5, 3)
-    print(x)
+    x_t = torch.Tensor(5, 3)
+    print(x_t)
 
     print("Torch randomly initialized 5x3 matrix X:")
-    x = torch.rand(5, 3)
-    print(x)
-    print("size:", x.size())
+    x_t = torch.rand(5, 3)
+    if args.verbose:
+        print(x_t)
+        print("size:", x_t.size())
 
     print("Torch randomly initialized 5x3 matrix Y:")
-    y = torch.rand(5, 3)
-    print(y)
+    y_t = torch.rand(5, 3)
+    if args.verbose:
+        print(y_t)
     print("X + Y:")
-    z = torch.add(x, y)
-    print(z)
+    z_t = torch.add(x_t, y_t)
+    print(z_t)
 
 
     print("slice (X + Y)[:, 1]:")
-    print(z[:, 1])
+    print(z_t[:, 1])
 
     num_wrong = 0
     print("unit_test:  num_tests:", 1,
