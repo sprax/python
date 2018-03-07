@@ -21,19 +21,19 @@ def num_repeat_1_subs_slow(string, sublen):
     return num
 
 
-def test_func_2(func_2, pair, expect, verbose):
+def test_func_args(func_args, args, expect, verbose):
     '''
-    tests the result of func_2 applied to the pair of arguments against expect.
+    tests the result of func_args applied to the *arguments against expect.
     Returns the number of wrong answers, that is,
     0 if result == expect,
     1 if not.
     '''
-    result = func_2(*pair)
+    result = func_args(*args)
     passed = result == expect
     if verbose > passed:
-        print("%s %s: expected %s:  %s  %s" % (func_2.__name__,
+        print("%s %s: expected %s:  %s  %s" % (func_args.__name__,
                                                "PASS" if passed else "FAIL",
-                                               expect, pair[0], pair[1]))
+                                               expect, args[0], args[1]))
     return not passed
 
 
@@ -47,7 +47,7 @@ def unit_test(args):
     ]
     num_wrong = 0
     for sample in samples:
-        num_wrong += test_func_2(num_repeat_1_subs_slow, *sample, verbose)
+        num_wrong += test_func_args(num_repeat_1_subs_slow, *sample, verbose)
     print("unit_test for has_one_repeated:  num_tests:", len(samples),
           " num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
 

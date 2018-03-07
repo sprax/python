@@ -331,6 +331,20 @@ def test_predicate(verbose, predicate, subject, expect):
               % (predicate.__name__, "PASS" if passed else "FAIL", expect, subject))
     return not passed
 
+def test_func_args(verbose, func_args, args, expect):
+    '''
+    tests the result of func_args applied to the *arguments against expect.
+    Returns the number of wrong answers, that is,
+    0 if result == expect,
+    1 if not.
+    '''
+    result = func_args(*args)
+    passed = result == expect
+    if verbose > passed:
+        print("%s %s: expected %s:  %s  %s" % (func_args.__name__,
+                                               "PASS" if passed else "FAIL",
+                                               expect, args[0], args[1]))
+    return not passed
 
 def unit_test(args):
     ''' test different (kinds of) predicate detectors '''
@@ -347,6 +361,9 @@ def unit_test(args):
     root = BinTreeNode(8, "eight")
     left = BinTreeNode(5, "seven", parent=root)
     right = BinTreeNode(11, "seven", parent=root)
+    left.right = BinTreeNode(6, "ninety", parent=left)
+    right.left = BinTreeNode(10, "ninety", parent=right)
+
     root.left = left
     root.right = right
     tree = BinSearchTree(root)
@@ -358,6 +375,8 @@ def unit_test(args):
         num_wrong += test_predicate(args.verbose, is_shape_symmetric, *pair)
         num_wrong += test_predicate(args.verbose, is_value_symmetric, *pair)
         num_wrong += test_predicate(args.verbose, BinTreeNode.is_bst, *pair)
+        num_wrong += test_func_args(args.verbose, mirror_shaped_trees, [left, right], True)
+        num_wrong += test_func_args(args.verbose, mirror_valued_trees, [left, right], True)
     print("unit_test:  num_tests:", len(pairs),
           " num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
 
