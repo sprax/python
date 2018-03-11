@@ -357,7 +357,6 @@ def unit_test(args):
 
     print(mytree[6])
     print(mytree[2])
-
     root = BinTreeNode(8, "eight")
     left = BinTreeNode(5, "seven", parent=root)
     right = BinTreeNode(11, "seven", parent=root)
