@@ -5,8 +5,8 @@ template for simple code testing
 
 import argparse
 from collections import deque
-import pdb
-from pdb import set_trace
+# import pdb
+# from pdb import set_trace
 
 
 def rect_1_3_4(row, col):
@@ -39,11 +39,11 @@ def pmp_1_5_14_contains():
     0, 0                                             14, 0
     '''
     bool_mat = [
-        [ 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0],
-        [ 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0],
-        [ 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1],
-        [ 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0],
-        [ 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0],
+        [0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0],
+        [0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0],
+        [1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1],
+        [0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0],
+        [0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0],
     ]
     def contains(row, col):
         '''returns bool_mat[row][col] if (row, col) is inside the bounding rectangle.'''
