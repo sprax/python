@@ -25,6 +25,32 @@ def rect_1_3_4(xin, yin):
     return 1
 
 
+def pmp_1_5_14_contains():
+    '''Clusre: this outer function returns the
+    "contains" function for this shape in quadrant 1
+
+    0, 5 .      __ __ __             __ __ __      . 14, 5
+             __|   __   |__ __ __ __|   __   |__
+          __|   __|  |__    __ __    __|  |__   |__
+         |__   |__    __|  |__ __|  |__    __|   __|  Area: 38
+            |__   |__|   __ __ __ __   |__|   __|
+         .     |__ __ __|           |__ __ __|     .
+    0, 0                                             14, 0
+    '''
+    bool_mat = [
+        [ 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0],
+        [ 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0],
+        [ 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1],
+        [ 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0],
+        [ 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0],
+    ]
+    def contains(xin, yin):
+        '''returns bool_mat[xin][yin]'''
+        return bool_mat[xin][yin]
+
+    return contains
+
+
 class BoundedGrid:
     '''Contiguous 2D grid specified by a containment function:
     contains(x, y) > 0 IFF the grid contains tile indexed by (x, y).
