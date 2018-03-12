@@ -5,29 +5,30 @@ template for simple code testing
 
 import argparse
 from collections import deque
-# import pdb
-# from pdb import set_trace
+import pdb
+from pdb import set_trace
 
 
-def rect_1_3_4(xin, yin):
-    '''returns 1 IFF (xin, yin) is in the 3x4 rectangle in quadrant 1,
-    that is, IFF 0 <= xin < 4 and 0 <= yin < 3
+def rect_1_3_4(row, col):
+    '''returns 1 IFF (row, col) is in the 3x4 rectangle in quadrant 1,
+    that is, IFF 0 <= col < 4 and 0 <= row < 3
     0, 3 __ __ __ __ 4, 3
         |           |
         |           |
         |__ __ __ __|
     0, 0             4, 0
     '''
-    if xin < 0 or xin > 3:
+    if row < 0 or row > 2:
         return 0
-    if yin < 0 or yin > 2:
+    if col < 0 or col > 3:
         return 0
     return 1
 
 
 def pmp_1_5_14_contains():
-    '''Clusre: this outer function returns the
-    "contains" function for this shape in quadrant 1
+    '''Closure: this outer function returns a "contains" function
+    for this shape in quadrant 1, without putting the boolean matrix
+    representing it into the outer namespace.
 
     0, 5 .      __ __ __             __ __ __      . 14, 5
              __|   __   |__ __ __ __|   __   |__
@@ -39,14 +40,21 @@ def pmp_1_5_14_contains():
     '''
     bool_mat = [
         [ 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0],
-        [ 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0],
+        [ 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0],
         [ 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1],
-        [ 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0],
+        [ 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0],
         [ 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0],
     ]
-    def contains(xin, yin):
-        '''returns bool_mat[xin][yin]'''
-        return bool_mat[xin][yin]
+    def contains(row, col):
+        '''returns bool_mat[row][col] if (row, col) is inside the bounding rectangle.'''
+        if row < 0 or row > 4:
+            return 0
+        if col < 0 or col > 13:
+            return 0
+        # set_trace()
+        # print("(%d, %d) -> " % (row, col), end='')
+        # print(bool_mat[row][col])
+        return bool_mat[row][col]
 
     return contains
 
@@ -61,53 +69,53 @@ class BoundedGrid:
 
 
 
-def reachable_area(grid, x_init, y_init):
+def reachable_area(grid, r_init, c_init):
     '''
     returns the area of the explorable grid by summing the areas of
     contiguous grid tiles as indexed by two integers, starting at the tile
-    indexed by (x_init, y_init), with adjacecy = 4.
+    indexed by (r_init, c_init), with adjacecy = 4.
     The contiguous area need not be convex.
     '''
-    area = grid.contains(x_init, y_init)
+    area = grid.contains(r_init, c_init)
     if area <= 0:
         return 0
     queue = deque()
     added = set()
-    queue.append((x_init, y_init))
-    added.add((x_init, y_init))
+    queue.append((r_init, c_init))
+    added.add((r_init, c_init))
     while queue:
-        xin, yin = queue.popleft()
-        xin += 1
-        if (xin, yin) not in added:
-            added.add((xin, yin))
-            inc = grid.contains(xin, yin)
+        row, col = queue.popleft()
+        col += 1
+        if (row, col) not in added:
+            added.add((row, col))
+            inc = grid.contains(row, col)
             if inc > 0:
                 area += inc
-                queue.append((xin, yin))
-        xin -= 1
-        yin -= 1
-        if (xin, yin) not in added:
-            added.add((xin, yin))
-            inc = grid.contains(xin, yin)
+                queue.append((row, col))
+        col -= 1
+        row -= 1
+        if (row, col) not in added:
+            added.add((row, col))
+            inc = grid.contains(row, col)
             if inc > 0:
                 area += inc
-                queue.append((xin, yin))
-        xin -= 1
-        yin += 1
-        if (xin, yin) not in added:
-            added.add((xin, yin))
-            inc = grid.contains(xin, yin)
+                queue.append((row, col))
+        col -= 1
+        row += 1
+        if (row, col) not in added:
+            added.add((row, col))
+            inc = grid.contains(row, col)
             if inc > 0:
                 area += inc
-                queue.append((xin, yin))
-        xin += 1
-        yin += 1
-        if (xin, yin) not in added:
-            added.add((xin, yin))
-            inc = grid.contains(xin, yin)
+                queue.append((row, col))
+        col += 1
+        row += 1
+        if (row, col) not in added:
+            added.add((row, col))
+            inc = grid.contains(row, col)
             if inc > 0:
                 area += inc
-                queue.append((xin, yin))
+                queue.append((row, col))
     return area
 
 def test_predicate(verbose, predicate, subject, expect):
@@ -147,6 +155,13 @@ def unit_test(args):
     num_wrong += area != 12
     if args.verbose > 1:
         print("area %d =?= 12" % area)
+
+    grid = BoundedGrid(pmp_1_5_14_contains())
+    area = reachable_area(grid, 1, 2)
+    num_wrong += area != 38
+    if args.verbose > 1:
+        print("area %d =?= 38" % area)
+
     print("unit_test:  num_tests:",
           " num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
 
