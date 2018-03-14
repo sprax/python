@@ -9,6 +9,56 @@ from collections import deque
 # from pdb import set_trace
 
 
+def reachable_area(grid, r_init, c_init):
+    '''
+    returns the area of the explorable grid by summing the areas of
+    contiguous grid tiles as indexed by two integers, starting at the tile
+    indexed by (r_init, c_init), with adjacecy = 4.
+    The contiguous area need not be convex.
+    '''
+    area = grid.contains(r_init, c_init)
+    if area <= 0:
+        return 0
+    queue = deque()
+    added = set()
+    queue.append((r_init, c_init))
+    added.add((r_init, c_init))
+    while queue:
+        row, col = queue.popleft()
+        col += 1
+        if (row, col) not in added:
+            added.add((row, col))
+            inc = grid.contains(row, col)
+            if inc > 0:
+                area += inc
+                queue.append((row, col))
+        col -= 1
+        row -= 1
+        if (row, col) not in added:
+            added.add((row, col))
+            inc = grid.contains(row, col)
+            if inc > 0:
+                area += inc
+                queue.append((row, col))
+        col -= 1
+        row += 1
+        if (row, col) not in added:
+            added.add((row, col))
+            inc = grid.contains(row, col)
+            if inc > 0:
+                area += inc
+                queue.append((row, col))
+        col += 1
+        row += 1
+        if (row, col) not in added:
+            added.add((row, col))
+            inc = grid.contains(row, col)
+            if inc > 0:
+                area += inc
+                queue.append((row, col))
+    return area
+
+
 def rect_1_3_4(row, col):
     '''returns 1 IFF (row, col) is in the 3x4 rectangle in quadrant 1,
     that is, IFF 0 <= col < 4 and 0 <= row < 3
@@ -59,7 +109,7 @@ def pmp_1_5_14_contains():
         # print("(%d, %d) -> " % (row, col), end='')
         # print(bool_mat[row][col])
         return bool_mat[row][col]
-
+    # return the enclosed function:
     return contains
 
 
@@ -68,59 +118,19 @@ class BoundedGrid:
     contains(x, y) > 0 IFF the grid contains tile indexed by (x, y).
     The returned value may be regarded as the contained area of the tile.'''
 
-    def __init__(self, contains):
+    def __init__(self, contains, name=None):
         self.contains = contains
+        self.name = name if name else contains.__name__
+
+    def __repr__(self):
+        '''reproducing expression'''
+        return "%s(%s)" % (type(self).__name__, self.name)
+
+    def __str__(self):
+        '''informal toString'''
+        return self.contains.__name__
 
 
-
-def reachable_area(grid, r_init, c_init):
-    '''
-    returns the area of the explorable grid by summing the areas of
-    contiguous grid tiles as indexed by two integers, starting at the tile
-    indexed by (r_init, c_init), with adjacecy = 4.
-    The contiguous area need not be convex.
-    '''
-    area = grid.contains(r_init, c_init)
-    if area <= 0:
-        return 0
-    queue = deque()
-    added = set()
-    queue.append((r_init, c_init))
-    added.add((r_init, c_init))
-    while queue:
-        row, col = queue.popleft()
-        col += 1
-        if (row, col) not in added:
-            added.add((row, col))
-            inc = grid.contains(row, col)
-            if inc > 0:
-                area += inc
-                queue.append((row, col))
-        col -= 1
-        row -= 1
-        if (row, col) not in added:
-            added.add((row, col))
-            inc = grid.contains(row, col)
-            if inc > 0:
-                area += inc
-                queue.append((row, col))
-        col -= 1
-        row += 1
-        if (row, col) not in added:
-            added.add((row, col))
-            inc = grid.contains(row, col)
-            if inc > 0:
-                area += inc
-                queue.append((row, col))
-        col += 1
-        row += 1
-        if (row, col) not in added:
-            added.add((row, col))
-            inc = grid.contains(row, col)
-            if inc > 0:
-                area += inc
-                queue.append((row, col))
-    return area
 
 def test_predicate(verbose, predicate, subject, expect):
     '''
@@ -136,35 +146,28 @@ def test_predicate(verbose, predicate, subject, expect):
               % (predicate.__name__, "PASS" if passed else "FAIL", expect, subject))
     return not passed
 
-def test_func_args(verbose, func_args, args, expect):
+def test_func_args(verbose, func, args, expect):
     '''
-    tests the result of func_args applied to the *arguments against expect.
+    tests the result of func applied to the *arguments against expect.
     Returns the number of wrong answers, that is,
     0 if result == expect,
     1 if not.
     '''
-    result = func_args(*args)
+    result = func(*args)
     passed = result == expect
     if verbose > passed:
-        print("%s %s: expected %s:  %s  %s" % (func_args.__name__,
-                                               "PASS" if passed else "FAIL",
-                                               expect, args[0], args[1]))
+        print("%s(%s, %s) == %s, expected %s:  %s"
+              % (func.__name__, args[0].__repr__(), args[1:], result, expect, "PASS" if passed else "FAIL"))
     return not passed
 
 def unit_test(args):
     ''' test different (kinds of) predicate detectors '''
     num_wrong = 0
     grid = BoundedGrid(rect_1_3_4)
-    area = reachable_area(grid, 1, 1)
-    num_wrong += area != 12
-    if args.verbose > 1:
-        print("area %d =?= 12" % area)
+    num_wrong += test_func_args(args.verbose, reachable_area, (grid, 1, 1), 12)
 
-    grid = BoundedGrid(pmp_1_5_14_contains())
-    area = reachable_area(grid, 1, 2)
-    num_wrong += area != 42
-    if args.verbose > 1:
-        print("area %d =?= 42" % area)
+    grid = BoundedGrid(pmp_1_5_14_contains(), pmp_1_5_14_contains.__name__)
+    num_wrong += test_func_args(args.verbose, reachable_area, (grid, 1, 2), 42)
 
     print("unit_test:  num_tests:",
           " num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
