@@ -30,24 +30,28 @@ def pmp_1_5_14_contains():
     for this shape in quadrant 1, without putting the boolean matrix
     representing it into the outer namespace.
 
-    0, 5 .      __ __ __             __ __ __      . 14, 5
+    0, 7 .         __                   __         . 14, 7
+                __|  |__             __|  |__
              __|   __   |__ __ __ __|   __   |__
           __|   __|  |__    __ __    __|  |__   |__
-         |__   |__    __|  |__ __|  |__    __|   __|  Area: 38
+         |__   |__    __|  |__ __|  |__    __|   __|  Area: 42
             |__   |__|   __ __ __ __   |__|   __|
-         .     |__ __ __|           |__ __ __|     .
+               |__    __|           |__    __|
+         .        |__|                 |__|        .
     0, 0                                             14, 0
     '''
     bool_mat = [
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
         [0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0],
         [0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0],
         [1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1],
         [0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0],
         [0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
     ]
     def contains(row, col):
         '''returns bool_mat[row][col] if (row, col) is inside the bounding rectangle.'''
-        if row < 0 or row > 4:
+        if row < 0 or row > 6:
             return 0
         if col < 0 or col > 13:
             return 0
@@ -158,9 +162,9 @@ def unit_test(args):
 
     grid = BoundedGrid(pmp_1_5_14_contains())
     area = reachable_area(grid, 1, 2)
-    num_wrong += area != 38
+    num_wrong += area != 42
     if args.verbose > 1:
-        print("area %d =?= 38" % area)
+        print("area %d =?= 42" % area)
 
     print("unit_test:  num_tests:",
           " num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
