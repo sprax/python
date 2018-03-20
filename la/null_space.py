@@ -8,41 +8,47 @@ import scipy
 import numpy as np
 from scipy import linalg, matrix
 
-def null(A, eps=1e-12):
-    u, s, vh = scipy.linalg.svd(A)   # , full_matrices=False)
-    padding = max(0, np.shape(A)[1]-np.shape(s)[0])
+def null(mat, eps=1e-12):
+    '''returns null space of matrix mat'''
+    u, s, vh = scipy.linalg.svd(mat)   # , full_matrices=False)
+    padding = max(0, np.shape(mat)[1]-np.shape(s)[0])
     null_mask = np.concatenate(((s <= eps), np.ones((padding, ), dtype=bool)), axis=0)
     null_space = scipy.compress(null_mask, vh, axis=0)
     return scipy.transpose(null_space)
 
 
-def show_null(A):
-    print "A:", A
-    print "null(A):", null(A)
-    print "A * null(A):", A * null(A)
+def show_null(mat):
+    '''Print matrix and its null space'''
+    print "mat:", mat
+    print "null(mat):", null(mat)
+    print "mat * null(mat):", mat * null(mat)
 
 def main():
-    A = matrix([
+    '''test null function'''
+    mat = matrix([
         [2, 3, 5],
         [-4, 2, 3]
     ])
-    show_null(A)
+    show_null(mat)
 
     # [[ 0.         -0.70710678]
     #  [ 0.          0.        ]
     #  [ 0.          0.70710678]
     #  [ 1.          0.        ]]
 
-    # null(A):
+    # null(mat):
     # [[  4.44089210e-16]
     # [  6.66133815e-16]]
 
     B = matrix([[1, 0, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
     show_null(B)
-    # print A * null(A)
+    # print mat * null(mat)
     # [[ 0.  0.]
     #  [ 0.  0.]
     #  [ 0.  0.]
     #  [ 0.  0.]]
 
-main()
+
+if __name__ == '__main__':
+    main()
+
