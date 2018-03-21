@@ -13,9 +13,9 @@ def max_contiguous_sum(array):
 
 def main():
     '''test max_contiguous_sum (Kadane algorithm)'''
-    arr = [1, 2, -3, 1, 3, 1, -2, 2, -1, 2]
+    arr = [1, 2, -4, 1, 3, 4, 1, -2, 2, -1, 2, -1]
     mcs = max_contiguous_sum(arr)
-    print(arr, " ==> ", mcs, "(expecting 7)")
+    print(arr, " ==> ", mcs, "(expecting 10)")
 
 if __name__ == '__main__':
     main()
