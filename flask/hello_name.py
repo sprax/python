@@ -13,6 +13,14 @@ app = Flask(__name__)
 def index():
     return "Flask App!"
 
+@app.route('/order', methods=['GET', 'POST'])
+def foo(x=None, y=None):
+    # do something to process order
+    print("Got order at time %d seconds." % time.time())
+    return render_template(
+        'test.html',name="Thanks!")
+
+
 @app.route("/hello/<string:name>/")
 def hello(name):
     # side effect:
@@ -24,6 +32,7 @@ def hello(name):
     ORDER += 1
     with open("ord%2d__%s.txt" % (ORDER, dstr), "w") as logf:
         print(dstr, file=logf)
+        print(dstr)
     return render_template(
         'test.html',name=name)
 
