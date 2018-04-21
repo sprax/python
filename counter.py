@@ -2,7 +2,7 @@
 
 
 def init_counter(count=0):
-    '''(re)set counter that increments whenver called'''
+    '''(re)set counter that increments whenever called'''
     _count = count
     def _increment_counter():
         '''inner incrementer function'''
