@@ -2,14 +2,19 @@
 {% block body %}
 
 <div class="block1">
-<h1>Yeah hey, {{name}}!</h1>
-  <form action="/order" method="post">
-    <button type="submit" value="Order Ice Cream" name=name />
-  </form>
-  <h2>Here is an interesting quote for you: </h2>
-  <p>
+    {% if name %}
+        <h1>Hello {{ name }}!</h1>
+    {% else %}
+        <h1>Yeah, hey there...</h1>
+    {% endif %}
+    <form action="/order" method="post">
+        <button type="submit" value="Order Ice Cream" name=name />
+    </form>
+    <h2>Here is an interesting quote for you: </h2>
+    <p>
 "The limits of my language are the limits of my mind. All I know is what I have words for."
-  </p>
-<img src="http://www.naturalprogramming.com/images/smilingpython.gif">
+    </p>
+    <img src="http://www.naturalprogramming.com/images/smilingpython.gif">
 </div>
+
 {% endblock %}
