@@ -4,60 +4,60 @@
 log-uniform random numbers (numbers uniform in the distribution of their logarithms)
 '''
 from __future__ import print_function
-from datetime import datetime
-import pdb;
-from pdb import set_trace
+# import pdb
+# from pdb import set_trace
 import time
 import argparse
-import math
 import os
 import sys
 import atexit
 import termios
 
 
-old_settings=None
+OLD_SETTINGS = None
 
 def init_anykey():
-   global old_settings
-   old_settings = termios.tcgetattr(sys.stdin)
-   new_settings = termios.tcgetattr(sys.stdin)
-   new_settings[3] = new_settings[3] & ~(termios.ECHO | termios.ICANON) # lflags
-   new_settings[6][termios.VMIN] = 0  # cc
-   new_settings[6][termios.VTIME] = 0 # cc
-   termios.tcsetattr(sys.stdin, termios.TCSADRAIN, new_settings)
+    ''' init '''
+    global OLD_SETTINGS
+    OLD_SETTINGS = termios.tcgetattr(sys.stdin)
+    new_settings = termios.tcgetattr(sys.stdin)
+    new_settings[3] = new_settings[3] & ~(termios.ECHO | termios.ICANON) # lflags
+    new_settings[6][termios.VMIN] = 0  # cc
+    new_settings[6][termios.VTIME] = 0 # cc
+    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, new_settings)
 
 @atexit.register
 def term_anykey():
-   # global old_settings
-   if old_settings:
-      termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings)
+    ''' reset terminal settings at exit '''
+    # global OLD_SETTINGS
+    if OLD_SETTINGS:
+        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, OLD_SETTINGS)
 
 def any_keys():
-   ch_set = []
-   ch = os.read(sys.stdin.fileno(), 1)
-   while ch != None and len(ch) > 0:
-      ch_set.append( ord(ch[0]) )
-      ch = os.read(sys.stdin.fileno(), 1)
-   return ch_set;
+    ''' get key(s) for one loop iteration '''
+    ch_set = []
+    char = os.read(sys.stdin.fileno(), 1)
+    while char:
+        ch_set.append(ord(char[0]))
+        char = os.read(sys.stdin.fileno(), 1)
+        return ch_set
 
 def term_input():
+    ''' main loop function; calls any_keys() '''
     init_anykey()
     while True:
-       keys = any_keys()
-       if keys:
-          print("KEYS: ({})".format([(key, chr(key)) for key in keys]))
-          if keys[0] == ord('q'):
-              print("quitting!")
-              break;
-       else:
-          time.sleep(0.1)
-
-
+        keys = any_keys()
+        if keys:
+            print("KEYS: ({})".format([(key, chr(key)) for key in keys]))
+            if keys[0] == ord('q'):
+                print("quitting!")
+                break
+            else:
+                time.sleep(0.1)
 
 def unit_test(args):
     ''' unit test: hit "q" to quit. '''
-    print(unit_test.__doc__)
+    print(unit_test.__doc__, "\nWith args:", args)
     term_input()
     print()
 
