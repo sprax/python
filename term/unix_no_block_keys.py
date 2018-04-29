@@ -13,7 +13,7 @@ import sys
 import atexit
 import termios
 
-
+# global
 OLD_SETTINGS = None
 
 def init_anykey():
@@ -45,6 +45,7 @@ def any_keys():
 def term_input():
     ''' main loop function; calls any_keys() '''
     init_anykey()
+    seconds = 1;
     while True:
         keys = any_keys()
         if keys:
@@ -54,6 +55,9 @@ def term_input():
                 break
             else:
                 time.sleep(0.1)
+        seconds += 1;
+        print("Sleeping for %d seconds..." % seconds)
+        time.sleep(seconds)
 
 def unit_test(args):
     ''' unit test: hit "q" to quit. '''
