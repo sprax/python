@@ -47,13 +47,16 @@ def term_input():
        keys = any_keys()
        if keys:
           print("KEYS: ({})".format([(key, chr(key)) for key in keys]))
+          if keys[0] == ord('q'):
+              print("quitting!")
+              break;
        else:
           time.sleep(0.5)
 
 
 
 def unit_test(args):
-    ''' unit test '''
+    ''' unit test: hit "q" to quit. '''
     print(unit_test.__doc__)
     term_input()
     print()
