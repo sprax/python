@@ -2,8 +2,8 @@
 
 
 def init_counter(count=0):
-    '''(re)set counter that increments whenver called'''
-    _count = count
+    '''(re)set counter that increments whenever called (closure)'''
+    _count = count      # the enclosed value 
     def _increment_counter():
         '''inner incrementer function'''
         nonlocal _count

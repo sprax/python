@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
 '''
 XDV  == eXchange (I/O) Depending on Verbosity.
-Basic debugging out for Python 3.5+
+Basic debugging output for Python 3.5+
 '''
 
 XDV_VERBOSITY = None
 XDV_DEFAULT = 0
+
+def printv(level, verbose, *args, **kwargs):
+    '''
+    prints args with kwargs if level < verbose.
+    Lightweight conditional output.
+    '''
+    if level < verbose:
+        print(*args, **kwargs)
+
 
 def set_xdv_verbosity(verbosity):
     '''Set the module-global variable XDV_VERBOSITY'''
