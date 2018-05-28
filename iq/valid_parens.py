@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-'''validate parentheticals'''
+'''
+Validate balance and order of parentheses, braces, and brackets (), {}, []"
+'''
 import argparse
 
 OPENERS_TO_CLOSERS = {

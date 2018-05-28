@@ -50,7 +50,7 @@ import re
 __version__ = '1.0.20070709'
 
 def syllabify(word, points):
-    """ Given a word and syllable breaking poings, returns a list of
+    """ Given a word and syllable breaking points, returns a list of
         syllables separated at the possible hyphenation points, even
         if they are close to the beginning or end of the word.
     """
