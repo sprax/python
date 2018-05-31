@@ -22,10 +22,12 @@ def flatten_bf(lst):
         try:
             first = lst[0]
             queue.append(first)
-            queue.append(lst[1:])
+            last = lst[1:]
+            if last:
+                queue.append(last)
         except (IndexError, TypeError):
-            if lst:
-                yield lst
+            # if lst:
+            yield lst
 
 
 '''
