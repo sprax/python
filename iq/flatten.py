@@ -1,0 +1,43 @@
+#!/usr/bin/python
+'''flattens nested lists/tuples into a generator'''
+from __future__ import print_function
+
+from collections import deque
+
+def flatten(lst):
+    '''Flattens nested lists or tuples in-order (but fails on strings)'''
+    for item in lst:
+        try:
+            for i in flatten(item):
+                yield i
+        except TypeError:
+            yield item
+
+
+def flatten_bf(lst):
+    '''Flattens nested lists or tuples "breadth-first" '''
+    queue = deque(lst)
+    while queue:
+        lst = queue.popleft()
+        try:
+            first = lst[0]
+            queue.append(first)
+            queue.append(lst[1:])
+        except (IndexError, TypeError):
+            if lst:
+                yield lst
+
+
+
+def main():
+    '''test flatten'''
+    nlist = [1, 2, [3, [[4, 5], 6]], 7, [8, 9]]
+    flist = list(flatten(nlist))
+    total = sum(flist)
+    print("  gen flatten(", nlist, ") => ", flist)
+    print("  sum(flatten(", nlist, ") => ", total)
+    blist = list(flatten_bf(nlist))
+    print(" q flatten_bf(", nlist, ") => ", blist)
+
+if __name__ == '__main__':
+    main()
