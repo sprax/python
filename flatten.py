@@ -1,5 +1,6 @@
 #!/usr/bin/python
 '''flattens nested lists/tuples into a generator'''
+from __future__ import print_function
 
 def flatten(lst):
     '''Flattens nested lists or tuples (but fails on strings)'''
@@ -11,6 +12,9 @@ def flatten(lst):
             yield item
 
 
-NLIST = [1, 3, [2, [4, [9]]], 5, 6, [7, 8]]
-TOTAL = sum(flatten(NLIST))
+NLIST = [1, 2, [3, [[4, 5], 6]]
+    , 7, [8, 9]]
+FLIST = list(flatten(NLIST))
+TOTAL = sum(FLIST)
+print(" flatten(", NLIST, ") => ", FLIST)
 print(" sum(flatten(", NLIST, ") => ", TOTAL)

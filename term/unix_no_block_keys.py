@@ -1,7 +1,7 @@
 
 #!/usr/bin/env python3
 '''
-log-uniform random numbers (numbers uniform in the distribution of their logarithms)
+non-blocking terminal input, linux.
 '''
 from __future__ import print_function
 # import pdb

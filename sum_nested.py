@@ -1,12 +1,15 @@
 #!/usr/bin/python3
-'''Sum all values in a list or tuple of nested lists and tuples.
+'''
+Sum all values in a list or tuple of nested lists and tuples.
 Usage (to run unit tests): python sum_nested.py
 None of the methods here can handle (nested) iterables containing strings.
 That case could be handled by explicitly testing for type str, or type Number,
 or using some logic with len() and is_subscriptable (defined below),
 but what would you actually want it to do?  Convert strings to numbers
-and sum them, or convert numbers to strings and concatenate them, or what?'''
-
+and sum them, or convert numbers to strings and concatenate them, or what?
+'''
+from __future__ import print_function
+# from pprint import pprint
 import collections
 from collections import deque
 
