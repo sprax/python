@@ -28,6 +28,13 @@ def flatten_bf(lst):
                 yield lst
 
 
+'''
+Claim 1: depth-first would be the same as in-order?
+Try this for in order:
+1, 2, 4, 5, 3, 6, 7, 8, 9
+
+Claim 2: The simple flatten above gives pre-order
+'''
 
 def main():
     '''test flatten'''
