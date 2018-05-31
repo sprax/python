@@ -1,7 +1,7 @@
 
-#!/usr/bin/env python3
+#!/usr/bin/env python
 '''
-non-blocking terminal input using select.
+Use select in a loop to get input without blocking or busy-waiting.  Pythhon 2 or 3.
 '''
 from __future__ import print_function
 # import pdb

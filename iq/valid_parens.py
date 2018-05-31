@@ -33,9 +33,11 @@ def is_valid_parens(code):
 
 
 def main():
-    '''Extract questions from text?'''
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('text', type=str, nargs='?', default='What set { of bracketed [ (multi) (parentheticals) ] } is this ??',
+    '''drives is_valid_parens'''
+    parser = argparse.ArgumentParser(description="Validate balance and order of "
+                                     "parentheses, braces, and brackets (), {}, []")
+    parser.add_argument('text', type=str, nargs='?', default='What set { of bracketed '
+                        '[ (multi) (parentheticals) ] } is this ??',
                         help='text to validate')
     args = parser.parse_args()
 
