@@ -14,13 +14,13 @@ Interview Questions:
     do you need any additional data structures?
 8.  If you use a recursive function, what might happen to the stack?
 9.  What is tail-recursion?
-10.  What is a generator function?   (In mathematics, physics, computer science, programming)
+10. What is a generator function?   (In mathematics, physics, computer science, programming)
 10a.     What is a generator in Python?  In other languages?
 10b.     What is the point of generators in general?
 11. What are EAFP and LBYL?
 11a.     In what contexts might it be better to ask for forgiveness than for permission?
 11b.     In what contexts might it be better to ask for forgiveness than for permission?
-12.  How can you define a function that transforms any list whose elements may be scalars, lists, or tuples into a simple list of scalars?
+12. How can you define a function that transforms any list whose elements may be scalars, lists, or tuples into a simple list of scalars?
 12a.     What are the inputs and the output of such a "flatten" function?
 12b.     What choices do you make for the algorithm, with what consequences?
 12c.     What about the order of the output list?  Do all choices in 9b give the same outcome?
@@ -95,8 +95,10 @@ HARDER_LIST = [[2], 0, [3, [6, [[10, [12, [14, 15], 13], 11]]], [7, 8, 9]], 1, [
 '''
 
 def flatten_df_rec(lst):
-    '''Flattens nested lists or tuples in-order
-    (but fails on strings)'''
+    '''
+    Flattens nested lists or tuples in-order (but it throws on scalar on
+    arguments, and on strings it returns a non-terminating generator)
+    '''
     for item in lst:
         try:
             for i in flatten_df_rec(item):
@@ -164,7 +166,7 @@ def test_pos_sum(pos_sum_func, flat_iter, verbose):
 
 def test_alt_sum(alt_sum_func, flat_iter, verbose):
     ''' applies a function to alternately add and subtract elements in an iterable
-    (as in a simple list or tuple), with verbosity '''
+        (as in a simple list or tuple), with verbosity '''
     result = alt_sum_func(list(flat_iter))
     if verbose:
         print("test_alt_sum({}, {}) => {}".format(test_alt_sum.__name__,
@@ -202,3 +204,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+    sta = "abcde"
+    res = flatten_df_rec(sta)
+    print(sta, " => ", res)
+    # print(sta, " => ", list(res))
