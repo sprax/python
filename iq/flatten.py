@@ -4,8 +4,8 @@ from __future__ import print_function
 
 from collections import deque
 
-# NESTED_LIST = [0, 1, [3, [6, [[8, [11, 12], 10]], 7, [9]]], 2, [4, 5]]
-NESTED_LIST = [9, [11, 12], 10]
+NESTED_LIST = [0, 1, [3, [6, [[8, [11, 12], 9]], 7, [10]]], 2, [4, 5]]
+EASIER_LIST = [7, [[11, 12]], 8, 9, [10]]
 '''
                   [ ]
                 /  |   \
@@ -38,19 +38,22 @@ def flatten_bf(lst):
     Flattens nested lists or tuples in
     "breadth-first" or "level-order"
     '''
-    queue = deque(lst)
+    queue = deque([lst])
     while queue:
         lst = queue.popleft()
         try:
-            first = lst[0]
-            queue.append(first)
-            last = lst[1:]
-            if last:
-                queue.append(last)
-            print("f({})  l[{}]  q<{}>".format(first, last, queue))
+            for obj in lst:
+                try:
+                    first = obj[0]
+                    queue.append(first)
+                    last = obj[1:]
+                    if last:
+                        queue.append(last)
+                    print("f({})  l[{}]  q<{}>".format(first, last, queue))
+                except (IndexError, TypeError):
+                    print("E({}    q<{}>)".format(lst, queue))
+                    yield obj
         except (IndexError, TypeError):
-            # if lst:
-            print("E({}    q<{}>)".format(lst, queue))
             yield lst
 
 
@@ -69,6 +72,9 @@ def main():
     total = sum(flist)
     print("  gen flatten(", nlist, ") => ", flist)
     print("  sum(flatten(", nlist, ") => ", total)
+    blist = list(flatten_bf(nlist))
+    print(" q flatten_bf(", nlist, ") => ", blist)
+    nlist = EASIER_LIST
     blist = list(flatten_bf(nlist))
     print(" q flatten_bf(", nlist, ") => ", blist)
 
