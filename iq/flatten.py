@@ -2,21 +2,55 @@
 '''
 Functions and tests for flattening nested lists/tuples into a generator.
 
-Question 1: Would depth-first be the same as in-order?
-Question 2: Does the simple flatten_df_rec give pre-order?
+Interview Questions:
+1.  How can you define a function that sums any list (or tuple) of numbers?
+2.  How can you define a function that gives an alternating sum of elements in a list or tuple?
+    (Add first element, subtract the next, then alternate -- so + evens and - minus odds == sum(evens) - sum(odds))
+3.  What will you do if the elements of the list (or tuple) can be other lists or tuples?
+4.  What do you generally call a data structure that may contain elements of the same general data structure?
+5.  What kinds of algorithms can you apply to a recursive data structure?
+6.  How can you traverse a recursive data structure (visit every node or element) without using recursion?
+7.  When you make an iterative function that traverses a recursive data structure, such as a list of lists,
+    do you need any additional data structures?
+8.  If you use a recursive function, what might happen to the stack?
+9.  What is tail-recursion?
+10.  What is a generator function?   (In mathematics, physics, computer science, programming)
+10a.     What is a generator in Python?  In other languages?
+10b.     What is the point of generators in general?
+11. What are EAFP and LBYL?
+11a.     In what contexts might it be better to ask for forgiveness than for permission?
+11b.     In what contexts might it be better to ask for forgiveness than for permission?
+12.  How can you define a function that transforms any list whose elements may be scalars, lists, or tuples into a simple list of scalars?
+12a.     What are the inputs and the output of such a "flatten" function?
+12b.     What choices do you make for the algorithm, with what consequences?
+12c.     What about the order of the output list?  Do all choices in 9b give the same outcome?
+12d.     Can you name the possible output orders?
+
+13. How can you define a function that, given an iterable recursive data structure in which the leaf nodes are numbers,
+    outputs the alternating sum of all its elements?
+13a.    What do you need to know to make your function compute the right answer?
+13b.    What do you need to know to make your function compute that answer efficiently?
+
+14. How would you test that the your function's implementation is correct?
+14a.    Is it enough to get the right answer on a few test examples?  Why or why not?
+14b.    How could you divide up your testing to be more sure it gives you what you want?
+
+15.
+Does the simple flatten_df_rec give pre-order or in-order?
 '''
 from __future__ import print_function
-
 from collections import deque
 
-EASIER_LIST = [0, [3, 4], 1, [5, [7]], 2, [6]]
+POS_SUM = sum
+
+EASIER_LIST = [0, 1, [3, 4], 2, [5, [7, 8], 6, [9]]]
 '''           [ ]
             /  |  \
            0   1   2
-         / |   |   |
-        3  4   5   6
-               |
-               7
+             / |   | \
+            3  4   5  6
+                  / \  \
+                 7   8  9
 '''
 
 HARDER_LIST = [[2], 0, [3, [6, [[10, [12, [14, 15], 13], 11]]], [7, 8, 9]], 1, [4, 5]]
@@ -72,6 +106,7 @@ def flatten_bf_itr(lst, trace=False):
                 print("X({})\tq<{}>)".format(lst, queue))
             yield lst
 
+
 def alt_sum(flat_iter):
     '''
     alternately adds and subtracts elements in an iterable (as in a simple list
@@ -83,6 +118,7 @@ def alt_sum(flat_iter):
         sign = -sign
     return asum
 
+
 def test_flatten(flatten_func, nested_list, verbose):
     '''applies a function to flatten a possibly nested list, with verbosity'''
     result = flatten_func(nested_list)
@@ -93,6 +129,7 @@ def test_flatten(flatten_func, nested_list, verbose):
         return listed
     return result
 
+
 def test_pos_sum(pos_sum_func, flat_iter, verbose):
     ''' applies a function to sum a simple iterable (as in a list or tuple),
         with verbosity '''
@@ -101,6 +138,7 @@ def test_pos_sum(pos_sum_func, flat_iter, verbose):
         print("test_pos_sum({}, {}) => {}".format(pos_sum_func.__name__,
                                                   flat_iter, result))
     return result
+
 
 def test_alt_sum(alt_sum_func, flat_iter, verbose):
     ''' applies a function to alternately add and subtract elements in an iterable
@@ -112,19 +150,15 @@ def test_alt_sum(alt_sum_func, flat_iter, verbose):
     return result
 
 
-
-
-
-
-
 def test_flatten_pos_alt_sums(flatten_func, nested_list, verbose):
     ''' Tests flattening and summing functions '''
     flat_iter = test_flatten(flatten_func, nested_list, verbose)
-    pos_value = test_pos_sum(pos_sum, flat_iter, verbose)
+    pos_value = test_pos_sum(POS_SUM, flat_iter, verbose)
     alt_value = test_alt_sum(alt_sum, flat_iter, verbose)
     if verbose:
         print("pos sum: %d,  alt sum: %d\n" % (pos_value, alt_value))
     return flat_iter, pos_value, alt_value
+
 
 def test_flattens_and_sums(nested_list, verbose):
     ''' Tests flattening and summing functions '''
@@ -132,16 +166,17 @@ def test_flattens_and_sums(nested_list, verbose):
     bf_flat, bf_pos, bf_alt = test_flatten_pos_alt_sums(flatten_bf_itr, nested_list, verbose)
     intersection = [pair[0] for pair in zip(bf_flat, df_flat) if pair[0] == pair[1]]
     if verbose:
-        print("intersection of breadth-first and depth-first flattened lists:", intersection)
+        print("intersection of depth-first and breadth-first flattened lists:", intersection)
+        print("diff pos sum of depth-first and breadth-first flattened lists:", df_pos - bf_pos)
+        print("diff alt sum of depth-first and breadth-first flattened lists:", df_alt - bf_alt)
     return intersection
-
 
 def main():
     '''tests flatten and sum functions as applied to lists'''
-    verbose = True
-    flat, pos, alt = test_flattens_and_sums(EASIER_LIST, verbose)
-    flat, pos, alt = test_flattens_and_sums(HARDER_LIST, verbose)
-
+    verbose, overlap = True, []
+    overlap += test_flattens_and_sums(EASIER_LIST, verbose)
+    overlap += test_flattens_and_sums(HARDER_LIST, verbose)
+    print("cumulative overlap:", overlap)
 
 if __name__ == '__main__':
     main()
