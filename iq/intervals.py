@@ -3,10 +3,11 @@
 '''
 find or create disjoint intervals
 '''
+from __future__ import print_function
 
 import argparse
-import pdb
-from pdb import set_trace
+# import pdb
+# from pdb import set_trace
 import random
 from collections import namedtuple
 
@@ -103,8 +104,6 @@ def unit_test(args):
 
 def main():
     '''driver for unit_test'''
-    const_a = "abcdefgh"
-    const_b = "abc_efgh"
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-verbose', type=int, nargs='?', const=2, default=1,
                         help='verbosity of output (const=2, default: 1)')
