@@ -4,8 +4,27 @@ from __future__ import print_function
 
 from collections import deque
 
+NESTED_LIST = [0, 1, [3, [6, [[8, [11, 12], 10]], 7, [9]]], 2, [4, 5]]
+'''
+                  [ ]
+                /  |   \
+               0   1    2
+                   |   / \
+                   3  4   5
+                  / \
+                 6   7
+                /     \
+               []      9
+              /  \
+             8    10
+            / \
+          11   12
+
+'''
+
 def flatten(lst):
-    '''Flattens nested lists or tuples in-order (but fails on strings)'''
+    '''Flattens nested lists or tuples in-order
+    (but fails on strings)'''
     for item in lst:
         try:
             for i in flatten(item):
@@ -15,7 +34,10 @@ def flatten(lst):
 
 
 def flatten_bf(lst):
-    '''Flattens nested lists or tuples "breadth-first" '''
+    '''
+    Flattens nested lists or tuples in
+    "breadth-first" or "level-order"
+    '''
     queue = deque(lst)
     while queue:
         lst = queue.popleft()
@@ -40,7 +62,7 @@ Claim 2: The simple flatten above gives pre-order
 
 def main():
     '''test flatten'''
-    nlist = [1, 2, [3, [[4, 5], 6]], 7, [8, 9]]
+    nlist = NESTED_LIST
     flist = list(flatten(nlist))
     total = sum(flist)
     print("  gen flatten(", nlist, ") => ", flist)
