@@ -112,24 +112,35 @@ def test_alt_sum(alt_sum_func, flat_iter, verbose):
     return result
 
 
+
+
+
+
+
+def test_flatten_pos_alt_sums(flatten_func, nested_list, verbose):
+    ''' Tests flattening and summing functions '''
+    flat_iter = test_flatten(flatten_func, nested_list, verbose)
+    pos_value = test_pos_sum(pos_sum, flat_iter, verbose)
+    alt_value = test_alt_sum(alt_sum, flat_iter, verbose)
+    if verbose:
+        print("pos sum: %d,  alt sum: %d\n" % (pos_value, alt_value))
+    return flat_iter, pos_value, alt_value
+
+def test_flattens_and_sums(nested_list, verbose):
+    ''' Tests flattening and summing functions '''
+    df_flat, df_pos, df_alt = test_flatten_pos_alt_sums(flatten_df_rec, nested_list, verbose)
+    bf_flat, bf_pos, bf_alt = test_flatten_pos_alt_sums(flatten_bf_itr, nested_list, verbose)
+    intersection = [pair[0] for pair in zip(bf_flat, df_flat) if pair[0] == pair[1]]
+    if verbose:
+        print("intersection of breadth-first and depth-first flattened lists:", intersection)
+    return intersection
+
+
 def main():
     '''tests flatten and sum functions as applied to lists'''
     verbose = True
-    flat_iter = test_flatten(flatten_df_rec, EASIER_LIST, verbose)
-    sum_value = test_pos_sum(sum, flat_iter, verbose)
-    alt_value = test_alt_sum(alt_sum, flat_iter, verbose)
-    print("pos sum: %d,  alt sum: %d\n" % (sum_value, alt_value))
-    flat_iter = test_flatten(flatten_bf_itr, EASIER_LIST, verbose)
-    sum_value = test_pos_sum(sum, flat_iter, verbose)
-    alt_value = test_alt_sum(alt_sum, flat_iter, verbose)
-    print("pos sum: %d,  alt sum: %d\n" % (sum_value, alt_value))
-
-    # flat_iter = test_flatten(flatten_df_rec, HARDER_LIST, verbose)
-    # sum_value = test_pos_sum(sum, flat_iter, verbose)
-    # print("sum: %d\n" % sum_value)
-    # flat_iter = test_flatten(flatten_bf_itr, HARDER_LIST, verbose)
-    # sum_value = test_pos_sum(sum, flat_iter, verbose)
-    # print("sum: %d\n" % sum_value)
+    flat, pos, alt = test_flattens_and_sums(EASIER_LIST, verbose)
+    flat, pos, alt = test_flattens_and_sums(HARDER_LIST, verbose)
 
 
 if __name__ == '__main__':
