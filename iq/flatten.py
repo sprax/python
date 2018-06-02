@@ -4,7 +4,8 @@ from __future__ import print_function
 
 from collections import deque
 
-NESTED_LIST = [0, 1, [3, [6, [[8, [11, 12], 10]], 7, [9]]], 2, [4, 5]]
+# NESTED_LIST = [0, 1, [3, [6, [[8, [11, 12], 10]], 7, [9]]], 2, [4, 5]]
+NESTED_LIST = [9, [11, 12], 10]
 '''
                   [ ]
                 /  |   \
@@ -19,7 +20,6 @@ NESTED_LIST = [0, 1, [3, [6, [[8, [11, 12], 10]], 7, [9]]], 2, [4, 5]]
              8    10
             / \
           11   12
-
 '''
 
 def flatten(lst):
@@ -47,8 +47,10 @@ def flatten_bf(lst):
             last = lst[1:]
             if last:
                 queue.append(last)
+            print("f({})  l[{}]  q<{}>".format(first, last, queue))
         except (IndexError, TypeError):
             # if lst:
+            print("E({}    q<{}>)".format(lst, queue))
             yield lst
 
 
