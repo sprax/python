@@ -24,19 +24,38 @@ Interview Questions:
 12a.     What are the inputs and the output of such a "flatten" function?
 12b.     What choices do you make for the algorithm, with what consequences?
 12c.     What about the order of the output list?  Do all choices in 9b give the same outcome?
-12d.     Can you name the possible output orders?
+12d.     Can you name the possible output orders?  (breadth-first?  depth-first?  level-order?  pre-order?  in-order?)
 
 13. How can you define a function that, given an iterable recursive data structure in which the leaf nodes are numbers,
     outputs the alternating sum of all its elements?
 13a.    What do you need to know to make your function compute the right answer?
 13b.    What do you need to know to make your function compute that answer efficiently?
+13c.    If the requirment is to traverse a large list breadth-first (level-order),
+        what additional data structure would you use to make the algorithm efficient?   [queue]
+13d.    If the requirment is to traverse a large list depth-first (pre-order),
+        what additional data structure would you use to make the algorithm efficient?   [stack]
 
-14. How would you test that the your function's implementation is correct?
-14a.    Is it enough to get the right answer on a few test examples?  Why or why not?
-14b.    How could you divide up your testing to be more sure it gives you what you want?
+Error Handling:
+14. What if the argument passed to this last function is one number, not a list or other iterable?
+14a.    What extra step could handle that case?
+15. How to handle an argument list of lists that contains non-numerical leaf nodes?
+15a.    Pre-filter, ignore non-numbers in-place, or throw?
 
-15.
-Does the simple flatten_df_rec give pre-order or in-order?
+Testing Questions:
+16. How would you test that the your function's implementation is correct?
+16a.    Is it enough to get the right answer on a few test examples?  Why or why not?
+16b.    How could you divide up your testing to be more sure it gives you what you want?
+
+Bonus Questions:
+17. Does the simple flatten_df_rec give pre-order, in-order, post-order, or what?
+18. Can any N-ary tree be mapped uniquely (and thus reversibly) to a list of leaves and recursive lists?
+18a.    How?    [Hint: Where do you put the tree's root node?]
+18b.    A trie is a kind of tree, right?  How can you map a prefix-tree of all English words to a recursive list?
+        [Hint: What is the root node of such a trie or prefix-tree?]
+19. Can any list of lists be mapped uniquely (and thus reversibly) to an N-ary tree?
+18a.    Can you map each list value to exactly one tree node?
+18b.    Will each tree-node point to exactly one value in the original list?  Must it?
+18c.    Hint: How to you map an empty list to a tree?  How about [1, 2, 3]?  And [[[1], 2], 3]?
 '''
 from __future__ import print_function
 from collections import deque
@@ -51,6 +70,9 @@ EASIER_LIST = [0, 1, [3, 4], 2, [5, [7, 8], 6, [9]]]
             3  4   5  6
                   / \  \
                  7   8  9
+ pre-order (root, children left to right): 0 1 3 4 2 5 7 8 6 9
+post-order (children left to right, root): 0 3 4 1 7 8 5 9 6 2
+  in-order (left, root, right) is not well-defined for non-binary trees
 '''
 
 HARDER_LIST = [[2], 0, [3, [6, [[10, [12, [14, 15], 13], 11]]], [7, 8, 9]], 1, [4, 5]]
