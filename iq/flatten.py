@@ -1,5 +1,10 @@
 #!/usr/bin/python
-'''flattens nested lists/tuples into a generator'''
+'''
+Functions and tests for flattening nested lists/tuples into a generator.
+
+Question 1: Would depth-first be the same as in-order?
+Question 2: Does the simple flatten_df_rec give pre-order?
+'''
 from __future__ import print_function
 
 from collections import deque
@@ -67,14 +72,16 @@ def flatten_bf_itr(lst, trace=False):
                 print("X({})\tq<{}>)".format(lst, queue))
             yield lst
 
-
-'''
-Claim 1: depth-first would be the same as in-order?
-Try this for in order:
-1, 2, 4, 5, 3, 6, 7, 8, 9
-
-Claim 2: The simple flatten_df_rec above gives pre-order
-'''
+def alt_sum(flat_iter):
+    '''
+    alternately adds and subtracts elements in an iterable (as in a simple list
+    or tuple), with verbosity.  Adds first element, subtracts second, and so on.
+    '''
+    asum, sign = 0, 1
+    for elem in flat_iter:
+        asum += sign * elem
+        sign = -sign
+    return asum
 
 def test_flatten(flatten_func, nested_list, verbose):
     '''applies a function to flatten a possibly nested list, with verbosity'''
@@ -82,34 +89,47 @@ def test_flatten(flatten_func, nested_list, verbose):
     if verbose:
         listed = list(result)
         print("test_flatten({}, {}) => {}".format(flatten_func.__name__,
-              nested_list, listed))
+                                                  nested_list, listed))
         return listed
     return result
 
-def test_sumlist(sum_func, flat_iter, verbose):
-    '''applies a function to sum a simple list or tuple, with verbosity'''
-    result = sum_func(list(flat_iter))
+def test_pos_sum(pos_sum_func, flat_iter, verbose):
+    ''' applies a function to sum a simple iterable (as in a list or tuple),
+        with verbosity '''
+    result = pos_sum_func(list(flat_iter))
     if verbose:
-        print("test_sumlist({}, {}) => {}".format(sum_func.__name__,
-              flat_iter, result))
+        print("test_pos_sum({}, {}) => {}".format(pos_sum_func.__name__,
+                                                  flat_iter, result))
     return result
 
+def test_alt_sum(alt_sum_func, flat_iter, verbose):
+    ''' applies a function to alternately add and subtract elements in an iterable
+    (as in a simple list or tuple), with verbosity '''
+    result = alt_sum_func(list(flat_iter))
+    if verbose:
+        print("test_alt_sum({}, {}) => {}".format(test_alt_sum.__name__,
+                                                  flat_iter, result))
+    return result
 
 
 def main():
     '''tests flatten and sum functions as applied to lists'''
     verbose = True
     flat_iter = test_flatten(flatten_df_rec, EASIER_LIST, verbose)
-    sum_value = test_sumlist(sum, flat_iter, verbose)
-    print()
+    sum_value = test_pos_sum(sum, flat_iter, verbose)
+    alt_value = test_alt_sum(alt_sum, flat_iter, verbose)
+    print("pos sum: %d,  alt sum: %d\n" % (sum_value, alt_value))
     flat_iter = test_flatten(flatten_bf_itr, EASIER_LIST, verbose)
-    sum_value = test_sumlist(sum, flat_iter, verbose)
-    print()
-    flat_iter = test_flatten(flatten_df_rec, HARDER_LIST, verbose)
-    sum_value = test_sumlist(sum, flat_iter, verbose)
-    print()
-    flat_iter = test_flatten(flatten_bf_itr, HARDER_LIST, verbose)
-    sum_value = test_sumlist(sum, flat_iter, verbose)
+    sum_value = test_pos_sum(sum, flat_iter, verbose)
+    alt_value = test_alt_sum(alt_sum, flat_iter, verbose)
+    print("pos sum: %d,  alt sum: %d\n" % (sum_value, alt_value))
+
+    # flat_iter = test_flatten(flatten_df_rec, HARDER_LIST, verbose)
+    # sum_value = test_pos_sum(sum, flat_iter, verbose)
+    # print("sum: %d\n" % sum_value)
+    # flat_iter = test_flatten(flatten_bf_itr, HARDER_LIST, verbose)
+    # sum_value = test_pos_sum(sum, flat_iter, verbose)
+    # print("sum: %d\n" % sum_value)
 
 
 if __name__ == '__main__':
