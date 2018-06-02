@@ -4,56 +4,67 @@ from __future__ import print_function
 
 from collections import deque
 
-NESTED_LIST = [0, 1, [3, [6, [[8, [11, 12], 9]], 7, [10]]], 2, [4, 5]]
-EASIER_LIST = [7, [[11, 12]], 8, 9, [10]]
-'''
-                  [ ]
-                /  |   \
-               0   1    2
-                   |   / \
-                   3  4   5
-                  / \
-                 6   7
-                /     \
-               []      9
-              /  \
-             8    10
-            / \
-          11   12
+EASIER_LIST = [0, [3, 4], 1, [5, [7]], 2, [6]]
+'''           [ ]
+            /  |  \
+           0   1   2
+         / |   |   |
+        3  4   5   6
+               |
+               7
 '''
 
-def flatten(lst):
+HARDER_LIST = [[2], 0, [3, [6, [[10, [12, [14, 15], 13], 11]]], [7, 8, 9]], 1, [4, 5]]
+'''
+              [ ]
+            /  |   \
+          [ ]  0    1
+          /    |   / \
+         2     3  4   5
+              / \
+             6  [ ]
+            /  / | \
+          [ ] 7  8  9
+          / \
+         10  11
+        / \
+      12   13
+     /  \
+    14  15
+'''
+
+def flatten_df_rec(lst):
     '''Flattens nested lists or tuples in-order
     (but fails on strings)'''
     for item in lst:
         try:
-            for i in flatten(item):
+            for i in flatten_df_rec(item):
                 yield i
         except TypeError:
             yield item
 
 
-def flatten_bf(lst):
+def flatten_bf_itr(lst, trace=False):
     '''
-    Flattens nested lists or tuples in
-    "breadth-first" or "level-order"
+    Flattens nested lists or tuples in "breadth-first" or "level-order"
     '''
     queue = deque([lst])
     while queue:
         lst = queue.popleft()
         try:
-            for obj in lst:
+            for elt in lst:
                 try:
-                    first = obj[0]
-                    queue.append(first)
-                    last = obj[1:]
-                    if last:
-                        queue.append(last)
-                    print("f({})  l[{}]  q<{}>".format(first, last, queue))
+                    first = elt[0]
+                    queue.append(elt)
+                    if trace:
+                        print("elt[0]={}\tQ<{}>)".format(first, queue))
                 except (IndexError, TypeError):
-                    print("E({}    q<{}>)".format(lst, queue))
-                    yield obj
+                    if trace:
+                        print("E={}\tq<{}>)".format(elt, queue))
+                    yield elt
         except (IndexError, TypeError):
+            if trace:
+                print("X({})\tq<{}>)".format(lst, queue))
             yield lst
 
 
@@ -62,21 +73,44 @@ Claim 1: depth-first would be the same as in-order?
 Try this for in order:
 1, 2, 4, 5, 3, 6, 7, 8, 9
 
-Claim 2: The simple flatten above gives pre-order
+Claim 2: The simple flatten_df_rec above gives pre-order
 '''
 
+def test_flatten(flatten_func, nested_list, verbose):
+    '''applies a function to flatten a possibly nested list, with verbosity'''
+    result = flatten_func(nested_list)
+    if verbose:
+        listed = list(result)
+        print("test_flatten({}, {}) => {}".format(flatten_func.__name__,
+              nested_list, listed))
+        return listed
+    return result
+
+def test_sumlist(sum_func, flat_iter, verbose):
+    '''applies a function to sum a simple list or tuple, with verbosity'''
+    result = sum_func(list(flat_iter))
+    if verbose:
+        print("test_sumlist({}, {}) => {}".format(sum_func.__name__,
+              flat_iter, result))
+    return result
+
+
+
 def main():
-    '''test flatten'''
-    nlist = NESTED_LIST
-    flist = list(flatten(nlist))
-    total = sum(flist)
-    print("  gen flatten(", nlist, ") => ", flist)
-    print("  sum(flatten(", nlist, ") => ", total)
-    blist = list(flatten_bf(nlist))
-    print(" q flatten_bf(", nlist, ") => ", blist)
-    nlist = EASIER_LIST
-    blist = list(flatten_bf(nlist))
-    print(" q flatten_bf(", nlist, ") => ", blist)
+    '''tests flatten and sum functions as applied to lists'''
+    verbose = True
+    flat_iter = test_flatten(flatten_df_rec, EASIER_LIST, verbose)
+    sum_value = test_sumlist(sum, flat_iter, verbose)
+    print()
+    flat_iter = test_flatten(flatten_bf_itr, EASIER_LIST, verbose)
+    sum_value = test_sumlist(sum, flat_iter, verbose)
+    print()
+    flat_iter = test_flatten(flatten_df_rec, HARDER_LIST, verbose)
+    sum_value = test_sumlist(sum, flat_iter, verbose)
+    print()
+    flat_iter = test_flatten(flatten_bf_itr, HARDER_LIST, verbose)
+    sum_value = test_sumlist(sum, flat_iter, verbose)
+
 
 if __name__ == '__main__':
     main()
