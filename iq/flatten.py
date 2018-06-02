@@ -96,7 +96,7 @@ HARDER_LIST = [[2], 0, [3, [6, [[10, [12, [14, 15], 13], 11]]], [7, 8, 9]], 1, [
 
 def flatten_df_rec(lst):
     '''
-    Flattens nested lists or tuples in-order (but it throws on scalar on
+    Flattens nested lists or tuples depth-first/pre-order (but it throws on scalar on
     arguments, and on strings it returns a non-terminating generator)
     '''
     for item in lst:
@@ -105,6 +105,22 @@ def flatten_df_rec(lst):
                 yield i
         except TypeError:
             yield item
+
+
+def flatten_df_itr(vit):
+    '''
+    Flattens nested lists or tuples depth-first/pre-order (and does not throw
+    on scalar on arguments, and on strings it returns a non-terminating generator)
+    '''
+    stack = [vit]
+    while stack:
+        vit = stack.pop()
+        if isinstance(vit, collections.Iterable):
+            for item in vit:
+                stack.append(item)
+        else:
+            yield vit
+
 
 
 def flatten_bf_itr(lst, trace=False):
@@ -206,5 +222,7 @@ if __name__ == '__main__':
     main()
     sta = "abcde"
     res = flatten_df_rec(sta)
-    print(sta, " => ", res)
+    print("flatten_df_rec:", sta, " => ", res)
     # print(sta, " => ", list(res))
+    res = flatten_df_itr(sta)
+    print("flatten_df_itr:", sta, " => ", list(res))
