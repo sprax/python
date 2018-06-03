@@ -58,7 +58,7 @@ Bonus Questions:
 18c.    Hint: How to you map an empty list to a tree?  How about [1, 2, 3]?  And [[[1], 2], 3]?
 '''
 from __future__ import print_function
-from collections import deque
+import collections
 
 POS_SUM = sum
 
@@ -107,12 +107,14 @@ def flatten_df_rec(lst):
             yield item
 
 
-def flatten_df_itr(vit):
+def _flatten_df_itr_rev(vit):
     '''
-    Flattens nested lists or tuples depth-first/pre-order (and does not throw
-    on scalar on arguments, and on strings it returns a non-terminating generator)
+    Destructively flattens a nested list or tuple into REVERSED depth-first/pre-order
+    generator.  It throws on scalar on arguments, returns a non-terminating generator
+    if fed a string, and it directly uses its argument as a stack, emptying it in the
+    process
     '''
-    stack = [vit]
+    stack = vit
     while stack:
         vit = stack.pop()
         if isinstance(vit, collections.Iterable):
@@ -121,17 +123,27 @@ def flatten_df_itr(vit):
         else:
             yield vit
 
+def flatten_df_itr(obj):
+    '''
+    Flattens nested lists or tuples depth-first/pre-order.  It does not throw
+    on scalar on arguments, and fails gracefully on strings.
+    '''
+    if isinstance(obj, collections.Iterable):
+        result = list(_flatten_df_itr_rev([obj]))
+        result.reverse()
+        return result
+    return obj
 
 
-def flatten_bf_itr(lst, trace=False):
+def flatten_bf_itr(obj, trace=False):
     '''
     Flattens nested lists or tuples in "breadth-first" or "level-order"
     '''
-    queue = deque([lst])
+    queue = collections.deque([obj])
     while queue:
-        lst = queue.popleft()
+        obj = queue.popleft()
         try:
-            for elt in lst:
+            for elt in obj:
                 try:
                     first = elt[0]
                     queue.append(elt)
@@ -143,8 +155,8 @@ def flatten_bf_itr(lst, trace=False):
                     yield elt
         except (IndexError, TypeError):
             if trace:
-                print("X({})\tq<{}>)".format(lst, queue))
-            yield lst
+                print("X({})\tq<{}>)".format(obj, queue))
+            yield obj
 
 
 def alt_sum(flat_iter):
@@ -218,11 +230,25 @@ def main():
     overlap += test_flattens_and_sums(HARDER_LIST, verbose)
     print("cumulative overlap:", overlap)
 
-if __name__ == '__main__':
-    main()
+def test_df_itr():
+    '''test the depth-first iterative function'''
     sta = "abcde"
     res = flatten_df_rec(sta)
     print("flatten_df_rec:", sta, " => ", res)
     # print(sta, " => ", list(res))
-    res = flatten_df_itr(sta)
-    print("flatten_df_itr:", sta, " => ", list(res))
+    res = _flatten_df_itr_rev(sta)
+    print("_flatten_df_itr_rev:", sta, " => ", res)
+    # print("flattened list:", res, " => ", list(res))
+    print()
+    res = _flatten_df_itr_rev([HARDER_LIST])
+    print("_flatten_df_itr_rev:", HARDER_LIST, " => ", res)
+    lst = list(res)
+    lst.reverse()
+    print("list({}).reverse() => {}".format(res, lst))
+    print("HARDER_LIST: ", HARDER_LIST)
+    fwd = flatten_df_itr(HARDER_LIST)
+    print("flatten_df_itr({}) => {}".format(HARDER_LIST, fwd))
+
+if __name__ == '__main__':
+    main()
+    test_df_itr()
