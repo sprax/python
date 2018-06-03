@@ -1,6 +1,6 @@
 #!/usr/bin/python
 '''
-Functions and tests for flattening nested lists/tuples into a generator.
+Functions and tests for flattening nested lists/tuples into a generator or list.
 
 Interview Questions:
 1.  How can you define a function that sums any list (or tuple) of numbers?
