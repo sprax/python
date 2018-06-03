@@ -117,6 +117,8 @@ def _flatten_df_itr_rev(vit):
     stack = vit
     while stack:
         vit = stack.pop()
+        # if isinstance(vit, str):
+        #     yield vit
         if isinstance(vit, collections.Iterable):
             for item in vit:
                 stack.append(item)
@@ -128,6 +130,8 @@ def flatten_df_itr(obj):
     Flattens nested lists or tuples depth-first/pre-order.  It does not throw
     on scalar on arguments, and fails gracefully on strings.
     '''
+    if isinstance(obj, str):
+        return obj
     if isinstance(obj, collections.Iterable):
         result = list(_flatten_df_itr_rev([obj]))
         result.reverse()
@@ -248,6 +252,13 @@ def test_df_itr():
     print("HARDER_LIST: ", HARDER_LIST)
     fwd = flatten_df_itr(HARDER_LIST)
     print("flatten_df_itr({}) => {}".format(HARDER_LIST, fwd))
+
+    print("Is a str iterable?  ", isinstance(sta, collections.Iterable))
+    fwd = flatten_df_itr(sta)
+    print("flatten_df_itr({}) => {}".format(sta, fwd))
+    # mix = [sta, 2, [3, 4], "end"]
+    # fwd = flatten_df_itr(mix)
+    # print("flatten_df_itr({}) => {}".format(mix, fwd))
 
 if __name__ == '__main__':
     main()
