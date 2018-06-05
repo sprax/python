@@ -20,7 +20,8 @@ Interview Questions:
 11. What are EAFP and LBYL?
 11a.     In what contexts might it be better to ask for forgiveness than for permission?
 11b.     In what contexts might it be better to ask for forgiveness than for permission?
-12. How can you define a function that transforms any list whose elements may be scalars, lists, or tuples into a simple list of scalars?
+12. How can you define a function that transforms any list whose elements may be scalars,
+         lists, or tuples into a simple list of scalars?
 12a.     What are the inputs and the output of such a "flatten" function?
 12b.     What choices do you make for the algorithm, with what consequences?
 12c.     What about the order of the output list?  Do all choices in 9b give the same outcome?
@@ -62,8 +63,8 @@ import collections
 
 POS_SUM = sum
 
-EASIER_LIST = [0, 1, [3, 4], 2, [5, [7, 8], 6, [9]]]
-'''           [ ]
+r'''
+              [ ]
             /  |  \
            0   1   2
              / |   | \
@@ -74,9 +75,9 @@ EASIER_LIST = [0, 1, [3, 4], 2, [5, [7, 8], 6, [9]]]
 post-order (children left to right, root): 0 3 4 1 7 8 5 9 6 2
   in-order (left, root, right) is not well-defined for non-binary trees
 '''
+EASIER_LIST = [0, 1, [3, 4], 2, [5, [7, 8], 6, [9]]]
 
-HARDER_LIST = [[2], 0, [3, [6, [[10, [12, [14, 15], 13], 11]]], [7, 8, 9]], 1, [4, 5]]
-'''
+r'''
               [ ]
             /  |   \
           [ ]  0    1
@@ -93,6 +94,7 @@ HARDER_LIST = [[2], 0, [3, [6, [[10, [12, [14, 15], 13], 11]]], [7, 8, 9]], 1, [
      /  \
     14  15
 '''
+HARDER_LIST = [[2], 0, [3, [6, [[10, [12, [14, 15], 13], 11]]], [7, 8, 9]], 1, [4, 5]]
 
 def flatten_df_rec(lst):
     '''
