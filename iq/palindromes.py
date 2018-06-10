@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 '''tests for various palindromes'''
 
+from __future__ import print_function
 import argparse
 # import pdb
 # from pdb import set_trace
@@ -13,7 +14,6 @@ def is_palindrome_range(string):
         if string[j] != string[-j-1]:
             return False
     return True
-
 
 def is_palindrome_slice(string):
     '''true IFF palindrome'''

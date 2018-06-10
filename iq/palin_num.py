@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 '''tests for various palindromes'''
 
+from __future__ import print_function
 import argparse
 # import pdb
 # from pdb import set_trace
@@ -17,17 +18,29 @@ def next_palindromic_num(num):
         return 22
     if num < 33:
         return 33
-    throw "Not Yet Implemented"
+    raise NotImplementedError("Not Yet Implemented for value %d > 32" % num)
 
-def next_palindromic_int(num):
+def gen_palindromic_nums(num):
     '''case-based generation of next (greater) palindromic integer'''
-    if -10 <= num and num < 9:
-        return num + 1
-    if 10 == num:
-        return 11;
-    if
+    raise NotImplementedError("Not Yet Implemented for num == %d" % num)
+
+def init_counter(count=0):
+    '''(re)set counter that increments whenever called (closure)'''
+    _count_dict = { 'count' : count }       # put the enclosed value in a dict
+    def _increment_counter():               # to avoid rebinding (for Python 2)
+        '''inner incrementer function'''
+        _count_dict['count'] += 1
+        return _count_dict['count']
+    return _increment_counter
 
 
+NUM = 0
+def gen_even():
+    '''yield all even natural numbers'''
+    global NUM
+    while True:
+        NUM += 2
+        yield num
 
 
 def is_palindrome_slice(string):
@@ -115,6 +128,16 @@ def main():
     args = parser.parse_args()
     unit_test(args)
 
+def even_fibs():
+    a,b = 1,2
+    while True:
+        yield b
+        a,b = a+2*b, 2*a+3*b
 
 if __name__ == '__main__':
-    main()
+    ef_gen = even_fibs()
+    print("ef_gen.next returns:", ef_gen.next())
+    print("ef_gen.next returns:", ef_gen.next())
+    print("ef_gen.next returns:", ef_gen.next())
+    print("ef_gen.next returns:", ef_gen.next())
+    print("ef_gen.next returns:", ef_gen.next())
