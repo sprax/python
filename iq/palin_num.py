@@ -128,16 +128,16 @@ def main():
     args = parser.parse_args()
     unit_test(args)
 
-def even_fibs():
+def even_fib_gen():
     a,b = 1,2
     while True:
         yield b
         a,b = a+2*b, 2*a+3*b
 
 if __name__ == '__main__':
-    ef_gen = even_fibs()
-    print("ef_gen.next returns:", ef_gen.next())
-    print("ef_gen.next returns:", ef_gen.next())
-    print("ef_gen.next returns:", ef_gen.next())
-    print("ef_gen.next returns:", ef_gen.next())
-    print("ef_gen.next returns:", ef_gen.next())
+    even_fibs = even_fib_gen()
+    print("even_fibs.next returns:", even_fibs.next())
+    print("even_fibs.next returns:", even_fibs.next())
+    print("even_fibs.next returns:", even_fibs.next())
+    print("even_fibs.next returns:", even_fibs.next())
+    print("even_fibs.next returns:", even_fibs.next())
