@@ -136,8 +136,8 @@ def even_fib_gen():
 
 if __name__ == '__main__':
     even_fibs = even_fib_gen()
-    print("even_fibs.next returns:", even_fibs.next())
-    print("even_fibs.next returns:", even_fibs.next())
-    print("even_fibs.next returns:", even_fibs.next())
-    print("even_fibs.next returns:", even_fibs.next())
-    print("even_fibs.next returns:", even_fibs.next())
+    print("even_fibs.next() returns:", even_fibs.next())
+    print("even_fibs.next() returns:", even_fibs.next())
+    print("even_fibs.next() returns:", even_fibs.next())
+    print("even_fibs.next() returns:", even_fibs.next())
+    print("even_fibs.next() returns:", even_fibs.next())
