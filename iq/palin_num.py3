@@ -3,6 +3,8 @@
 
 from __future__ import print_function
 import argparse
+import sys
+
 # import pdb
 # from pdb import set_trace
 
@@ -136,8 +138,21 @@ def even_fib_gen():
 
 if __name__ == '__main__':
     even_fibs = even_fib_gen()
-    print("even_fibs.next() returns:", even_fibs.next())
-    print("even_fibs.next() returns:", even_fibs.next())
-    print("even_fibs.next() returns:", even_fibs.next())
-    print("even_fibs.next() returns:", even_fibs.next())
-    print("even_fibs.next() returns:", even_fibs.next())
+    print("next(even_fib) yields:", next(even_fibs))
+    print("next(even_fib) yields:", next(even_fibs))
+    print("next(even_fib) yields:", next(even_fibs))
+    print("next(even_fib) yields:", next(even_fibs))
+    print("next(even_fib) yields:", next(even_fibs))
+
+    vinfo = sys.version_info
+    v_major = vinfo[0]
+    v_minor = vinfo[1]
+    ver_str = "Python %d.%d" % (v_major, v_minor)
+    even_fibs = even_fib_gen()
+    print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
+    print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
+    print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
+    print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
+    print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
+    if v_major < 3:
+        raise Exception("Call this script with Python 3")
