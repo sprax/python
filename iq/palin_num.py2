@@ -148,3 +148,7 @@ if __name__ == '__main__':
     print("Python %s: even_fibs.next() yields: %d" % (ver_str, even_fibs.next()))
     if v_major > 2:
         raise Exception("Call this script with Python 2")
+    for idx, num in enumerate(even_fib_gen()):
+        if idx > 39:
+            break;
+        print("for-loop:  %2d  %30d" % (idx, num))

@@ -137,13 +137,6 @@ def even_fib_gen():
         a,b = a+2*b, 2*a+3*b
 
 if __name__ == '__main__':
-    even_fibs = even_fib_gen()
-    print("next(even_fib) yields:", next(even_fibs))
-    print("next(even_fib) yields:", next(even_fibs))
-    print("next(even_fib) yields:", next(even_fibs))
-    print("next(even_fib) yields:", next(even_fibs))
-    print("next(even_fib) yields:", next(even_fibs))
-
     vinfo = sys.version_info
     v_major = vinfo[0]
     v_minor = vinfo[1]
@@ -156,3 +149,7 @@ if __name__ == '__main__':
     print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
     if v_major < 3:
         raise Exception("Call this script with Python 3")
+    for idx, num in enumerate(even_fib_gen()):
+        if idx > 39:
+            break;
+        print("for-loop:  %2d  %30d" % (idx, num))
