@@ -122,21 +122,19 @@ def unit_test(args):
     print("END palindromes.unit_test:  num_wrong: %d" % num_wrong)
 
 
-def main():
-    '''Extract questions from text?'''
-    parser = argparse.ArgumentParser(description=unit_test.__doc__)
-    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
-                        help='verbosity of output (default: 1)')
-    args = parser.parse_args()
-    unit_test(args)
-
 def even_fib_gen():
     a,b = 1,2
     while True:
         yield b
         a,b = a+2*b, 2*a+3*b
 
-if __name__ == '__main__':
+
+def main():
+    '''palindromic numbers'''
+    parser = argparse.ArgumentParser(description=unit_test.__doc__)
+    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
+                        help='verbosity of output (default: 1)')
+    args = parser.parse_args()
     vinfo = sys.version_info
     v_major = vinfo[0]
     v_minor = vinfo[1]
@@ -147,9 +145,14 @@ if __name__ == '__main__':
     print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
     print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
     print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
-    if v_major < 3:
-        raise Exception("Call this script with Python 3")
+    # if v_major < 3:
+    #     raise Exception("Call this script with Python 3")
     for idx, num in enumerate(even_fib_gen()):
         if idx > 39:
             break;
         print("for-loop:  %2d  %30d" % (idx, num))
+    # unit_test(args)
+
+
+if __name__ == '__main__':
+    main()
