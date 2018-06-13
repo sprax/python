@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-'''tests for various palindromes'''
+''' tests for various palindromes using Python 3 generators
+    Python 2.7 *can* run this version.
+'''
 
 from __future__ import print_function
 import argparse
 import sys
-
 # import pdb
 # from pdb import set_trace
 
