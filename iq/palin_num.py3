@@ -9,6 +9,9 @@ import sys
 # import pdb
 # from pdb import set_trace
 
+def next_palindromic_num_str(num_str):
+    assert(isinstance(num_str, str))
+
 
 def next_palindromic_num(num):
     '''case-based generation of next (greater) palindromic integer'''
@@ -21,7 +24,10 @@ def next_palindromic_num(num):
         return 22
     if num < 33:
         return 33
+    if num < 99:
+        return next_palindromic_num_str(str(num))
     raise NotImplementedError("Not Yet Implemented for value %d > 32" % num)
+
 
 def gen_palindromic_nums(num):
     '''case-based generation of next (greater) palindromic integer'''
@@ -143,16 +149,19 @@ def main():
     even_fibs = even_fib_gen()
     print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
     print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
-    print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
-    print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
-    print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
+    # print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
+    # print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
+    # print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
     # if v_major < 3:
     #     raise Exception("Call this script with Python 3")
     for idx, num in enumerate(even_fib_gen()):
-        if idx > 39:
+        if idx > 12:
             break;
         print("for-loop:  %2d  %30d" % (idx, num))
     # unit_test(args)
+    nxt = next_palindromic_num(54)
+    print(nxt)
+
 
 
 if __name__ == '__main__':
