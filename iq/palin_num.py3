@@ -9,8 +9,22 @@ import sys
 # import pdb
 # from pdb import set_trace
 
-def next_palindromic_num_str(num_str):
+def sup_palindromic_num_str(num_str):
+    '''
+    returns the supremum palindrome of the num in num_str, that is,
+    the least palindromic number greater than or equal to num.
+    Thus it returns num IFF num_str is already a palindrome.
+    '''
     assert(isinstance(num_str, str))
+    slen = len(num_str)
+    hlen = slen // 2
+    outs = num_str[0]
+    for j in range(hlen):
+        if  num_str[slen - 1 - j] < num_str[j]:
+            outs += num_str[j]
+    return int(outs)
+
+    # raise NotImplementedError("Not Yet Implemented for value %d > 32" % num)
 
 
 def next_palindromic_num(num):
@@ -18,15 +32,15 @@ def next_palindromic_num(num):
     assert 0 <= num
     if num < 9:
         return num + 1
-    if num == 10:
+    if num < 11:
         return 11
     if num < 22:
         return 22
     if num < 33:
         return 33
     if num < 99:
-        return next_palindromic_num_str(str(num))
-    raise NotImplementedError("Not Yet Implemented for value %d > 32" % num)
+        return sup_palindromic_num_str(str(num + 1))
+    raise NotImplementedError("Not Yet Implemented for value %d > 98" % num)
 
 
 def gen_palindromic_nums(num):
@@ -159,8 +173,11 @@ def main():
             break;
         print("for-loop:  %2d  %30d" % (idx, num))
     # unit_test(args)
-    nxt = next_palindromic_num(54)
-    print(nxt)
+    num = 51
+    for _ in range(10):
+        npn = next_palindromic_num(num)
+        print("next_palindromic_num(%d) == %d" % (num, npn))
+        num = npn
 
 
 
