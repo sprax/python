@@ -18,62 +18,45 @@ def _sup_palindromic_num_str(num_str):
     assert(isinstance(num_str, str))
     slen = len(num_str)
     hlen = slen // 2
+    mlen = (slen + 1) // 2
+    pref = num_str[:mlen]
 
     outa = []
     for idx, dig in enumerate(num_str):
         if  dig > num_str[slen - 1 - idx]:
             outa.append(dig)
-        else:
 
-    return int(''.join(outa))
+    suff = ''.join(outa)[::-1]
+    return int(pref + suff)
 
     # raise NotImplementedError("Not Yet Implemented for value %d > 32" % num)
 
-'''
->>> for i,c in enumerate(hh):
-...     print(i,c)
-...
-0 h
-1 e
-2 l
-3 l
-4 o
->>> 10**3
-1000
->>> xx = 54321
->>> lx = len(str(xx))
->>> lx
-5
->>> dd = 10**lx
->>> dd
-100000
->>> dd = 10**(lx-1)
->>> dd
-10000
->>> rig = xx//10
->>> rig = xx % 10
->>> lef = xx // dd
->>> rig
-1
->>> lef
-5
->>> if rig < lef:
-...     yy = xx + lef - rig
-...
->>> yy
-54325
-'''
-
-def sup_palindromic_num(num):
-    num_str = str(num)
-    num_len = len(num_str)
-    if  num_len > 2:
-        dec_mlt = 10
-        haf_len = num_len // 2
-        rig_dig = num % 10
-        lef_dig =
 
 def next_palindromic_num(num):
+    if num < 0:
+        return 0
+    if num < 9:
+        return num + 1
+    if num < 11:
+        return 11
+    num += 1
+    num_str = str(int(num))
+    num_len = len(num_str)
+    lef_den = 10 ** (num_len - 1)
+    rig_den = 10
+    haf_len = num_len // 2
+    for idx in range(haf_len):
+        lef_dig = num // lef_den
+        rig_dig = num  % rig_den
+        if  rig_dig < lef_dig:
+            num += lef_dig - rig_dig
+        elif rig_dig > lef_dig:
+            num += rig_den + rig_den*(lef_dig - rig_dig)/10
+        lef_den /= 10
+        rig_den *= 10
+    return  num
+
+def next_palindromic_num_cb(num):
     '''case-based generation of next (greater) palindromic integer'''
     assert 0 <= num
     if num < 9:
@@ -206,6 +189,14 @@ def main():
     v_major = vinfo[0]
     v_minor = vinfo[1]
     ver_str = "Python %d.%d" % (v_major, v_minor)
+
+    num = 7
+    for idx in range(237):
+        nxt = next_palindromic_num(num)
+        print("%3d  next_palindromic_num(%3d) -> %3d" % (idx, num, nxt))
+        num = nxt
+    return
+
     even_fibs = even_fib_gen()
     print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
     print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
@@ -221,8 +212,8 @@ def main():
     # unit_test(args)
     num = 51
     for _ in range(10):
-        npn = next_palindromic_num(num)
-        print("next_palindromic_num(%d) == %d" % (num, npn))
+        npn = next_palindromic_num_cb(num)
+        print("next_palindromic_num_cb(%d) == %d" % (num, npn))
         num = npn
 
 
