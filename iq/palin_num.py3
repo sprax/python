@@ -9,7 +9,7 @@ import sys
 # import pdb
 # from pdb import set_trace
 
-def sup_palindromic_num_str(num_str):
+def _sup_palindromic_num_str(num_str):
     '''
     returns the supremum palindrome of the num in num_str, that is,
     the least palindromic number greater than or equal to num.
@@ -18,14 +18,60 @@ def sup_palindromic_num_str(num_str):
     assert(isinstance(num_str, str))
     slen = len(num_str)
     hlen = slen // 2
-    outs = num_str[0]
-    for j in range(hlen):
-        if  num_str[slen - 1 - j] < num_str[j]:
-            outs += num_str[j]
-    return int(outs)
+
+    outa = []
+    for idx, dig in enumerate(num_str):
+        if  dig > num_str[slen - 1 - idx]:
+            outa.append(dig)
+        else:
+
+    return int(''.join(outa))
 
     # raise NotImplementedError("Not Yet Implemented for value %d > 32" % num)
 
+'''
+>>> for i,c in enumerate(hh):
+...     print(i,c)
+...
+0 h
+1 e
+2 l
+3 l
+4 o
+>>> 10**3
+1000
+>>> xx = 54321
+>>> lx = len(str(xx))
+>>> lx
+5
+>>> dd = 10**lx
+>>> dd
+100000
+>>> dd = 10**(lx-1)
+>>> dd
+10000
+>>> rig = xx//10
+>>> rig = xx % 10
+>>> lef = xx // dd
+>>> rig
+1
+>>> lef
+5
+>>> if rig < lef:
+...     yy = xx + lef - rig
+...
+>>> yy
+54325
+'''
+
+def sup_palindromic_num(num):
+    num_str = str(num)
+    num_len = len(num_str)
+    if  num_len > 2:
+        dec_mlt = 10
+        haf_len = num_len // 2
+        rig_dig = num % 10
+        lef_dig =
 
 def next_palindromic_num(num):
     '''case-based generation of next (greater) palindromic integer'''
@@ -39,7 +85,7 @@ def next_palindromic_num(num):
     if num < 33:
         return 33
     if num < 99:
-        return sup_palindromic_num_str(str(num + 1))
+        return _sup_palindromic_num_str(str(num + 1))
     raise NotImplementedError("Not Yet Implemented for value %d > 98" % num)
 
 
