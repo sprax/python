@@ -32,30 +32,6 @@ def _sup_palindromic_num_str(num_str):
     # raise NotImplementedError("Not Yet Implemented for value %d > 32" % num)
 
 
-def next_palindromic_num(num):
-    if num < 0:
-        return 0
-    if num < 9:
-        return num + 1
-    if num < 11:
-        return 11
-    num += 1
-    num_str = str(int(num))
-    num_len = len(num_str)
-    lef_den = 10 ** (num_len - 1)
-    rig_den = 10
-    haf_len = num_len // 2
-    for idx in range(haf_len):
-        lef_dig = num // lef_den
-        rig_dig = num  % rig_den
-        if  rig_dig < lef_dig:
-            num += lef_dig - rig_dig
-        elif rig_dig > lef_dig:
-            num += rig_den + rig_den*(lef_dig - rig_dig)/10
-        lef_den /= 10
-        rig_den *= 10
-    return  num
-
 def next_palindromic_num_cb(num):
     '''case-based generation of next (greater) palindromic integer'''
     assert 0 <= num
@@ -179,6 +155,47 @@ def even_fib_gen():
         a,b = a+2*b, 2*a+3*b
 
 
+def next_palindromic_num(num):
+    if num < 0:
+        return 0
+    if num < 9:
+        return num + 1
+    if num < 11:
+        return 11
+    num += 1
+    print("num %d incremented to %d" % (num-1, num))
+    num_str = str(int(num))
+    num_len = len(num_str)
+    lef_den = 10 ** (num_len - 1)
+    rig_den = 1
+    haf_len = num_len // 2
+    evn_max = (num_len + 1) // 2 - 1
+    for idx in range(haf_len):
+        lef_dig = (num // lef_den) % 10
+        rig_dig = (num // rig_den) % 10
+        print("idx %d,  num %d: lef_dig, rig_dig == (%d, %d)" % (idx, num, lef_dig, rig_dig))
+        if  lef_dig > rig_dig:
+            print("simple: lef_dig %d > %d rig_dig" % (lef_dig, rig_dig))
+            num += (lef_dig - rig_dig)*rig_den
+        elif lef_dig < rig_dig:
+            if idx == evn_max:
+                print("idx %d == %d evn_max" % (idx, evn_max))
+                num += rig_den*10 + rig_den*(1 + lef_dig - rig_dig)
+            elif idx == haf_len - 1:
+                # print("chirp")
+                nxt_dig =  num // (rig_den) % 10
+                print("nxt_dig: ", nxt_dig)
+                if nxt_dig == 9:
+                    num += rig_den*10 + rig_den*(1 + lef_dig - rig_dig)
+                else:
+                    num += rig_den*10 + rig_den*(lef_dig - rig_dig)
+            else:
+                print("regular")
+                num += rig_den*10 + rig_den*(lef_dig - rig_dig)
+        lef_den /= 10
+        rig_den *= 10
+    return  num
+
 def main():
     '''palindromic numbers'''
     parser = argparse.ArgumentParser(description=unit_test.__doc__)
@@ -189,12 +206,13 @@ def main():
     v_major = vinfo[0]
     v_minor = vinfo[1]
     ver_str = "Python %d.%d" % (v_major, v_minor)
+    print(ver_str)
 
-    num = 7
-    for idx in range(237):
+    num = 998
+    for idx in range(1000):
         nxt = next_palindromic_num(num)
-        print("%3d  next_palindromic_num(%3d) -> %3d" % (idx, num, nxt))
-        num = nxt
+        print("%3d  next_palindromic_num(%3d) -> %3d\n" % (idx, num, nxt))
+        num += 1 + 2 * (nxt - num) / 3
     return
 
     even_fibs = even_fib_gen()
@@ -213,7 +231,7 @@ def main():
     num = 51
     for _ in range(10):
         npn = next_palindromic_num_cb(num)
-        print("next_palindromic_num_cb(%d) == %d" % (num, npn))
+        print("next_palindromic_num_cb(%d) == %d\n" % (num, npn))
         num = npn
 
 
