@@ -173,7 +173,7 @@ def next_palindromic_num(num):
     for idx in range(haf_len):
         lef_dig = (num // lef_den) % 10
         rig_dig = (num // rig_den) % 10
-        # print("idx %d,  num %d: lef_dig, rig_dig == (%d, %d)" % (idx, num, lef_dig, rig_dig))
+        # print("\nidx %d,  num %d: lef_dig, rig_dig == (%d, %d)" % (idx, num, lef_dig, rig_dig))
         if  lef_dig > rig_dig:
             # print("simple: lef_dig %d > %d rig_dig" % (lef_dig, rig_dig))
             num += (lef_dig - rig_dig)*rig_den
@@ -205,9 +205,9 @@ def main():
     print(ver_str)
 
     num = 0
-    for idx in range(1000):
+    for idx in range(10000):
         nxt = next_palindromic_num(num)
-        print("%3d  next_palindromic_num(%4d) -> %4d\n" % (idx, num, nxt))
+        print("%3d  next_palindromic_num(%4d) -> %4d" % (idx, num, nxt))
         # num += 1 + num/2 + 3 * (nxt - num) / 4
         num = nxt
     return
