@@ -179,6 +179,8 @@ def next_palindromic_num(num):
             print("simple: lef_dig %d > %d rig_dig" % (lef_dig, rig_dig))
             num += (lef_dig - rig_dig)*rig_den
         elif lef_dig < rig_dig:
+            print("num + rig_den*10 = %d + %d*%d = %d" % (num, rig_den, 10, num + rig_den*10))
+            print("    >?  + lef_num + lef_den = %d + %d = %d" % (lef_num, lef_den, lef_num + lef_den))
             if num + rig_den*10 > lef_num + lef_den:
                 print("idx %d, lef_num %d  ----- carry numbers ---" % (idx, lef_num))
                 num += rig_den*10 + rig_den*(1 + lef_dig - rig_dig)
