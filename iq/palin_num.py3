@@ -171,24 +171,25 @@ def next_palindromic_num(num):
     haf_len = num_len // 2
     evn_max = (num_len + 1) // 2 - 1
     for idx in range(haf_len):
-        lef_dig = (num // lef_den) % 10
+        lef_num = num // lef_den
+        lef_dig = lef_num % 10
         rig_dig = (num // rig_den) % 10
         print("idx %d,  num %d: lef_dig, rig_dig == (%d, %d)" % (idx, num, lef_dig, rig_dig))
         if  lef_dig > rig_dig:
             print("simple: lef_dig %d > %d rig_dig" % (lef_dig, rig_dig))
             num += (lef_dig - rig_dig)*rig_den
         elif lef_dig < rig_dig:
-            if idx == evn_max:
-                print("idx %d == %d evn_max" % (idx, evn_max))
+            if num + rig_den*10 > lef_num + lef_den:
+                print("idx %d, lef_num %d  ----- carry numbers ---" % (idx, lef_num))
                 num += rig_den*10 + rig_den*(1 + lef_dig - rig_dig)
-            elif idx == haf_len - 1:
-                # print("chirp")
-                nxt_dig =  num // (rig_den) % 10
-                print("nxt_dig: ", nxt_dig)
-                if nxt_dig == 9:
-                    num += rig_den*10 + rig_den*(1 + lef_dig - rig_dig)
-                else:
-                    num += rig_den*10 + rig_den*(lef_dig - rig_dig)
+            # elif idx == haf_len - 1:
+            #     # print("chirp")
+            #     nxt_dig =  num // (rig_den) % 10
+            #     print("nxt_dig: ", nxt_dig)
+            #     if nxt_dig == 9:
+            #         num += rig_den*10 + rig_den*(1 + lef_dig - rig_dig)
+            #     else:
+            #         num += rig_den*10 + rig_den*(lef_dig - rig_dig)
             else:
                 print("regular")
                 num += rig_den*10 + rig_den*(lef_dig - rig_dig)
@@ -208,8 +209,8 @@ def main():
     ver_str = "Python %d.%d" % (v_major, v_minor)
     print(ver_str)
 
-    num = 998
-    for idx in range(1000):
+    num = 1990
+    for idx in range(6):
         nxt = next_palindromic_num(num)
         print("%3d  next_palindromic_num(%3d) -> %3d\n" % (idx, num, nxt))
         num += 1 + 2 * (nxt - num) / 3
