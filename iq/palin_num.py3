@@ -9,18 +9,20 @@ import sys
 # import pdb
 # from pdb import set_trace
 
+ONE_PLUS_EPS = 1.0 + sys.float_info.epsilon
+
 def num_digits(num, base=10):
     '''returns number of digits in num as a decimal integer.
     Unless base != 10, in which case it returns the number of digits num
-    would have in the specified base representation.'''
-    return 1 + int(math.log(num, base))
+    would have in the specified base representation.
+    NOTE: Without the ONE_PLUS_EPS factor, num_digits(1000 would return 3, not 4.
+    '''
+    return 1 + int(math.log(num * ONE_PLUS_EPS, base))
 
 
 def next_palindromic_num(num):
     '''Given an integral num, compute the next palindromic number (strictly
     greater than num) using only arithmetic operations.
-    TODO: eliminate the string conversion entirely; we only want the number of
-    digits in canonical form.
     TODO: better argument checking?
     '''
     num = int(num)  # Try to convert arg to int.  TODO: Raise on any non-integral arg?
@@ -32,8 +34,7 @@ def next_palindromic_num(num):
         return 11
     num += 1
     # print("num %d incremented to %d" % (num-1, num))
-    num_str = str(num)
-    num_len = len(num_str)
+    num_len = num_digits(num)
     lef_den = 10 ** (num_len - 1)
     rig_den = 1
     haf_len = num_len // 2
