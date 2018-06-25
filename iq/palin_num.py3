@@ -65,26 +65,35 @@ def next_palindromic_num(num):
     return  num
 
 
-def _sup_palindromic_num_str(num_str):
+def _sup_palindromic_num(num):
     '''
-    returns the supremum palindrome of the num in num_str, that is,
+    returns the supremum palindrome of num, that is,
     the least palindromic number greater than or equal to num.
-    Thus it returns num IFF num_str is already a palindrome, and otherwise
-    it returns the next great palindromic number.
+    Thus it returns num IFF num is already a palindrome;
+    otherwise, it returns the next great palindromic number.
     '''
-    assert(isinstance(num_str, str))
-    slen = len(num_str)
+    num = int(num)
+    nums = str(num)
+    slen = len(nums)
     hlen = slen // 2
     olen = slen - hlen
-    pref = num_str[:olen]
+    # special case for all 9's:
+    for dig in nums[0:olen]:
+        if dig != '9':
+            break
+    else:   # all 9's up to olen
+        print("ALL 9's case: %d -> %d" % (num, 10**slen + 1))
+        return 10**slen + 1
 
+
+    pref = nums[:olen]
     outa = []
-    for idx, lef_dig in enumerate(num_str):
-        rig_dig = num_str[slen - 1 - idx]
+    for idx, lef_dig in enumerate(nums):
+        rig_dig = nums[slen - 1 - idx]
         if  lef_dig > rig_dig:
             outa.append(lef_dig)
         elif lef_dig < rig_dig:
-            return _sup_palindromic_num_str(str(int(num_str) + 10**(idx + 1)))
+            return _sup_palindromic_num(str(int(nums) + 10**(idx + 1)))
     suff = ''.join(outa)[::-1]
     return int(pref + suff)
     # raise NotImplementedError("Not Yet Implemented for value %d > 32" % num)
@@ -102,7 +111,7 @@ def next_palindromic_num_cb(num):
     if num < 33:
         return 33
     if num < 99:
-        return _sup_palindromic_num_str(str(num + 1))
+        return _sup_palindromic_num(str(num + 1))
     raise NotImplementedError("Not Yet Implemented for value %d > 98" % num)
 
 
