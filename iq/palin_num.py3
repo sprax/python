@@ -10,6 +10,8 @@ import sys
 # from pdb import set_trace
 
 ONE_PLUS_EPS = 1.0 + sys.float_info.epsilon
+DEFAULT_BEG = 0
+DEFAULT_END = 41
 
 def num_digits(num, base=10):
     '''returns number of digits in num as a decimal integer.
@@ -142,13 +144,21 @@ def test_is_palindrome(is_palindrome, expect_string_pairs, verbose=0):
         num_wrong += test_one_string(is_palindrome, expect, verbose, string)
     return num_wrong
 
+def unit_test():
+    ''' tests '''
+
 
 def main():
     '''palindromic numbers'''
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('beg', type=int, nargs='?', default=DEFAULT_BEG,
+                        help='first number in test range (default: %d' % DEFAULT_BEG)
+    parser.add_argument('end', type=int, nargs='?', default=DEFAULT_END,
+                        help='last number in test range (default: %d' % DEFAULT_END)
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
+
     vinfo = sys.version_info
     v_major = vinfo[0]
     v_minor = vinfo[1]
@@ -156,7 +166,7 @@ def main():
     print(ver_str)
 
     num = 0
-    for idx in range(200):
+    for idx in range(args.end):
         nxt = next_palindromic_num(num)
         print("%3d  next_palindromic_num(%4d) -> %4d" % (idx, num, nxt))
         # num += 1 + num/2 + 3 * (nxt - num) / 4
