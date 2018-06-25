@@ -9,9 +9,10 @@ import sys
 # import pdb
 # from pdb import set_trace
 
-ONE_PLUS_EPS = 1.0 + sys.float_info.epsilon
 DEFAULT_BEG = 0
 DEFAULT_END = 41
+
+ONE_PLUS_EPS = 1.0 + sys.float_info.epsilon
 
 def num_digits(num, base=10):
     '''returns number of digits in num as a decimal integer.
@@ -74,17 +75,18 @@ def _sup_palindromic_num_str(num_str):
     assert(isinstance(num_str, str))
     slen = len(num_str)
     hlen = slen // 2
-    mlen = (slen + 1) // 2
-    pref = num_str[:mlen]
+    olen = slen - hlen
+    pref = num_str[:olen]
 
     outa = []
-    for idx, dig in enumerate(num_str):
-        if  dig > num_str[slen - 1 - idx]:
-            outa.append(dig)
-
+    for idx, lef_dig in enumerate(num_str):
+        rig_dig = num_str[slen - 1 - idx]
+        if  lef_dig > rig_dig:
+            outa.append(lef_dig)
+        elif lef_dig < rig_dig:
+            return _sup_palindromic_num_str(str(int(num_str) + 10**(idx + 1)))
     suff = ''.join(outa)[::-1]
     return int(pref + suff)
-
     # raise NotImplementedError("Not Yet Implemented for value %d > 32" % num)
 
 
@@ -102,8 +104,6 @@ def next_palindromic_num_cb(num):
     if num < 99:
         return _sup_palindromic_num_str(str(num + 1))
     raise NotImplementedError("Not Yet Implemented for value %d > 98" % num)
-
-
 
 
 
@@ -152,6 +152,7 @@ def unit_test():
 def main():
     '''palindromic numbers'''
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('-all', action='store_true', help='test all methods')
     parser.add_argument('beg', type=int, nargs='?', default=DEFAULT_BEG,
                         help='first number in test range (default: %d' % DEFAULT_BEG)
     parser.add_argument('end', type=int, nargs='?', default=DEFAULT_END,
@@ -164,38 +165,23 @@ def main():
     vinfo = sys.version_info
     v_major = vinfo[0]
     v_minor = vinfo[1]
-    ver_str = "Python %d.%d" % (v_major, v_minor)
-    print(ver_str)
+    ver_str = "Python%d.%d" % (v_major, v_minor)
+    print(ver_str, sys.argv[0])
 
-    num = 0
-    for idx in range(args.end):
-        nxt = next_palindromic_num(num)
-        print("%3d  next_palindromic_num(%4d) -> %4d" % (idx, num, nxt))
-        # num += 1 + num/2 + 3 * (nxt - num) / 4
-        if args.test:
-            test_one_string(is_palindrome_slice, True, args.verbose, str(nxt))
-        num = nxt
+    if args.all:
+        num = 0
+        for idx in range(args.end):
+            nxt = next_palindromic_num(num)
+            print("%4d  next_palindromic_num %4d -> %4d" % (idx, num, nxt))
+            # num += 1 + num/2 + 3 * (nxt - num) / 4
+            if args.test:
+                test_one_string(is_palindrome_slice, True, args.verbose, str(nxt))
+            num = nxt
 
-    test_one_string(is_palindrome_slice, True, args.verbose+1, "101")
-    return
-
-    even_fibs = even_fib_gen()
-    print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
-    print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
-    # print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
-    # print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
-    # print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
-    # if v_major < 3:
-    #     raise Exception("Call this script with Python 3")
-    for idx, num in enumerate(even_fib_gen()):
-        if idx > 12:
-            break;
-        print("for-loop:  %2d  %30d" % (idx, num))
-    # unit_test(args)
     num = 51
-    for _ in range(10):
+    for idx in range(args.end):
         npn = next_palindromic_num_cb(num)
-        print("next_palindromic_num_cb(%4d) == %4d\n" % (num, npn))
+        print("%4d  next_palindromic_num_cb(%4d) => %4d" % (idx, num, npn))
         num = npn
 
 
