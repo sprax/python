@@ -148,6 +148,7 @@ def unit_test():
     ''' tests '''
 
 
+
 def main():
     '''palindromic numbers'''
     parser = argparse.ArgumentParser(description=__doc__)
@@ -155,6 +156,7 @@ def main():
                         help='first number in test range (default: %d' % DEFAULT_BEG)
     parser.add_argument('end', type=int, nargs='?', default=DEFAULT_END,
                         help='last number in test range (default: %d' % DEFAULT_END)
+    parser.add_argument('-test', action='store_true', help='test all outputs')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
@@ -170,7 +172,11 @@ def main():
         nxt = next_palindromic_num(num)
         print("%3d  next_palindromic_num(%4d) -> %4d" % (idx, num, nxt))
         # num += 1 + num/2 + 3 * (nxt - num) / 4
+        if args.test:
+            test_one_string(is_palindrome_slice, True, args.verbose, str(nxt))
         num = nxt
+
+    test_one_string(is_palindrome_slice, True, args.verbose+1, "101")
     return
 
     even_fibs = even_fib_gen()
