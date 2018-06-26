@@ -72,13 +72,15 @@ def next_palindromic_num_hybrid(num):
     Thus it returns num IFF num is already a palindrome;
     otherwise, it returns the next great palindromic number.
     '''
+    if num == 9:
+        return 11
     numd = int(num) + 1
     nums = str(numd)
     slen = len(nums)
     hlen = slen // 2
     olen = slen - hlen
     outa = [c for c in nums]
-    print("BEGIN: ", outa)
+    # print("BEGIN: ", outa)
     add_ten = False
     rig_idx = slen
     for idx, lef_dig in enumerate(nums[:hlen]):
@@ -99,17 +101,19 @@ def next_palindromic_num_hybrid(num):
             outa[rig_idx] = lef_dig
 
     idx = hlen
-    # print("nums:", nums)
-    print("MIDDLE:", outa)
-    # print("idx:", idx)
-    # print("nums[idx]:", nums[idx])
+    # # print("nums:", nums)
+    # print("MIDDLE:", outa)
+    # # print("idx:", idx)
+    # # print("nums[idx]:", nums[idx])
     if add_ten:
         if hlen == olen:    # even length
-            print("even idx %d,  dig %s" % (idx, outa[idx]))
+            idx -= 1
+            # print("even BEFORE idx %d,  dig %s" % (idx, outa[idx]))
             while outa[idx] == '9':
                 outa[idx] = '0'
                 outa[slen - 1 - idx] = '0'
                 idx -= 1
+            # print("even  AFTER idx %d,  dig %s" % (idx, outa[idx]))
             dig = chr(ord(outa[idx]) + 1)
             outa[idx] = dig
             outa[slen - 1 - idx] = dig
