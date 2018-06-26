@@ -77,21 +77,6 @@ def next_palindromic_num_hybrid(num):
     slen = len(nums)
     hlen = slen // 2
     olen = slen - hlen
-    # # special case for all 9's:
-    # for dig in nums[0:hlen]:
-    #     if dig != '9':
-    #         break
-    # else:   # all 9's so far...
-    #     if nums[hlen] < '9':
-    #         res = num + 10**hlen
-    #         print("ALL 9's to hlen %d: %d -> %d" % (hlen, num, res))
-    #         return res
-    #     else:
-    #         print("ALL 9's to olen %d: %d -> %d" % (olen, num, 10**slen + 1))
-    #         return 10**slen + 1
-
-    # Now we know that len(result) == len(input)
-
     outa = [c for c in nums]
     print("BEGIN: ", outa)
     add_ten = False
@@ -114,16 +99,14 @@ def next_palindromic_num_hybrid(num):
             outa[rig_idx] = lef_dig
 
     idx = hlen
-    print("nums:", nums)
+    # print("nums:", nums)
     print("MIDDLE:", outa)
-    print("idx:", idx)
-    print("nums[idx]:", nums[idx])
-
-
+    # print("idx:", idx)
+    # print("nums[idx]:", nums[idx])
     if add_ten:
         if hlen == olen:    # even length
-            print("even length")
-            while nums[idx] == '9':
+            print("even idx %d,  dig %s" % (idx, outa[idx]))
+            while outa[idx] == '9':
                 outa[idx] = '0'
                 outa[slen - 1 - idx] = '0'
                 idx -= 1
@@ -145,8 +128,6 @@ def next_palindromic_num_hybrid(num):
                 outa[idx] = chr(ord(nums[idx]) + 1)
     else:
         outa[idx] = nums[idx]
-
-
 
     return int(''.join(outa))
     # raise NotImplementedError("Not Yet Implemented for value %d > 32" % num)
@@ -247,6 +228,7 @@ def main():
         npn = next_palindromic_num_hybrid(num)
         print("%4d  next_palindromic_num_hybrid %4d => %4d" % (idx, num, npn))
         if args.test:
+            assert num < npn
             test_one_string(is_palindrome_slice, True, args.verbose, str(npn))
         num = npn
 
