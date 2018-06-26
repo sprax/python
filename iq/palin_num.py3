@@ -65,6 +65,32 @@ def next_palindromic_num_math(num):
     return  num
 
 
+def palinums_math_gen(num):
+    '''
+    Generator for the sequence of palindromic natural numbers starting at 1,
+    using only arithmetic.
+    a=0, b=1,  a += b: 1 2 3 4 5 6 7 8 9
+    a=9, b=2,  a += b: 11
+       , b=11, a += b: 22 33 44 55 66 77 88 99
+       , b=2,  a += b: 101
+       , b=10, a += b: 111, 121, 131, 141, 151, 161, 171, 181, 191
+       , b=11, a += b: 202
+       , b=10, a += b: 212, 222, 232, 242 ... 292
+       , b=11, a += b: 303
+    '''
+    a, b, c = 0, 1, 0
+    while True:
+        c += 1
+        if  c == 9:
+            c = 0
+            b = 2
+        a += b
+        yield a
+
+
+
+
+
 def next_palindromic_num_hybrid(num):
     '''
     returns the supremum palindrome of num, that is,

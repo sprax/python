@@ -16,41 +16,13 @@ def _sup_palindromic_num_str(num_str):
     Thus it returns num IFF num_str is already a palindrome.
     '''
     assert(isinstance(num_str, str))
-    slen = len(num_str)
-    hlen = slen // 2
-    mlen = (slen + 1) // 2
-    pref = num_str[:mlen]
-
-    outa = []
-    for idx, dig in enumerate(num_str):
-        if  dig > num_str[slen - 1 - idx]:
-            outa.append(dig)
-
-    suff = ''.join(outa)[::-1]
-    return int(pref + suff)
-
-    # raise NotImplementedError("Not Yet Implemented for value %d > 32" % num)
-
-
-def next_palindromic_num_cb(num):
-    '''case-based generation of next (greater) palindromic integer'''
-    assert 0 <= num
-    if num < 9:
-        return num + 1
-    if num < 11:
-        return 11
-    if num < 22:
-        return 22
-    if num < 33:
-        return 33
-    if num < 99:
-        return _sup_palindromic_num_str(str(num + 1))
-    raise NotImplementedError("Not Yet Implemented for value %d > 98" % num)
+    raise NotImplementedError("Not Yet Implemented for value %d > 32" % num)
 
 
 def gen_palindromic_nums(num):
     '''case-based generation of next (greater) palindromic integer'''
     raise NotImplementedError("Not Yet Implemented for num == %d" % num)
+
 
 def init_counter(count=0):
     '''(re)set counter that increments whenever called (closure)'''
@@ -199,8 +171,9 @@ def next_palindromic_num(num):
         rig_den *= 10
     return  num
 
+
 def main():
-    '''palindromic numbers'''
+    '''drive tests of number generators'''
     parser = argparse.ArgumentParser(description=unit_test.__doc__)
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
@@ -211,17 +184,9 @@ def main():
     ver_str = "Python %d.%d" % (v_major, v_minor)
     print(ver_str)
 
-    num = 0
-    for idx in range(10000):
-        nxt = next_palindromic_num(num)
-        print("%3d  next_palindromic_num(%4d) -> %4d" % (idx, num, nxt))
-        # num += 1 + num/2 + 3 * (nxt - num) / 4
-        num = nxt
-    return
-
     even_fibs = even_fib_gen()
-    print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
-    print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
+    print("next(even_fibs) yields: %4d" % next(even_fibs))
+    print("next(even_fibs) yields: %4d" % next(even_fibs))
     # print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
     # print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
     # print("Python %s: next(even_fibs) yields: %d" % (ver_str, next(even_fibs)))
@@ -232,11 +197,6 @@ def main():
             break;
         print("for-loop:  %2d  %30d" % (idx, num))
     # unit_test(args)
-    num = 51
-    for _ in range(10):
-        npn = next_palindromic_num_cb(num)
-        print("next_palindromic_num_cb(%4d) == %4d\n" % (num, npn))
-        num = npn
 
 
 
