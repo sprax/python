@@ -9,8 +9,8 @@ import sys
 # import pdb
 # from pdb import set_trace
 
-DEFAULT_BEG = 0
-DEFAULT_END = 41
+DEFAULT_START = 1
+DEFAULT_COUNT = 4
 
 ONE_PLUS_EPS = 1.0 + sys.float_info.epsilon
 
@@ -23,9 +23,9 @@ def num_digits(num, base=10):
     return 1 + int(math.log(num * ONE_PLUS_EPS, base))
 
 
-def next_palindromic_num(num):
+def next_palindromic_num_math(num):
     '''Given an integral num, compute the next palindromic number (strictly
-    greater than num) using only arithmetic operations.
+    greater than num) using only arithmetic operations (and math.log for num_len).
     TODO: better argument checking?
     '''
     num = int(num)  # Try to convert arg to int.  TODO: Raise on any non-integral arg?
@@ -65,37 +65,90 @@ def next_palindromic_num(num):
     return  num
 
 
-def _sup_palindromic_num(num):
+def next_palindromic_num_hybrid(num):
     '''
     returns the supremum palindrome of num, that is,
     the least palindromic number greater than or equal to num.
     Thus it returns num IFF num is already a palindrome;
     otherwise, it returns the next great palindromic number.
     '''
-    num = int(num)
-    nums = str(num)
+    numd = int(num) + 1
+    nums = str(numd)
     slen = len(nums)
     hlen = slen // 2
     olen = slen - hlen
-    # special case for all 9's:
-    for dig in nums[0:olen]:
-        if dig != '9':
-            break
-    else:   # all 9's up to olen
-        print("ALL 9's case: %d -> %d" % (num, 10**slen + 1))
-        return 10**slen + 1
+    # # special case for all 9's:
+    # for dig in nums[0:hlen]:
+    #     if dig != '9':
+    #         break
+    # else:   # all 9's so far...
+    #     if nums[hlen] < '9':
+    #         res = num + 10**hlen
+    #         print("ALL 9's to hlen %d: %d -> %d" % (hlen, num, res))
+    #         return res
+    #     else:
+    #         print("ALL 9's to olen %d: %d -> %d" % (olen, num, 10**slen + 1))
+    #         return 10**slen + 1
 
+    # Now we know that len(result) == len(input)
 
-    pref = nums[:olen]
-    outa = []
-    for idx, lef_dig in enumerate(nums):
-        rig_dig = nums[slen - 1 - idx]
-        if  lef_dig > rig_dig:
-            outa.append(lef_dig)
+    outa = [c for c in nums]
+    print("BEGIN: ", outa)
+    add_ten = False
+    rig_idx = slen
+    for idx, lef_dig in enumerate(nums[:hlen]):
+        rig_idx -= 1
+        rig_dig = nums[rig_idx]
+        if add_ten:
+            if  rig_dig == '9':
+                rig_dig =  '0'
+            else:
+                rig_dig = chr(ord(rig_dig) + 1)
+                add_ten = False
+        if lef_dig > rig_dig:
+            outa[rig_idx] = lef_dig
         elif lef_dig < rig_dig:
-            return _sup_palindromic_num(str(int(nums) + 10**(idx + 1)))
-    suff = ''.join(outa)[::-1]
-    return int(pref + suff)
+            add_ten = True
+            outa[rig_idx] = lef_dig
+        else:
+            outa[rig_idx] = lef_dig
+
+    idx = hlen
+    print("nums:", nums)
+    print("MIDDLE:", outa)
+    print("idx:", idx)
+    print("nums[idx]:", nums[idx])
+
+
+    if add_ten:
+        if hlen == olen:    # even length
+            print("even length")
+            while nums[idx] == '9':
+                outa[idx] = '0'
+                outa[slen - 1 - idx] = '0'
+                idx -= 1
+            dig = chr(ord(outa[idx]) + 1)
+            outa[idx] = dig
+            outa[slen - 1 - idx] = dig
+        else:
+            if nums[idx] == '9':
+                outa[idx] = '0'
+                idx -= 1
+                while nums[idx] == '9':
+                    outa[idx] = '0'
+                    outa[slen - 1 - idx] = '0'
+                    idx -= 1
+                dig = chr(ord(outa[idx]) + 1)
+                outa[idx] = dig
+                outa[slen - 1 - idx] = dig
+            else:
+                outa[idx] = chr(ord(nums[idx]) + 1)
+    else:
+        outa[idx] = nums[idx]
+
+
+
+    return int(''.join(outa))
     # raise NotImplementedError("Not Yet Implemented for value %d > 32" % num)
 
 
@@ -111,7 +164,7 @@ def next_palindromic_num_cb(num):
     if num < 33:
         return 33
     if num < 99:
-        return _sup_palindromic_num(str(num + 1))
+        return next_palindromic_num_hybrid(str(num + 1))
     raise NotImplementedError("Not Yet Implemented for value %d > 98" % num)
 
 
@@ -162,10 +215,10 @@ def main():
     '''palindromic numbers'''
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('-all', action='store_true', help='test all methods')
-    parser.add_argument('beg', type=int, nargs='?', default=DEFAULT_BEG,
-                        help='first number in test range (default: %d' % DEFAULT_BEG)
-    parser.add_argument('end', type=int, nargs='?', default=DEFAULT_END,
-                        help='last number in test range (default: %d' % DEFAULT_END)
+    parser.add_argument('start', type=int, nargs='?', default=DEFAULT_START,
+                        help='first number in test domain (default: %d)' % DEFAULT_START)
+    parser.add_argument('count', type=int, nargs='?', default=DEFAULT_COUNT,
+                        help='how many numbers to generate (default: %d)' % DEFAULT_COUNT)
     parser.add_argument('-test', action='store_true', help='test all outputs')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
@@ -177,20 +230,24 @@ def main():
     ver_str = "Python%d.%d" % (v_major, v_minor)
     print(ver_str, sys.argv[0])
 
-    if args.all:
-        num = 0
-        for idx in range(args.end):
-            nxt = next_palindromic_num(num)
-            print("%4d  next_palindromic_num %4d -> %4d" % (idx, num, nxt))
-            # num += 1 + num/2 + 3 * (nxt - num) / 4
-            if args.test:
-                test_one_string(is_palindrome_slice, True, args.verbose, str(nxt))
-            num = nxt
+    print("args:", args)
 
-    num = 51
-    for idx in range(args.end):
-        npn = next_palindromic_num_cb(num)
-        print("%4d  next_palindromic_num_cb(%4d) => %4d" % (idx, num, npn))
+    if args.all:
+        num = args.start
+        for idx in range(args.count):
+            npn = next_palindromic_num_math(num)
+            print("%4d  next_palindromic_num_math %4d -> %4d" % (idx, num, npn))
+            # num += 1 + num/2 + 3 * (npn - num) / 4
+            if args.test:
+                test_one_string(is_palindrome_slice, True, args.verbose, str(npn))
+            num = npn
+
+    num = args.start
+    for idx in range(args.count):
+        npn = next_palindromic_num_hybrid(num)
+        print("%4d  next_palindromic_num_hybrid %4d => %4d" % (idx, num, npn))
+        if args.test:
+            test_one_string(is_palindrome_slice, True, args.verbose, str(npn))
         num = npn
 
 
