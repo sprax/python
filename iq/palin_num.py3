@@ -306,7 +306,7 @@ def main():
 
     print("  a   b   c   c_max   d")
     for idx, num in enumerate(palinums_math_gen()):
-        if idx > 22:
+        if idx > 33:
             break;
         print("pmg: %4d  %10d" % (idx, num))
     print()
