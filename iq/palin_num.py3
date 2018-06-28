@@ -14,13 +14,22 @@ DEFAULT_COUNT = 4
 
 ONE_PLUS_EPS = 1.0 + sys.float_info.epsilon
 
-def num_digits(num, base=10):
-    '''returns number of digits in num as a decimal integer.
+def num_digits_log(num, base=10):
+    '''returns number of digits in num as a non-negative decimal integer.
     Unless base != 10, in which case it returns the number of digits num
     would have in the specified base representation.
-    NOTE: Without the ONE_PLUS_EPS factor, num_digits(1000 would return 3, not 4.
+    NOTE: Without the ONE_PLUS_EPS factor, num_digits_log(1000 would return 3, not 4.
     '''
     return 1 + int(math.log(num * ONE_PLUS_EPS, base))
+
+def num_digits_str(num):
+    '''returns number of digits in num, when interpreted as a non-negative
+    int and converted to a string.'''
+    num = int(num)
+    if num < 0:
+        raise ValueError("num < 0")
+    return len(str(num))
+
 
 
 def next_palindromic_num_math(num):
@@ -37,7 +46,7 @@ def next_palindromic_num_math(num):
         return 11
     num += 1
     # print("num %d incremented to %d" % (num-1, num))
-    num_len = num_digits(num)
+    num_len = num_digits_log(num)
     lef_den = 10 ** (num_len - 1)
     rig_den = 1
     haf_len = num_len // 2
@@ -65,27 +74,61 @@ def next_palindromic_num_math(num):
     return  num
 
 
-def palinums_math_gen(num):
+def palinums_math_gen():
     '''
     Generator for the sequence of palindromic natural numbers starting at 1,
     using only arithmetic.
-    a=0, b=1,  a += b: 1 2 3 4 5 6 7 8 9
-    a=9, b=2,  a += b: 11
-       , b=11, a += b: 22 33 44 55 66 77 88 99
-       , b=2,  a += b: 101
-       , b=10, a += b: 111, 121, 131, 141, 151, 161, 171, 181, 191
-       , b=11, a += b: 202
-       , b=10, a += b: 212, 222, 232, 242 ... 292
-       , b=11, a += b: 303
+    a =   0,
+    b =   1,  c =  9, a += b: 1 2 3 4 5 6 7 8 9
+    b =   2,  c =  1, a += b: 11
+    b =  11,  c =  9, a += b: 22 33 44 55 66 77 88 99
+    b =   2,  c =  1, a += b: 101
+    b =  10,  c =  9, a += b: 111, 121, 131, 141, 151, 161, 171, 181, 191
+    b =  11,  c =  1, a += b: 202
+    b =  10,  c =  9, a += b: 212, 222, 232, ... 292
+    b =  11,  c =  1, a += b: 303
+    b =  10,  c =  9, a += b: 313, 323, 333, ... 393
+    b =  11,  c =  1, a += b: 404
+       . . .
+    b =  10,  c =  9, a += b: 919, 929, 939, ... 999
+    b =   2,  c =  1, a += b: 1001
+    b = 110,  c =  9, a += b: 1111, 1221, 1331, ... 1991
+    b =  11,  c =  1, a += b: 2002
+       . . .
+    b =  10,  c =  9, a += b: 9119, 9229, ... 9999
+    b =   2,  c =  1, a += b: 10001
+    b = 100,  c =  9, a += b: 10101, 10201, ... 10901
+    b = 110,  c =  1, a += b: 11011
+    b = 100,  c =  9, a += b: 11111, 11211, ... 11911
+    b = 110,  c =  1, a += b: 12021
+    b = 100,  c =  9, a += b: 12121, 12221, ... 12921
+       . . .
+    b = 100,  c =  9, a += b: 19191, 19291, ... 19991
+    b =  11,  c =  1, a += b: 20002
     '''
-    a, b, c = 0, 1, 0
+    a, b, c, d, e = 0, 1, 0, 9, True
+    c_max = 9
     while True:
-        c += 1
-        if  c == 9:
-            c = 0
-            b = 2
+        print(a, b, c, c_max, d, end="\t")
         a += b
         yield a
+        c += 1
+        if  c == c_max:
+            print("c == c_max: %d == %d" % (c, c_max))
+            if  a == d:
+                print("        d: %d -> %d" % (d, d*10 + 9))
+                d = d * 10 + 9  # 9 -> 99 -> 999 -> 9999 ...
+                b = 2
+            else:
+                if e:
+                    print("a != d, c_max %d,  %d != %d, c: %d, e: %s, so  b -> 11" % (a, c_max, d, c, e))
+                    b = 11
+                else:
+                    print("a != d, c_max %d,  %d != %d, c: %d, e: %s, so  b -> 10" % (a, c_max, d, c, e))
+                    b = 10
+                e = not e
+            c = 0
+            c_max = 8 if c_max == 1 else 1
 
 
 
@@ -252,16 +295,21 @@ def main():
             if args.test:
                 test_one_string(is_palindrome_slice, True, args.verbose, str(npn))
             num = npn
+        num = args.start
+        for idx in range(args.count):
+            npn = next_palindromic_num_hybrid(num)
+            print("%4d  next_palindromic_num_hybrid %4d => %4d" % (idx, num, npn))
+            if args.test:
+                assert num < npn
+                test_one_string(is_palindrome_slice, True, args.verbose, str(npn))
+            num = npn
 
-    num = args.start
-    for idx in range(args.count):
-        npn = next_palindromic_num_hybrid(num)
-        print("%4d  next_palindromic_num_hybrid %4d => %4d" % (idx, num, npn))
-        if args.test:
-            assert num < npn
-            test_one_string(is_palindrome_slice, True, args.verbose, str(npn))
-        num = npn
-
+    print("  a   b   c   c_max   d")
+    for idx, num in enumerate(palinums_math_gen()):
+        if idx > 22:
+            break;
+        print("pmg: %4d  %10d" % (idx, num))
+    print()
 
 
 if __name__ == '__main__':
