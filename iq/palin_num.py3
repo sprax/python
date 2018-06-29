@@ -11,6 +11,7 @@ import sys
 
 DEFAULT_START = 1
 DEFAULT_COUNT = 4
+DEFAULT_MAX_VAL = 1112
 
 ONE_PLUS_EPS = 1.0 + sys.float_info.epsilon
 
@@ -74,7 +75,7 @@ def next_palindromic_num_math(num):
     return  num
 
 
-def palinums_math_gen():
+def palinums_math_gen(verbose=1):
     '''
     Generator for the sequence of palindromic natural numbers starting at 1,
     using only arithmetic.
@@ -107,29 +108,41 @@ def palinums_math_gen():
     b =  11,  c =  1, a += b: 20002
     '''
     a, b, c, d, e = 0, 1, 0, 9, True
+    first = True
     c_max = 9
     while True:
-        print(a, b, c, c_max, d, end="\t")
+        if verbose > 0:
+            print("%4d %4d   %d/%d, %4d" % (a, b, c, c_max, d), end="\t")
         a += b
         yield a
         c += 1
         if  c == c_max:
-            print("c == c_max: %d == %d" % (c, c_max))
+            if verbose > 1:
+                print("c == c_max: %d == %d" % (c, c_max), end="\t")
             if  a == d:
-                print("        d: %d -> %d" % (d, d*10 + 9))
+                if verbose > 2:
+                    print("a == d, so d: %d -> %d" % (d, d*10 + 9))
                 d = d * 10 + 9  # 9 -> 99 -> 999 -> 9999 ...
                 b = 2
             else:
                 if e:
-                    print("a != d, c_max %d,  %d != %d, c: %d, e: %s, so  b -> 11" % (a, c_max, d, c, e))
+                    if verbose > 2:
+                        print("a != d, c_max %d,  %d != %d, c: %d, e: %s, so  b -> 11" % (a, c_max, d, c, e))
                     b = 11
                 else:
-                    print("a != d, c_max %d,  %d != %d, c: %d, e: %s, so  b -> 10" % (a, c_max, d, c, e))
+                    if verbose > 2:
+                        print("a != d, c_max %d,  %d != %d, c: %d, e: %s, so  b -> 10" % (a, c_max, d, c, e))
                     b = 10
                 e = not e
-            c = 0
-            c_max = 8 if c_max == 1 else 1
-
+            if  c_max == 9:
+                c_max = 1
+                c = 0
+            else:
+                c_max = 9
+                c = 0
+                if  first:
+                    first = False
+                    c = 1
 
 
 
@@ -273,6 +286,8 @@ def main():
                         help='first number in test domain (default: %d)' % DEFAULT_START)
     parser.add_argument('count', type=int, nargs='?', default=DEFAULT_COUNT,
                         help='how many numbers to generate (default: %d)' % DEFAULT_COUNT)
+    parser.add_argument('maxval', type=int, nargs='?', default=DEFAULT_MAX_VAL,
+                        help='stop if generated value > maxval (default: %d)' % DEFAULT_MAX_VAL)
     parser.add_argument('-test', action='store_true', help='test all outputs')
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
@@ -304,11 +319,15 @@ def main():
                 test_one_string(is_palindrome_slice, True, args.verbose, str(npn))
             num = npn
 
-    print("  a   b   c   c_max   d")
+    print("   a    b   c/c_max    d")
     for idx, num in enumerate(palinums_math_gen()):
-        if idx > 33:
-            break;
         print("pmg: %4d  %10d" % (idx, num))
+        if  args.test:
+            test_one_string(is_palindrome_slice, True, args.verbose, str(num))
+        if  idx > args.count:
+            break;
+        if  num > args.maxval:
+            break;
     print()
 
 
