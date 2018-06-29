@@ -11,7 +11,7 @@ import sys
 
 DEFAULT_START = 1
 DEFAULT_COUNT = 4
-DEFAULT_MAX_VAL = 1112
+DEFAULT_MAX_VAL = 2222
 
 ONE_PLUS_EPS = 1.0 + sys.float_info.epsilon
 
@@ -79,61 +79,68 @@ def palinums_math_gen(verbose=1):
     '''
     Generator for the sequence of palindromic natural numbers starting at 1,
     using only arithmetic.
-    a =   0,
-    b =   1,  c =  9, a += b: 1 2 3 4 5 6 7 8 9
-    b =   2,  c =  1, a += b: 11
-    b =  11,  c =  9, a += b: 22 33 44 55 66 77 88 99
-    b =   2,  c =  1, a += b: 101
-    b =  10,  c =  9, a += b: 111, 121, 131, 141, 151, 161, 171, 181, 191
-    b =  11,  c =  1, a += b: 202
-    b =  10,  c =  9, a += b: 212, 222, 232, ... 292
-    b =  11,  c =  1, a += b: 303
-    b =  10,  c =  9, a += b: 313, 323, 333, ... 393
-    b =  11,  c =  1, a += b: 404
+    ret_num = 0,
+    inc =   1,  c =  9, ret_num += inc: 1 2 3 4 5 6 7 8 9
+    inc =   2,  c =  1, ret_num += inc: 11
+    inc =  11,  c =  9, ret_num += inc: 22 33 44 55 66 77 88 99
+    inc =   2,  c =  1, ret_num += inc: 101
+    inc =  10,  c =  9, ret_num += inc: 111, 121, 131, 141, 151, 161, 171, 181, 191
+    inc =  11,  c =  1, ret_num += inc: 202
+    inc =  10,  c =  9, ret_num += inc: 212, 222, 232, ... 292
+    inc =  11,  c =  1, ret_num += inc: 303
+    inc =  10,  c =  9, ret_num += inc: 313, 323, 333, ... 393
+    inc =  11,  c =  1, ret_num += inc: 404
        . . .
-    b =  10,  c =  9, a += b: 919, 929, 939, ... 999
-    b =   2,  c =  1, a += b: 1001
-    b = 110,  c =  9, a += b: 1111, 1221, 1331, ... 1991
-    b =  11,  c =  1, a += b: 2002
+    inc =  10,  c =  9, ret_num += inc: 919, 929, 939, ... 999
+    inc =   2,  c =  1, ret_num += inc: 1001
+    inc = 110,  c =  9, ret_num += inc: 1111, 1221, 1331, ... 1991
+    inc =  11,  c =  1, ret_num += inc: 2002
        . . .
-    b =  10,  c =  9, a += b: 9119, 9229, ... 9999
-    b =   2,  c =  1, a += b: 10001
-    b = 100,  c =  9, a += b: 10101, 10201, ... 10901
-    b = 110,  c =  1, a += b: 11011
-    b = 100,  c =  9, a += b: 11111, 11211, ... 11911
-    b = 110,  c =  1, a += b: 12021
-    b = 100,  c =  9, a += b: 12121, 12221, ... 12921
+    inc =  10,  c =  9, ret_num += inc: 9119, 9229, ... 9999
+    inc =   2,  c =  1, ret_num += inc: 10001
+    inc = 100,  c =  9, ret_num += inc: 10101, 10201, ... 10901
+    inc = 110,  c =  1, ret_num += inc: 11011
+    inc = 100,  c =  9, ret_num += inc: 11111, 11211, ... 11911
+    inc = 110,  c =  1, ret_num += inc: 12021
+    inc = 100,  c =  9, ret_num += inc: 12121, 12221, ... 12921
        . . .
-    b = 100,  c =  9, a += b: 19191, 19291, ... 19991
-    b =  11,  c =  1, a += b: 20002
+    inc = 100,  c =  9, ret_num += inc: 19191, 19291, ... 19991
+    inc =  11,  c =  1, ret_num += inc: 20002
     '''
-    a, b, c, d, e = 0, 1, 0, 9, True
-    first = True
-    c_max = 9
+    ret_num, inc, c, num_dig = 0, 1, 0, 0
+    even, first = True, True
+    max_num, c_max = 9, 9
     while True:
         if verbose > 0:
-            print("%4d %4d   %d/%d, %4d" % (a, b, c, c_max, d), end="\t")
-        a += b
-        yield a
+            print("%4d %4d   %d/%d, %4d" % (ret_num, inc, c, c_max, max_num), end="\t")
+        ret_num += inc
+        yield ret_num
         c += 1
         if  c == c_max:
             if verbose > 1:
                 print("c == c_max: %d == %d" % (c, c_max), end="\t")
-            if  a == d:
+            if  ret_num == max_num:
                 if verbose > 2:
-                    print("a == d, so d: %d -> %d" % (d, d*10 + 9))
-                d = d * 10 + 9  # 9 -> 99 -> 999 -> 9999 ...
-                b = 2
+                    print("ret_num == max_num, so max_num: %d -> %d" % (max_num, max_num*10 + 9))
+                max_num = max_num * 10 + 9  # 9 -> 99 -> 999 -> 9999 ...
+                num_dig += 1
+                inc = 2
             else:
-                if e:
+                if even:
                     if verbose > 2:
-                        print("a != d, c_max %d,  %d != %d, c: %d, e: %s, so  b -> 11" % (a, c_max, d, c, e))
-                    b = 11
+                        print("ret_num != max_num, c_max %d,  %d != %d, c: %d, even: %s, so  inc -> 11" % (ret_num, c_max, max_num, c, even))
+                    inc = 11
+                    if num_dig > 2:
+                        print("num_dig %d, inc: %d -> %d" % (num_dig, inc, inc*10))
+                        inc *= 10
                 else:
                     if verbose > 2:
-                        print("a != d, c_max %d,  %d != %d, c: %d, e: %s, so  b -> 10" % (a, c_max, d, c, e))
-                    b = 10
-                e = not e
+                        print("ret_num != max_num, c_max %d,  %d != %d, c: %d, even: %s, so  inc -> 10" % (ret_num, c_max, max_num, c, even))
+                    inc = 10
+                    if num_dig > 2:
+                        print("num_dig %d, inc: %d -> %d" % (num_dig, inc, inc*10))
+                        inc = 11
+                even = not even
             if  c_max == 9:
                 c_max = 1
                 c = 0
@@ -319,7 +326,7 @@ def main():
                 test_one_string(is_palindrome_slice, True, args.verbose, str(npn))
             num = npn
 
-    print("   a    b   c/c_max    d")
+    print("   a    inc   c/c_max    d")
     for idx, num in enumerate(palinums_math_gen()):
         print("pmg: %4d  %10d" % (idx, num))
         if  args.test:
