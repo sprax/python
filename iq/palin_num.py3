@@ -137,7 +137,7 @@ def palinums_math_gen(verbose=1):
                     if verbose > 2:
                         print("ret_num != max_num, c_max %d,  %d != %d, c: %d, even: %s, so  inc -> 10" % (ret_num, c_max, max_num, c, even))
                     inc = 10
-                    if num_dig > 2:
+                    if num_dig > 2 and num_dig % 2 == 1:
                         print("num_dig %d, inc: %d -> %d" % (num_dig, inc, inc*10))
                         inc = 11
                 even = not even
