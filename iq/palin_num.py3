@@ -113,13 +113,15 @@ def palinums_math_gen(verbose=1):
     9009009 + 1100 -> 9010109
     9099909 + 110 -> 9111119
     900090009 + 11000 -> 900101009
+    901090109 + 11000 -> 901101109
     '''
-    ret_num, inc, c, num_dig = 0, 1, 0, 1
+    iii, ret_num, inc, c, num_dig = 1, 0, 1, 0, 1
     even, first = True, True
     max_num, c_max = 9, 9
     while True:
-        if verbose > 0:
-            print("%4d %4d   %d/%d  %4d" % (ret_num, inc, c, c_max, num_dig), end="\t")
+        iii += 1
+        if verbose > 1:
+            print("%4d %4d %4d   %d/%d  %4d" % (iii, ret_num, inc, c, c_max, num_dig), end="\t")
         ret_num += inc
         yield ret_num
         c += 1
@@ -127,15 +129,16 @@ def palinums_math_gen(verbose=1):
             if verbose > 3:
                 print("c == c_max: %d == %d" % (c, c_max), end="\t")
             if  ret_num == max_num:
-                if verbose > 1:
-                    print("ret_num == max_num, so max_num: %d -> %d" % (max_num, max_num*10 + 9))
+                if verbose > 2:
+                    print("ret_num == max_num, so max_num: %d -> %d" % (max_num, max_num*10 + 9), end="\t")
                 max_num = max_num * 10 + 9  # 9 -> 99 -> 999 -> 9999 ...
                 num_dig += 1
                 inc = 2
             else:
                 if even:
                     if num_dig > 3:
-                        print("num_dig %d, even %s, and num_dig // 2 is %d" % (num_dig, even, num_dig//2))
+                        if verbose > 1:
+                            print("num_dig %d, even %s, and num_dig // 2 is %d" % (num_dig, even, num_dig//2), end="\t")
                         inc = 11 * (10 ** (num_dig // 2 - 1))
                     else:
                         inc = 11
@@ -146,7 +149,7 @@ def palinums_math_gen(verbose=1):
                         inc = 10 ** (num_dig // 2)
                 if verbose > 2:
                     print("%d != %d, c_max %d, c: %d, even: %s, and num_dig: %d, so inc -> %d"
-                          % (ret_num, max_num, c_max, c, even, num_dig, inc))
+                          % (ret_num, max_num, c_max, c, even, num_dig, inc), end="\t")
                 even = not even
             if  c_max == 9:
                 c_max = 1
@@ -157,6 +160,8 @@ def palinums_math_gen(verbose=1):
                 if  first:
                     first = False
                     c = 1
+        if verbose > 1:
+            print()
 
 
 
@@ -272,11 +277,12 @@ def test_one_string(is_palindrome, expect, verbose, string):
     is_pal = is_palindrome(string)
     passed = is_pal == expect
     if verbose > passed:
-        print("%s %s: expected %s: %s %s" % (is_palindrome.__name__,
-                                             "PASS" if passed else "FAIL",
-                                             expect,
-                                             " "*(24 - len(string)),
-                                             " ".join(string)))
+        print("%s: expected %s(%s) to be %s %s %s" % ("PASS" if passed else "FAIL",
+                                                      is_palindrome.__name__,
+                                                      string,
+                                                      expect,
+                                                      " "*(24 - len(string)),
+                                                      " ".join(string)))
     return not passed
 
 
@@ -307,13 +313,13 @@ def main():
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
 
-    vinfo = sys.version_info
-    v_major = vinfo[0]
-    v_minor = vinfo[1]
-    ver_str = "Python%d.%d" % (v_major, v_minor)
-    print(ver_str, sys.argv[0])
-
-    print("args:", args)
+    if args.verbose > 2:
+        vinfo = sys.version_info
+        v_major = vinfo[0]
+        v_minor = vinfo[1]
+        ver_str = "Python%d.%d" % (v_major, v_minor)
+        print(ver_str, sys.argv[0])
+        print("args:", args)
 
     if args.all:
         num = args.start
@@ -333,9 +339,9 @@ def main():
                 test_one_string(is_palindrome_slice, True, args.verbose, str(npn))
             num = npn
 
-    print("   a    inc   c/c_max    d")
-    for idx, num in enumerate(palinums_math_gen(args.verbose)):
-        print("pmg: %4d  %10d" % (idx, num))
+    for idx, num in enumerate(palinums_math_gen(args.verbose), 1):
+        if  args.verbose == 1:
+            print("pmg: %4d  %10d" % (idx, num))
         if  args.test:
             if test_one_string(is_palindrome_slice, True, 1, str(num)):
                 break
