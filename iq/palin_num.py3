@@ -108,44 +108,45 @@ def palinums_math_gen(verbose=1):
     inc =  11,  c =  1, ret_num += inc: 20002
     [(1, 9), (2, 1), (11, 8), (2, 1), (10, 9), (11, 1), (10, 9), (11, 1)]
 
-    90909 + 110 -> 91019
+    10901 + 110 -> 11011 + 100 -> 11111
+    90909 + 110 -> 91019 + 100 -> 91119
     9009009 + 1100 -> 9010109
     9099909 + 110 -> 9111119
     900090009 + 11000 -> 900101009
     '''
-    ret_num, inc, c, num_dig = 0, 1, 0, 0
+    ret_num, inc, c, num_dig = 0, 1, 0, 1
     even, first = True, True
     max_num, c_max = 9, 9
     while True:
         if verbose > 0:
-            print("%4d %4d   %d/%d, %4d" % (ret_num, inc, c, c_max, max_num), end="\t")
+            print("%4d %4d   %d/%d  %4d" % (ret_num, inc, c, c_max, num_dig), end="\t")
         ret_num += inc
         yield ret_num
         c += 1
         if  c == c_max:
-            if verbose > 1:
+            if verbose > 3:
                 print("c == c_max: %d == %d" % (c, c_max), end="\t")
             if  ret_num == max_num:
-                if verbose > 2:
+                if verbose > 1:
                     print("ret_num == max_num, so max_num: %d -> %d" % (max_num, max_num*10 + 9))
                 max_num = max_num * 10 + 9  # 9 -> 99 -> 999 -> 9999 ...
                 num_dig += 1
                 inc = 2
             else:
                 if even:
-                    if verbose > 2:
-                        print("ret_num != max_num, c_max %d,  %d != %d, c: %d, even: %s, so  inc -> 11" % (ret_num, c_max, max_num, c, even))
-                    inc = 11
-                    if num_dig > 2:
-                        print("num_dig %d, inc: %d -> %d" % (num_dig, inc, inc*10))
-                        inc *= 10
-                else:
-                    if verbose > 2:
-                        print("ret_num != max_num, c_max %d,  %d != %d, c: %d, even: %s, so  inc -> 10" % (ret_num, c_max, max_num, c, even))
-                    inc = 10
-                    if num_dig > 2 and num_dig % 2 == 1:
-                        print("num_dig %d, inc: %d -> %d" % (num_dig, inc, inc*10))
+                    if num_dig > 3:
+                        print("num_dig %d, even %s, and num_dig // 2 is %d" % (num_dig, even, num_dig//2))
+                        inc = 11 * (10 ** (num_dig // 2 - 1))
+                    else:
                         inc = 11
+                else:
+                    if num_dig > 2 and num_dig % 2 == 0:
+                        inc = 11
+                    else:
+                        inc = 10 ** (num_dig // 2)
+                if verbose > 2:
+                    print("%d != %d, c_max %d, c: %d, even: %s, and num_dig: %d, so inc -> %d"
+                          % (ret_num, max_num, c_max, c, even, num_dig, inc))
                 even = not even
             if  c_max == 9:
                 c_max = 1
@@ -333,14 +334,15 @@ def main():
             num = npn
 
     print("   a    inc   c/c_max    d")
-    for idx, num in enumerate(palinums_math_gen()):
+    for idx, num in enumerate(palinums_math_gen(args.verbose)):
         print("pmg: %4d  %10d" % (idx, num))
         if  args.test:
-            test_one_string(is_palindrome_slice, True, args.verbose, str(num))
+            if test_one_string(is_palindrome_slice, True, 1, str(num)):
+                break
         if  idx > args.count:
-            break;
+            break
         if  num > args.maxval:
-            break;
+            break
     print()
 
 
