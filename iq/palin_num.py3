@@ -116,41 +116,51 @@ def palinums_math_gen(verbose=1):
     901090109 + 11000 -> 901101109
     '''
     iii, ret_num, inc, c, num_dig = 1, 0, 1, 0, 1
-    even, first = True, True
+    odd, first = True, True
     max_num, c_max = 9, 9
     while True:
         iii += 1
         if verbose > 1:
-            print("%4d %4d %4d   %d/%d  %4d" % (iii, ret_num, inc, c, c_max, num_dig), end="\t")
+            print("%4d:  %5d + %4d = %5d" % (iii, ret_num, inc, ret_num + inc), end="\t")
         ret_num += inc
         yield ret_num
         c += 1
         if  c == c_max:
-            if verbose > 3:
+            if verbose > 4:
                 print("c == c_max: %d == %d" % (c, c_max), end="\t")
             if  ret_num == max_num:
-                if verbose > 2:
+                if verbose > 3:
                     print("ret_num == max_num, so max_num: %d -> %d" % (max_num, max_num*10 + 9), end="\t")
                 max_num = max_num * 10 + 9  # 9 -> 99 -> 999 -> 9999 ...
                 num_dig += 1
                 inc = 2
             else:
-                if even:
+                if odd:
                     if num_dig > 3:
-                        if verbose > 1:
-                            print("num_dig %d, even %s, and num_dig // 2 is %d" % (num_dig, even, num_dig//2), end="\t")
+                        if verbose > 3:
+                            print("num_dig %d, odd %s, and num_dig // 2 is %d" % (num_dig, odd, num_dig//2), end="\t")
                         inc = 11 * (10 ** (num_dig // 2 - 1))
                     else:
                         inc = 11
                 else:
                     if num_dig > 2 and num_dig % 2 == 0:
-                        inc = 11
+                        inc = 11 * (10 ** (num_dig // 2 - 2))
                     else:
                         inc = 10 ** (num_dig // 2)
                 if verbose > 2:
-                    print("%d != %d, c_max %d, c: %d, even: %s, and num_dig: %d, so inc -> %d"
-                          % (ret_num, max_num, c_max, c, even, num_dig, inc), end="\t")
-                even = not even
+                    der = (num_dig % 2 and c_max == 9)
+                    print("(%d/%d), d.%d, o.%d t.%d: inc -> %d"
+                          % (c, c_max, num_dig, odd, der, inc), end="\t")
+                    if num_dig > 2 and odd != der:
+                        print(" dood! ", end="\t")
+                odd = not odd
+                if num_dig > 4:
+                    if (ret_num + 10) // 10 % 1000 == 0:
+                        print("special 11", end="\t")
+                        inc = 11
+                    elif (ret_num + 100) // (10**(num_dig/2 - 1)) % 1000 == 0:
+                        print("special 110", end="\t")
+                        inc = 110
             if  c_max == 9:
                 c_max = 1
                 c = 0
@@ -207,14 +217,14 @@ def next_palindromic_num_hybrid(num):
     # # print("idx:", idx)
     # # print("nums[idx]:", nums[idx])
     if add_ten:
-        if hlen == olen:    # even length
+        if hlen == olen:    # odd length
             idx -= 1
-            # print("even BEFORE idx %d,  dig %s" % (idx, outa[idx]))
+            # print("odd BEFORE idx %d,  dig %s" % (idx, outa[idx]))
             while outa[idx] == '9':
                 outa[idx] = '0'
                 outa[slen - 1 - idx] = '0'
                 idx -= 1
-            # print("even  AFTER idx %d,  dig %s" % (idx, outa[idx]))
+            # print("odd  AFTER idx %d,  dig %s" % (idx, outa[idx]))
             dig = chr(ord(outa[idx]) + 1)
             outa[idx] = dig
             outa[slen - 1 - idx] = dig
