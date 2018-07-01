@@ -75,7 +75,7 @@ def next_palindromic_num_math(num):
     return  num
 
 
-def palinums_math_gen(verbose=1):
+def palinums_math_gen_bust(verbose=1):
     '''
     Generator for the sequence of palindromic natural numbers starting at 1,
     using only arithmetic.
@@ -158,7 +158,7 @@ def palinums_math_gen(verbose=1):
                     if (ret_num + 10) // 10 % 1000 == 0:
                         print("special 11", end="\t")
                         inc = 11
-                    elif (ret_num + 100) // (10**(num_dig/2 - 1)) % 1000 == 0:
+                    elif (ret_num + 100) // (10**(num_dig//2 - 2)) % 1000 == 0:
                         print("special 110", end="\t")
                         inc = 110
             if  c_max == 9:
@@ -306,6 +306,47 @@ def test_is_palindrome(is_palindrome, expect_string_pairs, verbose=0):
 def unit_test():
     ''' tests '''
 
+
+
+def palinums_math_gen(verbose=1):
+    '''
+    Generator for the sequence of palindromic natural numbers starting at 1
+    '''
+    iii, ret_num, inc, c, num_dig = 1, 0, 1, 0, 1
+    all_nin, nxt_num, nxt_inc = 9, 191, 101
+    sub_num, sub_inc = 10901, 1010
+    while True:
+        iii += 1
+        old_num = ret_num
+        if ret_num == all_nin:
+            nxt_num = (all_nin + 1) * 2 - 9
+            nxt_inc = ret_num + 2
+            if verbose > 2:
+                print("nxt_num %d      nxt_inc %d" % (nxt_num, nxt_inc))
+            all_nin = all_nin * 10 + 9
+            num_dig += 1
+            if num_dig % 2 == 1:
+                inc = 10 ** (num_dig//2)
+            else:
+                inc = 11 * 10 ** (num_dig//2 - 1)
+            ret_num = nxt_inc
+        elif ret_num == nxt_num:
+            nxt_num += nxt_inc
+            ret_num += 11
+            if num_dig % 2 == 1:
+                sub_num = ret_num + 9 * 10 ** (num_dig//2)
+            if verbose > 2:
+                print("nxt_num %d -> %d  sub_num %d -> %d     sub_inc %d" % (old_num, nxt_num, old_num, sub_num, sub_inc))
+        elif ret_num == sub_num:
+            sub_num += sub_inc
+            ret_num += 110
+            if verbose > 2:
+                print("sub_num %d -> %d     sub_inc %d" % (old_num, sub_num, sub_inc))
+        else:
+            ret_num += inc
+        if verbose > 1:
+            print("pon: %8d + %4d -> %8d" % (old_num, ret_num - old_num, ret_num))
+        yield ret_num
 
 
 def main():
