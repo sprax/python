@@ -1,5 +1,6 @@
 # fibonaccis.py -- several ways of generating and printing the Fibonacci series
-
+from __future__ import print_function
+import argparse
 import math
 from math import log
 
@@ -78,15 +79,41 @@ def fib_generate_recip(n):
         a, b = b, a + b
         x = x+1
 
+################################################################################
+DEFAULT_START = 0
+DEFAULT_COUNT = 20
+DEFAULT_MAX_VAL = 55555
 
 def main_fib():
     '''test fibs'''
-    n = 7
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('-all', action='store_true', help='test all methods')
+    parser.add_argument('-start', type=int, nargs='?', default=DEFAULT_START,
+                        help='first number in test domain (default: %d)' % DEFAULT_START)
+    parser.add_argument('count', type=int, nargs='?', default=DEFAULT_COUNT,
+                        help='how many numbers to generate (default: %d)' % DEFAULT_COUNT)
+    parser.add_argument('maxval', type=int, nargs='?', default=DEFAULT_MAX_VAL,
+                        help='stop if generated value > maxval (default: %d)' % DEFAULT_MAX_VAL)
+    parser.add_argument('-test', action='store_true', help='test all outputs')
+    parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
+                        help='verbosity of output (default: 1)')
+    args = parser.parse_args()
+
+    if args.verbose > 2:
+        vinfo = sys.version_info
+        v_major = vinfo[0]
+        v_minor = vinfo[1]
+        ver_str = "Python%d.%d" % (v_major, v_minor)
+        print(ver_str, sys.argv[0])
+        print("args:", args)
+
+    n = args.count + 1
     fib_generated = [y for y in fib_generate(n)]
-    print('memoize  matrix  iterate generate  recurse    binet')
+    print('idx  memoize   matrix  iterate generate  recurse    binet')
     for x in range(1, n):
-        print(repr(fib_memoize(x)).rjust(7),
-              repr(fib_matrix(x)).rjust(7),
+        print(repr(x).rjust(3),
+              repr(fib_memoize(x)).rjust(8),
+              repr(fib_matrix(x)).rjust(8),
               repr(fib_iterate(x)).rjust(8),
               repr(fib_generated[x]).rjust(8),
               repr(fib_recurse(x)).rjust(8),
