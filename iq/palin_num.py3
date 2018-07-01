@@ -331,12 +331,13 @@ def palinums_math_gen(verbose=1):
                 inc = 11 * 10 ** (num_dig//2 - 1)
             ret_num = nxt_inc
         elif ret_num == nxt_num:
+            old_sub = sub_num
             nxt_num += nxt_inc
             ret_num += 11
-            if num_dig % 2 == 1:
+            if num_dig > 3 and num_dig % 2 == 1:
                 sub_num = ret_num + 9 * 10 ** (num_dig//2)
             if verbose > 2:
-                print("nxt_num %d -> %d  sub_num %d -> %d     sub_inc %d" % (old_num, nxt_num, old_num, sub_num, sub_inc))
+                print("nxt_num %d -> %d  sub_num %d -> %d     sub_inc %d" % (old_num, nxt_num, old_sub, sub_num, sub_inc))
         elif ret_num == sub_num:
             sub_num += sub_inc
             ret_num += 110
