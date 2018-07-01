@@ -308,7 +308,47 @@ def unit_test():
 
 
 
-def palinums_math_gen(verbose=1):
+def palinums_gen_9_1(verbose=1):
+    '''
+    Generator for the sequence of palindromic natural numbers starting at 1
+    '''
+    inc, ret_num, all_nin, num_dig = 1, 1, 9, 1
+    iii, nxt_num, nxt_inc, nine = 2, 0, 0, 8
+    sub_num, sub_inc = 10901, 1010
+    yield 0
+    yield 1
+    while True:
+        for _ in range(nine):
+            iii += 1
+            ret_num += inc
+            yield ret_num
+        old_num = ret_num
+        print("\t  %3d ret_num after 9: %d" % (iii, ret_num))
+        iii += 1
+        if ret_num == all_nin:
+            nxt_num = (all_nin + 1) * 2 - 9
+            all_nin = all_nin * 10 + 9
+            num_dig += 1
+            if num_dig > 2:
+                nine = 9
+            nxt_inc = ret_num + 2
+            if verbose > 2:
+                print("\t  ret_num %d    all_nin %d    nxt_num %d      nxt_inc %d" % (ret_num, all_nin, nxt_num, nxt_inc))
+            if num_dig % 2 == 1:
+                inc = 10 ** (num_dig//2)
+            else:
+                inc = 11 * 10 ** (num_dig//2 - 1)
+            ret_num = nxt_inc
+            yield ret_num
+        elif ret_num == nxt_num:
+            nxt_num += nxt_inc
+            ret_num += 11
+            yield ret_num
+        else:
+            yield -1
+
+
+def palinums_math_gen_mid(verbose=1):
     '''
     Generator for the sequence of palindromic natural numbers starting at 1
     '''
@@ -391,8 +431,8 @@ def main():
                 test_one_string(is_palindrome_slice, True, args.verbose, str(npn))
             num = npn
 
-    for idx, num in enumerate(palinums_math_gen(args.verbose), 1):
-        if  args.verbose == 1:
+    for idx, num in enumerate(palinums_gen_9_1(args.verbose), 0):
+        if  args.verbose > 0:
             print("pmg: %4d  %10d" % (idx, num))
         if  args.test:
             if test_one_string(is_palindrome_slice, True, 1, str(num)):
