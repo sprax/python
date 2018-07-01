@@ -9,9 +9,9 @@ import sys
 # import pdb
 # from pdb import set_trace
 
-DEFAULT_START = 1
-DEFAULT_COUNT = 4
-DEFAULT_MAX_VAL = 2222
+DEFAULT_START = 0
+DEFAULT_COUNT = 222
+DEFAULT_MAX_VAL = 55555
 
 ONE_PLUS_EPS = 1.0 + sys.float_info.epsilon
 
@@ -313,7 +313,7 @@ def palinums_gen_9_1(verbose=1):
     Generator for the sequence of palindromic natural numbers starting at 1
     '''
     inc, ret_num, all_nin, num_dig = 1, 1, 9, 1
-    iii, nxt_num, nxt_inc, nine = 2, 0, 0, 8
+    iii, nxt_num, nxt_inc, nine = 1, 0, 0, 8
     sub_num, sub_inc = 10901, 1010
     yield 0
     yield 1
