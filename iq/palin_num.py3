@@ -10,8 +10,8 @@ import sys
 # from pdb import set_trace
 
 DEFAULT_START = 0
-DEFAULT_COUNT = 222
-DEFAULT_MAX_VAL = 55555
+DEFAULT_COUNT = 100000
+DEFAULT_MAX_VAL = 555555
 
 ONE_PLUS_EPS = 1.0 + sys.float_info.epsilon
 
@@ -343,6 +343,12 @@ def palinums_gen_9_1(verbose=1):
         elif ret_num == nxt_num:
             nxt_num += nxt_inc
             ret_num += 11
+            yield ret_num
+        elif inc == 100:
+            ret_num += 110
+            yield ret_num
+        elif inc == 110:
+            ret_num += 100
             yield ret_num
         else:
             yield -1
