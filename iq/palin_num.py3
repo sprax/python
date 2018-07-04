@@ -10,8 +10,8 @@ import sys
 # from pdb import set_trace
 
 DEFAULT_START = 0
-DEFAULT_COUNT = 100000
-DEFAULT_MAX_VAL = 555555
+DEFAULT_COUNT = 10000
+DEFAULT_MAX_VAL = 5555555
 
 ONE_PLUS_EPS = 1.0 + sys.float_info.epsilon
 
@@ -314,6 +314,7 @@ def palinums_gen_9_1(verbose=1):
     '''
     inc, ret_num, all_nin, num_dig = 1, 1, 9, 1
     iii, nxt_num, nxt_inc, nine = 1, 0, 0, 8
+    nyt_num, nyt_inc = 0, 0
     sub_num, sub_inc = 10901, 1010
     yield 0
     yield 1
@@ -323,15 +324,19 @@ def palinums_gen_9_1(verbose=1):
             ret_num += inc
             yield ret_num
         old_num = ret_num
-        print("\t  %3d ret_num after 9: %d" % (iii, ret_num))
+        if verbose > 3:
+            print("\t  %3d ret_num after 9: %d" % (iii, ret_num))
         iii += 1
         if ret_num == all_nin:
-            nxt_num = (all_nin + 1) * 2 - 9
             all_nin = all_nin * 10 + 9
             num_dig += 1
             if num_dig > 2:
                 nine = 9
             nxt_inc = ret_num + 2
+            nxt_num = nxt_inc * 2 - 11  # (all_nin + 2)*2 - 11 == (all_nin + 1) * 2 - 9
+            if num_dig > 6:
+                nyt_num = nxt_inc + (all_nin // 10000) * 100
+                print("            nyt_num = ", nyt_num)
             if verbose > 2:
                 print("\t  ret_num %d    all_nin %d    nxt_num %d      nxt_inc %d" % (ret_num, all_nin, nxt_num, nxt_inc))
             if num_dig % 2 == 1:
@@ -344,13 +349,26 @@ def palinums_gen_9_1(verbose=1):
             nxt_num += nxt_inc
             ret_num += 11
             yield ret_num
+        elif num_dig > 6 and ret_num == nyt_num:
+            nyt_num += 100010
+            print("              nyt_num %d --> %d" % (ret_num, nyt_num))
+            ret_num += 110
+            yield ret_num
         elif inc == 100:
             ret_num += 110
             yield ret_num
         elif inc == 110:
             ret_num += 100
             yield ret_num
+        elif inc == 1000:
+            ret_num += 1100
+            yield ret_num
+        elif inc == 1100:
+            ret_num += 110
+            yield ret_num
         else:
+            print("palinums_gen_9_1 BUST at iii=%d  nxt_num=%d  inc=%d  ret_num=%d"
+                  % (iii, nxt_num, inc, ret_num))
             yield -1
 
 
@@ -437,9 +455,11 @@ def main():
                 test_one_string(is_palindrome_slice, True, args.verbose, str(npn))
             num = npn
 
+    old = 0
     for idx, num in enumerate(palinums_gen_9_1(args.verbose), 0):
         if  args.verbose > 0:
-            print("pmg: %4d  %10d" % (idx, num))
+            inc = num - old
+            print("pmg %5d:  %10d + %5d => %10d" % (idx, old, inc, num))
         if  args.test:
             if test_one_string(is_palindrome_slice, True, 1, str(num)):
                 break
@@ -447,6 +467,7 @@ def main():
             break
         if  num > args.maxval:
             break
+        old = num
     print()
 
 
