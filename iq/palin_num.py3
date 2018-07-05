@@ -10,8 +10,8 @@ import sys
 # from pdb import set_trace
 
 DEFAULT_START = 0
-DEFAULT_COUNT = 10000
-DEFAULT_MAX_VAL = 5555555
+DEFAULT_COUNT = 100000
+DEFAULT_MAX_VAL = 55555555
 
 ONE_PLUS_EPS = 1.0 + sys.float_info.epsilon
 
@@ -351,7 +351,11 @@ def palinums_gen_9_1(verbose=1):
             yield ret_num
         elif num_dig > 6 and ret_num == nyt_num:
             nyt_num += 100010
-            print("              nyt_num %d --> %d" % (ret_num, nyt_num))
+            if nyt_num == nxt_num:
+                nyt_num += 99911
+                print("    BINGO!    nyt_num %d --> %d --> %d" % (ret_num, nxt_num, nyt_num))
+            else:
+                print("              nyt_num %d --> %d" % (ret_num, nyt_num))
             ret_num += 110
             yield ret_num
         elif inc == 100:
