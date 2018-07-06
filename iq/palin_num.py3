@@ -314,7 +314,7 @@ def palinums_gen_9_1(verbose=1):
     '''
     inc, ret_num, all_nin, num_dig = 1, 1, 9, 1
     iii, nxt_num, nxt_inc, nine = 1, 0, 0, 8
-    nyt_num, nyt_inc = 0, 0
+    nyt_num, nyt_inc, nzt_num = 0, 0, 10099001
     sub_num, sub_inc = 10901, 1010
     yield 0
     yield 1
@@ -357,6 +357,10 @@ def palinums_gen_9_1(verbose=1):
             else:
                 print("              nyt_num %d --> %d" % (ret_num, nyt_num))
             ret_num += 110
+            yield ret_num
+        elif num_dig > 7 and ret_num == nzt_num:
+            nzt_num += 10000001
+            ret_num += 1100
             yield ret_num
         elif inc == 100:
             ret_num += 110
