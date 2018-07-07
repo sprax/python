@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 ''' tests for various palindromes using Python 3 generators
     Python 2.7 *can* run this version.
+    TODO: use next_palindromic_num_math to debug/develop the recurrence or
+    expansion list in palinums_gen_9_1 (rel and abs diffs).  Just check and
+    correct, using string or math supremum.
 '''
 from __future__ import print_function
 import argparse
