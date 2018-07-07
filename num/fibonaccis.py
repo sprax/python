@@ -1,4 +1,6 @@
 # fibonaccis.py -- several ways of generating and printing the Fibonacci series
+# TODO: memoize iterative methods
+
 from __future__ import print_function
 import argparse
 import math
