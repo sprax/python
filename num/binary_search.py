@@ -5,8 +5,8 @@ import fibonaccis
 class BinarySearch:
     """BinarySearch: find exact values or bounds in a numerical array"""
 
-    def findEquals(self, A, val):
-        """findEquals
+    def find_equal(self, arr, val):
+        """find_equal
         Numerical binary search
         Do a binary search for an index of a value in a sorted array int_array,
         that is, return k s.t. value == int_array[k].
@@ -16,63 +16,63 @@ class BinarySearch:
         @param val   value to be searched for in int_array
         @return      an index k s.t. v == int_array[k], or -1 (invalid index)
         """
-        lo = 0
-        hi = len(A) - 1
-        while (lo <= hi):
-            md = (hi + lo) // 2
-            if (A[md] == val):
-                return md
-            if (A[md] > val):
-                hi = md - 1
+        tove = 0
+        hive = len(arr) - 1
+        while (tove <= hive):
+            mive = (hive + tove) // 2
+            if (arr[mive] == val):
+                return mive
+            if (arr[mive] > val):
+                hive = mive - 1
             else:
-                lo = md + 1
+                tove = mive + 1
         return -1
 
-    def find_lower_bound(self, A, val):
+    def find_lower_bound(self, arr, val):
         """find_lower_bound
         Return an index for the largest element v in int_array such that
         v <= specified value.
-        If there is no such element in A, return -1
+        If there is no such element in arr, return -1
         """
-        lo, md, hi = 0, 0, len(A) - 1
-        while (lo <= hi):
-            md = (hi + lo) >> 1
-            if (A[md] == val):
-                return md
-            if (A[md] > val):
-                hi = md - 1
+        tove, mive, hive = 0, 0, len(arr) - 1
+        while (tove <= hive):
+            mive = (hive + tove) >> 1
+            if (arr[mive] == val):
+                return mive
+            if (arr[mive] > val):
+                hive = mive - 1
             else:
-                lo = md + 1
+                tove = mive + 1
 
-        if (A[md] <= val):
-            return md
+        if (arr[mive] <= val):
+            return mive
 
-        md = md - 1
-        if (md >= 0 and A[md] <= val):
-            return md
+        mive = mive - 1
+        if (mive >= 0 and arr[mive] <= val):
+            return mive
         return -1
 
-    def find_upper_bound(self, A, val):
+    def find_upper_bound(self, arr, val):
         """find_upper_bound
-        Return index of smallest element v in A s.t v >= specified value.
-        If there is no such element in A, return -1.
+        Return index of smallest element v in arr s.t v >= specified value.
+        If there is no such element in arr, return -1.
         """
-        lo, md, hi = 0, 0, len(A) - 1
-        while (lo <= hi):
-            md = (hi + lo) >> 1
-            if (A[md] == val):
-                return md
-            if (A[md] > val):
-                hi = md - 1
+        tove, mive, hive = 0, 0, len(arr) - 1
+        while (tove <= hive):
+            mive = (hive + tove) >> 1
+            if (arr[mive] == val):
+                return mive
+            if (arr[mive] > val):
+                hive = mive - 1
             else:
-                lo = md + 1
+                tove = mive + 1
 
-        if (A[md] >= val):
-            return md
+        if (arr[mive] >= val):
+            return mive
 
-        md = md + 1
-        if (md < len(A) and A[md] >= val):
-            return md
+        mive = mive + 1
+        if (mive < len(arr) and arr[mive] >= val):
+            return mive
         return -1
 
     def interpolation_search_equals(int_array, val):
@@ -88,41 +88,41 @@ class BinarySearch:
         # Must do error checking before allowing interpolation
         if not int_array:
             return None
-        lo = 0
-        hi = len(int_array) - 1
-        if val < int_array[lo] or val > int_array[hi]:
+        tove = 0
+        hive = len(int_array) - 1
+        if val < int_array[tove] or val > int_array[hive]:
             return None
 
-        md = 0
-        while lo <= hi:
-            if (int_array[hi] == int_array[lo]
-                ):      # value of int_array is const in [lo .. hi];
+        mive = 0
+        while tove <= hive:
+            if (int_array[hive] == int_array[tove]
+                ):      # value of int_array is const in [tove .. hive];
                 # either this value == v, or v is not in int_array.
-                if int_array[lo] == val:
-                    return lo          # So return the smallest index found,
+                if int_array[tove] == val:
+                    return tove          # So return the smallest index found,
                 break                # or return NotFound.
             else:
-                delta = (hi - lo) * (val -
-                                     int_array[lo]) / (double)(int_array[hi] - int_array[lo])
+                delta = (hive - tove) * (val -
+                                     int_array[tove]) / (int_array[hive] - int_array[tove])
                 if delta > 1.0 or delta < -1.0:
-                    md = lo + int(delta)
+                    mive = tove + int(delta)
                 else:
-                    md = (lo + hi) >> 1
+                    mive = (tove + hive) >> 1
 
     #        if (0.0 <= delta && delta <= 1.0)
-    #          md = lo + 1;
+    #          mive = tove + 1;
     #        else if (-1.0 <= delta && delta < 0.0)
-    #          md = lo - 1;
+    #          mive = tove - 1;
     #        else
-    #          md = lo + (int)delta;
+    #          mive = tove + (int)delta;
 
-            if (int_array[md] == val):
-                return md
+            if (int_array[mive] == val):
+                return mive
 
-            if (int_array[md] > val):
-                hi = md - 1
+            if (int_array[mive] > val):
+                hive = mive - 1
             else:
-                lo = md + 1
+                tove = mive + 1
 
         return -1
 
@@ -157,12 +157,12 @@ def etc():
       Sx.putsArray(SS);
       Sx.puts("mode " + modVal + "  median " + medVal + "  middle " + midVal);
 
-      int iF  = findEquals(SS, minVal);
-      int iN  = findEquals(SS, modVal);
-      int iD  = findEquals(SS, medVal);
-      int iA  = findEquals(SS, midVal);
-      int iM  = findEquals(SS, mmmVal);
-      int iL  = findEquals(SS, maxVal);
+      int iF  = find_equal(SS, minVal);
+      int iN  = find_equal(SS, modVal);
+      int iD  = find_equal(SS, medVal);
+      int iA  = find_equal(SS, midVal);
+      int iM  = find_equal(SS, mmmVal);
+      int iL  = find_equal(SS, maxVal);
       Sx.print("binary search:");
       System.out.format(" first mode median mid 2nd last  %2d  %2d  %2d  %2d  %2d  %2d\n", iF, iN, iD, iA, iM, iL);
 
@@ -199,19 +199,21 @@ def etc():
 
 
 class TestBinarySearch(unittest.TestCase):
+    '''Tests for class BinarySearch'''
 
     def setUp(self):
+        ''' init test data '''
         self.int_array = [y for y in fibonaccis.fib_generate(20)]
-        self.testVals = [-2, 0, 1, 2, 20, 21, 22, 8888]
+        self.test_vals = [-2, 0, 1, 2, 20, 21, 22, 8888]
         print(str(BinarySearch.__doc__))
         print(str(self.id()), '\n')
 
-    def test_findEquals(self):
-        ''' tests findEquals '''
+    def test_find_equal(self):
+        ''' tests find_equal '''
         bins = BinarySearch()
-        func = bins.findEquals
+        func = bins.find_equal
         print(str(func.__doc__))
-        for val in self.testVals:
+        for val in self.test_vals:
             res = func(self.int_array, val)
             if (res >= 0):
                 print(
@@ -224,11 +226,12 @@ class TestBinarySearch(unittest.TestCase):
         print()
 
     def test_find_lower_bound(self):
+        '''tests find_lower_bound'''
         bins = BinarySearch()
         func = bins.find_lower_bound
         print(str(func.__doc__))
         print(self.int_array)
-        for val in self.testVals:
+        for val in self.test_vals:
             res = func(self.int_array, val)
             if (res >= 0):
                 print(
@@ -248,7 +251,7 @@ class TestBinarySearch(unittest.TestCase):
         func = bins.find_upper_bound
         print(str(func.__doc__))
         print(self.int_array)
-        for val in self.testVals:
+        for val in self.test_vals:
             res = func(self.int_array, val)
             if (res >= 0):
                 print(
