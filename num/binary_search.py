@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+''' BinarySearch class and its test class '''
 import unittest
 import fibonaccis
 
@@ -75,56 +77,57 @@ class BinarySearch:
             return jmd
         return -1
 
-    def interpolation_search_equals(int_array, val):
-        """  /**
-        binary search for an index for the value v in a sorted array int_array,
-        that is, find k s.t. v == int_array[k].  Obviously, v must be the value
-        of an actual element in int_array.
 
-        @param int_array     sorted array of int
-        @param val   value to be search for in int_array
-        @return      an index k s.t. v == int_array[k], or -1 (invalid index)
-        """
-        # Must do error checking before allowing interpolation
-        if not int_array:
-            return None
-        jlo = 0
-        jhi = len(int_array) - 1
-        print("interpolation_search_equals: int_array has type:", type(int_array).__name__)
-        if val < int_array[jlo] or val > int_array[jhi]:
-            return None
+def interpolation_search_equals(int_array, val):
+    """  /**
+    binary search for an index for the value v in a sorted array int_array,
+    that is, find k s.t. v == int_array[k].  Obviously, v must be the value
+    of an actual element in int_array.
 
-        jmd = 0
-        while jlo <= jhi:
-            if int_array[jhi] == int_array[jlo]:
-                # value of int_array is const in [jlo .. jhi];
-                # either this value == v, or v is not in int_array.
-                if int_array[jlo] == val:
-                    return jlo          # So return the smallest index found,
-                break                # or return NotFound.
+    @param int_array     sorted array of int
+    @param val   value to be search for in int_array
+    @return      an index k s.t. v == int_array[k], or -1 (invalid index)
+    """
+    # Must do error checking before allowing interpolation
+    if not int_array:
+        return None
+    jlo = 0
+    jhi = len(int_array) - 1
+    print("interpolation_search_equals: int_array has type:", type(int_array).__name__)
+    if val < int_array[jlo] or val > int_array[jhi]:
+        return None
+
+    jmd = 0
+    while jlo <= jhi:
+        if int_array[jhi] == int_array[jlo]:
+            # value of int_array is const in [jlo .. jhi];
+            # either this value == v, or v is not in int_array.
+            if int_array[jlo] == val:
+                return jlo          # So return the smallest index found,
+            break                # or return NotFound.
+        else:
+            delta = (jhi - jlo) * (val - int_array[jlo]) / (int_array[jhi] - int_array[jlo])
+            if delta > 1.0 or delta < -1.0:
+                jmd = jlo + int(delta)
             else:
-                delta = (jhi - jlo) * (val - int_array[jlo]) / (int_array[jhi] - int_array[jlo])
-                if delta > 1.0 or delta < -1.0:
-                    jmd = jlo + int(delta)
-                else:
-                    jmd = (jlo + jhi) >> 1
+                jmd = (jlo + jhi) >> 1
 
-    #        if 0.0 <= delta && delta <= 1.0
-    #          jmd = jlo + 1;
-    #        else if -1.0 <= delta && delta < 0.0
-    #          jmd = jlo - 1;
-    #        else
-    #          jmd = jlo + (int)delta;
+#        if 0.0 <= delta && delta <= 1.0
+#          jmd = jlo + 1;
+#        else if -1.0 <= delta && delta < 0.0
+#          jmd = jlo - 1;
+#        else
+#          jmd = jlo + (int)delta;
 
-            if int_array[jmd] == val:
-                return jmd
+        if int_array[jmd] == val:
+            return jmd
 
-            if int_array[jmd] > val:
-                jhi = jmd - 1
-            else:
-                jlo = jmd + 1
+        if int_array[jmd] > val:
+            jhi = jmd - 1
+        else:
+            jlo = jmd + 1
 
-        return -1
+    return -1
 
 
 def etc():
