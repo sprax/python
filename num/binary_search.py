@@ -207,6 +207,7 @@ class TestBinarySearch(unittest.TestCase):
         print(str(self.id()), '\n')
 
     def test_findEquals(self):
+        ''' tests findEquals '''
         bins = BinarySearch()
         func = bins.findEquals
         print(str(func.__doc__))
@@ -242,6 +243,7 @@ class TestBinarySearch(unittest.TestCase):
         print()
 
     def test_find_upper_bound(self):
+        '''tests find_upper_bound'''
         bins = BinarySearch()
         func = bins.find_upper_bound
         print(str(func.__doc__))
