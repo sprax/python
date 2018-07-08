@@ -54,28 +54,28 @@ class BinarySearch:
             return jmd
         return -1
 
-    def find_upper_bound(self, arr, val):
-        """find_upper_bound
-        Return index of smallest element v in arr s.t v >= specified value.
-        If there is no such element in arr, return -1.
-        """
-        jlo, jmd, jhi = 0, 0, len(arr) - 1
-        while jlo <= jhi:
-            jmd = (jhi + jlo) >> 1
-            if arr[jmd] == val:
-                return jmd
-            if arr[jmd] > val:
-                jhi = jmd - 1
-            else:
-                jlo = jmd + 1
-
-        if arr[jmd] >= val:
+def find_upper_bound(arr, val):
+    """find_upper_bound
+    Return index of smallest element v in arr s.t v >= specified value.
+    If there is no such element in arr, return -1.
+    """
+    jlo, jmd, jhi = 0, 0, len(arr) - 1
+    while jlo <= jhi:
+        jmd = (jhi + jlo) >> 1
+        if arr[jmd] == val:
             return jmd
+        if arr[jmd] > val:
+            jhi = jmd - 1
+        else:
+            jlo = jmd + 1
 
-        jmd = jmd + 1
-        if jmd < len(arr) and arr[jmd] >= val:
-            return jmd
-        return -1
+    if arr[jmd] >= val:
+        return jmd
+
+    jmd = jmd + 1
+    if jmd < len(arr) and arr[jmd] >= val:
+        return jmd
+    return -1
 
 
 def interpolation_search_equals(int_array, val):
@@ -251,8 +251,7 @@ class TestBinarySearch(unittest.TestCase):
 
     def test_find_upper_bound(self):
         '''tests find_upper_bound'''
-        bins = BinarySearch()
-        func = bins.find_upper_bound
+        func = find_upper_bound
         print(str(func.__doc__))
         print(self.int_array)
         for val in self.test_vals:
