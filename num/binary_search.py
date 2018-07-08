@@ -8,13 +8,13 @@ import fibonaccis
 def find_equal(arr, val):
     """find_equal
     Numerical binary search
-    Do a binary search for an index of a value in a sorted array int_array,
-    that is, return k s.t. value == int_array[k].
-    If the specified value is not in int_array, return -1.
+    Do a binary search for an index of a value in a sorted array fib_array,
+    that is, return k s.t. value == fib_array[k].
+    If the specified value is not in fib_array, return -1.
 
-    @param int_array     sorted array
-    @param val   value to be searched for in int_array
-    @return      an index k s.t. v == int_array[k], or -1 (invalid index)
+    @param fib_array     sorted array
+    @param val   value to be searched for in fib_array
+    @return      an index k s.t. v == fib_array[k], or -1 (invalid index)
     """
     jlo = 0
     jhi = len(arr) - 1
@@ -30,7 +30,7 @@ def find_equal(arr, val):
 
 def find_lower_bound(arr, val):
     """find_lower_bound
-    Return an index for the largest element v in int_array such that
+    Return an index for the largest element v in fib_array such that
     v <= specified value.
     If there is no such element in arr, return -1
     """
@@ -76,35 +76,35 @@ def find_upper_bound(arr, val):
     return -1
 
 
-def interpolation_search_equals(int_array, val):
+def interpolation_search_equals(fib_array, val):
     """  /**
-    binary search for an index for the value v in a sorted array int_array,
-    that is, find k s.t. v == int_array[k].  Obviously, v must be the value
-    of an actual element in int_array.
+    binary search for an index for the value v in a sorted array fib_array,
+    that is, find k s.t. v == fib_array[k].  Obviously, v must be the value
+    of an actual element in fib_array.
 
-    @param int_array     sorted array of int
-    @param val   value to be search for in int_array
-    @return      an index k s.t. v == int_array[k], or -1 (invalid index)
+    @param fib_array     sorted array of int
+    @param val   value to be search for in fib_array
+    @return      an index k s.t. v == fib_array[k], or -1 (invalid index)
     """
     # Must do error checking before allowing interpolation
-    if not int_array:
+    if not fib_array:
         return None
     jlo = 0
-    jhi = len(int_array) - 1
-    # print("interpolation_search_equals: int_array has type:", type(int_array).__name__)
-    if val < int_array[jlo] or val > int_array[jhi]:
+    jhi = len(fib_array) - 1
+    # print("interpolation_search_equals: fib_array has type:", type(fib_array).__name__)
+    if val < fib_array[jlo] or val > fib_array[jhi]:
         return None
 
     jmd = 0
     while jlo <= jhi:
-        if int_array[jhi] == int_array[jlo]:
-            # value of int_array is const in [jlo .. jhi];
-            # either this value == v, or v is not in int_array.
-            if int_array[jlo] == val:
+        if fib_array[jhi] == fib_array[jlo]:
+            # value of fib_array is const in [jlo .. jhi];
+            # either this value == v, or v is not in fib_array.
+            if fib_array[jlo] == val:
                 return jlo          # So return the smallest index found,
             break                   # or return NotFound.
         else:
-            delta = (jhi - jlo) * (val - int_array[jlo]) / (int_array[jhi] - int_array[jlo])
+            delta = (jhi - jlo) * (val - fib_array[jlo]) / (fib_array[jhi] - fib_array[jlo])
             if delta > 1.0 or delta < -1.0:
                 jmd = jlo + int(delta)
             else:
@@ -117,9 +117,9 @@ def interpolation_search_equals(int_array, val):
 #        else
 #          jmd = jlo + (int)delta;
 
-        if int_array[jmd] == val:
+        if fib_array[jmd] == val:
             return jmd
-        if int_array[jmd] > val:
+        if fib_array[jmd] > val:
             jhi = jmd - 1
         else:
             jlo = jmd + 1
@@ -146,7 +146,7 @@ def etc():
       int modVal = Integer.MIN_VALUE;
       for int v : SS {
         if v >=  medVal {
-          modVal = v;       # mode val: first v in int_array s.t. v >= medVal
+          modVal = v;       # mode val: first v in fib_array s.t. v >= medVal
           break;
         }
       }
@@ -202,39 +202,40 @@ class TestBinarySearch(unittest.TestCase):
 
     def setUp(self):
         ''' init test data '''
-        self.int_array = [y for y in fibonaccis.fib_generate(20)]
+        self.fib_array = [y for y in fibonaccis.fib_generate(20)]
         self.test_vals = [-2, 0, 1, 2, 5, 8, 13, 20, 21, 22, 8888]
+        self.expecteds = [x in self.fib_array for x in self.test_vals]
         print(str(__doc__))
         print(str(self.id()), '\n')
-        # print("int_array is of type:", type(self.int_array).__name__)
+        # print("fib_array is of type:", type(self.fib_array).__name__)
 
 
     def test_find_equal(self, find_equal_func=find_equal):
         ''' tests find_equal '''
+        num_wrong = 0
         print(str(find_equal_func.__doc__))
-        for val in self.test_vals:
-            res = find_equal_func(self.int_array, val)
+        for val, exp in zip(self.test_vals, self.expecteds):
+            res = find_equal_func(self.fib_array, val)
             if res:
-                print(
-                    "exact value",
-                    self.int_array[res],
-                    "found at index",
-                    res)
+                num_wrong += not exp
+                print("exact value", self.fib_array[res], "found at index", res)
             else:
+                num_wrong += exp
                 print("exact value", val, "not found")
         print()
+        return num_wrong
 
     def test_find_lower_bound(self):
         '''tests find_lower_bound'''
         func = find_lower_bound
         print(str(func.__doc__))
-        print(self.int_array)
+        print(self.fib_array)
         for val in self.test_vals:
-            res = func(self.int_array, val)
+            res = func(self.fib_array, val)
             if res >= 0:
                 print(
                     "lower bound",
-                    self.int_array[res],
+                    self.fib_array[res],
                     "found for",
                     val,
                     "at index",
@@ -247,12 +248,12 @@ class TestBinarySearch(unittest.TestCase):
         '''tests find_upper_bound'''
         func = find_upper_bound
         print(str(func.__doc__))
-        print(self.int_array)
+        print(self.fib_array)
         for val in self.test_vals:
-            res = func(self.int_array, val)
+            res = func(self.fib_array, val)
             if res >= 0:
                 print(
-                    "upper bound {} found for {} at index {}".format(self.int_array[res], val, res))
+                    "upper bound {} found for {} at index {}".format(self.fib_array[res], val, res))
             else:
                 print("upper bound for {} not found".format(val))
         print()
