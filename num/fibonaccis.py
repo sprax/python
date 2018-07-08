@@ -6,34 +6,34 @@ import argparse
 import math
 from math import log
 
-def fib_recurse(n):
-    if n <= 1:
-          return n
+def fib_recurse(num):
+    if num <= 1:
+          return num
     else:
-        return fib_recurse(n-1) + fib_recurse(n-2)
+        return fib_recurse(num-1) + fib_recurse(num-2)
 
 
 memo = {0:0, 1:1}
 
-def fib_memoize(n):
-    if not n in memo:
-        memo[n] = fib_memoize(n-1) + fib_memoize(n-2)
-    return memo[n]
+def fib_memoize(num):
+    if not num in memo:
+        memo[num] = fib_memoize(num-1) + fib_memoize(num-2)
+    return memo[num]
 
 
-def fib_iterate(n):
+def fib_iterate(num):
     '''iteratively compute function: seq num to fib num'''
     a, b = 0, 1
-    for _ in range(n):
+    for _ in range(num):
         a, b = b, a + b
     return a
 
-# Binet's formula (only good for n < 70)
+# Binet's formula (only good for num < 70)
 PHI = (1 + 5**0.5) / 2
 
-def fib_binet(n):
+def fib_binet(num):
     '''Binet's Fibonacci formula'''
-    return int(round((PHI**n - (1-PHI)**n) / 5**0.5))
+    return int(round((PHI**num - (1-PHI)**num) / 5**0.5))
 
 def fib_binet_inverse(f):
     '''Binet's Fibonacci inverse formula: fibonacci number to sequence number'''
@@ -51,35 +51,35 @@ def mul(A, B):
     d, e, f = B
     return a*d + b*e, a*e + b*f, b*e + c*f
 
-def power(A, n):
+def power(A, num):
     '''Raise A to the nth power'''
-    if n == 1:     return A
-    if n & 1 == 0: return power(mul(A, A), n//2)
-    else:          return mul(A, power(mul(A, A), (n-1)//2))
+    if num == 1:     return A
+    if num & 1 == 0: return power(mul(A, A), num//2)
+    else:          return mul(A, power(mul(A, A), (num-1)//2))
 
-def fib_matrix(n):
+def fib_matrix(num):
     '''fibonacci's from matrix to the Nth power'''
-    if n < 2:
-        return n
-    return power((1,1,0), n-1)[0]
+    if num < 2:
+        return num
+    return power((1,1,0), num-1)[0]
 
 
-def fib_generate(n, start=0):
+def fib_generate(num, start=0):
     '''fibonacci generator'''
-    a, b, x = start, 1, 0
-    while x < n:
+    a, b, idx = start, 1, 0
+    while idx < num:
         yield a
         a, b = b, a + b
-        x = x + 1
+        idx = idx + 1
 
 
-def fib_generate_recip(n):
+def fib_generate_recip(num):
     '''fibonacci_reciprocal_generator'''
-    a, b, x = 1, 2, 1
-    while x < n:
+    a, b, idx = 1, 2, 1
+    while idx < num:
         yield 1.0/a
         a, b = b, a + b
-        x = x+1
+        idx = idx+1
 
 ################################################################################
 DEFAULT_START = 0
@@ -109,17 +109,17 @@ def main_fib():
         print(ver_str, sys.argv[0])
         print("args:", args)
 
-    n = args.count + 1
-    fib_generated = [y for y in fib_generate(n)]
+    num = args.count + 1
+    fib_generated = [y for y in fib_generate(num)]
     print('idx  memoize   matrix  iterate generate  recurse    binet')
-    for x in range(1, n):
-        print(repr(x).rjust(3),
-              repr(fib_memoize(x)).rjust(8),
-              repr(fib_matrix(x)).rjust(8),
-              repr(fib_iterate(x)).rjust(8),
-              repr(fib_generated[x]).rjust(8),
-              repr(fib_recurse(x)).rjust(8),
-              repr(fib_binet(x)).rjust(8),
+    for idx in range(1, num):
+        print(repr(idx).rjust(3),
+              repr(fib_memoize(idx)).rjust(8),
+              repr(fib_matrix(idx)).rjust(8),
+              repr(fib_iterate(idx)).rjust(8),
+              repr(fib_generated[idx]).rjust(8),
+              repr(fib_recurse(idx)).rjust(8),
+              repr(fib_binet(idx)).rjust(8),
              )
     print('sum: {0}'.format(sum(fib_generate(32))))
     print('sum of {1}s: {0}'.format(sum(fib_generate_recip(32)), 'reciprocal'))
