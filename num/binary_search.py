@@ -79,7 +79,7 @@ def find_upper_bound(arr, val):
 
 
 def interpolation_search_equals(fib_array, val):
-    """  /**
+    """
     binary search for an index for the value v in a sorted array fib_array,
     that is, find k s.t. v == fib_array[k].  Obviously, v must be the value
     of an actual element in fib_array.
@@ -202,18 +202,26 @@ def etc():
 class TestBinarySearch(unittest.TestCase):
     '''Tests for class binary search functions'''
 
-    def setUp(self):
+    def init_data(self):
         ''' init test data '''
         self.fib_array = [y for y in fibonaccis.fib_generate(20)]
         self.test_vals = [-2, 0, 1, 2, 5, 8, 13, 20, 21, 22, 8888]
         self.expecteds = [x in self.fib_array for x in self.test_vals]
+
+    # NOTE: Already defined in base class, no need to extend.
+    # def __init__(self):
+    #     ''' init self '''
+    #     self.init_data()
+
+    def setUp(self):
+        ''' init test data '''
+        self.init_data()
         print(str(__doc__))
         print(str(self.id()), '\n')
         # print("fib_array is of type:", type(self.fib_array).__name__)
         print("fibs:", self.fib_array)
         print("vals:", self.test_vals)
         print("exps:", self.expecteds)
-
 
     def test_find_equal(self, find_equal_func=find_equal):
         ''' tests find_equal '''
@@ -227,7 +235,7 @@ class TestBinarySearch(unittest.TestCase):
                       % (num_wrong, self.fib_array[res], res))
             else:
                 num_wrong += exp
-                print("%d | exact value %d not found" % (num_wrong, val))
+                print("%d | exact value %3d not found" % (num_wrong, val))
         print("num_wrong:", num_wrong)
         return num_wrong
 
@@ -265,4 +273,8 @@ class TestBinarySearch(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    TBS = TestBinarySearch()
+    TBS.init_data()
+    print("\n\t  Direct call:")
+    TBS.test_find_equal(interpolation_search_equals)
+    unittest.main()     # NOTE: This must be last, because basically it calls exit.
