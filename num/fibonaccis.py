@@ -5,6 +5,7 @@ from __future__ import print_function
 import argparse
 import math
 from math import log
+import sys
 
 def fib_recurse(num):
     if num <= 1:
@@ -75,11 +76,11 @@ def fib_generate(num, start=0):
 
 def fib_generate_recip(num):
     '''fibonacci_reciprocal_generator'''
-    a, b, idx = 1, 2, 1
+    lef, rig, idx = 1, 2, 1
     while idx < num:
-        yield 1.0/a
-        a, b = b, a + b
-        idx = idx+1
+        yield 1.0/lef
+        lef, rig = rig, lef + rig
+        idx = idx + 1
 
 ################################################################################
 DEFAULT_START = 0
