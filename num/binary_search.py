@@ -1,58 +1,56 @@
 #!/usr/bin/env python
-''' BinarySearch class and its test class '''
+''' Binary Search functions and a test class
+    Find exact values or bounds in a numerical array.
+'''
 import unittest
 import fibonaccis
 
+def find_equal(arr, val):
+    """find_equal
+    Numerical binary search
+    Do a binary search for an index of a value in a sorted array int_array,
+    that is, return k s.t. value == int_array[k].
+    If the specified value is not in int_array, return -1.
 
-class BinarySearch:
-    """BinarySearch: find exact values or bounds in a numerical array"""
-
-    def find_equal(self, arr, val):
-        """find_equal
-        Numerical binary search
-        Do a binary search for an index of a value in a sorted array int_array,
-        that is, return k s.t. value == int_array[k].
-        If the specified value is not in int_array, return -1.
-
-        @param int_array     sorted array
-        @param val   value to be searched for in int_array
-        @return      an index k s.t. v == int_array[k], or -1 (invalid index)
-        """
-        jlo = 0
-        jhi = len(arr) - 1
-        while   jlo <= jhi:
-            jmd = (jhi + jlo) // 2
-            if arr[jmd] == val:
-                return jmd
-            if arr[jmd] > val:
-                jhi = jmd - 1
-            else:
-                jlo = jmd + 1
-        return None # this line coult be omitted
-
-    def find_lower_bound(self, arr, val):
-        """find_lower_bound
-        Return an index for the largest element v in int_array such that
-        v <= specified value.
-        If there is no such element in arr, return -1
-        """
-        jlo, jmd, jhi = 0, 0, len(arr) - 1
-        while jlo <= jhi:
-            jmd = (jhi + jlo) >> 1
-            if arr[jmd] == val:
-                return jmd
-            if arr[jmd] > val:
-                jhi = jmd - 1
-            else:
-                jlo = jmd + 1
-
-        if arr[jmd] <= val:
+    @param int_array     sorted array
+    @param val   value to be searched for in int_array
+    @return      an index k s.t. v == int_array[k], or -1 (invalid index)
+    """
+    jlo = 0
+    jhi = len(arr) - 1
+    while   jlo <= jhi:
+        jmd = (jhi + jlo) // 2
+        if arr[jmd] == val:
             return jmd
+        if arr[jmd] > val:
+            jhi = jmd - 1
+        else:
+            jlo = jmd + 1
+    return None # this line coult be omitted
 
-        jmd = jmd - 1
-        if jmd >= 0 and arr[jmd] <= val:
+def find_lower_bound(arr, val):
+    """find_lower_bound
+    Return an index for the largest element v in int_array such that
+    v <= specified value.
+    If there is no such element in arr, return -1
+    """
+    jlo, jmd, jhi = 0, 0, len(arr) - 1
+    while jlo <= jhi:
+        jmd = (jhi + jlo) >> 1
+        if arr[jmd] == val:
             return jmd
-        return -1
+        if arr[jmd] > val:
+            jhi = jmd - 1
+        else:
+            jlo = jmd + 1
+
+    if arr[jmd] <= val:
+        return jmd
+
+    jmd = jmd - 1
+    if jmd >= 0 and arr[jmd] <= val:
+        return jmd
+    return -1
 
 def find_upper_bound(arr, val):
     """find_upper_bound
@@ -202,20 +200,19 @@ def etc():
 
 
 class TestBinarySearch(unittest.TestCase):
-    '''Tests for class BinarySearch'''
+    '''Tests for class binary search functions'''
 
     def setUp(self):
         ''' init test data '''
         self.int_array = [y for y in fibonaccis.fib_generate(20)]
         self.test_vals = [-2, 0, 1, 2, 5, 8, 13, 20, 21, 22, 888]
-        print(str(BinarySearch.__doc__))
+        print(str(__doc__))
         print(str(self.id()), '\n')
         print("int_array is of type:", type(self.int_array).__name__)
 
     def test_find_equal(self):
         ''' tests find_equal '''
-        bins = BinarySearch()
-        func = bins.find_equal
+        func = find_equal
         print(str(func.__doc__))
         for val in self.test_vals:
             res = func(self.int_array, val)
@@ -231,8 +228,7 @@ class TestBinarySearch(unittest.TestCase):
 
     def test_find_lower_bound(self):
         '''tests find_lower_bound'''
-        bins = BinarySearch()
-        func = bins.find_lower_bound
+        func = find_lower_bound
         print(str(func.__doc__))
         print(self.int_array)
         for val in self.test_vals:
