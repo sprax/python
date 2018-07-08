@@ -91,7 +91,7 @@ def interpolation_search_equals(int_array, val):
         return None
     jlo = 0
     jhi = len(int_array) - 1
-    print("interpolation_search_equals: int_array has type:", type(int_array).__name__)
+    # print("interpolation_search_equals: int_array has type:", type(int_array).__name__)
     if val < int_array[jlo] or val > int_array[jhi]:
         return None
 
@@ -102,7 +102,7 @@ def interpolation_search_equals(int_array, val):
             # either this value == v, or v is not in int_array.
             if int_array[jlo] == val:
                 return jlo          # So return the smallest index found,
-            break                # or return NotFound.
+            break                   # or return NotFound.
         else:
             delta = (jhi - jlo) * (val - int_array[jlo]) / (int_array[jhi] - int_array[jlo])
             if delta > 1.0 or delta < -1.0:
@@ -119,13 +119,11 @@ def interpolation_search_equals(int_array, val):
 
         if int_array[jmd] == val:
             return jmd
-
         if int_array[jmd] > val:
             jhi = jmd - 1
         else:
             jlo = jmd + 1
-
-    return -1
+    return None # explicit return could be omitted
 
 
 def etc():
@@ -205,17 +203,17 @@ class TestBinarySearch(unittest.TestCase):
     def setUp(self):
         ''' init test data '''
         self.int_array = [y for y in fibonaccis.fib_generate(20)]
-        self.test_vals = [-2, 0, 1, 2, 5, 8, 13, 20, 21, 22, 888]
+        self.test_vals = [-2, 0, 1, 2, 5, 8, 13, 20, 21, 22, 8888]
         print(str(__doc__))
         print(str(self.id()), '\n')
-        print("int_array is of type:", type(self.int_array).__name__)
+        # print("int_array is of type:", type(self.int_array).__name__)
 
-    def test_find_equal(self):
+
+    def test_find_equal(self, find_equal_func=find_equal):
         ''' tests find_equal '''
-        func = find_equal
-        print(str(func.__doc__))
+        print(str(find_equal_func.__doc__))
         for val in self.test_vals:
-            res = func(self.int_array, val)
+            res = find_equal_func(self.int_array, val)
             if res:
                 print(
                     "exact value",
