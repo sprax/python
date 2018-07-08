@@ -96,15 +96,14 @@ class BinarySearch:
 
         jmd = 0
         while jlo <= jhi:
-            if (int_array[jhi] == int_array[jlo]
-                ):      # value of int_array is const in [jlo .. jhi];
+            if int_array[jhi] == int_array[jlo]:
+                # value of int_array is const in [jlo .. jhi];
                 # either this value == v, or v is not in int_array.
                 if int_array[jlo] == val:
                     return jlo          # So return the smallest index found,
                 break                # or return NotFound.
             else:
-                delta = (jhi - jlo) * (val -
-                                     int_array[jlo]) / (int_array[jhi] - int_array[jlo])
+                delta = (jhi - jlo) * (val - int_array[jlo]) / (int_array[jhi] - int_array[jlo])
                 if delta > 1.0 or delta < -1.0:
                     jmd = jlo + int(delta)
                 else:
