@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+'''doubly sorted 2D array, right?'''
 
 import sys
 
@@ -32,6 +33,7 @@ def find_kth(arr, k):
         (x, y) = find_next(arr, possibles)
         print("nxt:", x, y)
         print("val:", arr[x][y])
+    return arr[x][y]
 
 
 if __name__ == '__main__':
@@ -40,5 +42,3 @@ if __name__ == '__main__':
             [ 7, 8, 9 ] ]
     k = int(sys.argv[1]) if len(sys.argv) > 1 else 3
     find_kth(arr, k)
-
-
