@@ -16,17 +16,17 @@ class BinarySearch:
         @param val   value to be searched for in int_array
         @return      an index k s.t. v == int_array[k], or -1 (invalid index)
         """
-        tove = 0
-        hive = len(arr) - 1
-        while (tove <= hive):
-            mive = (hive + tove) // 2
-            if (arr[mive] == val):
-                return mive
-            if (arr[mive] > val):
-                hive = mive - 1
+        jlo = 0
+        jhi = len(arr) - 1
+        while (jlo <= jhi):
+            jmd = (jhi + jlo) // 2
+            if (arr[jmd] == val):
+                return jmd
+            if (arr[jmd] > val):
+                jhi = jmd - 1
             else:
-                tove = mive + 1
-        return -1
+                jlo = jmd + 1
+        return None # this line coult be omitted
 
     def find_lower_bound(self, arr, val):
         """find_lower_bound
@@ -34,22 +34,22 @@ class BinarySearch:
         v <= specified value.
         If there is no such element in arr, return -1
         """
-        tove, mive, hive = 0, 0, len(arr) - 1
-        while (tove <= hive):
-            mive = (hive + tove) >> 1
-            if (arr[mive] == val):
-                return mive
-            if (arr[mive] > val):
-                hive = mive - 1
+        jlo, jmd, jhi = 0, 0, len(arr) - 1
+        while (jlo <= jhi):
+            jmd = (jhi + jlo) >> 1
+            if (arr[jmd] == val):
+                return jmd
+            if (arr[jmd] > val):
+                jhi = jmd - 1
             else:
-                tove = mive + 1
+                jlo = jmd + 1
 
-        if (arr[mive] <= val):
-            return mive
+        if (arr[jmd] <= val):
+            return jmd
 
-        mive = mive - 1
-        if (mive >= 0 and arr[mive] <= val):
-            return mive
+        jmd = jmd - 1
+        if (jmd >= 0 and arr[jmd] <= val):
+            return jmd
         return -1
 
     def find_upper_bound(self, arr, val):
@@ -57,22 +57,22 @@ class BinarySearch:
         Return index of smallest element v in arr s.t v >= specified value.
         If there is no such element in arr, return -1.
         """
-        tove, mive, hive = 0, 0, len(arr) - 1
-        while (tove <= hive):
-            mive = (hive + tove) >> 1
-            if (arr[mive] == val):
-                return mive
-            if (arr[mive] > val):
-                hive = mive - 1
+        jlo, jmd, jhi = 0, 0, len(arr) - 1
+        while (jlo <= jhi):
+            jmd = (jhi + jlo) >> 1
+            if (arr[jmd] == val):
+                return jmd
+            if (arr[jmd] > val):
+                jhi = jmd - 1
             else:
-                tove = mive + 1
+                jlo = jmd + 1
 
-        if (arr[mive] >= val):
-            return mive
+        if (arr[jmd] >= val):
+            return jmd
 
-        mive = mive + 1
-        if (mive < len(arr) and arr[mive] >= val):
-            return mive
+        jmd = jmd + 1
+        if (jmd < len(arr) and arr[jmd] >= val):
+            return jmd
         return -1
 
     def interpolation_search_equals(int_array, val):
@@ -88,41 +88,41 @@ class BinarySearch:
         # Must do error checking before allowing interpolation
         if not int_array:
             return None
-        tove = 0
-        hive = len(int_array) - 1
-        if val < int_array[tove] or val > int_array[hive]:
+        jlo = 0
+        jhi = len(int_array) - 1
+        if val < int_array[jlo] or val > int_array[jhi]:
             return None
 
-        mive = 0
-        while tove <= hive:
-            if (int_array[hive] == int_array[tove]
-                ):      # value of int_array is const in [tove .. hive];
+        jmd = 0
+        while jlo <= jhi:
+            if (int_array[jhi] == int_array[jlo]
+                ):      # value of int_array is const in [jlo .. jhi];
                 # either this value == v, or v is not in int_array.
-                if int_array[tove] == val:
-                    return tove          # So return the smallest index found,
+                if int_array[jlo] == val:
+                    return jlo          # So return the smallest index found,
                 break                # or return NotFound.
             else:
-                delta = (hive - tove) * (val -
-                                     int_array[tove]) / (int_array[hive] - int_array[tove])
+                delta = (jhi - jlo) * (val -
+                                     int_array[jlo]) / (int_array[jhi] - int_array[jlo])
                 if delta > 1.0 or delta < -1.0:
-                    mive = tove + int(delta)
+                    jmd = jlo + int(delta)
                 else:
-                    mive = (tove + hive) >> 1
+                    jmd = (jlo + jhi) >> 1
 
     #        if (0.0 <= delta && delta <= 1.0)
-    #          mive = tove + 1;
+    #          jmd = jlo + 1;
     #        else if (-1.0 <= delta && delta < 0.0)
-    #          mive = tove - 1;
+    #          jmd = jlo - 1;
     #        else
-    #          mive = tove + (int)delta;
+    #          jmd = jlo + (int)delta;
 
-            if (int_array[mive] == val):
-                return mive
+            if (int_array[jmd] == val):
+                return jmd
 
-            if (int_array[mive] > val):
-                hive = mive - 1
+            if (int_array[jmd] > val):
+                jhi = jmd - 1
             else:
-                tove = mive + 1
+                jlo = jmd + 1
 
         return -1
 
