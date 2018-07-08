@@ -18,9 +18,11 @@ def find_equal(arr, val):
     """
     jlo = 0
     jhi = len(arr) - 1
-    while   jlo <= jhi:
+    while jlo <= jhi:
         jmd = (jhi + jlo) // 2
+        # print("jlo, jmd, jhi: %2d %2d %2d : %d" % (jlo, jmd, jhi, arr[jmd]))
         if arr[jmd] == val:
+            # print("exact: arr[%d] (%d) == (%d)" % (jmd, arr[jmd], val))
             return jmd
         if arr[jmd] > val:
             jhi = jmd - 1
@@ -208,6 +210,9 @@ class TestBinarySearch(unittest.TestCase):
         print(str(__doc__))
         print(str(self.id()), '\n')
         # print("fib_array is of type:", type(self.fib_array).__name__)
+        print("fibs:", self.fib_array)
+        print("vals:", self.test_vals)
+        print("exps:", self.expecteds)
 
 
     def test_find_equal(self, find_equal_func=find_equal):
@@ -216,20 +221,20 @@ class TestBinarySearch(unittest.TestCase):
         print(str(find_equal_func.__doc__))
         for val, exp in zip(self.test_vals, self.expecteds):
             res = find_equal_func(self.fib_array, val)
-            if res:
+            if res is not None:
                 num_wrong += not exp
-                print("exact value", self.fib_array[res], "found at index", res)
+                print("%d | exact value %3d found at index %d"
+                      % (num_wrong, self.fib_array[res], res))
             else:
                 num_wrong += exp
-                print("exact value", val, "not found")
-        print()
+                print("%d | exact value %d not found" % (num_wrong, val))
+        print("num_wrong:", num_wrong)
         return num_wrong
 
     def test_find_lower_bound(self):
         '''tests find_lower_bound'''
         func = find_lower_bound
         print(str(func.__doc__))
-        print(self.fib_array)
         for val in self.test_vals:
             res = func(self.fib_array, val)
             if res >= 0:
@@ -252,8 +257,8 @@ class TestBinarySearch(unittest.TestCase):
         for val in self.test_vals:
             res = func(self.fib_array, val)
             if res >= 0:
-                print(
-                    "upper bound {} found for {} at index {}".format(self.fib_array[res], val, res))
+                print("upper bound {} found for {} at index {}"
+                      .format(self.fib_array[res], val, res))
             else:
                 print("upper bound for {} not found".format(val))
         print()
