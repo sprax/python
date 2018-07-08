@@ -1,6 +1,7 @@
-# fibonaccis.py -- several ways of generating and printing the Fibonacci series
-# TODO: memoize iterative methods
-
+'''
+fibonaccis.py -- several ways of generating and printing the Fibonacci series
+TODO: memoize iterative methods
+'''
 from __future__ import print_function
 import argparse
 import math
@@ -8,18 +9,19 @@ from math import log
 import sys
 
 def fib_recurse(num):
+    ''' recursive definition of function returning fibonacci N '''
     if num <= 1:
-          return num
-    else:
-        return fib_recurse(num-1) + fib_recurse(num-2)
+        return num
+    return fib_recurse(num-1) + fib_recurse(num-2)
 
 
-memo = {0:0, 1:1}
+MEMO = {0:0, 1:1}
 
 def fib_memoize(num):
-    if not num in memo:
-        memo[num] = fib_memoize(num-1) + fib_memoize(num-2)
-    return memo[num]
+    ''' memoization definition of function returning fibonacci N '''
+    if not num in MEMO:
+        MEMO[num] = fib_memoize(num-1) + fib_memoize(num-2)
+    return MEMO[num]
 
 
 def fib_iterate(num):
@@ -54,16 +56,17 @@ def mul(A, B):
 
 def power(A, num):
     '''Raise A to the nth power'''
-    if num == 1:     return A
-    if num & 1 == 0: return power(mul(A, A), num//2)
-    else:          return mul(A, power(mul(A, A), (num-1)//2))
+    if num == 1:
+        return A
+    if num & 1 == 0:
+        return power(mul(A, A), num//2)
+    return mul(A, power(mul(A, A), (num-1)//2))
 
 def fib_matrix(num):
     '''fibonacci's from matrix to the Nth power'''
     if num < 2:
         return num
-    return power((1,1,0), num-1)[0]
-
+    return power((1, 1, 0), num-1)[0]
 
 def fib_generate(num, start=0):
     '''fibonacci generator'''
