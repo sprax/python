@@ -1,4 +1,5 @@
 # sprython -- sandbox for Python
+[![CircleCI](https://circleci.com/gh/sprax/python.svg?style=svg)](https://circleci.com/gh/sprax/python)
 
 TODO
 ----
