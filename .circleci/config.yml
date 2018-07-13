@@ -50,6 +50,7 @@ jobs:
           command: |
             . venv/bin/activate
             # python manage.py test
+            cd term && nose2
 
       - store_artifacts:
           path: test-reports
