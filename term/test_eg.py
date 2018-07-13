@@ -1,8 +1,9 @@
-import json
-import sys
+''' example unittest tests '''
+# import json
+# import sys
 import unittest
-import requests
-from flask import Flask, render_template, request
+# import requests
+# from flask import Flask, render_template, request
 # import flaskapi
 
 class TestExamples(unittest.TestCase):
@@ -17,9 +18,9 @@ class TestExamples(unittest.TestCase):
         self.assertEqual(1.0, 1.0)
         self.assertEqual(True, True)
         lst = ['A', 1, 'bb', 'aa']
-        dct = { k : n for n, k in enumerate(lst)}
-        evn = { k : n for n, k in enumerate(lst) if n % 2 == 0}
-        odd = { k : n for n, k in enumerate(lst) if n % 2}
+        dct = {k : n for n, k in enumerate(lst)}
+        evn = {k : n for n, k in enumerate(lst) if n % 2 == 0}
+        odd = {k : n for n, k in enumerate(lst) if n % 2}
         print("lst:", lst)
         print("dct:", dct)
         print("evn:", evn)
@@ -28,8 +29,6 @@ class TestExamples(unittest.TestCase):
         self.assertDictContainsSubset(odd, dct)
         self.assertNotIn('B', lst)
         self.assertNotIn(['cc', 'DD'], lst)
-
-
 
 
 if __name__ == "__main__":
