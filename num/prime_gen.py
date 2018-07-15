@@ -8,7 +8,7 @@ def sieve():         # from code.activestate.com/recipes
     while True:
         s = D.pop(c, 0)
         if s:
-            add(D,c + s,s)
+            add(D, c + s, s)
         else:
             yield c
             D[c*c] = 2*c
@@ -30,11 +30,11 @@ def postponed_sieve(): # postponed sieve, by Will Ness, ideone.com/WFv4f
                 yield c
             else:
                 add(D, c + 2*p, 2*p)
-                p=ps.next()
-                q=p*p
+                p = ps.next()
+                q = p*p
         c += 2
 
-def add(D,x,s):
+def add(D, x, s):
     while x in D:
         x += s
     D[x] = s
@@ -42,7 +42,7 @@ def add(D,x,s):
 def main():
     for line in input():
         n = int(line)
-        print( list( islice( (p for p in postponed_sieve() ), n-1, n+1)))
+        print(list(islice((p for p in postponed_sieve()), n-1, n+1)))
         break
 
 #                - base -              - postponed -
