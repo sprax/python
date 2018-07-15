@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 '''Find primes by checking each number in a range for divisors.  Primes have no divisors but 1 and themselves.'''
+from __future__ import print_function
 import math
 
 print(str(2) + ' is a prime number')
