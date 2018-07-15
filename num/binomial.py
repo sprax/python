@@ -4,14 +4,15 @@
 
 import operator as op
 
-def ncr(n, r):
-    if n < r:
+def ncr(num, rem):
+    ''' binomial coefficient, or, n take r '''
+    if num < rem:
         return 0
-    r = min(r, n-r)
-    if r == 0:
+    rem = min(rem, num-rem)
+    if rem == 0:
         return 1
-    numer = reduce(op.mul, xrange(n, n-r, -1))
-    denom = reduce(op.mul, xrange(1, r+1))
+    numer = reduce(op.mul, xrange(num, num-rem, -1))
+    denom = reduce(op.mul, xrange(1, rem+1))
     return numer//denom
 
 print("ncr(3, 2) => ", ncr(4, 2))
