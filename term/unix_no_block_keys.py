@@ -45,7 +45,7 @@ def any_keys():
 def term_input():
     ''' main loop function; calls any_keys() '''
     init_anykey()
-    seconds = 1;
+    seconds = 1
     while True:
         keys = any_keys()
         if keys:
@@ -55,7 +55,7 @@ def term_input():
                 break
             else:
                 time.sleep(0.1)
-        seconds += 1;
+        seconds += 1
         print("Sleeping for %d seconds..." % seconds)
         time.sleep(seconds)
 
