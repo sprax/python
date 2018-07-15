@@ -1,5 +1,6 @@
 # lucas_list.py -- tested with python 2.7 and 3.5
 '''Lucas numbers computed as lists'''
+from __future__ import print_function
 import sys
 import fibonaccis
 
