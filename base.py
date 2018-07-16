@@ -6,13 +6,17 @@ inheritance and MRO -- TODO: spell it out
 
 
 class Base(object):
+    ''' base class '''
+
     def __init__(self, name):
         self.name = name
 
     def hi(self):
         print("Hi, I'm %s!" % self.name)
 
+
 class Derived(Base):
+    ''' derived class '''
     def __init__(self, name1, name2):
         super().__init__(name1)
         self.name += " " + name2
@@ -21,6 +25,7 @@ class Derived(Base):
         print("Hello, I'm %s!" % self.name)
 
 class PrefixMixin(object):
+    ''' prefix mixin class '''
     pass
 
 
