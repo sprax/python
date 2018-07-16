@@ -9,6 +9,7 @@ Usage: python <thisScript> [inputDir [filePatterns [outSuffix]]]
 # Sprax Lines  2012 ?
 
 # import modules
+from __future__ import print_function
 from collections import defaultdict
 import glob
 import os

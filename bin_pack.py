@@ -2,6 +2,7 @@
 '''
 Can the space requirements specified by bits be packed into the specified bins?
 '''
+from __future__ import print_function
 from itertools import islice
 # import pdb
 # from pdb import set_trace
