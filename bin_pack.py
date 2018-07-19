@@ -276,6 +276,7 @@ def test_packer(packer, packer_name, level):
 
 
 def unit_test(level):
+    ''' generic unit test '''
     test_name = "BinPack.unit_test"
     print("BEGIN:", test_name)
     num_wrong = 0
@@ -288,6 +289,7 @@ def unit_test(level):
 
 
 def main():
+    ''' test driver '''
     unit_test(1)
 
 if __name__ == '__main__':
