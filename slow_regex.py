@@ -2,14 +2,15 @@
 import timeit
 import re
 
+REX = re.compile('(foo|bar|hello)')
+
 def one(mystring):
     ''' tester '''
     any(s in mystring for s in ('foo', 'bar', 'hello'))
 
-r = re.compile('(foo|bar|hello)')
 def two(mystring):
     ''' tester '''
-    r.search(mystring)
+    REX.search(mystring)
 
 def main():
     ''' test function '''
