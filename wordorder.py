@@ -18,19 +18,19 @@ def main():
     '''main'''
     count = int(input().strip())
     words = []
-    dd = {}
-    for j in range(count):
-        wd = input().strip()
-        ct = dd.get(wd)
-        if ct:
-            dd[wd] = ct+1
+    dct = {}
+    for _ in range(count):
+        wrd = input().strip()
+        cnt = dct.get(wrd)
+        if cnt:
+            dct[wrd] = cnt+1
         else:
-            dd[wd] = 1
-            words.append(wd)
+            dct[wrd] = 1
+            words.append(wrd)
 
-    print(len(dd))
-    for wd in words:
-        print(dd.get(wd), '', end='')
+    print(len(dct))
+    for wrd in words:
+        print(dct.get(wrd), '', end='')
     print()
 
 main()
