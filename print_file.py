@@ -22,10 +22,12 @@ def print_lines(lines):
 
 
 def my_print(line):
+    ''' print encoded string '''
     print(line.encode("utf-8"))
 
 
 def uprint(*objects, sep=' ', end='\n', file=sys.stdout):
+    ''' print with encoding '''
     enc = file.encoding
     if enc == 'UTF-8':
         print(*objects, sep=sep, end=end, file=file)
