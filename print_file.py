@@ -6,6 +6,7 @@ import sys
 
 
 def read_file_lines(file):
+    ''' read text file line by line '''
     lines = []
     with open(file, 'r') as text:
         for line in text:
@@ -14,6 +15,7 @@ def read_file_lines(file):
     return lines
 
 def print_lines(lines):
+    ''' print items in a list on separate lines '''
     for line in lines:
         my_print(line)
 
@@ -30,4 +32,3 @@ def uprint(*objects, sep=' ', end='\n', file=sys.stdout):
     else:
         f = lambda obj: str(obj).encode(enc, errors='backslashreplace').decode(enc)
         print(*map(f, objects), sep=sep, end=end, file=file)
-
