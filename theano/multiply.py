@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-''' multipy.py: multiply two numbers using Theano -- tests installation
+''' multipy.py: MULTIPLY two numbers using Theano -- tests installation
     From https://github.com/Newmu/Theano-Tutorials/blob/master/0_multiply.py
 '''
 
@@ -7,12 +7,12 @@ from __future__ import print_function
 import theano
 from theano import tensor as T
 
-a = T.scalar()
-b = T.scalar()
+ScA = T.scalar()
+ScB = T.scalar()
 
-y = a * b
+PRODUCT = ScA * ScB
 
-multiply = theano.function(inputs=[a, b], outputs=y)
+MULTIPLY = theano.function(inputs=[ScA, ScB], outputs=PRODUCT)
 
-print(multiply(1, 2)) #2
-print(multiply(3, 3)) #9
+print(MULTIPLY(1, 2)) #2
+print(MULTIPLY(3, 3)) #9
