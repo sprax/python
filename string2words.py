@@ -25,8 +25,7 @@ def string2words_from_end_one(string, words_already_parsed):
     if is_word(string):
         if words_already_parsed:
             return string + " " + words_already_parsed
-        else:
-            return string
+        return string
 
     # Else divide the string into two parts, and if the 2nd part is a word, keep going.
     # Use min and max word lengths to skip checking substrings that cannot be words.
