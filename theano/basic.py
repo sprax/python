@@ -5,28 +5,39 @@
 '''
 
 from __future__ import print_function
-import theano
-from theano import tensor as T
 import numpy as np
+import theano
+# from theano import tensor as T
 
-# We first define a Theano variable x to be a vector of 32-bit floats,
-# and give it name ‘x’:
-x = theano.tensor.fvector('x')
+def basic_theano():
+    '''Theano variabls, function def, and function call'''
 
-# Create a Theano variable W, assign its value to be vector [0.2, 0.7],
-# and name it ‘W’:
-W = theano.shared(np.asarray([0.2, 0.7]), 'W')
+    # We first define a Theano variable x_vec to be a vector of 32-bit floats,
+    # and give it name ‘x_vec’:
+    x_vec = theano.tensor.fvector('x_vec')
+    print("x_vec of type:", type(x_vec), x_vec)
 
-# Define y to be the sum of all elements in the element-wise multiplication of x and W:
-y = (x * W).sum()
+    # Create a Theano variable w_tsv, assign its value to be vector [0.2, 0.7],
+    # and name it ‘w_tsv’:
+    w_tsv = theano.shared(np.asarray([0.2, 0.7]), 'w_tsv')
+    print("w_tsv of type:", type(w_tsv), w_tsv)
 
-# Define a Theano function f, which takes as input x and outputs y:
-f = theano.function([x], y)
+    # Define y_sum to be the sum of all elements in the element-wise multiplication of x_vec and w_tsv:
+    y_sum = (x_vec * w_tsv).sum()
+    print("y_sum = (x_vec * w_tsv).sum(), of type:", type(y_sum), y_sum)
 
-# Call this function, giving as the argument vector [1.0, 1.0],
-# essentially setting the value of variable x:
-output = f([1.0, 1.0])
+    # Define a Theano function x_times_w_sum_func, which takes as input x_vec and outputs y_sum:
+    x_times_w_sum_func = theano.function([x_vec], y_sum)
+    print("x_times_w_sum_func of type:", type(x_times_w_sum_func), x_times_w_sum_func)
 
-# The script prints out the summed product of [0.2, 0.7] and [1.0, 1.0], which is:
-# 0.2*1.0 + 0.7*1.0 = 0.9
-print("output:", output)
+    # Call this function, giving as the argument vector [1.0, 1.0],
+    # essentially setting the value of variable x_vec:
+    output = x_times_w_sum_func([1.0, 1.0])
+    print("output = x_times_w_sum_func([1.0, 1.0]), of type:", type(output), output)
+
+    # The script prints out the summed product of [0.2, 0.7] and [1.0, 1.0], which is:
+    # 0.2*1.0 + 0.7*1.0 = 0.9
+    print("output:", output)
+
+
+basic_theano()
