@@ -26,14 +26,14 @@ def basic_theano():
     y_sum = (x_vec * w_tsv).sum()
     print("y_sum = (x_vec * w_tsv).sum(), of type:", type(y_sum), y_sum)
 
-    # Define a Theano function x_times_w_sum_func, which takes as input x_vec and outputs y_sum:
-    x_times_w_sum_func = theano.function([x_vec], y_sum)
-    print("x_times_w_sum_func of type:", type(x_times_w_sum_func), x_times_w_sum_func)
+    # Define a Theano function x_dot_w_func, which takes as input x_vec and outputs y_sum:
+    x_dot_w_func = theano.function([x_vec], y_sum)
+    print("x_dot_w_func of type:", type(x_dot_w_func), x_dot_w_func)
 
     # Call this function, giving as the argument vector [1.0, 1.0],
     # essentially setting the value of variable x_vec:
-    output = x_times_w_sum_func([1.0, 1.0])
-    print("output = x_times_w_sum_func([1.0, 1.0]), of type:", type(output), output)
+    output = x_dot_w_func([1.0, 1.0])
+    print("output = x_dot_w_func([1.0, 1.0]), of type:", type(output), output)
 
     # The script prints out the summed product of [0.2, 0.7] and [1.0, 1.0], which is:
     # 0.2*1.0 + 0.7*1.0 = 0.9
