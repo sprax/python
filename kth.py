@@ -37,8 +37,8 @@ def find_kth(arr, k):
 
 
 if __name__ == '__main__':
-    arr = [ [ 1, 2, 3 ],
-            [ 4, 5, 6 ],
-            [ 7, 8, 9 ] ]
+    arr = [[1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]]
     k = int(sys.argv[1]) if len(sys.argv) > 1 else 3
     find_kth(arr, k)
