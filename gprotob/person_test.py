@@ -1,3 +1,4 @@
+''' test output of person.proto '''
 import person_pb2
 
 person = person_pb2.Person()
