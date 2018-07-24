@@ -1,4 +1,6 @@
 /// addressbook.cc -- tests protobuf example code
+/// Example command-line build:
+/// clang -std=c++11 -lstdc++ -lprotobuf addressbook.pb.cc addressbook.cc -o ab.out && ab.out
 #include <iostream>
 #include <fstream>
 #include <string>
