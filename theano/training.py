@@ -3,7 +3,6 @@
     From http://www.marekrei.com/blog/theano-tutorial/
     Written for: anaconda python 3.5; conda install theano=1.0.2
 '''
-
 from __future__ import print_function
 import numpy as np
 import theano
