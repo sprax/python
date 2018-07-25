@@ -160,6 +160,7 @@ def show_wrong(result, expected):
 
 
 def test_can_pack(packer, bins, bits, verbose, name, number, expected):
+    ''' the basic test function '''
     result = False
     excess = excess_space(bins, bits)
     if verbose > 0:
