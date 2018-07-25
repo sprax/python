@@ -10,6 +10,7 @@ def add_if_not_exists(possibles, newt):
 
 
 def find_next(arr, possibles):
+    ''' find next biggest '''
     min = 9999999
     selx = 0
     sely = 0
@@ -27,6 +28,7 @@ def find_next(arr, possibles):
 
 
 def find_kth(arr, k):
+    ''' return kth biggest '''
     possibles = [(0, 0)]
     for idx in range(0, k):
         print("idx:", idx)
