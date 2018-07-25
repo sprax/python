@@ -152,6 +152,7 @@ def can_pack_naive_rec(bins, bits, packed):
 ###############################################################################
 
 def show_wrong(result, expected):
+    ''' show result if unexpected '''
     if result == expected:
         return 0
     print("Wrong result:  %s, expected:  %s\n" % (result, expected))
