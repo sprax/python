@@ -1,4 +1,5 @@
 ''' benchmark '''
+from __future__ import print_function
 import timeit
 import re
 
