@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Sprax Lines       2016.07.25      Written with Python 3.5
 '''regex matcher with rules from json file'''
-
+from __future__ import print_function
 import json
 import re
 import sys
@@ -16,7 +16,7 @@ def match_rules(rules, body):
         if match:
             print("pattern({})  body({})  match({})  groups({})".format(rule['pattern'], body, match, match.groups()))
 
-def compile(rules):
+def compile_rules(rules):
     """
     Precompiles all pattern rules into an 're' key.
     """
@@ -26,11 +26,12 @@ def compile(rules):
 def load_rules(path='social_graces_regex.json'):
     '''read rules from JSON file'''
     rules = load_json_file(path, 'rules')
-    compile(rules)
+    compile_rules(rules)
     return rules
 
 def my_print(line):
     print(line.encode("utf-8"))
+
 
 def uprint(*objects, sep=' ', end='\n', file=sys.stdout):
     enc = file.encoding
