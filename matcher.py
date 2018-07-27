@@ -7,10 +7,12 @@ import re
 import sys
 
 def load_json_file(path, key='rules'):
-    with open(path) as fh:
-        return json.load(fh)[key]
+    ''' load rules from JSON file '''
+    with open(path) as fin:
+        return json.load(fin)[key]
 
 def match_rules(rules, body):
+    ''' find and show matches '''
     for rule in rules:
         match = rule['re'].match(body)
         if match:
@@ -30,13 +32,15 @@ def load_rules(path='social_graces_regex.json'):
     return rules
 
 def my_print(line):
+    ''' print utf-8-encoded line '''
     print(line.encode("utf-8"))
 
 
 def uprint(*objects, sep=' ', end='\n', file=sys.stdout):
+    ''' print encoded line with options '''
     enc = file.encoding
     if enc == 'UTF-8':
         print(*objects, sep=sep, end=end, file=file)
     else:
-        f = lambda obj: str(obj).encode(enc, errors='backslashreplace').decode(enc)
-        print(*map(f, objects), sep=sep, end=end, file=file)
+        func = lambda obj: str(obj).encode(enc, errors='backslashreplace').decode(enc)
+        print(*map(func, objects), sep=sep, end=end, file=file)
