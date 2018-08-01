@@ -1,17 +1,16 @@
 
+#!/usr/bin/env python
+'''
+Based on:
 http://what-i-learnt-today-blog.blogspot.com/2013/01/python-gcdlcm.html
-
-JAN
-18
-Python - GCD,LCM
-Python - GCD,LCM
-Today i going to explain how to find the G.C.D and L.C.M of given two numbers. First, to find G.C.D of two numbers, the logic will be,
+How to find the G.C.D and L.C.M of given two numbers.
+First, to find G.C.D of two numbers, the logic will be,
 
  1) Let A be the bigger number and B be the smaller number.
  2) Divide the bigger number(A) with the smaller number(B) and get the reminder.
  3) Now, make the divisor(B) as the bigger number(A) and the reminder(A%B) of the above step as samller number(B).
  4) Repeat the above 3 steps until the bigger number(A) becomes 0.
-
+'''
 def gcd(a,b):
  while b:
   a,b = b,a%b
@@ -40,4 +39,3 @@ This logic can be extended to any numbers by iterating,
   a = li.pop(i)
   b = li.pop(i+1)
   li.append(gcd(a,b))
-
