@@ -11,31 +11,35 @@ First, to find G.C.D of two numbers, the logic will be,
  3) Now, make the divisor(B) as the bigger number(A) and the reminder(A%B) of the above step as samller number(B).
  4) Repeat the above 3 steps until the bigger number(A) becomes 0.
 '''
-def gcd(a,b):
- while b:
-  a,b = b,a%b
- return a
 
-Now removing our assumption in step 1,
-
-
-def gcd(a,b):
- if a < b: a,b = b,a
- while b:
-  a,b = b,a%b
- return a
-
-Now, to get the L.C.M,
-
-def lcm(a,b):
- return (a*b)/gcd(a,b)
-
-This logic can be extended to any numbers by iterating,
+def gcd(a, b):
+    ''' Greatest common divisor, assuming A >= B '''
+    while b:
+        a, b = b, a%b
+        return a
 
 
- li = [2,3,8]
- i = 0
- while len(li) > 2:
-  a = li.pop(i)
-  b = li.pop(i+1)
-  li.append(gcd(a,b))
+# Now removing our assumption in step 1,
+
+
+def gcd(a, b):
+    if  a < b:
+        a, b = b, a
+    while b:
+        a, b = b, a % b
+        return a
+
+# Now, to get the L.C.M,
+
+def lcm(a, b):
+    return (a*b)/gcd(a,b)
+
+# This logic can be extended to any numbers by iterating,
+
+
+li = [2, 3, 8]
+i = 0
+while len(li) > 2:
+    a = li.pop(i)
+    b = li.pop(i+1)
+    li.append(gcd(a,b))
