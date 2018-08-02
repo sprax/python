@@ -2,7 +2,7 @@
 #!/usr/bin/env python
 '''
 Based on:
-http://what-i-learnt-today-blog.blogspot.com/2013/01/python-gcdlcm.html
+http://what-idx-learnt-today-blog.blogspot.com/2013/01/python-gcdlcm.html
 How to find the G.C.D and L.C.M of given two numbers.
 First, to find G.C.D of two numbers, the logic will be,
 
@@ -35,11 +35,9 @@ def lcm(a, b):
     return (a*b)/gcd(a,b)
 
 # This logic can be extended to any numbers by iterating,
-
-
-li = [2, 3, 8]
-i = 0
-while len(li) > 2:
-    a = li.pop(i)
-    b = li.pop(i+1)
-    li.append(gcd(a,b))
+lst = [2, 3, 8]
+idx = 0
+while len(lst) > 2:
+    a = lst.pop(idx)
+    b = lst.pop(idx+1)
+    lst.append(gcd(a,b))
