@@ -1,49 +1,56 @@
 
 #!/usr/bin/env python
 '''
-Based on:
-http://what-idx-learnt-today-blog.blogspot.com/2013/01/python-gcdlcm.html
-How to find the G.C.D and L.C.M of given two numbers.
-First, to find G.C.D of two numbers, the logic will be,
+From:
+http://what-i-learnt-today-blog.blogspot.com/2013/01/python-gcdlcm.html
+How to find the GCD and LCM of two non-zero integers.
+Find the GCD first:
 
- 1) Let A be the bigger number and B be the smaller number.
- 2) Divide the bigger number(A) with the smaller number(B) and get the reminder.
- 3) Now, make the divisor(B) as the bigger number(A) and the reminder(A%B) of the above step as samller number(B).
- 4) Repeat the above 3 steps until the bigger number(A) becomes 0.
+ Given A >= B,
+ 1) Divide the A by B to get the remainder R = A % B.
+ 2) Now B >= A % B, so switch places A=B and B=R, and compute B % R.
+ 3) Repeat the above 2 steps until the bigger number A == 0.
 '''
+from __future__ import print_function
 
-def gcd2ord(a, b):
-    ''' Greatest common divisor, assuming A <= B '''
-    while a:
-        b, a = a, b%a
-        return b
-
-
-# Now removing our assumption in step 1,
+def gcd2_a_lte_b(aaa, bbb):
+    ''' Greatest common divisor, assuming 1 <= A <= B '''
+    while aaa:
+        bbb, aaa = aaa, bbb % aaa
+    return bbb
 
 
-def gcd2(a, b):
-    if  a < b:
-        a, b = b, a
-    while b:
-        a, b = b, a % b
-        return a
+def gcd2(aaa, bbb):
+    ''' Greatest common divisor of any two numbers. '''
+    if  aaa < bbb:
+        aaa, bbb = bbb, aaa
+    while bbb:
+        print("    a, b:", aaa, bbb)
+        aaa, bbb = bbb, aaa % bbb
+    return aaa if aaa > 0 else -aaa
 
 # Now, to get the L.C.M,
 
-def lcm(a, b):
-    return (a*b)/gcd2(a,b)
+def lcm(aaa, bbb):
+    return (aaa*bbb)/gcd2(aaa,bbb)
 
-# This logic can be extended to any numbers by iterating,
-lst = [2, 3, 8]
-idx = 0
-while len(lst) > 2:
-    a = lst.pop(idx)
-    b = lst.pop(idx+1)
-    lst.append(gcd2(a,b))
+# # This logic can be extended to any numbers by iterating,
+# lst = [2, 3, 8]
+# idx = 0
+# while len(lst) > 2:
+#     aaa = lst.pop(idx)
+#     bbb = lst.pop(idx+1)
+#     lst.append(gcd2(aaa,bbb))
 
-####################################
-a, b = 42, 2*2*3*5*7*11 
-gcd = gcd2(a, b)
-print("GCD %d %d: %d" % (a, b, gcd))
+########################################
 
+def test_ab(aaa, bbb):
+    print("testing a, b:", aaa, bbb)
+    gcd = gcd2(aaa, bbb)
+    print("GCD %d %d: %d" % (aaa, bbb, gcd))
+
+test_ab(2*3*5, 3*3)
+test_ab(2*3*5, 3*3)
+test_ab(2*3*5, -3*3)
+test_ab(-2*3*5, -3*3)
+test_ab(2*3*7*17, 2*2*3*5*7*11)
