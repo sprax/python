@@ -12,17 +12,17 @@ First, to find G.C.D of two numbers, the logic will be,
  4) Repeat the above 3 steps until the bigger number(A) becomes 0.
 '''
 
-def gcd(a, b):
-    ''' Greatest common divisor, assuming A >= B '''
-    while b:
-        a, b = b, a%b
-        return a
+def gcd2ord(a, b):
+    ''' Greatest common divisor, assuming A <= B '''
+    while a:
+        b, a = a, b%a
+        return b
 
 
 # Now removing our assumption in step 1,
 
 
-def gcd(a, b):
+def gcd2(a, b):
     if  a < b:
         a, b = b, a
     while b:
@@ -32,7 +32,7 @@ def gcd(a, b):
 # Now, to get the L.C.M,
 
 def lcm(a, b):
-    return (a*b)/gcd(a,b)
+    return (a*b)/gcd2(a,b)
 
 # This logic can be extended to any numbers by iterating,
 lst = [2, 3, 8]
@@ -40,4 +40,10 @@ idx = 0
 while len(lst) > 2:
     a = lst.pop(idx)
     b = lst.pop(idx+1)
-    lst.append(gcd(a,b))
+    lst.append(gcd2(a,b))
+
+####################################
+a, b = 42, 2*2*3*5*7*11 
+gcd = gcd2(a, b)
+print("GCD %d %d: %d" % (a, b, gcd))
+
