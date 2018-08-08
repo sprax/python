@@ -21,7 +21,9 @@ def gcd2_a_lte_b(aaa, bbb):
 
 
 def gcd2(aaa, bbb):
-    ''' Greatest common divisor of any two numbers. '''
+    ''' Greatest common (positive) divisor of any two numbers.
+    Note that any number is a divisor of 0.
+    '''
     if  aaa < bbb:
         aaa, bbb = bbb, aaa
     while bbb:
@@ -32,7 +34,8 @@ def gcd2(aaa, bbb):
 # Now, to get the L.C.M,
 
 def lcm(aaa, bbb):
-    return (aaa*bbb)/gcd2(aaa,bbb)
+    ''' least common (positive) multiple of any two integers '''
+    return (aaa * bbb)/gcd2(aaa, bbb)
 
 # # This logic can be extended to any numbers by iterating,
 # lst = [2, 3, 8]
@@ -54,3 +57,5 @@ test_ab(2*3*5, 3*3)
 test_ab(2*3*5, -3*3)
 test_ab(-2*3*5, -3*3)
 test_ab(2*3*7*17, 2*2*3*5*7*11)
+test_ab(2*3*7*17, 0)
+test_ab(-2*3*7*17, 0)
