@@ -35,7 +35,6 @@ def my_print(line):
     ''' print utf-8-encoded line '''
     print(line.encode("utf-8"))
 
-
 def uprint(*objects, sep=' ', end='\n', file=sys.stdout):
     ''' print encoded line with options '''
     enc = file.encoding
