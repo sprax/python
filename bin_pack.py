@@ -59,17 +59,17 @@ def can_pack_track_rec(bins, num_usable, bits, num_unpacked, usable_space, neede
                 bins[num_usable] = diff_k_j
             else:
                 # Otherwise, sort the list by re-inserting diminished bin[k] value where it now belongs.
-                for q in reversed(range(k)):
-                    if diff_k_j < bins[q]:
-                        bins[q + 1] = bins[q]
+                for rdx in reversed(range(k)):
+                    if diff_k_j < bins[rdx]:
+                        bins[rdx + 1] = bins[rdx]
                     else:
-                        bins[q + 1] = diff_k_j
+                        bins[rdx + 1] = diff_k_j
                         break
                 else:
                     # set_trace()
                     bins[0] = diff_k_j
 
-            # Exhaustive recursion: check all remaining solutions that start with item[j] packed in bin[q]
+            # Exhaustive recursion: check all remaining solutions that start with item[j] packed in bin[rdx]
             if can_pack_track_rec(bins, num_usable, bits, j, usable_space, needed_space):
                 return True
 
