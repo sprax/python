@@ -24,7 +24,7 @@ def can_pack_track_rec(bins, num_usable, bits, num_unpacked, usable_space, neede
     * @param num_usable
     * @param bits
     * @param num_unpacked
-    * @return
+    * @return True if can pack, else False
     '''
     if num_unpacked < 1:
         return True
