@@ -4,9 +4,13 @@
 '''
 from __future__ import print_function
 import unittest
-import num.fibonaccis
+# import argparse
+import pdb
+from pdb import set_trace
+# from pprint import pprint
+import fibonaccis
 
-def find_equal(arr, val):
+def find_equal(mono_l, val):
     """find_equal
     Numerical binary search
     Do a binary search for an index of a value in a sorted array fib_array,
@@ -18,63 +22,64 @@ def find_equal(arr, val):
     @return      an index k s.t. v == fib_array[k], or -1 (invalid index)
     """
     jlo = 0
-    jhi = len(arr) - 1
+    jhi = len(mono_l) - 1
     while jlo <= jhi:
         jmd = (jhi + jlo) // 2
-        # print("jlo, jmd, jhi: %2d %2d %2d : %d" % (jlo, jmd, jhi, arr[jmd]))
-        if arr[jmd] == val:
-            # print("exact: arr[%d] (%d) == (%d)" % (jmd, arr[jmd], val))
+        # print("jlo, jmd, jhi: %2d %2d %2d : %d" % (jlo, jmd, jhi, mono_l[jmd]))
+        if mono_l[jmd] == val:
+            # print("exact: mono_l[%d] (%d) == (%d)" % (jmd, mono_l[jmd], val))
             return jmd
-        if arr[jmd] > val:
+        if mono_l[jmd] > val:
             jhi = jmd - 1
         else:
             jlo = jmd + 1
     return None # this line coult be omitted
 
-def find_lower_bound(arr, val):
+
+def find_lower_bound(mono_l, val):
     """find_lower_bound
-    Return an index for the largest element v in fib_array such that
-    v <= specified value.
-    If there is no such element in arr, return -1
+    Return an index for the largest element in mono_l (a monotonically
+    increasing list of numbers) such that mono_l[index] <= the specified val.
+    If there is no such element in mono_l, return -1
     """
-    jlo, jmd, jhi = 0, 0, len(arr) - 1
+    jlo, jmd, jhi = 0, 0, len(mono_l) - 1
     while jlo <= jhi:
         jmd = (jhi + jlo) >> 1
-        if arr[jmd] == val:
+        if mono_l[jmd] == val:
             return jmd
-        if arr[jmd] > val:
+        if mono_l[jmd] > val:
             jhi = jmd - 1
         else:
             jlo = jmd + 1
 
-    if arr[jmd] <= val:
+    if mono_l[jmd] <= val:
         return jmd
 
     jmd = jmd - 1
-    if jmd >= 0 and arr[jmd] <= val:
+    if jmd >= 0 and mono_l[jmd] <= val:
         return jmd
     return -1
 
-def find_upper_bound(arr, val):
+def find_upper_bound(mono_l, val):
     """find_upper_bound
-    Return index of smallest element v in arr s.t v >= specified value.
-    If there is no such element in arr, return -1.
+    Return index of smallest element v in mono_l s.t v >= specified value.
+    If there is no such element in mono_l, return -1.
     """
-    jlo, jmd, jhi = 0, 0, len(arr) - 1
+    jlo, jmd, jhi = 0, 0, len(mono_l) - 1
     while jlo <= jhi:
         jmd = (jhi + jlo) >> 1
-        if arr[jmd] == val:
+        if mono_l[jmd] == val:
             return jmd
-        if arr[jmd] > val:
+        if mono_l[jmd] > val:
             jhi = jmd - 1
         else:
             jlo = jmd + 1
 
-    if arr[jmd] >= val:
+    if mono_l[jmd] >= val:
         return jmd
 
     jmd = jmd + 1
-    if jmd < len(arr) and arr[jmd] >= val:
+    if jmd < len(mono_l) and mono_l[jmd] >= val:
         return jmd
     return -1
 
@@ -209,6 +214,9 @@ class TestBinarySearch(unittest.TestCase):
         self.test_vals = [-2, 0, 1, 2, 5, 8, 13, 20, 21, 22, 8888]
         self.expecteds = [x in self.fib_array for x in self.test_vals]
 
+    def runTest(self):
+        pass
+
     # NOTE: Already defined in base class, no need to extend.
     # def __init__(self):
     #     ''' init self '''
@@ -239,6 +247,7 @@ class TestBinarySearch(unittest.TestCase):
                 print("%d | exact value %3d not found" % (num_wrong, val))
         print("num_wrong:", num_wrong)
         return num_wrong
+
 
     def test_find_lower_bound(self):
         '''tests find_lower_bound'''
@@ -274,8 +283,15 @@ class TestBinarySearch(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    TBS = TestBinarySearch()
-    TBS.init_data()
-    print("\n\t  Direct call:")
-    TBS.test_find_equal(interpolation_search_equals)
-    unittest.main()     # NOTE: This must be last, because basically it calls exit.
+    if False:
+        unittest.main()
+    elif True:
+        # Depends on runTest being defined (or bypassed ?)
+        TBS = TestBinarySearch()
+        TBS.init_data()
+        print("\n\t  Direct call:")
+        TBS.test_find_equal(interpolation_search_equals)
+        # unittest.main()     # NOTE: This must be last, because basically it calls exit.
+    else:
+        suite = unittest.TestLoader().loadTestsFromTestCase(TestBinarySearch)
+        unittest.TextTestRunner(verbosity=3).run(suite)
