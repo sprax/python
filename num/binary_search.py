@@ -2,8 +2,9 @@
 ''' Binary Search functions and a test class
     Find exact values or bounds in a numerical array.
 '''
+from __future__ import print_function
 import unittest
-import fibonaccis
+import num.fibonaccis
 
 def find_equal(arr, val):
     """find_equal
