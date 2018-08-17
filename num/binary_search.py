@@ -26,13 +26,13 @@ def find_equal(mono_l, val):
     while jlo <= jhi:
         jmd = (jhi + jlo) // 2
         # print("jlo, jmd, jhi: %2d %2d %2d : %d" % (jlo, jmd, jhi, mono_l[jmd]))
-        if mono_l[jmd] == val:
-            # print("exact: mono_l[%d] (%d) == (%d)" % (jmd, mono_l[jmd], val))
-            return jmd
         if mono_l[jmd] > val:
             jhi = jmd - 1
-        else:
+        elif mono_l[jmd] < val:
             jlo = jmd + 1
+        else:
+            # print("exact: mono_l[%d] (%d) == (%d)" % (jmd, mono_l[jmd], val))
+            return jmd
     return None # this line coult be omitted
 
 
