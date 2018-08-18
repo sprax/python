@@ -291,6 +291,7 @@ if __name__ == '__main__':
     elif True:
         # Depends on runTest being defined (or bypassed ?)
         TBS = TestBinarySearch()
+        set_trace()
         TBS.init_data()
         print("\n\t  Direct call:")
         TBS.test_find_equal(interpolation_search_equals)
