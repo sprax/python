@@ -50,7 +50,7 @@ def find_lower_bound(mono_l, val):
         elif mono_l[jmd] < val:
             jlo = jmd + 1
         else:
-            assert mono_l[jmd] == val
+            # assert mono_l[jmd] == val
             return jmd
 
     if mono_l[jmd] <= val:
@@ -61,6 +61,7 @@ def find_lower_bound(mono_l, val):
         return jmd
     return -1
 
+
 def find_upper_bound(mono_l, val):
     """find_upper_bound
     Return index of smallest element v in mono_l s.t v >= specified value.
@@ -69,12 +70,13 @@ def find_upper_bound(mono_l, val):
     jlo, jmd, jhi = 0, 0, len(mono_l) - 1
     while jlo <= jhi:
         jmd = (jhi + jlo) >> 1
-        if mono_l[jmd] == val:
-            return jmd
         if mono_l[jmd] > val:
             jhi = jmd - 1
-        else:
+        if mono_l[jmd] < val:
             jlo = jmd + 1
+        else:
+            assert mono_l[jmd] == val
+            return jmd
 
     if mono_l[jmd] >= val:
         return jmd
