@@ -72,7 +72,7 @@ def find_upper_bound(mono_l, val):
         jmd = (jhi + jlo) >> 1
         if mono_l[jmd] > val:
             jhi = jmd - 1
-        if mono_l[jmd] < val:
+        elif mono_l[jmd] < val:
             jlo = jmd + 1
         else:
             assert mono_l[jmd] == val
