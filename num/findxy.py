@@ -16,8 +16,9 @@ def find_x_y(max_y=25, verbose=1):
         sqrt(x + y) + sqrt(x) = y
     '''
     for y in range(max_y):
-        for x in range(max_y * max_y // 2):
-            if abs(math.sqrt(x + y) + math.sqrt(y) - y) < 0.00001:
+        for x in range(max_y * max_y):
+            if abs(math.sqrt(x + y) + math.sqrt(x) - y) < 0.00001:
+                # set_trace()
                 print("sqrt(%d + %d) + sqrt(%d) == %d" % (x, y, x, y))
 
 
