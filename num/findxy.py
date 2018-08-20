@@ -8,8 +8,8 @@ from __future__ import print_function
 import math
 import unittest
 # import argparse
-import pdb
-from pdb import set_trace
+# import pdb
+# from pdb import set_trace
 
 def find_x_y(max_y=25, verbose=1):
     ''' Solve for x & y:
@@ -20,6 +20,8 @@ def find_x_y(max_y=25, verbose=1):
             if abs(math.sqrt(x + y) + math.sqrt(x) - y) < 0.00001:
                 # set_trace()
                 print("sqrt(%d + %d) + sqrt(%d) == %d" % (x, y, x, y))
+            elif verbose > 1:
+                print("sqrt(%d + %d) + sqrt(%d) != %d" % (x, y, x, y))
 
 
 
@@ -43,19 +45,21 @@ class TestFinder(unittest.TestCase):
     #     pass
 
 
-if __name__ == '__main__':
+def main():
+    '''test driver'''
     if True:
         find_x_y()
     elif False:
         unittest.main()
     elif True:
         # Depends on runTest being defined (or bypassed ?)
-        TBS = TestFinder()
-        set_trace()
-        TBS.init_data()
-        print("\n\t  Direct call:")
-        TBS.test_find_equal(interpolation_search_equals)
-        # unittest.main()     # NOTE: This must be last, because basically it calls exit.
+        tester = TestFinder()
+        # set_trace()
+        tester.init_data()
     else:
         suite = unittest.TestLoader().loadTestsFromTestCase(TestFinder)
         unittest.TextTestRunner(verbosity=3).run(suite)
+
+
+if __name__ == '__main__':
+    main()
