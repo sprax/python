@@ -33,6 +33,7 @@ class TestFinder(unittest.TestCase):
         self.max_y = 50
 
     def runTest(self):
+        '''why?'''
         pass
 
     def setUp(self):
