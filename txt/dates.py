@@ -37,7 +37,7 @@ def day_locs(wday):
     '''usual locations'''
     ans = 'Home'
     if wday < 5:
-        ans += '/Draper'
+        ans += '/GTL'
     if wday in [1, 4]:  # Tues or Friday
         ans += '/CFC'
     return ans
