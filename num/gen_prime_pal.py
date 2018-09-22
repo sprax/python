@@ -41,12 +41,23 @@ def gen_primes():
 
         q += 1
 
-
-def gen_prime_pal_range(start=0, stop=1000):
+def gen_prime_pal():
     """ Generate an infinite sequence of palindromic prime numbers,
         a.k.a prime palindromes.
     """
     return (x for x, s, n, h in (
         (x, s, n, n//2 if n%2 else (n-1)//2) for x, s, n in (
+            (x, str(x), len(str(x))) for x in
+            gen_primes())) if s[:n//2] == s[-1:h:-1])
+
+
+def gen_prime_pal_idx_range(beg_idx=0, end_idx=1000):
+    """ Generate sequence of prime palindromes from beg_idx to end_idx,
+        that is, return a generator that, from the infinite sequence of
+        palindromic prime numbers, yields only those that would have
+        indices in the range [beg_idx, end_idx].
+    """
+    return (x for x, s, n, h in (
+        (x, s, n, n//2 if n%2 else (n-1)//2) for x, s, n in (
             (x, str(x), len(str(x))) for x in itertools.islice(
-                gen_primes(), start, stop))) if s[:n//2] == s[-1:h:-1])
+                gen_primes(), beg_idx, end_idx))) if s[:n//2] == s[-1:h:-1])
