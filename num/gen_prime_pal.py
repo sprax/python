@@ -107,14 +107,27 @@ def gen_prime_pal_val_range(beg_val=0, end_val=1000):
             if s[:n//2] == s[-1:h:-1])
 
 
-DEFAULT_BEG = 100
-DEFAULT_END = 2000
+DEFAULT_BEG_NUM = 0
+DEFAULT_END_NUM = 101
 
 def main():
     '''Print lists of prime palindromes (default up to X)'''
+    print("ARGV:", sys.argv)
     argc = len(sys.argv)
-    beg_num = int(sys.argv[1]) if argc > 1 else DEFAULT_BEG
-    end_num = int(sys.argv[2]) if argc > 2 else DEFAULT_END
+    if argc < 2:
+        beg_num = DEFAULT_BEG_NUM
+        end_num = DEFAULT_END_NUM
+    elif argc < 3:
+        beg_num = DEFAULT_BEG_NUM
+        end_num = int(sys.argv[1])
+    elif argc < 4:
+        beg_num = int(sys.argv[1])
+        end_num = int(sys.argv[2])
+    else:
+        print("Usage: %s [[beg] end] # defaults: beg=%d, end=%d"
+              % (sys.argv[0], DEFAULT_BEG_NUM, DEFAULT_END_NUM))
+        exit(1)
+
     print("prime num value range:", *list(gen_primes_bounded(beg_num, end_num)))
     print("prime pal value range:", *list(gen_prime_pal_val_range(beg_num, end_num)))
     print("prime pal subix range:", *list(gen_prime_pal_sub_range(beg_num, end_num)))
