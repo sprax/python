@@ -112,7 +112,7 @@ DEFAULT_END_NUM = 101
 
 def main():
     '''Print lists of prime palindromes (default up to X)'''
-    print("ARGV:", sys.argv)
+    # print("ARGV:", sys.argv)
     argc = len(sys.argv)
     if argc < 2:
         beg_num = DEFAULT_BEG_NUM

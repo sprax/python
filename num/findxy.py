@@ -7,6 +7,7 @@ Solve for x:
 from __future__ import print_function
 import math
 import unittest
+import sys
 # import argparse
 # import pdb
 # from pdb import set_trace
@@ -48,11 +49,12 @@ class TestFinder(unittest.TestCase):
 
 def main():
     '''test driver'''
-    if True:
+    argc = len(sys.argv)
+    if argc < 2:
         find_x_y()
-    elif False:
+    elif argc < 3:
         unittest.main()
-    elif True:
+    elif argc < 4:
         # Depends on runTest being defined (or bypassed ?)
         tester = TestFinder()
         # set_trace()
