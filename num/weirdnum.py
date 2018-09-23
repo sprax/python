@@ -1,6 +1,7 @@
 #!/user/local/bin/python3
 # https://www.hackerrank.com/challenges/py-if-else?h_r=next-challenge&h_v=zen
 '''Without using if-else (elif)'''
+from __future__ import print_function
 
 N = int(input().strip())
 if N % 2 == 0:
