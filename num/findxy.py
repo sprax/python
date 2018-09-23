@@ -55,7 +55,8 @@ def main():
     elif argc < 3:
         unittest.main()
     elif argc < 4:
-        # Depends on runTest being defined (or bypassed ?)
+        print("argc == %d: Depends on runTest being defined (or bypassed ?"
+              % argc)
         tester = TestFinder()
         # set_trace()
         tester.init_data()
