@@ -110,10 +110,9 @@ def gen_prime_pal_val_range(beg_val=0, end_val=1000):
     between beg_val and end_val, yields only those that are palindromic
     primes.
     """
-    # FIXME wrong answer
     return (x for x, s, n, h in (
-        (x, s, n, n//2 if n%2 else (n-1)//2) for x, s, n in itertools.islice((
-            (x, str(x), len(str(x))) for x in gen_primes()), beg_val, end_val))
+        (x, s, n, n//2 if n%2 else (n-1)//2) for x, s, n in (
+            (x, str(x), len(str(x))) for x in gen_primes_bounded(beg_val, end_val)))
             if s[:n//2] == s[-1:h:-1])
 
 
