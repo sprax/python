@@ -17,50 +17,41 @@ def gen_primes():
     # indefinitely, but only as long as required by the current
     # number being tested.
     prime_divs = {}
-    cand = 2        # The loop var to increment and check for primeness
+    cnd_val = 2        # The loop var to increment and check for primeness
     while True:
-        if cand not in prime_divs:
-            # cand is a new prime.
+        if cnd_val not in prime_divs:
+            # cnd_val is a new prime.
             # Yield it and mark its first multiple that isn't
             # already marked in previous iterations
-            yield cand
-            prime_divs[cand * cand] = [cand]
+            yield cnd_val
+            prime_divs[cnd_val * cnd_val] = [cnd_val]
         else:
-            # cand is composite. prime_divs[cand] is the list of primes that
-            # divide it. Since we've reached cand, we no longer
-            # need it in the map, but we'll mark the next
-            # multiples of its witnesses to prepare for larger
-            # numbers
-            for prim in prime_divs[cand]:
-                prime_divs.setdefault(prim + cand, []).append(prim)
-            del prime_divs[cand]
-        cand += 1
+            # cnd_val is composite. prime_divs[cnd_val] is the list
+            # of primes that divide it.  Since we've reached cnd_val,
+            # we no longer need it in the map, but we'll mark the next
+            # multiples of its witnesses to prepare for larger numbers.
+            for prm_val in prime_divs[cnd_val]:
+                prime_divs.setdefault(prm_val + cnd_val, []).append(prm_val)
+            del prime_divs[cnd_val]
+        cnd_val += 1
 
 def gen_primes_bounded(beg_val=2, end_val=1000):
     """ Generate a bounded sequence of prime numbers.
     """
     prime_divs = {}
-    cand = 2
+    cnd_val = 2
     while True:
-        if end_val < cand:
+        if end_val < cnd_val:
             break
-        if cand not in prime_divs:
-            # cand is a new prime.
-            # Yield it and mark its first multiple that isn't
-            # already marked in previous iterations
-            if beg_val <= cand:
-                yield cand
-            prime_divs[cand * cand] = [cand]
+        if cnd_val not in prime_divs:
+            if beg_val <= cnd_val:
+                yield cnd_val
+            prime_divs[cnd_val * cnd_val] = [cnd_val]
         else:
-            # cand is composite. prime_divs[cand] is the list of primes that
-            # divide it. Since we've reached cand, we no longer
-            # need it in the map, but we'll mark the next
-            # multiples of its witnesses to prepare for larger
-            # numbers
-            for prim in prime_divs[cand]:
-                prime_divs.setdefault(prim + cand, []).append(prim)
-            del prime_divs[cand]
-        cand += 1
+            for prm_val in prime_divs[cnd_val]:
+                prime_divs.setdefault(prm_val + cnd_val, []).append(prm_val)
+            del prime_divs[cnd_val]
+        cnd_val += 1
 
 def gen_prime_pal():
     """ Generate an infinite sequence of palindromic prime numbers,
