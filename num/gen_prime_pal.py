@@ -40,9 +40,7 @@ def gen_primes_bounded(beg_val=2, end_val=1000):
     """
     prime_divs = {}
     cnd_val = 2
-    while True:
-        if end_val < cnd_val:
-            break
+    while cnd_val <= end_val:
         if cnd_val not in prime_divs:
             if beg_val <= cnd_val:
                 yield cnd_val
