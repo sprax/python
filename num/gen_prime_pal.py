@@ -10,7 +10,7 @@ import itertools
 import sys
 
 def gen_primes():
-    """ Generate an infinite sequence of prime numbers.
+    """ Generate an unbounded (infinite) sequence of prime numbers.
     """
     # Maps composites to primes witnessing their compositeness.
     # This is memory efficient, as the sieve is not "run forward"
@@ -36,6 +36,31 @@ def gen_primes():
             del prime_divs[cand]
         cand += 1
 
+def gen_primes_bounded(beg_val=2, end_val=1000):
+    """ Generate a bounded sequence of prime numbers.
+    """
+    prime_divs = {}
+    cand = 2
+    while True:
+        if end_val < cand:
+            break
+        if cand not in prime_divs:
+            # cand is a new prime.
+            # Yield it and mark its first multiple that isn't
+            # already marked in previous iterations
+            if beg_val <= cand:
+                yield cand
+            prime_divs[cand * cand] = [cand]
+        else:
+            # cand is composite. prime_divs[cand] is the list of primes that
+            # divide it. Since we've reached cand, we no longer
+            # need it in the map, but we'll mark the next
+            # multiples of its witnesses to prepare for larger
+            # numbers
+            for prim in prime_divs[cand]:
+                prime_divs.setdefault(prim + cand, []).append(prim)
+            del prime_divs[cand]
+        cand += 1
 
 def gen_prime_pal():
     """ Generate an infinite sequence of palindromic prime numbers,
@@ -100,9 +125,10 @@ def main():
     argc = len(sys.argv)
     beg_num = int(sys.argv[1]) if argc > 2 else DEFAULT_BEG
     end_num = int(sys.argv[2]) if argc > 1 else DEFAULT_END
-    print("prime value range:", *list(gen_prime_pal_val_range(beg_num, end_num)))
-    print("prime subix range:", *list(gen_prime_pal_sub_range(beg_num, end_num)))
-    print("prime index range:", *list(gen_prime_pal_idx_range(beg_num, end_num)))
+    print("prime any value range:", *list(gen_primes_bounded(beg_num, end_num)))
+    print("prime pal value range:", *list(gen_prime_pal_val_range(beg_num, end_num)))
+    print("prime pal subix range:", *list(gen_prime_pal_sub_range(beg_num, end_num)))
+    print("prime pal index range:", *list(gen_prime_pal_idx_range(beg_num, end_num)))
 
 if __name__ == '__main__':
     main()
