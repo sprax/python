@@ -126,6 +126,7 @@ def main():
               % (sys.argv[0], DEFAULT_BEG_NUM, DEFAULT_END_NUM))
         exit(1)
 
+    print("gen_prime_pal [%s]  beg = %d  end = %d ::::::::::::::::" % (sys.argv[0], beg_num, end_num))
     print("prime num value range:", *list(gen_primes_bounded(beg_num, end_num)))
     print("prime pal value range:", *list(gen_prime_pal_val_range(beg_num, end_num)))
     print("prime pal subix range:", *list(gen_prime_pal_sub_range(beg_num, end_num)))

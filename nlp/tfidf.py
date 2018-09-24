@@ -42,7 +42,7 @@ class TestTfidf(unittest.TestCase):
     '''tests the toy TFIDF functions above'''
 
     def setUp(self):
-        # create minimal instances for testing
+        ''' create minimal instances for testing '''
         self.show = 1
         self.inputs = np.array([
             [1.0, 2.0, 3.0, 4.0, 3.0, 0.0, 0.0, 1.0, 0.0],
