@@ -35,6 +35,35 @@ def gen_primes():
             del prime_divs[cnd_val]
         cnd_val += 1
 
+def gen_primop():
+    """ Generate prime numbers, optimized by odd-only"""
+    prime_divs = {4: [2]}
+    yield 2
+    cnd_val = 3        # The loop var to increment and check for primeness
+    while True:
+        if cnd_val not in prime_divs:
+            # cnd_val is a new prime.
+            # Yield it and mark its first multiple that isn't
+            # already marked in previous iterations
+            yield cnd_val
+            prime_divs[cnd_val * cnd_val] = [cnd_val]
+            print("ADD prime_divs[%d] = [%d]" % (cnd_val*cnd_val, cnd_val))
+            print("DCT ", prime_divs)
+        else:
+            # cnd_val is composite. prime_divs[cnd_val] is the list
+            # of primes that divide it.  Since we've reached cnd_val,
+            # we no longer need it in the map, but we'll mark the next
+            # multiples of its witnesses to prepare for larger numbers.
+            for prm_val in prime_divs[cnd_val]:
+                prime_divs.setdefault(prm_val + cnd_val, []).append(prm_val)
+                print("prime_divs.setdefault(prm_val+cnd_val=%d, []).append(prm_val=%d)"
+                      % (prm_val+cnd_val, prm_val))
+            del prime_divs[cnd_val]
+            print("DEL del prime_divs[cnd_val=%d]", cnd_val)
+        cnd_val += 1
+        print()
+
+
 def gen_primes_bounded(beg_val=2, end_val=1000):
     """ Generate a bounded sequence of prime numbers.
     """
@@ -106,7 +135,7 @@ def gen_prime_pal_val_range(beg_val=0, end_val=1000):
 
 
 DEFAULT_BEG_NUM = 0
-DEFAULT_END_NUM = 101
+DEFAULT_END_NUM = 15
 
 def main():
     '''Print lists of prime palindromes (default up to X)'''
@@ -126,11 +155,16 @@ def main():
               % (sys.argv[0], DEFAULT_BEG_NUM, DEFAULT_END_NUM))
         exit(1)
 
-    print("gen_prime_pal [%s]  beg = %d  end = %d ::::::::::::::::" % (sys.argv[0], beg_num, end_num))
+    print("gen_prime_pal [%s]  beg = %d  end = %d ::::::::::::::::"
+          % (sys.argv[0], beg_num, end_num))
+    print("primo num value range:", *list(itertools.islice((p for p in gen_primop()),
+                                          beg_num, end_num)))
+    print("primo num value range:", *list(itertools.islice((p for p in gen_primes()),
+                                          beg_num, end_num)))
     print("prime num value range:", *list(gen_primes_bounded(beg_num, end_num)))
-    print("prime pal value range:", *list(gen_prime_pal_val_range(beg_num, end_num)))
-    print("prime pal subix range:", *list(gen_prime_pal_sub_range(beg_num, end_num)))
-    print("prime pal index range:", *list(gen_prime_pal_idx_range(beg_num, end_num)))
+    # print("prime pal value range:", *list(gen_prime_pal_val_range(beg_num, end_num)))
+    # print("prime pal subix range:", *list(gen_prime_pal_sub_range(beg_num, end_num)))
+    # print("prime pal index range:", *list(gen_prime_pal_idx_range(beg_num, end_num)))
 
 if __name__ == '__main__':
     main()
