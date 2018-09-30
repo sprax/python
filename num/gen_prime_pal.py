@@ -46,8 +46,9 @@ def gen_primop():
             # Yield it and mark its first multiple that isn't
             # already marked in previous iterations
             yield cnd_val
+            print("YLD %d" % cnd_val)
             prime_divs[cnd_val * cnd_val] = [cnd_val]
-            print("ADD prime_divs[%d] = [%d]" % (cnd_val*cnd_val, cnd_val))
+            print("ADD prime_divs[%d * %d] = [%d]" % (cnd_val, cnd_val, cnd_val))
             print("DCT ", prime_divs)
         else:
             # cnd_val is composite. prime_divs[cnd_val] is the list
@@ -56,10 +57,10 @@ def gen_primop():
             # multiples of its witnesses to prepare for larger numbers.
             for prm_val in prime_divs[cnd_val]:
                 prime_divs.setdefault(prm_val + cnd_val, []).append(prm_val)
-                print("prime_divs.setdefault(prm_val+cnd_val=%d, []).append(prm_val=%d)"
-                      % (prm_val+cnd_val, prm_val))
+                print("prime_divs.setdefault(prm_val_%d + cnd_val_%d = %d, []).append(prm_val=%d)"
+                      % (prm_val, cnd_val, prm_val + cnd_val, prm_val))
             del prime_divs[cnd_val]
-            print("DEL del prime_divs[cnd_val=%d]", cnd_val)
+            print("DEL del prime_divs[cnd_val=%d]" % cnd_val)
         cnd_val += 1
         print()
 
