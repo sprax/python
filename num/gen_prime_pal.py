@@ -50,7 +50,7 @@ def gen_primop():
             print("YLD %d" % cnd_val)
             prime_divs[cnd_val * cnd_val] = [cnd_val]
             print("ADD prime_divs[%d * %d] = [%d]" % (cnd_val, cnd_val, cnd_val))
-            print("DCT ", prime_divs)
+            print("DCT ", sorted(prime_divs.items()))
         else:
             # cnd_val is composite. prime_divs[cnd_val] is the list
             # of primes that divide it.  Since we've reached cnd_val,
