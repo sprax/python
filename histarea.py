@@ -62,13 +62,16 @@ def histarea_simple(histogram):
 
 	# Pass 2: Initialize from last entry; do skip the first entry.
     area = 0
-    max_from_right = histogram[length-1]
+    max_right = histogram[length-1]
     for j in range(length-2, 0, -1):
         height = histogram[j]
-        if  max_from_right < height:
-            max_from_right = height
-        lesser_max = min(max_from_left[j], max_from_right)
-        area += lesser_max - height
+        if  max_right < height:
+            max_right = height
+        max_left = max_from_left[j]
+        if max_left < max_right:
+            area += max_left - height
+        else:
+            area += max_right - height
     return area
 
 
