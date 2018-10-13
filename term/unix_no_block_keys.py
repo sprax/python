@@ -35,17 +35,17 @@ def term_anykey():
 
 def any_keys():
     ''' get key(s) for one loop iteration '''
-    ch_set = []
+    chr_lst = []
     char = os.read(sys.stdin.fileno(), 1)
     while char:
-        ch_set.append(ord(char[0]))
+        chr_lst.append(ord(char[0]))
         char = os.read(sys.stdin.fileno(), 1)
-        return ch_set
+        return chr_lst
 
 def term_input():
     ''' main loop function; calls any_keys() '''
     init_anykey()
-    seconds = 1
+    flt_seconds = 1.0
     while True:
         keys = any_keys()
         if keys:
@@ -55,17 +55,19 @@ def term_input():
                 break
             else:
                 time.sleep(0.1)
-        seconds += 1
-        print("Sleeping for %d seconds..." % seconds)
-        time.sleep(seconds)
+        flt_seconds *= 1.1
+        int_seconds = int(flt_seconds)
+        print("Sleeping for %d (int(%f)) seconds..." % (int_seconds, flt_seconds))
+        time.sleep(int_seconds)
 
 def unit_test(args):
-    ''' unit test: hit "q" to quit. '''
-    print(unit_test.__doc__, "\nWith args:", args)
+    '''
+    unit test with args:'''
+    print(unit_test.__doc__, args, "\n\thit 'q' to quit...")
     term_input()
     print()
 
-
+###############################################################################
 def main():
     '''driver for unit_test'''
     default_count = 10000
