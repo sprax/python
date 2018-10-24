@@ -164,9 +164,9 @@ def main():
     print("primo num value range:", *list(itertools.islice((p for p in gen_primes()),
                                           beg_num, end_num)))
     print("prime num value range:", *list(gen_primes_bounded(beg_num, end_num)))
-    # print("prime pal value range:", *list(gen_prime_pal_val_range(beg_num, end_num)))
-    # print("prime pal subix range:", *list(gen_prime_pal_sub_range(beg_num, end_num)))
-    # print("prime pal index range:", *list(gen_prime_pal_idx_range(beg_num, end_num)))
+    print("prime pal value range:", *list(gen_prime_pal_val_range(beg_num, end_num)))
+    print("prime pal subix range:", *list(gen_prime_pal_sub_range(beg_num, end_num)))
+    print("prime pal index range:", *list(gen_prime_pal_idx_range(beg_num, end_num)))
 
 if __name__ == '__main__':
     main()
