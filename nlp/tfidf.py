@@ -7,6 +7,19 @@ import unittest
 import numpy as np
 
 
+def tfidf_np(mat):
+    ''' Input: numpy array where rows are term-frequency vectors representing documents.
+        Output: numpy array of TF-IDF vectors representing compared documents
+        (same dimensions as input).
+    '''
+    result = mat.copy()
+    # ndocs, ntoks = mat.shape
+    doxfreq = np.sum(mat > 0, axis=0)
+    doxfreq[doxfreq == 0] = 1
+    result /= doxfreq
+    return result
+
+
 def tfidf_doc_list(doc_list):
     ''' Input: list of term-frequency vectors representing documents.
         Output: list of TF-IDF vectors representing compared documents
@@ -23,19 +36,6 @@ def tfidf_doc_list(doc_list):
             if doxfreq[idx] > 0:
                 doc[idx] /= doxfreq[idx]
     return doc_list
-
-
-def tfidf_np(mat):
-    ''' Input: numpy array where rows are term-frequency vectors representing documents.
-        Output: numpy array of TF-IDF vectors representing compared documents
-        (same dimensions as input).
-    '''
-    result = mat.copy()
-    # ndocs, ntoks = mat.shape
-    doxfreq = np.sum(mat > 0, axis=0)
-    doxfreq[doxfreq == 0] = 1
-    result /= doxfreq
-    return result
 
 
 class TestTfidf(unittest.TestCase):
