@@ -79,7 +79,7 @@ def gggg_slc_val_range(beg_val=0, end_val=1000):
 
 
 DEFAULT_BEG_NUM = 0
-DEFAULT_END_NUM = 32
+DEFAULT_END_NUM = 64
 
 def main():
     argc = len(sys.argv)
@@ -99,9 +99,9 @@ def main():
 
     print("gggg_slc [%s]  beg = %d  end = %d ::::::::::::::::"
           % (sys.argv[0], beg_num, end_num))
-    print("ggggo num value range:", *list(itertools.islice((p for p in gggg_op()),
+    print("gggg num value range:", *list(itertools.islice((p for p in gggg_op()),
                                           beg_num, end_num)))
-    print("ggggo num value range:", *list(itertools.islice((p for p in gggg()),
+    print("gggg num value range:", *list(itertools.islice((p for p in gggg()),
                                           beg_num, end_num)))
     print("some num value range:", *list(gggg_bounded(beg_num, end_num)))
     print("some pal value range:", *list(gggg_slc_val_range(beg_num, end_num)))
