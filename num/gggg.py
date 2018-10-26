@@ -20,7 +20,7 @@ def gggg():
         cnd_val += 1
 
 def gggg_op():
-    """ GGGG, optimized"""
+    """ GGGG, more optimized"""
     some_divs = {}
     yield 2
     cnd_val = 3
@@ -72,12 +72,6 @@ def gggg_slc_sub_range(beg_idx=0, end_idx=1000):
 
 
 def gggg_slc_val_range(beg_val=0, end_val=1000):
-    """
-    Generate sequence of some palindromes between beg_val and end_val.
-    That is, return a generator that, from the finite range of integers
-    between beg_val and end_val, yields only those that are palindromic
-    somes.
-    """
     return (x for x, s, n, h in (
         (x, s, n, n//2 if n%2 else (n-1)//2) for x, s, n in (
             (x, str(x), len(str(x))) for x in gggg_bounded(beg_val, end_val)))
