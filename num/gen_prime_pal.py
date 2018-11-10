@@ -7,6 +7,7 @@ wrapper by sprax 2018.09, based on:
 '''
 from __future__ import print_function
 import itertools
+import math
 import sys
 
 def gen_primes():
@@ -135,6 +136,30 @@ def gen_prime_pal_val_range(beg_val=0, end_val=1000):
             (x, str(x), len(str(x))) for x in gen_primes_bounded(beg_val, end_val)))
             if s[:n//2] == s[-1:h:-1])
 
+def gggg_op():
+    """ GGGG, more optimized"""
+    some_nums = {}
+    yield 2
+    cnd_val = 3
+    while True:
+        if cnd_val in some_nums:
+            for ggg_val in some_nums[cnd_val]:
+                some_nums.setdefault(ggg_val*2 + cnd_val, []).append(ggg_val)
+            del some_nums[cnd_val]
+        else:
+            yield cnd_val
+            some_nums[cnd_val * cnd_val] = [cnd_val]
+
+        cnd_val += 2
+
+def is_pgt2(n):
+    i = 3
+    while (i <= 1 + int(math.sqrt(n))):
+        if (n % i == 0):
+            return False
+        i += 2
+    return True
+
 
 DEFAULT_BEG_NUM = 0
 DEFAULT_END_NUM = 15
@@ -159,10 +184,13 @@ def main():
 
     print("gen_prime_pal [%s]  beg = %d  end = %d ::::::::::::::::"
           % (sys.argv[0], beg_num, end_num))
-    print("primo num value range:", *list(itertools.islice((p for p in gen_primop()),
+    # print("primo num value range:", *list(itertools.islice((p for p in gen_primop()),
+    #                                       beg_num, end_num)))
+    print("primo num value range:", *list(itertools.islice((p for p in gggg_op()),
                                           beg_num, end_num)))
     print("primo num value range:", *list(itertools.islice((p for p in gen_primes()),
                                           beg_num, end_num)))
+    return
     print("prime num value range:", *list(gen_primes_bounded(beg_num, end_num)))
     print("prime pal value range:", *list(gen_prime_pal_val_range(beg_num, end_num)))
     print("prime pal subix range:", *list(gen_prime_pal_sub_range(beg_num, end_num)))
