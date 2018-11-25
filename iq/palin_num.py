@@ -441,11 +441,11 @@ def main():
     args = parser.parse_args()
 
     if args.verbose > 2:
-vinfo = sys.version_info
-v_major = vinfo[0]
-v_minor = vinfo[1]
-ver_str = "Python%d.%d" % (v_major, v_minor)
-print(ver_str, sys.argv[0])
+        vinfo = sys.version_info
+        v_major = vinfo[0]
+        v_minor = vinfo[1]
+        ver_str = "Python%d.%d" % (v_major, v_minor)
+        print(ver_str, sys.argv[0])
         print("args:", args)
 
     if args.all:
