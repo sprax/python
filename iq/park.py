@@ -19,7 +19,7 @@ input: list of Intervals
 output: sub-list of input that doesn't overlap
 '''
 
-hobos = [
+HOBOS = [
 	[ 0 ], 			 # expected Parkour answer: NONE
 	[ 0 ],			 # expected Ahopper answer: NONE
 	[ 1,  2, 3 ], 	 # expected Parkour answer: 3, only one way
@@ -38,15 +38,22 @@ hobos = [
 	[ 3,  2, 4, 2, 2, 1, 0, 3, 2, 6, 3, 3, 9, 1, 7, 1, 8, 3,  1, 3, 0, ],
 ]
 
-def park(ho, bo):
+def park_idx(hos, bos):
     '''
-    counts Parkour moves
+    counts Parkour moves, outer loop on list index
     '''
-    sz = len(ho)
-    assert sz == len(bo)
-    mv, eg = [], []
-    for j in range(sz):
-    return mv[-1]
+    siz = len(hos)
+    assert siz == len(bos)
+    mvs, egs = [None]*siz, [None]*siz
+    mvs[0] = egs[0] = 0
+    for j in range(siz):
+        if egs[j] is None:
+            break
+        nrg = egs[j] + bos[j]
+        print("hobo %d: %s %s %d" % (j, hos[j], bos[j], nrg))
+
+
+    return mvs[-1]
 
 
 def merged_disjoint_pairs(intervals):
@@ -86,6 +93,10 @@ def test_func_1(func_1, inputs, expect, verbose):
 def unit_test(args):
     ''' test disjoint interval functions '''
     verbose = args.verbose
+    park_idx([2], [2])
+    return
+
+
     inlist_1 = [[0, 1], [.5, 1.5], [2, 2.3], [2.1, 2.2], [2.3, 2.4], [2.5, 2.667]]
     outlst_1 = [[0, 1.5], [2, 2.4], [2.5, 2.667]]
     inlist_2 = list(inlist_1)   # copy
