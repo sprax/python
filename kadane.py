@@ -17,5 +17,9 @@ def main():
     mcs = max_contiguous_sum(arr)
     print(arr, " ==> ", mcs, "(expecting 10)")
 
+def area_between_bc_columns(bc_0, bc_1):
+    return bc_0 + bc_1
+
 if __name__ == '__main__':
+    print("Area 0 (should be 100): %8.4f" % area_between_bc_columns(57, 43))
     main()
