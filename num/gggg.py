@@ -7,46 +7,46 @@ import sys
 
 def gggg():
     """ GGGG """
-    some_divs = {}
+    some_nums = {}
     cnd_val = 2
     while True:
-        if cnd_val not in some_divs:
+        if cnd_val not in some_nums:
             yield cnd_val
-            some_divs[cnd_val * cnd_val] = [cnd_val]
+            some_nums[cnd_val * cnd_val] = [cnd_val]
         else:
-            for ggg_val in some_divs[cnd_val]:
-                some_divs.setdefault(ggg_val + cnd_val, []).append(ggg_val)
-            del some_divs[cnd_val]
+            for ggg_val in some_nums[cnd_val]:
+                some_nums.setdefault(ggg_val + cnd_val, []).append(ggg_val)
+            del some_nums[cnd_val]
         cnd_val += 1
 
 def gggg_op():
     """ GGGG, more optimized"""
-    some_divs = {}
+    some_nums = {}
     yield 2
     cnd_val = 3
     while True:
-        if cnd_val not in some_divs:
+        if cnd_val not in some_nums:
             yield cnd_val
-            some_divs[cnd_val * cnd_val] = [cnd_val]
+            some_nums[cnd_val * cnd_val] = [cnd_val]
         else:
-            for ggg_val in some_divs[cnd_val]:
-                some_divs.setdefault(ggg_val*2 + cnd_val, []).append(ggg_val)
-            del some_divs[cnd_val]
+            for ggg_val in some_nums[cnd_val]:
+                some_nums.setdefault(ggg_val*2 + cnd_val, []).append(ggg_val)
+            del some_nums[cnd_val]
         cnd_val += 2
 
 def gggg_bounded(beg_val=2, end_val=1000):
     """ more """
-    some_divs = {}
+    some_nums = {}
     cnd_val = 2
     while cnd_val <= end_val:
-        if cnd_val not in some_divs:
+        if cnd_val not in some_nums:
             if beg_val <= cnd_val:
                 yield cnd_val
-            some_divs[cnd_val * cnd_val] = [cnd_val]
+            some_nums[cnd_val * cnd_val] = [cnd_val]
         else:
-            for ggg_val in some_divs[cnd_val]:
-                some_divs.setdefault(ggg_val + cnd_val, []).append(ggg_val)
-            del some_divs[cnd_val]
+            for ggg_val in some_nums[cnd_val]:
+                some_nums.setdefault(ggg_val + cnd_val, []).append(ggg_val)
+            del some_nums[cnd_val]
         cnd_val += 1
 
 def gggg_slc():
