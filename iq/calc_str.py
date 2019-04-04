@@ -22,11 +22,16 @@ def calc_str_ez(mes):
         raise ValueError("not a str")
     stack []
     num = 0
+    in_num = False
     for ch in mes:
         if str.isdigit(ch):
             dig = ord(ch) - ord('0');
-            num = num * 10 + dig
-        elif:
+            if in_num:
+                num = num * 10 + dig
+            else:
+                num = dig
+                in_num = true
+        elif ch.isspace():
 
             pass // FIXME start here
 
