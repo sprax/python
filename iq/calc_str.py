@@ -12,7 +12,12 @@ OPENERS_TO_CLOSERS = {
 OPENERS = frozenset(OPENERS_TO_CLOSERS.keys())
 CLOSERS = frozenset(OPENERS_TO_CLOSERS.values())
 
+
 def calc_str_ez(mes):
+    '''
+    calculate value of an arithmetic expression in a string,
+    no positive or negative signs allowed.
+    '''
     if not isinstance(mes, str):
         raise ValueError("not a str")
     stack []
@@ -21,7 +26,8 @@ def calc_str_ez(mes):
         if str.isdigit(ch):
             dig = ord(ch) - ord('0');
             num = num * 10 + dig
-        else:
+        elif:
+
             pass // FIXME start here
 
 def is_valid_parens(code):
