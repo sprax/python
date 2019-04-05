@@ -20,10 +20,14 @@ def calc_str_ez(mes):
     '''
     if not isinstance(mes, str):
         raise ValueError("not a str")
-    stack = []
+    op_chars = ['+', '-', '*', '/']
+    num_stack = []
+    ops_stack = []
     num = 0
     in_num = False
     rq_num = True
+    req_op = False
+    got_op = False
     for ch in mes:
         if ch.isdigit():
             dig = ord(ch) - ord('0');
@@ -35,7 +39,16 @@ def calc_str_ez(mes):
         elif ch.isspace():
             if in_num:
                 in_num = False
-                stack.push(num)
+                num_stack.push(num)
+                req_op = True
+        elif ch in op_chars:
+            if req_op:
+                req_op = False
+
+            else:
+                raise ValueError("op not expected: " + ch)
+        else:
+            raise ValueError("char not expected: " + ch)
 
 
             pass # FIXME start here
