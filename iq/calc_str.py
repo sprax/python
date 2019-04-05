@@ -20,7 +20,7 @@ def calc_str_ez(mes):
     '''
     if not isinstance(mes, str):
         raise ValueError("not a str")
-    stack []
+    stack = []
     num = 0
     in_num = False
     for ch in mes:
@@ -32,8 +32,12 @@ def calc_str_ez(mes):
                 num = dig
                 in_num = true
         elif ch.isspace():
+            if in_num:
+                in_num = False
+                stack.push(num)
 
-            pass // FIXME start here
+
+            pass # FIXME start here
 
 def is_valid_parens(code):
     '''
