@@ -23,8 +23,9 @@ def calc_str_ez(mes):
     stack = []
     num = 0
     in_num = False
+    rq_num = True
     for ch in mes:
-        if str.isdigit(ch):
+        if ch.isdigit():
             dig = ord(ch) - ord('0');
             if in_num:
                 num = num * 10 + dig
