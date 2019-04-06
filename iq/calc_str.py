@@ -39,13 +39,11 @@ def calc_str_ez(mes):
                 in_num = true
         elif ch.isspace():
             if in_num:
-                needed = OPERAT
                 num_stack.push(num)
-                neededreq_op = True
+                needed = OPERAT
         elif ch in op_chars:
             if req_op:
-                req_op = False
-
+                needed = NUMBER
             else:
                 raise ValueError("op not expected: " + ch)
         else:
