@@ -12,6 +12,8 @@ OPENERS_TO_CLOSERS = {
 OPENERS = frozenset(OPENERS_TO_CLOSERS.keys())
 CLOSERS = frozenset(OPENERS_TO_CLOSERS.values())
 
+NUMBER = 1
+OPERAT = 2
 
 def calc_str_ez(mes):
     '''
@@ -24,23 +26,22 @@ def calc_str_ez(mes):
     num_stack = []
     ops_stack = []
     num = 0
+    needed = NUMBER
     in_num = False
-    rq_num = True
-    req_op = False
     got_op = False
     for ch in mes:
         if ch.isdigit():
             dig = ord(ch) - ord('0');
-            if in_num:
+            if needed is NUMBER:
                 num = num * 10 + dig
             else:
                 num = dig
                 in_num = true
         elif ch.isspace():
             if in_num:
-                in_num = False
+                needed = OPERAT
                 num_stack.push(num)
-                req_op = True
+                neededreq_op = True
         elif ch in op_chars:
             if req_op:
                 req_op = False
