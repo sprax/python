@@ -12,8 +12,8 @@ OPENERS_TO_CLOSERS = {
 OPENERS = frozenset(OPENERS_TO_CLOSERS.keys())
 CLOSERS = frozenset(OPENERS_TO_CLOSERS.values())
 
-NUMBER = 1
-OPERAT = 2
+
+REQ_NUM, MID_NUM, NEED_OP = 1, 2, 3
 
 def calc_str_ez(mes):
     '''
@@ -26,28 +26,26 @@ def calc_str_ez(mes):
     num_stack = []
     ops_stack = []
     num = 0
-    needed = NUMBER
-    in_num = False
-    got_op = False
-    for ch in mes:
-        print("ch: %s; needed is: %s" % (ch, str(needed)))
+    estate = REQ_NUM
+    for ch in mes + ' ':
+        print("ch: %s; estate is: %s" % (ch, str(estate)))
         if ch.isdigit():
             dig = ord(ch) - ord('0');
-            if in_num:
+            if estate is MID_NUM:
                 num = num * 10 + dig
             else:
                 num = dig
-                in_num = True
+                estate = MID_NUM
         elif ch.isspace():
-            if in_num:
+            if estate is MID_NUM:
                 print "GOT NUM: (%s)" % num
                 num_stack.append(num)
-                needed = OPERAT
+                estate = NEED_OP
         elif ch in op_chars:
-            if needed is OPERAT:
-                needed = NUMBER
+            if estate is NEED_OP:
+                estate = REQ_NUM
             else:
-                raise ValueError("op not expected: (" + ch + "); needed is: " + str(needed))
+                raise ValueError("op not expected: (" + ch + "); estate is: " + str(estate))
         else:
             raise ValueError("char not expected: " + ch)
             pass # FIXME start here
