@@ -30,58 +30,43 @@ def calc_str_ez(mes):
     in_num = False
     got_op = False
     for ch in mes:
+        print("ch: %s; needed is: %s" % (ch, str(needed)))
         if ch.isdigit():
             dig = ord(ch) - ord('0');
-            if needed is NUMBER:
+            if in_num:
                 num = num * 10 + dig
             else:
                 num = dig
-                in_num = true
+                in_num = True
         elif ch.isspace():
             if in_num:
-                num_stack.push(num)
+                print "GOT NUM: (%s)" % num
+                num_stack.append(num)
                 needed = OPERAT
         elif ch in op_chars:
-            if req_op:
+            if needed is OPERAT:
                 needed = NUMBER
             else:
-                raise ValueError("op not expected: " + ch)
+                raise ValueError("op not expected: (" + ch + "); needed is: " + str(needed))
         else:
             raise ValueError("char not expected: " + ch)
-
-
             pass # FIXME start here
-
-def is_valid_parens(code):
-    '''
-    validates balance and ordering of parentheticals: (), {}, [],
-    but not the pairs <>, '', or "".
-    '''
-    openers_stack = []
-    for char in code:
-        if char in OPENERS:
-            openers_stack.append(OPENERS_TO_CLOSERS[char])
-        elif char in CLOSERS:
-            if not openers_stack:
-                return False            # no opener
-            if char != openers_stack.pop():
-                return False            # wrong closer
-    return not openers_stack
+    return 99
 
 
 
 
 def main():
-    '''drives is_valid_parens'''
-    parser = argparse.ArgumentParser(description="Validate balance and order of "
-                                     "parentheses, braces, and brackets (), {}, []")
-    parser.add_argument('text', type=str, nargs='?', default='What set { of bracketed '
-                        '[ (multi) (parentheticals) ] } is this ??',
+    '''drives calc_str_ez, etc.'''
+    parser = argparse.ArgumentParser(description="parse and compute arithmetic value of string")
+    parser.add_argument('text', type=str, nargs='?', default='7 + 12',
                         help='text to validate')
     args = parser.parse_args()
 
-    valid = is_valid_parens(args.text)
-    print('is_valid("%s") = %s' % (args.text, valid))
+    print('calc_str_ez("%s") . . .' % (args.text))
+
+    value = calc_str_ez(args.text)
+    print('calc_str_ez("%s") = %s' % (args.text, value))
 
 if __name__ == '__main__':
     main()
