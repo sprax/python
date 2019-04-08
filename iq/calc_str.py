@@ -44,12 +44,16 @@ def calc_str_ez(mes):
         elif ch in op_chars:
             if estate is NEED_OP:
                 estate = REQ_NUM
+                ops_stack.append(ch)
             else:
                 raise ValueError("op not expected: (" + ch + "); estate is: " + str(estate))
         else:
             raise ValueError("char not expected: " + ch)
             pass # FIXME start here
-    return 99
+    if ops_stack and ops_stack[-1] is '+':
+        num = num_stack.pop() + num_stack.pop()
+
+    return num
 
 
 
