@@ -2,6 +2,7 @@
 '''
 Validate balance and order of parentheses, braces, and brackets (), {}, []"
 '''
+from __future__ import print_function
 import argparse
 
 OPENERS_TO_CLOSERS = {
@@ -36,22 +37,39 @@ def calc_str_ez(mes):
             else:
                 num = dig
                 estate = MID_NUM
-        elif ch.isspace():
-            if estate is MID_NUM:
-                print "GOT NUM: (%s)" % num
-                num_stack.append(num)
+        elif estate is MID_NUM:
+            print("GOT NUM: (%s)" % num)
+            num_stack.append(num)
+            if ch in op_chars:
+                print("GOT OP: (%s)" % ch)
+                ops_stack.append(ch)
+                estate = REQ_NUM
+            elif ch.isspace():
                 estate = NEED_OP
+                pass
+            else:
+                raise ValueError("unexpected number suffix: (" + ch + ")")
         elif ch in op_chars:
             if estate is NEED_OP:
                 estate = REQ_NUM
+                print("GOT OP: (%s)" % ch)
                 ops_stack.append(ch)
             else:
                 raise ValueError("op not expected: (" + ch + "); estate is: " + str(estate))
+        elif ch.isspace():
+            pass
         else:
             raise ValueError("char not expected: " + ch)
             pass # FIXME start here
-    if ops_stack and ops_stack[-1] is '+':
-        num = num_stack.pop() + num_stack.pop()
+
+    num = num_stack[0] if num_stack else 0
+
+
+    for op, nxt in zip(ops_stack, num_stack[1:]):
+        if op is '+':
+            num += nxt
+        elif op is '-':
+            num -= nxt
 
     return num
 
@@ -61,7 +79,7 @@ def calc_str_ez(mes):
 def main():
     '''drives calc_str_ez, etc.'''
     parser = argparse.ArgumentParser(description="parse and compute arithmetic value of string")
-    parser.add_argument('text', type=str, nargs='?', default='7 + 12',
+    parser.add_argument('text', type=str, nargs='?', default='7 -2 + 12+5 - 2',
                         help='text to validate')
     args = parser.parse_args()
 
