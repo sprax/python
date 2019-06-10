@@ -288,9 +288,13 @@ AUTHOR_NAME = defaultdict(lambda:"OTHER", AUTHOR_NAME)
 
 def print_author_count(ddct, out_file=sys.stdout, prefix="git_blames"):
     '''Print the author_count dict to stdout (default) or a file'''
+    total = 0.0
+    for _, val in ddct.items():
+        total += val
     for key, val in sorted(ddct.items(), key=lambda dit: dit[1], reverse=True):
-        name = AUTHOR_NAME[key]
-        print("%s:  %8s: %6d" % (prefix, name, val), file=out_file)
+        author = AUTHOR_NAME[key]
+        percent = val * 100.0 / total
+        print("%s:  %8s: %6d %7.2f%%" % (prefix, author, val, percent), file=out_file)
 
 def add_git_sums_to_file(in_path, out_path, charset='utf8'):
     '''
