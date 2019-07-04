@@ -1,8 +1,19 @@
 
 #!/usr/bin/env python3
 '''
-Given a word of length n, and n six-sided dice with a character in each side,
+Given a word of length N, and n six-sided dice with a character in each side,
 find out if this word is constructible by the set of given dice
+
+RECURSE:
+    for C in Word:
+        for D in Dice:
+            if C in D:
+                if Dice\D is empty (or Word\C is empty):
+                    return True
+                else:
+                    return RECURSE
+DYNAMIC:
+ORDERED RECURSION:
 '''
 from __future__ import print_function
 

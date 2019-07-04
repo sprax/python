@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- encoding: <utf-8> -*-
 # Sprax Lines       2017.04.01      Written with Python 3.5
+# sum_file.py (2019.06) based on test_filters.py (2017.04.01)
 # To re-import a library in Python 3.4+ (re-import), do:
 # import importlib
 # importlib.reload(nameOfModule)
-'''text filter functions'''
+'''selected text-filtering functions, e.g. for git blame output'''
 
 import argparse
 import heapq
@@ -150,7 +151,6 @@ def utf_print_words(fspec):
                 if len(word) > 0:
                     utf_print(word)
             utf_print(words)
-
 
 
 def rank_dict_by_value(summary_count, ranking):
@@ -325,10 +325,6 @@ def add_git_sums_to_file(in_path, out_path, charset='utf8'):
                     elif line:
                         print(line, file=out_file)
             print_author_count(total_counts, out_file=out_file, prefix="GIT_TOTALS")
-
-
-REP_WEBSTER = r'\n([A-Z-]+)\s+([^\s,]+)[^,]*,\s+((?:[a-z]\.\s*)+)(?:Etym:\s+\[([^]]+)\])?\s*(?:Defn:\s)([^.]+)?'
-REC_WEBSTER = re.compile(REP_WEBSTER)
 
 def sum_text_file():
     '''Filter lines or sentences in a text file.'''
