@@ -30,10 +30,10 @@ DYNAMIC:
 from __future__ import print_function
 
 import argparse
-import pdb
-from pdb import set_trace
-import random
-import re
+# import pdb
+# from pdb import set_trace
+# import random
+# import re
 
 from collections import namedtuple
 
@@ -57,6 +57,7 @@ class Chrix(namedtuple("Chrix", "c1 c2 c3 c4 c5 c6")):
         '''create a Chrix object from 6 separate arguments'''
         return super(Chrix, cls).__new__(cls, c_1, c_2, c_3, c_4, c_5, c_6)
 
+###############################################################################
 
 def can_roll_word_tail(head, tail, dice, verbose):
     ''' recursive head/tail word dice checker.  Is it tail-recursive? '''
@@ -83,18 +84,19 @@ def dice_in_word_order_error(word, dice, verbose):
         print("test: word(%s)" % word)
         print("test: dice({})".format(dice))
     error = 0
-    for chr, die in zip(word, dice):
+    for letter, die in zip(word, dice):
         # set_trace()
-        error += chr not in die
+        error += letter not in die
     return error
 
 def can_roll_word(word, dice, verbose):
     ''' True IFF word can be made from give dice '''
     return can_roll_word_tail(word[0], word[1:], dice, verbose)
 
-def test_can_roll_word(word, dice, expect, verbose):
-    ''' True IFF can_roll_word result == expect '''
-    pass
+#
+# def test_can_roll_word(word, dice, expect, verbose):
+#     ''' True IFF can_roll_word result == expect '''
+#     pass
 
 def unit_test(args):
     ''' test Chrice (character-dice) stuff '''
@@ -109,7 +111,7 @@ def unit_test(args):
         ]
 
     num_wrong = 0
-    word_dice = [(word, dice)]
+    # word_dice = [(word, dice)]
     expect = 1
     actual = can_roll_word(word, dice, verbose)
     num_wrong += (actual != expect)
