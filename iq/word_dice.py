@@ -1,6 +1,5 @@
-
 #!/usr/bin/env python3
-'''
+r'''
 Given a word of length N, and n six-sided dice with a character in each side,
 find out if this word is constructible by the set of given dice
 
@@ -34,27 +33,28 @@ class Chrix(namedtuple("Chrix", "c1 c2 c3 c4 c5 c6")):
         return "%s %s %s %s %s %s" % (self.c1, self.c2, self.c3, self.c4, self.c5, self.c6)
 
     def __new__(cls, str_6):
-        '''create namedtuple class from raw tuple'''
+        '''create namedtuple class from raw tuple by parsing (splitting) a string'''
         try:
-            return super(Chrix, cls).__new__(cls, *str.split(str_6))  # fastest parser
-        except:
-            char_list = list(filter(None, re.split('', str_6)))       # fastest filter
-            return super(Chrix, cls).__new__(cls, *char_list)
+            return super(Chrix, cls).__new__(cls, *str_6.split()) # fastest whitespace parser
+        except Exception:
+            return super(Chrix, cls).__new__(cls, *list(str_6)) # assume no whitespace, Python 2 or 3
 
     @classmethod
-    def from_chars(cls, a, b, c, d, e, f):
+    def from_chars(cls, c_1, c_2, c_3, c_4, c_5, c_6):
         '''create a Chrix object from 6 separate arguments'''
-        return super(Chrix, cls).__new__(cls, a, b, c, d, e, f)
+        return super(Chrix, cls).__new__(cls, c_1, c_2, c_3, c_4, c_5, c_6)
 
 
 
 def can_roll_word(word, dice, verbose):
+    ''' True IFF word can be made from give dice '''
     if verbose > 0:
         print("test: word(%s)" % word)
         print("test: dice({})".format(dice))
     return 0
 
-def test_word_dice(word, dice, expect, verbose):
+def test_can_roll_word(word, dice, expect, verbose):
+    ''' True IFF can_roll_word result == expect '''
     pass
 
 def unit_test(args):
