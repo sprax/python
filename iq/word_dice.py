@@ -3,16 +3,29 @@ r'''
 Given a word of length N, and n six-sided dice with a character in each side,
 find out if this word is constructible by the set of given dice
 
-RECURSE:
-    for C in Word:
-        for D in Dice:
-            if C in D:
-                if Dice\D is empty (or Word\C is empty):
-                    return True
-                else:
-                    return RECURSE
+RECURSIVE:
+    A)  Natural order is just the word itself as a sequence:
+        1.  Rollable(Word, Dice):
+                for C in Word:
+                    for D in Dice:
+                        if C in D:
+                            if Dice\D is empty (or Tail := Word\C is empty):
+                                return True
+                            else:
+                                if Rollable(Word\C, Dice\D):
+                                    return True
+                return False
+        2. O(N!), where N = 6 * len(word)
+    B) Re-ordered recursion: IFF dice-letter distribution is known, look for rarest letter first
+        1. Priority queue, most constrained first, to fail fast or succeed faster.
+    C) Memoized recursion: If distribution is not known in advance, find it in a pre-pass,
+       or add to it lazily as you go.  Banditry?
+    D) Tail recursion?  The algoirithm in A.1. is not, as written.  Could these be made so?
 DYNAMIC:
-ORDERED RECURSION:
+    A)  Make a hash table of all possible words from the dice and check if word is in hash
+        1.  All possible strings would be wrong -- O(N!) for all permutations, or actually O(6^N)
+        2.  Using a trie'd dictionary would be more like O(N^2 log N)
+
 '''
 from __future__ import print_function
 
