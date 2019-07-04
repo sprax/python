@@ -51,7 +51,10 @@ def roll_word_error(word, dice, verbose):
     if verbose > 0:
         print("test: word(%s)" % word)
         print("test: dice({})".format(dice))
-    return len(word)
+    error = 0
+    for chr, die in zip(word, dice)):
+        error += chr not in die
+    return error
 
 def can_roll_word(word, dice, verbose):
     ''' True IFF word can be made from give dice '''
