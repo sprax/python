@@ -45,9 +45,23 @@ class Chrix(namedtuple("Chrix", "c1 c2 c3 c4 c5 c6")):
         return super(Chrix, cls).__new__(cls, c_1, c_2, c_3, c_4, c_5, c_6)
 
 
+def can_roll_word_tail(head, tail, dice, verbose):
+    ''' recursive head/tail word dice checker.  Is it tail-recursive? '''
+    for die in dice:
+        if head in die:
+            if tail:
+                # rest = dice.copy()    # needs Python 3
+                rest = dice
+                rest.remove(die)
+                if can_roll_word_tail(tail[0], tail[1:], rest, verbose):
+                    return True
+            else:
+                return True # The head was found and the tail is empty.
+    return False
 
-def roll_word_error(word, dice, verbose):
-    ''' Returns 0 if word can be made from given dice, else an error measure '''
+
+def dice_in_word_order_error(word, dice, verbose):
+    ''' Returns 0 if dice list is already in word order, else an error measure '''
     if verbose > 0:
         print("test: word(%s)" % word)
         print("test: dice({})".format(dice))
@@ -59,7 +73,7 @@ def roll_word_error(word, dice, verbose):
 
 def can_roll_word(word, dice, verbose):
     ''' True IFF word can be made from give dice '''
-    return 0 == roll_word_error(word, dice, verbose)
+    return can_roll_word_tail(word[0], word[1:], dice, verbose)
 
 def test_can_roll_word(word, dice, expect, verbose):
     ''' True IFF can_roll_word result == expect '''
