@@ -17,8 +17,8 @@ ORDERED RECURSION:
 from __future__ import print_function
 
 import argparse
-# import pdb
-# from pdb import set_trace
+import pdb
+from pdb import set_trace
 import random
 import re
 
@@ -52,13 +52,14 @@ def roll_word_error(word, dice, verbose):
         print("test: word(%s)" % word)
         print("test: dice({})".format(dice))
     error = 0
-    for chr, die in zip(word, dice)):
+    for chr, die in zip(word, dice):
+        # set_trace()
         error += chr not in die
     return error
 
 def can_roll_word(word, dice, verbose):
     ''' True IFF word can be made from give dice '''
-    return 0 == roll_word_error
+    return 0 == roll_word_error(word, dice, verbose)
 
 def test_can_roll_word(word, dice, expect, verbose):
     ''' True IFF can_roll_word result == expect '''
@@ -72,7 +73,7 @@ def unit_test(args):
     dice = [
         Chrix('a b c d e f'),
         Chrix('lololo'),
-        Chrix('dexale'),
+        Chrix('olives'),
         Chrix('jklmno'),
         ]
 
