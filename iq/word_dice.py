@@ -53,9 +53,13 @@ def can_roll_word_tail(head, tail, dice, verbose):
                 # rest = dice.copy()    # needs Python 3
                 rest = dice
                 rest.remove(die)
+                if verbose > 2:
+                    print("Found head %s, look for tail %s in the rest: %s" % (head, tail, rest))
                 if can_roll_word_tail(tail[0], tail[1:], rest, verbose):
                     return True
             else:
+                if verbose > 1:
+                    print("Found head %s and the tail is empty." % head)
                 return True # The head was found and the tail is empty.
     return False
 
