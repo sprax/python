@@ -46,12 +46,16 @@ class Chrix(namedtuple("Chrix", "c1 c2 c3 c4 c5 c6")):
 
 
 
-def can_roll_word(word, dice, verbose):
-    ''' True IFF word can be made from give dice '''
+def roll_word_error(word, dice, verbose):
+    ''' Returns 0 if word can be made from given dice, else an error measure '''
     if verbose > 0:
         print("test: word(%s)" % word)
         print("test: dice({})".format(dice))
-    return 0
+    return len(word)
+
+def can_roll_word(word, dice, verbose):
+    ''' True IFF word can be made from give dice '''
+    return 0 == roll_word_error
 
 def test_can_roll_word(word, dice, expect, verbose):
     ''' True IFF can_roll_word result == expect '''
@@ -65,17 +69,17 @@ def unit_test(args):
     dice = [
         Chrix('a b c d e f'),
         Chrix('lololo'),
-        Chrix('xyzabc'),
+        Chrix('dexale'),
         Chrix('jklmno'),
         ]
 
     num_wrong = 0
     word_dice = [(word, dice)]
-    expect = 0
+    expect = 1
     actual = can_roll_word(word, dice, verbose)
     num_wrong += (actual != expect)
 
-    print("unit_test for has_one_repeated:  num_tests:", 1,
+    print("unit_test for can_roll_word:  num_tests:", 1,
           " num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
 
 
