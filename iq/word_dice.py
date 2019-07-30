@@ -6,15 +6,15 @@ find out if this word is constructible by the set of given dice
 RECURSIVE:
     A)  Natural order is just the word itself as a sequence:
         1.  Rollable(Word, Dice):
-                for C in Word:
-                    for D in Dice:
-                        if C in D:
-                            if Dice\D is empty (or Tail := Word\C is empty):
+            for C in Word:
+                for D in Dice:
+                    if C in D:
+                        if Dice\D is empty (or Tail := Word\C is empty):
+                            return True
+                        else:
+                            if Rollable(Word\C, Dice\D):
                                 return True
-                            else:
-                                if Rollable(Word\C, Dice\D):
-                                    return True
-                return False
+            return False
         2. O(N!), where N = 6 * len(word)
     B) Re-ordered recursion: IFF dice-letter distribution is known, look for rarest letter first
         1. Priority queue, most constrained first, to fail fast or succeed faster.

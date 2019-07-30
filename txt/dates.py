@@ -38,8 +38,10 @@ def day_locs(wday):
     ans = 'Home'
     if wday < 5:
         ans += '/GTL'
-    if wday in [1, 4]:  # Tues or Friday
+    if wday in [1, 4]:  # Tuesday or Friday
         ans += '/CFC'
+    elif wday in [3, 6]:  # Thursday or Sunday
+        ans += '/MRC'
     return ans
 
 def try_parse_date(text, in_formats):
