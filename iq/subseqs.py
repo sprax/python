@@ -16,7 +16,8 @@ import argparse
 
 
 def sub_str_idxs(seq_str, sub_str):
-    ''' test sub-sequences (or non-contiguous embedded string indices) stuff
+    '''
+    test sub-sequences (or non-contiguous embedded string indices) stuff
     Given for example S = BCXXBXXCXDXBCD, then the result should be [[4,7,9],[11,12,13] 
     '''
     result = []
@@ -49,11 +50,17 @@ def sub_str_idxs(seq_str, sub_str):
                     sub_idx = 0
     return result
 
-def unit_test(args):
+
+def test_str_sub_exp(seq_str, sub_str, exp_res):
     ''' test sub-sequences (or non-contiguous embedded string indices) stuff '''
-    result = sub_str_idxs("BCXXBXXCXDXBCD", "BCD")
-    print("The result should be: [[4, 7, 9], [11, 12, 13]]")
-    print("The actual result is:", result) 
+    act_res = sub_str_idxs(seq_str, sub_str)
+    print("The expected result is:", exp_res)
+    print("The returned result is:", act_res)
+
+def unit_test(args):
+    ''' Verify test cases '''
+    test_str_sub_exp("BCXXBXXCXDXBCD", "BCD", [[4, 7, 9], [11, 12, 13]])
+    test_str_sub_exp("BCXXBXCXBCBC", "BCBC", [[0, 1, 4, 6], [8, 9, 10, 11]])
 
 def main():
     '''driver for unit_test'''
