@@ -25,9 +25,12 @@ def sub_str_idxs(seq_str, sub_str):
     if seq_str and sub_str:
         sub_idx = 0
         nxt_chr = sub_str[sub_idx]
+        print("nxt_chr:", nxt_chr)
         for seq_idx, seq_chr in enumerate(seq_str):
+            print("        idx, chr:", seq_idx, seq_chr)
             if seq_chr == nxt_chr:
                 sub_res.append(seq_idx)
+                print("sub_res:", sub_res)
                 if len(sub_res) == len_sub:
                     result.append(sub_res) 
                     sub_res = []
@@ -35,6 +38,7 @@ def sub_str_idxs(seq_str, sub_str):
                 else:
                     sub_idx += 1
                     nxt_chr = sub_str[sub_idx]
+                    print("nxt_chr:", nxt_chr)
             elif seq_chr in sub_str:
                 sub_res = []
                 sub_idx = 0
