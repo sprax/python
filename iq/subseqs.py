@@ -40,15 +40,20 @@ def sub_str_idxs(seq_str, sub_str):
                     nxt_chr = sub_str[sub_idx]
                     print("nxt_chr:", nxt_chr)
             elif seq_chr in sub_str:
-                sub_res = []
-                sub_idx = 0
+                if seq_chr == sub_str[0]:
+                    sub_res = [seq_idx]
+                    sub_idx = 1
+                    nxt_chr = sub_str[sub_idx]
+                else:
+                    sub_res = []
+                    sub_idx = 0
     return result
 
 def unit_test(args):
     ''' test sub-sequences (or non-contiguous embedded string indices) stuff '''
     result = sub_str_idxs("BCXXBXXCXDXBCD", "BCD")
-    print("The result should be [[4,7,9],[11,12,13]]")
-    print("The actual result is ", result) 
+    print("The result should be: [[4, 7, 9], [11, 12, 13]]")
+    print("The actual result is:", result) 
 
 def main():
     '''driver for unit_test'''
