@@ -84,8 +84,10 @@ def string2words_from_beg_all(string, words_already_parsed, all_parses):
 
 
 def load_dictionary(file_name):
-    '''load dictionary from text file, one word per line'''
+    '''load dictionary from text file, one word per line, IFF DICTIONARY is empty'''
     word_count = 0
+    if DICTIONARY:
+        return
     for line in open(file_name):  # opened in text-mode; all EOLs are converted to '\n'
         line = line.rstrip('\n')
         size = len(line)
@@ -156,12 +158,12 @@ def palindromes_with_palindromic_anagrams(dictionary, verbose=1):
     return result
 
 
-def two_word_palindromes(dictionary, verbose=1):
-    ''' find all 2-word palindromes in the given dictionary,
-        e.g. "live evil", "go dog", "across orca", etc.
+def two_word_palindromes_naive(dictionary, verbose=1):
+    ''' find all 2-word palindromes in the given dictionary.
+        Examples: "live evil", "go dog", "across orca", ...
+        Naive brute force N-squared algorithm.
     '''
     result = []
-    # naive brute force N-squared:
     for word_a in dictionary:
         for word_b in dictionary:
             if is_palindrome(word_a + word_b):
@@ -170,6 +172,32 @@ def two_word_palindromes(dictionary, verbose=1):
                     print(two_word_palindrome)
                 result.append(two_word_palindrome)
     return result
+
+
+def two_word_palindromes(dictionary, verbose=1):
+    ''' find all 2-word palindromes in the given dictionary.
+        e.g. "live evil", "go dog", "across orca", etc.
+    '''
+    backward_words = []
+    for word in dictionary.keys():
+        backward_words.append(word[::-1]);
+
+    result = []
+    word_b = backward_words.__next__():
+    for word_a in dictionary:
+        letter = word_a[0]
+        if letter < word_b[0]:
+            continue
+        else:
+            while letter > word_b[0]:
+                word_b = backward_words.__next__();
+        if is_palindrome(word_a + word_b):
+                two_word_palindrome = word_a + " " + word_b
+                if verbose > 0:
+                    print(two_word_palindrome)
+                result.append(two_word_palindrome)
+    return result
+
 
 
 
