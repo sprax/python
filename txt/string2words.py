@@ -116,8 +116,11 @@ def test_is_palindrome(string):
     print("i_list", i_list, "is a palindrome? ", is_palindrome(i_list))
 
 
-def palindromes_with_one_or_more_anagrams(dictionary):
+
+
+def palindromes_with_one_or_more_anagrams(dictionary, verbose=1):
     ''' find all palindromes in the given dictionary with anagrams that are also palindromes '''
+    result = []
     original_order = []
     letter_counts = defaultdict(int)
     word_anagrams = defaultdict(list)
@@ -129,11 +132,15 @@ def palindromes_with_one_or_more_anagrams(dictionary):
             original_order.append(sorted_letters)
     for sorted_letters in original_order:
         if letter_counts[sorted_letters] > 1:
-            print(word_anagrams[sorted_letters])
+            if verbose > 0:
+                print(word_anagrams[sorted_letters])
+            result.append(word_anagrams[sorted_letters])
+    return result
 
 
-def palindromes_with_palindromic_anagrams(dictionary):
+def palindromes_with_palindromic_anagrams(dictionary, verbose=1):
     ''' find all palindromes in the given dictionary with anagrams that are also palindromes '''
+    result = []
     original_order = []
     letter_counts = defaultdict(int)
     palindrome_anagrams = defaultdict(list)
@@ -145,7 +152,10 @@ def palindromes_with_palindromic_anagrams(dictionary):
             if letter_counts[sorted_letters] == 2:
                 original_order.append(sorted_letters)
     for sorted_letters in original_order:
-        print(palindrome_anagrams[sorted_letters])
+        if verbose > 0:
+            print(palindrome_anagrams[sorted_letters])
+        result.append(palindrome_anagrams[sorted_letters])
+    return result
 
 
 
