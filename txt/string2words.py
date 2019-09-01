@@ -116,7 +116,23 @@ def test_is_palindrome(string):
     print("i_list", i_list, "is a palindrome? ", is_palindrome(i_list))
 
 
-def find_palindrome_anagrams(dictionary):
+def palindromes_with_one_or_more_anagrams(dictionary):
+    ''' find all palindromes in the given dictionary with anagrams that are also palindromes '''
+    original_order = []
+    letter_counts = defaultdict(int)
+    word_anagrams = defaultdict(list)
+    for word in dictionary:
+        sorted_letters = "".join(sorted(word))
+        letter_counts[sorted_letters] += 1
+        word_anagrams[sorted_letters].append(word)
+        if is_palindrome(word):
+            original_order.append(sorted_letters)
+    for sorted_letters in original_order:
+        if letter_counts[sorted_letters] > 1:
+            print(word_anagrams[sorted_letters])
+
+
+def palindromes_with_palindromic_anagrams(dictionary):
     ''' find all palindromes in the given dictionary with anagrams that are also palindromes '''
     original_order = []
     letter_counts = defaultdict(int)
@@ -130,6 +146,7 @@ def find_palindrome_anagrams(dictionary):
                 original_order.append(sorted_letters)
     for sorted_letters in original_order:
         print(palindrome_anagrams[sorted_letters])
+
 
 
 def test_string2words():
@@ -148,7 +165,10 @@ def test_string2words():
 
     load_dictionary(file_name)
 
-    find_palindrome_anagrams(DICTIONARY)
+    print("\n\t  palindromes_with_one_or_more_anagrams(DICTIONARY):")
+    palindromes_with_one_or_more_anagrams(DICTIONARY)
+    print("\n\t  palindromes_with_palindromic_anagrams(DICTIONARY):")
+    palindromes_with_palindromic_anagrams(DICTIONARY)
     return
 
     if len(sys.argv) > 3:
