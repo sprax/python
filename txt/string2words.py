@@ -1,9 +1,10 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 '''
 Parse a string into words
 Usage: python string2words.py words.txt rainrajatacozapsrakezarfabetrainzany
 '''
 
+from collections import defaultdict
 import sys
 
 VERBOSE = 1
@@ -115,6 +116,22 @@ def test_is_palindrome(string):
     print("i_list", i_list, "is a palindrome? ", is_palindrome(i_list))
 
 
+def find_palindrome_anagrams(dictionary):
+    ''' find all palindromes in the given dictionary with anagrams that are also palindromes '''
+    original_order = []
+    letter_counts = defaultdict(int)
+    palindrome_anagrams = defaultdict(list)
+    for word in dictionary:
+        if is_palindrome(word):
+            sorted_letters = "".join(sorted(word))
+            palindrome_anagrams[sorted_letters].append(word)
+            letter_counts[sorted_letters] += 1
+            if letter_counts[sorted_letters] == 2:
+                original_order.append(sorted_letters)
+    for sorted_letters in original_order:
+        print(palindrome_anagrams[sorted_letters])
+
+
 def test_string2words():
     '''test the string2words functions'''
     if len(sys.argv) > 1:
@@ -130,6 +147,9 @@ def test_string2words():
     test_is_palindrome(strings[0])
 
     load_dictionary(file_name)
+
+    find_palindrome_anagrams(DICTIONARY)
+    return
 
     if len(sys.argv) > 3:
         word = sys.argv[3]
