@@ -116,8 +116,6 @@ def test_is_palindrome(string):
     print("i_list", i_list, "is a palindrome? ", is_palindrome(i_list))
 
 
-
-
 def palindromes_with_one_or_more_anagrams(dictionary, verbose=1):
     ''' find all palindromes in the given dictionary with anagrams that are also palindromes '''
     result = []
@@ -158,6 +156,22 @@ def palindromes_with_palindromic_anagrams(dictionary, verbose=1):
     return result
 
 
+def two_word_palindromes(dictionary, verbose=1):
+    ''' find all 2-word palindromes in the given dictionary,
+        e.g. "live evil", "go dog", "across orca", etc.
+    '''
+    result = []
+    # naive brute force N-squared:
+    for word_a in dictionary:
+        for word_b in dictionary:
+            if is_palindrome(word_a + word_b):
+                two_word_palindrome = word_a + " " + word_b
+                if verbose > 0:
+                    print(two_word_palindrome)
+                result.append(two_word_palindrome)
+    return result
+
+
 
 def test_string2words():
     '''test the string2words functions'''
@@ -179,6 +193,10 @@ def test_string2words():
     palindromes_with_one_or_more_anagrams(DICTIONARY)
     print("\n\t  palindromes_with_palindromic_anagrams(DICTIONARY):")
     palindromes_with_palindromic_anagrams(DICTIONARY)
+
+    print("\n\t  two_word_palindromes(DICTIONARY):")
+    two_word_palindromes(DICTIONARY)
+
     return
 
     if len(sys.argv) > 3:
