@@ -183,14 +183,16 @@ def two_word_palindromes(dictionary, verbose=1):
         backward_words.append(word[::-1]);
 
     result = []
-    word_b = backward_words.__next__():
+    j = 0
+    word_b = backward_words[j]
     for word_a in dictionary:
         letter = word_a[0]
         if letter < word_b[0]:
             continue
         else:
             while letter > word_b[0]:
-                word_b = backward_words.__next__();
+                j = j + 1
+                word_b = backward_words[j];
         if is_palindrome(word_a + word_b):
                 two_word_palindrome = word_a + " " + word_b
                 if verbose > 0:
