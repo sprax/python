@@ -181,23 +181,38 @@ def two_word_palindromes(dictionary, verbose=1):
     backward_words = []
     for word in dictionary.keys():
         backward_words.append(word[::-1]);
+    bwit = iter(sorted(backward_words))
 
     result = []
-    j = 0
-    word_b = backward_words[j]
+    next_a, next_b = False, False
+    word_r = next(bwit)
     for word_a in dictionary:
-        letter = word_a[0]
-        if letter < word_b[0]:
-            continue
+        while word_a > word_r:
+            word_r = next(bwit, None)
+            if not word_r:
+                return result
+        for (aaa, bbb) in zip(word_a, word_r):
+            if aaa != bbb:
+                break
+            # if aaa < bbb:
+            #     next_a = True
+            #     break
+            #  aaa > bbb:
+            #     next_b = True
+            #     break
         else:
-            while letter > word_b[0]:
-                j = j + 1
-                word_b = backward_words[j];
-        if is_palindrome(word_a + word_b):
+            word_b = word_r[::-1]
+            if is_palindrome(word_a + word_b):
                 two_word_palindrome = word_a + " " + word_b
                 if verbose > 0:
                     print(two_word_palindrome)
                 result.append(two_word_palindrome)
+        # if next_a:
+        #     next_a = False
+        #     continue
+        # if next_b:
+        #     next_b = False
+        #     word_r = next(bwit)
     return result
 
 
