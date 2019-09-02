@@ -4,7 +4,12 @@ Parse a string into words
 Usage: python string2words.py words.txt rainrajatacozapsrakezarfabetrainzany
 '''
 
+
+import argparse
+from collections import Counter
 from collections import defaultdict
+import pdb
+from pdb import set_trace
 import sys
 
 VERBOSE = 1
@@ -176,7 +181,7 @@ def two_word_palindromes_naive(dictionary, verbose=1):
 
 def two_word_palindromes(dictionary, verbose=1):
     ''' find all 2-word palindromes in the given dictionary.
-        e.g. "live evil", "go dog", "across orca", etc.
+        e.g. "live evil", "go dog", "across orca", "shallot ayatollahs"
     '''
     backward_words = []
     for word in dictionary.keys():
@@ -187,13 +192,17 @@ def two_word_palindromes(dictionary, verbose=1):
     next_a, next_b = False, False
     word_r = next(bwit)
     for word_a in dictionary:
+        if word_a == 'ten':
+            set_trace()
         while word_a > word_r:
             word_r = next(bwit, None)
             if not word_r:
                 return result
+        ord = 0
         for (aaa, bbb) in zip(word_a, word_r):
             if aaa != bbb:
                 break
+            ord += 1
             # if aaa < bbb:
             #     next_a = True
             #     break
@@ -201,12 +210,19 @@ def two_word_palindromes(dictionary, verbose=1):
             #     next_b = True
             #     break
         else:
-            word_b = word_r[::-1]
-            if is_palindrome(word_a + word_b):
-                two_word_palindrome = word_a + " " + word_b
-                if verbose > 0:
-                    print(two_word_palindrome)
-                result.append(two_word_palindrome)
+            word_a_ord = word_a[0:ord]
+            while True:
+                word_b = word_r[::-1]
+                if is_palindrome(word_a + word_b):
+                    two_word_palindrome = word_a + " " + word_b
+                    if verbose > 0:
+                        print(two_word_palindrome)
+                    result.append(two_word_palindrome)
+                word_r = next(bwit, None)
+                if not word_r:
+                    return result
+                if word_r[0:ord] != word_a_ord:
+                    break
         # if next_a:
         #     next_a = False
         #     continue
@@ -240,8 +256,8 @@ def test_string2words():
     palindromes_with_palindromic_anagrams(DICTIONARY)
 
     print("\n\t  two_word_palindromes(DICTIONARY):")
-    two_word_palindromes(DICTIONARY)
-
+    twps = two_word_palindromes(DICTIONARY)
+    print("two_word_palindromes len: ", len(twps))
     return
 
     if len(sys.argv) > 3:
