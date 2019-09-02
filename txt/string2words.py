@@ -186,18 +186,22 @@ def two_word_palindromes(dictionary, verbose=1):
     backward_words = []
     for word in dictionary.keys():
         backward_words.append(word[::-1]);
-    bwit = iter(sorted(backward_words))
+    # bwit = iter(sorted(backward_words))
+    backward_words.sort()
+    size = len(backward_words)
 
+    idx = 0
     result = []
     next_a, next_b = False, False
-    word_r = next(bwit)
+    word_r = backward_words[idx]
     for word_a in dictionary:
         if word_a == 'ten':
             set_trace()
-        while word_a > word_r:
-            word_r = next(bwit, None)
-            if not word_r:
+        while word_a[0:2] > word_r[0:2]:
+            idx += 1
+            if idx >= size:
                 return result
+            word_r = backward_words[idx]
         ord = 0
         for (aaa, bbb) in zip(word_a, word_r):
             if aaa != bbb:
@@ -218,9 +222,10 @@ def two_word_palindromes(dictionary, verbose=1):
                     if verbose > 0:
                         print(two_word_palindrome)
                     result.append(two_word_palindrome)
-                word_r = next(bwit, None)
-                if not word_r:
+                idx += 1
+                if idx >= size:
                     return result
+                word_r = backward_words[idx]
                 if word_r[0:ord] != word_a_ord:
                     break
         # if next_a:
