@@ -196,7 +196,6 @@ def two_word_palindromes_sophomore(dictionary, verbose=1):
             rev_words_seg = []
             rev_words_segs[r_0] = rev_words_seg
         rev_words_seg.append(rev_word)
-
     seg = 0
     for word_a in dictionary:
         a_0 = word_a[0]
@@ -220,7 +219,6 @@ def two_word_palindromes_sophomore(dictionary, verbose=1):
     return result
 
 
-
 def two_word_palindromes(dictionary, verbose=1):
     ''' find all 2-word palindromes in the given dictionary.
         e.g. "live evil", "go dog", "across orca", "shallot ayatollahs"
@@ -231,7 +229,6 @@ def two_word_palindromes(dictionary, verbose=1):
     # bwit = iter(sorted(backward_words))
     backward_words.sort()
     size = len(backward_words)
-
     idx = 0
     result = []
     next_a, next_b = False, False
@@ -280,8 +277,6 @@ def two_word_palindromes(dictionary, verbose=1):
         #     next_b = False
         #     word_r = next(bwit)
     return result
-
-
 
 
 def test_string2words():
