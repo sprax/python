@@ -170,13 +170,55 @@ def two_word_palindromes_naive(dictionary, verbose=1):
     '''
     result = []
     for word_a in dictionary:
+        first = word_a[0]
         for word_b in dictionary:
-            if is_palindrome(word_a + word_b):
-                two_word_palindrome = word_a + " " + word_b
-                if verbose > 0:
-                    print(two_word_palindrome)
-                result.append(two_word_palindrome)
+            if first == word_b[-1]:
+                if is_palindrome(word_a + word_b):
+                    two_word_palindrome = word_a + " " + word_b
+                    if verbose > 0:
+                        print(two_word_palindrome)
+                    result.append(two_word_palindrome)
     return result
+
+def two_word_palindromes_sophomore(dictionary, verbose=1):
+    ''' find all 2-word palindromes in the given dictionary.
+        Examples: "live evil", "go dog", "across orca", ...
+        Naive brute force N-squared algorithm.
+    '''
+    result = []
+    rev_words = [word[::-1] for word in dictionary.keys()]
+    rev_words.sort()
+    r_0 = '\0'
+    rev_words_segs = {}
+    for rev_word in rev_words:
+        if  r_0 < rev_word[0]:
+            r_0 = rev_word[0]
+            rev_words_seg = []
+            rev_words_segs[r_0] = rev_words_seg
+        rev_words_seg.append(rev_word)
+
+    seg = 0
+    for word_a in dictionary:
+        a_0 = word_a[0]
+        a_z = len(word_a)
+        for word_r in rev_words_segs[a_0]:
+            ord = 0
+            for (aaa, bbb) in zip(word_a, word_r):
+                if aaa != bbb:
+                    break
+                ord += 1
+            else:
+                r_z = len(word_r)
+                if  a_z == r_z  or \
+                    a_z < r_z and is_palindrome(word_r[ord:]) or \
+                    a_z > r_z and is_palindrome(word_a[ord:]):
+                    word_b = word_r[::-1]
+                    two_word_palindrome = word_a + " " + word_b
+                    if verbose > 0:
+                        print(two_word_palindrome)
+                    result.append(two_word_palindrome)
+    return result
+
 
 
 def two_word_palindromes(dictionary, verbose=1):
@@ -263,8 +305,15 @@ def test_string2words():
     print("\n\t  palindromes_with_palindromic_anagrams(DICTIONARY):")
     palindromes_with_palindromic_anagrams(DICTIONARY)
 
-    print("\n\t  two_word_palindromes(DICTIONARY):")
-    twps = two_word_palindromes(DICTIONARY)
+    if True:
+        print("\n\t  two_word_palindromes_sophomore(DICTIONARY):")
+        twps = two_word_palindromes_sophomore(DICTIONARY)
+    elif True:
+        print("\n\t  two_word_palindromes_naive(DICTIONARY):")
+        twps = two_word_palindromes_naive(DICTIONARY)
+    else:
+        print("\n\t  two_word_palindromes(DICTIONARY):")
+        twps = two_word_palindromes(DICTIONARY)
     print("two_word_palindromes list len: ", len(twps))
     uniq = set(twps)
     print("two_word_palindromes  set len: ", len(uniq))
