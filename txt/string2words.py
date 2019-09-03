@@ -195,8 +195,8 @@ def two_word_palindromes(dictionary, verbose=1):
     next_a, next_b = False, False
     word_r = backward_words[idx]
     for word_a in dictionary:
-        if word_a == 'ten':
-            set_trace()
+        # if word_a == 'ten' or word_a == 'not':
+        #     set_trace()
         while word_a[0:2] > word_r[0:2]:
             idx += 1
             if idx >= size:
@@ -215,6 +215,7 @@ def two_word_palindromes(dictionary, verbose=1):
             #     break
         else:
             word_a_ord = word_a[0:ord]
+            tmp = idx
             while True:
                 word_b = word_r[::-1]
                 if is_palindrome(word_a + word_b):
@@ -222,12 +223,14 @@ def two_word_palindromes(dictionary, verbose=1):
                     if verbose > 0:
                         print(two_word_palindrome)
                     result.append(two_word_palindrome)
-                idx += 1
-                if idx >= size:
+                tmp += 1
+                if tmp >= size:
                     return result
-                word_r = backward_words[idx]
+                word_r = backward_words[tmp]
                 if word_r[0:ord] != word_a_ord:
                     break
+            # idx += 1
+            word_r = backward_words[idx]
         # if next_a:
         #     next_a = False
         #     continue
@@ -262,7 +265,9 @@ def test_string2words():
 
     print("\n\t  two_word_palindromes(DICTIONARY):")
     twps = two_word_palindromes(DICTIONARY)
-    print("two_word_palindromes len: ", len(twps))
+    print("two_word_palindromes list len: ", len(twps))
+    uniq = set(twps)
+    print("two_word_palindromes  set len: ", len(uniq))
     return
 
     if len(sys.argv) > 3:
