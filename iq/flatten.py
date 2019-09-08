@@ -49,9 +49,11 @@ Testing Questions:
 
 Bonus Questions:
 17. Does the simple flatten_df_rec give pre-order, in-order, post-order, or what?
-18. Can any N-ary tree be mapped uniquely (and thus reversibly) to a list of leaves and recursive lists?
+18. Can any N-ary tree be mapped uniquely (and thus reversibly) to a list of
+    leaves and recursive lists?
 18a.    How?    [Hint: Where do you put the tree's root node?]
-18b.    A trie is a kind of tree, right?  How can you map a prefix-tree of all English words to a recursive list?
+18b.    A trie is a kind of tree, right?  How can you map a prefix-tree of all English words
+        to a recursive list?
         [Hint: What is the root node of such a trie or prefix-tree?]
 19. Can any list of lists be mapped uniquely (and thus reversibly) to an N-ary tree?
 18a.    Can you map each list value to exactly one tree node?
