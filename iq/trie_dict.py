@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # Sprax Lines       2016.12.26      Written with Python 3.5
-"""LHRWCC: Linear Homogenous Recurrence With Constant Coefficients.
-   Class and unit tests.
-   """
+""" Word trie using defaultdicts. """
 
 import unittest
 import fibonaccis
