@@ -10,6 +10,7 @@ import argparse
 # from pdb import set_trace
 import random
 from collections import namedtuple
+from collections import defaultdict
 
 
 ParentChildPair = namedtuple("ParentChildPair", "parent child")
@@ -28,9 +29,12 @@ def have_common_ancestor(pairs, id_a, id_b):
     as found in parent-child pairs
     '''
     # find all ancestors of id_a
-    ancs_a = set()
+    anc_set_a = set()
+    anc_dct_a = defaultdict(list)
     for parent, child in pairs:
         print("PC", parent, child)
+        if child == id_a:
+            anc_set_a.add(parent)
     return False
 
 
