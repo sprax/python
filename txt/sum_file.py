@@ -12,6 +12,8 @@ import heapq
 import os.path
 import re
 import math
+import pdb
+from pdb import set_trace
 import string
 import sys
 import text_ops
@@ -292,9 +294,10 @@ def print_author_count(ddct, out_file=sys.stdout, prefix="git_blames"):
     for _, val in ddct.items():
         total += val
     for key, val in sorted(ddct.items(), key=lambda dit: dit[1], reverse=True):
-        author = AUTHOR_NAME[key]
+        # author = AUTHOR_NAME[key]
+        author = key
         percent = val * 100.0 / total
-        print("%s:  %8s: %6d %7.2f%%" % (prefix, author, val, percent), file=out_file)
+        print("%s:  %14s: %6d %7.2f%%" % (prefix, author, val, percent), file=out_file)
 
 def add_git_sums_to_file(in_path, out_path, charset='utf8'):
     '''
@@ -307,11 +310,12 @@ def add_git_sums_to_file(in_path, out_path, charset='utf8'):
         with (sys.stdout if out_path == '-' else open(out_path, 'w')) as out_file:
             total_counts = defaultdict(int)
             for line in text:
+                # set_trace()
                 line = line.rstrip()
                 toks = re.split(r'\W+', line.lstrip())
-                if len(toks) == 2 and len(toks[0]) == 3:
-                    author = toks[0]
-                    count = int(toks[1])    # TODO: check if parseint succeeds
+                if len(toks) > 2 and toks[1] == 'author':
+                    author = toks[2]
+                    count = int(toks[0])    # TODO: check if parseint succeeds
                     # print("================= %s => %d" % (author, count))
                     if out_of_sum:
                         out_of_sum = False
