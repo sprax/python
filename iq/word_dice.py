@@ -97,9 +97,9 @@ def can_roll_word_tail(head, tail, dice, verbose):
 
 def can_roll_word(word, dice, verbose):
     ''' True IFF word can be made from the given dice '''
-    if not word:
-        return True
-    return can_roll_word_tail(word[0], word[1:], dice, verbose)
+    # if not word:
+    #     return True
+    return can_roll_word_tail(word[0], word[1:], dice, verbose) if word else True
 
 
 def fail_test_can_roll_word(word, dice, expect, verbose):
