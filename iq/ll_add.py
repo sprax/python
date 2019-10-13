@@ -11,24 +11,50 @@ class ListNode(object):
         self.next = None
 
 
-def num_from_rdl(rdl):
-    ''' convert a linked list of digits in reverse order, that is,
-        an rdo = reversed digit list,
+def num_from_fdl(fdl):
+    ''' convert a linked list of digits in forward order, that is,
+        an fdl = forward digit list (most significant digit first),
         to a number.
     '''
-    sum = 0
+    num = 0
+    if isinstance(fdl, ListNode):
+        while fdl:
+            num = num * 10 + fdl.val
+            fdl = fdl.next
+            if not fdl:
+                break
+    return num
+
+
+
+def num_from_rdl(rdl):
+    ''' convert a linked list of digits in reverse order, that is,
+        an rdo = reversed digit list (least significant digit first),
+        to a number.
+    '''
+    num = 0
     if isinstance(rdl, ListNode):
         pot = 1
         while rdl:
-            sum += rdl.val * pot
+            num += rdl.val * pot
             rdl = rdl.next
             if not rdl:
-                return sum
+                return num
             pot *= 10
-    return sum
+    return num
 
 
-def add_two_numbers(l1, l2):
+def add_two_fwd_dig_lls(l1, l2):
+    """
+    :type l1: ListNode
+    :type l2: ListNode
+    :rtype: ListNode
+    """
+    return num_from_fdl(l1) + num_from_fdl(l2)
+
+
+
+def add_two_rev_dig_lls(l1, l2):
     """
     :type l1: ListNode
     :type l2: ListNode
@@ -52,8 +78,10 @@ def main():
     nx = nx.next
     nx.next = ListNode(9)
     # set_trace()
-    num = add_two_numbers(l1, l2)
-    print("num =", num)
+    num = add_two_fwd_dig_lls(l1, l2)
+    print("add_two_fwd_dig_lls =>", num)
+    num = add_two_rev_dig_lls(l1, l2)
+    print("add_two_rev_dig_lls =>", num)
 
 
 if __name__ == '__main__':
