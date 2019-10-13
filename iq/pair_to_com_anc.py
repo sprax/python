@@ -44,6 +44,9 @@ def have_common_ancestor_ab(pairs, id_a, id_b):
                 anc_added = set_add(anc_set_a, parent)
             if child == id_b or child in anc_set_b:
                 anc_added = set_add(anc_set_b, parent)
+                if parent in anc_set_a:
+                    print("have_common_ancestor_ab: return early with parent of b:", parent)
+                    return {parent}
         if not anc_added:
             break
     print("anc_set_a:", anc_set_a)

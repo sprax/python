@@ -59,24 +59,6 @@ class Chrix(namedtuple("Chrix", "c1 c2 c3 c4 c5 c6")):
 
 ###############################################################################
 
-def can_roll_word_tail(head, tail, dice, verbose):
-    ''' recursive head/tail word dice checker.  Is it tail-recursive? '''
-    for die in dice:
-        if head in die:
-            if tail:
-                # rest = dice.copy()    # needs Python 3
-                rest = dice
-                rest.remove(die)
-                if verbose > 2:
-                    print("Found head %s, look for tail %s in the rest: %s" % (head, tail, rest))
-                if can_roll_word_tail(tail[0], tail[1:], rest, verbose):
-                    return True
-            else:
-                if verbose > 1:
-                    print("Found head %s and the tail is empty." % head)
-                return True # The head was found and the tail is empty.
-    return False
-
 
 def dice_in_word_order_error(word, dice, verbose):
     ''' Returns 0 if dice list is already in word order, else an error measure '''
@@ -89,34 +71,146 @@ def dice_in_word_order_error(word, dice, verbose):
         error += letter not in die
     return error
 
+
+COUNTER = 0
+
+def can_roll_word_tail(head, tail, dice, verbose):
+    ''' recursive head/tail word dice checker.  Is it tail-recursive?
+    '''
+    global COUNTER
+    COUNTER += 1
+    for die in dice:
+        if head in die:
+            if tail:
+                # rest = dice.copy()    # needs Python 3
+                rest = dice[:]
+                rest.remove(die)
+                if verbose > 2:
+                    print("Found head %s, look for tail %s in the rest: %s" % (head, tail, rest))
+                if can_roll_word_tail(tail[0], tail[1:], rest, verbose):
+                    return True
+            else:
+                if verbose > 2:
+                    print("Found head %s and the tail is empty." % head)
+                return True # The head was found and the tail is empty.
+    return False
+
 def can_roll_word(word, dice, verbose):
-    ''' True IFF word can be made from give dice '''
-    return can_roll_word_tail(word[0], word[1:], dice, verbose)
+    ''' True IFF word can be made from the given dice '''
+    # if not word:
+    #     return True
+    return can_roll_word_tail(word[0], word[1:], dice, verbose) if word else True
 
-#
-# def test_can_roll_word(word, dice, expect, verbose):
-#     ''' True IFF can_roll_word result == expect '''
-#     pass
 
-def unit_test(args):
-    ''' test Chrice (character-dice) stuff '''
-    verbose = args.verbose
-    word = 'fool'
-    # dice = Chrix.from_chars('a','b','c','d','e','f')
-    dice = [
+def fail_test_can_roll_word(word, dice, expect, verbose):
+    ''' True IFF can_roll_word result != expect '''
+    # set_trace()
+    global COUNTER
+    COUNTER = 0
+    actual = can_roll_word(word, dice, verbose)
+    if verbose > 0:
+        print("COUNTER: %4d  word: %s \t roll: %s" % (COUNTER, word, actual))
+    return actual != expect
+
+TEST_DATA = [
+    ('fool', [
         Chrix('a b c d e f'),
         Chrix('lololo'),
         Chrix('olives'),
         Chrix('jklmno'),
-        ]
+        ],
+     True,
+    ),
+    ('fool', [
+        Chrix('olives'),
+        Chrix('lololo'),
+        Chrix('jklmno'),
+        Chrix('a b c d e f'),
+        ],
+     True
+    ),
+    ('dude', [
+        Chrix('olives'),
+        Chrix('lololo'),
+        Chrix('jklmno'),
+        Chrix('a b c d e f'),
+        ],
+     False
+    ),
+    ('hello', [
+        Chrix('olives'),
+        Chrix('ghijkl'),
+        Chrix('a b c d e f'),
+        Chrix('lololo'),
+        Chrix('jklmno'),
+        ],
+     True
+    ),
+    ('dermatoglyphics', [
+        Chrix('xzbfjs'),
+        Chrix('nuqvwc'),
+        Chrix('zbfjki'),
+        Chrix('quvwxh'),
+        Chrix('fjknup'),
+        Chrix('vwxzby'),
+        Chrix('zbfjul'),
+        Chrix('quvwxg'),
+        Chrix('bfjkno'),
+        Chrix('xzbfut'),
+        Chrix('nqbvwa'),
+        Chrix('quvwxm'),
+        Chrix('zubfjr'),
+        Chrix('nqvwxe'),
+        Chrix('bfjkud'),
+        ],
+     True
+    ),
+    ('dermatoglyphics', [
+        Chrix('dermas'),
+        Chrix('ermatc'),
+        Chrix('rmatoi'),
+        Chrix('matogh'),
+        Chrix('atoglp'),
+        Chrix('toglpy'),
+        Chrix('ogphyl'),
+        Chrix('lyphig'),
+        Chrix('dermao'),
+        Chrix('ermagt'),
+        Chrix('rmatoa'),
+        Chrix('atoglm'),
+        Chrix('toglyr'),
+        Chrix('oglype'),
+        Chrix('glyphd'),
+        ],
+     True
+    ),
+]
+# euouae
+# uncopyrightable
 
+def show_dice():
+    '''hard case'''
+    diceA = TEST_DATA[5][1]
+    diceB = TEST_DATA[4][1]
+    for dieA, dieB in zip(diceA, diceB):
+        print("[", dieA, "]   v.   [", dieB, "]")
+
+
+
+def unit_test(args):
+    ''' test Chrice (character-dice) stuff '''
+    verbose = args.verbose
+    num_tests = 0
     num_wrong = 0
-    # word_dice = [(word, dice)]
-    expect = 1
-    actual = can_roll_word(word, dice, verbose)
-    num_wrong += (actual != expect)
 
-    print("unit_test for can_roll_word:  num_tests:", 1,
+    for word, dice, expect in TEST_DATA:
+        num_tests += 1
+        num_wrong += fail_test_can_roll_word(word, dice, expect, verbose)
+        if verbose > 1:
+            print("")
+
+
+    print("unit_test for can_roll_word:  num_tests:", num_tests,
           " num_wrong:", num_wrong, " -- ", "FAIL" if num_wrong else "PASS")
 
 
@@ -131,4 +225,5 @@ def main():
 
 
 if __name__ == '__main__':
+    show_dice()
     main()
