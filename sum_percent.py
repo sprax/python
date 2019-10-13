@@ -12,6 +12,7 @@ Written for Python 3.7.4
 import fileinput
 
 def sum_percent(beg=0, end=1):
+    ''' add percentage column after number & name columns '''
     total_tags, total_debt = 0, 0
     auths, debts = [], []
     for line in fileinput.input():
