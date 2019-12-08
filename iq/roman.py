@@ -66,6 +66,18 @@ class Solution(object):
         if z < 0:
             return 0
         n = self.rondo.get(s[z])
+        while z > 0:
+            z -= 1
+            d = self.rondo.get(s[z])
+            if d == 1 and s[z+1] != 'I':
+                n -= 1
+            elif d == 10 and s[z+1] == 'C' or s[z+1] == 'L':
+                n -= 10
+            elif d == 100 and s[z+1] == 'D' or s[z+1] == 'M':
+                n -= 100
+            else:
+                n += d
+            print("s.{} => d.{} => n.{}".format(s[z], d, n))
         return n
 
 def main():
