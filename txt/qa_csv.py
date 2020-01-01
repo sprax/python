@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-'''Read and write CSV files for QA'''
+'''
+@file: qa_csv.py
+Read and write CSV files for QA
+'''
 import csv
 from quat import Quat
 
