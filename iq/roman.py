@@ -80,6 +80,63 @@ class Solution(object):
             print("s.{} => d.{} => n.{}".format(s[z], d, n))
         return n
 
+    def roman_to_int(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        n = 0
+        z = len(s)
+        while z > 0:
+            z -= 1;
+            c = s[z]
+            if c == 'I':
+                n += 1
+            else:
+                break
+        if c == 'V':
+            n += 5
+            if z > 0:
+                z -= 1
+                c = s[z]
+                if c == 'I':
+                    n -= 1
+                    z -= 1
+                    c = s[z]
+        elif c == 'X':
+            n += 10
+            if z > 0:
+                z -= 1
+                c = s[z]
+                if c == 'I':
+                    n -= 1
+                    z -= 1
+                    c = s[z]
+        while z > 0 and c == 'X':
+            n += 10
+            z -= 1
+            c = s[z]
+
+        . . .
+
+        if z < 0:
+            return 0
+        n = self.rondo.get(s[z])
+        while z > 0:
+            z -= 1
+            d = self.rondo.get(s[z])
+            if d == 1 and s[z+1] != 'I':
+                n -= 1
+            elif d == 10 and s[z+1] == 'C' or s[z+1] == 'L':
+                n -= 10
+            elif d == 100 and s[z+1] == 'D' or s[z+1] == 'M':
+                n -= 100
+            else:
+                n += d
+            print("s.{} => d.{} => n.{}".format(s[z], d, n))
+        return n
+
+
 def main():
     '''drive tests of Roman number converters'''
     parser = argparse.ArgumentParser(description="convert Roman number strings to ints")
