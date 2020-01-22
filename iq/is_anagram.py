@@ -20,3 +20,15 @@ class Solution(object):
         return sum == 0
 
 
+
+def main():
+    ''' driver for Solution '''
+    sol = Solution()
+    sss = "anagram"
+    ttt = "magaran"
+    isa = sol.isAnagram(sss, ttt)
+    print("isAnagram({}, {}) => {}".format(sss, ttt, isa))
+
+
+if __name__ == '__main__':
+    main()
