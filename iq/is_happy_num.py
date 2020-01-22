@@ -20,7 +20,11 @@ class Solution(object):
         :type n: int
         :rtype: int
         """
-        ss = str(n)
+        try:
+            num = int(n)
+        except ValueError:
+            return 0
+        ss = str(num)
         sums = set()
         while True:
             x = 0
@@ -46,11 +50,16 @@ class Solution(object):
 def main():
     ''' test Solution '''
     sol = Solution()
-    for x in range(37):
+    for x in range(99):
         # print("isHappy({}) => {}".format(x, sol.isHappy(x)))
         sic = sol.is_cyclic(x)
         hap = 1 == sic
-        print("is_cyclic({}) => {:3} (so happy == {})".format(x, sic, hap))
+        print("is_cyclic({:3}) => {:3} (so happy == {})".format(x, sic, hap))
+
+    x = 'un1'
+    sic = sol.is_cyclic(x)
+    hap = 1 == sic
+    print("is_cyclic({:3}) => {:3} (so happy == {})".format(x, sic, hap))
 
 if __name__ == '__main__':
     main()
