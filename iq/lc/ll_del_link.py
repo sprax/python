@@ -36,6 +36,55 @@ class Solution(object):
         except AttributeError:
             pass
 
+    def next_not_value(self, node, value):
+        """
+        :type node: ListNode
+        :type data: int
+        :rtype: ListNode
+        """
+        # set_trace()
+        while (node and node.data == value):
+            node = node.next
+        return node
+
+
+    def remove_by_value(self, node, value):
+        """
+        :type node: ListNode
+        :type data: int
+        :rtype: ListNode
+        """
+        # set_trace()
+        head = self.next_not_value(node, value)
+        node = head
+        while (node):
+            # print(" %d" % node.data, end='')
+            node.next = self.next_not_value(node.next, value)
+            node = node.next
+        return head
+
+    def removeElements(self, head, data):
+        """
+        LeetCode signature
+        :type head: ListNode
+        :type data: int
+        :rtype: ListNode
+        """
+        while (head and head.data == data):
+            head = head.next
+
+        node = head
+        while (node):
+            print(" %d" % node.data, end='')
+            next = node.next
+            while (next and next.data == data):
+                next = next.next
+            node.next = next
+            node = node.next
+        return head
+
+
+
 def main():
     ''' test driver '''
     sol = Solution()
@@ -52,18 +101,29 @@ def main():
     sol.deleteNode(le)
     printList(l1, "DEL saved end N: ")
 
+    l2 = ListNode(6)
+    l2.next = ListNode(6)
+    nx = l2.next
+    nx.next = ListNode(7)
+    nx = nx.next
+    nx.next = ListNode(6)
+    nx = nx.next
+    nx.next = ListNode(8)
+    nx = nx.next
+    nx.next = ListNode(6)
+    nx = nx.next
+    nx.next = ListNode(6)
+    nx = nx.next
+    nx.next = ListNode(9)
+    nx = nx.next
+    nx.next = ListNode(6)
+    # set_trace()
+    l3 = (l1, l2)
+    printList(l2, "before: ")
+    # l2 = sol.remove_by_value(l2, 6)
+    l2 = sol.removeElements(l2, 6)
+    printList(l2, " after: ")
 
-    #
-    # l2 = ListNode(5)
-    # l2.next = ListNode(6)
-    # nx = l2.next
-    # nx.next = ListNode(7)
-    # nx = nx.next
-    # nx.next = ListNode(8)
-    # nx = nx.next
-    # nx.next = ListNode(9)
-    # # set_trace()
-    # l3 = (l1, l2)
 
 
 if __name__ == '__main__':
