@@ -6,8 +6,8 @@ from pdb import set_trace
 
 class ListNode(object):
     ''' Definition for singly-linked list. '''
-    def __init__(self, data):
-        self.data = data
+    def __init__(self, val):
+        self.val = val
         self.next = None
 
 # Utility function to print the linked LinkedList
@@ -15,7 +15,7 @@ def printList(node, label=''):
     print("%s[" % label, end='')
     temp = node
     while (temp):
-        print(" %d" % temp.data, end='')
+        print(" %d" % temp.val, end='')
         temp = temp.next
     print(']')
 
@@ -27,11 +27,11 @@ class Solution(object):
         """
         # # with temp, faster than 24.3%
         # nxt = node.next
-        # node.data = nxt.data
+        # node.val = nxt.val
         # node.next = nxt.next
         # direct, faster than 83.3%
         try:
-            node.data = node.next.data
+            node.val = node.next.val
             node.next = node.next.next
         except AttributeError:
             pass
@@ -39,11 +39,11 @@ class Solution(object):
     def next_not_value(self, node, value):
         """
         :type node: ListNode
-        :type data: int
+        :type val: int
         :rtype: ListNode
         """
         # set_trace()
-        while (node and node.data == value):
+        while (node and node.val == value):
             node = node.next
         return node
 
@@ -51,33 +51,33 @@ class Solution(object):
     def remove_by_value(self, node, value):
         """
         :type node: ListNode
-        :type data: int
+        :type val: int
         :rtype: ListNode
         """
         # set_trace()
         head = self.next_not_value(node, value)
         node = head
         while (node):
-            # print(" %d" % node.data, end='')
+            # print(" %d" % node.val, end='')
             node.next = self.next_not_value(node.next, value)
             node = node.next
         return head
 
-    def removeElements(self, head, data):
+    def removeElements(self, head, val):
         """
         LeetCode signature
         :type head: ListNode
-        :type data: int
+        :type val: int
         :rtype: ListNode
         """
-        while (head and head.data == data):
+        while (head and head.val == val):
             head = head.next
 
         node = head
         while (node):
-            print(" %d" % node.data, end='')
+            print(" %d" % node.val, end='')
             next = node.next
-            while (next and next.data == data):
+            while (next and next.val == val):
                 next = next.next
             node.next = next
             node = node.next
