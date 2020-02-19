@@ -38,36 +38,74 @@ Accepted    11,598      Submissions 18,960
 import pdb
 from pdb import set_trace
 from typing import List
+from collections import defaultdict
 
 class Solution:
+
+    def __init__(self):
+        self.seen = defaultdict(int)
+
     def canReach(self, arr: List[int], start: int) -> bool:
-        visited = [start]
-        while visited:
-            siz = len(arr)
-            idx = visited.pop()
-            jmp = arr[idx]
-            nxt = idx + jmp
-            if nxt < siz:
-                if arr[nxt] == 0:
-                    return True
-                if nxt not in visited:
-                    visited.append(nxt)
-            nxt = idx - jmp
-            if nxt >= 0:
-                if arr[nxt] == 0:
-                    return True
-                if nxt not in visited:
-                    visited.append(nxt)
+        return self.can_reach_96_100(arr, start)
+
+    def can_reach_96_100(self, arr: List[int], start: int) -> bool:
+        '''
+        Runtime: 232 ms, faster than 95.46% of Python3 online submissions for Jump Game III.
+        Memory Usage: 19.3 MB, less than 100.00% of Python3 online submissions for Jump Game III.
+        '''
+        return self.can_reach_rec(arr, start)
+
+    def can_reach_rec(self, arr: List[int], idx: int) -> bool:
+        val = arr[idx]
+        if val == 0:
+            return True
+        self.seen[idx] = val
+        nxt = idx + val
+        if nxt < len(arr) and not self.seen[nxt]:
+            self.seen[nxt] = val
+            if self.can_reach_rec(arr, nxt):
+                return True
+        nxt = idx - val
+        if 0 <= nxt and not self.seen[nxt]:
+            self.seen[nxt] = val
+            if self.can_reach_rec(arr, nxt):
+                return True
         return False
+
+    def can_reach_33_100(self, arr: List[int], start: int) -> bool:
+        end = len(arr)
+        visited = set()
+        queue = [start]
+        while queue:
+            idx = queue.pop()
+            val = arr[idx]
+            if val == 0:
+                return True
+            visited.add(idx)
+            nxt = idx + val
+            if nxt < end and nxt not in visited:
+                queue.append(nxt)
+            nxt = idx - val
+            if nxt >= 0 and nxt not in visited:
+                queue.append(nxt)
+        return False
+
+def test_one(arr, start, expect):
+    sol = Solution()
+    actual = sol.canReach(arr, start)
+    print("arr({}) & start {} => {} =?= {}".format(arr, start, actual, expect))
+    return actual != expect
 
 def main():
     ''' test driver '''
-    sol = Solution()
+    num_wrong = 0
     arr = [4,2,3,0,3,1,2]
-    start = 5
-    expect = True
-    actual = sol.canReach(arr, start)
-    print("arr({}) & start {} => {} =?= {}".format(arr, start, actual, expect))
+    beg = 5
+    num_wrong += test_one(arr, beg, True)
+    arr = [3,0,2,1,2]
+    beg = 2
+    num_wrong += test_one(arr, beg, False)
+    print("num_wrong: %d" % num_wrong)
 
 
 if __name__ == '__main__':

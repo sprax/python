@@ -4,8 +4,10 @@
 import pdb
 from pdb import set_trace
 
+
 class ListNode(object):
     ''' Definition for singly-linked list. '''
+
     def __init__(self, val):
         self.val = val
         self.next = None
@@ -31,6 +33,7 @@ class Solution:
             head = next
         return tail
 
+
 def main():
     ''' test driver '''
     sol = Solution()
@@ -54,7 +57,6 @@ def main():
     printList(l2, "before: ")
     lr = sol.reverseList(l2)
     printList(lr, " after: ")
-
 
 
 if __name__ == '__main__':
