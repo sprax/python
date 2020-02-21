@@ -55,8 +55,9 @@ class Solution(object):
                     res_l -= ten_p
             res_r = n - res_l
             ten_p *= 10
+            qot_l = res_l // ten_p
             qot_r = res_r // ten_p
-            break
+
         return [res_l, res_r]
 
 
