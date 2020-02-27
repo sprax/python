@@ -60,6 +60,10 @@ class Solution:
 
             if offset:
                 while srcidx < strlen:
+                    if outidx < 0 or outidx >= strlen:
+                        set_trace()
+                    if srcidx < 0 or srcidx >= strlen:
+                        set_trace()
                     result[outidx] = s[srcidx]
                     outidx += 1
                     srcidx += stride
@@ -89,6 +93,13 @@ def main():
     num_rows = 3
     expect = "PAHNAPLSIIGYIR"
     num_wrong += test_one(in_str, num_rows, expect)
+    num_rows = 5
+    expect = "PAHNAPLSIIGYIR"
+    num_wrong += test_one(in_str, num_rows, expect)
+    num_rows = 2
+    expect = "PAHNAPLSIIGYIR"
+    num_wrong += test_one(in_str, num_rows, expect)
+
     print("num_wrong: %d" % num_wrong)
 
 
