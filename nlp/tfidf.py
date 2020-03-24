@@ -3,6 +3,7 @@
 Compute TFIDF matrix on a list of vectorized documents
 Sprax Lines       2018.01      Python 3.5
 '''
+from typing import List
 import unittest
 import numpy as np
 
@@ -20,7 +21,7 @@ def tfidf_np(mat):
     return result
 
 
-def tfidf_doc_list(doc_list):
+def tfidf_doc_list(doc_list : List[List[float]]):
     ''' Input: list of term-frequency vectors representing documents.
         Output: list of TF-IDF vectors representing compared documents
         (same dimensions as input).
