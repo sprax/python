@@ -17,12 +17,12 @@ def print_dates(out_format, start_date, offset_days, num_days, per_day, verbose)
     date = start_date
     date += datetime.timedelta(days=offset_days)
     # for _ in itertools.repeat(None, num_days):
-    for _ in range(num_days):
+    for day_num in range(num_days):
         tstm = date.timetuple()
         if verbose > 2:
             print(tstm)
         dstr = time.strftime(out_format, tstm)
-        locs = day_locs(tstm.tm_wday)
+        locs = day_locs(tstm.tm_wday, day_num)
         # code = DAY_CODES[tstm.tm_wday]
         # print(tstm)
         # print("%s ==> %s %s\t%s" % (date, dstr, code, locs))
@@ -33,15 +33,15 @@ def print_dates(out_format, start_date, offset_days, num_days, per_day, verbose)
             print("%s\t%s" % (dstr, locs))
         date += datetime.timedelta(days=1)
 
-def day_locs(wday):
+def day_locs(wday, count=0):
     '''usual locations'''
-    ans = 'Home'
-    if wday < 5:
-        ans += '/GTL'
-    if wday in [1, 4]:  # Tuesday or Friday
-        ans += '/CFC'
-    elif wday in [3, 6]:  # Thursday or Sunday
-        ans += '/MRC'
+    ans = 'Home\tCOVID-19 shutdown, day %d' % count
+    # if wday < 5:
+    #     ans += 'MIT'
+    # if wday in [1, 4]:  # Tuesday or Friday
+    #     ans += '/CFC'
+    # elif wday in [3, 6]:  # Thursday or Sunday
+    #     ans += '/MRC'
     return ans
 
 def try_parse_date(text, in_formats):
