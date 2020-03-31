@@ -3,9 +3,12 @@
 '''Output some dates.'''
 
 import argparse
-import datetime
+import datetime as dt
+from datetime import date
+from datetime import datetime
 import re
 import time
+
 
 import text_ops
 from utf_print import utf_print
@@ -15,14 +18,16 @@ from utf_print import utf_print
 def print_dates(out_format, start_date, offset_days, num_days, per_day, verbose):
     '''Output num_days consecutive formatted dates from start_date'''
     date = start_date
-    date += datetime.timedelta(days=offset_days)
+    date += dt.timedelta(days=offset_days)
+    shutdown_date = datetime(2020, 3, 16)   # COVID
     # for _ in itertools.repeat(None, num_days):
-    for day_num in range(num_days):
+    for _ in range(num_days):
         tstm = date.timetuple()
         if verbose > 2:
             print(tstm)
+        days = (date - shutdown_date).days
         dstr = time.strftime(out_format, tstm)
-        locs = day_locs(tstm.tm_wday, day_num)
+        locs = day_locs(tstm.tm_wday, days)
         # code = DAY_CODES[tstm.tm_wday]
         # print(tstm)
         # print("%s ==> %s %s\t%s" % (date, dstr, code, locs))
@@ -31,7 +36,7 @@ def print_dates(out_format, start_date, offset_days, num_days, per_day, verbose)
             print("%s PM \t%s" % (dstr, 'Home'))
         else:
             print("%s\t%s" % (dstr, locs))
-        date += datetime.timedelta(days=1)
+        date += dt.timedelta(days=1)
 
 def day_locs(wday, count=0):
     '''usual locations'''
@@ -50,7 +55,7 @@ def try_parse_date(text, in_formats):
     for date_format in in_formats:
         try:
             print("\t\t try_parse(text, date_format) : ({}, {})".format(text, date_format))
-            date = datetime.datetime.strptime(text, date_format)
+            date = datetime.strptime(text, date_format)
             return date
         except ValueError:
             pass
@@ -166,7 +171,7 @@ def main():
     default_format_out = '%Y.%m.%d %a'
     default_num_days = 7
     default_jrnl_input = "djs.txt"
-    start_date = datetime.datetime.now()
+    start_date = datetime.now()
     parser = argparse.ArgumentParser(
         # usage='%(prog)s [options]',
         description="Read/write journal-entry style dates"
@@ -195,7 +200,7 @@ def main():
 
     if args.start_date:
         try:
-            start_date = datetime.datetime.strptime(args.start_date, out_format)
+            start_date = datetime.strptime(args.start_date, out_format)
         except ValueError:
             print("WARNING: Failed to parse start date: {}; using default: {}"
                   .format(args.start_date, start_date))
