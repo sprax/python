@@ -64,8 +64,6 @@ def remove(node):
                                    node.right.right)
 
 
-
-
 def mirror_shaped_trees(ltree, rtree):
     '''True IFF binary trees ltree and rtree morror each other in shape'''
     if not ltree and not rtree:
@@ -347,8 +345,8 @@ def test_func_args(verbose, func_args, args, expect):
     return not passed
 
 def unit_test(args):
-    ''' test different (kinds of) predicate detectors '''
-
+    ''' test different (kinds of) predicate detectors
+    '''
     mytree = BinSearchTree()
     mytree[3] = "red"
     mytree[4] = "blue"
@@ -392,7 +390,6 @@ def main():
     parser.add_argument('-verbose', type=int, nargs='?', const=1, default=1,
                         help='verbosity of output (default: 1)')
     args = parser.parse_args()
-
 
     unit_test(args)
 
