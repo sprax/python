@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """
-This is the "example" module.
+This is the "factorial_doc_test" module.
+To get output even when all tests pass, use:
 
-The example module supplies one function, factorial().  For example,
+python example.py -v
+
+The factorial_doc_test module supplies one function, factorial():
 
 >>> factorial(5)
 120
