@@ -1,4 +1,8 @@
 
+'''
+https://stackoverflow.com/questions/9106065/python-list-slicing-with-arbitrary-indices
+'''
+
 from operator import itemgetter
 
 def slice_by_index(lst, indexes):
