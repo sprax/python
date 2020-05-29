@@ -6,6 +6,7 @@ wrapper by sprax 2018.09, based on:
     http://code.activestate.com/recipes/117119/
 '''
 from __future__ import print_function
+import collections
 import itertools
 import math
 import sys
@@ -37,7 +38,7 @@ def gen_primes():
         cnd_val += 1
 
 def gen_primop():
-    """ Generate prime numbers, optimized by odd-only"""
+    """ Generate prime numbers, optimized by odd-only """
     # prime_divs = {4: [2]}
     prime_divs = {}
     yield 2
@@ -65,6 +66,23 @@ def gen_primop():
             print("DEL del prime_divs[cnd_val=%d]" % cnd_val)
         cnd_val += 2
         print()
+
+
+def gen_primes_opt():
+    """ GGGG, more optimized
+    """
+    prime_divs = collections.defaultdict(list)
+    yield 2
+    cnd_val = 3
+    while True:
+        if cnd_val in prime_divs:
+            for prm_val in prime_divs[cnd_val]:
+                prime_divs[prm_val*2 + cnd_val].append(prm_val)
+            del prime_divs[cnd_val]
+        else:
+            yield cnd_val
+            prime_divs[cnd_val * cnd_val] = [cnd_val]
+        cnd_val += 2
 
 
 def gen_primes_bounded(beg_val=2, end_val=1000):
@@ -136,22 +154,6 @@ def gen_prime_pal_val_range(beg_val=0, end_val=1000):
             (x, str(x), len(str(x))) for x in gen_primes_bounded(beg_val, end_val)))
             if s[:n//2] == s[-1:h:-1])
 
-def gggg_op():
-    """ GGGG, more optimized"""
-    some_nums = {}
-    yield 2
-    cnd_val = 3
-    while True:
-        if cnd_val in some_nums:
-            for ggg_val in some_nums[cnd_val]:
-                some_nums.setdefault(ggg_val*2 + cnd_val, []).append(ggg_val)
-            del some_nums[cnd_val]
-        else:
-            yield cnd_val
-            some_nums[cnd_val * cnd_val] = [cnd_val]
-
-        cnd_val += 2
-
 def is_pgt2(n):
     i = 3
     while (i <= 1 + int(math.sqrt(n))):
@@ -184,13 +186,13 @@ def main():
 
     print("gen_prime_pal [%s]  beg = %d  end = %d ::::::::::::::::"
           % (sys.argv[0], beg_num, end_num))
-    # print("primo num value range:", *list(itertools.islice((p for p in gen_primop()),
-    #                                       beg_num, end_num)))
-    print("primo num value range:", *list(itertools.islice((p for p in gggg_op()),
+    print("prime odd num value range:", *list(itertools.islice((p for p in gen_primop()),
                                           beg_num, end_num)))
-    print("primo num value range:", *list(itertools.islice((p for p in gen_primes()),
+    print("primo opt num value range:", *list(itertools.islice((p for p in gen_primes_opt()),
                                           beg_num, end_num)))
-    return
+    print("primo all num value range:", *list(itertools.islice((p for p in gen_primes()),
+                                          beg_num, end_num)))
+    # return
     print("prime num value range:", *list(gen_primes_bounded(beg_num, end_num)))
     print("prime pal value range:", *list(gen_prime_pal_val_range(beg_num, end_num)))
     print("prime pal subix range:", *list(gen_prime_pal_sub_range(beg_num, end_num)))
