@@ -1,6 +1,13 @@
 from itertools import islice
 from fileinput import input
 
+
+def add(D, x, s):
+    while x in D:
+        x += s
+    D[x] = s
+
+
 def sieve():         # from code.activestate.com/recipes
     yield 2          #                 /117119-sieve-of-eratosthenes
     D = {}           # original code by
@@ -33,11 +40,6 @@ def postponed_sieve(): # postponed sieve, by Will Ness, ideone.com/WFv4f
                 p = ps.next()
                 q = p*p
         c += 2
-
-def add(D, x, s):
-    while x in D:
-        x += s
-    D[x] = s
 
 def main():
     for line in input():
