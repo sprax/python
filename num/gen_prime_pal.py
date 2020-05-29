@@ -69,20 +69,23 @@ def gen_primop():
 
 
 def gen_primes_opt():
-    """ GGGG, more optimized
-    """
-    prime_divs = collections.defaultdict(list)
-    yield 2
-    cnd_val = 3
+    '''
+    Prime number generator, optimized to try only odd numbers.
+    How to populate a list with some range of generated values:
+        list(itertools.islice((p for p in gen_primes_opt()), beg_num, end_num)))
+    '''
+    yield 2                                     # return the first prime number
+    prime_divs = collections.defaultdict(list)  # map numbers to their prime divisors
+    candidate = 3
     while True:
-        if cnd_val in prime_divs:
-            for prm_val in prime_divs[cnd_val]:
-                prime_divs[prm_val*2 + cnd_val].append(prm_val)
-            del prime_divs[cnd_val]
+        if candidate in prime_divs:
+            for prime_div in prime_divs[candidate]:
+                prime_divs[prime_div*2 + candidate].append(prime_div)
+            del prime_divs[candidate]           # sieve no longer needed for candidate
         else:
-            yield cnd_val
-            prime_divs[cnd_val * cnd_val] = [cnd_val]
-        cnd_val += 2
+            yield candidate                     # yield the next prime number
+            prime_divs[candidate * candidate] = [candidate] # start sieve for sqaure
+        candidate += 2
 
 
 def gen_primes_bounded(beg_val=2, end_val=1000):
@@ -188,7 +191,7 @@ def main():
           % (sys.argv[0], beg_num, end_num))
     print("prime odd num value range:", *list(itertools.islice((p for p in gen_primop()),
                                           beg_num, end_num)))
-    print("primo opt num value range:", *list(itertools.islice((p for p in gen_primes_opt()),
+    print("prime opt num value range:", *list(itertools.islice((p for p in gen_primes_opt()),
                                           beg_num, end_num)))
     print("primo all num value range:", *list(itertools.islice((p for p in gen_primes()),
                                           beg_num, end_num)))
