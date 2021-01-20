@@ -1,8 +1,14 @@
+#!/usr/bin/env python3
+# @file: lucas_list.py
+# @auth: Sprax Lines
+# @date: 2016-06-05 17:23:13 Sun 05 Jun
+
 # lucas_list.py -- tested with python 2.7 and 3.5
 '''Lucas numbers computed as lists'''
 from __future__ import print_function
 import sys
 import fibonaccis
+
 
 def lucas_interval(inf, sup):
     '''Return a list of Lucas numbers between inf and sup, inclusive.'''
@@ -13,6 +19,7 @@ def lucas_interval(inf, sup):
             result.append(am2)
         am2, am1 = am1, am2 + am1
     return result
+
 
 def lucas_list(length):
     '''Return a list of Lucas numbers.'''
@@ -29,11 +36,13 @@ def lucas_list(length):
 PHI = (1 + 5**0.5) / 2
 OMP = (1 - PHI)
 
+
 def lucas_binet(idx):
     '''Uses Binet's formula (only good for n < 70)'''
     return int(round(pow(PHI, idx) + pow(OMP, idx)))
 
 DEFAULT_LEN = 34
+
 
 def main():
     '''Print lists of Lucas numbers (default length 34)'''
@@ -47,6 +56,7 @@ def main():
     binets = [lucas_binet(num) for num in range(1, end_num + 1)]
     print("Binet's formula:")
     print(binets)
+
 
 if __name__ == '__main__':
     main()
