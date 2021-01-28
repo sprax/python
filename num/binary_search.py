@@ -10,7 +10,7 @@ from pdb import set_trace
 # from pprint import pprint
 import fibonaccis
 
-def find_equal(mono_l, val):
+def find_equal(mono_l, target):
     """find_equal
     Numerical binary search
     Do a binary search for an index of a value in a sorted array mono_l,
@@ -18,7 +18,7 @@ def find_equal(mono_l, val):
     If the specified value is not in mono_l, return -1.
 
     @param mono_l   sorted array (indexible list)
-    @param val      value to be searched for in mono_l
+    @param target   value to be searched for in mono_l
     @return         an index k s.t. v == mono_l[k], or -1 (invalid index)
     """
     jlo = 0
@@ -26,43 +26,43 @@ def find_equal(mono_l, val):
     while jlo <= jhi:
         jmd = (jhi + jlo) // 2
         # print("jlo, jmd, jhi: %2d %2d %2d : %d" % (jlo, jmd, jhi, mono_l[jmd]))
-        if mono_l[jmd] > val:
+        if mono_l[jmd] > target:
             jhi = jmd - 1
-        elif mono_l[jmd] < val:
+        elif mono_l[jmd] < target:
             jlo = jmd + 1
         else:
-            # print("exact: mono_l[%d] (%d) == (%d)" % (jmd, mono_l[jmd], val))
+            # print("exact: mono_l[%d] (%d) == (%d)" % (jmd, mono_l[jmd], target))
             return jmd
     return None # this line coult be omitted
 
 
-def find_lower_bound(mono_l, val):
+def find_lower_bound(mono_l, target):
     """find_lower_bound
     Return an index for the largest element in mono_l (a monotonically
-    increasing list of numbers) such that mono_l[index] <= the specified val.
+    increasing list of numbers) such that mono_l[index] <= the specified target.
     If there is no such element in mono_l, return -1
     """
     jlo, jmd, jhi = 0, 0, len(mono_l) - 1
     while jlo <= jhi:
         jmd = (jhi + jlo) >> 1
-        if mono_l[jmd] > val:
+        if mono_l[jmd] > target:
             jhi = jmd - 1
-        elif mono_l[jmd] < val:
+        elif mono_l[jmd] < target:
             jlo = jmd + 1
         else:
-            # assert mono_l[jmd] == val
+            # assert mono_l[jmd] == target
             return jmd
 
-    if mono_l[jmd] <= val:
+    if mono_l[jmd] <= target:
         return jmd
 
     jmd = jmd - 1
-    if jmd >= 0 and mono_l[jmd] <= val:
+    if jmd >= 0 and mono_l[jmd] <= target:
         return jmd
     return -1
 
 
-def find_upper_bound(mono_l, val):
+def find_upper_bound(mono_l, target):
     """find_upper_bound
     Return index of smallest element v in mono_l s.t v >= specified value.
     If there is no such element in mono_l, return -1.
@@ -70,31 +70,31 @@ def find_upper_bound(mono_l, val):
     jlo, jmd, jhi = 0, 0, len(mono_l) - 1
     while jlo <= jhi:
         jmd = (jhi + jlo) >> 1
-        if mono_l[jmd] > val:
+        if mono_l[jmd] > target:
             jhi = jmd - 1
-        elif mono_l[jmd] < val:
+        elif mono_l[jmd] < target:
             jlo = jmd + 1
         else:
-            assert mono_l[jmd] == val
+            assert mono_l[jmd] == target
             return jmd
 
-    if mono_l[jmd] >= val:
+    if mono_l[jmd] >= target:
         return jmd
 
     jmd = jmd + 1
-    if jmd < len(mono_l) and mono_l[jmd] >= val:
+    if jmd < len(mono_l) and mono_l[jmd] >= target:
         return jmd
     return -1
 
 
-def interpolation_search_equals(mono_l, val):
+def interpolation_search_equals(mono_l, target):
     """
     binary search for an index for the value v in a sorted array mono_l,
     that is, find k s.t. v == mono_l[k].  Obviously, v must be the value
     of an actual element in mono_l.
 
     @param mono_l     sorted array of int
-    @param val   value to be search for in mono_l
+    @param target   value to be search for in mono_l
     @return      an index k s.t. v == mono_l[k], or -1 (invalid index)
     """
     # Must do error checking before allowing interpolation
@@ -103,7 +103,7 @@ def interpolation_search_equals(mono_l, val):
     jlo = 0
     jhi = len(mono_l) - 1
     # print("interpolation_search_equals: mono_l has type:", type(mono_l).__name__)
-    if val < mono_l[jlo] or val > mono_l[jhi]:
+    if target < mono_l[jlo] or target > mono_l[jhi]:
         return None
 
     jmd = 0
@@ -111,11 +111,11 @@ def interpolation_search_equals(mono_l, val):
         if mono_l[jhi] == mono_l[jlo]:
             # value of mono_l is const in [jlo .. jhi];
             # either this value == v, or v is not in mono_l.
-            if mono_l[jlo] == val:
+            if mono_l[jlo] == target:
                 return jlo          # So return the smallest index found,
             break                   # or return NotFound.
         else:
-            delta = (jhi - jlo) * (val - mono_l[jlo]) / (mono_l[jhi] - mono_l[jlo])
+            delta = (jhi - jlo) * (target - mono_l[jlo]) / (mono_l[jhi] - mono_l[jlo])
             if delta > 1.0 or delta < -1.0:
                 jmd = jlo + int(delta)
             else:
@@ -128,9 +128,9 @@ def interpolation_search_equals(mono_l, val):
 #        else
 #          jmd = jlo + (int)delta;
 
-        if mono_l[jmd] == val:
+        if mono_l[jmd] == target:
             return jmd
-        if mono_l[jmd] > val:
+        if mono_l[jmd] > target:
             jhi = jmd - 1
         else:
             jlo = jmd + 1
@@ -157,7 +157,7 @@ def etc():
       int modVal = Integer.MIN_VALUE;
       for int v : SS {
         if v >=  medVal {
-          modVal = v;       # mode val: first v in mono_l s.t. v >= medVal
+          modVal = v;       # mode target: first v in mono_l s.t. v >= medVal
           break;
         }
       }
@@ -239,15 +239,15 @@ class TestBinarySearch(unittest.TestCase):
         ''' tests find_equal '''
         num_wrong = 0
         print(str(find_equal_func.__doc__))
-        for val, exp in zip(self.test_vals, self.expecteds):
-            res = find_equal_func(self.mono_l, val)
-            if res is not None:
+        for target, exp in zip(self.test_vals, self.expecteds):
+            result = find_equal_func(self.mono_l, target)
+            if result is not None:
                 num_wrong += not exp
                 print("%d | exact value %3d found at index %d"
-                      % (num_wrong, self.mono_l[res], res))
+                      % (num_wrong, self.mono_l[result], result))
             else:
                 num_wrong += exp
-                print("%d | exact value %3d not found" % (num_wrong, val))
+                print("%d | exact value %3d not found" % (num_wrong, target))
         print("num_wrong:", num_wrong)
         return num_wrong
 
@@ -256,18 +256,18 @@ class TestBinarySearch(unittest.TestCase):
         '''tests find_lower_bound'''
         func = find_lower_bound
         print(str(func.__doc__))
-        for val in self.test_vals:
-            res = func(self.mono_l, val)
-            if res >= 0:
+        for target in self.test_vals:
+            result = func(self.mono_l, target)
+            if result >= 0:
                 print(
                     "lower bound",
-                    self.mono_l[res],
+                    self.mono_l[result],
                     "found for",
-                    val,
+                    target,
                     "at index",
-                    res)
+                    result)
             else:
-                print("lower bound for", val, "not found")
+                print("lower bound for", target, "not found")
         print()
 
     def test_find_upper_bound(self):
@@ -275,13 +275,13 @@ class TestBinarySearch(unittest.TestCase):
         func = find_upper_bound
         print(str(func.__doc__))
         print(self.mono_l)
-        for val in self.test_vals:
-            res = func(self.mono_l, val)
-            if res >= 0:
+        for target in self.test_vals:
+            result = func(self.mono_l, target)
+            if result >= 0:
                 print("upper bound {} found for {} at index {}"
-                      .format(self.mono_l[res], val, res))
+                      .format(self.mono_l[result], target, result))
             else:
-                print("upper bound for {} not found".format(val))
+                print("upper bound for {} not found".format(target))
         print()
 
 
