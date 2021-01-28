@@ -19,15 +19,17 @@ def print_dates(out_format, start_date, offset_days, num_days, per_day, verbose)
     '''Output num_days consecutive formatted dates from start_date'''
     date = start_date
     date += dt.timedelta(days=offset_days)
-    shutdown_date = datetime(2020, 3, 16)   # COVID
+    shutdown_date = datetime(2020,  3, 16)   # COVID
+    freetime_date = datetime(2020, 10, 21)   # anninversary and interview
     # for _ in itertools.repeat(None, num_days):
     for _ in range(num_days):
         tstm = date.timetuple()
         if verbose > 2:
             print(tstm)
-        days = (date - shutdown_date).days
+        dups = (date - shutdown_date).days
+        dwns = (date - freetime_date).days
         dstr = time.strftime(out_format, tstm)
-        locs = day_locs(tstm.tm_wday, days)
+        locs = day_locations(tstm.tm_wday, dups, None)
         # code = DAY_CODES[tstm.tm_wday]
         # print(tstm)
         # print("%s ==> %s %s\t%s" % (date, dstr, code, locs))
@@ -38,9 +40,12 @@ def print_dates(out_format, start_date, offset_days, num_days, per_day, verbose)
             print("%s\t%s" % (dstr, locs))
         date += dt.timedelta(days=1)
 
-def day_locs(wday, count=0):
+def day_locations(wday, count_up=0, count_down=0):
     '''usual locations'''
-    ans = 'Home\tCOVID-19 shutdown, day %d' % count
+    if count_down is not None:
+        ans = 'Home\tCOVID-19 day %d (free %d)' % (count_up, count_down)
+    else:
+        ans = 'Home\tCOVID-19 day %d' % (count_up)
     # if wday < 5:
     #     ans += 'MIT'
     # if wday in [1, 4]:  # Tuesday or Friday
