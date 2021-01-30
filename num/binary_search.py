@@ -1,5 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 ''' Binary Search functions and a test class
+@file: binary_search.py
+@auth: Sprax Lines
+@date: 2018-03-12 22:42:22 Mon 12 Mar
+
     Find exact values or bounds in a numerical array.
 '''
 from __future__ import print_function
