@@ -1,7 +1,12 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 '''Find primes by checking each number in a range for divisors.  Primes have no divisors but 1 and themselves.'''
+@file: prime_divide.py
+@auth: Tully Lines
+@date: 2016-12-28 13:00:53 Wed 28 Dec
+
 from __future__ import print_function
 import math
+
 
 def is_prime(self, num: int) -> bool:
     bound = 1 + math.ceil(math.sqrt(num))
