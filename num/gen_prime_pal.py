@@ -1,8 +1,8 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 '''
 @file: gen_prime_pal.py
 @auth: Sprax Lines
-@date: 2018-09-22 11:55:35 Sat 22 Sep
+@date: 2018-09-20 22:45:23 Thu 20 Sep
 
 gen_prime_pal.py
 wrapper by sprax 2018.09, based on:
