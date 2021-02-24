@@ -1,5 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 '''
+@file: findxy.py
+@auth: sprax
+@date: 2018-08-19 00:38:43 Sun 19 Aug
+
 Solve for x:
     sqrt(x + 15) + sqrt(x) = 15
     x = 49
@@ -12,6 +16,7 @@ import sys
 # import pdb
 # from pdb import set_trace
 
+
 def find_x_y(max_y=25, verbose=1):
     ''' Solve for x & y:
         sqrt(x + y) + sqrt(x) = y
@@ -23,7 +28,6 @@ def find_x_y(max_y=25, verbose=1):
                 print("sqrt(%d + %d) + sqrt(%d) == %d" % (x, y, x, y))
             elif verbose > 1:
                 print("sqrt(%d + %d) + sqrt(%d) != %d" % (x, y, x, y))
-
 
 
 class TestFinder(unittest.TestCase):
