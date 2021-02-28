@@ -1,8 +1,8 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 ''' Binary Search functions and a test class
 @file: binary_search.py
 @auth: Sprax Lines
-@date: 2018-03-12 22:42:22 Mon 12 Mar
+@date: 2016-06-05 17:23:13 Sun 05 Jun
 
     Find exact values or bounds in a numerical array.
 '''
@@ -13,6 +13,7 @@ import pdb
 from pdb import set_trace
 # from pprint import pprint
 import fibonaccis
+
 
 def find_equal(mono_l, target):
     """find_equal
@@ -29,13 +30,15 @@ def find_equal(mono_l, target):
     jhi = len(mono_l) - 1
     while jlo <= jhi:
         jmd = (jhi + jlo) // 2
-        # print("jlo, jmd, jhi: %2d %2d %2d : %d" % (jlo, jmd, jhi, mono_l[jmd]))
+        # print("jlo, jmd, jhi: %2d %2d %2d : %d" % (jlo, jmd, jhi,
+        # mono_l[jmd]))
         if mono_l[jmd] > target:
             jhi = jmd - 1
         elif mono_l[jmd] < target:
             jlo = jmd + 1
         else:
-            # print("exact: mono_l[%d] (%d) == (%d)" % (jmd, mono_l[jmd], target))
+            # print("exact: mono_l[%d] (%d) == (%d)" % (jmd, mono_l[jmd],
+            # target))
             return jmd
     return None # this line coult be omitted
 
@@ -43,7 +46,8 @@ def find_equal(mono_l, target):
 def find_lower_bound(mono_l, target):
     """find_lower_bound
     Return an index for the largest element in mono_l (a monotonically
-    increasing list of numbers) such that mono_l[index] <= the specified target.
+    increasing list of numbers) such that mono_l[index] <= the specified
+    target.
     If there is no such element in mono_l, return -1
     """
     jlo, jmd, jhi = 0, 0, len(mono_l) - 1
@@ -106,7 +110,8 @@ def interpolation_search_equals(mono_l, target):
         return None
     jlo = 0
     jhi = len(mono_l) - 1
-    # print("interpolation_search_equals: mono_l has type:", type(mono_l).__name__)
+    # print("interpolation_search_equals: mono_l has type:",
+    # type(mono_l).__name__)
     if target < mono_l[jlo] or target > mono_l[jhi]:
         return None
 
@@ -149,9 +154,11 @@ def etc():
       int minVal = 10, maxVal = 0;
       int maxInc = 9;
       long  seed = 1; # System.currentTimeMillis();
-      int AA[][] = ArrayAlgo.makeRandomRowColSortedArray(nRows, nCols, minVal, maxInc, seed);
+      int AA[][] = ArrayAlgo.makeRandomRowColSortedArray(nRows, nCols, minVal,
+      maxInc, seed);
     #int SS[] = AA[0];
-      int SS[] = { 10, 12, 14, 14, 14, 14, 14, 14, 15, 16, 17, 18, 36, 44, 55, 66};
+      int SS[] = { 10, 12, 14, 14, 14, 14, 14, 14, 15, 16, 17, 18, 36, 44, 55,
+      66};
       nCols   = SS.length;
       minVal  = SS[0];
       maxVal  = SS[nCols-1];
@@ -178,7 +185,8 @@ def etc():
       int iM  = find_equal(SS, mmmVal);
       int iL  = find_equal(SS, maxVal);
       Sx.print("binary search:");
-      System.out.format(" first mode median mid 2nd last  %2d  %2d  %2d  %2d  %2d  %2d\n", iF, iN, iD, iA, iM, iL);
+      System.out.format(" first mode median mid 2nd last  %2d  %2d  %2d  %2d
+      %2d  %2d\n", iF, iN, iD, iA, iM, iL);
 
       iF  = interpolationSearchEquals(SS, minVal);
       iN  = interpolationSearchEquals(SS, modVal);
@@ -187,7 +195,8 @@ def etc():
       iM  = interpolationSearchEquals(SS, mmmVal);
       iL  = interpolationSearchEquals(SS, maxVal);
       Sx.print("interpolation:");
-      System.out.format(" first mode median mid 2nd last  %2d  %2d  %2d  %2d  %2d  %2d\n", iF, iN, iD, iA, iM, iL);
+      System.out.format(" first mode median mid 2nd last  %2d  %2d  %2d  %2d
+      %2d  %2d\n", iF, iN, iD, iA, iM, iL);
 
       iF  = binarySearchLowerBound(SS, minVal);
       iN  = binarySearchLowerBound(SS, modVal);
@@ -196,7 +205,8 @@ def etc():
       iM  = binarySearchLowerBound(SS, mmmVal);
       iL  = binarySearchLowerBound(SS, maxVal);
       Sx.print("lower bound:  ");
-      System.out.format(" first mode median mid 2nd last  %2d  %2d  %2d  %2d  %2d  %2d\n", iF, iN, iD, iA, iM, iL);
+      System.out.format(" first mode median mid 2nd last  %2d  %2d  %2d  %2d
+      %2d  %2d\n", iF, iN, iD, iA, iM, iL);
 
       iF  = binarySearchUpperBound(SS, minVal);
       iN  = binarySearchUpperBound(SS, modVal);
@@ -205,7 +215,8 @@ def etc():
       iM  = binarySearchUpperBound(SS, mmmVal);
       iL  = binarySearchUpperBound(SS, maxVal);
       Sx.print("upper bound:  ");
-      System.out.format(" first mode median mid 2nd last  %2d  %2d  %2d  %2d  %2d  %2d\n", iF, iN, iD, iA, iM, iL);
+      System.out.format(" first mode median mid 2nd last  %2d  %2d  %2d  %2d
+      %2d  %2d\n", iF, iN, iD, iA, iM, iL);
 
       return 0;
     }
@@ -299,7 +310,8 @@ if __name__ == '__main__':
         TBS.init_data()
         print("\n\t  Direct call:")
         TBS.test_find_equal(interpolation_search_equals)
-        # unittest.main()     # NOTE: This must be last, because basically it calls exit.
+        # unittest.main()     # NOTE: This must be last, because basically it
+        # calls exit.
     else:
         suite = unittest.TestLoader().loadTestsFromTestCase(TestBinarySearch)
         unittest.TextTestRunner(verbosity=3).run(suite)
