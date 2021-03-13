@@ -1,8 +1,14 @@
-#!/user/local/bin/python3
+#!/usr/bin/env python3
+# @file: weirdnum.py
+# @auth: Sprax Lines
+# @date: 2016-07-20 17:52:26 Wed 20 Jul
+
 # https://www.hackerrank.com/challenges/py-if-else?h_r=next-challenge&h_v=zen
 '''Without using if-else (elif)'''
 from __future__ import print_function
+
 import sys
+
 
 def main():
     '''main'''
@@ -20,5 +26,6 @@ def main():
         if num < 6 or num > 20:
             print('Not ', end='')
     print('Weird')
+
 
 main()
