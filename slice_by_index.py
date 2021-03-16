@@ -1,9 +1,14 @@
+#!/usr/bin/env python3
+# @file: slice_by_index.py
+# @auth: sprax
+# @date: 2020-04-03 01:37:23 Fri 03 Apr
 
 '''
 https://stackoverflow.com/questions/9106065/python-list-slicing-with-arbitrary-indices
 '''
 
 from operator import itemgetter
+
 
 def slice_by_index(lst, indexes):
     """Slice list by positional indexes.
@@ -15,7 +20,8 @@ def slice_by_index(lst, indexes):
         indexes: iterable of 0-based indexes of the list positions to return.
 
     Returns:
-        a new list containing elements of lst on positions specified by indexes.
+        a new list containing elements of lst on positions specified by
+        indexes.
 
     >>> slice_by_index([], [])
     []

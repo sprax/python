@@ -1,4 +1,9 @@
+#!/usr/bin/env python2
 '''
+@file: gen_prime_pal.py
+@auth: Sprax Lines
+@date: 2018-09-22 11:55:35 Sat 22 Sep
+
 gen_prime_pal.py
 wrapper by sprax 2018.09, based on:
     Sieve of Eratosthenes
@@ -10,6 +15,7 @@ import collections
 import itertools
 import math
 import sys
+
 
 def gen_primes():
     """ Generate an unbounded (infinite) sequence of prime numbers.
@@ -36,6 +42,7 @@ def gen_primes():
                 prime_divs.setdefault(prm_val + cnd_val, []).append(prm_val)
             del prime_divs[cnd_val]
         cnd_val += 1
+
 
 def gen_primop():
     """ Generate prime numbers, optimized by odd-only """
@@ -72,19 +79,23 @@ def gen_primes_opt():
     '''
     Prime number generator, optimized to try only odd numbers.
     How to populate a list with some range of generated values:
-        list(itertools.islice((p for p in gen_primes_opt()), beg_num, end_num)))
+        list(itertools.islice((p for p in gen_primes_opt()), beg_num,
+        end_num)))
     '''
     yield 2                                     # return the first prime number
-    prime_divs = collections.defaultdict(list)  # map numbers to their prime divisors
+    # map numbers to their prime divisors
+    prime_divs = collections.defaultdict(list)
     candidate = 3
     while True:
         if candidate in prime_divs:
             for prime_div in prime_divs[candidate]:
                 prime_divs[prime_div*2 + candidate].append(prime_div)
-            del prime_divs[candidate]           # sieve no longer needed for candidate
+            # sieve no longer needed for candidate
+            del prime_divs[candidate]
         else:
             yield candidate                     # yield the next prime number
-            prime_divs[candidate * candidate] = [candidate] # start sieve for sqaure
+            # start sieve for sqaure
+            prime_divs[candidate * candidate] = [candidate]
         candidate += 2
 
 
@@ -103,6 +114,7 @@ def gen_primes_bounded(beg_val=2, end_val=1000):
                 prime_divs.setdefault(prm_val + cnd_val, []).append(prm_val)
             del prime_divs[cnd_val]
         cnd_val += 1
+
 
 def gen_prime_pal():
     """ Generate an infinite sequence of palindromic prime numbers,
@@ -157,6 +169,7 @@ def gen_prime_pal_val_range(beg_val=0, end_val=1000):
             (x, str(x), len(str(x))) for x in gen_primes_bounded(beg_val, end_val)))
             if s[:n//2] == s[-1:h:-1])
 
+
 def is_pgt2(n):
     i = 3
     while (i <= 1 + int(math.sqrt(n))):
@@ -168,6 +181,7 @@ def is_pgt2(n):
 
 DEFAULT_BEG_NUM = 0
 DEFAULT_END_NUM = 15
+
 
 def main():
     '''Print lists of prime palindromes (default up to X)'''
@@ -200,6 +214,7 @@ def main():
     print("prime pal value range:", *list(gen_prime_pal_val_range(beg_num, end_num)))
     print("prime pal subix range:", *list(gen_prime_pal_sub_range(beg_num, end_num)))
     print("prime pal index range:", *list(gen_prime_pal_idx_range(beg_num, end_num)))
+
 
 if __name__ == '__main__':
     main()
