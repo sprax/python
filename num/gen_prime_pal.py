@@ -11,6 +11,7 @@ wrapper by sprax 2018.09, based on:
     http://code.activestate.com/recipes/117119/
 '''
 from __future__ import print_function
+
 import collections
 import itertools
 import math
@@ -58,7 +59,8 @@ def gen_primop():
             yield cnd_val
             print("YLD %d" % cnd_val)
             prime_divs[cnd_val * cnd_val] = [cnd_val]
-            print("ADD prime_divs[%d * %d] = [%d]" % (cnd_val, cnd_val, cnd_val))
+            print("ADD prime_divs[%d * %d] = [%d]" %
+                  (cnd_val, cnd_val, cnd_val))
             print("DCT ", sorted(prime_divs.items()))
         else:
             # cnd_val is composite. prime_divs[cnd_val] is the list
@@ -66,9 +68,10 @@ def gen_primop():
             # we no longer need it in the map, but we'll mark the next
             # multiples of its witnesses to prepare for larger numbers.
             for prm_val in prime_divs[cnd_val]:
-                prime_divs.setdefault(prm_val*2 + cnd_val, []).append(prm_val)
+                prime_divs.setdefault(
+                    prm_val * 2 + cnd_val, []).append(prm_val)
                 print("prime_divs.setdefault(prm_val_%d*2 + cnd_val_%d = %d, []).append(prm_val=%d)"
-                      % (prm_val*2, cnd_val, prm_val + cnd_val, prm_val))
+                      % (prm_val * 2, cnd_val, prm_val + cnd_val, prm_val))
             del prime_divs[cnd_val]
             print("DEL del prime_divs[cnd_val=%d]" % cnd_val)
         cnd_val += 2
@@ -89,7 +92,7 @@ def gen_primes_opt():
     while True:
         if candidate in prime_divs:
             for prime_div in prime_divs[candidate]:
-                prime_divs[prime_div*2 + candidate].append(prime_div)
+                prime_divs[prime_div * 2 + candidate].append(prime_div)
             # sieve no longer needed for candidate
             del prime_divs[candidate]
         else:
@@ -121,9 +124,9 @@ def gen_prime_pal():
         a.k.a prime palindromes.
     """
     return (x for x, s, n, h in (
-        (x, s, n, n//2 if n%2 else (n-1)//2) for x, s, n in (
+        (x, s, n, n // 2 if n % 2 else (n - 1) // 2) for x, s, n in (
             (x, str(x), len(str(x))) for x in
-            gen_primes())) if s[:n//2] == s[-1:h:-1])
+            gen_primes())) if s[:n // 2] == s[-1:h:-1])
 
 
 def gen_prime_pal_idx_range(beg_idx=0, end_idx=100):
@@ -136,9 +139,9 @@ def gen_prime_pal_idx_range(beg_idx=0, end_idx=100):
     yield end_idx - beg_idx prime palindromes before it is exhausted.
     """
     return itertools.islice((x for x, s, n, h in (
-        (x, s, n, n//2 if n%2 else (n-1)//2) for x, s, n in (
+        (x, s, n, n // 2 if n % 2 else (n - 1) // 2) for x, s, n in (
             (x, str(x), len(str(x))) for x in gen_primes()))
-                             if s[:n//2] == s[-1:h:-1]), beg_idx, end_idx)
+        if s[:n // 2] == s[-1:h:-1]), beg_idx, end_idx)
 
 
 def gen_prime_pal_sub_range(beg_idx=0, end_idx=1000):
@@ -152,9 +155,9 @@ def gen_prime_pal_sub_range(beg_idx=0, end_idx=1000):
     primes are palindromic, where N = end_idx - beg_idx.
     """
     return (x for x, s, n, h in (
-        (x, s, n, n//2 if n%2 else (n-1)//2) for x, s, n in (
+        (x, s, n, n // 2 if n % 2 else (n - 1) // 2) for x, s, n in (
             (x, str(x), len(str(x))) for x in itertools.islice(
-                gen_primes(), beg_idx, end_idx))) if s[:n//2] == s[-1:h:-1])
+                gen_primes(), beg_idx, end_idx))) if s[:n // 2] == s[-1:h:-1])
 
 
 def gen_prime_pal_val_range(beg_val=0, end_val=1000):
@@ -165,9 +168,15 @@ def gen_prime_pal_val_range(beg_val=0, end_val=1000):
     primes.
     """
     return (x for x, s, n, h in (
-        (x, s, n, n//2 if n%2 else (n-1)//2) for x, s, n in (
+        (x, s, n, n // 2 if n % 2 else (n - 1) // 2) for x, s, n in (
             (x, str(x), len(str(x))) for x in gen_primes_bounded(beg_val, end_val)))
-            if s[:n//2] == s[-1:h:-1])
+        if s[:n // 2] == s[-1:h:-1])
+
+
+def next_prime_pal(beg_val: int) -> int:
+    if beg_val < 2:
+        return 2
+    return next(gen_prime_pal_val_range(beg_val + 1, beg_val * 100))
 
 
 def is_pgt2(n):
@@ -203,17 +212,31 @@ def main():
 
     print("gen_prime_pal [%s]  beg = %d  end = %d ::::::::::::::::"
           % (sys.argv[0], beg_num, end_num))
-    print("prime odd num value range:", *list(itertools.islice((p for p in gen_primop()),
-                                          beg_num, end_num)))
-    print("prime opt num value range:", *list(itertools.islice((p for p in gen_primes_opt()),
-                                          beg_num, end_num)))
-    print("primo all num value range:", *list(itertools.islice((p for p in gen_primes()),
-                                          beg_num, end_num)))
+    print("prime odd num value range:",
+          *list(itertools.islice((p for p in gen_primop()),
+                                 beg_num, end_num)))
+    print("prime opt num value range:",
+          *list(itertools.islice((p for p in gen_primes_opt()),
+                                 beg_num, end_num)))
+    print("primo all num value range:",
+          *list(itertools.islice((p for p in gen_primes()), beg_num, end_num)))
     # return
-    print("prime num value range:", *list(gen_primes_bounded(beg_num, end_num)))
-    print("prime pal value range:", *list(gen_prime_pal_val_range(beg_num, end_num)))
-    print("prime pal subix range:", *list(gen_prime_pal_sub_range(beg_num, end_num)))
-    print("prime pal index range:", *list(gen_prime_pal_idx_range(beg_num, end_num)))
+    print("prime num value range:",
+          *list(gen_primes_bounded(beg_num, end_num)))
+    print("prime pal value range:",
+          *list(gen_prime_pal_val_range(beg_num, end_num)))
+    print("prime pal subix range:",
+          *list(gen_prime_pal_sub_range(beg_num, end_num)))
+    print("prime pal index range:",
+          *list(gen_prime_pal_idx_range(beg_num, end_num)))
+
+    beg_num = 5
+    print("prime pal next after %d: %d" % (beg_num, next_prime_pal(beg_num)))
+
+    beg_num = 10
+    print("prime pal next after %d: %d" % (beg_num, next_prime_pal(beg_num)))
+    beg_num = 12
+    print("prime pal next after %d: %d" % (beg_num, next_prime_pal(beg_num)))
 
 
 if __name__ == '__main__':
