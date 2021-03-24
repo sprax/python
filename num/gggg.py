@@ -1,9 +1,15 @@
+#!/usr/bin/env python3
 '''
+@file: gggg.py
+@auth: sprax
+@date: 2018-10-26 14:03:34 Fri 26 Oct
+
 ggg.py
 '''
 from __future__ import print_function
 import itertools
 import sys
+
 
 def gggg():
     """ GGGG """
@@ -18,6 +24,7 @@ def gggg():
                 some_nums.setdefault(ggg_val + cnd_val, []).append(ggg_val)
             del some_nums[cnd_val]
         cnd_val += 1
+
 
 def gggg_op():
     """ GGGG, more optimized"""
@@ -34,6 +41,7 @@ def gggg_op():
             del some_nums[cnd_val]
         cnd_val += 2
 
+
 def gggg_bounded(beg_val=2, end_val=1000):
     """ more """
     some_nums = {}
@@ -48,6 +56,7 @@ def gggg_bounded(beg_val=2, end_val=1000):
                 some_nums.setdefault(ggg_val + cnd_val, []).append(ggg_val)
             del some_nums[cnd_val]
         cnd_val += 1
+
 
 def gggg_slc():
     """ only some """
@@ -81,6 +90,7 @@ def gggg_slc_val_range(beg_val=0, end_val=1000):
 DEFAULT_BEG_NUM = 0
 DEFAULT_END_NUM = 64
 
+
 def main():
     argc = len(sys.argv)
     if argc < 2:
@@ -107,6 +117,7 @@ def main():
     print("some pal value range:", *list(gggg_slc_val_range(beg_num, end_num)))
     print("some pal subix range:", *list(gggg_slc_sub_range(beg_num, end_num)))
     print("some pal index range:", *list(gggg_slc_idx_range(beg_num, end_num)))
+
 
 if __name__ == '__main__':
     main()
