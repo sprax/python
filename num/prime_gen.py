@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# @file: prime_gen.py
+# @auth: Sprax Lines
+# @date: 2018-02-07 12:46:33 Wed 07 Feb
+
 from itertools import islice
 from fileinput import input
 
@@ -40,6 +45,7 @@ def postponed_sieve(): # postponed sieve, by Will Ness, ideone.com/WFv4f
                 p = ps.next()
                 q = p*p
         c += 2
+
 
 def main():
     for line in input():
