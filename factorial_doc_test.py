@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 """
+@file: factorial_doc_test.py
+@auth: sprax
+@date: 2020-04-01 02:11:04 Wed 01 Apr
+
 This is the "factorial_doc_test" module.
 To get output even when all tests pass, use:
 
@@ -10,6 +14,7 @@ The factorial_doc_test module supplies one function, factorial():
 >>> factorial(5)
 120
 """
+
 
 def factorial(n):
     """Return the factorial of n, an exact integer >= 0.
