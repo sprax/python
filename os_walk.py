@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
+# @file: os_walk.py
+# @auth: sprax
+# @date: 2019-09-13 23:43:30 Fri 13 Sep
+
 # Sprax Lines       2016.12.26      Written with Python 3.5
 """LHRWCC: Linear Homogenous Recurrence With Constant Coefficients.
    Class and unit tests.
-   """
+"""
 
 import os
 import unittest
+
 
 def os_walk():
     # Set the directory you want to start from
@@ -27,7 +32,7 @@ def os_walk():
 #         self.length = self.order
 #
 #     def a_n_recurse(self, idx):
-#         '''Deprecated: recursively computes Nth term in the LHRWCC sequence'''
+# '''Deprecated: recursively computes Nth term in the LHRWCC sequence'''
 #         if idx < self.order:
 #             return self.inits[idx]
 #         tot = 0
@@ -91,7 +96,9 @@ def os_walk():
 #     print(test_list)
 #     assert test_list == save_list
 #
-# #####################################################
+
+###############################################################################
+
 # class TestLinHomoRecWithConstCoef(unittest.TestCase):
 #     '''unit tests'''
 #
@@ -130,6 +137,7 @@ def os_walk():
 #         ref_list = [1, 2, 3, 17, 53, 172, 588]
 #         try_reference_rec([2, 3, 5], [1, 2, 3], ref_list, length)
 #
+
 
 if __name__ == '__main__':
     # unittest.main()
