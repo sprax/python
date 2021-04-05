@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+# @file: plot.py
+# @auth: Sprax Lines
+# @date: 2017-09-24 00:21:15 Sun 24 Sep
 
 import matplotlib.pyplot as plt
 import numpy as np
