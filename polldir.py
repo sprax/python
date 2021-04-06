@@ -1,5 +1,9 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python3
 '''
+@file: polldir.py
+@auth: Sprax Lines
+@date: 2016-06-02 17:36:26 Thu 02 Jun
+
 Poll a directory for the latest file matching a file_pat.
 '''
 # Sprax Lines  2012 ?
@@ -14,6 +18,7 @@ from stat import ST_MTIME
 import shutil
 import sys
 import time
+
 
 def get_latest_file_name_and_time(dir_path, file_pat='txt', old_ftime=0, verbose=1):
     ''' yes '''
@@ -32,11 +37,12 @@ def get_latest_file_name_and_time(dir_path, file_pat='txt', old_ftime=0, verbose
 
 def poll_dir_for_new_file(dir_path, file_pat, old_time=0, verbose=1, call_back=None, *cb_args):
     """ poll dir for any new file(s) matching file_pat.
-        When a file newer than old_time is found, old_time is set to the new time
-        and call_back is called as: truthy = call_back(cb_args) 
+        When a file newer than old_time is found, old_time is set to the new
+        time
+        and call_back is called as: truthy = call_back(cb_args)
         Or, if call_back is None, the function returns
         the latest file and file mod time.
-    """
+"""
     # get all entries in the directory w/ stats
     fname = None
     ftime = old_ftime
@@ -47,7 +53,6 @@ def poll_dir_for_new_file(dir_path, file_pat, old_time=0, verbose=1, call_back=N
                 return fname, ftime
             truthy = call_back(*cb_args)
     return fname, ftime
-
 
 
 def make_date_to_files_dic(pairs, dirSuffix):
@@ -68,7 +73,9 @@ def make_date_to_files_dic(pairs, dirSuffix):
 
 
 def getUniqueDirName(dirs, baseName):
-    '''if there is already a directory with this name (baseName), make a new name'''
+    '''
+    if there is already a directory with this name (baseName), make a new name
+    '''
     suffix = 0
     uniqDirName = baseName
     while uniqDirName in dirs:
@@ -78,7 +85,8 @@ def getUniqueDirName(dirs, baseName):
 
 
 def mvFilesToDateDirs(dirs, date2files):
-    """ Put Acc test results into a canonical CSV format, one column per test run.
+    """ Put Acc test results into a canonical CSV format, one column per test
+    run.
     Usage: python canonize.py templateFile outputFile] summaryFile(s)
     NB:  the outputFile name will have '.csv' appended"""
 
@@ -137,6 +145,7 @@ def main():
         mvFilesToDateDirs(dirs, date2files)
     else:
         print("The date2files dict is empty.")
+
 
 if __name__ == '__main__':
     main()
