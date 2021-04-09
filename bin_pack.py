@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 '''
+@file: bin_pack.py
+@auth: Sprax Lines
+@date: 2018-02-07 00:19:39 Wed 07 Feb
+
 Can the space requirements specified by bits be packed into the specified bins?
 '''
 from __future__ import print_function
@@ -19,7 +23,8 @@ def excess_space(bins, bits):
 
 def can_pack_track_rec(bins, num_usable, bits, num_unpacked, usable_space, needed_space):
     '''
-    * Sorted recursion.  Early return if largest item cannot fit in largest remaining bin.
+    * Sorted recursion.  Early return if largest item cannot fit in largest
+    remaining bin.
     * @param bins
     * @param num_usable
     * @param bits
@@ -34,20 +39,27 @@ def can_pack_track_rec(bins, num_usable, bits, num_unpacked, usable_space, neede
     j = num_unpacked - 1
     k = num_usable - 1
 
-    # return False if the largest remaining bin cannot fit the largest num_unpacked item.
+    # return False if the largest remaining bin cannot fit the largest
+    # num_unpacked item.
     if bins[k] < bits[j]:
         return False
 
     # Use reverse order, assuming the inputs were sorted in ascending order.
     for k in reversed(range(num_usable)):
         diff_k_j = bins[k] - bits[j]
-        if diff_k_j >= 0:                         # expected to be True at beginning of loop
+        # expected to be True at beginning of loop
+        if diff_k_j >= 0:
             swapping = False
-            if diff_k_j < bits[0]:               # If the space left in this bin would be less than the
-                usable_space -= diff_k_j            # smallest item, then this bin would become unusable.
-                if usable_space < needed_space:     # If the remaining usable space would not suffice,
-                    return False                   # return False immediately, without decrementing, etc.
-                swapping = True                    # Need to swap the diminished bins[k] off the active list.
+            # If the space left in this bin would be less than the
+            if diff_k_j < bits[0]:
+                # smallest item, then this bin would become unusable.
+                usable_space -= diff_k_j
+                # If the remaining usable space would not suffice,
+                if usable_space < needed_space:
+                    # return False immediately, without decrementing, etc.
+                    return False
+                # Need to swap the diminished bins[k] off the active list.
+                swapping = True
 
             usable_space -= bits[j]
             needed_space -= bits[j]
@@ -58,7 +70,8 @@ def can_pack_track_rec(bins, num_usable, bits, num_unpacked, usable_space, neede
                 bins[k] = bins[num_usable]
                 bins[num_usable] = diff_k_j
             else:
-                # Otherwise, sort the list by re-inserting diminished bin[k] value where it now belongs.
+                # Otherwise, sort the list by re-inserting diminished bin[k]
+                # value where it now belongs.
                 for rdx in reversed(range(k)):
                     if diff_k_j < bins[rdx]:
                         bins[rdx + 1] = bins[rdx]
@@ -69,7 +82,8 @@ def can_pack_track_rec(bins, num_usable, bits, num_unpacked, usable_space, neede
                     # set_trace()
                     bins[0] = diff_k_j
 
-            # Exhaustive recursion: check all remaining solutions that start with item[j] packed in bin[rdx]
+            # Exhaustive recursion: check all remaining solutions that start
+            # with item[j] packed in bin[rdx]
             if can_pack_track_rec(bins, num_usable, bits, j, usable_space, needed_space):
                 return True
 
@@ -101,7 +115,8 @@ def can_pack_track(bins, bits):
         return False        # return early: max bin < max bit
 
     if can_pack_track_rec(sbins, len(sbins), sbits, len(sbits), usable_space, needed_space):
-        # Change the original array.  (Pass by value means bins = sbins would not.)
+        # Change the original array.  (Pass by value means bins = sbins would
+        # not.)
         for  idx, sbin in enumerate(sbins):
             bins[idx] = sbin
         return True
@@ -123,7 +138,8 @@ def can_pack_naive(bins, bits):
 
 def can_pack_naive_rec(bins, bits, packed):
     '''
-    Naive exhaustive recursion, no early failure (as when sum(bins) < sum(bits)), no sorting.
+    Naive exhaustive recursion, no early failure (as when sum(bins) <
+    sum(bits)), no sorting.
     Implementation: Naive exhaustive recursion with supplementary array.
     Complexity: Time O(N!), additional space O(N).
     * Tries to fit bits into bins in the original order given.
@@ -137,19 +153,21 @@ def can_pack_naive_rec(bins, bits, packed):
 
     for i in range(len(bits)):
         if not packed[i]:
-            # Exhaustive: check all remaining solutions that start with item[i] packed in some bin[j]
+            # Exhaustive: check all remaining solutions that start with item[i]
+            # packed in some bin[j]
             packed[i] = True
             for j in range(len(bins)):
                 if bins[j] >= bits[i]:
-                    bins[j] -= bits[i]            # deduct item amount from bin and try to pack the rest
+                    # deduct item amount from bin and try to pack the rest
+                    bins[j] -= bits[i]
                     if can_pack_naive_rec(bins, bits, packed):
                         return True                # success: return
                     bins[j] += bits[i]   # failure: restore item amount to bin
             packed[i] = False
     return False
 
-
 ###############################################################################
+
 
 def show_wrong(result, expected):
     ''' show result if unexpected '''
@@ -192,6 +210,7 @@ def test_can_pack(packer, bins, bits, verbose, name, number, expected):
 def pass_fail(num_wrong):
     ''' pass or fail string '''
     return "PASS" if num_wrong == 0 else "FAIL"
+
 
 def test_packer(packer, packer_name, level):
     ''' tests a can_pack method '''
@@ -293,6 +312,7 @@ def unit_test(level):
 def main():
     ''' test driver '''
     unit_test(1)
+
 
 if __name__ == '__main__':
     main()
