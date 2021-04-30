@@ -1,4 +1,9 @@
+#!/usr/bin/env python3
 '''argparse example'''
+@file: argparsed.py
+@auth: Sprax Lines
+@date: 2016-09-12 23:09:56 Mon 12 Sep
+
 import argparse
 
 parser = argparse.ArgumentParser(description='Process some integers.')
