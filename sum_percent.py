@@ -1,8 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 '''
 @file: sum_percent.py
-@auth: Sprax Lines
-@date: 2019.10.06
+@auth: sprax
+@date: 2019-10-06 01:02:13 Sun 06 Oct
+
 Convert size/name pairs, such as from uniq -c, into a table with percentages
 Written for Python 3.7.4
 '''
@@ -10,6 +11,7 @@ Written for Python 3.7.4
 # import pdb
 # from pdb import set_trace
 import fileinput
+
 
 def sum_percent(beg=0, end=1):
     ''' add percentage column after number & name columns '''
@@ -43,6 +45,7 @@ def sum_percent(beg=0, end=1):
         print("%12s %7d  % 7.1f" % (name, size, percent))
 
     print("%12s %7d  % 7.1f" % ("TOTALS", total_debt, 100.0))
+
 
 if __name__ == '__main__':
     sum_percent()
