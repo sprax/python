@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# @file: bhattacharyya.py
+# @auth: Sprax Lines
+# @date: 2016-06-14 18:58:23 Tue 14 Jun
+
 # bhattacharyya test
 # From: https://gist.github.com/jstadler/c47861f3d86c40b82d4c
 
@@ -11,12 +16,14 @@ h5 = [ 8, 8, 8, 8, 8, 8, 8, 8 ]
 
 h = [ h1, h2, h3, h4, h5 ]
 
+
 def mean(hist):
     mean = 0.0
     for i in hist:
         mean += i
     mean/= len(hist)
     return mean
+
 
 def bhatta (hist1,  hist2):
     # calculate mean of hist1
@@ -29,7 +36,7 @@ def bhatta (hist1,  hist2):
     score = 0
     for i in range(8):
         score += math.sqrt(hist1[i] * hist2[i])
-    # print(h1_,h2_,score)
+    # print(h1_, h2_, score)
     score = math.sqrt(1 - (1 / math.sqrt(h1_*h2_*8*8)) * score)
     return score
 
