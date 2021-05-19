@@ -1,7 +1,13 @@
+#!/usr/bin/env python3
+# @file: kadane.py
+# @auth: Sprax Lines
+# @date: 2016-06-07 18:08:50 Tue 07 Jun
+
 # kadane.py from the interwebs
 '''Kadane algorithm for finding the maximum sum of a contiguous subarray'''
 
 from __future__ import print_function
+
 
 def max_contiguous_sum(array):
     '''function to find the maximum sum of a contiguous subarray'''
@@ -11,14 +17,17 @@ def max_contiguous_sum(array):
         max_so_far = max(max_so_far, max_ending_here)
     return max_so_far
 
+
 def main():
     '''test max_contiguous_sum (Kadane algorithm)'''
     arr = [1, 2, -4, 1, 3, 4, 1, -2, 2, -1, 2, -1]
     mcs = max_contiguous_sum(arr)
     print(arr, " ==> ", mcs, "(expecting 10)")
 
+
 def area_between_bc_columns(bc_0, bc_1):
     return bc_0 + bc_1
+
 
 if __name__ == '__main__':
     print("Area 0 (should be 100): %8.4f" % area_between_bc_columns(57, 43))
