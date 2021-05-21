@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-'''doubly sorted 2D array, right?'''
+'''
+doubly sorted 2D array, right?i
+@file: kth.py
+@auth: Sprax Lines
+@date: 2016-06-07 18:08:50 Tue 07 Jun
+'''
 
 import sys
 
