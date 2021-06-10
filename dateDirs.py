@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
+# @file: dateDirs.py
+# @auth: Sprax Lines
+# @date: 2016-06-02 17:36:26 Thu 02 Jun
+
 # Sprax Lines       2016.07.12      Updated for Python 3.5
+
 '''
 Group photos and videos by date and move them to folders named
 for the dates found.  Moves .jpg and .mov files by default, but
@@ -19,6 +24,7 @@ from stat import ST_MTIME
 import shutil
 import sys
 import time
+
 
 def dateDirs(dirpath, dirSuffix, patterns, verbose):
     """ Make dictionary mapping file modification dates to file names """
@@ -94,13 +100,16 @@ def make_date_to_files_dic(pairs, dirSuffix):
 
 
 def getUniqueDirName(dirs, baseName):
-    '''if there is already a directory with this name (baseName), make a new name'''
+    '''
+    if there is already a directory with this name (baseName), make a new name
+    '''
     suffix = 0
     uniqDirName = baseName
     while uniqDirName in dirs:
         suffix += 1
         uniqDirName = baseName + "_" + str(suffix)
     return uniqDirName
+
 
 def moveFilesToDateDirs(dirs, date2files):
     '''Actually move the files into the date-named directories'''
@@ -157,6 +166,7 @@ def main():
         moveFilesToDateDirs(out_dirs, date2files)
     else:
         print("The date2files dict is empty.")
+
 
 if __name__ == '__main__':
     main()
