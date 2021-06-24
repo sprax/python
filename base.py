@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
+# @file: base.py
+# @auth: Sprax Lines
+# @date: 2017-05-28 14:13:52 Sun 28 May
+
 # Sprax Lines       2016.07.12      Written with Python 3.5
+
 '''
 inheritance and MRO -- TODO: spell it out
 '''
@@ -21,14 +26,13 @@ class Derived(Base):
         super().__init__(name1)
         self.name += " " + name2
 
-    def hi(self):
-        print("Hello, I'm %s!" % self.name)
+    # def hi(self):
+    #     print("Hello, I'm %s!" % self.name)
+
 
 class PrefixMixin(object):
     ''' prefix mixin class '''
     pass
-
-
 
 
 def main():
@@ -36,6 +40,7 @@ def main():
     base.hi()
     derv = Derived("jerry", "hall")
     derv.hi()
+
 
 if __name__ == '__main__':
     main()
