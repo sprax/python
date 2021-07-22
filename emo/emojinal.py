@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
+# @file: emojinal.py
+# @auth: Sprax Lines
+# @date: 2017-06-14 02:20:56 Wed 14 Jun
+
 # -*- coding: iso-8859-15 -*-
+
 '''
 Plan:
     Words|phrases -> words >= [phonetic syllables reprs]
@@ -24,6 +29,7 @@ from collections import defaultdict
 :foggy:
 :ocean:
 
+
 def extract_emojis(str):
     return ''.join(c for c in str if c in emoji.UNICODE_EMOJI)
 
@@ -39,6 +45,7 @@ a_list = ['?? ?? me as�, bla es se ?? ds ??????']
 # is_emoji("????") #False
 
 re.findall(r'[^\w\s,]', a_list[0])
+
 
 def test_misc():
     trans()
@@ -128,12 +135,15 @@ dec_emo = {
 	127796: ['🌴 ', '', ''],
 }
 
+
 def selflist(word):
     return [word]
+
 
 def getsyl(map, word):
     syls = map.get(word)
     return sysl if syls else word
+
 
 def trans():
     wtsl = defaultdict(selflist)
