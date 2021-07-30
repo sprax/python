@@ -1,14 +1,22 @@
 #!/usr/bin/env python3
+# @file: emotrans.py
+# @auth: Sprax Lines
+# @date: 2017-06-14 02:20:56 Wed 14 Jun
+
 # -*- coding: utf-8 -*-
 #
 # # # coding: iso-8859-15
+
 '''
 TODO: Add the set of all synonyms to emo_words
-TODO: Divide EmoTrans parent class TransEmo which holds a TxtEmo(En) and an EmoTxt(En).
+TODO: Divide EmoTrans parent class TransEmo which holds a TxtEmo(En) and an
+EmoTxt(En).
         Keep TxtEmo as a calc or substitute translator
-        Make EmoTxt a probabilistic translater by giving it a trainable model of En-sentences.
+        Make EmoTxt a probabilistic translater by giving it a trainable model
+        of En-sentences.
 
-Plan for General sentence translation [square brackets for the still TBD parts]:
+Plan for General sentence translation [square brackets for the still TBD
+parts]:
     while not completely translated, try translating in this order:
         phrases => emojis
             [tetragrams -> emojis] ?
@@ -20,7 +28,8 @@ Plan for General sentence translation [square brackets for the still TBD parts]:
             synsets -> emojis
             TODO: control this better:
                 identify transitive and intransitive verbs and distinguish:
-                    Intrans: run, runs, running, ran (not the nouns: run, runner)
+                    Intrans: run, runs, running, ran (not the nouns:
+                    run, runner)
                     Trans: run a race, run a machine, run a deficit, etc.
                 Generate phrases: 'male runner' <-> 'running man',
                     'male water polo player' <-> 'man playing water polo', etc.
@@ -28,12 +37,17 @@ Plan for General sentence translation [square brackets for the still TBD parts]:
             phonetic reps -> emojis (homonyms)
         words -> phonemic syllables
             syllables -> emojis
-        [words -> sub-syllabic phonemes (possibly multiple phonemic decompositions)
-            phonemes combined across word boundaries into phrases for whole sentences
+        [words -> sub-syllabic phonemes (possibly multiple phonemic
+        decompositions)
+            phonemes combined across word boundaries into phrases for whole
+            sentences
                 (or just the untranslated parts)
-            match sublists of phonemes from sentences and emoji-to-word translations
-                (virtual or realized lattices weighted by probabilities and/or scores)
-            recombine into sentences and/or objects that contain sentences and skeletons
+            match sublists of phonemes from sentences and emoji-to-word
+            translations
+                (virtual or realized lattices weighted by probabilities and/or
+                scores)
+            recombine into sentences and/or objects that contain sentences and
+            skeletons
                 tracking original word boundaries] ?
 
     score and rank each (partial) translation
@@ -86,6 +100,7 @@ DEFAULT_TRANSLAT = "🤙  😐 📬 "
 # def extract_emojis(str):
 #   return ''.join(c for c in str if c in emoji.EMOJI_UNICODE)
 
+
 def test_load():
     '''load emodict.json'''
     emodict = json.loads(open('../../emodict.json').read())
@@ -95,14 +110,17 @@ def test_load():
         ucs = unicode_chr_str(tup[0])
         print(ucs, "\t", len(ucs), "\t", tup[1]['order'], "\t", tup[0], "\t", tup[1]['shortname'])
 
+
 def selflist(word):
     '''return argument as sole element in list'''
     return [word]
+
 
 def getsyl(table, word):
     '''syllables'''
     syls = table.get(word)
     return syls if syls else word
+
 
 def trans():
     '''Translate to syllables?'''
@@ -113,12 +131,14 @@ def trans():
     for word in words:
         print("{} --> {}".format(word, getsyl(wtsl, word)))
 
+
 def char(i):
     '''return arg converted to chr'''
     try:
         return chr(i)
     except ValueError:
         return struct.pack('i', i).decode('utf-32')
+
 
 def unicode_chr_str(hex_unicode):
     '''print hexadecimal-encoded emoji code/key as unichars'''
@@ -129,6 +149,7 @@ def unicode_chr_str(hex_unicode):
 
 EMO_SYNONYMS = {}
 
+
 def wordnet_syn_set(word, pos, lower_only=True):
     '''
     Returns a list of wordnet synonyms of word based on part of speech
@@ -137,7 +158,8 @@ def wordnet_syn_set(word, pos, lower_only=True):
     [ADJ, NOUN, ADV, ADJ_SAT, VERB], that is,
     ADJ, ADJ_SAT, ADV, NOUN, VERB = 'a', 's', 'r', 'n', 'v'.
     In practice, satellite synsets (s or ADJ_SAT) are not useful for simple
-    word substitution.  Just use the first letter from a common NLTK POS tagger.
+    word substitution.  Just use the first letter from a common NLTK POS
+    tagger.
     If lower_only is True, only lowercase synonyms are included.
     The list may contain duplicates, which are likely to be more common words.
     '''
@@ -155,17 +177,19 @@ def wordnet_syn_set(word, pos, lower_only=True):
                 synonyms.append(lemma.replace('_', ' '))
     return synonyms
 
+
 def pluralize(word):
     '''
     Return the plural form of the given word.
     TODO: Check that word is a noun (or an adjective or at any rate can
     be sensibly used as a noun) before calling inflection.pluralize?
-    If not, return (word, false)
+    If not, return (word, False)
     FIXME BUGS: inflection is often wrong, e.g. (safe <-> saves)
     '''
     if word.lower()[-3:] == 'afe':
         return word + 's'
     return inflection.pluralize(word)
+
 
 def singularize(word):
     '''
@@ -193,19 +217,23 @@ def is_singular(word):
     '''
     return word != pluralize(word)
 
+
 def is_plural(word):
     '''Deprecated until replaced by a LUT; @see is_singular.'''
     return word != singularize(word)
+
 
 def read_pickle(path):
     '''returns a loaded pickle'''
     with open(path, 'rb') as pkl:
         return pickle.load(pkl)
 
+
 def show_sorted_dict(dct, idx, lbl=''):
     '''print sorted dictionary'''
     for key, val in sorted(dct.items(), key=lambda dit: dit[idx].lower()):
         print("{}  {} => {}".format(lbl, key, val))
+
 
 def _add_txt_emo_multiples(preset_dict):
     '''Add preset word-to-multiple-emojis mapping'''
@@ -217,6 +245,7 @@ def _add_txt_emo_multiples(preset_dict):
         'wife'   : ['👉 💑', '👉 💏', '➡ 👩❤👨'],
         'board'   : ['🎹 ➖ 🔑 ', '⌨ ➖ 🗝'],
     })
+
 
 def print_tagged(tagged):
     '''Pretty prints words and the POS-tags aligned on two lines.'''
@@ -256,12 +285,14 @@ SHOW_USABLE_EMOJIS = 4096
 SHOW_SYNONYM_LISTS = 8192
 SHOW_PHONETICS_KEX = 16384
 
+
 class EmoTrans:
     '''
     Translate text to emojis, emojis to text.
     TODO: disallow 'uh' for 'a', etc.
     TODO: finish gen* -> _gen*
-    TODO: simple anaphora: 'Neil is an astronaut.  He[astronaut] went to the moon.'  Beware dog syllogisms.
+    TODO: simple anaphora: 'Neil is an astronaut.  He[astronaut] went to the
+    moon.'  Beware dog syllogisms.
     TODO: break up into 2 or 3 classes: Translater, POSer, Chunker, SynSubber?
     TODO: Add lattice & scoring, probability weighting.
     '''
@@ -271,7 +302,8 @@ class EmoTrans:
         # print("EmoTrans: self.options: ", self.options)
         self.verbose = self.options.verbose
         self.waflags = self.options.waflags
-        self.cmu_pro = cmudict.dict() # get the CMU Pronouncing Dict # TODO: wrap in sep class
+        # get the CMU Pronouncing Dict # TODO: wrap in sep class
+        self.cmu_pro = cmudict.dict()
         self.usables = self._gen_usables()
         if self.waflags & SHOW_USABLE_EMOJIS:
             self.print_usable_emojis()
@@ -361,7 +393,9 @@ class EmoTrans:
 
     # FIXME stub
     def gen_phonetic_repl(self, text):
-        '''Returns single phonetic spelling representation of the given text.'''
+        '''
+        Returns single phonetic spelling representation of the given text.
+        '''
         return word_phonetics.cmu_phon(self.cmu_pro, text, verbose=(self.waflags & SHOW_PHONETICS_KEX))
 
     # FIXME stub
@@ -401,8 +435,10 @@ class EmoTrans:
 
     def gen_emo_to_txt(self, presets, i_words=ET.INDEX_FREQUENT_WORDS):
         '''
-        Generates the emoji to texts mapping by first reverse mapping the preset
-        text-to-emojis map, then extending text lists (which are the map's values).
+        Generates the emoji to texts mapping by first reverse mapping the
+        preset
+        text-to-emojis map, then extending text lists (which are the map's
+        values).
         '''
         emo_txt = {}
         for txt, lst in presets.items():
@@ -422,7 +458,9 @@ class EmoTrans:
         return emo_txt
 
     def rev_txt_to_gen(self):
-        '''reverse of gen_txt_to_emo: map each emoji to a list of word-phrases'''
+        '''
+        reverse of gen_txt_to_emo: map each emoji to a list of word-phrases
+        '''
         emo_txt = {}
         for txt, lst in sorted(self.txt_emo.items()):
             # print("emo_txt 1: {} -:> {}".format(txt, lst))
@@ -454,7 +492,8 @@ class EmoTrans:
     def emojize_token(self, token):
         '''
         Return emoji string translation of token or None.
-        The token is to be matched as-is; it will not be transformed in any way.
+        The token is to be matched as-is; it will not be transformed in any
+        way.
         If it is meant to match an all lower-case key, the token
         must already be itself all lower-case.
         '''
@@ -472,7 +511,10 @@ class EmoTrans:
         return emo
 
     def emojize_chars(self, token):
-        '''Return string joined from separate emoji translations of each character in token.'''
+        '''
+        Return string joined from separate emoji translations of each character
+        in token.
+        '''
         return ' '.join([self.emojize_token(char) for char in token])
 
     def emojize_phone(self, phone, space=' '):
@@ -509,7 +551,10 @@ class EmoTrans:
         return ' ➖ 🇸 '
 
     def emojize_plural_noun(self, word, space=' '):
-        '''Replaces a plural noun with reduplicated emojis, if one matches the singular form.'''
+        '''
+        Replaces a plural noun with reduplicated emojis, if one matches the
+        singular form.
+        '''
         singular = singularize(word)
         if self.waflags & SHOW_NOUN_SINGPLUR:
             print("emojize_plural_noun %s -> %s" % (word, singular))
@@ -529,13 +574,17 @@ class EmoTrans:
         If word is not already all lower case, put both the orignal
         (partially capitalized) word and its all-lower-cased form in
         the list of synonyms, so as to match proper names.
-        That is to support custom emojis and/or syllabified names, but including
+        That is to support custom emojis and/or syllabified names,
+        but including
         proper names may objuscate common meanings.
-        Also note that wordnet always lowercases input words, and returns proper names
-        mixed in with lower case words.  You may want to filter out the capitalized
+        Also note that wordnet always lowercases input words,
+        and returns proper names
+        mixed in with lower case words.  You may want to filter out the
+        capitalized
         "synonyms", if you can even call them that.
         '''
-        # FIXME: reject synonyms that merely singularize or pluralize the source word.
+        # FIXME: reject synonyms that merely singularize or pluralize the
+        # source word.
         rejects = []
         lwrd = word.lower()
         if self.is_singular_noun(lwrd):
@@ -547,7 +596,8 @@ class EmoTrans:
             if singular != lwrd:
                 rejects.append(singular)
 
-        # FIXME: stricter: if the source word is singular [plural], so must be any synonyms
+        # FIXME: stricter: if the source word is singular [plural],
+        # so must be any synonyms
 
         synonyms = [word]
         is_lower = word.islower()
@@ -590,7 +640,8 @@ class EmoTrans:
         # if len(synonyms) > 1:
         #     synset = set([syn.lower() for syn in synonyms])
         #     if len(synset) > 1:
-        #         print("ZZZ emojize_word(%s, %s) with SYNONYMS: " % (src_word, pos), synonyms)
+        #         print("ZZZ emojize_word(%s, %s) with SYNONYMS:
+        # " % (src_word, pos), synonyms)
         if self.waflags & SHOW_EMO_LIST_VALS:
             print("EW SYNONYMS: {} -:> {}".format(src_word, synonyms))
 
@@ -623,16 +674,19 @@ class EmoTrans:
                                     break
                                 emo_lst.append(emojis)
                             else:
-                                return ''.join(emo_lst) # space already appended
+                                # space already appended
+                                return ''.join(emo_lst)
 
             if self.options.singularize and self.is_plural_noun(word):
                 emostr = self.emojize_plural_noun(word, space)
                 if emostr:
                     return emostr
 
-                # At least when subtraction is allowed, lip == lips - S ~= <kiss> - S == 💋 - S == 💋 <-> <S>
-                # NB: Not elif, because some nouns can be either singular and plural, e.g. fish, sheep, dice,
-                # briefs,data, agenda, heuristics,
+                # At least when subtraction is allowed, lip == lips - S ~=
+                # <kiss> - S == 💋 - S == 💋 <-> <S>
+                # NB: Not elif, because some nouns can be either singular and
+                # plural, e.g. fish, sheep, dice,
+                # briefs, data, agenda, heuristics,
             if self.options.pluralize:
                 if self.is_singular_noun(word):
                     plural = pluralize(word)
@@ -655,7 +709,8 @@ class EmoTrans:
         return self.emojize_word(word, space=space)
 
     def emojize_sentence_beg_mid_end(self, sentence, mid_translator, space=' '):
-        ''' Segment sentence into beg, mid, and end, translate each, then recombine, where:
+        ''' Segment sentence into beg, mid, and end, translate each,
+        then recombine, where:
             beg = chars before any words
             end = chars after all words
             mid = everthing between beg and end.
@@ -675,13 +730,17 @@ class EmoTrans:
 
     def emojize_text_syntags(self, text, space=' '):
         '''
-        Translate text word by word to emojis, where possible, using regex substitution.
-        By design, text is to be the body of a sentence: the part between any leading or
+        Translate text word by word to emojis, where possible,
+        using regex substitution.
+        By design, text is to be the body of a sentence: the part between any
+        leading or
         trailing punctuation.
         TODO: decouple translation from sentence rendering.  How?
             1. Use same tokenizer for extraction and substitution, and EITHER:
-                a. Use regex-replacement to convert body into a template for string-substitution.  OR:
-                b. Cut everything into a sequence of strings, translate tokens, and reconcatenate.
+                a. Use regex-replacement to convert body into a template for
+                string-substitution.  OR:
+                b. Cut everything into a sequence of strings, translate tokens,
+                and reconcatenate.
         '''
         # emojize_match_bound = partial(self.emojize_match, space=space)
 
@@ -735,8 +794,10 @@ class EmoTrans:
 
     def emojize_text_subs(self, text, space=' '):
         '''
-        Translate text word by word to emojis, where possible, using regex substitution.
-        By design, text is to be the body of a sentence: the part between any leading or
+        Translate text word by word to emojis, where possible,
+        using regex substitution.
+        By design, text is to be the body of a sentence: the part between any
+        leading or
         trailing punctuation.
         '''
         emojize_match_bound = partial(self.emojize_match, space=space)
@@ -753,8 +814,10 @@ class EmoTrans:
         Split phrase in to tokens (destructive), translate words,
         then join them back together.  Characters lost in the split
         are genearlly not restorable.  So round trips are not faithful.
-        FIXME: replace splitter with a non-destructive version that keeps the seperators.
-        The return product should be a tagged list, i.e. a list of pairs [(token, {word|fill}), ...]
+        FIXME: replace splitter with a non-destructive version that keeps the
+        seperators.
+        The return product should be a tagged list, i.e.
+        a list of pairs [(token, {word|fill}), ...]
         '''
         srcs = text_regex.words_split_out(txt_phrase.strip())
         if self.waflags & SHOW_SOURCE_TEXT:
@@ -768,7 +831,8 @@ class EmoTrans:
 
     def emojize_text_split_join(self, text, space=' '):
         '''
-        Deprecated somewhat: Phrase translation by emojize_phrase is lossy and not
+        Deprecated somewhat: Phrase translation by emojize_phrase is lossy and
+        not
         reversible.  Characters lost in the split are genearlly
         not restorable.  So round trips are not faithful.
         '''
@@ -795,7 +859,10 @@ class EmoTrans:
         return uchr in self.emo_txt
 
     def textize_emo_span_recurse_busted(self, emo_span):
-        '''FIXME: busted.  translate a string or slice of emojis into a text string'''
+        '''
+        FIXME: busted.  translate a string or slice of emojis into a text
+        string
+        '''
         if self.waflags & 2:
             print("TSPAN: span({})".format(emo_span))
         try:
@@ -805,11 +872,14 @@ class EmoTrans:
             txt = random.choice(lst) if self.options.random else lst[0]
             return txt
         except KeyError:
-            # return self.textize_emo_span_recurse(emo_span[0:-1]) + self.textize_emo_span_recurse(emo_span[-1:])
+            # return self.textize_emo_span_recurse(emo_span[0:-1]) +
+            # self.textize_emo_span_recurse(emo_span[-1:])
             return emo_span
 
     def textize_emo_chars(self, emo_span, space=' '):
-        '''translate a string or slice of emojis char by char into a text string'''
+        '''
+        translate a string or slice of emojis char by char into a text string
+        '''
         if self.waflags & SHOW_TEXT_BUILDERS:
             print("TCHRS: span({})".format(emo_span))
         text = ''
@@ -878,7 +948,8 @@ class EmoTrans:
         '''
         if  self.waflags & SHOW_TEXT_DIVISION:
             print("TESFE A:  span({})  prev_words({})".format(emo_span, prev_words))
-        # emo_span = emo_span.rstrip() -- should no longer need (or want) to strip.
+        # emo_span = emo_span.rstrip() -- should no longer need (or want) to
+        # strip.
 
         # If the this (whole or remaining) span can be parsed as a single emoji
         # with an (English) translation, just return it, concatenated with any
@@ -893,8 +964,10 @@ class EmoTrans:
                 print("TESFE B: {} -:> {}".format(emo_span, word_calcs))
             return self.append_to_prev_list(word_calcs, prev_words).reverse()
         except KeyError:
-            # Else divide the string into two parts, and if the 2nd part is a word, keep going.
-            # Use min and max word lengths to skip checking substrings that cannot be words.
+            # Else divide the string into two parts, and if the 2nd part is a
+            # word, keep going.
+            # Use min and max word lengths to skip checking substrings that
+            # cannot be words.
             max_index = len(emo_span)
             min_index = max_index - MAX_MULTI_EMO_LEN
             if  min_index < 0:
@@ -920,10 +993,13 @@ class EmoTrans:
 
     def _textize_emo_list(self, emo_list, space=' '):
         '''
-        Try to translate each emoji or string of several emojis into a list of strings,
-        each one representing words or phrases.  If no translation is found for an item
+        Try to translate each emoji or string of several emojis into a list of
+        strings,
+        each one representing words or phrases.  If no translation is found for
+        an item
         in the input list, that item is places as-is in the output list.
-        The output list will have the same number of items (length) as the input list.
+        The output list will have the same number of items (length) as the
+        input list.
         TODO: Helper methods.
         '''
         if  self.waflags & SHOW_EMO_LIST_VALS:
@@ -946,7 +1022,8 @@ class EmoTrans:
             elif idx > 1 and emo_str == '🇸' and old_emos == '➖':
                 all_calcs = self.emo_txt.get(emo_list[idx - 2])
                 old_emos = emo_str
-                if all_calcs:   # could be None if we didn't forward translate the txt to emo
+                # could be None if we didn't forward translate the txt to emo
+                if all_calcs:
                     sing_calcs = []
                     for calc in all_calcs:
                         all_words = calc.split()
@@ -965,7 +1042,8 @@ class EmoTrans:
                             print("TEL SING:  list{}  prev{} ::> sing{}  old({})  now({}) -> ({})".format(
                                 emo_list, all_calcs, sing_calcs, old_emos, emo_str, sing_calc))
                         txt_list[-2] = sing_calc
-                        txt_list.pop()  # truncate list by popping off the calc for <-> ('➖')
+                        # truncate list by popping off the calc for <-> ('➖')
+                        txt_list.pop()
                         continue
             else:
                 old_emos = emo_str
@@ -977,7 +1055,8 @@ class EmoTrans:
                     print("TEL emo_txt: {} -:> {} --> ({})".format(emo_str, word_calcs, calc))
                 txt_list.append(calc)
             except KeyError:
-                # Else divide the string recursively into parts, and try to tranlate each part.
+                # Else divide the string recursively into parts,
+                # and try to tranlate each part.
                 if self.waflags & SHOW_TEXT_DIVISION:
                     print("TEL : Calling TESFE(%s)" % emo_str)
                 calc = self.textize_emo_span_from_end(emo_str)
@@ -991,7 +1070,8 @@ class EmoTrans:
             # Is the whole span a key?
             return self.emo_txt[emo_span]
         except KeyError:
-            emo_list = emo_span.split()         # NB: call plain split(), not split(space)
+            # NB: call plain split(), not split(space)
+            emo_list = emo_span.split()
             return self._textize_emo_list(emo_list)
 
     def textize_sentence_subs(self, emo_sent, space=' '):
@@ -1069,7 +1149,10 @@ class EmoTrans:
         return self.textize_sentence_subs(sentence)
 
     def trans_txt_to_emo_and_back(self, sentence):
-        '''translate text sentence to emoji and back, showing stages according to options'''
+        '''
+        translate text sentence to emoji and back, showing stages according to
+        options
+        '''
         if self.options.waflags & SHOW_SOURCE_TEXT:
             print("==========> src => txt (%s)" % sentence)
         if self.options.waflags & SHOW_TRANSLATION:
@@ -1082,7 +1165,10 @@ class EmoTrans:
                 print("Edit distance: {:>4}".format(dist))
 
     def trans_emo_to_txt_and_back(self, sentence):
-        '''translate emoji sentence to text and back, showing stages according to options'''
+        '''
+        translate emoji sentence to text and back, showing stages according to
+        options
+        '''
         if self.options.waflags & SHOW_SOURCE_TEXT:
             print("=~=~=~=~=~> src => emo (%s)" % sentence)
         if self.options.waflags & SHOW_TRANSLATION:
@@ -1096,11 +1182,12 @@ class EmoTrans:
 
 
 def shuffled_list(seq):
-    '''Randomly shuffle an iterable into a list.
+        '''Randomly shuffle an iterable into a list.
     Call this on the list of indices to avoid modifying a source list in-place.'''
     shuffled = list(seq)
     random.shuffle(shuffled)
     return shuffled
+
 
 def test_translate_sentences(options):
     '''Test translation from Enlish to emojis and back.'''
@@ -1134,6 +1221,7 @@ def test_translate_sentences(options):
     if options.text_file:
         for sentence in text_fio.read_text_lines(options.text_file, options.charset):
             emotrans.trans_txt_to_emo_and_back(sentence)
+
 
 def main():
     '''test english -> emoji translation'''
@@ -1170,8 +1258,10 @@ def main():
                         help='Disable phonetic matching (which is on by default)')
     parser.add_argument('-pluralize', action='store_false',
                         help='Disable pluralization (which is on by default)')
-    # parser.add_argument('-output_file', type=str, nargs='?', default='lab.txt',
-    #                     help='output path for filtered text (default: - <stdout>)')
+    # parser.add_argument('-output_file', type=str, nargs='?',
+    # default='lab.txt',
+    #                     help='output path for filtered text (default:
+    # - <stdout>)')
     parser.add_argument('-random', action='store_true',
                         help='Choose random emojis or words from translation lists '\
                              '(instead of always choosing the first)')
@@ -1210,7 +1300,8 @@ def main():
             for phrase in nut.words:
                 words.update(text_regex.gen_normal_word_tokens(phrase, 2))
         text_regex.print_sorted(words, args.print_end)
-        # words = extract_words_from_file(args.input_file, gen_normal_word_tokens))
+        # words = extract_words_from_file(args.input_file,
+        # gen_normal_word_tokens))
         exit(0)
 
     # if verbose > 7:
@@ -1218,6 +1309,7 @@ def main():
     #     print("Type(args): ", type(args))
     #     print(args)
     test_translate_sentences(args)
+
 
 if __name__ == '__main__':
     START_TIME = time.time()
