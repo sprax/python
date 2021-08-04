@@ -3,7 +3,7 @@
 # @auth: Sprax Lines
 # @date: 2017-12-20 01:01:25 Wed 20 Dec
 
-'''direct logging output to stdout'''
+'''Use logging module to log output to stdout'''
 
 import logging
 import sys
