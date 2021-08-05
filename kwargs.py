@@ -1,15 +1,18 @@
-
-
 #!/usr/bin/env python3
-#
+# @file: kwargs.py
+# @auth: Sprax Lines
+# @date: 2017-12-17 14:16:37 Sun 17 Dec
+
 # # -*- coding: utf-8 -*-
 '''Example classes with args and kwargs in __init__'''
 
 import sys
 from pdb import set_trace
 
+
 class CopyCtor:
-    ''' init can be used as a simple copy-constructor.
+    '''
+    init can be used as a simple copy-constructor.
         When args[0] is an instance, it is copied and kwargs are ignored.
         Otherwise, the kwargs are used and args is ignored.
     '''
@@ -27,15 +30,19 @@ class CopyCtor:
             if args:
                 # import pdb; pdb.set_trace()
                 # print("WARNING: %s.%s:  ignoring args: "
-                #     % (type(self).__name__, sys._getframe().f_code.co_name), *args)
+                #     % (type(self).__name__, sys._getframe().f_code.co_name),
+                # *args)
                 print("WARNING: %s.%s:  ignoring args: "
                       % (type(self).__name__, self.__init__.__name__), *args)
             self.__dict__ = kwargs
 
 
 class BothCopyCtor:
-    ''' init can be used as a copy-constructor with updates (differences from original).
-        If args[0] is an instance, it is copied and the kwargs are used to update the new object.
+    '''
+    init can be used as a copy-constructor with updates (differences from
+    original).
+        If args[0] is an instance, it is copied and the kwargs are used to
+        update the new object.
         Otherwise, the kwargs are used and args is ignored.
     '''
 
@@ -51,14 +58,17 @@ class BothCopyCtor:
             if args:
                 # import pdb; pdb.set_trace()
                 # print("WARNING: %s.%s:  ignoring args: "
-                #       % (type(self).__name__, sys._getframe().f_code.co_name), *args)
+                #       % (type(self).__name__,
+                # sys._getframe().f_code.co_name), *args)
                 print("WARNING: %s.%s:  ignoring args: "
                       % (type(self).__name__, self.__init__.__name__), *args)
             self.__dict__ = kwargs
 
 
 class KwargsOnly:
-    '''init takes kwargs only, and uses only the kwargs that are listed as valid.'''
+    '''
+    init takes kwargs only, and uses only the kwargs that are listed as valid.
+    '''
 
     def __init__(self, **kwargs):
         valid_kwargs = ['name', 'kind', 'text']
@@ -83,13 +93,15 @@ def test_kwargs(*args):
     print()
 
     try:
-        bust = KwargsOnly(name='myKwargsOnly', kind='checked', test='Four square')
+        bust = KwargsOnly(name='myKwargsOnly',
+                          kind='checked', test='Four square')
         print("bust:", bust.__dict__)
     except TypeError as ex:
         print("Caught expected TypeError from KwargsOnly(...test=...):", ex)
 
     only = KwargsOnly(name='myKwargsOnly', kind='checked', text='Four score')
     print("only:", only.__dict__)
+
 
 if __name__ == '__main__':
     test_kwargs(sys.argv)
