@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# @file: rwords.py
+# @auth: sprax
+# @date: 2016-07-25 12:33:48 Mon 25 Jul
+
 # Sprax Lines       2016.07.25      Written with Python 3.5
 '''Class and driver script to solve simple substitution cipher from
 a corpus and encoded text in separate text files.
@@ -21,19 +25,22 @@ Where:
 import heapq
 import re
 import sys
-from collections import defaultdict
-from collections import Counter
+from collections import Counter, defaultdict
+
 
 class SubCipher:
     '''Solver to infer a simple substituion cipher based on a large
     corpus and small sample of encoded text.   Assumes English for
     boot-strapping off these four words: I, a, the, and.'''
+
     def __init__(self, cipher_file, corpus_file, verbose):
         self.cipher_file = cipher_file
         self.corpus_file = corpus_file
         self.cipher_lines = read_file_lines(cipher_file)
-        self.cipher_len_1, self.cipher_words = word_counts_short_and_long(cipher_file, 1)
-        self.corpus_len_1, self.corpus_words = word_counts_short_and_long(corpus_file, 1)
+        self.cipher_len_1, self.cipher_words = word_counts_short_and_long(
+            cipher_file, 1)
+        self.corpus_len_1, self.corpus_words = word_counts_short_and_long(
+            corpus_file, 1)
         self.cipher_chars = count_chars_from_words(self.cipher_words)
         self.corpus_chars = count_chars_from_words(self.corpus_words)
         self.forward_map = defaultdict(int)
@@ -50,13 +57,14 @@ class SubCipher:
         substitution cipher, and a corpus of English text expected to contain
         most of the words in the encoded text, decipher the encoded file.
         Uses the SubCipher class.
-        '''
+'''
         self.find_a_and_i()
         self.find_the_and_and()
         self.find_words_from_ciphers()
         if self.verbose > 0:
             matches, misses, missing_words = self.count_decoded_words_in_corpus()
-            print("Distinct decoded words found in corpus: {}  misses: {}".format(matches, misses))
+            print("Distinct decoded words found in corpus: {}  misses: {}".format(
+                matches, misses))
             if self.verbose > 1:
                 print("decoded words missing from corpus:", missing_words)
                 if self.verbose > 2:
@@ -143,24 +151,28 @@ class SubCipher:
         decision is immediate, not defered to accumulate multiple
         scoring passes or backpropogating votes.'''
         num_words = len(self.corpus_words)
-        corpus = self.corpus_words.most_common(num_words) # Just try them all
-        inverse_pq = [] # priority = [num_unknown (updated on pop), -count, length]
+        corpus = self.corpus_words.most_common(num_words)  # Just try them all
+        # priority = [num_unknown (updated on pop), -count, length]
+        inverse_pq = []
         for ciph, count in self.cipher_words.items():
             entry = [self.number_of_unknowns(ciph), -count, len(ciph), ciph]
             heapq.heappush(inverse_pq, entry)
 
-        sentinel = ''   # terminate the loop when the sentinel is seen a second time
+        # terminate the loop when the sentinel is seen a second time
+        sentinel = ''
         while inverse_pq:
             num_unk, neg_count, length, ciph = heapq.heappop(inverse_pq)
             if num_unk == 0:
                 continue
-            num_unk, idx_unk = self.num_idx_unknown(ciph)   # update (unknowns can become known)
+            # update (unknowns can become known)
+            num_unk, idx_unk = self.num_idx_unknown(ciph)
             if num_unk == 1:
                 self.inverse_match_1_unknown(ciph, length, idx_unk, corpus)
 
             elif num_unk > 1:
                 if ciph == sentinel:
-                    print('Breaking from queue at: ', ciph, num_unk, -neg_count)
+                    print('Breaking from queue at: ',
+                          ciph, num_unk, -neg_count)
                     break
                 elif not sentinel:
                     # Set the sentinel and give each item still in the queue
@@ -168,18 +180,20 @@ class SubCipher:
                     # and get matched.  Quit when the sentinel comes back to
                     # the front.
                     sentinel = ciph
-                    print('Repush entry [', ciph, num_unk, -neg_count, '] to end of the queue')
+                    print('Repush entry [', ciph, num_unk, -
+                          neg_count, '] to end of the queue')
                     heapq.heappush(inverse_pq, [1000, 0, length, ciph])
             elif self.verbose > 2:
-                print('\tAlready deciphered: ', num_unk, -neg_count, ciph
-                      , self.decipher_word(ciph))
+                print('\tAlready deciphered: ', num_unk, -
+                      neg_count, ciph, self.decipher_word(ciph))
 
     def inverse_match_1_unknown(self, ciph, length, idx_unknown, corpus):
         '''Try to match one cipher word with a single unknown against all
         corpus words of same length.  Accept the match that maximaly
         improves the total score (if there is any such a match).'''
         if self.verbose > 3:
-            print('Trying to match cipher word {} at index {}'.format(ciph, idx_unknown))
+            print('Trying to match cipher word {} at index {}'.format(
+                ciph, idx_unknown))
         self.inverse_score = self.score_inverse_map()
         ciph_char = ciph[idx_unknown]
         max_score = 0
@@ -193,22 +207,29 @@ class SubCipher:
                         continue            # skip over the single unknown
                     if word[idx] != deciphered[idx]:
                         break               # break on the first known mismatch
-                else:                       # all known chars matched, hole excluded
-                    # Compute the total score that would result from accepting this mapping
+                # all known chars matched, hole excluded
+                else:
+                    # Compute the total score that would result from accepting
+                    # this mapping
                     word_char = word[idx_unknown]
-                    self.inverse_map[ciph_char] = word_char # create temporary inverse mapping
-                    try_score = self.score_inverse_map()    # compute score with this mapping
-                    self.inverse_map[ciph_char] = 0         # delete temporary inverse mapping
+                    # create temporary inverse mapping
+                    self.inverse_map[ciph_char] = word_char
+                    # compute score with this mapping
+                    try_score = self.score_inverse_map()
+                    # delete temporary inverse mapping
+                    self.inverse_map[ciph_char] = 0
                     if max_score < try_score:
                         max_score = try_score
                         max_word = word
 
         if max_score > self.inverse_score:
-            self.update_mapping_on_better_score(ciph, idx_unknown, max_word, max_score)
+            self.update_mapping_on_better_score(
+                ciph, idx_unknown, max_word, max_score)
 
     def update_mapping_on_better_score(self, ciph, idx_unknown, max_word, max_score):
         '''Update forward and inverse maps and, if verbose > 0, show why.
-        For now this method assumes inverse-map scoring, but could be generalized
+        For now this method assumes inverse-map scoring,
+        but could be generalized
         for forward-mapping, partial-word matches (stemming), and so forth.
         This method exists mainly to provide a trace of the solver's progress.'''
         ciph_char = ciph[idx_unknown]
@@ -231,11 +252,15 @@ class SubCipher:
         self.assign(max_char, ciph_char)
 
     def score_inverse_map(self):
-        '''score based on totality of deciphered cipher words matching corpus words'''
+        '''
+        score based on totality of deciphered cipher words matching corpus
+        words
+        '''
         score_total = 0
         for ciph, ciph_count in self.cipher_words.items():
             word = self.decipher_word(ciph)
-            word_count = 1 if self.corpus_words[word] else 0    # 0 if not in corpus
+            # 0 if not in corpus
+            word_count = 1 if self.corpus_words[word] else 0
             score = word_count * ciph_count * len(ciph)
             if self.verbose > 5:
                 print(" {:9}\t {} => {}".format(score, ciph, word))
@@ -246,14 +271,15 @@ class SubCipher:
         '''returns three things: the hit and miss counts, and a list of
         all the decoded cipher text words missing from the corpus:
         (1) hits: the number of distinct encoded words that, decoded with the
-        current best guess at the cipher key, match some word found in the corpus, and
+        current best guess at the cipher key, match some word found in the
+        corpus, and
         (2) misses: the number that do not.
         Note that the set of 'words' may include such strings as "t" and
         "ll", which result from splitting "don't" and "you'll" on the
-        apostrophe. No assumption is made of proper grammer or orthography
+        apostrophe.  No assumption is made of proper grammer or orthography
         (3) missing words: a list containing all decoded cipher text
         words not found in the corpus, in lexicographically sorted order
-        '''
+'''
         num_ciphers = len(self.cipher_len_1) + len(self.cipher_words)
         num_matches = 0
         missing = []
@@ -272,7 +298,9 @@ class SubCipher:
         return num_matches, num_ciphers - num_matches, sorted(missing)
 
     def number_of_unknowns(self, ciph):
-        '''returns the number of unknown cipher characters in the string ciph'''
+        '''
+        returns the number of unknown cipher characters in the string ciph
+        '''
         return sum(map(lambda x: self.inverse_map[x] == 0, ciph))
 
     def num_idx_unknown(self, ciph):
@@ -336,7 +364,8 @@ class SubCipher:
             print(word_char, "->", ciph_char if ciph_char else ' ', file=outfile)
 
     def print_deciphered_lines(self, outfile=sys.stdout):
-        '''Print the decoded contents of the original cipher file to the console
+        '''Print the decoded contents of the original cipher file to the
+        console
         (default) or a file'''
         for line in self.cipher_lines:
             text = self.decipher_text(line)
@@ -352,10 +381,13 @@ class SubCipher:
             out.close()
 
     def write_deciphered_text(self, path):
-        '''Write the decoded contents of the original cipher file into a new file'''
+        '''
+        Write the decoded contents of the original cipher file into a new file
+        '''
         with open(path, 'w') as out:
             self.print_deciphered_lines(out)
             out.close()
+
 
 def uprint(*objects, sep=' ', end='\n', outfile=sys.stdout):
     '''Prints non-ASCII Unicode (UTF-8) characters in a safe (but possibly
@@ -363,19 +395,22 @@ def uprint(*objects, sep=' ', end='\n', outfile=sys.stdout):
     such as on Mac or KDE have no problem, nor do most IDE's, but calling
     Python's built-in print to print such characters (e.g., an em-dash)
     from a Windows cmd or Powershell terminal causes errors such as:
-    UnicodeEncodeError: 'charmap' codec can't encode characters in position 32-33:
+    UnicodeEncodeError: 'charmap' codec can't encode characters in position
+    32-33:
     character maps to <undefined> '''
     enc = outfile.encoding
     if enc == 'UTF-8':
         print(*objects, sep=sep, end=end, file=outfile)
     else:
-        enc_dec = lambda obj: str(obj).encode(enc, errors='backslashreplace').decode(enc)
+        def enc_dec(obj): return str(obj).encode(
+            enc, errors='backslashreplace').decode(enc)
         print(*map(enc_dec, objects), sep=sep, end=end, file=outfile)
+
 
 def char_range_inclusive(first, last, step=1):
     '''ranges from specified first to last character, inclusive, in
     any character set, depending only on ord()'''
-    for char in range(ord(first), ord(last)+1, step):
+    for char in range(ord(first), ord(last) + 1, step):
         yield chr(char)
 
 
@@ -387,8 +422,12 @@ def read_file_lines(path):
             lines.append(line.rstrip())
     return lines
 
+
 def count_words(path):
-    '''Returns a Counter that has counted all ASCII-only words found in a text file.'''
+    '''
+    Returns a Counter that has counted all ASCII-only words found in a text
+    file.
+    '''
     rgx_match = re.compile(r"[A-Za-z]+")
     counter = Counter()
     with open(path, 'r') as text:
@@ -398,8 +437,10 @@ def count_words(path):
             counter.update(words)
     return counter
 
+
 def word_counts_short_and_long(path, max_short_len):
-    '''Returns two Counters containing all the ASCII-only words found in a text file.
+    '''Returns two Counters containing all the ASCII-only words found in a text
+    file.
        The first counter counts only words up to length max_short_len, as-is.
        The second counter contains all the longer words, but lowercased.'''
     rgx_match = re.compile(r"[A-Za-z]+")
@@ -419,6 +460,7 @@ def word_counts_short_and_long(path, max_short_len):
             other_counter.update(other)
     return short_counter, other_counter
 
+
 def count_chars_from_words(word_counter):
     '''Count chars from all words times their counts'''
     char_counter = Counter()
@@ -427,14 +469,16 @@ def count_chars_from_words(word_counter):
             char_counter.update(item[0])
     return char_counter
 
+
 def solve_simple_substition_cipher(cipher_file, corpus_file, verbose):
     '''Given a file of ordinary English sentences encoded using a simple
     substitution cipher, and a corpus of English text expected to contain
     most of the words in the encoded text, decipher the encoded file.
     Uses the SubCipher class.
-    '''
+'''
     subs = SubCipher(cipher_file, corpus_file, verbose)
     subs.solve()
+
 
 def main():
     '''Get file names for cipher and corpus texts and call
