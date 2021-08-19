@@ -1,18 +1,27 @@
+#!/usr/bin/env python3
+# @file: dict_merge.py
+# @auth: Trey Hunner
+# @date: 2017-06-26 10:03:07 Mon 26 Jun
+
 # http://treyhunner.com/2016/02/how-to-merge-dictionaries-in-python/
+
 '''
 The Idiomatic Way to Merge Dictionaries in Python
 FEB 23RD, 2016 10:00 AM | COMMENTS
 Have you ever wanted to combine two or more dictionaries in Python?
 
-There are multiple ways to solve this problem: some are awkward, some are inaccurate, and most require multiple lines of code.
+There are multiple ways to solve this problem: some are awkward,
+some are inaccurate, and most require multiple lines of code.
 
-Let’s walk through the different ways of solving this problem and discuss which is the most Pythonic.
+Let’s walk through the different ways of solving this problem and discuss which
+is the most Pythonic.
 
 Our Problem
 
 Before we can discuss solutions, we need to clearly define our problem.
 
-Our code has two dictionaries: user and defaults. We want to merge these two dictionaries into a new dictionary called context.
+Our code has two dictionaries: user and defaults.  We want to merge these two
+dictionaries into a new dictionary called context.
 
 We have some requirements:
 
@@ -21,28 +30,40 @@ keys in defaults and user may be any valid keys
 the values in defaults and user can be anything
 defaults and user should not change during the creation of context
 updates made to context should never alter defaults or user
-Note: In 5, we’re focused on updates to the dictionary, not contained objects. For concerns about mutability of nested objects, we should look into copy.deepcopy.
+Note: In 5, we’re focused on updates to the dictionary, not contained objects.
+For concerns about mutability of nested objects, we should look into
+copy.deepcopy.
 
 So we want something like this:
 '''
+from collections import ChainMap
+from itertools import chain
+
 user = {'name': "Trey", 'website': "http://treyhunner.com"}
 defaults = {'name': "Anonymous User", 'page_name': "Profile Page"}
-context = merge_dicts(defaults, user)  # magical merge function
-context
+context = merge_dicts(defaults, user)  # magical merge function context
+
+
 {'website': 'http://treyhunner.com', 'name': 'Trey', 'page_name': 'Profile Page'}
 
+
 '''
-We’ll also consider whether a solution is Pythonic. This is a very subjective and often illusory measure. Here are a few of the particular criteria we will use:
+We’ll also consider whether a solution is Pythonic.  This is a very subjective
+and often illusory measure.  Here are a few of the particular criteria we will
+use:
 
 The solution should be concise but not terse
 The solution should be readable but not overly verbose
-The solution should be one line if possible so it can be written inline if needed
+The solution should be one line if possible so it can be written inline if
+needed
 The solution should not be needlessly inefficient
 Possible Solutions
 
 Now that we’ve defined our problem, let’s discuss some possible solutions.
 
-We’re going to walk through a number of methods for merging dictionaries and discuss which of these methods is the most accurate and which is the most idiomatic.
+We’re going to walk through a number of methods for merging dictionaries and
+discuss which of these methods is the most accurate and which is the most
+idiomatic.
 
 Multiple update
 
@@ -51,10 +72,15 @@ Here’s one of the simplest ways to merge our dictionaries:
 context = {}
 context.update(defaults)
 context.update(user)
-'''
-Here we’re making an empty dictionary and using the update method to add items from each of the other dictionaries. Notice that we’re adding defaults first so that any common keys in user will override those in defaults.
 
-All five of our requirements were met so this is accurate. This solution takes three lines of code and cannot be performed inline, but it’s pretty clear.
+
+'''
+Here we’re making an empty dictionary and using the update method to add items
+from each of the other dictionaries.  Notice that we’re adding defaults first
+so that any common keys in user will override those in defaults.
+
+All five of our requirements were met so this is accurate.  This solution takes
+three lines of code and cannot be performed inline, but it’s pretty clear.
 
 Score:
 
@@ -66,10 +92,13 @@ Alternatively, we could copy defaults and update the copy with user.
 '''
 context = defaults.copy()
 context.update(user)
+
+
 '''
 This solution is only slightly different from the previous one.
 
-For this particular problem, I prefer this solution of copying the defaults dictionary to make it clear that defaults represents default values.
+For this particular problem, I prefer this solution of copying the defaults
+dictionary to make it clear that defaults represents default values.
 
 Score:
 
@@ -77,12 +106,16 @@ Accurate: yes
 Idiomatic: yes
 Dictionary constructor
 
-We could also pass our dictionary to the dict constructor which will also copy the dictionary for us:
+We could also pass our dictionary to the dict constructor which will also copy
+the dictionary for us:
 '''
 context = dict(defaults)
 context.update(user)
+
+
 '''
-This solution is very similar to the previous one, but it’s a little bit less explicit.
+This solution is very similar to the previous one, but it’s a little bit less
+explicit.
 
 Score:
 
@@ -93,26 +126,36 @@ Keyword arguments hack
 You may have seen this clever answer before, possibly on StackOverflow:
 '''
 context = dict(defaults, **user)
+
+
 '''
-This is just one line of code. That’s kind of cool. However, this solution is a little hard to understand.
+This is just one line of code.  That’s kind of cool.  However,
+this solution is a little hard to understand.
 
 Beyond readability, there’s an even bigger problem: this solution is wrong.
 
-The keys must be strings. In Python 2 (with the CPython interpreter) we can get away with non-strings as keys, but don’t be fooled: this is a hack that only works by accident in Python 2 using the standard CPython runtime.
+The keys must be strings.  In Python 2 (with the CPython interpreter) we can
+get away with non-strings as keys, but don’t be fooled: this is a hack that
+only works by accident in Python 2 using the standard CPython runtime.
 
 Score:
 
-Accurate: no. Requirement 2 is not met (keys may be any valid key)
-Idiomatic: no. This is a hack.
+Accurate: no.  Requirement 2 is not met (keys may be any valid key)
+Idiomatic: no.  This is a hack.
 Dictionary comprehension
 
 Just because we can, let’s try doing this with a dictionary comprehension:
 '''
 context = {k: v for d in [defaults, user] for k, v in d.items()}
+
+
 '''
 This works, but this is a little hard to read.
 
-If we have an unknown number of dictionaries this might be a good idea, but we’d probably want to break our comprehension over multiple lines to make it more readable. In our case of two dictionaries, this doubly-nested comprehension is a little much.
+If we have an unknown number of dictionaries this might be a good idea,
+but we’d probably want to break our comprehension over multiple lines to make
+it more readable.  In our case of two dictionaries, this doubly-nested
+comprehension is a little much.
 
 Score:
 
@@ -120,13 +163,18 @@ Accurate: yes
 Idiomatic: arguably not
 Concatenate items
 
-What if we get a list of items from each dictionary, concatenate them, and then create a new dictionary from that?
+What if we get a list of items from each dictionary, concatenate them,
+and then create a new dictionary from that?
 '''
 context = dict(list(defaults.items()) + list(user.items()))
-'''
-This actually works. We know that the user keys will win out over defaults because those keys come at the end of our concatenated list.
 
-In Python 2 we actually don’t need the list conversions, but we’re working in Python 3 here (you are on Python 3, right?).
+
+'''
+This actually works.  We know that the user keys will win out over defaults
+because those keys come at the end of our concatenated list.
+
+In Python 2 we actually don’t need the list conversions, but we’re working in
+Python 3 here (you are on Python 3, right?).
 
 Score:
 
@@ -134,17 +182,25 @@ Accurate: yes
 Idiomatic: not particularly, there’s a bit of repetition
 Union items
 
-In Python 3, items is a dict_items object, which is a quirky object that supports union operations.
+In Python 3, items is a dict_items object, which is a quirky object that
+supports union operations.
 '''
 context = dict(defaults.items() | user.items())
+
+
 '''
-That’s kind of interesting. But this is not accurate.
+That’s kind of interesting.  But this is not accurate.
 
-Requirement 1 (user should “win” over defaults) fails because the union of two dict_items objects is a set of key-value pairs and sets are unordered so duplicate keys may resolve in an unpredictable way.
+Requirement 1 (user should “win” over defaults) fails because the union of two
+dict_items objects is a set of key-value pairs and sets are unordered so
+duplicate keys may resolve in an unpredictable way.
 
-Requirement 3 (the values can be anything) fails because sets require their items to be hashable so both the keys and values in our key-value tuples must be hashable.
+Requirement 3 (the values can be anything) fails because sets require their
+items to be hashable so both the keys and values in our key-value tuples must
+be hashable.
 
-Side note: I’m not sure why the union operation is even allowed on dict_items objects. What is this good for?
+Side note: I’m not sure why the union operation is even allowed on dict_items
+objects.  What is this good for?
 
 Score:
 
@@ -152,12 +208,15 @@ Accurate: no, requirements 1 and 3 fail
 Idiomatic: no
 Chain items
 
-So far the most idiomatic way we’ve seen to perform this merge in a single line of code involves creating two lists of items, concatenating them, and forming a dictionary.
+So far the most idiomatic way we’ve seen to perform this merge in a single line
+of code involves creating two lists of items, concatenating them,
+and forming a dictionary.
 
 We can join our items together more succinctly with itertools.chain:
 '''
-from itertools import chain
 context = dict(chain(defaults.items(), user.items()))
+
+
 '''
 This works well and may be more efficient than creating two unnecessary lists.
 
@@ -167,26 +226,37 @@ Accurate: yes
 Idiomatic: fairly, but those items calls seem slightly redundant
 ChainMap
 
-A ChainMap allows us to create a new dictionary without even looping over our initial dictionaries (well sort of, we’ll discuss this):
+A ChainMap allows us to create a new dictionary without even looping over our
+initial dictionaries (well sort of, we’ll discuss this):
 '''
-from collections import ChainMap
 context = ChainMap({}, user, defaults)
+
+
 '''
-A ChainMap groups dictionaries together into a proxy object (a “view”); lookups query each provided dictionary until a match is found.
+A ChainMap groups dictionaries together into a proxy object (a “view”); lookups
+query each provided dictionary until a match is found.
 
 This code raises a few questions.
 
 Why did we put user before defaults?
 
-We ordered our arguments this way to ensure requirement 1 was met. The dictionaries are searched in order, so user returns matches before defaults.
+We ordered our arguments this way to ensure requirement 1 was met.
+The dictionaries are searched in order, so user returns matches before
+defaults.
 
 Why is there an empty dictionary before user?
 
-This is for requirement 5. Changes to ChainMap objects affect the first dictionary provided and we don’t want user to change so we provided an empty dictionary first.
+This is for requirement 5.  Changes to ChainMap objects affect the first
+dictionary provided and we don’t want user to change so we provided an empty
+dictionary first.
 
 Does this actually give us a dictionary?
 
-A ChainMap object is not a dictionary but it is a dictionary-like mapping. We may be okay with this if our code practices duck typing, but we’ll need to inspect the features of ChainMap to be sure. Among other features, ChainMap objects are coupled to their underlying dictionaries and they handle removing items in an interesting way.
+A ChainMap object is not a dictionary but it is a dictionary-like mapping.
+We may be okay with this if our code practices duck typing,
+but we’ll need to inspect the features of ChainMap to be sure.
+Among other features, ChainMap objects are coupled to their underlying
+dictionaries and they handle removing items in an interesting way.
 
 Score:
 
@@ -197,8 +267,12 @@ Dictionary from ChainMap
 If we really want a dictionary, we could convert our ChainMap to a dictionary:
 '''
 context = dict(ChainMap(user, defaults))
+
+
 '''
-It’s a little odd that user must come before defaults in this code whereas this order was flipped in most of our other solutions. Outside of that oddity, this code is fairly simple and should be clear enough for our purposes.
+It’s a little odd that user must come before defaults in this code whereas this
+order was flipped in most of our other solutions.  Outside of that oddity,
+this code is fairly simple and should be clear enough for our purposes.
 
 Score:
 
@@ -209,8 +283,11 @@ Dictionary concatenation
 What if we simply concatenate our dictionaries?
 '''
 context = defaults + user
+
+
 '''
-This is cool, but it isn’t valid. This was discussed in a python-ideas thread last year.
+This is cool, but it isn’t valid.  This was discussed in a python-ideas thread
+last year.
 
 Some of the concerns brought up in this thread include:
 
@@ -219,17 +296,24 @@ For duplicate keys, should the left-hand side or right-hand side win?
 Should there be an updated built-in instead (kind of like sorted)?
 Score:
 
-Accurate: no. This doesn’t work.
-Idiomatic: no. This doesn’t work.
+Accurate: no.  This doesn’t work.
+Idiomatic: no.  This doesn’t work.
 Dictionary unpacking
 
-If you’re using Python 3.5, thanks to PEP 448, there’s a new way to merge dictionaries:
+If you’re using Python 3.5, thanks to PEP 448, there’s a new way to merge
+dictionaries:
 '''
 context = {**defaults, **user}
-'''
-This is simple and Pythonic. There are quite a few symbols, but it’s fairly clear that the output is a dictionary at least.
 
-This is functionally equivalent to our very first solution where we made an empty dictionary and populated it with all items from defaults and user in turn. All of our requirements are met and this is likely the simplest solution we’ll ever get.
+
+'''
+This is simple and Pythonic.  There are quite a few symbols,
+but it’s fairly clear that the output is a dictionary at least.
+
+This is functionally equivalent to our very first solution where we made an
+empty dictionary and populated it with all items from defaults and user in
+turn.  All of our requirements are met and this is likely the simplest solution
+we’ll ever get.
 
 Score:
 
@@ -237,11 +321,15 @@ Accurate: yes
 Idiomatic: yes
 Summary
 
-There are a number of ways to combine multiple dictionaries, but there are few elegant ways to do this with just one line of code.
+There are a number of ways to combine multiple dictionaries,
+but there are few elegant ways to do this with just one line of code.
 
 If you’re using Python 3.5, this is the one obvious way to solve this problem:
 '''
 context = {**defaults, **user}
+
+
 '''
-If you are not yet using Python 3.5, you’ll need to review the solutions above to determine which is the most appropriate for your needs.
+If you are not yet using Python 3.5, you’ll need to review the solutions above
+to determine which is the most appropriate for your needs.
 '''
