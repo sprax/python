@@ -1,15 +1,18 @@
+#!/usr/bin/env python3
+# @file: popen.py
+# @auth: sprax
+# @date: 2020-04-01 13:35:50 Wed 01 Apr
 
-from subprocess import Popen, PIPE
 import errno
+from subprocess import PIPE, Popen
 
 p = Popen('less', text=True,
-    stdin=PIPE)
+          stdin=PIPE)
 
 for x in range(100):
     line = 'Line number %d.\n' % x
     try:
         p.stdin.write(line)
-
 
     except IOError as e:
         if e.errno == errno.EPIPE or e.errno == errno.EINVAL:
@@ -23,4 +26,5 @@ for x in range(100):
 p.stdin.close()
 p.wait()
 
-print('All done!') # This should always be printed below any output written to less.
+# This should always be printed below any output written to less.
+print('All done!')
