@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# @file: emotemp.py
+# @auth: Sprax Lines
+# @date: 2017-06-26 00:14:51 Mon 26 Jun
+
 col_to_idx: ['order', 'flags', 'len', 'chr', 'monosyls', 'shortname', 'alternates', 'polysyls', 'category']
 EMO_TUPLES = [
     ('1f600', 1, 1, 1, '😀', [], ':grinning:', [], ['smirking', 'grinning'], 'people'),
