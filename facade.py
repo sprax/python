@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-# @file: base.py
-# @auth: Sprax Lines
-# @date: 2017-05-28 14:13:52 Sun 28 May
+# @file: facade.py
+# @auth: sprax
+# @date: 2021-10-16 22:31:42 Sat 16 Oct
 
 # Sprax Lines       2016.07.12      Written with Python 3.5
 
 '''
-Facade v. Proxy v. Adaptor v. (In)formal Interface
+Facade v.  Proxy v.  Adaptor v. (In)formal Interface
 '''
 
 
